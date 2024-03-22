@@ -51,9 +51,7 @@ func CmdSwap() *cobra.Command {
 				tokenOut,
 				sdkmath.Int(slippage),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
+
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
