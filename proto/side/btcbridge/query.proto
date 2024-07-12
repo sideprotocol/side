@@ -1,0 +1,140 @@
+syntax = "proto3";
+package side.btcbridge;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "side/btcbridge/params.proto";
+import "side/btcbridge/bitcoin.proto";
+
+option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/side/btcbridge/params";
+  }
+  // ChainTip queries the chain tip of the module.
+  rpc QueryChainTip(QueryChainTipRequest) returns (QueryChainTipResponse) {
+    option (google.api.http).get = "/side/btcbridge/tip";
+  }
+  // BlockHeaderByHeight queries the block header by height.
+  rpc QueryBlockHeaderByHeight(QueryBlockHeaderByHeightRequest) returns (QueryBlockHeaderByHeightResponse) {
+    option (google.api.http).get = "/side/btcbridge/height/{height}";
+  }
+  // BlockHeaderByHash queries the block header by hash.
+  rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
+    option (google.api.http).get = "/side/btcbridge/hash/{hash}";
+  }
+  // QuerySigningRequest queries the request to sign.
+  rpc QuerySigningRequest(QuerySigningRequestRequest) returns (QuerySigningRequestResponse) {
+    option (google.api.http).get = "/side/btcbridge/signing/request";
+  }
+  // QuerySigningRequestByAddress queries the signing request by the given address.
+  rpc QuerySigningRequestByAddress(QuerySigningRequestByAddressRequest) returns (QuerySigningRequestByAddressResponse) {
+    option (google.api.http).get = "/side/btcbridge/signing/request/address/{address}";
+  }
+  // QuerySigningRequestByTxHash queries the signing request by the given tx hash.
+  rpc QuerySigningRequestByTxHash(QuerySigningRequestByTxHashRequest) returns (QuerySigningRequestByTxHashResponse) {
+    option (google.api.http).get = "/side/btcbridge/signing/request/tx/{txid}";
+  }
+  // UTXOs queries all utxos.
+  rpc QueryUTXOs(QueryUTXOsRequest) returns (QueryUTXOsResponse) {
+    option (google.api.http).get = "/side/btcbridge/utxos";
+  }
+  // UTXOsByAddress queries the utxos of the given address.
+  rpc QueryUTXOsByAddress(QueryUTXOsByAddressRequest) returns (QueryUTXOsByAddressResponse) {
+    option (google.api.http).get = "/side/btcbridge/utxos/{address}";
+  }
+}
+
+// QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method.
+message QuerySigningRequestRequest {
+  SigningStatus status = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination            = 2;
+}
+
+// QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method.
+message QuerySigningRequestResponse {
+  repeated BitcoinSigningRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination            = 2;
+}
+
+// QuerySigningRequestByAddressRequest is request type for the Query/SigningRequestByAddress RPC method.
+message QuerySigningRequestByAddressRequest {
+  string address = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination            = 2;
+}
+
+// QuerySigningRequestByAddressResponse is response type for the Query/SigningRequestByAddress RPC method.
+message QuerySigningRequestByAddressResponse {
+  repeated BitcoinSigningRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination            = 2;
+}
+
+// QuerySigningRequestByTxHashRequest is request type for the Query/SigningRequestByTxHash RPC method.
+message QuerySigningRequestByTxHashRequest {
+  string txid = 1;
+}
+
+// QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHash RPC method.
+message QuerySigningRequestByTxHashResponse {
+  BitcoinSigningRequest request = 1;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryChainTipRequest is request type for the Query/ChainTip RPC method.
+message QueryChainTipRequest {}
+
+// QueryChainTipResponse is response type for the Query/ChainTip RPC method.
+message QueryChainTipResponse {
+  string hash = 1;
+  uint64 height = 2;
+}
+
+// QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method.
+message QueryBlockHeaderByHeightRequest {
+  uint64 height = 1;
+}
+
+// QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method.
+message QueryBlockHeaderByHeightResponse {
+  BlockHeader block_header = 1;
+}
+
+// QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method.
+message QueryBlockHeaderByHashRequest {
+  string hash = 1;
+}
+
+// QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
+message QueryBlockHeaderByHashResponse {
+  BlockHeader block_header = 1;
+}
+
+// QueryUTXOsRequest is the request type for the Query/UTXOs RPC method.
+message QueryUTXOsRequest {}
+
+// QueryUTXOsResponse is the response type for the Query/UTXOs RPC method.
+message QueryUTXOsResponse {
+  repeated UTXO utxos = 1;
+}
+
+// QueryUTXOsByAddressRequest is the request type for the Query/UTXOsByAddress RPC method.
+message QueryUTXOsByAddressRequest {
+  string address = 1;
+}
+
+// QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method.
+message QueryUTXOsByAddressResponse {
+  repeated UTXO utxos = 1;
+}

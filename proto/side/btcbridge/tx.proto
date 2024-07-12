@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package side.btcbridge;
+
+import "gogoproto/gogo.proto";
+import "side/btcbridge/params.proto";
+import "side/btcbridge/bitcoin.proto";
+
+option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
+
+// Msg defines the Msg service.
+service Msg {
+  // SubmitBlockHeaders submits bitcoin block headers to the side chain.
+  rpc SubmitBlockHeaders (MsgSubmitBlockHeaderRequest) returns (MsgSubmitBlockHeadersResponse);
+  // SubmitDepositTransaction submits bitcoin transaction to the side chain.
+  rpc SubmitDepositTransaction (MsgSubmitDepositTransactionRequest) returns (MsgSubmitDepositTransactionResponse);
+  // SubmitWithdrawalTransaction submits bitcoin transaction to the side chain.
+  rpc SubmitWithdrawTransaction (MsgSubmitWithdrawTransactionRequest) returns (MsgSubmitWithdrawTransactionResponse);
+  // UpdateSenders updates the senders of the side chain.
+  rpc UpdateQualifiedRelayers (MsgUpdateQualifiedRelayersRequest) returns (MsgUpdateQualifiedRelayersResponse);
+  // WithdrawBitcoin withdraws the bitcoin from the side chain.
+  rpc WithdrawBitcoin (MsgWithdrawBitcoinRequest) returns (MsgWithdrawBitcoinResponse);
+  // SubmitWithdrawSignatures submits the signatures of the withdraw transaction.
+  rpc SubmitWithdrawSignatures (MsgSubmitWithdrawSignaturesRequest) returns (MsgSubmitWithdrawSignaturesResponse);
+  // SubmitWithdrawStatus submits the status of the withdraw transaction.
+  rpc SubmitWithdrawStatus (MsgSubmitWithdrawStatusRequest) returns (MsgSubmitWithdrawStatusResponse);
+  // UpdateParams defines a governance operation for updating the x/btcbridge module
+  // parameters. The authority defaults to the x/gov module account.
+  //
+  // Since: cosmos-sdk 0.47
+  rpc UpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
+}
+
+// MsgSubmitWithdrawStatusRequest defines the Msg/SubmitWithdrawStatus request type.
+message MsgSubmitWithdrawStatusRequest {
+  string sender = 1;
+  string txid = 2;
+  SigningStatus status = 3;
+}
+
+// MsgSubmitWithdrawStatusResponse defines the Msg/SubmitWithdrawStatus response type.
+message MsgSubmitWithdrawStatusResponse {
+}
+
+// MsgBlockHeaderRequest defines the Msg/SubmitBlockHeaders request type.
+message MsgSubmitBlockHeaderRequest {
+  string sender = 1;
+  repeated BlockHeader block_headers = 2;
+}
+
+// MsgSubmitBlockHeadersResponse defines the Msg/SubmitBlockHeaders response type.
+message MsgSubmitBlockHeadersResponse {
+}
+
+// MsgSubmitTransactionRequest defines the Msg/SubmitTransaction request type.
+message MsgSubmitDepositTransactionRequest {
+  // this is relayer address who submit the bitcoin transaction to the side chain
+  string sender = 1;
+  string blockhash = 2;
+  // the tx bytes in base64 format
+  // used for parsing the sender of the transaction
+  string prev_tx_bytes = 3;
+  // the tx bytes in base64 format
+  string tx_bytes = 4;
+  repeated string proof = 5;
+}
+
+// MsgSubmitTransactionResponse defines the Msg/SubmitTransaction response type.
+message MsgSubmitDepositTransactionResponse {
+}
+
+// MsgSubmitTransactionRequest defines the Msg/SubmitTransaction request type.
+message MsgSubmitWithdrawTransactionRequest {
+  // this is relayer address who submit the bitcoin transaction to the side chain
+  string sender = 1;
+  string blockhash = 2;
+  // the tx bytes in base64 format
+  string tx_bytes = 4;
+  repeated string proof = 5;
+}
+
+// MsgSubmitTransactionResponse defines the Msg/SubmitTransaction response type.
+message MsgSubmitWithdrawTransactionResponse {
+}
+
+// Msg defines the MsgUpdateSender service.
+message MsgUpdateQualifiedRelayersRequest {
+  string sender = 1;
+  // update senders who can send block headers to the side chain
+  repeated string relayers = 2;
+}
+
+// MsgUpdateSenderResponse defines the Msg/UpdateSender response type.
+message MsgUpdateQualifiedRelayersResponse {
+}
+
+// MsgWithdrawBitcoinRequest defines the Msg/WithdrawBitcoin request type.
+message MsgWithdrawBitcoinRequest {
+  string sender = 1;
+  // withdraw amount in satoshi, etc: 100000000sat = 1btc
+  string amount = 2;
+  // fee rate in sats/vB
+  string fee_rate = 3;
+}
+
+// MsgWithdrawBitcoinResponse defines the Msg/WithdrawBitcoin response type.
+message MsgWithdrawBitcoinResponse {
+}
+
+// MsgSubmitWithdrawSignaturesRequest defines the Msg/SubmitWithdrawSignatures request type.
+message MsgSubmitWithdrawSignaturesRequest {
+  string sender = 1;
+  string txid = 2;
+  string psbt = 3;
+}
+
+// MsgSubmitWithdrawSignaturesResponse defines the Msg/SubmitWithdrawSignatures response type.
+message MsgSubmitWithdrawSignaturesResponse {
+}
+
+// MsgUpdateParamsRequest is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsRequest {
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+
+  // params defines the x/btcbridge parameters to be updated.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsResponse {}
