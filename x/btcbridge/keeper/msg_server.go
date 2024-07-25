@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -154,8 +155,8 @@ func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdraw
 
 	// Emit events
 	m.EmitEvent(ctx, msg.Sender,
+		sdk.NewAttribute("sequence", fmt.Sprintf("%d", req.Sequence)),
 		sdk.NewAttribute("amount", msg.Amount),
-		sdk.NewAttribute("txid", req.Txid),
 	)
 
 	return &types.MsgWithdrawBitcoinResponse{}, nil
@@ -165,17 +166,19 @@ func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSub
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
+
 	param := m.GetParams(sdk.UnwrapSDKContext(goCtx))
 	if !param.IsAuthorizedSender(msg.Sender) {
 		return nil, types.ErrSenderAddressNotAuthorized
 	}
+
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	exist := m.HasWithdrawRequest(ctx, msg.Txid)
+	exist := m.HasWithdrawRequest(ctx, msg.Sequence)
 	if !exist {
 		return nil, types.ErrWithdrawRequestNotExist
 	}
 
-	request := m.GetWithdrawRequest(ctx, msg.Txid)
+	request := m.GetWithdrawRequest(ctx, msg.Sequence)
 	request.Status = msg.Status
 	m.SetWithdrawRequest(ctx, request)
 

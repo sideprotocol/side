@@ -99,8 +99,8 @@ func (k Keeper) QueryWithdrawRequestByTxHash(goCtx context.Context, req *types.Q
 
 	var request *types.BitcoinWithdrawRequest
 
-	if k.HasWithdrawRequest(ctx, req.Txid) {
-		request = k.GetWithdrawRequest(ctx, req.Txid)
+	if k.HasWithdrawRequestByTxHash(ctx, req.Txid) {
+		request = k.GetWithdrawRequestByTxHash(ctx, req.Txid)
 	}
 
 	return &types.QueryWithdrawRequestByTxHashResponse{Request: request}, nil

@@ -34,79 +34,82 @@ func (k Keeper) IncrementRequestSequence(ctx sdk.Context) uint64 {
 }
 
 // NewWithdrawRequest creates a new withdrawal request
-func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, coin sdk.Coin) (*types.BitcoinWithdrawRequest, error) {
-	p := k.GetParams(ctx)
+func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin) (*types.BitcoinWithdrawRequest, error) {
+	switch types.AssetTypeFromDenom(amount.Denom, k.GetParams(ctx)) {
+	case types.AssetType_ASSET_TYPE_BTC, types.AssetType_ASSET_TYPE_RUNE:
+		withdrawRequest := &types.BitcoinWithdrawRequest{
+			Address:  sender,
+			Amount:   amount,
+			Sequence: k.IncrementRequestSequence(ctx),
+			Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+		}
 
-	switch types.AssetTypeFromDenom(coin.Denom, p) {
-	case types.AssetType_ASSET_TYPE_BTC:
-		return k.NewBtcWithdrawRequest(ctx, sender, coin)
+		k.SetWithdrawRequest(ctx, withdrawRequest)
 
-	case types.AssetType_ASSET_TYPE_RUNE:
-		return k.NewRunesWithdrawRequest(ctx, sender, coin)
+		return withdrawRequest, nil
 
 	default:
 		return nil, types.ErrAssetNotSupported
 	}
 }
 
-// NewBtcWithdrawRequest creates a request for btc withdrawal
-func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, coin sdk.Coin) (*types.BitcoinWithdrawRequest, error) {
-	withdrawRequest := &types.BitcoinWithdrawRequest{
-		Address:  sender,
-		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
-		Sequence: k.IncrementRequestSequence(ctx),
-	}
-
-	k.SetWithdrawRequest(ctx, withdrawRequest)
-
-	return withdrawRequest, nil
-}
-
-// NewRunesWithdrawRequest creates a request for runes withdrawal
-func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, coin sdk.Coin) (*types.BitcoinWithdrawRequest, error) {
-	withdrawRequest := &types.BitcoinWithdrawRequest{
-		Address:  sender,
-		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
-		Sequence: k.IncrementRequestSequence(ctx),
-	}
-
-	k.SetWithdrawRequest(ctx, withdrawRequest)
-
-	return withdrawRequest, nil
-}
-
 // HasWithdrawRequest returns true if the given withdrawal request exists, false otherwise
-func (k Keeper) HasWithdrawRequest(ctx sdk.Context, hash string) bool {
+func (k Keeper) HasWithdrawRequest(ctx sdk.Context, sequence uint64) bool {
 	store := ctx.KVStore(k.storeKey)
-	return store.Has(types.BtcWithdrawRequestHashKey(hash))
+	return store.Has(types.BtcWithdrawRequestKey(sequence))
 }
 
-// GetWithdrawRequest returns the withdraw request by the given hash
-func (k Keeper) GetWithdrawRequest(ctx sdk.Context, hash string) *types.BitcoinWithdrawRequest {
+// HasWithdrawRequestByTxHash returns true if the given withdrawal request exists, false otherwise
+func (k Keeper) HasWithdrawRequestByTxHash(ctx sdk.Context, hash string) bool {
 	store := ctx.KVStore(k.storeKey)
+	return store.Has(types.BtcWithdrawRequestByTxHashKey(hash))
+}
+
+// GetWithdrawRequest returns the withdraw request by the given sequence
+func (k Keeper) GetWithdrawRequest(ctx sdk.Context, sequence uint64) *types.BitcoinWithdrawRequest {
+	store := ctx.KVStore(k.storeKey)
+
 	var withdrawRequest types.BitcoinWithdrawRequest
-	// TODO replace the key with the hash
-	bz := store.Get(types.BtcWithdrawRequestHashKey(hash))
+	bz := store.Get(types.BtcWithdrawRequestKey(sequence))
 	k.cdc.MustUnmarshal(bz, &withdrawRequest)
+
+	return &withdrawRequest
+}
+
+// GetWithdrawRequestByTxHash returns the withdraw request by the given hash
+func (k Keeper) GetWithdrawRequestByTxHash(ctx sdk.Context, hash string) *types.BitcoinWithdrawRequest {
+	store := ctx.KVStore(k.storeKey)
+
+	var withdrawRequest types.BitcoinWithdrawRequest
+	bz := store.Get(types.BtcWithdrawRequestByTxHashKey(hash))
+	k.cdc.MustUnmarshal(bz, &withdrawRequest)
+
 	return &withdrawRequest
 }
 
 // SetWithdrawRequest sets the withdrawal request
 func (k Keeper) SetWithdrawRequest(ctx sdk.Context, withdrawRequest *types.BitcoinWithdrawRequest) {
 	store := ctx.KVStore(k.storeKey)
+
 	bz := k.cdc.MustMarshal(withdrawRequest)
-	// TODO replace the key with the hash
-	store.Set(types.BtcWithdrawRequestHashKey(withdrawRequest.Txid), bz)
+	store.Set(types.BtcWithdrawRequestKey(withdrawRequest.Sequence), bz)
+
+	if len(withdrawRequest.Txid) != 0 {
+		store.Set(types.BtcWithdrawRequestByTxHashKey(withdrawRequest.Txid), types.Int64ToBytes(withdrawRequest.Sequence))
+	}
 }
 
 // IterateWithdrawRequests iterates through all withdrawal requests
 func (k Keeper) IterateWithdrawRequests(ctx sdk.Context, process func(withdrawRequest types.BitcoinWithdrawRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
+
 	iterator := sdk.KVStorePrefixIterator(store, types.BtcWithdrawRequestPrefix)
 	defer iterator.Close()
+
 	for ; iterator.Valid(); iterator.Next() {
 		var withdrawRequest types.BitcoinWithdrawRequest
 		k.cdc.MustUnmarshal(iterator.Value(), &withdrawRequest)
+
 		if process(withdrawRequest) {
 			break
 		}
@@ -116,16 +119,20 @@ func (k Keeper) IterateWithdrawRequests(ctx sdk.Context, process func(withdrawRe
 // filter WithdrawRequest by status with pagination
 func (k Keeper) FilterWithdrawRequestsByStatus(ctx sdk.Context, req *types.QueryWithdrawRequestsRequest) []*types.BitcoinWithdrawRequest {
 	var withdrawRequests []*types.BitcoinWithdrawRequest
+
 	k.IterateWithdrawRequests(ctx, func(withdrawRequest types.BitcoinWithdrawRequest) (stop bool) {
 		if withdrawRequest.Status == req.Status {
 			withdrawRequests = append(withdrawRequests, &withdrawRequest)
 		}
+
 		// pagination TODO: limit the number of withdrawal requests
 		if len(withdrawRequests) >= 100 {
 			return true
 		}
+
 		return false
 	})
+
 	return withdrawRequests
 }
 
@@ -136,12 +143,15 @@ func (k Keeper) FilterWithdrawRequestsByAddr(ctx sdk.Context, req *types.QueryWi
 		if withdrawRequest.Address == req.Address {
 			withdrawRequests = append(withdrawRequests, &withdrawRequest)
 		}
+
 		// pagination TODO: limit the number of withdrawal requests
 		if len(withdrawRequests) >= 100 {
 			return true
 		}
+
 		return false
 	})
+
 	return withdrawRequests
 }
 
@@ -192,12 +202,12 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 
 	txHash := uTx.MsgTx().TxHash()
 
-	if !k.HasWithdrawRequest(ctx, txHash.String()) {
+	if !k.HasWithdrawRequestByTxHash(ctx, txHash.String()) {
 		return nil, types.ErrWithdrawRequestNotExist
 	}
 
-	withdrawRequest := k.GetWithdrawRequest(ctx, txHash.String())
-	// if withdrawRequest.Status != types.WithdrawStatus_WITHDRAW_STATUS_BROADCASTED || withdrawRequest.Status != types.WithdrawStatus_WITHDRAW_STATUS_SIGNED {
+	withdrawRequest := k.GetWithdrawRequestByTxHash(ctx, txHash.String())
+	// if withdrawRequest.Status != types.WithdrawStatus_WITHDRAW_STATUS_BROADCASTED {
 	// 	return types.ErrInvalidStatus
 	// }
 	withdrawRequest.Status = types.WithdrawStatus_WITHDRAW_STATUS_CONFIRMED
