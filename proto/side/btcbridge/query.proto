@@ -27,60 +27,52 @@ service Query {
   rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
     option (google.api.http).get = "/side/btcbridge/hash/{hash}";
   }
-  // QuerySigningRequest queries the request to sign.
-  rpc QuerySigningRequest(QuerySigningRequestRequest) returns (QuerySigningRequestResponse) {
-    option (google.api.http).get = "/side/btcbridge/signing/request";
+  // QueryWithdrawRequests queries the withdrawal requests by the given status.
+  rpc QueryWithdrawRequests(QueryWithdrawRequestsRequest) returns (QueryWithdrawRequestsResponse) {
+    option (google.api.http).get = "/side/btcbridge/withdrawal/request";
   }
-  // QuerySigningRequestByAddress queries the signing request by the given address.
-  rpc QuerySigningRequestByAddress(QuerySigningRequestByAddressRequest) returns (QuerySigningRequestByAddressResponse) {
-    option (google.api.http).get = "/side/btcbridge/signing/request/address/{address}";
+  // QueryWithdrawRequestsByAddress queries the withdrawal requests by the given address.
+  rpc QueryWithdrawRequestsByAddress(QueryWithdrawRequestsByAddressRequest) returns (QueryWithdrawRequestsByAddressResponse) {
+    option (google.api.http).get = "/side/btcbridge/withdrawal/request/address/{address}";
   }
-  // QuerySigningRequestByTxHash queries the signing request by the given tx hash.
-  rpc QuerySigningRequestByTxHash(QuerySigningRequestByTxHashRequest) returns (QuerySigningRequestByTxHashResponse) {
-    option (google.api.http).get = "/side/btcbridge/signing/request/tx/{txid}";
-  }
-  // UTXOs queries all utxos.
-  rpc QueryUTXOs(QueryUTXOsRequest) returns (QueryUTXOsResponse) {
-    option (google.api.http).get = "/side/btcbridge/utxos";
-  }
-  // UTXOsByAddress queries the utxos of the given address.
-  rpc QueryUTXOsByAddress(QueryUTXOsByAddressRequest) returns (QueryUTXOsByAddressResponse) {
-    option (google.api.http).get = "/side/btcbridge/utxos/{address}";
+  // QueryWithdrawRequestByTxHash queries the withdrawal request by the given tx hash.
+  rpc QueryWithdrawRequestByTxHash(QueryWithdrawRequestByTxHashRequest) returns (QueryWithdrawRequestByTxHashResponse) {
+    option (google.api.http).get = "/side/btcbridge/withdrawal/request/tx/{txid}";
   }
 }
 
-// QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method.
-message QuerySigningRequestRequest {
-  SigningStatus status = 1;
+// QueryWithdrawRequestsRequest is request type for the Query/WithdrawRequests RPC method.
+message QueryWithdrawRequestsRequest {
+  WithdrawStatus status = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 
-// QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method.
-message QuerySigningRequestResponse {
-  repeated BitcoinSigningRequest requests = 1;
+// QueryWithdrawRequestsResponse is response type for the Query/WithdrawRequests RPC method.
+message QueryWithdrawRequestsResponse {
+  repeated BitcoinWithdrawRequest requests = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 
-// QuerySigningRequestByAddressRequest is request type for the Query/SigningRequestByAddress RPC method.
-message QuerySigningRequestByAddressRequest {
+// QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method.
+message QueryWithdrawRequestsByAddressRequest {
   string address = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 
-// QuerySigningRequestByAddressResponse is response type for the Query/SigningRequestByAddress RPC method.
-message QuerySigningRequestByAddressResponse {
-  repeated BitcoinSigningRequest requests = 1;
+// QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method.
+message QueryWithdrawRequestsByAddressResponse {
+  repeated BitcoinWithdrawRequest requests = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 
-// QuerySigningRequestByTxHashRequest is request type for the Query/SigningRequestByTxHash RPC method.
-message QuerySigningRequestByTxHashRequest {
+// QueryWithdrawRequestByTxHashRequest is request type for the Query/WithdrawRequestByTxHash RPC method.
+message QueryWithdrawRequestByTxHashRequest {
   string txid = 1;
 }
 
-// QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHash RPC method.
-message QuerySigningRequestByTxHashResponse {
-  BitcoinSigningRequest request = 1;
+// QueryWithdrawRequestByTxHashResponse is response type for the Query/WithdrawRequestByTxHash RPC method.
+message QueryWithdrawRequestByTxHashResponse {
+  BitcoinWithdrawRequest request = 1;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -119,22 +111,4 @@ message QueryBlockHeaderByHashRequest {
 // QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
 message QueryBlockHeaderByHashResponse {
   BlockHeader block_header = 1;
-}
-
-// QueryUTXOsRequest is the request type for the Query/UTXOs RPC method.
-message QueryUTXOsRequest {}
-
-// QueryUTXOsResponse is the response type for the Query/UTXOs RPC method.
-message QueryUTXOsResponse {
-  repeated UTXO utxos = 1;
-}
-
-// QueryUTXOsByAddressRequest is the request type for the Query/UTXOsByAddress RPC method.
-message QueryUTXOsByAddressRequest {
-  string address = 1;
-}
-
-// QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method.
-message QueryUTXOsByAddressResponse {
-  repeated UTXO utxos = 1;
 }

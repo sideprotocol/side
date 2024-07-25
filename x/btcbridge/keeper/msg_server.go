@@ -1,12 +1,7 @@
 package keeper
 
 import (
-	"bytes"
 	"context"
-	"encoding/base64"
-	"strconv"
-
-	"github.com/btcsuite/btcd/btcutil/psbt"
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -148,12 +143,7 @@ func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdraw
 		}
 	}
 
-	feeRate, err := strconv.ParseInt(msg.FeeRate, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := m.Keeper.NewSigningRequest(ctx, msg.Sender, coin, feeRate)
+	req, err := m.Keeper.NewWithdrawRequest(ctx, msg.Sender, coin)
 	if err != nil {
 		return nil, err
 	}
@@ -162,8 +152,6 @@ func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdraw
 		return nil, err
 	}
 
-	m.lockAsset(ctx, req.Txid, coin)
-
 	// Emit events
 	m.EmitEvent(ctx, msg.Sender,
 		sdk.NewAttribute("amount", msg.Amount),
@@ -171,52 +159,6 @@ func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdraw
 	)
 
 	return &types.MsgWithdrawBitcoinResponse{}, nil
-}
-
-// SubmitWithdrawSignatures submits the signatures of the withdraw transaction.
-func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.MsgSubmitWithdrawSignaturesRequest) (*types.MsgSubmitWithdrawSignaturesResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	exist := m.HasSigningRequest(ctx, msg.Txid)
-	if !exist {
-		return nil, types.ErrSigningRequestNotExist
-	}
-
-	b, err := base64.StdEncoding.DecodeString(msg.Psbt)
-	if err != nil {
-		return nil, types.ErrInvalidSignatures
-	}
-
-	packet, err := psbt.NewFromRawBytes(bytes.NewReader(b), false)
-	if err != nil {
-		return nil, err
-	}
-
-	if packet.UnsignedTx.TxHash().String() != msg.Txid {
-		return nil, types.ErrInvalidSignatures
-	}
-
-	if err = packet.SanityCheck(); err != nil {
-		return nil, err
-	}
-	if !packet.IsComplete() {
-		return nil, types.ErrInvalidSignatures
-	}
-
-	// verify the signatures
-	if !types.VerifyPsbtSignatures(packet) {
-		return nil, types.ErrInvalidSignatures
-	}
-
-	// Set the signing request status to signed
-	request := m.GetSigningRequest(ctx, msg.Txid)
-	request.Psbt = msg.Psbt
-	request.Status = types.SigningStatus_SIGNING_STATUS_SIGNED
-	m.SetSigningRequest(ctx, request)
-
-	return &types.MsgSubmitWithdrawSignaturesResponse{}, nil
 }
 
 func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSubmitWithdrawStatusRequest) (*types.MsgSubmitWithdrawStatusResponse, error) {
@@ -228,14 +170,14 @@ func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSub
 		return nil, types.ErrSenderAddressNotAuthorized
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	exist := m.HasSigningRequest(ctx, msg.Txid)
+	exist := m.HasWithdrawRequest(ctx, msg.Txid)
 	if !exist {
-		return nil, types.ErrSigningRequestNotExist
+		return nil, types.ErrWithdrawRequestNotExist
 	}
 
-	request := m.GetSigningRequest(ctx, msg.Txid)
+	request := m.GetWithdrawRequest(ctx, msg.Txid)
 	request.Status = msg.Status
-	m.SetSigningRequest(ctx, request)
+	m.SetWithdrawRequest(ctx, request)
 
 	return &types.MsgSubmitWithdrawStatusResponse{}, nil
 }

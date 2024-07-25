@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -39,7 +38,6 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdSubmitBlocks())
 	cmd.AddCommand(CmdUpdateSenders())
 	cmd.AddCommand(CmdWithdrawBitcoin())
-	cmd.AddCommand(CmdSubmitWithdrawSignatures())
 
 	return cmd
 }
@@ -114,7 +112,7 @@ func CmdUpdateSenders() *cobra.Command {
 // Withdraw Bitcoin
 func CmdWithdrawBitcoin() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "withdraw [amount] [fee-rate]",
+		Use:   "withdraw [amount]",
 		Short: "Withdraw bitcoin to the given sender",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
@@ -130,47 +128,6 @@ func CmdWithdrawBitcoin() *cobra.Command {
 
 			msg := types.NewMsgWithdrawBitcoinRequest(
 				clientCtx.GetFromAddress().String(),
-				args[0],
-				args[1],
-			)
-
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdSubmitWithdrawSignatures() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "submit-signature [psbt]",
-		Short: "Submit signed withdrawal psbt",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			p, err := psbt.NewFromRawBytes(strings.NewReader(args[0]), true)
-			if err != nil {
-				return fmt.Errorf("invalid psbt")
-			}
-
-			signedTx, err := psbt.Extract(p)
-			if err != nil {
-				return fmt.Errorf("failed to extract tx from psbt")
-			}
-
-			msg := types.NewMsgSubmitWithdrawSignaturesRequest(
-				clientCtx.GetFromAddress().String(),
-				signedTx.TxHash().String(),
 				args[0],
 			)
 

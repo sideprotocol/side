@@ -23,47 +23,43 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Bitcoin Signing Status
-type SigningStatus int32
+// Bitcoin Withdrawal Status
+type WithdrawStatus int32
 
 const (
-	// SIGNING_STATUS_UNSPECIFIED - Default value, should not be used
-	SigningStatus_SIGNING_STATUS_UNSPECIFIED SigningStatus = 0
-	// SIGNING_STATUS_CREATED - The signing request is created
-	SigningStatus_SIGNING_STATUS_CREATED SigningStatus = 1
-	// SIGNING_STATUS_SIGNED - The signing request is signed
-	SigningStatus_SIGNING_STATUS_SIGNED SigningStatus = 2
-	// SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-	SigningStatus_SIGNING_STATUS_BROADCASTED SigningStatus = 3
-	// SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-	SigningStatus_SIGNING_STATUS_CONFIRMED SigningStatus = 4
-	// SIGNING_STATUS_REJECTED - The signing request is rejected
-	SigningStatus_SIGNING_STATUS_REJECTED SigningStatus = 5
+	// WITHDRAW_STATUS_UNSPECIFIED - Default value, should not be used
+	WithdrawStatus_WITHDRAW_STATUS_UNSPECIFIED WithdrawStatus = 0
+	// WITHDRAW_STATUS_CREATED - The withdrawal request is created
+	WithdrawStatus_WITHDRAW_STATUS_CREATED WithdrawStatus = 1
+	// WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+	WithdrawStatus_WITHDRAW_STATUS_BROADCASTED WithdrawStatus = 2
+	// WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+	WithdrawStatus_WITHDRAW_STATUS_CONFIRMED WithdrawStatus = 3
+	// WITHDRAW_STATUS_REJECTED - The withdrawal tx is rejected
+	WithdrawStatus_WITHDRAW_STATUS_REJECTED WithdrawStatus = 4
 )
 
-var SigningStatus_name = map[int32]string{
-	0: "SIGNING_STATUS_UNSPECIFIED",
-	1: "SIGNING_STATUS_CREATED",
-	2: "SIGNING_STATUS_SIGNED",
-	3: "SIGNING_STATUS_BROADCASTED",
-	4: "SIGNING_STATUS_CONFIRMED",
-	5: "SIGNING_STATUS_REJECTED",
+var WithdrawStatus_name = map[int32]string{
+	0: "WITHDRAW_STATUS_UNSPECIFIED",
+	1: "WITHDRAW_STATUS_CREATED",
+	2: "WITHDRAW_STATUS_BROADCASTED",
+	3: "WITHDRAW_STATUS_CONFIRMED",
+	4: "WITHDRAW_STATUS_REJECTED",
 }
 
-var SigningStatus_value = map[string]int32{
-	"SIGNING_STATUS_UNSPECIFIED": 0,
-	"SIGNING_STATUS_CREATED":     1,
-	"SIGNING_STATUS_SIGNED":      2,
-	"SIGNING_STATUS_BROADCASTED": 3,
-	"SIGNING_STATUS_CONFIRMED":   4,
-	"SIGNING_STATUS_REJECTED":    5,
+var WithdrawStatus_value = map[string]int32{
+	"WITHDRAW_STATUS_UNSPECIFIED": 0,
+	"WITHDRAW_STATUS_CREATED":     1,
+	"WITHDRAW_STATUS_BROADCASTED": 2,
+	"WITHDRAW_STATUS_CONFIRMED":   3,
+	"WITHDRAW_STATUS_REJECTED":    4,
 }
 
-func (x SigningStatus) String() string {
-	return proto.EnumName(SigningStatus_name, int32(x))
+func (x WithdrawStatus) String() string {
+	return proto.EnumName(WithdrawStatus_name, int32(x))
 }
 
-func (SigningStatus) EnumDescriptor() ([]byte, []int) {
+func (WithdrawStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_b004a69efe3c7d84, []int{0}
 }
 
@@ -176,29 +172,26 @@ func (m *BlockHeader) GetNtx() uint64 {
 	return 0
 }
 
-// Bitcoin Signing Request
-type BitcoinSigningRequest struct {
-	Address  string        `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	Txid     string        `protobuf:"bytes,2,opt,name=txid,proto3" json:"txid,omitempty"`
-	Psbt     string        `protobuf:"bytes,3,opt,name=psbt,proto3" json:"psbt,omitempty"`
-	Status   SigningStatus `protobuf:"varint,4,opt,name=status,proto3,enum=side.btcbridge.SigningStatus" json:"status,omitempty"`
-	Sequence uint64        `protobuf:"varint,5,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	// The vault address that the request is associated with
-	VaultAddress string `protobuf:"bytes,6,opt,name=vault_address,json=vaultAddress,proto3" json:"vault_address,omitempty"`
+// Bitcoin Withdrawal Request
+type BitcoinWithdrawRequest struct {
+	Address  string         `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Sequence uint64         `protobuf:"varint,2,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	Txid     string         `protobuf:"bytes,3,opt,name=txid,proto3" json:"txid,omitempty"`
+	Status   WithdrawStatus `protobuf:"varint,4,opt,name=status,proto3,enum=side.btcbridge.WithdrawStatus" json:"status,omitempty"`
 }
 
-func (m *BitcoinSigningRequest) Reset()         { *m = BitcoinSigningRequest{} }
-func (m *BitcoinSigningRequest) String() string { return proto.CompactTextString(m) }
-func (*BitcoinSigningRequest) ProtoMessage()    {}
-func (*BitcoinSigningRequest) Descriptor() ([]byte, []int) {
+func (m *BitcoinWithdrawRequest) Reset()         { *m = BitcoinWithdrawRequest{} }
+func (m *BitcoinWithdrawRequest) String() string { return proto.CompactTextString(m) }
+func (*BitcoinWithdrawRequest) ProtoMessage()    {}
+func (*BitcoinWithdrawRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b004a69efe3c7d84, []int{1}
 }
-func (m *BitcoinSigningRequest) XXX_Unmarshal(b []byte) error {
+func (m *BitcoinWithdrawRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *BitcoinSigningRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *BitcoinWithdrawRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_BitcoinSigningRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_BitcoinWithdrawRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -208,224 +201,44 @@ func (m *BitcoinSigningRequest) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *BitcoinSigningRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BitcoinSigningRequest.Merge(m, src)
+func (m *BitcoinWithdrawRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BitcoinWithdrawRequest.Merge(m, src)
 }
-func (m *BitcoinSigningRequest) XXX_Size() int {
+func (m *BitcoinWithdrawRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *BitcoinSigningRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_BitcoinSigningRequest.DiscardUnknown(m)
+func (m *BitcoinWithdrawRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_BitcoinWithdrawRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_BitcoinSigningRequest proto.InternalMessageInfo
+var xxx_messageInfo_BitcoinWithdrawRequest proto.InternalMessageInfo
 
-func (m *BitcoinSigningRequest) GetAddress() string {
+func (m *BitcoinWithdrawRequest) GetAddress() string {
 	if m != nil {
 		return m.Address
 	}
 	return ""
 }
 
-func (m *BitcoinSigningRequest) GetTxid() string {
-	if m != nil {
-		return m.Txid
-	}
-	return ""
-}
-
-func (m *BitcoinSigningRequest) GetPsbt() string {
-	if m != nil {
-		return m.Psbt
-	}
-	return ""
-}
-
-func (m *BitcoinSigningRequest) GetStatus() SigningStatus {
-	if m != nil {
-		return m.Status
-	}
-	return SigningStatus_SIGNING_STATUS_UNSPECIFIED
-}
-
-func (m *BitcoinSigningRequest) GetSequence() uint64 {
+func (m *BitcoinWithdrawRequest) GetSequence() uint64 {
 	if m != nil {
 		return m.Sequence
 	}
 	return 0
 }
 
-func (m *BitcoinSigningRequest) GetVaultAddress() string {
-	if m != nil {
-		return m.VaultAddress
-	}
-	return ""
-}
-
-// Bitcoin UTXO
-type UTXO struct {
-	Txid    string `protobuf:"bytes,1,opt,name=txid,proto3" json:"txid,omitempty"`
-	Vout    uint64 `protobuf:"varint,2,opt,name=vout,proto3" json:"vout,omitempty"`
-	Address string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
-	Amount  uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
-	// height is used for calculating confirmations
-	Height       uint64 `protobuf:"varint,5,opt,name=height,proto3" json:"height,omitempty"`
-	PubKeyScript []byte `protobuf:"bytes,6,opt,name=pub_key_script,json=pubKeyScript,proto3" json:"pub_key_script,omitempty"`
-	IsCoinbase   bool   `protobuf:"varint,7,opt,name=is_coinbase,json=isCoinbase,proto3" json:"is_coinbase,omitempty"`
-	IsLocked     bool   `protobuf:"varint,8,opt,name=is_locked,json=isLocked,proto3" json:"is_locked,omitempty"`
-	// rune balances associated with the UTXO
-	Runes []*RuneBalance `protobuf:"bytes,9,rep,name=runes,proto3" json:"runes,omitempty"`
-}
-
-func (m *UTXO) Reset()         { *m = UTXO{} }
-func (m *UTXO) String() string { return proto.CompactTextString(m) }
-func (*UTXO) ProtoMessage()    {}
-func (*UTXO) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b004a69efe3c7d84, []int{2}
-}
-func (m *UTXO) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *UTXO) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_UTXO.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *UTXO) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UTXO.Merge(m, src)
-}
-func (m *UTXO) XXX_Size() int {
-	return m.Size()
-}
-func (m *UTXO) XXX_DiscardUnknown() {
-	xxx_messageInfo_UTXO.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UTXO proto.InternalMessageInfo
-
-func (m *UTXO) GetTxid() string {
+func (m *BitcoinWithdrawRequest) GetTxid() string {
 	if m != nil {
 		return m.Txid
 	}
 	return ""
 }
 
-func (m *UTXO) GetVout() uint64 {
+func (m *BitcoinWithdrawRequest) GetStatus() WithdrawStatus {
 	if m != nil {
-		return m.Vout
+		return m.Status
 	}
-	return 0
-}
-
-func (m *UTXO) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
-
-func (m *UTXO) GetAmount() uint64 {
-	if m != nil {
-		return m.Amount
-	}
-	return 0
-}
-
-func (m *UTXO) GetHeight() uint64 {
-	if m != nil {
-		return m.Height
-	}
-	return 0
-}
-
-func (m *UTXO) GetPubKeyScript() []byte {
-	if m != nil {
-		return m.PubKeyScript
-	}
-	return nil
-}
-
-func (m *UTXO) GetIsCoinbase() bool {
-	if m != nil {
-		return m.IsCoinbase
-	}
-	return false
-}
-
-func (m *UTXO) GetIsLocked() bool {
-	if m != nil {
-		return m.IsLocked
-	}
-	return false
-}
-
-func (m *UTXO) GetRunes() []*RuneBalance {
-	if m != nil {
-		return m.Runes
-	}
-	return nil
-}
-
-// Rune Balance
-type RuneBalance struct {
-	// serialized rune id
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	// rune amount
-	Amount string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
-}
-
-func (m *RuneBalance) Reset()         { *m = RuneBalance{} }
-func (m *RuneBalance) String() string { return proto.CompactTextString(m) }
-func (*RuneBalance) ProtoMessage()    {}
-func (*RuneBalance) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b004a69efe3c7d84, []int{3}
-}
-func (m *RuneBalance) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *RuneBalance) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_RuneBalance.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *RuneBalance) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RuneBalance.Merge(m, src)
-}
-func (m *RuneBalance) XXX_Size() int {
-	return m.Size()
-}
-func (m *RuneBalance) XXX_DiscardUnknown() {
-	xxx_messageInfo_RuneBalance.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_RuneBalance proto.InternalMessageInfo
-
-func (m *RuneBalance) GetId() string {
-	if m != nil {
-		return m.Id
-	}
-	return ""
-}
-
-func (m *RuneBalance) GetAmount() string {
-	if m != nil {
-		return m.Amount
-	}
-	return ""
+	return WithdrawStatus_WITHDRAW_STATUS_UNSPECIFIED
 }
 
 // Rune ID
@@ -440,7 +253,7 @@ func (m *RuneId) Reset()         { *m = RuneId{} }
 func (m *RuneId) String() string { return proto.CompactTextString(m) }
 func (*RuneId) ProtoMessage()    {}
 func (*RuneId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b004a69efe3c7d84, []int{4}
+	return fileDescriptor_b004a69efe3c7d84, []int{2}
 }
 func (m *RuneId) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -494,7 +307,7 @@ func (m *Edict) Reset()         { *m = Edict{} }
 func (m *Edict) String() string { return proto.CompactTextString(m) }
 func (*Edict) ProtoMessage()    {}
 func (*Edict) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b004a69efe3c7d84, []int{5}
+	return fileDescriptor_b004a69efe3c7d84, []int{3}
 }
 func (m *Edict) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -545,11 +358,9 @@ func (m *Edict) GetOutput() uint32 {
 }
 
 func init() {
-	proto.RegisterEnum("side.btcbridge.SigningStatus", SigningStatus_name, SigningStatus_value)
+	proto.RegisterEnum("side.btcbridge.WithdrawStatus", WithdrawStatus_name, WithdrawStatus_value)
 	proto.RegisterType((*BlockHeader)(nil), "side.btcbridge.BlockHeader")
-	proto.RegisterType((*BitcoinSigningRequest)(nil), "side.btcbridge.BitcoinSigningRequest")
-	proto.RegisterType((*UTXO)(nil), "side.btcbridge.UTXO")
-	proto.RegisterType((*RuneBalance)(nil), "side.btcbridge.RuneBalance")
+	proto.RegisterType((*BitcoinWithdrawRequest)(nil), "side.btcbridge.BitcoinWithdrawRequest")
 	proto.RegisterType((*RuneId)(nil), "side.btcbridge.RuneId")
 	proto.RegisterType((*Edict)(nil), "side.btcbridge.Edict")
 }
@@ -557,52 +368,42 @@ func init() {
 func init() { proto.RegisterFile("side/btcbridge/bitcoin.proto", fileDescriptor_b004a69efe3c7d84) }
 
 var fileDescriptor_b004a69efe3c7d84 = []byte{
-	// 715 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x54, 0xdd, 0x6e, 0xda, 0x48,
-	0x14, 0xc6, 0xfc, 0x05, 0x86, 0x80, 0xd8, 0xd9, 0x84, 0xf5, 0x92, 0x2c, 0x1b, 0xb1, 0xab, 0x2a,
-	0xea, 0x85, 0x51, 0x53, 0xe5, 0x01, 0xf8, 0x71, 0x12, 0xfa, 0x43, 0xaa, 0x31, 0x91, 0xaa, 0xde,
-	0x58, 0xfe, 0x19, 0xc1, 0x28, 0xe0, 0x71, 0x3d, 0x63, 0x44, 0x9e, 0xa2, 0x7d, 0xa5, 0xde, 0xf5,
-	0x32, 0xbd, 0xeb, 0x65, 0x95, 0xbc, 0x42, 0x1f, 0xa0, 0x9a, 0x63, 0x83, 0x00, 0x45, 0xbd, 0x3b,
-	0xdf, 0x77, 0xfe, 0xbe, 0x73, 0xce, 0xd8, 0xe8, 0x58, 0x30, 0x9f, 0x76, 0x5c, 0xe9, 0xb9, 0x11,
-	0xf3, 0x27, 0xb4, 0xe3, 0x32, 0xe9, 0x71, 0x16, 0x18, 0x61, 0xc4, 0x25, 0xc7, 0x35, 0xe5, 0x35,
-	0xd6, 0xde, 0xe6, 0xc1, 0x84, 0x4f, 0x38, 0xb8, 0x3a, 0xca, 0x4a, 0xa2, 0xda, 0x3f, 0x35, 0x54,
-	0xe9, 0xcd, 0xb8, 0x77, 0x7b, 0x45, 0x1d, 0x9f, 0x46, 0x58, 0x47, 0x7b, 0x0b, 0x1a, 0x09, 0xc6,
-	0x03, 0x5d, 0x3b, 0xd1, 0x4e, 0xf3, 0x64, 0x05, 0x31, 0x46, 0xf9, 0xa9, 0x23, 0xa6, 0x7a, 0xf6,
-	0x44, 0x3b, 0x2d, 0x13, 0xb0, 0x71, 0x03, 0x15, 0xa7, 0x94, 0x4d, 0xa6, 0x52, 0xcf, 0x41, 0x70,
-	0x8a, 0xb0, 0x81, 0xfe, 0x0c, 0x23, 0xba, 0x60, 0x3c, 0x16, 0xb6, 0xab, 0xaa, 0xdb, 0x90, 0x9a,
-	0x87, 0xd4, 0x3f, 0x56, 0xae, 0xa4, 0xaf, 0xaa, 0xf3, 0x2f, 0xaa, 0xcc, 0x69, 0x74, 0x3b, 0xa3,
-	0x76, 0xc4, 0xb9, 0xd4, 0x0b, 0x10, 0x87, 0x12, 0x8a, 0x70, 0x2e, 0xf1, 0x01, 0x2a, 0x04, 0x3c,
-	0xf0, 0xa8, 0x5e, 0x84, 0x3e, 0x09, 0x50, 0x92, 0x5c, 0x26, 0x85, 0xbe, 0x97, 0x48, 0x52, 0xb6,
-	0xe2, 0x24, 0x9b, 0x53, 0xbd, 0x04, 0x81, 0x60, 0xe3, 0x3a, 0xca, 0x05, 0x72, 0xa9, 0x97, 0x81,
-	0x52, 0x66, 0xfb, 0x9b, 0x86, 0x0e, 0x7b, 0xc9, 0xba, 0x2c, 0x36, 0x09, 0x58, 0x30, 0x21, 0xf4,
-	0x63, 0x4c, 0x85, 0x54, 0x0b, 0x70, 0x7c, 0x3f, 0xa2, 0x42, 0xc0, 0x02, 0xca, 0x64, 0x05, 0xa1,
-	0xf2, 0x92, 0xf9, 0xab, 0x05, 0x28, 0x5b, 0x71, 0xa1, 0x70, 0x93, 0xf1, 0xcb, 0x04, 0x6c, 0x7c,
-	0x8e, 0x8a, 0x42, 0x3a, 0x32, 0x16, 0x30, 0x6f, 0xed, 0xec, 0x1f, 0x63, 0xfb, 0x12, 0x46, 0xda,
-	0xd1, 0x82, 0x20, 0x92, 0x06, 0xe3, 0x26, 0x2a, 0x09, 0xa5, 0x41, 0x4d, 0x59, 0x00, 0xa5, 0x6b,
-	0x8c, 0xff, 0x43, 0xd5, 0x85, 0x13, 0xcf, 0xa4, 0xbd, 0x92, 0x56, 0x84, 0x7e, 0xfb, 0x40, 0x76,
-	0x13, 0xae, 0xfd, 0x29, 0x8b, 0xf2, 0x37, 0xe3, 0xf7, 0xd7, 0x6b, 0xa1, 0xda, 0xb6, 0xd0, 0x05,
-	0x8f, 0x25, 0x88, 0xcf, 0x13, 0xb0, 0x37, 0x47, 0xcd, 0x6d, 0x8f, 0xda, 0x40, 0x45, 0x67, 0xce,
-	0xe3, 0x40, 0xc2, 0x08, 0x79, 0x92, 0xa2, 0x8d, 0x7b, 0x17, 0xb6, 0xee, 0xfd, 0x3f, 0xaa, 0x85,
-	0xb1, 0x6b, 0xdf, 0xd2, 0x3b, 0x5b, 0x78, 0x11, 0x0b, 0x25, 0x08, 0xdc, 0x27, 0xfb, 0x61, 0xec,
-	0xbe, 0xa6, 0x77, 0x16, 0x70, 0xea, 0xca, 0x4c, 0xd8, 0x6a, 0xe7, 0xae, 0x23, 0x28, 0x5c, 0xad,
-	0x44, 0x10, 0x13, 0xfd, 0x94, 0xc1, 0x47, 0xa8, 0xcc, 0x84, 0xad, 0x5e, 0x05, 0xf5, 0xe1, 0x80,
-	0x25, 0x52, 0x62, 0xe2, 0x0d, 0x60, 0xfc, 0x02, 0x15, 0xa2, 0x38, 0xa0, 0x42, 0x2f, 0x9f, 0xe4,
-	0x4e, 0x2b, 0x67, 0x47, 0xbb, 0x5b, 0x25, 0x71, 0x40, 0x7b, 0xce, 0xcc, 0x09, 0x3c, 0x4a, 0x92,
-	0xc8, 0xf6, 0x39, 0xaa, 0x6c, 0xb0, 0xb8, 0x86, 0xb2, 0xeb, 0xad, 0x64, 0x99, 0xbf, 0x31, 0x65,
-	0x72, 0xd2, 0x14, 0xb5, 0x0d, 0x54, 0x54, 0x69, 0x43, 0x5f, 0x3d, 0x3b, 0x78, 0xbe, 0xe9, 0xb7,
-	0x90, 0x00, 0x55, 0x47, 0x2e, 0x21, 0xa7, 0x4a, 0xb2, 0x72, 0xd9, 0xb6, 0x51, 0xc1, 0xf4, 0x99,
-	0x27, 0xf1, 0xb3, 0x75, 0x83, 0xca, 0x59, 0xe3, 0x29, 0x7d, 0x43, 0xff, 0x77, 0x8d, 0x15, 0xcf,
-	0x63, 0x19, 0xc6, 0xc9, 0x7b, 0xaa, 0x92, 0x14, 0x3d, 0xff, 0xa2, 0xa1, 0xea, 0xd6, 0xa3, 0xc1,
-	0x2d, 0xd4, 0xb4, 0x86, 0x97, 0xa3, 0xe1, 0xe8, 0xd2, 0xb6, 0xc6, 0xdd, 0xf1, 0x8d, 0x65, 0xdf,
-	0x8c, 0xac, 0x77, 0x66, 0x7f, 0x78, 0x31, 0x34, 0x07, 0xf5, 0x0c, 0x6e, 0xa2, 0xc6, 0x8e, 0xbf,
-	0x4f, 0xcc, 0xee, 0xd8, 0x1c, 0xd4, 0x35, 0xfc, 0x37, 0x3a, 0xdc, 0xf1, 0x29, 0x68, 0x0e, 0xea,
-	0xd9, 0x27, 0xca, 0xf6, 0xc8, 0x75, 0x77, 0xd0, 0xef, 0x5a, 0x2a, 0x35, 0x87, 0x8f, 0x91, 0xbe,
-	0x5b, 0xf6, 0x7a, 0x74, 0x31, 0x24, 0x6f, 0xcd, 0x41, 0x3d, 0x8f, 0x8f, 0xd0, 0x5f, 0x3b, 0x5e,
-	0x62, 0xbe, 0x32, 0xfb, 0x2a, 0xb5, 0xd0, 0xbb, 0xfa, 0xfa, 0xd0, 0xd2, 0xee, 0x1f, 0x5a, 0xda,
-	0x8f, 0x87, 0x96, 0xf6, 0xf9, 0xb1, 0x95, 0xb9, 0x7f, 0x6c, 0x65, 0xbe, 0x3f, 0xb6, 0x32, 0x1f,
-	0x8c, 0x09, 0x93, 0xd3, 0xd8, 0x35, 0x3c, 0x3e, 0xef, 0xa8, 0x9d, 0xc1, 0x8f, 0xc9, 0xe3, 0x33,
-	0x00, 0x9d, 0xe5, 0xc6, 0x0f, 0x4e, 0xde, 0x85, 0x54, 0xb8, 0x45, 0x08, 0x78, 0xf9, 0x2b, 0x00,
-	0x00, 0xff, 0xff, 0x50, 0x8f, 0x56, 0x8e, 0xff, 0x04, 0x00, 0x00,
+	// 545 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x53, 0xcd, 0x6e, 0xda, 0x4c,
+	0x14, 0xc5, 0x0e, 0x90, 0x70, 0x51, 0x10, 0xdf, 0x7c, 0x11, 0x75, 0x93, 0xd4, 0x89, 0x58, 0x54,
+	0x51, 0x17, 0x46, 0x4a, 0xa5, 0xee, 0xf9, 0x71, 0x04, 0x95, 0x9a, 0x54, 0x03, 0x11, 0x52, 0x37,
+	0x96, 0x7f, 0x46, 0x78, 0x14, 0xf0, 0x50, 0xcf, 0x38, 0xa5, 0x6f, 0xd1, 0x75, 0x9f, 0xa1, 0x0f,
+	0xd2, 0x65, 0x96, 0x5d, 0x56, 0xf0, 0x0a, 0x7d, 0x80, 0x6a, 0xae, 0x4d, 0xd4, 0xd0, 0xee, 0xce,
+	0xb9, 0xf7, 0xdc, 0x9f, 0x39, 0x57, 0x03, 0xa7, 0x92, 0x47, 0xac, 0x13, 0xa8, 0x30, 0x48, 0x79,
+	0x34, 0x63, 0x9d, 0x80, 0xab, 0x50, 0xf0, 0xc4, 0x59, 0xa6, 0x42, 0x09, 0xd2, 0xd0, 0x59, 0xe7,
+	0x31, 0x7b, 0x7c, 0x34, 0x13, 0x33, 0x81, 0xa9, 0x8e, 0x46, 0xb9, 0xaa, 0xfd, 0xcb, 0x80, 0x7a,
+	0x6f, 0x2e, 0xc2, 0xbb, 0x21, 0xf3, 0x23, 0x96, 0x12, 0x0b, 0xf6, 0xef, 0x59, 0x2a, 0xb9, 0x48,
+	0x2c, 0xe3, 0xdc, 0xb8, 0x28, 0xd3, 0x2d, 0x25, 0x04, 0xca, 0xb1, 0x2f, 0x63, 0xcb, 0x3c, 0x37,
+	0x2e, 0x6a, 0x14, 0x31, 0x69, 0x41, 0x35, 0x66, 0x7c, 0x16, 0x2b, 0x6b, 0x0f, 0xc5, 0x05, 0x23,
+	0x0e, 0xfc, 0xbf, 0x4c, 0xd9, 0x3d, 0x17, 0x99, 0xf4, 0x02, 0xdd, 0xdd, 0xc3, 0xd2, 0x32, 0x96,
+	0xfe, 0xb7, 0x4d, 0xe5, 0x73, 0x75, 0x9f, 0x33, 0xa8, 0x2f, 0x58, 0x7a, 0x37, 0x67, 0x5e, 0x2a,
+	0x84, 0xb2, 0x2a, 0xa8, 0x83, 0x3c, 0x44, 0x85, 0x50, 0xe4, 0x08, 0x2a, 0x89, 0x48, 0x42, 0x66,
+	0x55, 0x71, 0x4e, 0x4e, 0xf4, 0x4a, 0x01, 0x57, 0xd2, 0xda, 0xcf, 0x57, 0xd2, 0x58, 0xc7, 0x14,
+	0x5f, 0x30, 0xeb, 0x00, 0x85, 0x88, 0x49, 0x13, 0xf6, 0x12, 0xb5, 0xb2, 0x6a, 0x18, 0xd2, 0xb0,
+	0xfd, 0xd5, 0x80, 0x56, 0x2f, 0xb7, 0x6b, 0xca, 0x55, 0x1c, 0xa5, 0xfe, 0x27, 0xca, 0x3e, 0x66,
+	0x4c, 0x2a, 0xed, 0x80, 0x1f, 0x45, 0x29, 0x93, 0x12, 0x1d, 0xa8, 0xd1, 0x2d, 0x25, 0xc7, 0x70,
+	0x20, 0xb5, 0x48, 0xef, 0x61, 0x62, 0xaf, 0x47, 0x8e, 0x63, 0x57, 0x3c, 0x42, 0x1f, 0x6a, 0x14,
+	0x31, 0x79, 0x03, 0x55, 0xa9, 0x7c, 0x95, 0x49, 0x7c, 0x78, 0xe3, 0xd2, 0x76, 0x9e, 0x9e, 0xc4,
+	0xd9, 0x8e, 0x1e, 0xa3, 0x8a, 0x16, 0xea, 0xb6, 0x03, 0x55, 0x9a, 0x25, 0x6c, 0x14, 0xe9, 0x67,
+	0xa3, 0x7d, 0xc5, 0x2d, 0x72, 0x42, 0x1a, 0x60, 0xaa, 0x15, 0x6e, 0x70, 0x48, 0x4d, 0xb5, 0x6a,
+	0x7b, 0x50, 0x71, 0x23, 0x1e, 0x2a, 0xf2, 0x12, 0x4c, 0x1e, 0xa1, 0xb6, 0x7e, 0xd9, 0xda, 0x1d,
+	0x96, 0xb7, 0xa4, 0x26, 0x8f, 0xf4, 0xd9, 0xfc, 0x85, 0xc8, 0x12, 0x55, 0x1c, 0xb3, 0x60, 0x3a,
+	0x2e, 0x32, 0xb5, 0xcc, 0xf2, 0x73, 0x1e, 0xd2, 0x82, 0xbd, 0xfa, 0x66, 0x40, 0xe3, 0xe9, 0xae,
+	0xe4, 0x0c, 0x4e, 0xa6, 0xa3, 0xc9, 0x70, 0x40, 0xbb, 0x53, 0x6f, 0x3c, 0xe9, 0x4e, 0x6e, 0xc7,
+	0xde, 0xed, 0xf5, 0xf8, 0xbd, 0xdb, 0x1f, 0x5d, 0x8d, 0xdc, 0x41, 0xb3, 0x44, 0x4e, 0xe0, 0xd9,
+	0xae, 0xa0, 0x4f, 0xdd, 0xee, 0xc4, 0x1d, 0x34, 0x8d, 0x7f, 0x55, 0xf7, 0xe8, 0x4d, 0x77, 0xd0,
+	0xef, 0x8e, 0xb5, 0xc0, 0x24, 0x2f, 0xe0, 0xf9, 0x5f, 0xd5, 0x37, 0xd7, 0x57, 0x23, 0xfa, 0xce,
+	0x1d, 0x34, 0xf7, 0xc8, 0x29, 0x58, 0xbb, 0x69, 0xea, 0xbe, 0x75, 0xfb, 0xba, 0xb8, 0xdc, 0x1b,
+	0x7e, 0x5f, 0xdb, 0xc6, 0xc3, 0xda, 0x36, 0x7e, 0xae, 0x6d, 0xe3, 0xcb, 0xc6, 0x2e, 0x3d, 0x6c,
+	0xec, 0xd2, 0x8f, 0x8d, 0x5d, 0xfa, 0xe0, 0xcc, 0xb8, 0x8a, 0xb3, 0xc0, 0x09, 0xc5, 0xa2, 0xa3,
+	0xed, 0xc1, 0x3f, 0x10, 0x8a, 0x39, 0x92, 0xce, 0xea, 0x8f, 0xbf, 0xa4, 0x3e, 0x2f, 0x99, 0x0c,
+	0xaa, 0x28, 0x78, 0xfd, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x3a, 0xbb, 0x19, 0x58, 0x6a, 0x03, 0x00,
+	0x00,
 }
 
 func (m *BlockHeader) Marshal() (dAtA []byte, err error) {
@@ -681,7 +482,7 @@ func (m *BlockHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *BitcoinSigningRequest) Marshal() (dAtA []byte, err error) {
+func (m *BitcoinWithdrawRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -691,181 +492,37 @@ func (m *BitcoinSigningRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *BitcoinSigningRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *BitcoinWithdrawRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *BitcoinSigningRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *BitcoinWithdrawRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VaultAddress) > 0 {
-		i -= len(m.VaultAddress)
-		copy(dAtA[i:], m.VaultAddress)
-		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.VaultAddress)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.Sequence != 0 {
-		i = encodeVarintBitcoin(dAtA, i, uint64(m.Sequence))
-		i--
-		dAtA[i] = 0x28
-	}
 	if m.Status != 0 {
 		i = encodeVarintBitcoin(dAtA, i, uint64(m.Status))
 		i--
 		dAtA[i] = 0x20
 	}
-	if len(m.Psbt) > 0 {
-		i -= len(m.Psbt)
-		copy(dAtA[i:], m.Psbt)
-		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Psbt)))
-		i--
-		dAtA[i] = 0x1a
-	}
 	if len(m.Txid) > 0 {
 		i -= len(m.Txid)
 		copy(dAtA[i:], m.Txid)
 		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Txid)))
 		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *UTXO) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *UTXO) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *UTXO) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Runes) > 0 {
-		for iNdEx := len(m.Runes) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Runes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintBitcoin(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x4a
-		}
-	}
-	if m.IsLocked {
-		i--
-		if m.IsLocked {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x40
-	}
-	if m.IsCoinbase {
-		i--
-		if m.IsCoinbase {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x38
-	}
-	if len(m.PubKeyScript) > 0 {
-		i -= len(m.PubKeyScript)
-		copy(dAtA[i:], m.PubKeyScript)
-		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.PubKeyScript)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.Height != 0 {
-		i = encodeVarintBitcoin(dAtA, i, uint64(m.Height))
-		i--
-		dAtA[i] = 0x28
-	}
-	if m.Amount != 0 {
-		i = encodeVarintBitcoin(dAtA, i, uint64(m.Amount))
-		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Address)))
-		i--
 		dAtA[i] = 0x1a
 	}
-	if m.Vout != 0 {
-		i = encodeVarintBitcoin(dAtA, i, uint64(m.Vout))
+	if m.Sequence != 0 {
+		i = encodeVarintBitcoin(dAtA, i, uint64(m.Sequence))
 		i--
 		dAtA[i] = 0x10
 	}
-	if len(m.Txid) > 0 {
-		i -= len(m.Txid)
-		copy(dAtA[i:], m.Txid)
-		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Txid)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *RuneBalance) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *RuneBalance) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *RuneBalance) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Amount) > 0 {
-		i -= len(m.Amount)
-		copy(dAtA[i:], m.Amount)
-		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Amount)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Id)))
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Address)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -1003,7 +660,7 @@ func (m *BlockHeader) Size() (n int) {
 	return n
 }
 
-func (m *BitcoinSigningRequest) Size() (n int) {
+func (m *BitcoinWithdrawRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1013,82 +670,15 @@ func (m *BitcoinSigningRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovBitcoin(uint64(l))
 	}
-	l = len(m.Txid)
-	if l > 0 {
-		n += 1 + l + sovBitcoin(uint64(l))
+	if m.Sequence != 0 {
+		n += 1 + sovBitcoin(uint64(m.Sequence))
 	}
-	l = len(m.Psbt)
+	l = len(m.Txid)
 	if l > 0 {
 		n += 1 + l + sovBitcoin(uint64(l))
 	}
 	if m.Status != 0 {
 		n += 1 + sovBitcoin(uint64(m.Status))
-	}
-	if m.Sequence != 0 {
-		n += 1 + sovBitcoin(uint64(m.Sequence))
-	}
-	l = len(m.VaultAddress)
-	if l > 0 {
-		n += 1 + l + sovBitcoin(uint64(l))
-	}
-	return n
-}
-
-func (m *UTXO) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Txid)
-	if l > 0 {
-		n += 1 + l + sovBitcoin(uint64(l))
-	}
-	if m.Vout != 0 {
-		n += 1 + sovBitcoin(uint64(m.Vout))
-	}
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovBitcoin(uint64(l))
-	}
-	if m.Amount != 0 {
-		n += 1 + sovBitcoin(uint64(m.Amount))
-	}
-	if m.Height != 0 {
-		n += 1 + sovBitcoin(uint64(m.Height))
-	}
-	l = len(m.PubKeyScript)
-	if l > 0 {
-		n += 1 + l + sovBitcoin(uint64(l))
-	}
-	if m.IsCoinbase {
-		n += 2
-	}
-	if m.IsLocked {
-		n += 2
-	}
-	if len(m.Runes) > 0 {
-		for _, e := range m.Runes {
-			l = e.Size()
-			n += 1 + l + sovBitcoin(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *RuneBalance) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovBitcoin(uint64(l))
-	}
-	l = len(m.Amount)
-	if l > 0 {
-		n += 1 + l + sovBitcoin(uint64(l))
 	}
 	return n
 }
@@ -1407,7 +997,7 @@ func (m *BlockHeader) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *BitcoinSigningRequest) Unmarshal(dAtA []byte) error {
+func (m *BitcoinWithdrawRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1430,10 +1020,10 @@ func (m *BitcoinSigningRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: BitcoinSigningRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: BitcoinWithdrawRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BitcoinSigningRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: BitcoinWithdrawRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1469,89 +1059,6 @@ func (m *BitcoinSigningRequest) Unmarshal(dAtA []byte) error {
 			m.Address = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Txid = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Psbt", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Psbt = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
-			}
-			m.Status = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Status |= SigningStatus(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sequence", wireType)
 			}
@@ -1570,89 +1077,7 @@ func (m *BitcoinSigningRequest) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VaultAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.VaultAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipBitcoin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *UTXO) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowBitcoin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: UTXO: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UTXO: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
 			}
@@ -1684,62 +1109,11 @@ func (m *UTXO) Unmarshal(dAtA []byte) error {
 			}
 			m.Txid = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Vout", wireType)
-			}
-			m.Vout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Vout |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 4:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
-			m.Amount = 0
+			m.Status = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBitcoin
@@ -1749,252 +1123,11 @@ func (m *UTXO) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Amount |= uint64(b&0x7F) << shift
+				m.Status |= WithdrawStatus(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
-			}
-			m.Height = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Height |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PubKeyScript", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PubKeyScript = append(m.PubKeyScript[:0], dAtA[iNdEx:postIndex]...)
-			if m.PubKeyScript == nil {
-				m.PubKeyScript = []byte{}
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IsCoinbase", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.IsCoinbase = bool(v != 0)
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IsLocked", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.IsLocked = bool(v != 0)
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Runes", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Runes = append(m.Runes, &RuneBalance{})
-			if err := m.Runes[len(m.Runes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipBitcoin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *RuneBalance) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowBitcoin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: RuneBalance: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: RuneBalance: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBitcoin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBitcoin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Amount = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipBitcoin(dAtA[iNdEx:])

@@ -213,19 +213,6 @@ func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, sender s
 		return err
 	}
 
-	utxo := types.UTXO{
-		Txid:         hash,
-		Vout:         uint64(vout),
-		Amount:       uint64(out.Value),
-		PubKeyScript: out.PkScript,
-		Height:       height,
-		Address:      vault.Address,
-		IsCoinbase:   false,
-		IsLocked:     false,
-	}
-
-	k.saveUTXO(ctx, &utxo)
-
 	return nil
 }
 
@@ -251,23 +238,6 @@ func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipi
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receipientAddr, coins); err != nil {
 		return err
 	}
-
-	utxo := types.UTXO{
-		Txid:         hash,
-		Vout:         uint64(vout),
-		Amount:       uint64(out.Value),
-		PubKeyScript: out.PkScript,
-		Height:       height,
-		Address:      vault.Address,
-		IsCoinbase:   false,
-		IsLocked:     false,
-		Runes: []*types.RuneBalance{{
-			Id:     id.ToString(),
-			Amount: amount,
-		}},
-	}
-
-	k.saveUTXO(ctx, &utxo)
 
 	return nil
 }
