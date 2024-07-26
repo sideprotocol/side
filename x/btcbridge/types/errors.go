@@ -36,4 +36,7 @@ var (
 	ErrInvalidRuneId = errorsmod.Register(ModuleName, 6101, "invalid rune id")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 7100, "invalid module params")
+
+	ErrInvalidDepositAmount  = errorsmod.Register(ModuleName, 8100, "invalid deposit amount")
+	ErrInvalidWithdrawAmount = errorsmod.Register(ModuleName, 8101, "invalid withdrawal amount")
 )

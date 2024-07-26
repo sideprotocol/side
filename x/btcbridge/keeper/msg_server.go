@@ -131,25 +131,44 @@ func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdraw
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	params := m.GetParams(ctx)
+
 	sender := sdk.MustAccAddressFromBech32(msg.Sender)
 
-	coin, err := sdk.ParseCoinNormalized(msg.Amount)
+	amount, err := sdk.ParseCoinNormalized(msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
-	if coin.Denom == m.GetParams(ctx).BtcVoucherDenom {
-		if err := types.CheckOutputAmount(msg.Sender, coin.Amount.Int64()); err != nil {
+	networkFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.NetworkFee)
+
+	if amount.Denom == params.BtcVoucherDenom {
+		protocolFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.ProtocolFees.WithdrawFee)
+
+		amount = amount.Sub(networkFee).Sub(protocolFee)
+		if amount.Amount.Int64() < params.ProtocolLimits.BtcMinWithdraw || amount.Amount.Int64() > params.ProtocolLimits.BtcMaxWithdraw {
+			return nil, types.ErrInvalidWithdrawAmount
+		}
+
+		if err := types.CheckOutputAmount(msg.Sender, amount.Amount.Int64()); err != nil {
+			return nil, types.ErrInvalidWithdrawAmount
+		}
+
+		if err := m.bankKeeper.SendCoins(ctx, sender, sdk.MustAccAddressFromBech32(params.ProtocolFees.Collector), sdk.NewCoins(protocolFee)); err != nil {
 			return nil, err
 		}
 	}
 
-	req, err := m.Keeper.NewWithdrawRequest(ctx, msg.Sender, coin)
+	req, err := m.Keeper.NewWithdrawRequest(ctx, msg.Sender, amount)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = m.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(coin)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(amount, networkFee)); err != nil {
+		return nil, err
+	}
+
+	if err := m.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(amount, networkFee)); err != nil {
 		return nil, err
 	}
 
