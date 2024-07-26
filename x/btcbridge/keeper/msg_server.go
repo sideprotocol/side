@@ -22,12 +22,6 @@ func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmi
 		return nil, err
 	}
 
-	// check if the sender is one of the authorized senders
-	param := m.GetParams(ctx)
-	if !param.IsAuthorizedSender(msg.Sender) {
-		return nil, types.ErrSenderAddressNotAuthorized
-	}
-
 	// Set block headers
 	err := m.SetBlockHeaders(ctx, msg.BlockHeaders)
 	if err != nil {
@@ -103,27 +97,6 @@ func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.M
 	return &types.MsgSubmitWithdrawTransactionResponse{}, nil
 }
 
-// UpdateSenders implements types.MsgServer.
-func (m msgServer) UpdateQualifiedRelayers(goCtx context.Context, msg *types.MsgUpdateQualifiedRelayersRequest) (*types.MsgUpdateQualifiedRelayersResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	// check if the sender is one of the authorized senders
-	param := m.GetParams(ctx)
-	if !param.IsAuthorizedSender(msg.Sender) {
-		return nil, types.ErrSenderAddressNotAuthorized
-	}
-
-	// Set block headers
-	m.SetParams(ctx, types.NewParams(msg.Relayers))
-
-	// Emit events
-
-	return &types.MsgUpdateQualifiedRelayersResponse{}, nil
-}
-
 func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdrawBitcoinRequest) (*types.MsgWithdrawBitcoinResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
@@ -184,11 +157,6 @@ func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdraw
 func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSubmitWithdrawStatusRequest) (*types.MsgSubmitWithdrawStatusResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
-	}
-
-	param := m.GetParams(sdk.UnwrapSDKContext(goCtx))
-	if !param.IsAuthorizedSender(msg.Sender) {
-		return nil, types.ErrSenderAddressNotAuthorized
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)

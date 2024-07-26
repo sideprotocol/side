@@ -20,11 +20,6 @@ import (
 func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.MsgSubmitDepositTransactionRequest) (*chainhash.Hash, btcutil.Address, error) {
 	ctx.Logger().Info("accept bitcoin deposit tx", "blockhash", msg.Blockhash)
 
-	params := k.GetParams(ctx)
-	if !params.IsAuthorizedSender(msg.Sender) {
-		return nil, nil, types.ErrSenderAddressNotAuthorized
-	}
-
 	tx, prevTx, err := k.ValidateDepositTransaction(ctx, msg.TxBytes, msg.PrevTxBytes, msg.Blockhash, msg.Proof)
 	if err != nil {
 		return nil, nil, err
