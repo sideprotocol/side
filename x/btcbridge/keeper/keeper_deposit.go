@@ -143,7 +143,7 @@ func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height
 		return nil, err
 	}
 
-	// mint voucher token and save utxo if the receiver is a vault address
+	// mint voucher token if the receiver is a vault address
 	for i, out := range tx.MsgTx().TxOut {
 		if types.IsOpReturnOutput(out) {
 			continue
@@ -165,7 +165,7 @@ func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height
 			continue
 		}
 
-		// mint the voucher token by asset type and save utxos
+		// mint the voucher token by asset type
 		// skip if the asset type of the sender address is unspecified
 		switch vault.AssetType {
 		case types.AssetType_ASSET_TYPE_BTC:
