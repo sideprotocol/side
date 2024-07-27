@@ -8,28 +8,28 @@ import (
 const TypeMsgUpdateParams = "update_params"
 
 // Route returns the route of MsgUpdateParams.
-func (msg *MsgUpdateParamsRequest) Route() string {
+func (msg *MsgUpdateParams) Route() string {
 	return RouterKey
 }
 
 // Type returns the type of MsgUpdateParams.
-func (msg *MsgUpdateParamsRequest) Type() string {
+func (msg *MsgUpdateParams) Type() string {
 	return TypeMsgUpdateParams
 }
 
 // GetSignBytes implements the LegacyMsg interface.
-func (m MsgUpdateParamsRequest) GetSignBytes() []byte {
+func (m MsgUpdateParams) GetSignBytes() []byte {
 	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
 }
 
 // GetSigners returns the expected signers for a MsgUpdateParams message.
-func (m *MsgUpdateParamsRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgUpdateParams) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(m.Authority)
 	return []sdk.AccAddress{addr}
 }
 
 // ValidateBasic performs basic MsgUpdateParams message validation.
-func (m *MsgUpdateParamsRequest) ValidateBasic() error {
+func (m *MsgUpdateParams) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
 		return sdkerrors.Wrap(err, "invalid authority address")
 	}

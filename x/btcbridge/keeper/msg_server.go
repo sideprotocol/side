@@ -16,7 +16,7 @@ type msgServer struct {
 }
 
 // SubmitBlockHeaders implements types.MsgServer.
-func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmitBlockHeaderRequest) (*types.MsgSubmitBlockHeadersResponse, error) {
+func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmitBlockHeaders) (*types.MsgSubmitBlockHeadersResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmi
 // No Permission check required for this message
 // Since everyone can submit a transaction to mint voucher tokens
 // This message is usually sent by relayers
-func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.MsgSubmitDepositTransactionRequest) (*types.MsgSubmitDepositTransactionResponse, error) {
+func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.MsgSubmitDepositTransaction) (*types.MsgSubmitDepositTransactionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if err := msg.ValidateBasic(); err != nil {
@@ -73,7 +73,7 @@ func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.Ms
 // No Permission check required for this message
 // Since everyone can submit a transaction to mint voucher tokens
 // This message is usually sent by relayers
-func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.MsgSubmitWithdrawTransactionRequest) (*types.MsgSubmitWithdrawTransactionResponse, error) {
+func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.MsgSubmitWithdrawTransaction) (*types.MsgSubmitWithdrawTransactionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if err := msg.ValidateBasic(); err != nil {
@@ -97,7 +97,7 @@ func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.M
 	return &types.MsgSubmitWithdrawTransactionResponse{}, nil
 }
 
-func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdrawBitcoinRequest) (*types.MsgWithdrawBitcoinResponse, error) {
+func (m msgServer) Withdraw(goCtx context.Context, msg *types.MsgWithdraw) (*types.MsgWithdrawResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
@@ -151,10 +151,10 @@ func (m msgServer) WithdrawBitcoin(goCtx context.Context, msg *types.MsgWithdraw
 		sdk.NewAttribute("amount", msg.Amount),
 	)
 
-	return &types.MsgWithdrawBitcoinResponse{}, nil
+	return &types.MsgWithdrawResponse{}, nil
 }
 
-func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSubmitWithdrawStatusRequest) (*types.MsgSubmitWithdrawStatusResponse, error) {
+func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSubmitWithdrawStatus) (*types.MsgSubmitWithdrawStatusResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSub
 }
 
 // UpdateParams updates the module params.
-func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParamsRequest) (*types.MsgUpdateParamsResponse, error) {
+func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
 	}

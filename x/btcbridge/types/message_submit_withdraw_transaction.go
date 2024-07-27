@@ -7,13 +7,13 @@ import (
 
 const TypeMsgSubmitWithdrawTransaction = "submit_withdraw_transaction"
 
-func NewMsgSubmitWithdrawTransactionRequest(
+func NewMsgSubmitWithdrawTransaction(
 	sender string,
 	blockhash string,
 	transaction string,
 	proof []string,
-) *MsgSubmitWithdrawTransactionRequest {
-	return &MsgSubmitWithdrawTransactionRequest{
+) *MsgSubmitWithdrawTransaction {
+	return &MsgSubmitWithdrawTransaction{
 		Sender:    sender,
 		Blockhash: blockhash,
 		TxBytes:   transaction,
@@ -21,15 +21,15 @@ func NewMsgSubmitWithdrawTransactionRequest(
 	}
 }
 
-func (msg *MsgSubmitWithdrawTransactionRequest) Route() string {
+func (msg *MsgSubmitWithdrawTransaction) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgSubmitWithdrawTransactionRequest) Type() string {
+func (msg *MsgSubmitWithdrawTransaction) Type() string {
 	return TypeMsgSubmitDepositTransaction
 }
 
-func (msg *MsgSubmitWithdrawTransactionRequest) GetSigners() []sdk.AccAddress {
+func (msg *MsgSubmitWithdrawTransaction) GetSigners() []sdk.AccAddress {
 	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
@@ -37,12 +37,12 @@ func (msg *MsgSubmitWithdrawTransactionRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{Sender}
 }
 
-func (msg *MsgSubmitWithdrawTransactionRequest) GetSignBytes() []byte {
+func (msg *MsgSubmitWithdrawTransaction) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgSubmitWithdrawTransactionRequest) ValidateBasic() error {
+func (msg *MsgSubmitWithdrawTransaction) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return sdkerrors.Wrapf(err, "invalid Sender address (%s)", err)
