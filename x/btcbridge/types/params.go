@@ -27,6 +27,16 @@ func NewParams(relayers []string) Params {
 			PubKey:    "",
 			AssetType: AssetType_ASSET_TYPE_RUNE,
 		}},
+		ProtocolLimits: &ProtocolLimits{
+			BtcMinDeposit:  50000,     // 0.0005BTC
+			BtcMinWithdraw: 30000,     // 0.0003BTC
+			BtcMaxWithdraw: 500000000, // 5BTC
+		},
+		ProtocolFees: &ProtocolFees{
+			DepositFee:  8000,  // 0.00008BTC
+			WithdrawFee: 12000, // 0.00012BTC
+			Collector:   "",
+		},
 	}
 }
 
@@ -75,6 +85,21 @@ func (p Params) Validate() error {
 
 		if vault.AssetType == AssetType_ASSET_TYPE_UNSPECIFIED {
 			return ErrInvalidParams
+		}
+	}
+
+	if p.ProtocolLimits != nil {
+		if p.ProtocolLimits.BtcMinWithdraw > p.ProtocolLimits.BtcMaxWithdraw {
+			return ErrInvalidParams
+		}
+	}
+
+	if p.ProtocolFees != nil {
+		if len(p.ProtocolFees.Collector) != 0 {
+			_, err := sdk.AccAddressFromBech32(p.ProtocolFees.Collector)
+			if err != nil {
+				return ErrInvalidParams
+			}
 		}
 	}
 

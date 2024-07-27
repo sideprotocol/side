@@ -194,22 +194,32 @@ func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, sender s
 	}
 	k.addToMintHistory(ctx, hash)
 
-	// mint the voucher token
-	if len(denom) == 0 {
-		denom = "sat"
+	params := k.GetParams(ctx)
+
+	protocolFee := sdk.NewInt64Coin(denom, params.ProtocolFees.DepositFee)
+	protocolFeeCollector := sdk.MustAccAddressFromBech32(params.ProtocolFees.Collector)
+
+	amount := sdk.NewInt64Coin(denom, out.Value)
+
+	depositAmount := amount.Sub(protocolFee)
+	if depositAmount.Amount.Int64() < params.ProtocolLimits.BtcMinDeposit {
+		return types.ErrInvalidDepositAmount
 	}
-	coins := sdk.NewCoins(sdk.NewCoin(denom, sdk.NewInt(out.Value)))
 
 	receipient, err := sdk.AccAddressFromBech32(sender)
 	if err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, coins); err != nil {
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(amount)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receipient, coins); err != nil {
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receipient, sdk.NewCoins(depositAmount)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, protocolFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
 		return err
 	}
 

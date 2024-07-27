@@ -2,6 +2,7 @@ syntax = "proto3";
 package side.btcbridge;
 
 import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
 
@@ -13,9 +14,16 @@ message Params {
   int32 confirmations = 2;
   // Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
   uint64 max_acceptable_block_depth = 3;
-  // the denomanation of the voucher
+  // The denomination of the voucher
   string btc_voucher_denom = 4;
+  // Vault list
   repeated Vault vaults = 5;
+  // Protocol limitations
+  ProtocolLimits protocol_limits = 6;
+  // Protocol fees
+  ProtocolFees protocol_fees = 7;
+  // Network fee for withdrawal to bitcoin
+  int64 NetworkFee = 8;
 }
 
 // AssetType defines the type of asset
@@ -26,11 +34,11 @@ enum AssetType {
   ASSET_TYPE_BTC = 1;
   // BRC20: ordi, sats
   ASSET_TYPE_BRC20 = 2;
-  // RUNE: dog*go*to*the*moon
+  // RUNE, dog*go*to*the*moon
   ASSET_TYPE_RUNE = 3;
 }
 
-// Vault defines the vault.
+// Vault defines the asset vault
 message Vault {
   // the depositor should send their btc to this address
   string address = 1;
@@ -38,4 +46,24 @@ message Vault {
   string pub_key = 2;
   // the address to which the voucher is sent
   AssetType asset_type = 3;
+}
+
+// ProtocolLimits defines the params related to the the protocol limitations
+message ProtocolLimits {
+  // The minimum deposit amount for btc
+  int64 btc_min_deposit = 1;
+  // The minimum withdrawal amount for btc
+  int64 btc_min_withdraw = 2;
+  // The maximum withdrawal amount for btc
+  int64 btc_max_withdraw = 3;
+}
+
+// ProtocolFees defines the params related to the protocol fees
+message ProtocolFees {
+  // Protocol fee amount for deposit
+  int64 deposit_fee = 1;
+  // Protocol fee amount for withdrawal
+  int64 withdraw_fee = 2;
+  // Protocol fee collector
+  string collector = 3;
 }
