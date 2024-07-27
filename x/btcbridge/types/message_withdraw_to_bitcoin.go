@@ -5,27 +5,27 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgWithdraw = "withdraw"
+const TypeMsgWithdrawToBitcoin = "withdraw_to_bitcoin"
 
-func NewMsgWithdraw(
+func NewMsgWithdrawToBitcoin(
 	sender string,
 	amount string,
-) *MsgWithdraw {
-	return &MsgWithdraw{
+) *MsgWithdrawToBitcoin {
+	return &MsgWithdrawToBitcoin{
 		Sender: sender,
 		Amount: amount,
 	}
 }
 
-func (msg *MsgWithdraw) Route() string {
+func (msg *MsgWithdrawToBitcoin) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgWithdraw) Type() string {
-	return TypeMsgWithdraw
+func (msg *MsgWithdrawToBitcoin) Type() string {
+	return TypeMsgWithdrawToBitcoin
 }
 
-func (msg *MsgWithdraw) GetSigners() []sdk.AccAddress {
+func (msg *MsgWithdrawToBitcoin) GetSigners() []sdk.AccAddress {
 	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
@@ -33,12 +33,12 @@ func (msg *MsgWithdraw) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{Sender}
 }
 
-func (msg *MsgWithdraw) GetSignBytes() []byte {
+func (msg *MsgWithdrawToBitcoin) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgWithdraw) ValidateBasic() error {
+func (msg *MsgWithdrawToBitcoin) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return sdkerrors.Wrapf(err, "invalid Sender address (%s)", err)

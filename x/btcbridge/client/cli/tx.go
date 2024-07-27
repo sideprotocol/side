@@ -35,7 +35,7 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdSubmitBlocks())
-	cmd.AddCommand(CmdWithdraw())
+	cmd.AddCommand(CmdWithdrawToBitcoin())
 
 	return cmd
 }
@@ -73,8 +73,8 @@ func CmdSubmitBlocks() *cobra.Command {
 	return cmd
 }
 
-// Withdraw
-func CmdWithdraw() *cobra.Command {
+// Withdraw To Bitcoin
+func CmdWithdrawToBitcoin() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "withdraw [amount]",
 		Short: "Withdraw asset to the given sender",
@@ -90,7 +90,7 @@ func CmdWithdraw() *cobra.Command {
 				return fmt.Errorf("invalid amount")
 			}
 
-			msg := types.NewMsgWithdraw(
+			msg := types.NewMsgWithdrawToBitcoin(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 			)

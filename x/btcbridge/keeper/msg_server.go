@@ -97,7 +97,7 @@ func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.M
 	return &types.MsgSubmitWithdrawTransactionResponse{}, nil
 }
 
-func (m msgServer) Withdraw(goCtx context.Context, msg *types.MsgWithdraw) (*types.MsgWithdrawResponse, error) {
+func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdrawToBitcoin) (*types.MsgWithdrawToBitcoinResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
@@ -151,7 +151,7 @@ func (m msgServer) Withdraw(goCtx context.Context, msg *types.MsgWithdraw) (*typ
 		sdk.NewAttribute("amount", msg.Amount),
 	)
 
-	return &types.MsgWithdrawResponse{}, nil
+	return &types.MsgWithdrawToBitcoinResponse{}, nil
 }
 
 func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSubmitWithdrawStatus) (*types.MsgSubmitWithdrawStatusResponse, error) {

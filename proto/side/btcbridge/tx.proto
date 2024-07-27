@@ -16,8 +16,8 @@ service Msg {
   rpc SubmitDepositTransaction (MsgSubmitDepositTransaction) returns (MsgSubmitDepositTransactionResponse);
   // SubmitWithdrawalTransaction submits bitcoin transaction to the side chain.
   rpc SubmitWithdrawTransaction (MsgSubmitWithdrawTransaction) returns (MsgSubmitWithdrawTransactionResponse);
-  // Withdraw withdraws the asset from the side chain.
-  rpc Withdraw (MsgWithdraw) returns (MsgWithdrawResponse);
+  // WithdrawToBitcoin withdraws the asset to bitcoin.
+  rpc WithdrawToBitcoin (MsgWithdrawToBitcoin) returns (MsgWithdrawToBitcoinResponse);
   // SubmitWithdrawStatus submits the status of the withdraw transaction.
   rpc SubmitWithdrawStatus (MsgSubmitWithdrawStatus) returns (MsgSubmitWithdrawStatusResponse);
   // UpdateParams defines a governance operation for updating the x/btcbridge module
@@ -80,15 +80,15 @@ message MsgSubmitWithdrawTransaction {
 message MsgSubmitWithdrawTransactionResponse {
 }
 
-// MsgWithdraw defines the Msg/Withdraw request type.
-message MsgWithdraw {
+// MsgWithdrawToBitcoin defines the Msg/WithdrawToBitcoin request type.
+message MsgWithdrawToBitcoin {
   string sender = 1;
   // withdraw amount in satoshi, etc: 100000000sat = 1btc
   string amount = 2;
 }
 
-// MsgWithdrawResponse defines the Msg/Withdraw response type.
-message MsgWithdrawResponse {
+// MsgWithdrawToBitcoinResponse defines the Msg/WithdrawToBitcoin response type.
+message MsgWithdrawToBitcoinResponse {
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
