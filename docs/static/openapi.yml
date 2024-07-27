@@ -79879,9 +79879,11 @@ definitions:
       MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
 
       Since: cosmos-sdk 0.47
-  side.btcbridge.MsgWithdrawResponse:
+  side.btcbridge.MsgWithdrawToBitcoinResponse:
     type: object
-    description: MsgWithdrawResponse defines the Msg/Withdraw response type.
+    description: >-
+      MsgWithdrawToBitcoinResponse defines the Msg/WithdrawToBitcoin response
+      type.
   side.btcbridge.Params:
     type: object
     properties:
