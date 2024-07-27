@@ -16,8 +16,6 @@ service Msg {
   rpc SubmitDepositTransaction (MsgSubmitDepositTransactionRequest) returns (MsgSubmitDepositTransactionResponse);
   // SubmitWithdrawalTransaction submits bitcoin transaction to the side chain.
   rpc SubmitWithdrawTransaction (MsgSubmitWithdrawTransactionRequest) returns (MsgSubmitWithdrawTransactionResponse);
-  // UpdateSenders updates the senders of the side chain.
-  rpc UpdateQualifiedRelayers (MsgUpdateQualifiedRelayersRequest) returns (MsgUpdateQualifiedRelayersResponse);
   // WithdrawBitcoin withdraws the bitcoin from the side chain.
   rpc WithdrawBitcoin (MsgWithdrawBitcoinRequest) returns (MsgWithdrawBitcoinResponse);
   // SubmitWithdrawStatus submits the status of the withdraw transaction.
@@ -80,17 +78,6 @@ message MsgSubmitWithdrawTransactionRequest {
 
 // MsgSubmitTransactionResponse defines the Msg/SubmitTransaction response type.
 message MsgSubmitWithdrawTransactionResponse {
-}
-
-// Msg defines the MsgUpdateSender service.
-message MsgUpdateQualifiedRelayersRequest {
-  string sender = 1;
-  // update senders who can send block headers to the side chain
-  repeated string relayers = 2;
-}
-
-// MsgUpdateSenderResponse defines the Msg/UpdateSender response type.
-message MsgUpdateQualifiedRelayersResponse {
 }
 
 // MsgWithdrawBitcoinRequest defines the Msg/WithdrawBitcoin request type.

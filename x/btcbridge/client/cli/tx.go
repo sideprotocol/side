@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -36,7 +35,6 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdSubmitBlocks())
-	cmd.AddCommand(CmdUpdateSenders())
 	cmd.AddCommand(CmdWithdrawBitcoin())
 
 	return cmd
@@ -62,40 +60,6 @@ func CmdSubmitBlocks() *cobra.Command {
 			msg := types.NewMsgSubmitBlockHeaderRequest(
 				clientCtx.GetFromAddress().String(),
 				blockHeaders,
-			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-// Update Authorized Senders
-func CmdUpdateSenders() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "update-senders [senders]",
-		Short: "Update authorized senders",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			// split the senders from args[0]
-			senders := strings.Split(args[0], ",")
-			if len(senders) == 0 {
-				return fmt.Errorf("senders can not be empty")
-			}
-
-			msg := types.NewMsgUpdateSendersRequest(
-				clientCtx.GetFromAddress().String(),
-				senders,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

@@ -3,6 +3,7 @@ package types
 import (
 	"bytes"
 	"encoding/hex"
+	"time"
 
 	secp256k1 "github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
@@ -11,10 +12,17 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+var (
+	// default reward epoch
+	DefaultRewardEpoch = time.Duration(1209600) * time.Second // 14 days
+
+	// default TSS update transition period
+	DefaultTssUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
+)
+
 // NewParams creates a new Params instance
-func NewParams(relayers []string) Params {
+func NewParams() Params {
 	return Params{
-		AuthorizedRelayers:      relayers,
 		Confirmations:           2,
 		MaxAcceptableBlockDepth: 100,
 		BtcVoucherDenom:         "sat",
@@ -28,32 +36,28 @@ func NewParams(relayers []string) Params {
 			AssetType: AssetType_ASSET_TYPE_RUNE,
 		}},
 		ProtocolLimits: &ProtocolLimits{
-			BtcMinDeposit:  50000,     // 0.0005BTC
-			BtcMinWithdraw: 30000,     // 0.0003BTC
-			BtcMaxWithdraw: 500000000, // 5BTC
+			BtcMinDeposit:  50000,     // 0.0005 BTC
+			BtcMinWithdraw: 30000,     // 0.0003 BTC
+			BtcMaxWithdraw: 500000000, // 5 BTC
 		},
 		ProtocolFees: &ProtocolFees{
-			DepositFee:  8000,  // 0.00008BTC
-			WithdrawFee: 12000, // 0.00012BTC
+			DepositFee:  8000,  // 0.00008 BTC
+			WithdrawFee: 12000, // 0.00012 BTC
 			Collector:   "",
 		},
+		NetworkFee:                8000, // 0.00008 BTC
+		RewardEpoch:               &DefaultRewardEpoch,
+		TssUpdateTransitionPeriod: &DefaultTssUpdateTransitionPeriod,
 	}
 }
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
-	return NewParams([]string{})
+	return NewParams()
 }
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	for _, sender := range p.AuthorizedRelayers {
-		_, err := sdk.AccAddressFromBech32(sender)
-		if err != nil {
-			return err
-		}
-	}
-
 	if err := sdk.ValidateDenom(p.BtcVoucherDenom); err != nil {
 		return err
 	}
@@ -61,14 +65,16 @@ func (p Params) Validate() error {
 	vaults := make(map[string]bool)
 
 	for _, vault := range p.Vaults {
-		_, ok := vaults[vault.Address]
-		if ok {
-			return ErrInvalidParams
-		}
+		if len(vault.Address) != 0 {
+			_, err := sdk.AccAddressFromBech32(vault.Address)
+			if err != nil {
+				return err
+			}
 
-		_, err := sdk.AccAddressFromBech32(vault.Address)
-		if err != nil {
-			return err
+			_, ok := vaults[vault.Address]
+			if ok {
+				return ErrInvalidParams
+			}
 		}
 
 		if len(vault.PubKey) != 0 {
@@ -104,16 +110,6 @@ func (p Params) Validate() error {
 	}
 
 	return nil
-}
-
-// checks if the given address is an authorized sender
-func (p Params) IsAuthorizedSender(sender string) bool {
-	for _, s := range p.AuthorizedRelayers {
-		if s == sender {
-			return true
-		}
-	}
-	return false
 }
 
 // SelectVaultByBitcoinAddress returns the vault if the address is found
