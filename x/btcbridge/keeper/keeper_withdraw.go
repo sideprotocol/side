@@ -156,7 +156,7 @@ func (k Keeper) FilterWithdrawRequestsByAddr(ctx sdk.Context, req *types.QueryWi
 }
 
 // Process Bitcoin Withdraw Transaction
-func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.MsgSubmitWithdrawTransactionRequest) (*chainhash.Hash, error) {
+func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.MsgSubmitWithdrawTransaction) (*chainhash.Hash, error) {
 	ctx.Logger().Info("accept bitcoin withdraw tx", "blockhash", msg.Blockhash)
 
 	param := k.GetParams(ctx)

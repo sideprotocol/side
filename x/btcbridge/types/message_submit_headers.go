@@ -7,25 +7,25 @@ import (
 
 const TypeMsgSubmitBlockHeader = "submit_block_header"
 
-func NewMsgSubmitBlockHeaderRequest(
+func NewMsgSubmitBlockHeaders(
 	sender string,
 	headers []*BlockHeader,
-) *MsgSubmitBlockHeaderRequest {
-	return &MsgSubmitBlockHeaderRequest{
+) *MsgSubmitBlockHeaders {
+	return &MsgSubmitBlockHeaders{
 		Sender:       sender,
 		BlockHeaders: headers,
 	}
 }
 
-func (msg *MsgSubmitBlockHeaderRequest) Route() string {
+func (msg *MsgSubmitBlockHeaders) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgSubmitBlockHeaderRequest) Type() string {
+func (msg *MsgSubmitBlockHeaders) Type() string {
 	return TypeMsgSubmitBlockHeader
 }
 
-func (msg *MsgSubmitBlockHeaderRequest) GetSigners() []sdk.AccAddress {
+func (msg *MsgSubmitBlockHeaders) GetSigners() []sdk.AccAddress {
 	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
@@ -33,12 +33,12 @@ func (msg *MsgSubmitBlockHeaderRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{Sender}
 }
 
-func (msg *MsgSubmitBlockHeaderRequest) GetSignBytes() []byte {
+func (msg *MsgSubmitBlockHeaders) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgSubmitBlockHeaderRequest) ValidateBasic() error {
+func (msg *MsgSubmitBlockHeaders) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return sdkerrors.Wrapf(err, "invalid Sender address (%s)", err)

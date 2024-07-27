@@ -35,7 +35,7 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdSubmitBlocks())
-	cmd.AddCommand(CmdWithdrawBitcoin())
+	cmd.AddCommand(CmdWithdraw())
 
 	return cmd
 }
@@ -57,7 +57,7 @@ func CmdSubmitBlocks() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgSubmitBlockHeaderRequest(
+			msg := types.NewMsgSubmitBlockHeaders(
 				clientCtx.GetFromAddress().String(),
 				blockHeaders,
 			)
@@ -73,11 +73,11 @@ func CmdSubmitBlocks() *cobra.Command {
 	return cmd
 }
 
-// Withdraw Bitcoin
-func CmdWithdrawBitcoin() *cobra.Command {
+// Withdraw
+func CmdWithdraw() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "withdraw [amount]",
-		Short: "Withdraw bitcoin to the given sender",
+		Short: "Withdraw asset to the given sender",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -90,7 +90,7 @@ func CmdWithdrawBitcoin() *cobra.Command {
 				return fmt.Errorf("invalid amount")
 			}
 
-			msg := types.NewMsgWithdrawBitcoinRequest(
+			msg := types.NewMsgWithdraw(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 			)

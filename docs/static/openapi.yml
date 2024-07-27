@@ -49607,11 +49607,6 @@ paths:
                 description: params holds all the parameters of this module.
                 type: object
                 properties:
-                  authorized_relayers:
-                    type: array
-                    items:
-                      type: string
-                    title: Only accept blocks sending from these addresses
                   confirmations:
                     type: integer
                     format: int32
@@ -49627,7 +49622,7 @@ paths:
                       acceptance.
                   btc_voucher_denom:
                     type: string
-                    title: the denomanation of the voucher
+                    title: The denomination of the voucher
                   vaults:
                     type: array
                     items:
@@ -49652,8 +49647,58 @@ paths:
                             - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                              - ASSET_TYPE_BTC: BTC
                              - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                             - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
-                      description: Vault defines the vault.
+                             - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+                        version:
+                          type: integer
+                          format: int32
+                          title: version
+                      title: Vault defines the asset vault
+                    title: Asset vaults
+                  protocol_limits:
+                    title: Protocol limitations
+                    type: object
+                    properties:
+                      btc_min_deposit:
+                        type: string
+                        format: int64
+                        title: The minimum deposit amount for btc
+                      btc_min_withdraw:
+                        type: string
+                        format: int64
+                        title: The minimum withdrawal amount for btc
+                      btc_max_withdraw:
+                        type: string
+                        format: int64
+                        title: The maximum withdrawal amount for btc
+                  protocol_fees:
+                    title: Protocol fees
+                    type: object
+                    properties:
+                      deposit_fee:
+                        type: string
+                        format: int64
+                        title: Protocol fee amount for deposit
+                      withdraw_fee:
+                        type: string
+                        format: int64
+                        title: Protocol fee amount for withdrawal
+                      collector:
+                        type: string
+                        title: Protocol fee collector
+                  network_fee:
+                    type: string
+                    format: int64
+                    title: Network fee for withdrawal to bitcoin
+                  reward_epoch:
+                    type: string
+                    title: >-
+                      Reward epoch for relayer and TSS participant
+                      incentivization
+                  tss_update_transition_period:
+                    type: string
+                    title: >-
+                      Transition period after which TSS participants update
+                      process is completed
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -79741,7 +79786,7 @@ definitions:
       - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
        - ASSET_TYPE_BTC: BTC
        - ASSET_TYPE_BRC20: BRC20: ordi, sats
-       - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
+       - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
     title: AssetType defines the type of asset
   side.btcbridge.BitcoinWithdrawRequest:
     type: object
@@ -79816,8 +79861,8 @@ definitions:
   side.btcbridge.MsgSubmitDepositTransactionResponse:
     type: object
     description: >-
-      MsgSubmitTransactionResponse defines the Msg/SubmitTransaction response
-      type.
+      MsgSubmitDepositTransactionResponse defines the
+      Msg/SubmitDepositTransaction response type.
   side.btcbridge.MsgSubmitWithdrawStatusResponse:
     type: object
     description: >-
@@ -79826,28 +79871,20 @@ definitions:
   side.btcbridge.MsgSubmitWithdrawTransactionResponse:
     type: object
     description: >-
-      MsgSubmitTransactionResponse defines the Msg/SubmitTransaction response
-      type.
+      MsgSubmitWithdrawTransactionResponse defines the
+      Msg/SubmitWithdrawTransaction response type.
   side.btcbridge.MsgUpdateParamsResponse:
     type: object
     description: |-
       MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
 
       Since: cosmos-sdk 0.47
-  side.btcbridge.MsgUpdateQualifiedRelayersResponse:
+  side.btcbridge.MsgWithdrawResponse:
     type: object
-    description: MsgUpdateSenderResponse defines the Msg/UpdateSender response type.
-  side.btcbridge.MsgWithdrawBitcoinResponse:
-    type: object
-    description: MsgWithdrawBitcoinResponse defines the Msg/WithdrawBitcoin response type.
+    description: MsgWithdrawResponse defines the Msg/Withdraw response type.
   side.btcbridge.Params:
     type: object
     properties:
-      authorized_relayers:
-        type: array
-        items:
-          type: string
-        title: Only accept blocks sending from these addresses
       confirmations:
         type: integer
         format: int32
@@ -79862,7 +79899,7 @@ definitions:
           which transactions are considered for acceptance.
       btc_voucher_denom:
         type: string
-        title: the denomanation of the voucher
+        title: The denomination of the voucher
       vaults:
         type: array
         items:
@@ -79887,9 +79924,88 @@ definitions:
                 - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                  - ASSET_TYPE_BTC: BTC
                  - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                 - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
-          description: Vault defines the vault.
+                 - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+            version:
+              type: integer
+              format: int32
+              title: version
+          title: Vault defines the asset vault
+        title: Asset vaults
+      protocol_limits:
+        title: Protocol limitations
+        type: object
+        properties:
+          btc_min_deposit:
+            type: string
+            format: int64
+            title: The minimum deposit amount for btc
+          btc_min_withdraw:
+            type: string
+            format: int64
+            title: The minimum withdrawal amount for btc
+          btc_max_withdraw:
+            type: string
+            format: int64
+            title: The maximum withdrawal amount for btc
+      protocol_fees:
+        title: Protocol fees
+        type: object
+        properties:
+          deposit_fee:
+            type: string
+            format: int64
+            title: Protocol fee amount for deposit
+          withdraw_fee:
+            type: string
+            format: int64
+            title: Protocol fee amount for withdrawal
+          collector:
+            type: string
+            title: Protocol fee collector
+      network_fee:
+        type: string
+        format: int64
+        title: Network fee for withdrawal to bitcoin
+      reward_epoch:
+        type: string
+        title: Reward epoch for relayer and TSS participant incentivization
+      tss_update_transition_period:
+        type: string
+        title: >-
+          Transition period after which TSS participants update process is
+          completed
     description: Params defines the parameters for the module.
+  side.btcbridge.ProtocolFees:
+    type: object
+    properties:
+      deposit_fee:
+        type: string
+        format: int64
+        title: Protocol fee amount for deposit
+      withdraw_fee:
+        type: string
+        format: int64
+        title: Protocol fee amount for withdrawal
+      collector:
+        type: string
+        title: Protocol fee collector
+    title: ProtocolFees defines the params related to the protocol fees
+  side.btcbridge.ProtocolLimits:
+    type: object
+    properties:
+      btc_min_deposit:
+        type: string
+        format: int64
+        title: The minimum deposit amount for btc
+      btc_min_withdraw:
+        type: string
+        format: int64
+        title: The minimum withdrawal amount for btc
+      btc_max_withdraw:
+        type: string
+        format: int64
+        title: The maximum withdrawal amount for btc
+    title: ProtocolLimits defines the params related to the the protocol limitations
   side.btcbridge.QueryBlockHeaderByHashResponse:
     type: object
     properties:
@@ -79972,11 +80088,6 @@ definitions:
         description: params holds all the parameters of this module.
         type: object
         properties:
-          authorized_relayers:
-            type: array
-            items:
-              type: string
-            title: Only accept blocks sending from these addresses
           confirmations:
             type: integer
             format: int32
@@ -79991,7 +80102,7 @@ definitions:
               to which transactions are considered for acceptance.
           btc_voucher_denom:
             type: string
-            title: the denomanation of the voucher
+            title: The denomination of the voucher
           vaults:
             type: array
             items:
@@ -80016,8 +80127,56 @@ definitions:
                     - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                      - ASSET_TYPE_BTC: BTC
                      - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                     - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
-              description: Vault defines the vault.
+                     - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+                version:
+                  type: integer
+                  format: int32
+                  title: version
+              title: Vault defines the asset vault
+            title: Asset vaults
+          protocol_limits:
+            title: Protocol limitations
+            type: object
+            properties:
+              btc_min_deposit:
+                type: string
+                format: int64
+                title: The minimum deposit amount for btc
+              btc_min_withdraw:
+                type: string
+                format: int64
+                title: The minimum withdrawal amount for btc
+              btc_max_withdraw:
+                type: string
+                format: int64
+                title: The maximum withdrawal amount for btc
+          protocol_fees:
+            title: Protocol fees
+            type: object
+            properties:
+              deposit_fee:
+                type: string
+                format: int64
+                title: Protocol fee amount for deposit
+              withdraw_fee:
+                type: string
+                format: int64
+                title: Protocol fee amount for withdrawal
+              collector:
+                type: string
+                title: Protocol fee collector
+          network_fee:
+            type: string
+            format: int64
+            title: Network fee for withdrawal to bitcoin
+          reward_epoch:
+            type: string
+            title: Reward epoch for relayer and TSS participant incentivization
+          tss_update_transition_period:
+            type: string
+            title: >-
+              Transition period after which TSS participants update process is
+              completed
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   side.btcbridge.QueryWithdrawRequestByTxHashResponse:
     type: object
@@ -80238,8 +80397,12 @@ definitions:
           - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
            - ASSET_TYPE_BTC: BTC
            - ASSET_TYPE_BRC20: BRC20: ordi, sats
-           - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
-    description: Vault defines the vault.
+           - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+      version:
+        type: integer
+        format: int32
+        title: version
+    title: Vault defines the asset vault
   side.btcbridge.WithdrawStatus:
     type: string
     enum:

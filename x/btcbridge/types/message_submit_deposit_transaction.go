@@ -7,13 +7,13 @@ import (
 
 const TypeMsgSubmitDepositTransaction = "submit_deposit_transaction"
 
-func NewMsgSubmitTransactionRequest(
+func NewMsgSubmitTransaction(
 	sender string,
 	blockhash string,
 	transaction string,
 	proof []string,
-) *MsgSubmitDepositTransactionRequest {
-	return &MsgSubmitDepositTransactionRequest{
+) *MsgSubmitDepositTransaction {
+	return &MsgSubmitDepositTransaction{
 		Sender:    sender,
 		Blockhash: blockhash,
 		TxBytes:   transaction,
@@ -21,15 +21,15 @@ func NewMsgSubmitTransactionRequest(
 	}
 }
 
-func (msg *MsgSubmitDepositTransactionRequest) Route() string {
+func (msg *MsgSubmitDepositTransaction) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgSubmitDepositTransactionRequest) Type() string {
+func (msg *MsgSubmitDepositTransaction) Type() string {
 	return TypeMsgSubmitDepositTransaction
 }
 
-func (msg *MsgSubmitDepositTransactionRequest) GetSigners() []sdk.AccAddress {
+func (msg *MsgSubmitDepositTransaction) GetSigners() []sdk.AccAddress {
 	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
@@ -37,12 +37,12 @@ func (msg *MsgSubmitDepositTransactionRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{Sender}
 }
 
-func (msg *MsgSubmitDepositTransactionRequest) GetSignBytes() []byte {
+func (msg *MsgSubmitDepositTransaction) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgSubmitDepositTransactionRequest) ValidateBasic() error {
+func (msg *MsgSubmitDepositTransaction) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return sdkerrors.Wrapf(err, "invalid Sender address (%s)", err)
