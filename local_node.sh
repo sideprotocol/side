@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KEYS=("validator" "test" "relayer" "btc-vault" "runes-vault")
+KEYS=("validator" "test" "fee-collector" "btc-vault" "runes-vault")
 CHAINID="grimoria-testnet-1"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
@@ -88,9 +88,6 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg gas "$BLOCK_GAS" '.app_state["feemarket"]["block_gas"]=$gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	# Set gas limit in genesis
 	jq --arg max_gas "$MAX_GAS" '.consensus_params["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	# setup relayers
-	RELAYER=$($BINARY keys show "${KEYS[2]}" -a --keyring-backend $KEYRING --home "$HOMEDIR")
-	jq --arg relayer "$RELAYER" '.app_state["btcbridge"]["params"]["authorized_relayers"][0]=$relayer' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	# setup vaults
 	BTC_VAULT=$($BINARY keys show "${KEYS[3]}" -a --keyring-backend $KEYRING --home "$HOMEDIR")
 	jq --arg btc_vault "$BTC_VAULT" '.app_state["btcbridge"]["params"]["vaults"][0]["address"]=$btc_vault' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
@@ -100,6 +97,9 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg runes_vault "$RUNES_VAULT" '.app_state["btcbridge"]["params"]["vaults"][1]["address"]=$runes_vault' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	PUKEY=$($BINARY keys show "${KEYS[4]}" --pubkeyhex --keyring-backend $KEYRING --home "$HOMEDIR")
 	jq --arg pubkey "$PUKEY" '.app_state["btcbridge"]["params"]["vaults"][1]["pub_key"]=$pubkey' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	# set protocol fee collector
+	PROTOCOL_FEE_COLLECTOR=$($BINARY keys show "${KEYS[2]}" -a --keyring-backend $KEYRING --home "$HOMEDIR")
+	jq --arg fee_collector "$PROTOCOL_FEE_COLLECTOR" '.app_state["btcbridge"]["params"]["protocol_fees"]["collector"]=$fee_collector' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 
 	# set custom pruning settings
 	sed -i.bak 's/pruning = "default"/pruning = "custom"/g' "$APP_TOML"
