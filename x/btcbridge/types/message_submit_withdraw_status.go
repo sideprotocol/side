@@ -9,13 +9,15 @@ const TypeMsgSubmitWithdrawStatus = "submit_withdraw_status"
 
 func NewMsgSubmitWithdrawStatusRequest(
 	sender string,
+	sequence uint64,
 	txid string,
-	status SigningStatus,
+	status WithdrawStatus,
 ) *MsgSubmitWithdrawStatusRequest {
 	return &MsgSubmitWithdrawStatusRequest{
-		Sender: sender,
-		Txid:   txid,
-		Status: status,
+		Sender:   sender,
+		Sequence: sequence,
+		Txid:     txid,
+		Status:   status,
 	}
 }
 
@@ -47,10 +49,10 @@ func (msg *MsgSubmitWithdrawStatusRequest) ValidateBasic() error {
 	}
 
 	if len(msg.Txid) == 0 {
-		return sdkerrors.Wrap(ErrSigningRequestNotExist, "txid cannot be empty")
+		return sdkerrors.Wrap(ErrWithdrawRequestNotExist, "txid cannot be empty")
 	}
 
-	if msg.Status != SigningStatus_SIGNING_STATUS_BROADCASTED {
+	if msg.Status != WithdrawStatus_WITHDRAW_STATUS_BROADCASTED {
 		return sdkerrors.Wrap(ErrInvalidStatus, "invalid status")
 	}
 

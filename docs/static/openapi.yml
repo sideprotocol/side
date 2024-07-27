@@ -49652,8 +49652,8 @@ paths:
                             - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                              - ASSET_TYPE_BTC: BTC
                              - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                             - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
-                      description: Vault defines the parameters for the module.
+                             - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
+                      description: Vault defines the vault.
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -49675,342 +49675,6 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
-      tags:
-        - Query
-  /side/btcbridge/signing/request:
-    get:
-      summary: QuerySigningRequest queries the request to sign.
-      operationId: SideBtcbridgeQuerySigningRequest
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              requests:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    address:
-                      type: string
-                    txid:
-                      type: string
-                    psbt:
-                      type: string
-                    status:
-                      type: string
-                      enum:
-                        - SIGNING_STATUS_UNSPECIFIED
-                        - SIGNING_STATUS_CREATED
-                        - SIGNING_STATUS_SIGNED
-                        - SIGNING_STATUS_BROADCASTED
-                        - SIGNING_STATUS_CONFIRMED
-                        - SIGNING_STATUS_REJECTED
-                      default: SIGNING_STATUS_UNSPECIFIED
-                      description: >-
-                        - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED
-                        - Default value, should not be used
-                         - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-                         - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-                         - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-                         - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-                         - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-                      title: Bitcoin Signing Status
-                    sequence:
-                      type: string
-                      format: uint64
-                    vault_address:
-                      type: string
-                      title: The vault address that the request is associated with
-                  title: Bitcoin Signing Request
-              pagination:
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
-
-                      was set, its value is undefined otherwise
-                description: >-
-                  PageResponse is to be embedded in gRPC response messages where
-                  the
-
-                  corresponding request message has used PageRequest.
-
-                   message SomeResponse {
-                           repeated Bar results = 1;
-                           PageResponse page = 2;
-                   }
-            description: >-
-              QuerySigningRequestResponse is response type for the
-              Query/SigningRequest RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: status
-          description: |2-
-             - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED - Default value, should not be used
-             - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-             - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-             - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-             - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-             - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-          in: query
-          required: false
-          type: string
-          enum:
-            - SIGNING_STATUS_UNSPECIFIED
-            - SIGNING_STATUS_CREATED
-            - SIGNING_STATUS_SIGNED
-            - SIGNING_STATUS_BROADCASTED
-            - SIGNING_STATUS_CONFIRMED
-            - SIGNING_STATUS_REJECTED
-          default: SIGNING_STATUS_UNSPECIFIED
-        - name: pagination.next_key
-          description: |-
-            next_key is the key to be passed to PageRequest.key to
-            query the next page most efficiently. It will be empty if
-            there are no more results.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.total
-          description: >-
-            total is total number of results available if
-            PageRequest.count_total
-
-            was set, its value is undefined otherwise
-          in: query
-          required: false
-          type: string
-          format: uint64
-      tags:
-        - Query
-  /side/btcbridge/signing/request/address/{address}:
-    get:
-      summary: >-
-        QuerySigningRequestByAddress queries the signing request by the given
-        address.
-      operationId: SideBtcbridgeQuerySigningRequestByAddress
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              requests:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    address:
-                      type: string
-                    txid:
-                      type: string
-                    psbt:
-                      type: string
-                    status:
-                      type: string
-                      enum:
-                        - SIGNING_STATUS_UNSPECIFIED
-                        - SIGNING_STATUS_CREATED
-                        - SIGNING_STATUS_SIGNED
-                        - SIGNING_STATUS_BROADCASTED
-                        - SIGNING_STATUS_CONFIRMED
-                        - SIGNING_STATUS_REJECTED
-                      default: SIGNING_STATUS_UNSPECIFIED
-                      description: >-
-                        - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED
-                        - Default value, should not be used
-                         - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-                         - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-                         - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-                         - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-                         - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-                      title: Bitcoin Signing Status
-                    sequence:
-                      type: string
-                      format: uint64
-                    vault_address:
-                      type: string
-                      title: The vault address that the request is associated with
-                  title: Bitcoin Signing Request
-              pagination:
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
-
-                      was set, its value is undefined otherwise
-                description: >-
-                  PageResponse is to be embedded in gRPC response messages where
-                  the
-
-                  corresponding request message has used PageRequest.
-
-                   message SomeResponse {
-                           repeated Bar results = 1;
-                           PageResponse page = 2;
-                   }
-            description: >-
-              QuerySigningRequestByAddressResponse is response type for the
-              Query/SigningRequestByAddress RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: address
-          in: path
-          required: true
-          type: string
-        - name: pagination.next_key
-          description: |-
-            next_key is the key to be passed to PageRequest.key to
-            query the next page most efficiently. It will be empty if
-            there are no more results.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.total
-          description: >-
-            total is total number of results available if
-            PageRequest.count_total
-
-            was set, its value is undefined otherwise
-          in: query
-          required: false
-          type: string
-          format: uint64
-      tags:
-        - Query
-  /side/btcbridge/signing/request/tx/{txid}:
-    get:
-      summary: >-
-        QuerySigningRequestByTxHash queries the signing request by the given tx
-        hash.
-      operationId: SideBtcbridgeQuerySigningRequestByTxHash
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              request:
-                type: object
-                properties:
-                  address:
-                    type: string
-                  txid:
-                    type: string
-                  psbt:
-                    type: string
-                  status:
-                    type: string
-                    enum:
-                      - SIGNING_STATUS_UNSPECIFIED
-                      - SIGNING_STATUS_CREATED
-                      - SIGNING_STATUS_SIGNED
-                      - SIGNING_STATUS_BROADCASTED
-                      - SIGNING_STATUS_CONFIRMED
-                      - SIGNING_STATUS_REJECTED
-                    default: SIGNING_STATUS_UNSPECIFIED
-                    description: >-
-                      - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED -
-                      Default value, should not be used
-                       - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-                       - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-                       - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-                       - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-                       - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-                    title: Bitcoin Signing Status
-                  sequence:
-                    type: string
-                    format: uint64
-                  vault_address:
-                    type: string
-                    title: The vault address that the request is associated with
-                title: Bitcoin Signing Request
-            description: >-
-              QuerySigningRequestByTxHashResponse is response type for the
-              Query/SigningRequestByTxHash RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: txid
-          in: path
-          required: true
-          type: string
       tags:
         - Query
   /side/btcbridge/tip:
@@ -50051,59 +49715,93 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /side/btcbridge/utxos:
+  /side/btcbridge/withdrawal/request:
     get:
-      summary: UTXOs queries all utxos.
-      operationId: SideBtcbridgeQueryUTXOs
+      summary: >-
+        QueryWithdrawRequests queries the withdrawal requests by the given
+        status.
+      operationId: SideBtcbridgeQueryWithdrawRequests
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              utxos:
+              requests:
                 type: array
                 items:
                   type: object
                   properties:
-                    txid:
-                      type: string
-                    vout:
-                      type: string
-                      format: uint64
                     address:
                       type: string
                     amount:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                    sequence:
                       type: string
                       format: uint64
-                    height:
+                    txid:
                       type: string
-                      format: uint64
-                      title: height is used for calculating confirmations
-                    pub_key_script:
+                    status:
                       type: string
-                      format: byte
-                    is_coinbase:
-                      type: boolean
-                    is_locked:
-                      type: boolean
-                    runes:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            title: serialized rune id
-                          amount:
-                            type: string
-                            title: rune amount
-                        title: Rune Balance
-                      title: rune balances associated with the UTXO
-                  title: Bitcoin UTXO
+                      enum:
+                        - WITHDRAW_STATUS_UNSPECIFIED
+                        - WITHDRAW_STATUS_CREATED
+                        - WITHDRAW_STATUS_BROADCASTED
+                        - WITHDRAW_STATUS_CONFIRMED
+                      default: WITHDRAW_STATUS_UNSPECIFIED
+                      description: >-
+                        - WITHDRAW_STATUS_UNSPECIFIED:
+                        WITHDRAW_STATUS_UNSPECIFIED - Default value, should not
+                        be used
+                         - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+                         - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+                         - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+                      title: Bitcoin Withdrawal Status
+                  title: Bitcoin Withdrawal Request
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
             description: >-
-              QueryUTXOsResponse is the response type for the Query/UTXOs RPC
-              method.
+              QueryWithdrawRequestsResponse is response type for the
+              Query/WithdrawRequests RPC method.
         default:
           description: An unexpected error response.
           schema:
@@ -50122,61 +49820,130 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
+      parameters:
+        - name: status
+          description: |2-
+             - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED - Default value, should not be used
+             - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+             - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+             - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+          in: query
+          required: false
+          type: string
+          enum:
+            - WITHDRAW_STATUS_UNSPECIFIED
+            - WITHDRAW_STATUS_CREATED
+            - WITHDRAW_STATUS_BROADCASTED
+            - WITHDRAW_STATUS_CONFIRMED
+          default: WITHDRAW_STATUS_UNSPECIFIED
+        - name: pagination.next_key
+          description: |-
+            next_key is the key to be passed to PageRequest.key to
+            query the next page most efficiently. It will be empty if
+            there are no more results.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.total
+          description: >-
+            total is total number of results available if
+            PageRequest.count_total
+
+            was set, its value is undefined otherwise
+          in: query
+          required: false
+          type: string
+          format: uint64
       tags:
         - Query
-  /side/btcbridge/utxos/{address}:
+  /side/btcbridge/withdrawal/request/address/{address}:
     get:
-      summary: UTXOsByAddress queries the utxos of the given address.
-      operationId: SideBtcbridgeQueryUTXOsByAddress
+      summary: >-
+        QueryWithdrawRequestsByAddress queries the withdrawal requests by the
+        given address.
+      operationId: SideBtcbridgeQueryWithdrawRequestsByAddress
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              utxos:
+              requests:
                 type: array
                 items:
                   type: object
                   properties:
-                    txid:
-                      type: string
-                    vout:
-                      type: string
-                      format: uint64
                     address:
                       type: string
                     amount:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                    sequence:
                       type: string
                       format: uint64
-                    height:
+                    txid:
                       type: string
-                      format: uint64
-                      title: height is used for calculating confirmations
-                    pub_key_script:
+                    status:
                       type: string
-                      format: byte
-                    is_coinbase:
-                      type: boolean
-                    is_locked:
-                      type: boolean
-                    runes:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            title: serialized rune id
-                          amount:
-                            type: string
-                            title: rune amount
-                        title: Rune Balance
-                      title: rune balances associated with the UTXO
-                  title: Bitcoin UTXO
+                      enum:
+                        - WITHDRAW_STATUS_UNSPECIFIED
+                        - WITHDRAW_STATUS_CREATED
+                        - WITHDRAW_STATUS_BROADCASTED
+                        - WITHDRAW_STATUS_CONFIRMED
+                      default: WITHDRAW_STATUS_UNSPECIFIED
+                      description: >-
+                        - WITHDRAW_STATUS_UNSPECIFIED:
+                        WITHDRAW_STATUS_UNSPECIFIED - Default value, should not
+                        be used
+                         - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+                         - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+                         - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+                      title: Bitcoin Withdrawal Status
+                  title: Bitcoin Withdrawal Request
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
             description: >-
-              QueryUTXOsByAddressResponse is the response type for the
-              Query/UTXOsByAddress RPC method.
+              QueryWithdrawRequestsByAddressResponse is response type for the
+              Query/WithdrawRequestsByAddress RPC method.
         default:
           description: An unexpected error response.
           schema:
@@ -50197,6 +49964,106 @@ paths:
                   additionalProperties: {}
       parameters:
         - name: address
+          in: path
+          required: true
+          type: string
+        - name: pagination.next_key
+          description: |-
+            next_key is the key to be passed to PageRequest.key to
+            query the next page most efficiently. It will be empty if
+            there are no more results.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.total
+          description: >-
+            total is total number of results available if
+            PageRequest.count_total
+
+            was set, its value is undefined otherwise
+          in: query
+          required: false
+          type: string
+          format: uint64
+      tags:
+        - Query
+  /side/btcbridge/withdrawal/request/tx/{txid}:
+    get:
+      summary: >-
+        QueryWithdrawRequestByTxHash queries the withdrawal request by the given
+        tx hash.
+      operationId: SideBtcbridgeQueryWithdrawRequestByTxHash
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              request:
+                type: object
+                properties:
+                  address:
+                    type: string
+                  amount:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
+                  sequence:
+                    type: string
+                    format: uint64
+                  txid:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                      - WITHDRAW_STATUS_UNSPECIFIED
+                      - WITHDRAW_STATUS_CREATED
+                      - WITHDRAW_STATUS_BROADCASTED
+                      - WITHDRAW_STATUS_CONFIRMED
+                    default: WITHDRAW_STATUS_UNSPECIFIED
+                    description: >-
+                      - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED
+                      - Default value, should not be used
+                       - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+                       - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+                       - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+                    title: Bitcoin Withdrawal Status
+                title: Bitcoin Withdrawal Request
+            description: >-
+              QueryWithdrawRequestByTxHashResponse is response type for the
+              Query/WithdrawRequestByTxHash RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: txid
           in: path
           required: true
           type: string
@@ -79874,43 +79741,46 @@ definitions:
       - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
        - ASSET_TYPE_BTC: BTC
        - ASSET_TYPE_BRC20: BRC20: ordi, sats
-       - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+       - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
     title: AssetType defines the type of asset
-  side.btcbridge.BitcoinSigningRequest:
+  side.btcbridge.BitcoinWithdrawRequest:
     type: object
     properties:
       address:
         type: string
-      txid:
+      amount:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      sequence:
         type: string
-      psbt:
+        format: uint64
+      txid:
         type: string
       status:
         type: string
         enum:
-          - SIGNING_STATUS_UNSPECIFIED
-          - SIGNING_STATUS_CREATED
-          - SIGNING_STATUS_SIGNED
-          - SIGNING_STATUS_BROADCASTED
-          - SIGNING_STATUS_CONFIRMED
-          - SIGNING_STATUS_REJECTED
-        default: SIGNING_STATUS_UNSPECIFIED
+          - WITHDRAW_STATUS_UNSPECIFIED
+          - WITHDRAW_STATUS_CREATED
+          - WITHDRAW_STATUS_BROADCASTED
+          - WITHDRAW_STATUS_CONFIRMED
+        default: WITHDRAW_STATUS_UNSPECIFIED
         description: >-
-          - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED - Default
+          - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED - Default
           value, should not be used
-           - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-           - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-           - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-           - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-           - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-        title: Bitcoin Signing Status
-      sequence:
-        type: string
-        format: uint64
-      vault_address:
-        type: string
-        title: The vault address that the request is associated with
-    title: Bitcoin Signing Request
+           - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+           - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+           - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+        title: Bitcoin Withdrawal Status
+    title: Bitcoin Withdrawal Request
   side.btcbridge.BlockHeader:
     type: object
     properties:
@@ -79948,11 +79818,6 @@ definitions:
     description: >-
       MsgSubmitTransactionResponse defines the Msg/SubmitTransaction response
       type.
-  side.btcbridge.MsgSubmitWithdrawSignaturesResponse:
-    type: object
-    description: >-
-      MsgSubmitWithdrawSignaturesResponse defines the
-      Msg/SubmitWithdrawSignatures response type.
   side.btcbridge.MsgSubmitWithdrawStatusResponse:
     type: object
     description: >-
@@ -80022,8 +79887,8 @@ definitions:
                 - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                  - ASSET_TYPE_BTC: BTC
                  - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                 - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
-          description: Vault defines the parameters for the module.
+                 - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
+          description: Vault defines the vault.
     description: Params defines the parameters for the module.
   side.btcbridge.QueryBlockHeaderByHashResponse:
     type: object
@@ -80151,79 +80016,10 @@ definitions:
                     - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                      - ASSET_TYPE_BTC: BTC
                      - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                     - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
-              description: Vault defines the parameters for the module.
+                     - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
+              description: Vault defines the vault.
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  side.btcbridge.QuerySigningRequestByAddressResponse:
-    type: object
-    properties:
-      requests:
-        type: array
-        items:
-          type: object
-          properties:
-            address:
-              type: string
-            txid:
-              type: string
-            psbt:
-              type: string
-            status:
-              type: string
-              enum:
-                - SIGNING_STATUS_UNSPECIFIED
-                - SIGNING_STATUS_CREATED
-                - SIGNING_STATUS_SIGNED
-                - SIGNING_STATUS_BROADCASTED
-                - SIGNING_STATUS_CONFIRMED
-                - SIGNING_STATUS_REJECTED
-              default: SIGNING_STATUS_UNSPECIFIED
-              description: >-
-                - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED -
-                Default value, should not be used
-                 - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-                 - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-                 - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-                 - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-                 - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-              title: Bitcoin Signing Status
-            sequence:
-              type: string
-              format: uint64
-            vault_address:
-              type: string
-              title: The vault address that the request is associated with
-          title: Bitcoin Signing Request
-      pagination:
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
-        description: |-
-          PageResponse is to be embedded in gRPC response messages where the
-          corresponding request message has used PageRequest.
-
-           message SomeResponse {
-                   repeated Bar results = 1;
-                   PageResponse page = 2;
-           }
-    description: >-
-      QuerySigningRequestByAddressResponse is response type for the
-      Query/SigningRequestByAddress RPC method.
-  side.btcbridge.QuerySigningRequestByTxHashResponse:
+  side.btcbridge.QueryWithdrawRequestByTxHashResponse:
     type: object
     properties:
       request:
@@ -80231,40 +80027,46 @@ definitions:
         properties:
           address:
             type: string
-          txid:
+          amount:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
+          sequence:
             type: string
-          psbt:
+            format: uint64
+          txid:
             type: string
           status:
             type: string
             enum:
-              - SIGNING_STATUS_UNSPECIFIED
-              - SIGNING_STATUS_CREATED
-              - SIGNING_STATUS_SIGNED
-              - SIGNING_STATUS_BROADCASTED
-              - SIGNING_STATUS_CONFIRMED
-              - SIGNING_STATUS_REJECTED
-            default: SIGNING_STATUS_UNSPECIFIED
+              - WITHDRAW_STATUS_UNSPECIFIED
+              - WITHDRAW_STATUS_CREATED
+              - WITHDRAW_STATUS_BROADCASTED
+              - WITHDRAW_STATUS_CONFIRMED
+            default: WITHDRAW_STATUS_UNSPECIFIED
             description: >-
-              - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED - Default
-              value, should not be used
-               - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-               - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-               - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-               - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-               - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-            title: Bitcoin Signing Status
-          sequence:
-            type: string
-            format: uint64
-          vault_address:
-            type: string
-            title: The vault address that the request is associated with
-        title: Bitcoin Signing Request
+              - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED -
+              Default value, should not be used
+               - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+               - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+               - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+            title: Bitcoin Withdrawal Status
+        title: Bitcoin Withdrawal Request
     description: >-
-      QuerySigningRequestByTxHashResponse is response type for the
-      Query/SigningRequestByTxHash RPC method.
-  side.btcbridge.QuerySigningRequestResponse:
+      QueryWithdrawRequestByTxHashResponse is response type for the
+      Query/WithdrawRequestByTxHash RPC method.
+  side.btcbridge.QueryWithdrawRequestsByAddressResponse:
     type: object
     properties:
       requests:
@@ -80274,36 +80076,42 @@ definitions:
           properties:
             address:
               type: string
-            txid:
+            amount:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+            sequence:
               type: string
-            psbt:
+              format: uint64
+            txid:
               type: string
             status:
               type: string
               enum:
-                - SIGNING_STATUS_UNSPECIFIED
-                - SIGNING_STATUS_CREATED
-                - SIGNING_STATUS_SIGNED
-                - SIGNING_STATUS_BROADCASTED
-                - SIGNING_STATUS_CONFIRMED
-                - SIGNING_STATUS_REJECTED
-              default: SIGNING_STATUS_UNSPECIFIED
+                - WITHDRAW_STATUS_UNSPECIFIED
+                - WITHDRAW_STATUS_CREATED
+                - WITHDRAW_STATUS_BROADCASTED
+                - WITHDRAW_STATUS_CONFIRMED
+              default: WITHDRAW_STATUS_UNSPECIFIED
               description: >-
-                - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED -
+                - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED -
                 Default value, should not be used
-                 - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-                 - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-                 - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-                 - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-                 - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-              title: Bitcoin Signing Status
-            sequence:
-              type: string
-              format: uint64
-            vault_address:
-              type: string
-              title: The vault address that the request is associated with
-          title: Bitcoin Signing Request
+                 - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+                 - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+                 - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+              title: Bitcoin Withdrawal Status
+          title: Bitcoin Withdrawal Request
       pagination:
         type: object
         properties:
@@ -80331,165 +80139,83 @@ definitions:
                    PageResponse page = 2;
            }
     description: >-
-      QuerySigningRequestResponse is response type for the Query/SigningRequest
-      RPC method.
-  side.btcbridge.QueryUTXOsByAddressResponse:
+      QueryWithdrawRequestsByAddressResponse is response type for the
+      Query/WithdrawRequestsByAddress RPC method.
+  side.btcbridge.QueryWithdrawRequestsResponse:
     type: object
     properties:
-      utxos:
+      requests:
         type: array
         items:
           type: object
           properties:
-            txid:
-              type: string
-            vout:
-              type: string
-              format: uint64
             address:
               type: string
             amount:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+            sequence:
               type: string
               format: uint64
-            height:
-              type: string
-              format: uint64
-              title: height is used for calculating confirmations
-            pub_key_script:
-              type: string
-              format: byte
-            is_coinbase:
-              type: boolean
-            is_locked:
-              type: boolean
-            runes:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    title: serialized rune id
-                  amount:
-                    type: string
-                    title: rune amount
-                title: Rune Balance
-              title: rune balances associated with the UTXO
-          title: Bitcoin UTXO
-    description: >-
-      QueryUTXOsByAddressResponse is the response type for the
-      Query/UTXOsByAddress RPC method.
-  side.btcbridge.QueryUTXOsResponse:
-    type: object
-    properties:
-      utxos:
-        type: array
-        items:
-          type: object
-          properties:
             txid:
               type: string
-            vout:
+            status:
               type: string
-              format: uint64
-            address:
-              type: string
-            amount:
-              type: string
-              format: uint64
-            height:
-              type: string
-              format: uint64
-              title: height is used for calculating confirmations
-            pub_key_script:
-              type: string
-              format: byte
-            is_coinbase:
-              type: boolean
-            is_locked:
-              type: boolean
-            runes:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    title: serialized rune id
-                  amount:
-                    type: string
-                    title: rune amount
-                title: Rune Balance
-              title: rune balances associated with the UTXO
-          title: Bitcoin UTXO
-    description: QueryUTXOsResponse is the response type for the Query/UTXOs RPC method.
-  side.btcbridge.RuneBalance:
-    type: object
-    properties:
-      id:
-        type: string
-        title: serialized rune id
-      amount:
-        type: string
-        title: rune amount
-    title: Rune Balance
-  side.btcbridge.SigningStatus:
-    type: string
-    enum:
-      - SIGNING_STATUS_UNSPECIFIED
-      - SIGNING_STATUS_CREATED
-      - SIGNING_STATUS_SIGNED
-      - SIGNING_STATUS_BROADCASTED
-      - SIGNING_STATUS_CONFIRMED
-      - SIGNING_STATUS_REJECTED
-    default: SIGNING_STATUS_UNSPECIFIED
+              enum:
+                - WITHDRAW_STATUS_UNSPECIFIED
+                - WITHDRAW_STATUS_CREATED
+                - WITHDRAW_STATUS_BROADCASTED
+                - WITHDRAW_STATUS_CONFIRMED
+              default: WITHDRAW_STATUS_UNSPECIFIED
+              description: >-
+                - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED -
+                Default value, should not be used
+                 - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+                 - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+                 - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+              title: Bitcoin Withdrawal Status
+          title: Bitcoin Withdrawal Request
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
     description: >-
-      - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED - Default value,
-      should not be used
-       - SIGNING_STATUS_CREATED: SIGNING_STATUS_CREATED - The signing request is created
-       - SIGNING_STATUS_SIGNED: SIGNING_STATUS_SIGNED - The signing request is signed
-       - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
-       - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
-       - SIGNING_STATUS_REJECTED: SIGNING_STATUS_REJECTED - The signing request is rejected
-    title: Bitcoin Signing Status
-  side.btcbridge.UTXO:
-    type: object
-    properties:
-      txid:
-        type: string
-      vout:
-        type: string
-        format: uint64
-      address:
-        type: string
-      amount:
-        type: string
-        format: uint64
-      height:
-        type: string
-        format: uint64
-        title: height is used for calculating confirmations
-      pub_key_script:
-        type: string
-        format: byte
-      is_coinbase:
-        type: boolean
-      is_locked:
-        type: boolean
-      runes:
-        type: array
-        items:
-          type: object
-          properties:
-            id:
-              type: string
-              title: serialized rune id
-            amount:
-              type: string
-              title: rune amount
-          title: Rune Balance
-        title: rune balances associated with the UTXO
-    title: Bitcoin UTXO
+      QueryWithdrawRequestsResponse is response type for the
+      Query/WithdrawRequests RPC method.
   side.btcbridge.Vault:
     type: object
     properties:
@@ -80512,5 +80238,20 @@ definitions:
           - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
            - ASSET_TYPE_BTC: BTC
            - ASSET_TYPE_BRC20: BRC20: ordi, sats
-           - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
-    description: Vault defines the parameters for the module.
+           - ASSET_TYPE_RUNE: RUNE: dog*go*to*the*moon
+    description: Vault defines the vault.
+  side.btcbridge.WithdrawStatus:
+    type: string
+    enum:
+      - WITHDRAW_STATUS_UNSPECIFIED
+      - WITHDRAW_STATUS_CREATED
+      - WITHDRAW_STATUS_BROADCASTED
+      - WITHDRAW_STATUS_CONFIRMED
+    default: WITHDRAW_STATUS_UNSPECIFIED
+    description: >-
+      - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED - Default
+      value, should not be used
+       - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal request is created
+       - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
+       - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
+    title: Bitcoin Withdrawal Status

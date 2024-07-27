@@ -63,72 +63,45 @@ func (k Keeper) QueryBlockHeaderByHeight(goCtx context.Context, req *types.Query
 	return &types.QueryBlockHeaderByHeightResponse{BlockHeader: header}, nil
 }
 
-func (k Keeper) QuerySigningRequest(goCtx context.Context, req *types.QuerySigningRequestRequest) (*types.QuerySigningRequestResponse, error) {
+func (k Keeper) QueryWithdrawRequests(goCtx context.Context, req *types.QueryWithdrawRequestsRequest) (*types.QueryWithdrawRequestsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
-	if req.Status == types.SigningStatus_SIGNING_STATUS_UNSPECIFIED {
+	if req.Status == types.WithdrawStatus_WITHDRAW_STATUS_UNSPECIFIED {
 		return nil, status.Error(codes.InvalidArgument, "invalid status")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	requests := k.FilterSigningRequestsByStatus(ctx, req)
+	requests := k.FilterWithdrawRequestsByStatus(ctx, req)
 
-	return &types.QuerySigningRequestResponse{Requests: requests}, nil
+	return &types.QueryWithdrawRequestsResponse{Requests: requests}, nil
 }
 
-func (k Keeper) QuerySigningRequestByAddress(goCtx context.Context, req *types.QuerySigningRequestByAddressRequest) (*types.QuerySigningRequestByAddressResponse, error) {
+func (k Keeper) QueryWithdrawRequestsByAddress(goCtx context.Context, req *types.QueryWithdrawRequestsByAddressRequest) (*types.QueryWithdrawRequestsByAddressResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	requests := k.FilterSigningRequestsByAddr(ctx, req)
+	requests := k.FilterWithdrawRequestsByAddr(ctx, req)
 
-	return &types.QuerySigningRequestByAddressResponse{Requests: requests}, nil
+	return &types.QueryWithdrawRequestsByAddressResponse{Requests: requests}, nil
 }
 
-func (k Keeper) QuerySigningRequestByTxHash(goCtx context.Context, req *types.QuerySigningRequestByTxHashRequest) (*types.QuerySigningRequestByTxHashResponse, error) {
+func (k Keeper) QueryWithdrawRequestByTxHash(goCtx context.Context, req *types.QueryWithdrawRequestByTxHashRequest) (*types.QueryWithdrawRequestByTxHashResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	var request *types.BitcoinSigningRequest
+	var request *types.BitcoinWithdrawRequest
 
-	if k.HasSigningRequest(ctx, req.Txid) {
-		request = k.GetSigningRequest(ctx, req.Txid)
+	if k.HasWithdrawRequestByTxHash(ctx, req.Txid) {
+		request = k.GetWithdrawRequestByTxHash(ctx, req.Txid)
 	}
 
-	return &types.QuerySigningRequestByTxHashResponse{Request: request}, nil
-}
-
-func (k Keeper) QueryUTXOs(goCtx context.Context, req *types.QueryUTXOsRequest) (*types.QueryUTXOsResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	utxos := k.GetAllUTXOs(ctx)
-
-	return &types.QueryUTXOsResponse{Utxos: utxos}, nil
-}
-
-func (k Keeper) QueryUTXOsByAddress(goCtx context.Context, req *types.QueryUTXOsByAddressRequest) (*types.QueryUTXOsByAddressResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	_, err := sdk.AccAddressFromBech32(req.Address)
-	if err != nil {
-		return nil, err
-	}
-
-	utxos := k.GetUTXOsByAddr(ctx, req.Address)
-
-	return &types.QueryUTXOsByAddressResponse{Utxos: utxos}, nil
+	return &types.QueryWithdrawRequestByTxHashResponse{Request: request}, nil
 }

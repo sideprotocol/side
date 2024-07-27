@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 
@@ -30,8 +29,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdBestBlock())
 	cmd.AddCommand(CmdQueryBlock())
-	cmd.AddCommand(CmdQueryUTXOs())
-	cmd.AddCommand(CmdQuerySigningRequest())
+	cmd.AddCommand(CmdQueryWithdrawRequest())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -129,11 +127,11 @@ func CmdQueryBlock() *cobra.Command {
 	return cmd
 }
 
-// CmdQuerySigningRequest returns the command to query signing request
-func CmdQuerySigningRequest() *cobra.Command {
+// CmdQueryWithdrawRequest returns the command to query withdrawal request
+func CmdQueryWithdrawRequest() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "signing-request [status | address | tx hash]",
-		Short: "Query signing requests by status, address or tx hash",
+		Use:   "withdraw-request [status | address | tx hash]",
+		Short: "Query withdrawal requests by status, address or tx hash",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -152,7 +150,7 @@ func CmdQuerySigningRequest() *cobra.Command {
 						return fmt.Errorf("invalid arg, neither status, address nor tx hash: %s", args[0])
 					}
 
-					res, err := queryClient.QuerySigningRequestByTxHash(cmd.Context(), &types.QuerySigningRequestByTxHashRequest{Txid: args[0]})
+					res, err := queryClient.QueryWithdrawRequestByTxHash(cmd.Context(), &types.QueryWithdrawRequestByTxHashRequest{Txid: args[0]})
 					if err != nil {
 						return err
 					}
@@ -160,7 +158,7 @@ func CmdQuerySigningRequest() *cobra.Command {
 					return clientCtx.PrintProto(res)
 				}
 
-				res, err := queryClient.QuerySigningRequestByAddress(cmd.Context(), &types.QuerySigningRequestByAddressRequest{Address: args[0]})
+				res, err := queryClient.QueryWithdrawRequestsByAddress(cmd.Context(), &types.QueryWithdrawRequestsByAddressRequest{Address: args[0]})
 				if err != nil {
 					return err
 				}
@@ -168,7 +166,7 @@ func CmdQuerySigningRequest() *cobra.Command {
 				return clientCtx.PrintProto(res)
 			}
 
-			res, err := queryClient.QuerySigningRequest(cmd.Context(), &types.QuerySigningRequestRequest{Status: types.SigningStatus(status)})
+			res, err := queryClient.QueryWithdrawRequests(cmd.Context(), &types.QueryWithdrawRequestsRequest{Status: types.WithdrawStatus(status)})
 			if err != nil {
 				return err
 			}
@@ -180,57 +178,4 @@ func CmdQuerySigningRequest() *cobra.Command {
 	flags.AddQueryFlagsToCmd(cmd)
 
 	return cmd
-}
-
-func CmdQueryUTXOs() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "utxos [address]",
-		Short: "query utxos with an optional address",
-		Args:  cobra.MaximumNArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			if len(args) == 0 {
-				return queryUTXOs(cmd.Context(), &clientCtx)
-			}
-
-			return queryUTXOsByAddr(cmd.Context(), &clientCtx, args[0])
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func queryUTXOs(cmdCtx context.Context, clientCtx *client.Context) error {
-	queryClient := types.NewQueryClient(clientCtx)
-
-	res, err := queryClient.QueryUTXOs(cmdCtx, &types.QueryUTXOsRequest{})
-	if err != nil {
-		return err
-	}
-
-	return clientCtx.PrintProto(res)
-}
-
-func queryUTXOsByAddr(cmdCtx context.Context, clientCtx *client.Context, addr string) error {
-	queryClient := types.NewQueryClient(clientCtx)
-
-	_, err := sdk.AccAddressFromBech32(addr)
-	if err != nil {
-		return err
-	}
-
-	res, err := queryClient.QueryUTXOsByAddress(cmdCtx, &types.QueryUTXOsByAddressRequest{
-		Address: addr,
-	})
-	if err != nil {
-		return err
-	}
-
-	return clientCtx.PrintProto(res)
 }

@@ -11,7 +11,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSubmitBlockHeaderRequest{}, "btcbridge/MsgSubmitBlockHeaderRequest", nil)
 	cdc.RegisterConcrete(&MsgUpdateQualifiedRelayersRequest{}, "btcbridge/MsgUpdateQualifiedRelayersRequest", nil)
 	cdc.RegisterConcrete(&MsgSubmitDepositTransactionRequest{}, "btcbridge/MsgSubmitDepositTransactionRequest", nil)
-	cdc.RegisterConcrete(&MsgSubmitWithdrawSignaturesRequest{}, "btcbridge/MsgSubmitWithdrawSignaturesRequest", nil)
 	cdc.RegisterConcrete(&MsgSubmitWithdrawTransactionRequest{}, "btcbridge/MsgSubmitWithdrawTransactionRequest", nil)
 	cdc.RegisterConcrete(&MsgUpdateParamsRequest{}, "btcbridge/MsgUpdateParamsRequest", nil)
 	// this line is used by starport scaffolding # 2
@@ -21,7 +20,6 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitBlockHeaderRequest{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgUpdateQualifiedRelayersRequest{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitDepositTransactionRequest{})
-	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitWithdrawSignaturesRequest{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitWithdrawTransactionRequest{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgUpdateParamsRequest{})
 	// this line is used by starport scaffolding # 3
