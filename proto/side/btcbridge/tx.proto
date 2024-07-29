@@ -71,6 +71,8 @@ message MsgSubmitWithdrawTransaction {
   // this is relayer address who submit the bitcoin transaction to the side chain
   string sender = 1;
   string blockhash = 2;
+  // the previous tx bytes in base64 format
+  string prev_tx_bytes = 3;
   // the tx bytes in base64 format
   string tx_bytes = 4;
   repeated string proof = 5;
