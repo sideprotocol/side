@@ -1,6 +1,9 @@
 package types
 
 import (
+	"bytes"
+	"math/big"
+
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
@@ -16,6 +19,11 @@ const (
 
 	// allowed number of edicts in the runes payload for the runes deposit transaction
 	RunesEdictNum = 1
+)
+
+var (
+	// withdrawal identifier which is used in the OP_RETURN script of the withdrawal tx
+	WithdrawIdentifier = []byte("side")
 )
 
 // ExtractRecipientAddr extracts the recipient address for minting voucher token by the type of the asset to be deposited
@@ -148,4 +156,20 @@ func CheckRunesDepositTransaction(tx *wire.MsgTx, vaults []*Vault) (*Edict, erro
 	}
 
 	return edicts[0], nil
+}
+
+// ParseSequence parses the sequence from the given tx
+// make sure the tx is valid
+func ParseSequence(tx *wire.MsgTx) (uint64, error) {
+	scriptBuilder := txscript.MakeScriptTokenizer(0, tx.TxOut[0].PkScript)
+
+	if scriptBuilder.Next() && scriptBuilder.Opcode() == txscript.OP_RETURN {
+		if scriptBuilder.Next() && bytes.Equal(scriptBuilder.Data(), WithdrawIdentifier) {
+			if scriptBuilder.Next() {
+				return new(big.Int).SetBytes(scriptBuilder.Data()).Uint64(), nil
+			}
+		}
+	}
+
+	return 0, ErrInvalidSequence
 }

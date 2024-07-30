@@ -1,14 +1,7 @@
 package keeper
 
 import (
-	"bytes"
-	"encoding/base64"
-	"fmt"
-
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -159,62 +152,32 @@ func (k Keeper) FilterWithdrawRequestsByAddr(ctx sdk.Context, req *types.QueryWi
 func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.MsgSubmitWithdrawTransaction) (*chainhash.Hash, error) {
 	ctx.Logger().Info("accept bitcoin withdraw tx", "blockhash", msg.Blockhash)
 
-	param := k.GetParams(ctx)
-
-	header := k.GetBlockHeader(ctx, msg.Blockhash)
-	// Check if block confirmed
-	if header == nil {
-		return nil, types.ErrBlockNotFound
-	}
-
-	best := k.GetBestBlockHeader(ctx)
-	// Check if the block is confirmed
-	if best.Height-header.Height < uint64(param.Confirmations) {
-		return nil, types.ErrNotConfirmed
-	}
-	// Check if the block is within the acceptable depth
-	if best.Height-header.Height > param.MaxAcceptableBlockDepth {
-		return nil, types.ErrExceedMaxAcceptanceDepth
-	}
-
-	// Decode the base64 transaction
-	txBytes, err := base64.StdEncoding.DecodeString(msg.TxBytes)
+	tx, prevTx, err := k.ValidateTransaction(ctx, msg.TxBytes, msg.PrevTxBytes, msg.Blockhash, msg.Proof)
 	if err != nil {
-		fmt.Println("Error decoding transaction from base64:", err)
 		return nil, err
 	}
 
-	// Create a new transaction
-	var tx wire.MsgTx
-	err = tx.Deserialize(bytes.NewReader(txBytes))
+	if types.SelectVaultByPkScript(k.GetParams(ctx).Vaults, prevTx.MsgTx().TxOut[tx.MsgTx().TxIn[0].PreviousOutPoint.Index].PkScript) == nil {
+		return nil, types.ErrInvalidWithdrawTransaction
+	}
+
+	sequence, err := types.ParseSequence(tx.MsgTx())
 	if err != nil {
-		fmt.Println("Error deserializing transaction:", err)
 		return nil, err
 	}
 
-	uTx := btcutil.NewTx(&tx)
-	if len(uTx.MsgTx().TxIn) < 1 {
-		return nil, types.ErrInvalidBtcTransaction
-	}
-
-	txHash := uTx.MsgTx().TxHash()
-
-	if !k.HasWithdrawRequestByTxHash(ctx, txHash.String()) {
+	if !k.HasWithdrawRequest(ctx, sequence) {
 		return nil, types.ErrWithdrawRequestNotExist
 	}
 
-	withdrawRequest := k.GetWithdrawRequestByTxHash(ctx, txHash.String())
-	// if withdrawRequest.Status != types.WithdrawStatus_WITHDRAW_STATUS_BROADCASTED {
-	// 	return types.ErrInvalidStatus
-	// }
+	withdrawRequest := k.GetWithdrawRequest(ctx, sequence)
+	if withdrawRequest.Status == types.WithdrawStatus_WITHDRAW_STATUS_CONFIRMED {
+		return nil, types.ErrWithdrawRequestConfirmed
+	}
+
+	withdrawRequest.Txid = tx.Hash().String()
 	withdrawRequest.Status = types.WithdrawStatus_WITHDRAW_STATUS_CONFIRMED
 	k.SetWithdrawRequest(ctx, withdrawRequest)
 
-	// Validate the transaction
-	if err := blockchain.CheckTransactionSanity(uTx); err != nil {
-		fmt.Println("Transaction is not valid:", err)
-		return nil, err
-	}
-
-	return &txHash, nil
+	return tx.Hash(), nil
 }

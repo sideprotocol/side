@@ -1,11 +1,6 @@
 package keeper
 
 import (
-	"bytes"
-	"encoding/base64"
-	"fmt"
-
-	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
@@ -20,7 +15,7 @@ import (
 func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.MsgSubmitDepositTransaction) (*chainhash.Hash, btcutil.Address, error) {
 	ctx.Logger().Info("accept bitcoin deposit tx", "blockhash", msg.Blockhash)
 
-	tx, prevTx, err := k.ValidateDepositTransaction(ctx, msg.TxBytes, msg.PrevTxBytes, msg.Blockhash, msg.Proof)
+	tx, prevTx, err := k.ValidateTransaction(ctx, msg.TxBytes, msg.PrevTxBytes, msg.Blockhash, msg.Proof)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -31,90 +26,6 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 	}
 
 	return tx.Hash(), recipient, nil
-}
-
-// validateDepositTransaction validates the deposit transaction
-func (k Keeper) ValidateDepositTransaction(ctx sdk.Context, txBytes string, prevTxBytes string, blockHash string, proof []string) (*btcutil.Tx, *btcutil.Tx, error) {
-	params := k.GetParams(ctx)
-
-	header := k.GetBlockHeader(ctx, blockHash)
-	// Check if block confirmed
-	if header == nil || header.Height == 0 {
-		return nil, nil, types.ErrBlockNotFound
-	}
-
-	best := k.GetBestBlockHeader(ctx)
-	// Check if the block is confirmed
-	if best.Height-header.Height < uint64(params.Confirmations) {
-		return nil, nil, types.ErrNotConfirmed
-	}
-	// Check if the block is within the acceptable depth
-	// if best.Height-header.Height > param.MaxAcceptableBlockDepth {
-	// 	return types.ErrExceedMaxAcceptanceDepth
-	// }
-
-	// Decode the base64 transaction
-	rawTx, err := base64.StdEncoding.DecodeString(txBytes)
-	if err != nil {
-		fmt.Println("Error decoding transaction from base64:", err)
-		return nil, nil, err
-	}
-
-	// Create a new transaction
-	var tx wire.MsgTx
-	err = tx.Deserialize(bytes.NewReader(rawTx))
-	if err != nil {
-		fmt.Println("Error deserializing transaction:", err)
-		return nil, nil, err
-	}
-
-	uTx := btcutil.NewTx(&tx)
-
-	// Validate the transaction
-	if err := blockchain.CheckTransactionSanity(uTx); err != nil {
-		fmt.Println("Transaction is not valid:", err)
-		return nil, nil, err
-	}
-
-	// Decode the previous transaction
-	rawPrevTx, err := base64.StdEncoding.DecodeString(prevTxBytes)
-	if err != nil {
-		fmt.Println("Error decoding transaction from base64:", err)
-		return nil, nil, err
-	}
-
-	// Create a new transaction
-	var prevMsgTx wire.MsgTx
-	err = prevMsgTx.Deserialize(bytes.NewReader(rawPrevTx))
-	if err != nil {
-		fmt.Println("Error deserializing transaction:", err)
-		return nil, nil, err
-	}
-
-	prevTx := btcutil.NewTx(&prevMsgTx)
-
-	// Validate the transaction
-	if err := blockchain.CheckTransactionSanity(prevTx); err != nil {
-		fmt.Println("Transaction is not valid:", err)
-		return nil, nil, err
-	}
-
-	if uTx.MsgTx().TxIn[0].PreviousOutPoint.Hash.String() != prevTx.Hash().String() {
-		return nil, nil, types.ErrInvalidBtcTransaction
-	}
-
-	// check if the proof is valid
-	root, err := chainhash.NewHashFromStr(header.MerkleRoot)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	if !types.VerifyMerkleProof(proof, uTx.Hash(), root) {
-		k.Logger(ctx).Error("Invalid merkle proof", "txhash", tx, "root", root, "proof", proof)
-		return nil, nil, types.ErrTransactionNotIncluded
-	}
-
-	return uTx, prevTx, nil
 }
 
 // mint performs the minting operation of the voucher token
