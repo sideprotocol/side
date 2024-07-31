@@ -1,12 +1,11 @@
 package types
 
 import (
+	"crypto/ed25519"
 	"encoding/hex"
 	"reflect"
 
-	"github.com/btcsuite/btcd/btcec/v2/schnorr"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cometbft/cometbft/crypto"
 )
 
 // ParticipantExists returns true if the given address is a participant, false otherwise
@@ -20,8 +19,8 @@ func ParticipantExists(participants []*DKGParticipant, addr string) bool {
 	return false
 }
 
-// CheckCompletionRequests checks if the vaults of all the completion requests are same
-func CheckCompletionRequests(requests []*DKGCompletionRequest) bool {
+// CheckDKGCompletionRequests checks if the vaults of all the DKG completion requests are same
+func CheckDKGCompletionRequests(requests []*DKGCompletionRequest) bool {
 	if len(requests) == 0 {
 		return false
 	}
@@ -37,23 +36,25 @@ func CheckCompletionRequests(requests []*DKGCompletionRequest) bool {
 	return true
 }
 
-// GetVaultAddressFromPubKey gets the vault address from the given public key
-// Note: the method generates taproot address
-func GetVaultAddressFromPubKey(pubKey string) (string, error) {
-	pubKeyBytes, err := hex.DecodeString(pubKey)
+// VerifySignature verifies the given signature against the given DKG completion request
+func VerifySignature(signature string, pubKey []byte, req *DKGCompletionRequest) bool {
+	sig, err := hex.DecodeString(signature)
 	if err != nil {
-		return "", err
+		return false
 	}
 
-	parsedPubKey, err := schnorr.ParsePubKey(pubKeyBytes)
-	if err != nil {
-		return "", err
+	sigMsg := GetSigMsgFromDKGCompletionReq(req)
+
+	return ed25519.Verify(pubKey, sigMsg, sig)
+}
+
+// GetSigMsgFromDKGCompletionReq gets the msg to be signed from the given DKG completion request
+func GetSigMsgFromDKGCompletionReq(req *DKGCompletionRequest) []byte {
+	rawMsg := Int64ToBytes(req.Id)
+
+	for _, v := range req.Vaults {
+		rawMsg = append(rawMsg, []byte(v)...)
 	}
 
-	address, err := GetTaprootAddress(parsedPubKey, sdk.GetConfig().GetBtcChainCfg())
-	if err != nil {
-		return "", err
-	}
-
-	return address.String(), nil
+	return crypto.Sha256(rawMsg)
 }
