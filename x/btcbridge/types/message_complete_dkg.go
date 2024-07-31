@@ -10,6 +10,22 @@ import (
 
 const TypeMsgCompleteDKG = "complete_dkg"
 
+func NewMsgCompleteDKG(
+	sender string,
+	id uint64,
+	vaults []string,
+	validator string,
+	signature string,
+) *MsgCompleteDKG {
+	return &MsgCompleteDKG{
+		Sender:    sender,
+		Id:        id,
+		Vaults:    vaults,
+		Validator: validator,
+		Signature: signature,
+	}
+}
+
 // Route returns the route of MsgCompleteDKG.
 func (msg *MsgCompleteDKG) Route() string {
 	return RouterKey

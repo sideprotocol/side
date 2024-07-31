@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -19,10 +21,10 @@ import (
 
 var DefaultRelativePacketTimeoutTimestamp = uint64((time.Duration(10) * time.Minute).Nanoseconds())
 
-// const (
-// 	flagPacketTimeoutTimestamp = "packet-timeout-timestamp"
-// 	listSeparator              = ","
-// )
+const (
+	// flagPacketTimeoutTimestamp = "packet-timeout-timestamp"
+	listSeparator = ","
+)
 
 // GetTxCmd returns the transaction commands for this module
 func GetTxCmd() *cobra.Command {
@@ -36,6 +38,7 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdSubmitBlocks())
 	cmd.AddCommand(CmdWithdrawToBitcoin())
+	cmd.AddCommand(CmdCompleteDKG())
 
 	return cmd
 }
@@ -93,6 +96,46 @@ func CmdWithdrawToBitcoin() *cobra.Command {
 			msg := types.NewMsgWithdrawToBitcoin(
 				clientCtx.GetFromAddress().String(),
 				args[0],
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// Complete DKG
+func CmdCompleteDKG() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "complete-dkg [id] [vaults] [validator-address] [signature]",
+		Short: "Complete dkg request with new vaults",
+		Args:  cobra.ExactArgs(4),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			vaults := strings.Split(args[1], listSeparator)
+
+			msg := types.NewMsgCompleteDKG(
+				clientCtx.GetFromAddress().String(),
+				id,
+				vaults,
+				args[2],
+				args[3],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {
