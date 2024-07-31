@@ -81,6 +81,8 @@ func (p Params) Validate() error {
 			if ok {
 				return ErrInvalidParams
 			}
+
+			vaults[vault.Address] = true
 		}
 
 		if len(vault.PubKey) != 0 {
