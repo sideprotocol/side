@@ -34,6 +34,10 @@ var (
 	BtcWithdrawRequestByTxHashPrefix = []byte{0x15} // prefix for each key to a withdrawal request from tx hash
 
 	BtcMintedTxHashKeyPrefix = []byte{0x15} // prefix for each key to a minted tx hash
+
+	DKGRequestIDKey               = []byte{0x16} // key for the DKG request id
+	DKGRequestKeyPrefix           = []byte{0x17} // prefix for each key to a DKG request
+	DKGCompletionRequestKeyPrefix = []byte{0x18} // prefix for each key to a DKG completion request
 )
 
 func Int64ToBytes(number uint64) []byte {
@@ -60,4 +64,12 @@ func BtcWithdrawRequestByTxHashKey(txid string) []byte {
 
 func BtcMintedTxHashKey(hash string) []byte {
 	return append(BtcMintedTxHashKeyPrefix, []byte(hash)...)
+}
+
+func DKGRequestKey(id uint64) []byte {
+	return append(DKGRequestKeyPrefix, Int64ToBytes(id)...)
+}
+
+func DKGCompletionRequestKey(id uint64, sender string) []byte {
+	return append(append(DKGCompletionRequestKeyPrefix, Int64ToBytes(id)...), []byte(sender)...)
 }

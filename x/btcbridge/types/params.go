@@ -16,8 +16,11 @@ var (
 	// default reward epoch
 	DefaultRewardEpoch = time.Duration(1209600) * time.Second // 14 days
 
-	// default TSS update transition period
-	DefaultTssUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
+	// default DKG timeout period
+	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
+
+	// default TSS participant update transition period
+	DefaultTSSParticipantUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
 )
 
 // NewParams creates a new Params instance
@@ -45,9 +48,12 @@ func NewParams() Params {
 			WithdrawFee: 12000, // 0.00012 BTC
 			Collector:   "",
 		},
-		NetworkFee:                8000, // 0.00008 BTC
-		RewardEpoch:               &DefaultRewardEpoch,
-		TssUpdateTransitionPeriod: &DefaultTssUpdateTransitionPeriod,
+		NetworkFee:  8000, // 0.00008 BTC
+		RewardEpoch: &DefaultRewardEpoch,
+		TssParams: &TSSParams{
+			DkgTimeoutPeriod:                  &DefaultDKGTimeoutPeriod,
+			ParticipantUpdateTransitionPeriod: &DefaultTSSParticipantUpdateTransitionPeriod,
+		},
 	}
 }
 

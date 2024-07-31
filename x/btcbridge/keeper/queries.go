@@ -105,3 +105,51 @@ func (k Keeper) QueryWithdrawRequestByTxHash(goCtx context.Context, req *types.Q
 
 	return &types.QueryWithdrawRequestByTxHashResponse{Request: request}, nil
 }
+
+func (k Keeper) QueryDKGRequest(goCtx context.Context, req *types.QueryDKGRequestRequest) (*types.QueryDKGRequestResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	request := k.GetDKGRequest(ctx, req.Id)
+
+	return &types.QueryDKGRequestResponse{Request: request}, nil
+}
+
+func (k Keeper) QueryDKGRequests(goCtx context.Context, req *types.QueryDKGRequestsRequest) (*types.QueryDKGRequestsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	requests := k.GetDKGRequests(ctx, req.Status)
+
+	return &types.QueryDKGRequestsResponse{Requests: requests}, nil
+}
+
+func (k Keeper) QueryAllDKGRequests(goCtx context.Context, req *types.QueryAllDKGRequestsRequest) (*types.QueryAllDKGRequestsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	requests := k.GetAllDKGRequests(ctx)
+
+	return &types.QueryAllDKGRequestsResponse{Requests: requests}, nil
+}
+
+func (k Keeper) QueryDKGCompletionRequests(goCtx context.Context, req *types.QueryDKGCompletionRequestsRequest) (*types.QueryDKGCompletionRequestsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	requests := k.GetDKGCompletionRequests(ctx, req.Id)
+
+	return &types.QueryDKGCompletionRequestsResponse{Requests: requests}, nil
+}

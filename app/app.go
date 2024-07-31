@@ -554,6 +554,7 @@ func New(
 		keys[btcbridgetypes.MemStoreKey],
 		govAuthor,
 		app.BankKeeper,
+		app.StakingKeeper,
 	)
 	btcbridgeModule := btcbridge.NewAppModule(appCodec, app.BtcBridgeKeeper)
 

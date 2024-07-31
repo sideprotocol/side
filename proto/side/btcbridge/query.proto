@@ -39,6 +39,22 @@ service Query {
   rpc QueryWithdrawRequestByTxHash(QueryWithdrawRequestByTxHashRequest) returns (QueryWithdrawRequestByTxHashResponse) {
     option (google.api.http).get = "/side/btcbridge/withdrawal/request/tx/{txid}";
   }
+  // QueryDKGRequest queries the DKG request by the given id.
+  rpc QueryDKGRequest(QueryDKGRequestRequest) returns (QueryDKGRequestResponse) {
+    option (google.api.http).get = "/side/btcbridge/dkg/request/{id}";
+  }
+  // QueryDKGRequests queries the DKG requests by the given status
+  rpc QueryDKGRequests(QueryDKGRequestsRequest) returns (QueryDKGRequestsResponse) {
+    option (google.api.http).get = "/side/btcbridge/dkg/request";
+  }
+  // QueryAllDKGRequests queries all DKG requests.
+  rpc QueryAllDKGRequests(QueryAllDKGRequestsRequest) returns (QueryAllDKGRequestsResponse) {
+    option (google.api.http).get = "/side/btcbridge/dkg/requests";
+  }
+  // QueryDKGCompletionRequests queries DKG completion requests by the given id.
+  rpc QueryDKGCompletionRequests(QueryDKGCompletionRequestsRequest) returns (QueryDKGCompletionRequestsResponse) {
+    option (google.api.http).get = "/side/btcbridge/dkg/completion/request/{id}";
+  }
 }
 
 // QueryWithdrawRequestsRequest is request type for the Query/WithdrawRequests RPC method.
@@ -111,4 +127,43 @@ message QueryBlockHeaderByHashRequest {
 // QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
 message QueryBlockHeaderByHashResponse {
   BlockHeader block_header = 1;
+}
+
+// QueryDKGRequestRequest is the request type for the Query/DKGRequest RPC method.
+message QueryDKGRequestRequest {
+  uint64 id = 1;
+}
+
+// QueryDKGRequestResponse is the response type for the Query/DKGRequest RPC method.
+message QueryDKGRequestResponse {
+  DKGRequest request = 1;
+}
+
+// QueryDKGRequestsRequest is the request type for the Query/DKGRequests RPC method.
+message QueryDKGRequestsRequest {
+  DKGRequestStatus status = 1;
+}
+
+// QueryDKGRequestsResponse is the response type for the Query/DKGRequests RPC method.
+message QueryDKGRequestsResponse {
+  repeated DKGRequest requests = 1;
+}
+
+// QueryAllDKGRequestsRequest is the request type for the Query/AllDKGRequests RPC method.
+message QueryAllDKGRequestsRequest {
+}
+
+// QueryAllDKGRequestsResponse is the response type for the Query/AllDKGRequests RPC method.
+message QueryAllDKGRequestsResponse {
+  repeated DKGRequest requests = 1;
+}
+
+// QueryDKGCompletionRequestsRequest is the request type for the Query/DKGCompletionRequests RPC method.
+message QueryDKGCompletionRequestsRequest {
+  uint64 id = 1;
+}
+
+// QueryDKGCompletionRequestsResponse is the response type for the Query/DKGCompletionRequests RPC method.
+message QueryDKGCompletionRequestsResponse {
+  repeated DKGCompletionRequest requests = 1;
 }

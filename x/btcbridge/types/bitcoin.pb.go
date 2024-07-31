@@ -5,18 +5,24 @@ package types
 
 import (
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
+	_ "github.com/cosmos/cosmos-sdk/codec/types"
 	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -58,6 +64,41 @@ func (x WithdrawStatus) String() string {
 
 func (WithdrawStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_b004a69efe3c7d84, []int{0}
+}
+
+type DKGRequestStatus int32
+
+const (
+	// DKG_REQUEST_STATUS_UNSPECIFIED defines the unknown DKG request status
+	DKGRequestStatus_DKG_REQUEST_STATUS_UNSPECIFIED DKGRequestStatus = 0
+	// DKG_REQUEST_STATUS_PENDING defines the status of the DKG request which is pending
+	DKGRequestStatus_DKG_REQUEST_STATUS_PENDING DKGRequestStatus = 1
+	// DKG_REQUEST_STATUS_COMPLETED defines the status of the DKG request which is completed
+	DKGRequestStatus_DKG_REQUEST_STATUS_COMPLETED DKGRequestStatus = 2
+	// DKG_REQUEST_STATUS_FAILED defines the status of the DKG request which failed
+	DKGRequestStatus_DKG_REQUEST_STATUS_FAILED DKGRequestStatus = 3
+)
+
+var DKGRequestStatus_name = map[int32]string{
+	0: "DKG_REQUEST_STATUS_UNSPECIFIED",
+	1: "DKG_REQUEST_STATUS_PENDING",
+	2: "DKG_REQUEST_STATUS_COMPLETED",
+	3: "DKG_REQUEST_STATUS_FAILED",
+}
+
+var DKGRequestStatus_value = map[string]int32{
+	"DKG_REQUEST_STATUS_UNSPECIFIED": 0,
+	"DKG_REQUEST_STATUS_PENDING":     1,
+	"DKG_REQUEST_STATUS_COMPLETED":   2,
+	"DKG_REQUEST_STATUS_FAILED":      3,
+}
+
+func (x DKGRequestStatus) String() string {
+	return proto.EnumName(DKGRequestStatus_name, int32(x))
+}
+
+func (DKGRequestStatus) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_b004a69efe3c7d84, []int{1}
 }
 
 // Bitcoin Block Header
@@ -362,55 +403,277 @@ func (m *Edict) GetOutput() uint32 {
 	return 0
 }
 
+// DKG Participant
+type DKGParticipant struct {
+	// the moniker of the corresponding validator
+	Moniker string `protobuf:"bytes,1,opt,name=moniker,proto3" json:"moniker,omitempty"`
+	// the operator address of the corresponding validator
+	Address string `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+}
+
+func (m *DKGParticipant) Reset()         { *m = DKGParticipant{} }
+func (m *DKGParticipant) String() string { return proto.CompactTextString(m) }
+func (*DKGParticipant) ProtoMessage()    {}
+func (*DKGParticipant) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b004a69efe3c7d84, []int{4}
+}
+func (m *DKGParticipant) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DKGParticipant) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DKGParticipant.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DKGParticipant) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DKGParticipant.Merge(m, src)
+}
+func (m *DKGParticipant) XXX_Size() int {
+	return m.Size()
+}
+func (m *DKGParticipant) XXX_DiscardUnknown() {
+	xxx_messageInfo_DKGParticipant.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DKGParticipant proto.InternalMessageInfo
+
+func (m *DKGParticipant) GetMoniker() string {
+	if m != nil {
+		return m.Moniker
+	}
+	return ""
+}
+
+func (m *DKGParticipant) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+// DKG Request
+type DKGRequest struct {
+	// the unique request id
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// participant set
+	Participants []*DKGParticipant `protobuf:"bytes,2,rep,name=participants,proto3" json:"participants,omitempty"`
+	// threshold required to perform DKG
+	Threshold uint32 `protobuf:"varint,3,opt,name=threshold,proto3" json:"threshold,omitempty"`
+	// expiration time
+	Expiration *time.Time `protobuf:"bytes,4,opt,name=expiration,proto3,stdtime" json:"expiration,omitempty"`
+	// status
+	Status DKGRequestStatus `protobuf:"varint,5,opt,name=status,proto3,enum=side.btcbridge.DKGRequestStatus" json:"status,omitempty"`
+}
+
+func (m *DKGRequest) Reset()         { *m = DKGRequest{} }
+func (m *DKGRequest) String() string { return proto.CompactTextString(m) }
+func (*DKGRequest) ProtoMessage()    {}
+func (*DKGRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b004a69efe3c7d84, []int{5}
+}
+func (m *DKGRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DKGRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DKGRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DKGRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DKGRequest.Merge(m, src)
+}
+func (m *DKGRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *DKGRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DKGRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DKGRequest proto.InternalMessageInfo
+
+func (m *DKGRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *DKGRequest) GetParticipants() []*DKGParticipant {
+	if m != nil {
+		return m.Participants
+	}
+	return nil
+}
+
+func (m *DKGRequest) GetThreshold() uint32 {
+	if m != nil {
+		return m.Threshold
+	}
+	return 0
+}
+
+func (m *DKGRequest) GetExpiration() *time.Time {
+	if m != nil {
+		return m.Expiration
+	}
+	return nil
+}
+
+func (m *DKGRequest) GetStatus() DKGRequestStatus {
+	if m != nil {
+		return m.Status
+	}
+	return DKGRequestStatus_DKG_REQUEST_STATUS_UNSPECIFIED
+}
+
+// DKG Completion Request
+type DKGCompletionRequest struct {
+	// request id
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// sender
+	Sender string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
+	// new vaults generated by DKG
+	Vaults []*Vault `protobuf:"bytes,3,rep,name=vaults,proto3" json:"vaults,omitempty"`
+}
+
+func (m *DKGCompletionRequest) Reset()         { *m = DKGCompletionRequest{} }
+func (m *DKGCompletionRequest) String() string { return proto.CompactTextString(m) }
+func (*DKGCompletionRequest) ProtoMessage()    {}
+func (*DKGCompletionRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b004a69efe3c7d84, []int{6}
+}
+func (m *DKGCompletionRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DKGCompletionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DKGCompletionRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DKGCompletionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DKGCompletionRequest.Merge(m, src)
+}
+func (m *DKGCompletionRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *DKGCompletionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DKGCompletionRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DKGCompletionRequest proto.InternalMessageInfo
+
+func (m *DKGCompletionRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *DKGCompletionRequest) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *DKGCompletionRequest) GetVaults() []*Vault {
+	if m != nil {
+		return m.Vaults
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("side.btcbridge.WithdrawStatus", WithdrawStatus_name, WithdrawStatus_value)
+	proto.RegisterEnum("side.btcbridge.DKGRequestStatus", DKGRequestStatus_name, DKGRequestStatus_value)
 	proto.RegisterType((*BlockHeader)(nil), "side.btcbridge.BlockHeader")
 	proto.RegisterType((*BitcoinWithdrawRequest)(nil), "side.btcbridge.BitcoinWithdrawRequest")
 	proto.RegisterType((*RuneId)(nil), "side.btcbridge.RuneId")
 	proto.RegisterType((*Edict)(nil), "side.btcbridge.Edict")
+	proto.RegisterType((*DKGParticipant)(nil), "side.btcbridge.DKGParticipant")
+	proto.RegisterType((*DKGRequest)(nil), "side.btcbridge.DKGRequest")
+	proto.RegisterType((*DKGCompletionRequest)(nil), "side.btcbridge.DKGCompletionRequest")
 }
 
 func init() { proto.RegisterFile("side/btcbridge/bitcoin.proto", fileDescriptor_b004a69efe3c7d84) }
 
 var fileDescriptor_b004a69efe3c7d84 = []byte{
-	// 584 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x93, 0xcd, 0x6e, 0xda, 0x4c,
-	0x14, 0x86, 0xb1, 0x01, 0x27, 0x0c, 0x0a, 0xe2, 0x9b, 0x2f, 0xa2, 0x0e, 0x69, 0x4d, 0xc4, 0xa2,
-	0x8a, 0xba, 0x18, 0x2b, 0x54, 0x6a, 0xd7, 0xfc, 0x38, 0x82, 0x45, 0x93, 0x6a, 0x20, 0x42, 0xea,
-	0xc6, 0xf2, 0xcf, 0x08, 0x8f, 0x02, 0x1e, 0xea, 0x19, 0x53, 0x7a, 0x13, 0x55, 0x2f, 0x2b, 0xcb,
-	0x48, 0xdd, 0x74, 0x55, 0x55, 0x70, 0x0b, 0xbd, 0x80, 0x6a, 0xc6, 0x86, 0x26, 0x69, 0x77, 0xe7,
-	0x9d, 0xf3, 0x9e, 0x33, 0xc7, 0xcf, 0xf1, 0x80, 0xe7, 0x9c, 0x86, 0xc4, 0xf6, 0x45, 0xe0, 0x27,
-	0x34, 0x9c, 0x11, 0xdb, 0xa7, 0x22, 0x60, 0x34, 0x46, 0xcb, 0x84, 0x09, 0x06, 0x6b, 0x32, 0x8b,
-	0xf6, 0xd9, 0xe6, 0xf1, 0x8c, 0xcd, 0x98, 0x4a, 0xd9, 0x32, 0xca, 0x5c, 0x4d, 0x2b, 0x60, 0x7c,
-	0xc1, 0xb8, 0xed, 0x7b, 0x9c, 0xd8, 0xab, 0x0b, 0x9f, 0x08, 0xef, 0xc2, 0xfe, 0xd3, 0xa5, 0xfd,
-	0x4b, 0x03, 0xd5, 0xde, 0x9c, 0x05, 0xb7, 0x43, 0xe2, 0x85, 0x24, 0x81, 0x26, 0x38, 0x58, 0x91,
-	0x84, 0x53, 0x16, 0x9b, 0xda, 0x99, 0x76, 0x5e, 0xc2, 0x3b, 0x09, 0x21, 0x28, 0x45, 0x1e, 0x8f,
-	0x4c, 0xfd, 0x4c, 0x3b, 0xaf, 0x60, 0x15, 0xc3, 0x06, 0x30, 0x22, 0x42, 0x67, 0x91, 0x30, 0x8b,
-	0xca, 0x9c, 0x2b, 0x88, 0xc0, 0xff, 0xcb, 0x84, 0xac, 0x28, 0x4b, 0xb9, 0xeb, 0xcb, 0xee, 0xae,
-	0x2a, 0x2d, 0xa9, 0xd2, 0xff, 0x76, 0xa9, 0xec, 0x5e, 0xd9, 0xa7, 0x05, 0xaa, 0x0b, 0x92, 0xdc,
-	0xce, 0x89, 0x9b, 0x30, 0x26, 0xcc, 0xb2, 0xf2, 0x81, 0xec, 0x08, 0x33, 0x26, 0xe0, 0x31, 0x28,
-	0xc7, 0x2c, 0x0e, 0x88, 0x69, 0xa8, 0x7b, 0x32, 0x21, 0x47, 0xf2, 0xa9, 0xe0, 0xe6, 0x41, 0x36,
-	0x92, 0x8c, 0xe5, 0x99, 0xa0, 0x0b, 0x62, 0x1e, 0x2a, 0xa3, 0x8a, 0x61, 0x1d, 0x14, 0x63, 0xb1,
-	0x36, 0x2b, 0xea, 0x48, 0x86, 0xed, 0x6f, 0x1a, 0x68, 0xf4, 0x32, 0x9c, 0x53, 0x2a, 0xa2, 0x30,
-	0xf1, 0x3e, 0x61, 0xf2, 0x31, 0x25, 0x5c, 0x48, 0x02, 0x5e, 0x18, 0x26, 0x84, 0x73, 0x45, 0xa0,
-	0x82, 0x77, 0x12, 0xbe, 0x05, 0x86, 0xb7, 0x60, 0x69, 0x2c, 0x14, 0x83, 0x6a, 0xe7, 0x04, 0x65,
-	0x70, 0x91, 0x84, 0x8b, 0x72, 0xb8, 0xa8, 0xcf, 0x68, 0xdc, 0x2b, 0xdd, 0xfd, 0x68, 0x15, 0x70,
-	0x6e, 0x87, 0x4d, 0x70, 0xc8, 0x65, 0x77, 0xf9, 0x01, 0x19, 0xa8, 0xbd, 0x56, 0xf3, 0xae, 0x69,
-	0x98, 0xb3, 0x51, 0x31, 0x7c, 0x03, 0x0c, 0x2e, 0x3c, 0x91, 0x72, 0x45, 0xa2, 0xd6, 0xb1, 0xd0,
-	0xe3, 0x5d, 0xa3, 0xdd, 0xcc, 0x63, 0xe5, 0xc2, 0xb9, 0xbb, 0x8d, 0x80, 0x81, 0xd3, 0x98, 0x8c,
-	0x42, 0xc9, 0x4b, 0x71, 0xcf, 0x97, 0x98, 0x09, 0x58, 0x03, 0xba, 0x58, 0xab, 0xe1, 0x8f, 0xb0,
-	0x2e, 0xd6, 0x6d, 0x17, 0x94, 0x9d, 0x90, 0x06, 0x02, 0xbe, 0x04, 0x3a, 0x0d, 0x95, 0xb7, 0xda,
-	0x69, 0x3c, 0xbd, 0x2c, 0x6b, 0x89, 0x75, 0x1a, 0xca, 0x7d, 0x3f, 0x20, 0x50, 0xd9, 0x7f, 0x60,
-	0x03, 0x18, 0x2c, 0x15, 0xcb, 0x34, 0xfb, 0x0f, 0x8e, 0x70, 0xae, 0x5e, 0x7d, 0xd1, 0x40, 0xed,
-	0xf1, 0xac, 0xb0, 0x05, 0x4e, 0xa7, 0xa3, 0xc9, 0x70, 0x80, 0xbb, 0x53, 0x77, 0x3c, 0xe9, 0x4e,
-	0x6e, 0xc6, 0xee, 0xcd, 0xd5, 0xf8, 0xbd, 0xd3, 0x1f, 0x5d, 0x8e, 0x9c, 0x41, 0xbd, 0x00, 0x4f,
-	0xc1, 0xb3, 0xa7, 0x86, 0x3e, 0x76, 0xba, 0x13, 0x67, 0x50, 0xd7, 0xfe, 0x55, 0xdd, 0xc3, 0xd7,
-	0xdd, 0x41, 0xbf, 0x3b, 0x96, 0x06, 0x1d, 0xbe, 0x00, 0x27, 0x7f, 0x55, 0x5f, 0x5f, 0x5d, 0x8e,
-	0xf0, 0x3b, 0x67, 0x50, 0x2f, 0xf6, 0x86, 0x77, 0x1b, 0x4b, 0xbb, 0xdf, 0x58, 0xda, 0xcf, 0x8d,
-	0xa5, 0x7d, 0xdd, 0x5a, 0x85, 0xfb, 0xad, 0x55, 0xf8, 0xbe, 0xb5, 0x0a, 0x1f, 0xd0, 0x8c, 0x8a,
-	0x28, 0xf5, 0x51, 0xc0, 0x16, 0xb6, 0x04, 0xa0, 0x9e, 0x47, 0xc0, 0xe6, 0x4a, 0xd8, 0xeb, 0x07,
-	0xcf, 0x50, 0x7c, 0x5e, 0x12, 0xee, 0x1b, 0xca, 0xf0, 0xfa, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0xa3, 0xf2, 0x72, 0xd3, 0xa5, 0x03, 0x00, 0x00,
+	// 856 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x54, 0x41, 0x6f, 0xe2, 0x46,
+	0x18, 0xc5, 0xc0, 0xb2, 0xe1, 0xa3, 0x8b, 0xe8, 0x34, 0xa5, 0x0e, 0x49, 0x4d, 0xc4, 0xa1, 0x8a,
+	0x56, 0xaa, 0xad, 0x4d, 0xa5, 0xb6, 0x57, 0xc0, 0x0e, 0x41, 0xd9, 0x4d, 0xd2, 0x81, 0x34, 0x52,
+	0x2f, 0xc8, 0xc6, 0x53, 0x18, 0x05, 0x7b, 0x5c, 0xcf, 0x38, 0x65, 0xff, 0x44, 0xb5, 0xb7, 0xfe,
+	0xa5, 0x1c, 0x57, 0xea, 0xa5, 0xa7, 0x6d, 0x95, 0xfc, 0x85, 0x9e, 0xab, 0x6a, 0xc6, 0x36, 0x09,
+	0x2c, 0xbd, 0xcd, 0xf3, 0x7b, 0xdf, 0x7c, 0x6f, 0xde, 0x37, 0x63, 0x38, 0xe0, 0xd4, 0x27, 0x96,
+	0x27, 0xa6, 0x5e, 0x4c, 0xfd, 0x19, 0xb1, 0x3c, 0x2a, 0xa6, 0x8c, 0x86, 0x66, 0x14, 0x33, 0xc1,
+	0x50, 0x5d, 0xb2, 0xe6, 0x8a, 0x6d, 0xed, 0xce, 0xd8, 0x8c, 0x29, 0xca, 0x92, 0xab, 0x54, 0xd5,
+	0xda, 0x9b, 0x31, 0x36, 0x5b, 0x10, 0x4b, 0x21, 0x2f, 0xf9, 0xd9, 0x72, 0xc3, 0xb7, 0x19, 0xd5,
+	0xde, 0xa4, 0x04, 0x0d, 0x08, 0x17, 0x6e, 0x10, 0x65, 0x02, 0x63, 0xca, 0x78, 0xc0, 0xb8, 0xe5,
+	0xb9, 0x9c, 0x58, 0xb7, 0xaf, 0x3c, 0x22, 0xdc, 0x57, 0xd6, 0xa3, 0x83, 0xd6, 0x5e, 0xca, 0x4f,
+	0xd2, 0xa6, 0x29, 0xc8, 0xa8, 0xfd, 0x0d, 0xeb, 0x91, 0x1b, 0xbb, 0x41, 0x46, 0x76, 0xfe, 0xd1,
+	0xa0, 0xd6, 0x5b, 0xb0, 0xe9, 0xcd, 0x29, 0x71, 0x7d, 0x12, 0x23, 0x1d, 0x9e, 0xdf, 0x92, 0x98,
+	0x53, 0x16, 0xea, 0xda, 0xa1, 0x76, 0x54, 0xc6, 0x39, 0x44, 0x08, 0xca, 0x73, 0x97, 0xcf, 0xf5,
+	0xe2, 0xa1, 0x76, 0x54, 0xc5, 0x6a, 0x8d, 0x9a, 0x50, 0x99, 0x13, 0x3a, 0x9b, 0x0b, 0xbd, 0xa4,
+	0xc4, 0x19, 0x42, 0x26, 0x7c, 0x16, 0xc5, 0xe4, 0x96, 0xb2, 0x84, 0x4f, 0x3c, 0xb9, 0xfb, 0x44,
+	0x95, 0x96, 0x55, 0xe9, 0xa7, 0x39, 0x95, 0xf6, 0x95, 0xfb, 0xb4, 0xa1, 0x16, 0x90, 0xf8, 0x66,
+	0x41, 0x26, 0x31, 0x63, 0x42, 0x7f, 0xa6, 0x74, 0x90, 0x7e, 0xc2, 0x8c, 0x09, 0xb4, 0x0b, 0xcf,
+	0x42, 0x16, 0x4e, 0x89, 0x5e, 0x51, 0x7d, 0x52, 0x20, 0x2d, 0x79, 0x54, 0x70, 0xfd, 0x79, 0x6a,
+	0x49, 0xae, 0xe5, 0x37, 0x99, 0x9d, 0xbe, 0xa3, 0x84, 0x6a, 0x8d, 0x1a, 0x50, 0x0a, 0xc5, 0x52,
+	0xaf, 0xaa, 0x4f, 0x72, 0xd9, 0xf9, 0x43, 0x83, 0x66, 0x2f, 0x1d, 0xe1, 0x35, 0x15, 0x73, 0x3f,
+	0x76, 0x7f, 0xc5, 0xe4, 0x97, 0x84, 0x70, 0x21, 0x13, 0x70, 0x7d, 0x3f, 0x26, 0x9c, 0xab, 0x04,
+	0xaa, 0x38, 0x87, 0xe8, 0x3b, 0xa8, 0xb8, 0x01, 0x4b, 0x42, 0xa1, 0x32, 0xa8, 0x1d, 0xef, 0x99,
+	0x59, 0xce, 0x72, 0x28, 0x66, 0x36, 0x14, 0xb3, 0xcf, 0x68, 0xd8, 0x2b, 0xdf, 0x7d, 0x68, 0x17,
+	0x70, 0x26, 0x47, 0x2d, 0xd8, 0xe1, 0x72, 0x77, 0x79, 0x80, 0x34, 0xa8, 0x15, 0x56, 0x7e, 0x97,
+	0xd4, 0xcf, 0xb2, 0x51, 0x6b, 0xf4, 0x2d, 0x54, 0xb8, 0x70, 0x45, 0xc2, 0x55, 0x12, 0xf5, 0x63,
+	0xc3, 0x5c, 0xbf, 0x5f, 0x66, 0xee, 0x79, 0xa4, 0x54, 0x38, 0x53, 0x77, 0x4c, 0xa8, 0xe0, 0x24,
+	0x24, 0x43, 0x5f, 0xe6, 0xa5, 0x72, 0xcf, 0x86, 0x98, 0x02, 0x54, 0x87, 0xa2, 0x58, 0x2a, 0xf3,
+	0x2f, 0x70, 0x51, 0x2c, 0x3b, 0x13, 0x78, 0xe6, 0xf8, 0x74, 0x2a, 0xd0, 0x57, 0x50, 0xa4, 0xbe,
+	0xd2, 0xd6, 0x8e, 0x9b, 0x9b, 0xcd, 0xd2, 0x2d, 0x71, 0x91, 0xfa, 0x72, 0xde, 0x4f, 0x12, 0xa8,
+	0xae, 0x0e, 0xd8, 0x84, 0x0a, 0x4b, 0x44, 0x94, 0xa4, 0xf7, 0xe0, 0x05, 0xce, 0x50, 0xc7, 0x86,
+	0xba, 0x7d, 0x36, 0xb8, 0x74, 0x63, 0x41, 0xa7, 0x34, 0x72, 0x43, 0x95, 0x6e, 0xc0, 0x42, 0x7a,
+	0x43, 0xe2, 0x3c, 0xdd, 0x0c, 0x3e, 0xcd, 0xbd, 0xb8, 0x96, 0x7b, 0xe7, 0x5f, 0x0d, 0xc0, 0x3e,
+	0x1b, 0xe4, 0x03, 0xaa, 0xaf, 0xcc, 0x96, 0x95, 0xa9, 0x1e, 0x7c, 0x12, 0x3d, 0x76, 0x90, 0xd5,
+	0xa5, 0xa3, 0xda, 0xc7, 0x99, 0xad, 0x1b, 0xc1, 0x6b, 0x35, 0xe8, 0x00, 0xaa, 0x62, 0x1e, 0x13,
+	0x3e, 0x67, 0x0b, 0x3f, 0x3b, 0xc3, 0xe3, 0x07, 0x64, 0x03, 0x90, 0x65, 0x44, 0x63, 0x57, 0xc8,
+	0x77, 0x51, 0x56, 0x31, 0xb5, 0xcc, 0xf4, 0xc9, 0x9a, 0xf9, 0x93, 0x35, 0xc7, 0xf9, 0x93, 0xed,
+	0xed, 0xdc, 0x7d, 0x68, 0x6b, 0xef, 0xfe, 0x6a, 0x6b, 0xf8, 0x49, 0x1d, 0xfa, 0x7e, 0x63, 0xaa,
+	0x87, 0x5b, 0x1c, 0x66, 0x67, 0xdc, 0x98, 0x6b, 0x00, 0xbb, 0xf6, 0xd9, 0xa0, 0xcf, 0x82, 0x68,
+	0x41, 0xe4, 0x56, 0xff, 0x97, 0x44, 0x13, 0x2a, 0x9c, 0x84, 0x3e, 0x89, 0xf3, 0xf1, 0xa4, 0x08,
+	0x7d, 0x0d, 0x95, 0x5b, 0x37, 0x59, 0x08, 0xae, 0x97, 0x54, 0x36, 0x9f, 0x6f, 0x76, 0xfe, 0x51,
+	0xb2, 0x38, 0x13, 0xbd, 0xfc, 0x4d, 0x83, 0xfa, 0xfa, 0x0d, 0x43, 0x6d, 0xd8, 0xbf, 0x1e, 0x8e,
+	0x4f, 0x6d, 0xdc, 0xbd, 0x9e, 0x8c, 0xc6, 0xdd, 0xf1, 0xd5, 0x68, 0x72, 0x75, 0x3e, 0xba, 0x74,
+	0xfa, 0xc3, 0x93, 0xa1, 0x63, 0x37, 0x0a, 0x68, 0x1f, 0xbe, 0xd8, 0x14, 0xf4, 0xb1, 0xd3, 0x1d,
+	0x3b, 0x76, 0x43, 0xdb, 0x56, 0xdd, 0xc3, 0x17, 0x5d, 0xbb, 0xdf, 0x1d, 0x49, 0x41, 0x11, 0x7d,
+	0x09, 0x7b, 0x1f, 0x55, 0x5f, 0x9c, 0x9f, 0x0c, 0xf1, 0x1b, 0xc7, 0x6e, 0x94, 0x5e, 0xfe, 0xae,
+	0x41, 0x63, 0x33, 0x1c, 0xd4, 0x01, 0xc3, 0x3e, 0x1b, 0x4c, 0xb0, 0xf3, 0xc3, 0x95, 0x33, 0x1a,
+	0x6f, 0x77, 0x65, 0x40, 0x6b, 0x8b, 0xe6, 0xd2, 0x39, 0xb7, 0x87, 0xe7, 0x83, 0x86, 0x86, 0x0e,
+	0xe1, 0x60, 0x0b, 0xdf, 0xbf, 0x78, 0x73, 0xf9, 0xda, 0x59, 0x39, 0xdb, 0xa2, 0x38, 0xe9, 0x0e,
+	0x5f, 0x4b, 0x67, 0xbd, 0xd3, 0xbb, 0x7b, 0x43, 0x7b, 0x7f, 0x6f, 0x68, 0x7f, 0xdf, 0x1b, 0xda,
+	0xbb, 0x07, 0xa3, 0xf0, 0xfe, 0xc1, 0x28, 0xfc, 0xf9, 0x60, 0x14, 0x7e, 0x32, 0x67, 0x54, 0xcc,
+	0x13, 0xcf, 0x9c, 0xb2, 0xc0, 0x92, 0x69, 0xab, 0x6b, 0x32, 0x65, 0x0b, 0x05, 0xac, 0xe5, 0x93,
+	0xff, 0xb1, 0x78, 0x1b, 0x11, 0xee, 0x55, 0x94, 0xe0, 0x9b, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff,
+	0xe1, 0x18, 0xd8, 0xec, 0x69, 0x06, 0x00, 0x00,
 }
 
 func (m *BlockHeader) Marshal() (dAtA []byte, err error) {
@@ -626,6 +889,154 @@ func (m *Edict) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *DKGParticipant) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DKGParticipant) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DKGParticipant) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Moniker) > 0 {
+		i -= len(m.Moniker)
+		copy(dAtA[i:], m.Moniker)
+		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Moniker)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DKGRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DKGRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DKGRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Status != 0 {
+		i = encodeVarintBitcoin(dAtA, i, uint64(m.Status))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.Expiration != nil {
+		n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.Expiration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.Expiration):])
+		if err3 != nil {
+			return 0, err3
+		}
+		i -= n3
+		i = encodeVarintBitcoin(dAtA, i, uint64(n3))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Threshold != 0 {
+		i = encodeVarintBitcoin(dAtA, i, uint64(m.Threshold))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Participants) > 0 {
+		for iNdEx := len(m.Participants) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Participants[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintBitcoin(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Id != 0 {
+		i = encodeVarintBitcoin(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DKGCompletionRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DKGCompletionRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DKGCompletionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Vaults) > 0 {
+		for iNdEx := len(m.Vaults) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Vaults[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintBitcoin(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintBitcoin(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintBitcoin(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintBitcoin(dAtA []byte, offset int, v uint64) int {
 	offset -= sovBitcoin(v)
 	base := offset
@@ -733,6 +1144,73 @@ func (m *Edict) Size() (n int) {
 	}
 	if m.Output != 0 {
 		n += 1 + sovBitcoin(uint64(m.Output))
+	}
+	return n
+}
+
+func (m *DKGParticipant) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Moniker)
+	if l > 0 {
+		n += 1 + l + sovBitcoin(uint64(l))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovBitcoin(uint64(l))
+	}
+	return n
+}
+
+func (m *DKGRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovBitcoin(uint64(m.Id))
+	}
+	if len(m.Participants) > 0 {
+		for _, e := range m.Participants {
+			l = e.Size()
+			n += 1 + l + sovBitcoin(uint64(l))
+		}
+	}
+	if m.Threshold != 0 {
+		n += 1 + sovBitcoin(uint64(m.Threshold))
+	}
+	if m.Expiration != nil {
+		l = github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.Expiration)
+		n += 1 + l + sovBitcoin(uint64(l))
+	}
+	if m.Status != 0 {
+		n += 1 + sovBitcoin(uint64(m.Status))
+	}
+	return n
+}
+
+func (m *DKGCompletionRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovBitcoin(uint64(m.Id))
+	}
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovBitcoin(uint64(l))
+	}
+	if len(m.Vaults) > 0 {
+		for _, e := range m.Vaults {
+			l = e.Size()
+			n += 1 + l + sovBitcoin(uint64(l))
+		}
 	}
 	return n
 }
@@ -1405,6 +1883,432 @@ func (m *Edict) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBitcoin(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DKGParticipant) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBitcoin
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DKGParticipant: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DKGParticipant: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Moniker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Moniker = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBitcoin(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DKGRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBitcoin
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DKGRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DKGRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Participants", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Participants = append(m.Participants, &DKGParticipant{})
+			if err := m.Participants[len(m.Participants)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+			}
+			m.Threshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Threshold |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Expiration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Expiration == nil {
+				m.Expiration = new(time.Time)
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(m.Expiration, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= DKGRequestStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBitcoin(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DKGCompletionRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBitcoin
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DKGCompletionRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DKGCompletionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vaults", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBitcoin
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBitcoin
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Vaults = append(m.Vaults, &Vault{})
+			if err := m.Vaults[len(m.Vaults)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipBitcoin(dAtA[iNdEx:])

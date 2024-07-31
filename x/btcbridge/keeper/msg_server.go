@@ -172,6 +172,64 @@ func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSub
 	return &types.MsgSubmitWithdrawStatusResponse{}, nil
 }
 
+// InitiateDKG initiates the DKG request.
+func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG) (*types.MsgInitiateDKGResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	req := &types.DKGRequest{
+		Id:           m.Keeper.GetNextDKGRequestID(ctx),
+		Participants: msg.Participants,
+		Threshold:    msg.Threshold,
+		Expiration:   m.Keeper.GetDKGRequestExpirationTime(ctx),
+		Status:       types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING,
+	}
+
+	m.Keeper.SetDKGRequest(ctx, req)
+	m.Keeper.SetDKGRequestID(ctx, req.Id)
+
+	// Emit events
+	m.EmitEvent(ctx, msg.Authority,
+		sdk.NewAttribute("id", fmt.Sprintf("%d", req.Id)),
+		sdk.NewAttribute("expiration", req.Expiration.String()),
+	)
+
+	return &types.MsgInitiateDKGResponse{}, nil
+}
+
+// CompleteDKG initiates the DKG request.
+func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG) (*types.MsgCompleteDKGResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	req := &types.DKGCompletionRequest{
+		Id:     msg.Id,
+		Sender: msg.Sender,
+		Vaults: msg.Vaults,
+	}
+
+	if err := m.Keeper.CompleteDKG(ctx, req); err != nil {
+		return nil, err
+	}
+
+	// Emit events
+	m.EmitEvent(ctx, msg.Sender,
+		sdk.NewAttribute("id", fmt.Sprintf("%d", msg.Id)),
+	)
+
+	return &types.MsgCompleteDKGResponse{}, nil
+}
+
 // UpdateParams updates the module params.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {
