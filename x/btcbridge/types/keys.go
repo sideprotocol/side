@@ -70,6 +70,6 @@ func DKGRequestKey(id uint64) []byte {
 	return append(DKGRequestKeyPrefix, Int64ToBytes(id)...)
 }
 
-func DKGCompletionRequestKey(id uint64, sender string) []byte {
-	return append(append(DKGCompletionRequestKeyPrefix, Int64ToBytes(id)...), []byte(sender)...)
+func DKGCompletionRequestKey(id uint64, validator string) []byte {
+	return append(append(DKGCompletionRequestKeyPrefix, Int64ToBytes(id)...), []byte(validator)...)
 }

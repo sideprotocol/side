@@ -120,14 +120,14 @@ func (k Keeper) SetDKGCompletionRequest(ctx sdk.Context, req *types.DKGCompletio
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(req)
-	store.Set(types.DKGCompletionRequestKey(req.Id, req.Sender), bz)
+	store.Set(types.DKGCompletionRequestKey(req.Id, req.Validator), bz)
 }
 
 // HasDKGCompletionRequest returns true if the given completion request exists, false otherwise
-func (k Keeper) HasDKGCompletionRequest(ctx sdk.Context, id uint64, sender string) bool {
+func (k Keeper) HasDKGCompletionRequest(ctx sdk.Context, id uint64, validator string) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.DKGCompletionRequestKey(id, sender))
+	return store.Has(types.DKGCompletionRequestKey(id, validator))
 }
 
 // GetDKGCompletionRequests gets DKG completion requests by the given id
@@ -175,18 +175,31 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return types.ErrInvalidDKGCompletionRequest
 	}
 
-	if k.HasDKGCompletionRequest(ctx, req.Id, req.Sender) {
+	if k.HasDKGCompletionRequest(ctx, req.Id, req.Validator) {
 		return types.ErrDKGCompletionRequestExists
 	}
 
-	if !types.ParticipantExists(dkgReq.Participants, req.Sender) {
+	validatorConsAddr, _ := sdk.ConsAddressFromHex(req.Validator)
+	validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, validatorConsAddr)
+	if !found {
+		return types.ErrInvalidDKGCompletionRequest
+	}
+
+	if !types.ParticipantExists(dkgReq.Participants, validator.OperatorAddress) {
 		return types.ErrUnauthorizedDKGCompletionRequest
 	}
 
-	for _, v := range req.Vaults {
-		if types.SelectVaultByPubKey(k.GetParams(ctx).Vaults, v.PubKey) != nil {
-			return types.ErrInvalidDKGCompletionRequest
-		}
+	if err := k.CheckVaults(ctx, req.Vaults); err != nil {
+		return err
+	}
+
+	pubKey, err := validator.ConsPubKey()
+	if err != nil {
+		return err
+	}
+
+	if !types.VerifySignature(req.Signature, pubKey.Bytes(), req) {
+		return types.ErrInvalidDKGCompletionRequest
 	}
 
 	k.SetDKGCompletionRequest(ctx, req)
@@ -194,22 +207,36 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	return nil
 }
 
+// CheckVaults checks if the provided vaults are valid
+func (k Keeper) CheckVaults(ctx sdk.Context, vaults []string) error {
+	currentVaults := k.GetParams(ctx).Vaults
+
+	if len(vaults) != len(currentVaults) {
+		return types.ErrInvalidDKGCompletionRequest
+	}
+
+	for _, v := range vaults {
+		if types.SelectVaultByBitcoinAddress(currentVaults, v) != nil {
+			return types.ErrInvalidDKGCompletionRequest
+		}
+	}
+
+	return nil
+}
+
 // UpdateVaults updates the asset vaults of the btc bridge
-func (k Keeper) UpdateVaults(ctx sdk.Context, newVaults []*types.Vault) {
+func (k Keeper) UpdateVaults(ctx sdk.Context, newVaults []string) {
 	params := k.GetParams(ctx)
 
-	for _, v := range newVaults {
-		address, err := types.GetVaultAddressFromPubKey(v.PubKey)
-		if err != nil {
-			panic(err)
+	for i, v := range newVaults {
+		newVault := &types.Vault{
+			Address:   v,
+			AssetType: params.Vaults[i].AssetType,
+			// TODO
+			Version: 1,
 		}
 
-		v.Address = address
-
-		// TODO
-		v.Version = 1
-
-		params.Vaults = append(params.Vaults, v)
+		params.Vaults = append(params.Vaults, newVault)
 	}
 
 	k.SetParams(ctx, params)

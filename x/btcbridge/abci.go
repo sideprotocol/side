@@ -25,14 +25,15 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 		}
 
 		// check if the DKG completion requests are valid
-		if !types.CheckCompletionRequests(completionRequests) {
+		if !types.CheckDKGCompletionRequests(completionRequests) {
 			req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_FAILED
 			continue
 		}
 
-		req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_COMPLETED
-
 		// update vaults
 		k.UpdateVaults(ctx, completionRequests[0].Vaults)
+
+		// update status
+		req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_COMPLETED
 	}
 }
