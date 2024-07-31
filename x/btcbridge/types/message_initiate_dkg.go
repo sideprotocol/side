@@ -35,17 +35,17 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		return sdkerrors.Wrap(err, "invalid authority address")
 	}
 
-	if len(m.Participants) == 0 || m.Threshold == 0 || m.Threshold >= uint32(len(m.Participants)) {
+	if len(m.Participants) == 0 || m.Threshold == 0 || m.Threshold > uint32(len(m.Participants)) {
 		return ErrInvalidDKGParams
 	}
 
 	for _, p := range m.Participants {
-		if _, err := sdk.AccAddressFromBech32(p.Address); err != nil {
+		if len(p.Moniker) > stakingtypes.MaxMonikerLength {
 			return ErrInvalidDKGParams
 		}
 
-		if len(p.Moniker) > stakingtypes.MaxMonikerLength {
-			return ErrInvalidDKGParams
+		if _, err := sdk.ValAddressFromBech32(p.Address); err != nil {
+			return sdkerrors.Wrap(err, "invalid participant address")
 		}
 	}
 
