@@ -30,6 +30,8 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdBestBlock())
 	cmd.AddCommand(CmdQueryBlock())
 	cmd.AddCommand(CmdQueryWithdrawRequest())
+	cmd.AddCommand(CmdQueryDKGRequests())
+	cmd.AddCommand(CmdQueryDKGCompletionRequests())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -167,6 +169,81 @@ func CmdQueryWithdrawRequest() *cobra.Command {
 			}
 
 			res, err := queryClient.QueryWithdrawRequests(cmd.Context(), &types.QueryWithdrawRequestsRequest{Status: types.WithdrawStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryDKGRequests returns the command to query DKG requests
+func CmdQueryDKGRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "dkg-requests [status]",
+		Short: "Query dkg requests by the optional status",
+		Args:  cobra.MaximumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if len(args) > 0 {
+				status, err := strconv.ParseInt(args[0], 10, 32)
+				if err != nil {
+					return err
+				}
+
+				res, err := queryClient.QueryDKGRequests(cmd.Context(), &types.QueryDKGRequestsRequest{Status: types.DKGRequestStatus(status)})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			res, err := queryClient.QueryAllDKGRequests(cmd.Context(), &types.QueryAllDKGRequestsRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryDKGCompletionRequests returns the command to query DKG completion requests
+func CmdQueryDKGCompletionRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "dkg-completions [id]",
+		Short: "Query dkg completion requests by the given request id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryDKGCompletionRequests(cmd.Context(), &types.QueryDKGCompletionRequestsRequest{Id: id})
 			if err != nil {
 				return err
 			}
