@@ -25,8 +25,8 @@ message Params {
   int64 network_fee = 7;
   // Reward epoch for relayer and TSS participant incentivization
   google.protobuf.Duration reward_epoch = 8 [(gogoproto.stdduration) = true];
-  // Transition period after which TSS participants update process is completed
-  google.protobuf.Duration tss_update_transition_period = 9 [(gogoproto.stdduration) = true];
+  // TSS params
+  TSSParams tss_params = 9;
 }
 
 // AssetType defines the type of asset
@@ -71,4 +71,12 @@ message ProtocolFees {
   int64 withdraw_fee = 2;
   // Protocol fee collector
   string collector = 3;
+}
+
+// TSSParams defines the params related to TSS
+message TSSParams {
+  // timeout duration for DKG request
+  google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.stdduration) = true];
+  // Transition period after which TSS participants update process is completed
+  google.protobuf.Duration participant_update_transition_period = 2 [(gogoproto.stdduration) = true];
 }

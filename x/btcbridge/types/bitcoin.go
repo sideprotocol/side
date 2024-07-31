@@ -1,10 +1,13 @@
 package types
 
 import (
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/mempool"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
+	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -19,6 +22,11 @@ const (
 	// default sig hash type
 	DefaultSigHashType = txscript.SigHashAll
 )
+
+// GetTaprootAddress gets the taproot address from the given public key
+func GetTaprootAddress(pubKey *secp256k1.PublicKey, chainCfg *chaincfg.Params) (*btcutil.AddressTaproot, error) {
+	return btcutil.NewAddressTaproot(schnorr.SerializePubKey(txscript.ComputeTaprootKeyNoScript(pubKey)), chainCfg)
+}
 
 // IsDustOut returns true if the given output is dust, false otherwise
 func IsDustOut(out *wire.TxOut) bool {

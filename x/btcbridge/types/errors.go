@@ -42,4 +42,10 @@ var (
 	ErrInvalidDepositAmount  = errorsmod.Register(ModuleName, 8100, "invalid deposit amount")
 	ErrInvalidWithdrawAmount = errorsmod.Register(ModuleName, 8101, "invalid withdrawal amount")
 	ErrInvalidSequence       = errorsmod.Register(ModuleName, 8102, "invalid sequence")
+
+	ErrInvalidDKGParams                 = errorsmod.Register(ModuleName, 9100, "invalid dkg params")
+	ErrDKGRequestDoesNotExist           = errorsmod.Register(ModuleName, 9101, "dkg request does not exist")
+	ErrDKGCompletionRequestExists       = errorsmod.Register(ModuleName, 9102, "dkg completion request already exists")
+	ErrInvalidDKGCompletionRequest      = errorsmod.Register(ModuleName, 9103, "invalid dkg completion request")
+	ErrUnauthorizedDKGCompletionRequest = errorsmod.Register(ModuleName, 9104, "unauthorized dkg completion request")
 )

@@ -42,6 +42,7 @@ func BtcBridgeKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		memStoreKey,
 		authority,
 		app.BankKeeper,
+		app.StakingKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, log.NewNopLogger())
