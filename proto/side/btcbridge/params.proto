@@ -50,7 +50,7 @@ message Vault {
   // the address to which the voucher is sent
   AssetType asset_type = 3;
   // version
-  int32 version = 4;
+  uint64 version = 4;
 }
 
 // ProtocolLimits defines the params related to the the protocol limitations

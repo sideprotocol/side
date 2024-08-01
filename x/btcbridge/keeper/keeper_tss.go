@@ -232,12 +232,28 @@ func (k Keeper) UpdateVaults(ctx sdk.Context, newVaults []string) {
 		newVault := &types.Vault{
 			Address:   v,
 			AssetType: params.Vaults[i].AssetType,
-			// TODO
-			Version: 1,
+			Version:   k.IncreaseVaultVersion(ctx),
 		}
 
 		params.Vaults = append(params.Vaults, newVault)
 	}
 
 	k.SetParams(ctx, params)
+}
+
+// IncreaseVaultVersion increases the vault version by 1 and starts from 1
+// Note: the genesis version is 0
+func (k Keeper) IncreaseVaultVersion(ctx sdk.Context) uint64 {
+	store := ctx.KVStore(k.storeKey)
+
+	version := uint64(0)
+
+	bz := store.Get(types.VaultVersionKey)
+	if bz != nil {
+		version = sdk.BigEndianToUint64(bz)
+	}
+
+	store.Set(types.VaultVersionKey, sdk.Uint64ToBigEndian(version+1))
+
+	return version + 1
 }

@@ -57,6 +57,16 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 		return ErrInvalidDKGCompletionRequest
 	}
 
+	vaults := make(map[string]bool)
+	for _, v := range m.Vaults {
+		_, err := sdk.AccAddressFromBech32(v)
+		if err != nil || vaults[v] {
+			return ErrInvalidDKGCompletionRequest
+		}
+
+		vaults[v] = true
+	}
+
 	if _, err := sdk.ConsAddressFromHex(m.Validator); err != nil {
 		return ErrInvalidDKGCompletionRequest
 	}

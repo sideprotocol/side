@@ -32,12 +32,12 @@ var (
 	BtcBestBlockHeaderKey            = []byte{0x13} // key for the best block height
 	BtcWithdrawRequestPrefix         = []byte{0x14} // prefix for each key to a withdrawal request
 	BtcWithdrawRequestByTxHashPrefix = []byte{0x15} // prefix for each key to a withdrawal request from tx hash
+	BtcMintedTxHashKeyPrefix         = []byte{0x16} // prefix for each key to a minted tx hash
 
-	BtcMintedTxHashKeyPrefix = []byte{0x15} // prefix for each key to a minted tx hash
-
-	DKGRequestIDKey               = []byte{0x16} // key for the DKG request id
-	DKGRequestKeyPrefix           = []byte{0x17} // prefix for each key to a DKG request
-	DKGCompletionRequestKeyPrefix = []byte{0x18} // prefix for each key to a DKG completion request
+	DKGRequestIDKey               = []byte{0x20} // key for the DKG request id
+	DKGRequestKeyPrefix           = []byte{0x21} // prefix for each key to a DKG request
+	DKGCompletionRequestKeyPrefix = []byte{0x22} // prefix for each key to a DKG completion request
+	VaultVersionKey               = []byte{0x23} // key for vault version; default to 0 in the genesis and increased by 1 once updated
 )
 
 func Int64ToBytes(number uint64) []byte {
