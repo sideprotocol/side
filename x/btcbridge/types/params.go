@@ -176,3 +176,14 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 
 	return nil
 }
+
+// HasVaultVersion returns true if the given version exists in vaults, false otherwise
+func HasVaultVersion(vaults []*Vault, version uint64) bool {
+	for _, v := range vaults {
+		if v.Version == version {
+			return true
+		}
+	}
+
+	return false
+}

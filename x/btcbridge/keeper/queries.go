@@ -153,3 +153,15 @@ func (k Keeper) QueryDKGCompletionRequests(goCtx context.Context, req *types.Que
 
 	return &types.QueryDKGCompletionRequestsResponse{Requests: requests}, nil
 }
+
+func (k Keeper) QueryConsolidations(goCtx context.Context, req *types.QueryConsolidationsRequest) (*types.QueryConsolidationsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	consolidations := k.GetConsolidations(ctx)
+
+	return &types.QueryConsolidationsResponse{Consolidations: consolidations}, nil
+}

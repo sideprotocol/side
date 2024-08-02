@@ -24,6 +24,8 @@ service Msg {
   rpc InitiateDKG (MsgInitiateDKG) returns (MsgInitiateDKGResponse);
   // CompleteDKG completes the given DKG request.
   rpc CompleteDKG (MsgCompleteDKG) returns (MsgCompleteDKGResponse);
+  // ConsolidateVaults initiates the vault consolidation request.
+  rpc ConsolidateVaults (MsgConsolidateVaults) returns (MsgConsolidateVaultsResponse);
   // UpdateParams defines a governance operation for updating the x/btcbridge module
   // parameters. The authority defaults to the x/gov module account.
   //
@@ -126,6 +128,24 @@ message MsgCompleteDKG {
 
 // MsgCompleteDKGResponse defines the Msg/CompleteDKG response type.
 message MsgCompleteDKGResponse {}
+
+// MsgConsolidateVaults is the Msg/ConsolidateVaults request type.
+message MsgConsolidateVaults {
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // vault version
+  uint64 vault_version = 2;
+  // btc consolidation
+  BtcConsolidation btc_consolidation = 3;
+  // runes consolidations
+  repeated RunesConsolidation runes_consolidations = 4;
+  // indicates if switching to new vaults
+  // the flag will ignore consolidations above
+  bool switch = 5;
+}
+
+// MsgConsolidateVaultsResponse defines the Msg/ConsolidateVaults response type.
+message MsgConsolidateVaultsResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //
