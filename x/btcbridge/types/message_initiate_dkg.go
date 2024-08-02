@@ -44,8 +44,12 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 			return ErrInvalidDKGParams
 		}
 
-		if _, err := sdk.ValAddressFromBech32(p.Address); err != nil {
-			return sdkerrors.Wrap(err, "invalid participant address")
+		if _, err := sdk.ValAddressFromBech32(p.OperatorAddress); err != nil {
+			return sdkerrors.Wrap(err, "invalid operator address")
+		}
+
+		if _, err := sdk.ConsAddressFromHex(p.ConsensusAddress); err != nil {
+			return sdkerrors.Wrap(err, "invalid consensus address")
 		}
 	}
 

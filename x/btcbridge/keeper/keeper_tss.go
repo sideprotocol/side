@@ -185,7 +185,7 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return types.ErrInvalidDKGCompletionRequest
 	}
 
-	if !types.ParticipantExists(dkgReq.Participants, validator.OperatorAddress) {
+	if !types.ParticipantExists(dkgReq.Participants, req.Validator) {
 		return types.ErrUnauthorizedDKGCompletionRequest
 	}
 
