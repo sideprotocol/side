@@ -167,6 +167,14 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return types.ErrDKGRequestDoesNotExist
 	}
 
+	if !types.ParticipantExists(dkgReq.Participants, req.Validator) {
+		return types.ErrUnauthorizedDKGCompletionRequest
+	}
+
+	if k.HasDKGCompletionRequest(ctx, req.Id, req.Validator) {
+		return types.ErrDKGCompletionRequestExists
+	}
+
 	if dkgReq.Status != types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING {
 		return types.ErrInvalidDKGCompletionRequest
 	}
@@ -175,22 +183,14 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return types.ErrInvalidDKGCompletionRequest
 	}
 
-	if k.HasDKGCompletionRequest(ctx, req.Id, req.Validator) {
-		return types.ErrDKGCompletionRequestExists
+	if err := k.CheckVaults(ctx, req.Vaults); err != nil {
+		return err
 	}
 
 	validatorConsAddr, _ := sdk.ConsAddressFromHex(req.Validator)
 	validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, validatorConsAddr)
 	if !found {
 		return types.ErrInvalidDKGCompletionRequest
-	}
-
-	if !types.ParticipantExists(dkgReq.Participants, req.Validator) {
-		return types.ErrUnauthorizedDKGCompletionRequest
-	}
-
-	if err := k.CheckVaults(ctx, req.Vaults); err != nil {
-		return err
 	}
 
 	pubKey, err := validator.ConsPubKey()
@@ -241,8 +241,7 @@ func (k Keeper) UpdateVaults(ctx sdk.Context, newVaults []string) {
 	k.SetParams(ctx, params)
 }
 
-// IncreaseVaultVersion increases the vault version by 1 and starts from 1
-// Note: the genesis version is 0
+// IncreaseVaultVersion increases the vault version by 1
 func (k Keeper) IncreaseVaultVersion(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 
