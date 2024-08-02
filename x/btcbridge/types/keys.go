@@ -38,6 +38,9 @@ var (
 	DKGRequestKeyPrefix           = []byte{0x21} // prefix for each key to a DKG request
 	DKGCompletionRequestKeyPrefix = []byte{0x22} // prefix for each key to a DKG completion request
 	VaultVersionKey               = []byte{0x23} // key for vault version; default to 0 in the genesis and increased by 1 once updated
+
+	ConsolidationIDKey     = []byte{0x30} // key for the consolidation id
+	ConsolidationKeyPrefix = []byte{0x31} // prefix for each key to a consolidation
 )
 
 func Int64ToBytes(number uint64) []byte {
@@ -72,4 +75,8 @@ func DKGRequestKey(id uint64) []byte {
 
 func DKGCompletionRequestKey(id uint64, validator string) []byte {
 	return append(append(DKGCompletionRequestKeyPrefix, Int64ToBytes(id)...), []byte(validator)...)
+}
+
+func ConsolidationKey(id uint64) []byte {
+	return append(ConsolidationKeyPrefix, Int64ToBytes(id)...)
 }

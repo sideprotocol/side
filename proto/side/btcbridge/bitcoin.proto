@@ -109,3 +109,36 @@ message DKGCompletionRequest {
   // hex encoded validator signature
   string signature = 5;
 }
+
+// BTC Consolidation
+message BtcConsolidation {
+  // the outputs less than or equal to the target threshold will be consolidated
+  int64 target_threshold = 1;
+  // the maximum number of the outputs to be consolidated; 0 means all outputs
+  uint32 max_num = 2;
+}
+
+// Runes Consolidation
+message RunesConsolidation {
+  // rune id to be consolidated
+  string rune_id = 1;
+  // the outputs less than or equal to the target threshold will be consolidated
+  string target_threshold = 2;
+  // the maximum number of the outputs to be consolidated; 0 means all outputs
+  uint32 max_num = 3;
+}
+
+// Consolidation
+message Consolidation {
+  // id
+  uint64 id = 1;
+  // vault version
+  uint64 vault_version = 2;
+  // btc consolidation
+  BtcConsolidation btc_consolidation = 3;
+  // runes consolidations
+  repeated RunesConsolidation runes_consolidations = 4;
+  // indicates if switching to new vaults
+  // the flag will ignore consolidations above
+  bool switch = 5;
+}

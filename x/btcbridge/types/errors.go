@@ -48,4 +48,8 @@ var (
 	ErrDKGCompletionRequestExists       = errorsmod.Register(ModuleName, 9102, "dkg completion request already exists")
 	ErrInvalidDKGCompletionRequest      = errorsmod.Register(ModuleName, 9103, "invalid dkg completion request")
 	ErrUnauthorizedDKGCompletionRequest = errorsmod.Register(ModuleName, 9104, "unauthorized dkg completion request")
+
+	ErrInvalidConsolidation      = errorsmod.Register(ModuleName, 10000, "invalid consolidation")
+	ErrInvalidBtcConsolidation   = errorsmod.Register(ModuleName, 10001, "invalid btc consolidation")
+	ErrInvalidRunesConsolidation = errorsmod.Register(ModuleName, 10002, "invalid runes consolidation")
 )

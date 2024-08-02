@@ -230,6 +230,34 @@ func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG)
 	return &types.MsgCompleteDKGResponse{}, nil
 }
 
+// ConsolidateVaults initiates the vault consolidation request.
+func (m msgServer) ConsolidateVaults(goCtx context.Context, msg *types.MsgConsolidateVaults) (*types.MsgConsolidateVaultsResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	consolidation := &types.Consolidation{
+		Id:                  m.Keeper.IncreaseConsolidationID(ctx),
+		VaultVersion:        msg.VaultVersion,
+		BtcConsolidation:    msg.BtcConsolidation,
+		RunesConsolidations: msg.RunesConsolidations,
+		Switch:              msg.Switch,
+	}
+
+	if err := m.Keeper.HandleConsolidation(ctx, consolidation); err != nil {
+		return nil, err
+	}
+
+	// Emit events
+	m.EmitEvent(ctx, msg.Authority,
+		sdk.NewAttribute("id", fmt.Sprintf("%d", consolidation.Id)),
+	)
+
+	return &types.MsgConsolidateVaultsResponse{}, nil
+}
+
 // UpdateParams updates the module params.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {
