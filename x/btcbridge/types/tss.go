@@ -9,9 +9,9 @@ import (
 )
 
 // ParticipantExists returns true if the given address is a participant, false otherwise
-func ParticipantExists(participants []*DKGParticipant, addr string) bool {
+func ParticipantExists(participants []*DKGParticipant, consAddress string) bool {
 	for _, p := range participants {
-		if p.Address == addr {
+		if p.ConsensusAddress == consAddress {
 			return true
 		}
 	}
