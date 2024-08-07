@@ -70,6 +70,7 @@ func DefaultGenesis() *GenesisState {
 		Params:          DefaultParams(),
 		BestBlockHeader: DefaultBestBlockHeader(),
 		BlockHeaders:    []*BlockHeader{},
+		Utxos:           []*UTXO{},
 	}
 }
 

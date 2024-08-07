@@ -9,15 +9,13 @@ const TypeMsgSubmitWithdrawStatus = "submit_withdraw_status"
 
 func NewMsgSubmitWithdrawStatus(
 	sender string,
-	sequence uint64,
 	txid string,
 	status WithdrawStatus,
 ) *MsgSubmitWithdrawStatus {
 	return &MsgSubmitWithdrawStatus{
-		Sender:   sender,
-		Sequence: sequence,
-		Txid:     txid,
-		Status:   status,
+		Sender: sender,
+		Txid:   txid,
+		Status: status,
 	}
 }
 

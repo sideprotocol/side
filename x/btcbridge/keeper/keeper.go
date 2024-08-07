@@ -18,6 +18,8 @@ import (
 
 type (
 	Keeper struct {
+		BaseUTXOKeeper
+
 		cdc      codec.BinaryCodec
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
@@ -38,12 +40,13 @@ func NewKeeper(
 	stakingKeeper types.StakingKeeper,
 ) *Keeper {
 	return &Keeper{
-		cdc:           cdc,
-		storeKey:      storeKey,
-		memKey:        memKey,
-		authority:     authority,
-		bankKeeper:    bankKeeper,
-		stakingKeeper: stakingKeeper,
+		cdc:            cdc,
+		storeKey:       storeKey,
+		memKey:         memKey,
+		authority:      authority,
+		bankKeeper:     bankKeeper,
+		stakingKeeper:  stakingKeeper,
+		BaseUTXOKeeper: *NewBaseUTXOKeeper(cdc, storeKey),
 	}
 }
 
