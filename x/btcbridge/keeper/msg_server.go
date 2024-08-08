@@ -32,15 +32,6 @@ func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmi
 		return nil, err
 	}
 
-	// Emit events
-	// m.EmitEvent(
-	// 	ctx,
-	// 	msg.Sender,
-	// 	sdk.Attribute{
-	// 		Key:   types.AttributeKeyPoolCreator,
-	// 		Value: msg.Sender,
-	// 	},
-	// )
 	return &types.MsgSubmitBlockHeadersResponse{}, nil
 }
 
@@ -65,7 +56,6 @@ func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.Ms
 	// Emit Events
 	m.EmitEvent(ctx, msg.Sender,
 		sdk.NewAttribute("blockhash", msg.Blockhash),
-		sdk.NewAttribute("txBytes", msg.TxBytes),
 		sdk.NewAttribute("txid", txHash.String()),
 		sdk.NewAttribute("recipient", recipient.EncodeAddress()),
 	)
@@ -94,7 +84,6 @@ func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.M
 	// Emit Events
 	m.EmitEvent(ctx, msg.Sender,
 		sdk.NewAttribute("blockhash", msg.Blockhash),
-		sdk.NewAttribute("txBytes", msg.TxBytes),
 		sdk.NewAttribute("txid", txHash.String()),
 	)
 
