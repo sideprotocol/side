@@ -7,7 +7,7 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 )
 
-// VerifyMerkleProof verifies a Merkle proof
+// VerifyMerkleProof verifies the merkle proof
 func VerifyMerkleProof(proofs []string, txHash, root *chainhash.Hash) bool {
 	current := txHash
 	for _, proof := range proofs {

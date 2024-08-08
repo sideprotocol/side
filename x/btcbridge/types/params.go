@@ -38,7 +38,7 @@ func NewParams() Params {
 		}, {
 			Address:   "",
 			PubKey:    "",
-			AssetType: AssetType_ASSET_TYPE_RUNE,
+			AssetType: AssetType_ASSET_TYPE_RUNES,
 			Version:   0,
 		}},
 		ProtocolLimits: &ProtocolLimits{

@@ -120,7 +120,7 @@ var xxx_messageInfo_MsgSubmitBlockHeadersResponse proto.InternalMessageInfo
 
 // MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type.
 type MsgSubmitDepositTransaction struct {
-	// this is relayer address who submit the bitcoin transaction to the side chain
+	// this is the relayer address who submits the bitcoin transaction to the side chain
 	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	Blockhash string `protobuf:"bytes,2,opt,name=blockhash,proto3" json:"blockhash,omitempty"`
 	// the tx bytes in base64 format
@@ -238,7 +238,7 @@ var xxx_messageInfo_MsgSubmitDepositTransactionResponse proto.InternalMessageInf
 
 // MsgSubmitWithdrawTransaction defines the Msg/SubmitWithdrawTransaction request type.
 type MsgSubmitWithdrawTransaction struct {
-	// this is relayer address who submit the bitcoin transaction to the side chain
+	// this is the relayer address who submits the bitcoin transaction to the side chain
 	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	Blockhash string `protobuf:"bytes,2,opt,name=blockhash,proto3" json:"blockhash,omitempty"`
 	// the tx bytes in base64 format

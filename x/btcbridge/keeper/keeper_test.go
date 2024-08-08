@@ -72,7 +72,7 @@ func (suite *KeeperTestSuite) setupParams(btcVault string, runesVault string) {
 		},
 		{
 			Address:   runesVault,
-			AssetType: types.AssetType_ASSET_TYPE_RUNE,
+			AssetType: types.AssetType_ASSET_TYPE_RUNES,
 		},
 	}})
 }

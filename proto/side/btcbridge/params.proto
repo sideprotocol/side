@@ -37,17 +37,17 @@ enum AssetType {
   ASSET_TYPE_BTC = 1;
   // BRC20: ordi, sats
   ASSET_TYPE_BRC20 = 2;
-  // RUNE, dog*go*to*the*moon
-  ASSET_TYPE_RUNE = 3;
+  // RUNE: dog•go•to•the•moon
+  ASSET_TYPE_RUNES = 3;
 }
 
 // Vault defines the asset vault
 message Vault {
-  // the depositor should send their btc to this address
+  // the vault address for deposit
   string address = 1;
-  // the pub key to which the voucher is sent
+  // public key of the vault
   string pub_key = 2;
-  // the address to which the voucher is sent
+  // the asset type supported by the vault
   AssetType asset_type = 3;
   // version
   uint64 version = 4;

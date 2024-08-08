@@ -42,8 +42,8 @@ func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Co
 	case types.AssetType_ASSET_TYPE_BTC:
 		return k.NewBtcWithdrawRequest(ctx, sender, amount, feeRate, btcVault.Address, sequence)
 
-	case types.AssetType_ASSET_TYPE_RUNE:
-		runesVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_RUNE)
+	case types.AssetType_ASSET_TYPE_RUNES:
+		runesVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_RUNES)
 		return k.NewRunesWithdrawRequest(ctx, sender, amount, feeRate, runesVault.Address, btcVault.Address, sequence)
 
 	default:
@@ -208,7 +208,7 @@ func (k Keeper) IterateWithdrawRequests(ctx sdk.Context, cb func(withdrawRequest
 	}
 }
 
-// filter WithdrawRequest by status with pagination
+// FilterWithdrawRequestsByStatus filters withdrawal requests by status with pagination
 func (k Keeper) FilterWithdrawRequestsByStatus(ctx sdk.Context, req *types.QueryWithdrawRequestsRequest) []*types.BitcoinWithdrawRequest {
 	var withdrawRequests []*types.BitcoinWithdrawRequest
 
@@ -228,7 +228,7 @@ func (k Keeper) FilterWithdrawRequestsByStatus(ctx sdk.Context, req *types.Query
 	return withdrawRequests
 }
 
-// filter WithdrawRequest by address with pagination
+// FilterWithdrawRequestsByAddr filters withdrawal requests by address with pagination
 func (k Keeper) FilterWithdrawRequestsByAddr(ctx sdk.Context, req *types.QueryWithdrawRequestsByAddressRequest) []*types.BitcoinWithdrawRequest {
 	var withdrawRequests []*types.BitcoinWithdrawRequest
 
@@ -248,7 +248,7 @@ func (k Keeper) FilterWithdrawRequestsByAddr(ctx sdk.Context, req *types.QueryWi
 	return withdrawRequests
 }
 
-// Process Bitcoin Withdraw Transaction
+// ProcessBitcoinWithdrawTransaction handles the withdrawal transaction
 func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.MsgSubmitWithdrawTransaction) (*chainhash.Hash, error) {
 	ctx.Logger().Info("accept bitcoin withdraw tx", "blockhash", msg.Blockhash)
 
@@ -322,7 +322,7 @@ func (k Keeper) handleBtcTxFee(p *psbt.Packet, changeAddr string) (*types.UTXO, 
 
 	return &types.UTXO{
 		Txid:         p.UnsignedTx.TxHash().String(),
-		Vout:         1,
+		Vout:         2,
 		Address:      changeAddr,
 		Amount:       uint64(changeOut.Value),
 		PubKeyScript: changeOut.PkScript,

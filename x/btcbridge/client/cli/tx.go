@@ -8,8 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/spf13/cobra"
+
+	"github.com/btcsuite/btcd/btcutil/psbt"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -117,7 +118,7 @@ func CmdWithdrawToBitcoin() *cobra.Command {
 func CmdSubmitWithdrawSignatures() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "submit-signatures [psbt]",
-		Short: "Submit signed withdrawal psbt",
+		Short: "Submit the signed psbt",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
