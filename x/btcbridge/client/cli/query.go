@@ -30,6 +30,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdBestBlock())
 	cmd.AddCommand(CmdQueryBlock())
 	cmd.AddCommand(CmdQueryWithdrawRequest())
+	cmd.AddCommand(CmdQueryUTXOs())
 	cmd.AddCommand(CmdQueryDKGRequests())
 	cmd.AddCommand(CmdQueryDKGCompletionRequests())
 	// this line is used by starport scaffolding # 1
@@ -169,6 +170,49 @@ func CmdQueryWithdrawRequest() *cobra.Command {
 			}
 
 			res, err := queryClient.QueryWithdrawRequests(cmd.Context(), &types.QueryWithdrawRequestsRequest{Status: types.WithdrawStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryUTXOs() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "utxos [address]",
+		Short: "query utxos with an optional address",
+		Args:  cobra.MaximumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if len(args) == 0 {
+				res, err := queryClient.QueryUTXOs(cmd.Context(), &types.QueryUTXOsRequest{})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			_, err = sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryUTXOsByAddress(cmd.Context(), &types.QueryUTXOsByAddressRequest{
+				Address: args[0],
+			})
 			if err != nil {
 				return err
 			}

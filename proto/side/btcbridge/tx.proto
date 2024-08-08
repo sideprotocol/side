@@ -18,6 +18,8 @@ service Msg {
   rpc SubmitWithdrawTransaction (MsgSubmitWithdrawTransaction) returns (MsgSubmitWithdrawTransactionResponse);
   // WithdrawToBitcoin withdraws the asset to bitcoin.
   rpc WithdrawToBitcoin (MsgWithdrawToBitcoin) returns (MsgWithdrawToBitcoinResponse);
+  // SubmitWithdrawSignatures submits the signatures of the withdraw transaction.
+  rpc SubmitWithdrawSignatures (MsgSubmitWithdrawSignatures) returns (MsgSubmitWithdrawSignaturesResponse);
   // SubmitWithdrawStatus submits the status of the withdraw transaction.
   rpc SubmitWithdrawStatus (MsgSubmitWithdrawStatus) returns (MsgSubmitWithdrawStatusResponse);
   // InitiateDKG initiates the DKG request.
@@ -34,9 +36,8 @@ service Msg {
 // MsgSubmitWithdrawStatus defines the Msg/SubmitWithdrawStatus request type.
 message MsgSubmitWithdrawStatus {
   string sender = 1;
-  uint64 sequence = 2;
-  string txid = 3;
-  WithdrawStatus status = 4;
+  string txid = 2;
+  WithdrawStatus status = 3;
 }
 
 // MsgSubmitWithdrawStatusResponse defines the Msg/SubmitWithdrawStatus response type.
@@ -91,10 +92,23 @@ message MsgWithdrawToBitcoin {
   string sender = 1;
   // withdraw amount in satoshi, etc: 100000000sat = 1btc
   string amount = 2;
+  // fee rate in sats/vB
+  string fee_rate = 3;
 }
 
 // MsgWithdrawToBitcoinResponse defines the Msg/WithdrawToBitcoin response type.
 message MsgWithdrawToBitcoinResponse {
+}
+
+// MsgSubmitWithdrawSignatures defines the Msg/SubmitWithdrawSignatures request type.
+message MsgSubmitWithdrawSignatures {
+  string sender = 1;
+  string txid = 2;
+  string psbt = 3;
+}
+
+// MsgSubmitWithdrawSignaturesResponse defines the Msg/SubmitWithdrawSignatures response type.
+message MsgSubmitWithdrawSignaturesResponse {
 }
 
 // MsgInitiateDKG is the Msg/InitiateDKG request type.

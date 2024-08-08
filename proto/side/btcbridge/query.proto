@@ -39,6 +39,14 @@ service Query {
   rpc QueryWithdrawRequestByTxHash(QueryWithdrawRequestByTxHashRequest) returns (QueryWithdrawRequestByTxHashResponse) {
     option (google.api.http).get = "/side/btcbridge/withdrawal/request/tx/{txid}";
   }
+  // QueryUTXOs queries all utxos.
+  rpc QueryUTXOs(QueryUTXOsRequest) returns (QueryUTXOsResponse) {
+    option (google.api.http).get = "/side/btcbridge/utxos";
+  }
+  // QueryUTXOsByAddress queries the utxos of the given address.
+  rpc QueryUTXOsByAddress(QueryUTXOsByAddressRequest) returns (QueryUTXOsByAddressResponse) {
+    option (google.api.http).get = "/side/btcbridge/utxos/{address}";
+  }
   // QueryDKGRequest queries the DKG request by the given id.
   rpc QueryDKGRequest(QueryDKGRequestRequest) returns (QueryDKGRequestResponse) {
     option (google.api.http).get = "/side/btcbridge/dkg/request/{id}";
@@ -127,6 +135,24 @@ message QueryBlockHeaderByHashRequest {
 // QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
 message QueryBlockHeaderByHashResponse {
   BlockHeader block_header = 1;
+}
+
+// QueryUTXOsRequest is the request type for the Query/UTXOs RPC method.
+message QueryUTXOsRequest {}
+
+// QueryUTXOsResponse is the response type for the Query/UTXOs RPC method.
+message QueryUTXOsResponse {
+  repeated UTXO utxos = 1;
+}
+
+// QueryUTXOsByAddressRequest is the request type for the Query/UTXOsByAddress RPC method.
+message QueryUTXOsByAddressRequest {
+  string address = 1;
+}
+
+// QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method.
+message QueryUTXOsByAddressResponse {
+  repeated UTXO utxos = 1;
 }
 
 // QueryDKGRequestRequest is the request type for the Query/DKGRequest RPC method.

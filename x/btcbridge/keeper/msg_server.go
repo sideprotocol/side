@@ -1,10 +1,14 @@
 package keeper
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"fmt"
+	"strconv"
 
 	"cosmossdk.io/errors"
+	"github.com/btcsuite/btcd/btcutil/psbt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
@@ -113,12 +117,10 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 		return nil, err
 	}
 
-	networkFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.NetworkFee)
-
 	if amount.Denom == params.BtcVoucherDenom {
 		protocolFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.ProtocolFees.WithdrawFee)
 
-		amount = amount.Sub(networkFee).Sub(protocolFee)
+		amount = amount.Sub(protocolFee)
 		if amount.Amount.Int64() < params.ProtocolLimits.BtcMinWithdraw || amount.Amount.Int64() > params.ProtocolLimits.BtcMaxWithdraw {
 			return nil, types.ErrInvalidWithdrawAmount
 		}
@@ -132,26 +134,77 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 		}
 	}
 
-	req, err := m.Keeper.NewWithdrawRequest(ctx, msg.Sender, amount)
+	feeRate, err := strconv.ParseInt(msg.FeeRate, 10, 64)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(amount, networkFee)); err != nil {
+	req, err := m.Keeper.NewWithdrawRequest(ctx, msg.Sender, amount, feeRate)
+	if err != nil {
 		return nil, err
 	}
 
-	if err := m.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(amount, networkFee)); err != nil {
+	if err = m.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(amount)); err != nil {
 		return nil, err
 	}
+
+	m.lockAsset(ctx, req.Txid, amount)
 
 	// Emit events
 	m.EmitEvent(ctx, msg.Sender,
-		sdk.NewAttribute("sequence", fmt.Sprintf("%d", req.Sequence)),
 		sdk.NewAttribute("amount", msg.Amount),
+		sdk.NewAttribute("txid", req.Txid),
 	)
 
 	return &types.MsgWithdrawToBitcoinResponse{}, nil
+}
+
+// SubmitWithdrawSignatures submits the signatures of the withdraw transaction.
+func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.MsgSubmitWithdrawSignatures) (*types.MsgSubmitWithdrawSignaturesResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasWithdrawRequestByTxHash(ctx, msg.Txid) {
+		return nil, types.ErrWithdrawRequestNotExist
+	}
+
+	b, err := base64.StdEncoding.DecodeString(msg.Psbt)
+	if err != nil {
+		return nil, types.ErrInvalidSignatures
+	}
+
+	packet, err := psbt.NewFromRawBytes(bytes.NewReader(b), false)
+	if err != nil {
+		return nil, err
+	}
+
+	if packet.UnsignedTx.TxHash().String() != msg.Txid {
+		return nil, types.ErrInvalidSignatures
+	}
+
+	if err = packet.SanityCheck(); err != nil {
+		return nil, err
+	}
+	if !packet.IsComplete() {
+		return nil, types.ErrInvalidSignatures
+	}
+
+	// verify the signatures
+	if !types.VerifyPsbtSignatures(packet) {
+		return nil, types.ErrInvalidSignatures
+	}
+
+	// set the withdraw status to signed
+	request := m.GetWithdrawRequestByTxHash(ctx, msg.Txid)
+	request.Psbt = msg.Psbt
+	request.Status = types.WithdrawStatus_WITHDRAW_STATUS_SIGNED
+
+	m.SetWithdrawRequest(ctx, request)
+
+	return &types.MsgSubmitWithdrawSignaturesResponse{}, nil
 }
 
 func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSubmitWithdrawStatus) (*types.MsgSubmitWithdrawStatusResponse, error) {
@@ -160,12 +213,12 @@ func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSub
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	exist := m.HasWithdrawRequest(ctx, msg.Sequence)
-	if !exist {
+
+	if !m.HasWithdrawRequestByTxHash(ctx, msg.Txid) {
 		return nil, types.ErrWithdrawRequestNotExist
 	}
 
-	request := m.GetWithdrawRequest(ctx, msg.Sequence)
+	request := m.GetWithdrawRequestByTxHash(ctx, msg.Txid)
 	request.Status = msg.Status
 	m.SetWithdrawRequest(ctx, request)
 

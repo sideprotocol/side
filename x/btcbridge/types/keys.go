@@ -33,11 +33,16 @@ var (
 	BtcWithdrawRequestPrefix         = []byte{0x14} // prefix for each key to a withdrawal request
 	BtcWithdrawRequestByTxHashPrefix = []byte{0x15} // prefix for each key to a withdrawal request from tx hash
 	BtcMintedTxHashKeyPrefix         = []byte{0x16} // prefix for each key to a minted tx hash
+	BtcLockedAssetKeyPrefix          = []byte{0x17} // prefix for each key to the locked asset
 
-	DKGRequestIDKey               = []byte{0x20} // key for the DKG request id
-	DKGRequestKeyPrefix           = []byte{0x21} // prefix for each key to a DKG request
-	DKGCompletionRequestKeyPrefix = []byte{0x22} // prefix for each key to a DKG completion request
-	VaultVersionKey               = []byte{0x23} // key for vault version; default to 0 in the genesis and increased by 1 once updated
+	BtcUtxoKeyPrefix           = []byte{0x20} // prefix for each key to a utxo
+	BtcOwnerUtxoKeyPrefix      = []byte{0x21} // prefix for each key to an owned utxo
+	BtcOwnerRunesUtxoKeyPrefix = []byte{0x22} // prefix for each key to an owned runes utxo
+
+	DKGRequestIDKey               = []byte{0x30} // key for the DKG request id
+	DKGRequestKeyPrefix           = []byte{0x31} // prefix for each key to a DKG request
+	DKGCompletionRequestKeyPrefix = []byte{0x32} // prefix for each key to a DKG completion request
+	VaultVersionKey               = []byte{0x33} // key for vault version; default to 0 in the genesis and increased by 1 once updated
 )
 
 func Int64ToBytes(number uint64) []byte {
@@ -64,6 +69,29 @@ func BtcWithdrawRequestByTxHashKey(txid string) []byte {
 
 func BtcMintedTxHashKey(hash string) []byte {
 	return append(BtcMintedTxHashKeyPrefix, []byte(hash)...)
+}
+
+func BtcLockedAssetKey(txHash string, coin []byte) []byte {
+	return append(append(BtcLockedAssetKeyPrefix, []byte(txHash)...), coin...)
+}
+
+func BtcUtxoKey(hash string, vout uint64) []byte {
+	return append(append(BtcUtxoKeyPrefix, []byte(hash)...), Int64ToBytes(vout)...)
+}
+
+func BtcOwnerUtxoKey(owner string, hash string, vout uint64) []byte {
+	key := append(append(BtcOwnerUtxoKeyPrefix, []byte(owner)...), []byte(hash)...)
+	key = append(key, Int64ToBytes(vout)...)
+
+	return key
+}
+
+func BtcOwnerRunesUtxoKey(owner string, id string, hash string, vout uint64) []byte {
+	key := append(append(BtcOwnerRunesUtxoKeyPrefix, []byte(owner)...), []byte(id)...)
+	key = append(key, []byte(hash)...)
+	key = append(key, Int64ToBytes(vout)...)
+
+	return key
 }
 
 func DKGRequestKey(id uint64) []byte {

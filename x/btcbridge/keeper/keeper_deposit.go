@@ -65,7 +65,7 @@ func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height
 			return nil, err
 		}
 
-		// check if the receiver is one of the voucher addresses
+		// check if the receiver is one of the vault addresses
 		vault := types.SelectVaultByBitcoinAddress(params.Vaults, addr.EncodeAddress())
 		if vault == nil {
 			continue
@@ -129,6 +129,18 @@ func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, sender s
 		return err
 	}
 
+	utxo := types.UTXO{
+		Txid:         hash,
+		Vout:         uint64(vout),
+		Amount:       uint64(out.Value),
+		PubKeyScript: out.PkScript,
+		Height:       height,
+		Address:      vault.Address,
+		IsLocked:     false,
+	}
+
+	k.saveUTXO(ctx, &utxo)
+
 	return nil
 }
 
@@ -154,6 +166,22 @@ func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipi
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receipientAddr, coins); err != nil {
 		return err
 	}
+
+	utxo := types.UTXO{
+		Txid:         hash,
+		Vout:         uint64(vout),
+		Amount:       uint64(out.Value),
+		PubKeyScript: out.PkScript,
+		Height:       height,
+		Address:      vault.Address,
+		IsLocked:     false,
+		Runes: []*types.RuneBalance{{
+			Id:     id.ToString(),
+			Amount: amount,
+		}},
+	}
+
+	k.saveUTXO(ctx, &utxo)
 
 	return nil
 }

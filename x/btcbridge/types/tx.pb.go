@@ -30,10 +30,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // MsgSubmitWithdrawStatus defines the Msg/SubmitWithdrawStatus request type.
 type MsgSubmitWithdrawStatus struct {
-	Sender   string         `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Sequence uint64         `protobuf:"varint,2,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	Txid     string         `protobuf:"bytes,3,opt,name=txid,proto3" json:"txid,omitempty"`
-	Status   WithdrawStatus `protobuf:"varint,4,opt,name=status,proto3,enum=side.btcbridge.WithdrawStatus" json:"status,omitempty"`
+	Sender string         `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Txid   string         `protobuf:"bytes,2,opt,name=txid,proto3" json:"txid,omitempty"`
+	Status WithdrawStatus `protobuf:"varint,3,opt,name=status,proto3,enum=side.btcbridge.WithdrawStatus" json:"status,omitempty"`
 }
 
 func (m *MsgSubmitWithdrawStatus) Reset()         { *m = MsgSubmitWithdrawStatus{} }
@@ -74,13 +73,6 @@ func (m *MsgSubmitWithdrawStatus) GetSender() string {
 		return m.Sender
 	}
 	return ""
-}
-
-func (m *MsgSubmitWithdrawStatus) GetSequence() uint64 {
-	if m != nil {
-		return m.Sequence
-	}
-	return 0
 }
 
 func (m *MsgSubmitWithdrawStatus) GetTxid() string {
@@ -464,6 +456,8 @@ type MsgWithdrawToBitcoin struct {
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// withdraw amount in satoshi, etc: 100000000sat = 1btc
 	Amount string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	// fee rate in sats/vB
+	FeeRate string `protobuf:"bytes,3,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
 }
 
 func (m *MsgWithdrawToBitcoin) Reset()         { *m = MsgWithdrawToBitcoin{} }
@@ -513,6 +507,13 @@ func (m *MsgWithdrawToBitcoin) GetAmount() string {
 	return ""
 }
 
+func (m *MsgWithdrawToBitcoin) GetFeeRate() string {
+	if m != nil {
+		return m.FeeRate
+	}
+	return ""
+}
+
 // MsgWithdrawToBitcoinResponse defines the Msg/WithdrawToBitcoin response type.
 type MsgWithdrawToBitcoinResponse struct {
 }
@@ -550,6 +551,104 @@ func (m *MsgWithdrawToBitcoinResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgWithdrawToBitcoinResponse proto.InternalMessageInfo
 
+// MsgSubmitWithdrawSignatures defines the Msg/SubmitWithdrawSignatures request type.
+type MsgSubmitWithdrawSignatures struct {
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Txid   string `protobuf:"bytes,2,opt,name=txid,proto3" json:"txid,omitempty"`
+	Psbt   string `protobuf:"bytes,3,opt,name=psbt,proto3" json:"psbt,omitempty"`
+}
+
+func (m *MsgSubmitWithdrawSignatures) Reset()         { *m = MsgSubmitWithdrawSignatures{} }
+func (m *MsgSubmitWithdrawSignatures) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitWithdrawSignatures) ProtoMessage()    {}
+func (*MsgSubmitWithdrawSignatures) Descriptor() ([]byte, []int) {
+	return fileDescriptor_785ca8e1e4227068, []int{10}
+}
+func (m *MsgSubmitWithdrawSignatures) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitWithdrawSignatures) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitWithdrawSignatures.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitWithdrawSignatures) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitWithdrawSignatures.Merge(m, src)
+}
+func (m *MsgSubmitWithdrawSignatures) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitWithdrawSignatures) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitWithdrawSignatures.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitWithdrawSignatures proto.InternalMessageInfo
+
+func (m *MsgSubmitWithdrawSignatures) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgSubmitWithdrawSignatures) GetTxid() string {
+	if m != nil {
+		return m.Txid
+	}
+	return ""
+}
+
+func (m *MsgSubmitWithdrawSignatures) GetPsbt() string {
+	if m != nil {
+		return m.Psbt
+	}
+	return ""
+}
+
+// MsgSubmitWithdrawSignaturesResponse defines the Msg/SubmitWithdrawSignatures response type.
+type MsgSubmitWithdrawSignaturesResponse struct {
+}
+
+func (m *MsgSubmitWithdrawSignaturesResponse) Reset()         { *m = MsgSubmitWithdrawSignaturesResponse{} }
+func (m *MsgSubmitWithdrawSignaturesResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitWithdrawSignaturesResponse) ProtoMessage()    {}
+func (*MsgSubmitWithdrawSignaturesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_785ca8e1e4227068, []int{11}
+}
+func (m *MsgSubmitWithdrawSignaturesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitWithdrawSignaturesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitWithdrawSignaturesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitWithdrawSignaturesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitWithdrawSignaturesResponse.Merge(m, src)
+}
+func (m *MsgSubmitWithdrawSignaturesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitWithdrawSignaturesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitWithdrawSignaturesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitWithdrawSignaturesResponse proto.InternalMessageInfo
+
 // MsgInitiateDKG is the Msg/InitiateDKG request type.
 type MsgInitiateDKG struct {
 	// authority is the address that controls the module (defaults to x/gov unless overwritten).
@@ -564,7 +663,7 @@ func (m *MsgInitiateDKG) Reset()         { *m = MsgInitiateDKG{} }
 func (m *MsgInitiateDKG) String() string { return proto.CompactTextString(m) }
 func (*MsgInitiateDKG) ProtoMessage()    {}
 func (*MsgInitiateDKG) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{10}
+	return fileDescriptor_785ca8e1e4227068, []int{12}
 }
 func (m *MsgInitiateDKG) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -622,7 +721,7 @@ func (m *MsgInitiateDKGResponse) Reset()         { *m = MsgInitiateDKGResponse{}
 func (m *MsgInitiateDKGResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgInitiateDKGResponse) ProtoMessage()    {}
 func (*MsgInitiateDKGResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{11}
+	return fileDescriptor_785ca8e1e4227068, []int{13}
 }
 func (m *MsgInitiateDKGResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -669,7 +768,7 @@ func (m *MsgCompleteDKG) Reset()         { *m = MsgCompleteDKG{} }
 func (m *MsgCompleteDKG) String() string { return proto.CompactTextString(m) }
 func (*MsgCompleteDKG) ProtoMessage()    {}
 func (*MsgCompleteDKG) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{12}
+	return fileDescriptor_785ca8e1e4227068, []int{14}
 }
 func (m *MsgCompleteDKG) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -741,7 +840,7 @@ func (m *MsgCompleteDKGResponse) Reset()         { *m = MsgCompleteDKGResponse{}
 func (m *MsgCompleteDKGResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgCompleteDKGResponse) ProtoMessage()    {}
 func (*MsgCompleteDKGResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{13}
+	return fileDescriptor_785ca8e1e4227068, []int{15}
 }
 func (m *MsgCompleteDKGResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -786,7 +885,7 @@ func (m *MsgUpdateParams) Reset()         { *m = MsgUpdateParams{} }
 func (m *MsgUpdateParams) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParams) ProtoMessage()    {}
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{14}
+	return fileDescriptor_785ca8e1e4227068, []int{16}
 }
 func (m *MsgUpdateParams) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -839,7 +938,7 @@ func (m *MsgUpdateParamsResponse) Reset()         { *m = MsgUpdateParamsResponse
 func (m *MsgUpdateParamsResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParamsResponse) ProtoMessage()    {}
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{15}
+	return fileDescriptor_785ca8e1e4227068, []int{17}
 }
 func (m *MsgUpdateParamsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -879,6 +978,8 @@ func init() {
 	proto.RegisterType((*MsgSubmitWithdrawTransactionResponse)(nil), "side.btcbridge.MsgSubmitWithdrawTransactionResponse")
 	proto.RegisterType((*MsgWithdrawToBitcoin)(nil), "side.btcbridge.MsgWithdrawToBitcoin")
 	proto.RegisterType((*MsgWithdrawToBitcoinResponse)(nil), "side.btcbridge.MsgWithdrawToBitcoinResponse")
+	proto.RegisterType((*MsgSubmitWithdrawSignatures)(nil), "side.btcbridge.MsgSubmitWithdrawSignatures")
+	proto.RegisterType((*MsgSubmitWithdrawSignaturesResponse)(nil), "side.btcbridge.MsgSubmitWithdrawSignaturesResponse")
 	proto.RegisterType((*MsgInitiateDKG)(nil), "side.btcbridge.MsgInitiateDKG")
 	proto.RegisterType((*MsgInitiateDKGResponse)(nil), "side.btcbridge.MsgInitiateDKGResponse")
 	proto.RegisterType((*MsgCompleteDKG)(nil), "side.btcbridge.MsgCompleteDKG")
@@ -890,58 +991,60 @@ func init() {
 func init() { proto.RegisterFile("side/btcbridge/tx.proto", fileDescriptor_785ca8e1e4227068) }
 
 var fileDescriptor_785ca8e1e4227068 = []byte{
-	// 803 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x56, 0xcd, 0x6e, 0xeb, 0x44,
-	0x14, 0x8e, 0x93, 0x34, 0xdc, 0x9c, 0xb4, 0x41, 0x58, 0x21, 0xd7, 0x75, 0x8b, 0x13, 0xcc, 0xfd,
-	0x89, 0xc4, 0x25, 0x91, 0x72, 0xaf, 0x58, 0xa3, 0x50, 0xd1, 0xa2, 0x2a, 0x52, 0xe5, 0xb6, 0x02,
-	0xb1, 0xa9, 0xc6, 0xf6, 0x60, 0x0f, 0x24, 0x1e, 0xd7, 0x33, 0x2e, 0xa9, 0x84, 0xc4, 0x0b, 0xb0,
-	0xe8, 0x96, 0x37, 0x80, 0x37, 0xe9, 0xb2, 0x12, 0x1b, 0x56, 0x08, 0xb5, 0x2f, 0x82, 0xfc, 0x93,
-	0x89, 0x93, 0xd8, 0xfd, 0xd9, 0xdd, 0x5d, 0xe6, 0x7c, 0xdf, 0x7c, 0xe7, 0x3b, 0x67, 0x7a, 0x4e,
-	0x0d, 0xcf, 0x19, 0xb1, 0xf1, 0xc0, 0xe4, 0x96, 0x19, 0x10, 0xdb, 0xc1, 0x03, 0x3e, 0xeb, 0xfb,
-	0x01, 0xe5, 0x54, 0x6e, 0x46, 0x40, 0x5f, 0x00, 0x6a, 0xcb, 0xa1, 0x0e, 0x8d, 0xa1, 0x41, 0xf4,
-	0x2b, 0x61, 0xa9, 0x3b, 0x2b, 0xd7, 0x7d, 0x14, 0xa0, 0x29, 0x4b, 0xc1, 0xdd, 0x15, 0xd0, 0x24,
-	0xdc, 0xa2, 0xc4, 0x4b, 0x50, 0xfd, 0x0f, 0x09, 0x9e, 0x8f, 0x99, 0x73, 0x1c, 0x9a, 0x53, 0xc2,
-	0xbf, 0x23, 0xdc, 0xb5, 0x03, 0xf4, 0xcb, 0x31, 0x47, 0x3c, 0x64, 0x72, 0x1b, 0x6a, 0x0c, 0x7b,
-	0x36, 0x0e, 0x14, 0xa9, 0x2b, 0xf5, 0xea, 0x46, 0x7a, 0x92, 0x55, 0x78, 0xc6, 0xf0, 0x79, 0x88,
-	0x3d, 0x0b, 0x2b, 0xe5, 0xae, 0xd4, 0xab, 0x1a, 0xe2, 0x2c, 0xcb, 0x50, 0xe5, 0x33, 0x62, 0x2b,
-	0x95, 0xf8, 0x46, 0xfc, 0x5b, 0xfe, 0x12, 0x6a, 0x2c, 0x56, 0x54, 0xaa, 0x5d, 0xa9, 0xd7, 0x1c,
-	0x6a, 0xfd, 0xe5, 0xaa, 0xfa, 0xcb, 0x79, 0x8d, 0x94, 0xad, 0x7f, 0x0a, 0x9d, 0x02, 0x6b, 0x06,
-	0x66, 0x3e, 0xf5, 0x18, 0xd6, 0xcf, 0xe1, 0x63, 0x41, 0x19, 0x4d, 0xa8, 0xf5, 0xf3, 0x01, 0x46,
-	0x36, 0x0e, 0x8a, 0xbd, 0x7f, 0x05, 0x5b, 0x66, 0xc4, 0x3b, 0x73, 0x13, 0xa2, 0x52, 0xee, 0x56,
-	0x7a, 0x8d, 0xe1, 0xce, 0xaa, 0xa5, 0x8c, 0x98, 0xb1, 0x69, 0x66, 0x94, 0xf5, 0x0e, 0x7c, 0x92,
-	0x9b, 0x52, 0x78, 0xfa, 0x53, 0x82, 0x1d, 0xc1, 0xd8, 0xc3, 0x3e, 0x65, 0x84, 0x9f, 0x04, 0xc8,
-	0x63, 0xc8, 0xe2, 0x84, 0x7a, 0x85, 0xd6, 0x76, 0xa1, 0x1e, 0x27, 0x72, 0x11, 0x73, 0xe3, 0xbe,
-	0xd6, 0x8d, 0x45, 0x40, 0xd6, 0x61, 0xcb, 0x0f, 0xf0, 0xc5, 0x19, 0x9f, 0x9d, 0x99, 0x97, 0x1c,
-	0xb3, 0xb4, 0xc3, 0x8d, 0x28, 0x78, 0x32, 0x1b, 0x45, 0x21, 0x79, 0x1b, 0x9e, 0x09, 0xb8, 0x1a,
-	0xc3, 0x1f, 0xf0, 0x14, 0x6a, 0xc1, 0x86, 0x1f, 0x50, 0xfa, 0xa3, 0xb2, 0xd1, 0xad, 0xf4, 0xea,
-	0x46, 0x72, 0xd0, 0x5f, 0xc2, 0x67, 0xf7, 0x38, 0x15, 0x15, 0xfd, 0x25, 0xc1, 0xee, 0xda, 0x4b,
-	0xbc, 0xa7, 0x25, 0xbd, 0x82, 0x17, 0xf7, 0x59, 0x15, 0x35, 0x7d, 0x03, 0xad, 0x31, 0x73, 0x04,
-	0x83, 0x8e, 0x92, 0xb1, 0x28, 0x2c, 0xa5, 0x0d, 0x35, 0x34, 0xa5, 0xa1, 0xc7, 0xd3, 0x3a, 0xd2,
-	0x93, 0xae, 0xc5, 0xad, 0x59, 0xd3, 0x11, 0x79, 0xae, 0x24, 0x68, 0x8e, 0x99, 0xf3, 0xad, 0x47,
-	0x38, 0x41, 0x1c, 0xef, 0x1d, 0xee, 0x47, 0x5d, 0x41, 0x21, 0x77, 0x69, 0x40, 0xf8, 0x65, 0x9a,
-	0x65, 0x11, 0x90, 0x47, 0xb0, 0xe9, 0xa3, 0x80, 0x13, 0x8b, 0xf8, 0xc8, 0xe3, 0xf3, 0x3f, 0xd0,
-	0xb5, 0x99, 0xd9, 0x3b, 0xdc, 0x3f, 0x5a, 0xd0, 0x8c, 0xa5, 0x3b, 0x51, 0x06, 0xee, 0x06, 0x98,
-	0xb9, 0x74, 0x92, 0x8c, 0xe2, 0x96, 0xb1, 0x08, 0xe8, 0x0a, 0xb4, 0x97, 0x1d, 0x09, 0xb3, 0xbf,
-	0x27, 0x66, 0xbf, 0xa6, 0x53, 0x7f, 0x82, 0x13, 0xb3, 0x45, 0xfd, 0x68, 0x42, 0x99, 0xd8, 0xe9,
-	0xf8, 0x97, 0x89, 0x1d, 0xf1, 0x2e, 0x50, 0x38, 0xe1, 0xd1, 0x2b, 0x46, 0xcf, 0x91, 0x9e, 0x22,
-	0x2b, 0x17, 0x68, 0x42, 0x6c, 0xc4, 0x69, 0x90, 0xbe, 0xe0, 0x22, 0x10, 0xa1, 0x8c, 0x38, 0x1e,
-	0xe2, 0x61, 0x80, 0x95, 0x8d, 0x04, 0x15, 0x81, 0xd4, 0x68, 0xc6, 0x8d, 0x30, 0x8a, 0xe1, 0xc3,
-	0x31, 0x73, 0x4e, 0x7d, 0x1b, 0x71, 0x7c, 0x14, 0x6f, 0xbb, 0x07, 0xba, 0xfa, 0x0e, 0x6a, 0xc9,
-	0x56, 0x8c, 0x2d, 0x37, 0x86, 0xed, 0xd5, 0x7e, 0x26, 0x2a, 0xa3, 0xea, 0xf5, 0xbf, 0x9d, 0x92,
-	0x91, 0x72, 0xf5, 0xed, 0x78, 0x39, 0x66, 0xd3, 0xcc, 0x1d, 0x0c, 0xff, 0xae, 0x41, 0x65, 0xcc,
-	0x1c, 0xf9, 0x27, 0x90, 0x73, 0xd6, 0xcf, 0xcb, 0x55, 0xf9, 0xdc, 0x95, 0xa1, 0x7e, 0xf1, 0x28,
-	0xda, 0x3c, 0xa7, 0xfc, 0x2b, 0x28, 0x85, 0x5b, 0xe5, 0xf3, 0x42, 0xa9, 0x75, 0xb2, 0xfa, 0xf6,
-	0x09, 0x64, 0x91, 0xfd, 0x37, 0xd8, 0x2e, 0xde, 0x00, 0x6f, 0x0a, 0x15, 0x73, 0xd8, 0xea, 0xbb,
-	0xa7, 0xb0, 0x85, 0x01, 0x07, 0x3e, 0x5a, 0x9f, 0xd7, 0x17, 0x39, 0x52, 0x6b, 0x2c, 0xf5, 0xcd,
-	0x63, 0x58, 0x22, 0x91, 0x0f, 0xad, 0xdc, 0x7f, 0x88, 0xaf, 0x1f, 0xb4, 0x9d, 0x10, 0xd5, 0xc1,
-	0x23, 0x89, 0x22, 0xe3, 0x29, 0x34, 0xb2, 0x1b, 0x42, 0xcb, 0xb9, 0x9f, 0xc1, 0xd5, 0x57, 0xf7,
-	0xe3, 0x59, 0xd9, 0xec, 0x2c, 0xe7, 0xc9, 0x66, 0xf0, 0x5c, 0xd9, 0x9c, 0xe9, 0x93, 0xbf, 0x87,
-	0xcd, 0xa5, 0xd1, 0xeb, 0xe4, 0xdc, 0xcb, 0x12, 0xd4, 0xd7, 0x0f, 0x10, 0xe6, 0xca, 0xa3, 0x83,
-	0xeb, 0x5b, 0x4d, 0xba, 0xb9, 0xd5, 0xa4, 0xff, 0x6e, 0x35, 0xe9, 0xea, 0x4e, 0x2b, 0xdd, 0xdc,
-	0x69, 0xa5, 0x7f, 0xee, 0xb4, 0xd2, 0x0f, 0x7d, 0x87, 0x70, 0x37, 0x34, 0xfb, 0x16, 0x9d, 0x0e,
-	0x22, 0xb1, 0xf8, 0xf3, 0xc5, 0xa2, 0x93, 0xf8, 0x30, 0x98, 0x65, 0x3f, 0x9e, 0x2e, 0x7d, 0xcc,
-	0xcc, 0x5a, 0x4c, 0x78, 0xfb, 0x7f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xbb, 0x1d, 0x96, 0x4a, 0x5b,
-	0x09, 0x00, 0x00,
+	// 841 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x56, 0xdd, 0x6e, 0xe3, 0x44,
+	0x14, 0xae, 0x93, 0x34, 0x25, 0x27, 0x6d, 0x10, 0x56, 0xc8, 0xba, 0x6e, 0x71, 0x82, 0xd9, 0x9f,
+	0x48, 0xbb, 0x24, 0x52, 0x76, 0xc5, 0x35, 0x0a, 0x95, 0x76, 0xd1, 0x2a, 0xd2, 0xca, 0xbb, 0x2b,
+	0x10, 0x12, 0x8a, 0xc6, 0xf1, 0xd4, 0x1e, 0x48, 0x3c, 0xc6, 0x33, 0x29, 0xa9, 0x04, 0xe2, 0x05,
+	0xb8, 0xd8, 0xc7, 0x80, 0x37, 0xd9, 0xcb, 0x72, 0xc7, 0x15, 0x42, 0xed, 0x8b, 0x20, 0x8f, 0x9d,
+	0x89, 0x13, 0xdb, 0x49, 0x7b, 0xc7, 0x9d, 0xe7, 0x7c, 0xdf, 0x7c, 0xe7, 0x9b, 0xe3, 0x33, 0x47,
+	0x03, 0xf7, 0x18, 0x71, 0x70, 0xdf, 0xe6, 0x13, 0x3b, 0x24, 0x8e, 0x8b, 0xfb, 0x7c, 0xd1, 0x0b,
+	0x42, 0xca, 0xa9, 0xda, 0x88, 0x80, 0x9e, 0x04, 0xf4, 0xa6, 0x4b, 0x5d, 0x2a, 0xa0, 0x7e, 0xf4,
+	0x15, 0xb3, 0xf4, 0x93, 0x8d, 0xed, 0x01, 0x0a, 0xd1, 0x8c, 0x25, 0xe0, 0xe9, 0x06, 0x68, 0x13,
+	0x3e, 0xa1, 0xc4, 0x8f, 0x51, 0xf3, 0x57, 0xb8, 0x37, 0x62, 0xee, 0xeb, 0xb9, 0x3d, 0x23, 0xfc,
+	0x1b, 0xc2, 0x3d, 0x27, 0x44, 0x3f, 0xbf, 0xe6, 0x88, 0xcf, 0x99, 0xda, 0x82, 0x2a, 0xc3, 0xbe,
+	0x83, 0x43, 0x4d, 0xe9, 0x28, 0xdd, 0x9a, 0x95, 0xac, 0x54, 0x15, 0x2a, 0x7c, 0x41, 0x1c, 0xad,
+	0x24, 0xa2, 0xe2, 0x5b, 0xfd, 0x02, 0xaa, 0x4c, 0xec, 0xd2, 0xca, 0x1d, 0xa5, 0xdb, 0x18, 0x18,
+	0xbd, 0x75, 0xe3, 0xbd, 0x75, 0x6d, 0x2b, 0x61, 0x9b, 0x9f, 0x42, 0xbb, 0x20, 0xbd, 0x85, 0x59,
+	0x40, 0x7d, 0x86, 0xcd, 0x9f, 0xe0, 0x63, 0x49, 0x19, 0x4e, 0xe9, 0xe4, 0xc7, 0x17, 0x18, 0x39,
+	0x38, 0x2c, 0xf6, 0xf7, 0x25, 0x1c, 0xd9, 0x11, 0x6f, 0xec, 0xc5, 0x44, 0xad, 0xd4, 0x29, 0x77,
+	0xeb, 0x83, 0x93, 0x4d, 0x4b, 0x29, 0x31, 0xeb, 0xd0, 0x4e, 0x29, 0x9b, 0x6d, 0xf8, 0x24, 0x37,
+	0xa5, 0xf4, 0xf4, 0x87, 0x02, 0x27, 0x92, 0x71, 0x86, 0x03, 0xca, 0x08, 0x7f, 0x13, 0x22, 0x9f,
+	0xa1, 0x09, 0x27, 0xd4, 0x2f, 0xb4, 0x76, 0x0a, 0x35, 0x91, 0xc8, 0x43, 0xcc, 0x4b, 0xea, 0xb7,
+	0x0a, 0xa8, 0x26, 0x1c, 0x05, 0x21, 0xbe, 0x18, 0xf3, 0xc5, 0xd8, 0xbe, 0xe4, 0x38, 0xae, 0x65,
+	0xcd, 0xaa, 0x47, 0xc1, 0x37, 0x8b, 0x61, 0x14, 0x52, 0x8f, 0xe1, 0x03, 0x09, 0x57, 0x04, 0x7c,
+	0xc0, 0x13, 0xa8, 0x09, 0xfb, 0x41, 0x48, 0xe9, 0xb9, 0xb6, 0xdf, 0x29, 0x77, 0x6b, 0x56, 0xbc,
+	0x30, 0x1f, 0xc0, 0x67, 0x5b, 0x9c, 0xca, 0x13, 0xfd, 0xa9, 0xc0, 0x69, 0xe6, 0x4f, 0xfc, 0x4f,
+	0x8f, 0xf4, 0x10, 0xee, 0x6f, 0xb3, 0x2a, 0xcf, 0x84, 0xa0, 0x39, 0x62, 0xae, 0x64, 0xd0, 0x61,
+	0xdc, 0xf9, 0x85, 0x47, 0x69, 0x41, 0x15, 0xcd, 0xe8, 0xdc, 0xe7, 0xc9, 0x39, 0x92, 0x55, 0x64,
+	0xf0, 0x1c, 0xe3, 0x71, 0x88, 0x38, 0x4e, 0xfc, 0x1f, 0x9c, 0x63, 0x6c, 0x21, 0x8e, 0x4d, 0x43,
+	0x54, 0x2d, 0x93, 0x42, 0x5a, 0xf8, 0x3e, 0xd5, 0x27, 0xb2, 0xbf, 0x89, 0xeb, 0x23, 0x3e, 0x0f,
+	0xf1, 0xdd, 0xae, 0x98, 0x0a, 0x95, 0x80, 0xd9, 0x3c, 0x71, 0x20, 0xbe, 0xd7, 0x7e, 0x6e, 0x56,
+	0x5e, 0xba, 0x78, 0xa7, 0x40, 0x63, 0xc4, 0xdc, 0xaf, 0x7d, 0xc2, 0x09, 0xe2, 0xf8, 0xec, 0xe5,
+	0xf3, 0xe8, 0xb7, 0xa1, 0x39, 0xf7, 0x68, 0x48, 0xf8, 0x65, 0x92, 0x7c, 0x15, 0x50, 0x87, 0x70,
+	0x18, 0xa0, 0x90, 0x93, 0x09, 0x09, 0x90, 0xcf, 0x97, 0x37, 0x28, 0x73, 0xa9, 0xcf, 0x5e, 0x3e,
+	0x7f, 0xb5, 0xa2, 0x59, 0x6b, 0x7b, 0xa2, 0x0c, 0xdc, 0x0b, 0x31, 0xf3, 0xe8, 0xd4, 0x11, 0xa6,
+	0x8f, 0xac, 0x55, 0xc0, 0xd4, 0xa0, 0xb5, 0xee, 0x48, 0x9a, 0xfd, 0x3d, 0x36, 0xfb, 0x15, 0x9d,
+	0x05, 0x53, 0x1c, 0x9b, 0x2d, 0x2a, 0x53, 0x03, 0x4a, 0x49, 0x91, 0x2a, 0x56, 0x89, 0x38, 0x11,
+	0xef, 0x02, 0xcd, 0xa7, 0x3c, 0x6a, 0xb3, 0xa8, 0x5f, 0x92, 0x55, 0x64, 0xe5, 0x02, 0x4d, 0x89,
+	0x83, 0x38, 0x0d, 0x93, 0x16, 0x5b, 0x05, 0x22, 0x94, 0x2d, 0x6b, 0xa6, 0xed, 0xc7, 0xa8, 0x0c,
+	0x24, 0x46, 0x53, 0x6e, 0xa4, 0x51, 0x0c, 0x1f, 0x8e, 0x98, 0xfb, 0x36, 0x70, 0x10, 0xc7, 0xaf,
+	0xc4, 0xc4, 0xdd, 0x51, 0xd5, 0x67, 0x50, 0x8d, 0x27, 0xb3, 0xb0, 0x5c, 0x1f, 0xb4, 0x36, 0xeb,
+	0x19, 0xab, 0x0c, 0x2b, 0xef, 0xff, 0x69, 0xef, 0x59, 0x09, 0xd7, 0x3c, 0x16, 0x13, 0x3a, 0x9d,
+	0x66, 0xe9, 0x60, 0xf0, 0xd7, 0x01, 0x94, 0x47, 0xcc, 0x55, 0x7f, 0x00, 0x35, 0x67, 0x3e, 0x3e,
+	0xd8, 0x94, 0xcf, 0x9d, 0x69, 0xfa, 0xe7, 0xb7, 0xa2, 0x2d, 0x73, 0xaa, 0xbf, 0x80, 0x56, 0x38,
+	0xf6, 0x1e, 0x17, 0x4a, 0x65, 0xc9, 0xfa, 0xd3, 0x3b, 0x90, 0x65, 0xf6, 0xdf, 0xe0, 0xb8, 0x78,
+	0x44, 0x3d, 0x29, 0x54, 0xcc, 0x61, 0xeb, 0xcf, 0xee, 0xc2, 0x96, 0x06, 0x5c, 0xf8, 0x28, 0x3b,
+	0x50, 0xee, 0xe7, 0x48, 0x65, 0x58, 0xfa, 0x93, 0xdb, 0xb0, 0xb2, 0x75, 0xce, 0x19, 0x1b, 0x8f,
+	0x77, 0x5a, 0x5f, 0x91, 0xb7, 0xd4, 0xb9, 0x78, 0x62, 0xa8, 0x01, 0x34, 0x73, 0xdf, 0x04, 0x8f,
+	0x76, 0x8b, 0x09, 0xa2, 0xde, 0xbf, 0x25, 0x51, 0x66, 0x7c, 0x0b, 0xf5, 0xf4, 0x7c, 0x32, 0x72,
+	0xf6, 0xa7, 0x70, 0xfd, 0xe1, 0x76, 0x3c, 0x2d, 0x9b, 0x9e, 0x24, 0x79, 0xb2, 0x29, 0x3c, 0x57,
+	0x36, 0xe7, 0xee, 0xab, 0xdf, 0xc2, 0xe1, 0xda, 0xc5, 0x6f, 0xe7, 0xec, 0x4b, 0x13, 0xf4, 0x47,
+	0x3b, 0x08, 0x4b, 0xe5, 0xe1, 0x8b, 0xf7, 0xd7, 0x86, 0x72, 0x75, 0x6d, 0x28, 0xff, 0x5e, 0x1b,
+	0xca, 0xbb, 0x1b, 0x63, 0xef, 0xea, 0xc6, 0xd8, 0xfb, 0xfb, 0xc6, 0xd8, 0xfb, 0xae, 0xe7, 0x12,
+	0xee, 0xcd, 0xed, 0xde, 0x84, 0xce, 0xfa, 0x91, 0x98, 0x78, 0xc0, 0x4d, 0xe8, 0x54, 0x2c, 0xfa,
+	0x8b, 0xf4, 0xf3, 0xf1, 0x32, 0xc0, 0xcc, 0xae, 0x0a, 0xc2, 0xd3, 0xff, 0x02, 0x00, 0x00, 0xff,
+	0xff, 0x6c, 0x8b, 0xbf, 0xa1, 0x5d, 0x0a, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -964,6 +1067,8 @@ type MsgClient interface {
 	SubmitWithdrawTransaction(ctx context.Context, in *MsgSubmitWithdrawTransaction, opts ...grpc.CallOption) (*MsgSubmitWithdrawTransactionResponse, error)
 	// WithdrawToBitcoin withdraws the asset to bitcoin.
 	WithdrawToBitcoin(ctx context.Context, in *MsgWithdrawToBitcoin, opts ...grpc.CallOption) (*MsgWithdrawToBitcoinResponse, error)
+	// SubmitWithdrawSignatures submits the signatures of the withdraw transaction.
+	SubmitWithdrawSignatures(ctx context.Context, in *MsgSubmitWithdrawSignatures, opts ...grpc.CallOption) (*MsgSubmitWithdrawSignaturesResponse, error)
 	// SubmitWithdrawStatus submits the status of the withdraw transaction.
 	SubmitWithdrawStatus(ctx context.Context, in *MsgSubmitWithdrawStatus, opts ...grpc.CallOption) (*MsgSubmitWithdrawStatusResponse, error)
 	// InitiateDKG initiates the DKG request.
@@ -1021,6 +1126,15 @@ func (c *msgClient) WithdrawToBitcoin(ctx context.Context, in *MsgWithdrawToBitc
 	return out, nil
 }
 
+func (c *msgClient) SubmitWithdrawSignatures(ctx context.Context, in *MsgSubmitWithdrawSignatures, opts ...grpc.CallOption) (*MsgSubmitWithdrawSignaturesResponse, error) {
+	out := new(MsgSubmitWithdrawSignaturesResponse)
+	err := c.cc.Invoke(ctx, "/side.btcbridge.Msg/SubmitWithdrawSignatures", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) SubmitWithdrawStatus(ctx context.Context, in *MsgSubmitWithdrawStatus, opts ...grpc.CallOption) (*MsgSubmitWithdrawStatusResponse, error) {
 	out := new(MsgSubmitWithdrawStatusResponse)
 	err := c.cc.Invoke(ctx, "/side.btcbridge.Msg/SubmitWithdrawStatus", in, out, opts...)
@@ -1067,6 +1181,8 @@ type MsgServer interface {
 	SubmitWithdrawTransaction(context.Context, *MsgSubmitWithdrawTransaction) (*MsgSubmitWithdrawTransactionResponse, error)
 	// WithdrawToBitcoin withdraws the asset to bitcoin.
 	WithdrawToBitcoin(context.Context, *MsgWithdrawToBitcoin) (*MsgWithdrawToBitcoinResponse, error)
+	// SubmitWithdrawSignatures submits the signatures of the withdraw transaction.
+	SubmitWithdrawSignatures(context.Context, *MsgSubmitWithdrawSignatures) (*MsgSubmitWithdrawSignaturesResponse, error)
 	// SubmitWithdrawStatus submits the status of the withdraw transaction.
 	SubmitWithdrawStatus(context.Context, *MsgSubmitWithdrawStatus) (*MsgSubmitWithdrawStatusResponse, error)
 	// InitiateDKG initiates the DKG request.
@@ -1095,6 +1211,9 @@ func (*UnimplementedMsgServer) SubmitWithdrawTransaction(ctx context.Context, re
 }
 func (*UnimplementedMsgServer) WithdrawToBitcoin(ctx context.Context, req *MsgWithdrawToBitcoin) (*MsgWithdrawToBitcoinResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WithdrawToBitcoin not implemented")
+}
+func (*UnimplementedMsgServer) SubmitWithdrawSignatures(ctx context.Context, req *MsgSubmitWithdrawSignatures) (*MsgSubmitWithdrawSignaturesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitWithdrawSignatures not implemented")
 }
 func (*UnimplementedMsgServer) SubmitWithdrawStatus(ctx context.Context, req *MsgSubmitWithdrawStatus) (*MsgSubmitWithdrawStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitWithdrawStatus not implemented")
@@ -1181,6 +1300,24 @@ func _Msg_WithdrawToBitcoin_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).WithdrawToBitcoin(ctx, req.(*MsgWithdrawToBitcoin))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SubmitWithdrawSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitWithdrawSignatures)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitWithdrawSignatures(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.btcbridge.Msg/SubmitWithdrawSignatures",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitWithdrawSignatures(ctx, req.(*MsgSubmitWithdrawSignatures))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1278,6 +1415,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_WithdrawToBitcoin_Handler,
 		},
 		{
+			MethodName: "SubmitWithdrawSignatures",
+			Handler:    _Msg_SubmitWithdrawSignatures_Handler,
+		},
+		{
 			MethodName: "SubmitWithdrawStatus",
 			Handler:    _Msg_SubmitWithdrawStatus_Handler,
 		},
@@ -1321,19 +1462,14 @@ func (m *MsgSubmitWithdrawStatus) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	if m.Status != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x20
+		dAtA[i] = 0x18
 	}
 	if len(m.Txid) > 0 {
 		i -= len(m.Txid)
 		copy(dAtA[i:], m.Txid)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Txid)))
 		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Sequence != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.Sequence))
-		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x12
 	}
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
@@ -1621,6 +1757,13 @@ func (m *MsgWithdrawToBitcoin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.FeeRate) > 0 {
+		i -= len(m.FeeRate)
+		copy(dAtA[i:], m.FeeRate)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.FeeRate)))
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.Amount) > 0 {
 		i -= len(m.Amount)
 		copy(dAtA[i:], m.Amount)
@@ -1654,6 +1797,73 @@ func (m *MsgWithdrawToBitcoinResponse) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *MsgWithdrawToBitcoinResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitWithdrawSignatures) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitWithdrawSignatures) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitWithdrawSignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Psbt) > 0 {
+		i -= len(m.Psbt)
+		copy(dAtA[i:], m.Psbt)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Psbt)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Txid) > 0 {
+		i -= len(m.Txid)
+		copy(dAtA[i:], m.Txid)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Txid)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitWithdrawSignaturesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitWithdrawSignaturesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitWithdrawSignaturesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1898,9 +2108,6 @@ func (m *MsgSubmitWithdrawStatus) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	if m.Sequence != 0 {
-		n += 1 + sovTx(uint64(m.Sequence))
-	}
 	l = len(m.Txid)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -2042,10 +2249,44 @@ func (m *MsgWithdrawToBitcoin) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
+	l = len(m.FeeRate)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
 	return n
 }
 
 func (m *MsgWithdrawToBitcoinResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSubmitWithdrawSignatures) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Txid)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Psbt)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSubmitWithdrawSignaturesResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2216,25 +2457,6 @@ func (m *MsgSubmitWithdrawStatus) Unmarshal(dAtA []byte) error {
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sequence", wireType)
-			}
-			m.Sequence = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Sequence |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
 			}
@@ -2266,7 +2488,7 @@ func (m *MsgSubmitWithdrawStatus) Unmarshal(dAtA []byte) error {
 			}
 			m.Txid = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
@@ -3135,6 +3357,38 @@ func (m *MsgWithdrawToBitcoin) Unmarshal(dAtA []byte) error {
 			}
 			m.Amount = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FeeRate", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FeeRate = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -3183,6 +3437,202 @@ func (m *MsgWithdrawToBitcoinResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgWithdrawToBitcoinResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitWithdrawSignatures) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitWithdrawSignatures: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitWithdrawSignatures: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Txid = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Psbt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Psbt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitWithdrawSignaturesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitWithdrawSignaturesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitWithdrawSignaturesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
