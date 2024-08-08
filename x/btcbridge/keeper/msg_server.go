@@ -171,6 +171,11 @@ func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.Ms
 		return nil, types.ErrWithdrawRequestNotExist
 	}
 
+	withdrawRequest := m.GetWithdrawRequestByTxHash(ctx, msg.Txid)
+	if withdrawRequest.Status != types.WithdrawStatus_WITHDRAW_STATUS_CREATED {
+		return nil, types.ErrInvalidSignatures
+	}
+
 	b, err := base64.StdEncoding.DecodeString(msg.Psbt)
 	if err != nil {
 		return nil, types.ErrInvalidSignatures
@@ -197,32 +202,13 @@ func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.Ms
 		return nil, types.ErrInvalidSignatures
 	}
 
-	// set the withdraw status to signed
-	request := m.GetWithdrawRequestByTxHash(ctx, msg.Txid)
-	request.Psbt = msg.Psbt
-	request.Status = types.WithdrawStatus_WITHDRAW_STATUS_SIGNED
+	// set the withdraw status to broadcasted
+	withdrawRequest.Psbt = msg.Psbt
+	withdrawRequest.Status = types.WithdrawStatus_WITHDRAW_STATUS_BROADCASTED
 
-	m.SetWithdrawRequest(ctx, request)
+	m.SetWithdrawRequest(ctx, withdrawRequest)
 
 	return &types.MsgSubmitWithdrawSignaturesResponse{}, nil
-}
-
-func (m msgServer) SubmitWithdrawStatus(goCtx context.Context, msg *types.MsgSubmitWithdrawStatus) (*types.MsgSubmitWithdrawStatusResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !m.HasWithdrawRequestByTxHash(ctx, msg.Txid) {
-		return nil, types.ErrWithdrawRequestNotExist
-	}
-
-	request := m.GetWithdrawRequestByTxHash(ctx, msg.Txid)
-	request.Status = msg.Status
-	m.SetWithdrawRequest(ctx, request)
-
-	return &types.MsgSubmitWithdrawStatusResponse{}, nil
 }
 
 // InitiateDKG initiates the DKG request.

@@ -51934,7 +51934,6 @@ paths:
                       enum:
                         - WITHDRAW_STATUS_UNSPECIFIED
                         - WITHDRAW_STATUS_CREATED
-                        - WITHDRAW_STATUS_SIGNED
                         - WITHDRAW_STATUS_BROADCASTED
                         - WITHDRAW_STATUS_CONFIRMED
                         - WITHDRAW_STATUS_FAILED
@@ -51944,7 +51943,6 @@ paths:
                         WITHDRAW_STATUS_UNSPECIFIED - Default value, should not
                         be used
                          - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-                         - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
                          - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
                          - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
                          - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
@@ -52171,7 +52169,6 @@ paths:
           description: |2-
              - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED - Default value, should not be used
              - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-             - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
              - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
              - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
              - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
@@ -52181,7 +52178,6 @@ paths:
           enum:
             - WITHDRAW_STATUS_UNSPECIFIED
             - WITHDRAW_STATUS_CREATED
-            - WITHDRAW_STATUS_SIGNED
             - WITHDRAW_STATUS_BROADCASTED
             - WITHDRAW_STATUS_CONFIRMED
             - WITHDRAW_STATUS_FAILED
@@ -52238,7 +52234,6 @@ paths:
                       enum:
                         - WITHDRAW_STATUS_UNSPECIFIED
                         - WITHDRAW_STATUS_CREATED
-                        - WITHDRAW_STATUS_SIGNED
                         - WITHDRAW_STATUS_BROADCASTED
                         - WITHDRAW_STATUS_CONFIRMED
                         - WITHDRAW_STATUS_FAILED
@@ -52248,7 +52243,6 @@ paths:
                         WITHDRAW_STATUS_UNSPECIFIED - Default value, should not
                         be used
                          - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-                         - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
                          - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
                          - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
                          - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
@@ -52525,7 +52519,6 @@ paths:
                     enum:
                       - WITHDRAW_STATUS_UNSPECIFIED
                       - WITHDRAW_STATUS_CREATED
-                      - WITHDRAW_STATUS_SIGNED
                       - WITHDRAW_STATUS_BROADCASTED
                       - WITHDRAW_STATUS_CONFIRMED
                       - WITHDRAW_STATUS_FAILED
@@ -52534,7 +52527,6 @@ paths:
                       - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED
                       - Default value, should not be used
                        - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-                       - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
                        - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
                        - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
                        - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
@@ -82426,7 +82418,6 @@ definitions:
         enum:
           - WITHDRAW_STATUS_UNSPECIFIED
           - WITHDRAW_STATUS_CREATED
-          - WITHDRAW_STATUS_SIGNED
           - WITHDRAW_STATUS_BROADCASTED
           - WITHDRAW_STATUS_CONFIRMED
           - WITHDRAW_STATUS_FAILED
@@ -82435,7 +82426,6 @@ definitions:
           - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED - Default
           value, should not be used
            - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-           - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
            - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
            - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
            - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
@@ -82579,11 +82569,6 @@ definitions:
     description: >-
       MsgSubmitWithdrawSignaturesResponse defines the
       Msg/SubmitWithdrawSignatures response type.
-  side.btcbridge.MsgSubmitWithdrawStatusResponse:
-    type: object
-    description: >-
-      MsgSubmitWithdrawStatusResponse defines the Msg/SubmitWithdrawStatus
-      response type.
   side.btcbridge.MsgSubmitWithdrawTransactionResponse:
     type: object
     description: >-
@@ -83189,7 +83174,6 @@ definitions:
             enum:
               - WITHDRAW_STATUS_UNSPECIFIED
               - WITHDRAW_STATUS_CREATED
-              - WITHDRAW_STATUS_SIGNED
               - WITHDRAW_STATUS_BROADCASTED
               - WITHDRAW_STATUS_CONFIRMED
               - WITHDRAW_STATUS_FAILED
@@ -83198,7 +83182,6 @@ definitions:
               - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED -
               Default value, should not be used
                - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-               - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
                - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
                - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
                - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
@@ -83229,7 +83212,6 @@ definitions:
               enum:
                 - WITHDRAW_STATUS_UNSPECIFIED
                 - WITHDRAW_STATUS_CREATED
-                - WITHDRAW_STATUS_SIGNED
                 - WITHDRAW_STATUS_BROADCASTED
                 - WITHDRAW_STATUS_CONFIRMED
                 - WITHDRAW_STATUS_FAILED
@@ -83238,7 +83220,6 @@ definitions:
                 - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED -
                 Default value, should not be used
                  - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-                 - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
                  - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
                  - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
                  - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
@@ -83295,7 +83276,6 @@ definitions:
               enum:
                 - WITHDRAW_STATUS_UNSPECIFIED
                 - WITHDRAW_STATUS_CREATED
-                - WITHDRAW_STATUS_SIGNED
                 - WITHDRAW_STATUS_BROADCASTED
                 - WITHDRAW_STATUS_CONFIRMED
                 - WITHDRAW_STATUS_FAILED
@@ -83304,7 +83284,6 @@ definitions:
                 - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED -
                 Default value, should not be used
                  - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-                 - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
                  - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
                  - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
                  - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
@@ -83429,7 +83408,6 @@ definitions:
     enum:
       - WITHDRAW_STATUS_UNSPECIFIED
       - WITHDRAW_STATUS_CREATED
-      - WITHDRAW_STATUS_SIGNED
       - WITHDRAW_STATUS_BROADCASTED
       - WITHDRAW_STATUS_CONFIRMED
       - WITHDRAW_STATUS_FAILED
@@ -83438,7 +83416,6 @@ definitions:
       - WITHDRAW_STATUS_UNSPECIFIED: WITHDRAW_STATUS_UNSPECIFIED - Default
       value, should not be used
        - WITHDRAW_STATUS_CREATED: WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-       - WITHDRAW_STATUS_SIGNED: WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
        - WITHDRAW_STATUS_BROADCASTED: WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
        - WITHDRAW_STATUS_CONFIRMED: WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
        - WITHDRAW_STATUS_FAILED: WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
