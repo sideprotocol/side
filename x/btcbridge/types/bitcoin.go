@@ -21,7 +21,7 @@ const (
 	MinRelayFee = 1000
 
 	// default sig hash type
-	DefaultSigHashType = txscript.SigHashAll
+	DefaultSigHashType = txscript.SigHashDefault
 )
 
 // BuildPsbt builds a bitcoin psbt from the given params.

@@ -215,46 +215,51 @@ func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes
 	}
 
 	// Create a new transaction
-	var tx wire.MsgTx
-	err = tx.Deserialize(bytes.NewReader(rawTx))
+	var msgTx wire.MsgTx
+	err = msgTx.Deserialize(bytes.NewReader(rawTx))
 	if err != nil {
 		fmt.Println("Error deserializing transaction:", err)
 		return nil, nil, err
 	}
 
-	uTx := btcutil.NewTx(&tx)
+	tx := btcutil.NewTx(&msgTx)
 
 	// Validate the transaction
-	if err := blockchain.CheckTransactionSanity(uTx); err != nil {
+	if err := blockchain.CheckTransactionSanity(tx); err != nil {
 		fmt.Println("Transaction is not valid:", err)
 		return nil, nil, err
 	}
 
-	// Decode the previous transaction
-	rawPrevTx, err := base64.StdEncoding.DecodeString(prevTxBytes)
-	if err != nil {
-		fmt.Println("Error decoding transaction from base64:", err)
-		return nil, nil, err
-	}
+	var prevTx *btcutil.Tx
 
-	// Create a new transaction
-	var prevMsgTx wire.MsgTx
-	err = prevMsgTx.Deserialize(bytes.NewReader(rawPrevTx))
-	if err != nil {
-		fmt.Println("Error deserializing transaction:", err)
-		return nil, nil, err
-	}
+	// Check the previous tx if given
+	if len(prevTxBytes) > 0 {
+		// Decode the previous transaction
+		rawPrevTx, err := base64.StdEncoding.DecodeString(prevTxBytes)
+		if err != nil {
+			fmt.Println("Error decoding transaction from base64:", err)
+			return nil, nil, err
+		}
 
-	prevTx := btcutil.NewTx(&prevMsgTx)
+		// Create a new transaction
+		var prevMsgTx wire.MsgTx
+		err = prevMsgTx.Deserialize(bytes.NewReader(rawPrevTx))
+		if err != nil {
+			fmt.Println("Error deserializing transaction:", err)
+			return nil, nil, err
+		}
 
-	// Validate the transaction
-	if err := blockchain.CheckTransactionSanity(prevTx); err != nil {
-		fmt.Println("Transaction is not valid:", err)
-		return nil, nil, err
-	}
+		prevTx = btcutil.NewTx(&prevMsgTx)
 
-	if uTx.MsgTx().TxIn[0].PreviousOutPoint.Hash.String() != prevTx.Hash().String() {
-		return nil, nil, types.ErrInvalidBtcTransaction
+		// Validate the transaction
+		if err := blockchain.CheckTransactionSanity(prevTx); err != nil {
+			fmt.Println("Transaction is not valid:", err)
+			return nil, nil, err
+		}
+
+		if tx.MsgTx().TxIn[0].PreviousOutPoint.Hash.String() != prevTx.Hash().String() {
+			return nil, nil, types.ErrInvalidBtcTransaction
+		}
 	}
 
 	// check if the proof is valid
@@ -263,10 +268,10 @@ func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes
 		return nil, nil, err
 	}
 
-	if !types.VerifyMerkleProof(proof, uTx.Hash(), root) {
+	if !types.VerifyMerkleProof(proof, tx.Hash(), root) {
 		k.Logger(ctx).Error("Invalid merkle proof", "txhash", tx, "root", root, "proof", proof)
 		return nil, nil, types.ErrTransactionNotIncluded
 	}
 
-	return uTx, prevTx, nil
+	return tx, prevTx, nil
 }
