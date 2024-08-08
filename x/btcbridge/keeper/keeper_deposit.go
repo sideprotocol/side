@@ -66,7 +66,7 @@ func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height
 		}
 
 		// check if the receiver is one of the vault addresses
-		vault := types.SelectVaultByBitcoinAddress(params.Vaults, addr.EncodeAddress())
+		vault := types.SelectVaultByAddress(params.Vaults, addr.EncodeAddress())
 		if vault == nil {
 			continue
 		}

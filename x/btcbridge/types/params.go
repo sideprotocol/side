@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 var (
@@ -26,17 +27,19 @@ var (
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		Confirmations:           2,
+		Confirmations:           1,
 		MaxAcceptableBlockDepth: 100,
 		BtcVoucherDenom:         "sat",
 		Vaults: []*Vault{{
 			Address:   "",
 			PubKey:    "",
 			AssetType: AssetType_ASSET_TYPE_BTC,
+			Version:   0,
 		}, {
 			Address:   "",
 			PubKey:    "",
 			AssetType: AssetType_ASSET_TYPE_RUNE,
+			Version:   0,
 		}},
 		ProtocolLimits: &ProtocolLimits{
 			BtcMinDeposit:  50000,     // 0.0005 BTC
@@ -46,7 +49,7 @@ func NewParams() Params {
 		ProtocolFees: &ProtocolFees{
 			DepositFee:  8000,  // 0.00008 BTC
 			WithdrawFee: 12000, // 0.00012 BTC
-			Collector:   "",
+			Collector:   authtypes.NewModuleAddress(ModuleName).String(),
 		},
 		NetworkFee:  8000, // 0.00008 BTC
 		RewardEpoch: &DefaultRewardEpoch,
@@ -68,38 +71,8 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	vaults := make(map[string]bool)
-
-	for _, vault := range p.Vaults {
-		if len(vault.Address) != 0 {
-			_, err := sdk.AccAddressFromBech32(vault.Address)
-			if err != nil {
-				return err
-			}
-
-			_, ok := vaults[vault.Address]
-			if ok {
-				return ErrInvalidParams
-			}
-
-			vaults[vault.Address] = true
-		}
-
-		if len(vault.PubKey) != 0 {
-			pkBytes, err := hex.DecodeString(vault.PubKey)
-			if err != nil {
-				return err
-			}
-
-			_, err = secp256k1.ParsePubKey(pkBytes)
-			if err != nil {
-				return err
-			}
-		}
-
-		if vault.AssetType == AssetType_ASSET_TYPE_UNSPECIFIED {
-			return ErrInvalidParams
-		}
+	if err := validateVaults(p.Vaults); err != nil {
+		return err
 	}
 
 	if p.ProtocolLimits != nil {
@@ -120,9 +93,8 @@ func (p Params) Validate() error {
 	return nil
 }
 
-// SelectVaultByBitcoinAddress returns the vault if the address is found
-// returns the vault if the address is found
-func SelectVaultByBitcoinAddress(vaults []*Vault, address string) *Vault {
+// SelectVaultByAddress returns the vault by the address
+func SelectVaultByAddress(vaults []*Vault, address string) *Vault {
 	for _, v := range vaults {
 		if v.Address == address {
 			return v
@@ -131,8 +103,7 @@ func SelectVaultByBitcoinAddress(vaults []*Vault, address string) *Vault {
 	return nil
 }
 
-// SelectVaultByPubKey returns the vault if the public key is found
-// returns the vault if the public key is found
+// SelectVaultByPubKey returns the vault by the public key
 func SelectVaultByPubKey(vaults []*Vault, pubKey string) *Vault {
 	for _, v := range vaults {
 		if v.PubKey == pubKey {
@@ -171,6 +142,44 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 
 		if bytes.Equal(addrScript, pkScript) {
 			return v
+		}
+	}
+
+	return nil
+}
+
+// validateVaults validates the given vaults
+func validateVaults(vaults []*Vault) error {
+	vaultMap := make(map[string]bool)
+
+	for _, v := range vaults {
+		if len(v.Address) != 0 {
+			_, err := sdk.AccAddressFromBech32(v.Address)
+			if err != nil {
+				return err
+			}
+
+			if vaultMap[v.Address] {
+				return ErrInvalidParams
+			}
+
+			vaultMap[v.Address] = true
+		}
+
+		if len(v.PubKey) != 0 {
+			pkBytes, err := hex.DecodeString(v.PubKey)
+			if err != nil {
+				return err
+			}
+
+			_, err = secp256k1.ParsePubKey(pkBytes)
+			if err != nil {
+				return err
+			}
+		}
+
+		if v.AssetType == AssetType_ASSET_TYPE_UNSPECIFIED {
+			return ErrInvalidParams
 		}
 	}
 

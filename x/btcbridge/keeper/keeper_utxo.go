@@ -339,6 +339,12 @@ func (bk *BaseUTXOKeeper) SpendUTXOs(ctx sdk.Context, utxos []*types.UTXO) error
 	return nil
 }
 
+// SaveUTXO saves the given utxo
+// Intended to be used out of the module, such as genesis import
+func (bk *BaseUTXOKeeper) SaveUTXO(ctx sdk.Context, utxo *types.UTXO) {
+	bk.saveUTXO(ctx, utxo)
+}
+
 // saveUTXO saves the given utxo
 func (bk *BaseUTXOKeeper) saveUTXO(ctx sdk.Context, utxo *types.UTXO) {
 	bk.SetUTXO(ctx, utxo)

@@ -49749,6 +49749,7 @@ paths:
                         - DKG_REQUEST_STATUS_PENDING
                         - DKG_REQUEST_STATUS_COMPLETED
                         - DKG_REQUEST_STATUS_FAILED
+                        - DKG_REQUEST_STATUS_TIMEDOUT
                       default: DKG_REQUEST_STATUS_UNSPECIFIED
                   title: DKG Request
             description: >-
@@ -49946,6 +49947,7 @@ paths:
              - DKG_REQUEST_STATUS_PENDING: DKG_REQUEST_STATUS_PENDING defines the status of the DKG request which is pending
              - DKG_REQUEST_STATUS_COMPLETED: DKG_REQUEST_STATUS_COMPLETED defines the status of the DKG request which is completed
              - DKG_REQUEST_STATUS_FAILED: DKG_REQUEST_STATUS_FAILED defines the status of the DKG request which failed
+             - DKG_REQUEST_STATUS_TIMEDOUT: DKG_REQUEST_STATUS_TIMEDOUT defines the status of the DKG request which timed out
           in: query
           required: false
           type: string
@@ -49954,6 +49956,7 @@ paths:
             - DKG_REQUEST_STATUS_PENDING
             - DKG_REQUEST_STATUS_COMPLETED
             - DKG_REQUEST_STATUS_FAILED
+            - DKG_REQUEST_STATUS_TIMEDOUT
           default: DKG_REQUEST_STATUS_UNSPECIFIED
       tags:
         - Query
@@ -50006,6 +50009,7 @@ paths:
                       - DKG_REQUEST_STATUS_PENDING
                       - DKG_REQUEST_STATUS_COMPLETED
                       - DKG_REQUEST_STATUS_FAILED
+                      - DKG_REQUEST_STATUS_TIMEDOUT
                     default: DKG_REQUEST_STATUS_UNSPECIFIED
                 title: DKG Request
             description: >-
@@ -50259,6 +50263,7 @@ paths:
                         - DKG_REQUEST_STATUS_PENDING
                         - DKG_REQUEST_STATUS_COMPLETED
                         - DKG_REQUEST_STATUS_FAILED
+                        - DKG_REQUEST_STATUS_TIMEDOUT
                       default: DKG_REQUEST_STATUS_UNSPECIFIED
                   title: DKG Request
             description: >-
@@ -82532,6 +82537,7 @@ definitions:
           - DKG_REQUEST_STATUS_PENDING
           - DKG_REQUEST_STATUS_COMPLETED
           - DKG_REQUEST_STATUS_FAILED
+          - DKG_REQUEST_STATUS_TIMEDOUT
         default: DKG_REQUEST_STATUS_UNSPECIFIED
     title: DKG Request
   side.btcbridge.DKGRequestStatus:
@@ -82541,6 +82547,7 @@ definitions:
       - DKG_REQUEST_STATUS_PENDING
       - DKG_REQUEST_STATUS_COMPLETED
       - DKG_REQUEST_STATUS_FAILED
+      - DKG_REQUEST_STATUS_TIMEDOUT
     default: DKG_REQUEST_STATUS_UNSPECIFIED
     title: >-
       - DKG_REQUEST_STATUS_UNSPECIFIED: DKG_REQUEST_STATUS_UNSPECIFIED defines
@@ -82548,6 +82555,7 @@ definitions:
        - DKG_REQUEST_STATUS_PENDING: DKG_REQUEST_STATUS_PENDING defines the status of the DKG request which is pending
        - DKG_REQUEST_STATUS_COMPLETED: DKG_REQUEST_STATUS_COMPLETED defines the status of the DKG request which is completed
        - DKG_REQUEST_STATUS_FAILED: DKG_REQUEST_STATUS_FAILED defines the status of the DKG request which failed
+       - DKG_REQUEST_STATUS_TIMEDOUT: DKG_REQUEST_STATUS_TIMEDOUT defines the status of the DKG request which timed out
   side.btcbridge.MsgCompleteDKGResponse:
     type: object
     description: MsgCompleteDKGResponse defines the Msg/CompleteDKG response type.
@@ -82760,6 +82768,7 @@ definitions:
                 - DKG_REQUEST_STATUS_PENDING
                 - DKG_REQUEST_STATUS_COMPLETED
                 - DKG_REQUEST_STATUS_FAILED
+                - DKG_REQUEST_STATUS_TIMEDOUT
               default: DKG_REQUEST_STATUS_UNSPECIFIED
           title: DKG Request
     description: >-
@@ -82912,6 +82921,7 @@ definitions:
               - DKG_REQUEST_STATUS_PENDING
               - DKG_REQUEST_STATUS_COMPLETED
               - DKG_REQUEST_STATUS_FAILED
+              - DKG_REQUEST_STATUS_TIMEDOUT
             default: DKG_REQUEST_STATUS_UNSPECIFIED
         title: DKG Request
     description: >-
@@ -82961,6 +82971,7 @@ definitions:
                 - DKG_REQUEST_STATUS_PENDING
                 - DKG_REQUEST_STATUS_COMPLETED
                 - DKG_REQUEST_STATUS_FAILED
+                - DKG_REQUEST_STATUS_TIMEDOUT
               default: DKG_REQUEST_STATUS_UNSPECIFIED
           title: DKG Request
     description: >-

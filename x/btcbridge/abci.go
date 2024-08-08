@@ -14,7 +14,7 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	for _, req := range pendingDKGRequests {
 		// check if the DKG request expired
 		if !ctx.BlockTime().Before(*req.Expiration) {
-			req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_FAILED
+			req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_TIMEDOUT
 			continue
 		}
 

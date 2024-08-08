@@ -101,6 +101,8 @@ enum DKGRequestStatus {
   DKG_REQUEST_STATUS_COMPLETED = 2;
   // DKG_REQUEST_STATUS_FAILED defines the status of the DKG request which failed
   DKG_REQUEST_STATUS_FAILED = 3;
+  // DKG_REQUEST_STATUS_TIMEDOUT defines the status of the DKG request which timed out
+  DKG_REQUEST_STATUS_TIMEDOUT = 4;
 }
 
 // DKG Request

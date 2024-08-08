@@ -252,7 +252,7 @@ func (k Keeper) FilterWithdrawRequestsByAddr(ctx sdk.Context, req *types.QueryWi
 func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.MsgSubmitWithdrawTransaction) (*chainhash.Hash, error) {
 	ctx.Logger().Info("accept bitcoin withdraw tx", "blockhash", msg.Blockhash)
 
-	tx, _, err := k.ValidateTransaction(ctx, msg.TxBytes, msg.PrevTxBytes, msg.Blockhash, msg.Proof)
+	tx, _, err := k.ValidateTransaction(ctx, msg.TxBytes, "", msg.Blockhash, msg.Proof)
 	if err != nil {
 		return nil, err
 	}
@@ -294,15 +294,15 @@ func (k Keeper) spendUTXOs(ctx sdk.Context, uTx *btcutil.Tx) {
 	}
 }
 
-// handleTxFee performs the fee handling for the btc withdrawal tx
+// handleBtcTxFee performs the network fee handling for the btc withdrawal tx
 // Make sure that the given psbt is valid
-// There are at most two outputs and the change output is the last one if any
+// There are at most three outpus and the change output is the last one if any
 func (k Keeper) handleBtcTxFee(p *psbt.Packet, changeAddr string) (*types.UTXO, error) {
-	recipientOut := p.UnsignedTx.TxOut[0]
+	recipientOut := p.UnsignedTx.TxOut[1]
 
 	changeOut := new(wire.TxOut)
-	if len(p.UnsignedTx.TxOut) > 1 {
-		changeOut = p.UnsignedTx.TxOut[1]
+	if len(p.UnsignedTx.TxOut) > 2 {
+		changeOut = p.UnsignedTx.TxOut[2]
 	} else {
 		changeOut = wire.NewTxOut(0, types.MustPkScriptFromAddress(changeAddr))
 		p.UnsignedTx.TxOut = append(p.UnsignedTx.TxOut, changeOut)

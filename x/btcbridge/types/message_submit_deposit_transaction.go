@@ -7,17 +7,19 @@ import (
 
 const TypeMsgSubmitDepositTransaction = "submit_deposit_transaction"
 
-func NewMsgSubmitTransaction(
+func NewMsgSubmitDepositTransaction(
 	sender string,
 	blockhash string,
-	transaction string,
+	prevTx string,
+	tx string,
 	proof []string,
 ) *MsgSubmitDepositTransaction {
 	return &MsgSubmitDepositTransaction{
-		Sender:    sender,
-		Blockhash: blockhash,
-		TxBytes:   transaction,
-		Proof:     proof,
+		Sender:      sender,
+		Blockhash:   blockhash,
+		PrevTxBytes: prevTx,
+		TxBytes:     tx,
+		Proof:       proof,
 	}
 }
 
@@ -53,7 +55,7 @@ func (msg *MsgSubmitDepositTransaction) ValidateBasic() error {
 	}
 
 	if len(msg.PrevTxBytes) == 0 {
-		return sdkerrors.Wrap(ErrInvalidBtcTransaction, "transaction cannot be empty")
+		return sdkerrors.Wrap(ErrInvalidBtcTransaction, "previous transaction cannot be empty")
 	}
 
 	if len(msg.TxBytes) == 0 {

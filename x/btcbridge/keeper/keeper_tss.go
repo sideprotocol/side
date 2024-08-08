@@ -216,7 +216,7 @@ func (k Keeper) CheckVaults(ctx sdk.Context, vaults []string) error {
 	}
 
 	for _, v := range vaults {
-		if types.SelectVaultByBitcoinAddress(currentVaults, v) != nil {
+		if types.SelectVaultByAddress(currentVaults, v) != nil {
 			return types.ErrInvalidDKGCompletionRequest
 		}
 	}

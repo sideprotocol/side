@@ -54,7 +54,7 @@ func ExtractCommonRecipientAddr(tx *wire.MsgTx, prevTx *wire.MsgTx, vaults []*Va
 			return nil, err
 		}
 
-		vault := SelectVaultByBitcoinAddress(vaults, addr.EncodeAddress())
+		vault := SelectVaultByAddress(vaults, addr.EncodeAddress())
 		if vault == nil {
 			recipient = addr
 			nonVaultOutCount++
@@ -104,7 +104,7 @@ func ExtractRunesRecipientAddr(tx *wire.MsgTx, prevTx *wire.MsgTx, vaults []*Vau
 			return nil, err
 		}
 
-		vault := SelectVaultByBitcoinAddress(vaults, addr.EncodeAddress())
+		vault := SelectVaultByAddress(vaults, addr.EncodeAddress())
 		if vault == nil {
 			recipient = addr
 			nonVaultOutCount++

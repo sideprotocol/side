@@ -20,7 +20,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// import utxos
 	for _, utxo := range genState.Utxos {
-		k.SetUTXO(ctx, utxo)
+		k.SaveUTXO(ctx, utxo)
 	}
 }
 
@@ -30,6 +30,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.Params = k.GetParams(ctx)
 	genesis.BestBlockHeader = k.GetBestBlockHeader(ctx)
 	genesis.BlockHeaders = k.GetAllBlockHeaders(ctx)
+	genesis.Utxos = k.GetAllUTXOs(ctx)
 
 	// this line is used by starport scaffolding # genesis/module/export
 
