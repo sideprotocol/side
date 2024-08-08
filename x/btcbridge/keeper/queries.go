@@ -106,6 +106,33 @@ func (k Keeper) QueryWithdrawRequestByTxHash(goCtx context.Context, req *types.Q
 	return &types.QueryWithdrawRequestByTxHashResponse{Request: request}, nil
 }
 
+func (k Keeper) QueryUTXOs(goCtx context.Context, req *types.QueryUTXOsRequest) (*types.QueryUTXOsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	utxos := k.GetAllUTXOs(ctx)
+
+	return &types.QueryUTXOsResponse{Utxos: utxos}, nil
+}
+
+func (k Keeper) QueryUTXOsByAddress(goCtx context.Context, req *types.QueryUTXOsByAddressRequest) (*types.QueryUTXOsByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	_, err := sdk.AccAddressFromBech32(req.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	utxos := k.GetUTXOsByAddr(ctx, req.Address)
+
+	return &types.QueryUTXOsByAddressResponse{Utxos: utxos}, nil
+}
+
 func (k Keeper) QueryDKGRequest(goCtx context.Context, req *types.QueryDKGRequestRequest) (*types.QueryDKGRequestResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")

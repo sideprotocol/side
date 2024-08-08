@@ -1,6 +1,8 @@
 package types
 
 import (
+	"strconv"
+
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -10,10 +12,12 @@ const TypeMsgWithdrawToBitcoin = "withdraw_to_bitcoin"
 func NewMsgWithdrawToBitcoin(
 	sender string,
 	amount string,
+	feeRate string,
 ) *MsgWithdrawToBitcoin {
 	return &MsgWithdrawToBitcoin{
-		Sender: sender,
-		Amount: amount,
+		Sender:  sender,
+		Amount:  amount,
+		FeeRate: feeRate,
 	}
 }
 
@@ -47,6 +51,15 @@ func (msg *MsgWithdrawToBitcoin) ValidateBasic() error {
 	_, err = sdk.ParseCoinNormalized(msg.Amount)
 	if err != nil {
 		return sdkerrors.Wrapf(ErrInvalidAmount, "invalid amount %s", msg.Amount)
+	}
+
+	feeRate, err := strconv.ParseInt(msg.FeeRate, 10, 64)
+	if err != nil {
+		return err
+	}
+
+	if feeRate <= 0 {
+		return sdkerrors.Wrap(ErrInvalidFeeRate, "fee rate must be greater than zero")
 	}
 
 	return nil

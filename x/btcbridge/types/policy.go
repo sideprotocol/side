@@ -1,13 +1,12 @@
 package types
 
 import (
-	"bytes"
-	"math/big"
-
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -158,18 +157,19 @@ func CheckRunesDepositTransaction(tx *wire.MsgTx, vaults []*Vault) (*Edict, erro
 	return edicts[0], nil
 }
 
-// ParseSequence parses the sequence from the given tx
-// make sure the tx is valid
-func ParseSequence(tx *wire.MsgTx) (uint64, error) {
-	scriptBuilder := txscript.MakeScriptTokenizer(0, tx.TxOut[0].PkScript)
+// BuildWithdrawScript builds the OP_RETURN script using the withdrawal sequence
+// Panic if any error occurred (not expected)
+func BuildWithdrawScript(sequence uint64) []byte {
+	scriptBuilder := txscript.NewScriptBuilder()
 
-	if scriptBuilder.Next() && scriptBuilder.Opcode() == txscript.OP_RETURN {
-		if scriptBuilder.Next() && bytes.Equal(scriptBuilder.Data(), WithdrawIdentifier) {
-			if scriptBuilder.Next() {
-				return new(big.Int).SetBytes(scriptBuilder.Data()).Uint64(), nil
-			}
-		}
+	scriptBuilder.AddOp(txscript.OP_RETURN)
+	scriptBuilder.AddData(WithdrawIdentifier)
+	scriptBuilder.AddData(sdk.Uint64ToBigEndian(sequence))
+
+	script, err := scriptBuilder.Script()
+	if err != nil {
+		panic(err)
 	}
 
-	return 0, ErrInvalidSequence
+	return script
 }

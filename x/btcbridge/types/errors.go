@@ -25,17 +25,24 @@ var (
 	ErrInvalidDepositTransaction  = errorsmod.Register(ModuleName, 3204, "invalid deposit transaction")
 	ErrInvalidWithdrawTransaction = errorsmod.Register(ModuleName, 3205, "invalid withdrawal transaction")
 
+	ErrInvalidSignatures        = errorsmod.Register(ModuleName, 4200, "invalid signatures")
 	ErrInsufficientBalance      = errorsmod.Register(ModuleName, 4201, "insufficient balance")
 	ErrWithdrawRequestNotExist  = errorsmod.Register(ModuleName, 4202, "withdrawal request does not exist")
 	ErrWithdrawRequestConfirmed = errorsmod.Register(ModuleName, 4203, "withdrawal request has been confirmed")
 	ErrInvalidStatus            = errorsmod.Register(ModuleName, 4204, "invalid status")
 
-	ErrInvalidAmount     = errorsmod.Register(ModuleName, 5100, "invalid amount")
-	ErrAssetNotSupported = errorsmod.Register(ModuleName, 5101, "asset not supported")
-	ErrDustOutput        = errorsmod.Register(ModuleName, 5102, "too small output amount")
+	ErrUTXODoesNotExist = errorsmod.Register(ModuleName, 5100, "utxo does not exist")
+	ErrUTXOLocked       = errorsmod.Register(ModuleName, 5101, "utxo locked")
+	ErrUTXOUnlocked     = errorsmod.Register(ModuleName, 5102, "utxo unlocked")
 
-	ErrInvalidRunes  = errorsmod.Register(ModuleName, 6100, "invalid runes")
-	ErrInvalidRuneId = errorsmod.Register(ModuleName, 6101, "invalid rune id")
+	ErrInvalidAmount       = errorsmod.Register(ModuleName, 6100, "invalid amount")
+	ErrInvalidFeeRate      = errorsmod.Register(ModuleName, 6101, "invalid fee rate")
+	ErrAssetNotSupported   = errorsmod.Register(ModuleName, 6102, "asset not supported")
+	ErrDustOutput          = errorsmod.Register(ModuleName, 6103, "too small output amount")
+	ErrInsufficientUTXOs   = errorsmod.Register(ModuleName, 6104, "insufficient utxos")
+	ErrFailToSerializePsbt = errorsmod.Register(ModuleName, 6105, "failed to serialize psbt")
+	ErrInvalidRunes        = errorsmod.Register(ModuleName, 6106, "invalid runes")
+	ErrInvalidRuneId       = errorsmod.Register(ModuleName, 6107, "invalid rune id")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 7100, "invalid module params")
 

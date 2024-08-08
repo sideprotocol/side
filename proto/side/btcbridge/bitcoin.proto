@@ -27,23 +27,44 @@ message BlockHeader {
 enum WithdrawStatus {
   // WITHDRAW_STATUS_UNSPECIFIED - Default value, should not be used
   WITHDRAW_STATUS_UNSPECIFIED = 0;
-  // WITHDRAW_STATUS_CREATED - The withdrawal request is created
+  // WITHDRAW_STATUS_CREATED - The withdrawal tx is created
   WITHDRAW_STATUS_CREATED = 1;
   // WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
   WITHDRAW_STATUS_BROADCASTED = 2;
   // WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
   WITHDRAW_STATUS_CONFIRMED = 3;
+  // WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
+  WITHDRAW_STATUS_FAILED = 4;
 }
 
 // Bitcoin Withdrawal Request
 message BitcoinWithdrawRequest {
   string address = 1;
-  cosmos.base.v1beta1.Coin amount = 2 [
-    (gogoproto.nullable) = false
-  ];
-  uint64 sequence = 3;
-  string txid = 4;
+  uint64 sequence = 2;
+  string txid = 3;
+  string psbt = 4;
   WithdrawStatus status = 5;
+}
+
+// Bitcoin UTXO
+message UTXO {
+  string txid = 1;
+  uint64 vout = 2;
+  string address = 3;
+  uint64 amount = 4;
+  uint64 height = 5;
+  bytes pub_key_script = 6;
+  bool is_locked = 7;
+  // rune balances associated with the UTXO
+  repeated RuneBalance runes = 8;
+}
+
+// Rune Balance
+message RuneBalance {
+  // serialized rune id
+  string id = 1;
+  // rune amount
+  string amount = 2;
 }
 
 // Rune ID
