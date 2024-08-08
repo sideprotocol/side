@@ -29,14 +29,12 @@ enum WithdrawStatus {
   WITHDRAW_STATUS_UNSPECIFIED = 0;
   // WITHDRAW_STATUS_CREATED - The withdrawal tx is created
   WITHDRAW_STATUS_CREATED = 1;
-  // WITHDRAW_STATUS_SIGNED - The withdrawal tx is signed
-  WITHDRAW_STATUS_SIGNED = 2;
   // WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
-  WITHDRAW_STATUS_BROADCASTED = 3;
+  WITHDRAW_STATUS_BROADCASTED = 2;
   // WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
-  WITHDRAW_STATUS_CONFIRMED = 4;
+  WITHDRAW_STATUS_CONFIRMED = 3;
   // WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
-  WITHDRAW_STATUS_FAILED = 5;
+  WITHDRAW_STATUS_FAILED = 4;
 }
 
 // Bitcoin Withdrawal Request
