@@ -12,7 +12,7 @@ func AssetTypeFromDenom(denom string, p Params) AssetType {
 	}
 
 	if strings.HasPrefix(denom, fmt.Sprintf("%s/", RunesProtocolName)) {
-		return AssetType_ASSET_TYPE_RUNE
+		return AssetType_ASSET_TYPE_RUNES
 	}
 
 	return AssetType_ASSET_TYPE_UNSPECIFIED

@@ -150,7 +150,7 @@ func CheckRunesDepositTransaction(tx *wire.MsgTx, vaults []*Vault) (*Edict, erro
 	}
 
 	vault := SelectVaultByPkScript(vaults, tx.TxOut[edicts[0].Output].PkScript)
-	if vault == nil || vault.AssetType != AssetType_ASSET_TYPE_RUNE {
+	if vault == nil || vault.AssetType != AssetType_ASSET_TYPE_RUNES {
 		return nil, ErrInvalidDepositTransaction
 	}
 

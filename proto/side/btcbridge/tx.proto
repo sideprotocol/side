@@ -43,7 +43,7 @@ message MsgSubmitBlockHeadersResponse {
 
 // MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type.
 message MsgSubmitDepositTransaction {
-  // this is relayer address who submit the bitcoin transaction to the side chain
+  // this is the relayer address who submits the bitcoin transaction to the side chain
   string sender = 1;
   string blockhash = 2;
   // the tx bytes in base64 format
@@ -60,7 +60,7 @@ message MsgSubmitDepositTransactionResponse {
 
 // MsgSubmitWithdrawTransaction defines the Msg/SubmitWithdrawTransaction request type.
 message MsgSubmitWithdrawTransaction {
-  // this is relayer address who submit the bitcoin transaction to the side chain
+  // this is the relayer address who submits the bitcoin transaction to the side chain
   string sender = 1;
   string blockhash = 2;
   // the tx bytes in base64 format

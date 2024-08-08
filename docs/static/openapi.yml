@@ -50958,24 +50958,24 @@ paths:
                       properties:
                         address:
                           type: string
-                          title: the depositor should send their btc to this address
+                          title: the vault address for deposit
                         pub_key:
                           type: string
-                          title: the pub key to which the voucher is sent
+                          title: public key of the vault
                         asset_type:
-                          title: the address to which the voucher is sent
+                          title: the asset type supported by the vault
                           type: string
                           enum:
                             - ASSET_TYPE_UNSPECIFIED
                             - ASSET_TYPE_BTC
                             - ASSET_TYPE_BRC20
-                            - ASSET_TYPE_RUNE
+                            - ASSET_TYPE_RUNES
                           default: ASSET_TYPE_UNSPECIFIED
                           description: |-
                             - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                              - ASSET_TYPE_BTC: BTC
                              - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                             - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+                             - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
                         version:
                           type: string
                           format: uint64
@@ -82398,13 +82398,13 @@ definitions:
       - ASSET_TYPE_UNSPECIFIED
       - ASSET_TYPE_BTC
       - ASSET_TYPE_BRC20
-      - ASSET_TYPE_RUNE
+      - ASSET_TYPE_RUNES
     default: ASSET_TYPE_UNSPECIFIED
     description: |-
       - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
        - ASSET_TYPE_BTC: BTC
        - ASSET_TYPE_BRC20: BRC20: ordi, sats
-       - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+       - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
     title: AssetType defines the type of asset
   side.btcbridge.BitcoinWithdrawRequest:
     type: object
@@ -82618,24 +82618,24 @@ definitions:
           properties:
             address:
               type: string
-              title: the depositor should send their btc to this address
+              title: the vault address for deposit
             pub_key:
               type: string
-              title: the pub key to which the voucher is sent
+              title: public key of the vault
             asset_type:
-              title: the address to which the voucher is sent
+              title: the asset type supported by the vault
               type: string
               enum:
                 - ASSET_TYPE_UNSPECIFIED
                 - ASSET_TYPE_BTC
                 - ASSET_TYPE_BRC20
-                - ASSET_TYPE_RUNE
+                - ASSET_TYPE_RUNES
               default: ASSET_TYPE_UNSPECIFIED
               description: |-
                 - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                  - ASSET_TYPE_BTC: BTC
                  - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                 - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+                 - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
             version:
               type: string
               format: uint64
@@ -83006,24 +83006,24 @@ definitions:
               properties:
                 address:
                   type: string
-                  title: the depositor should send their btc to this address
+                  title: the vault address for deposit
                 pub_key:
                   type: string
-                  title: the pub key to which the voucher is sent
+                  title: public key of the vault
                 asset_type:
-                  title: the address to which the voucher is sent
+                  title: the asset type supported by the vault
                   type: string
                   enum:
                     - ASSET_TYPE_UNSPECIFIED
                     - ASSET_TYPE_BTC
                     - ASSET_TYPE_BRC20
-                    - ASSET_TYPE_RUNE
+                    - ASSET_TYPE_RUNES
                   default: ASSET_TYPE_UNSPECIFIED
                   description: |-
                     - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
                      - ASSET_TYPE_BTC: BTC
                      - ASSET_TYPE_BRC20: BRC20: ordi, sats
-                     - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+                     - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
                 version:
                   type: string
                   format: uint64
@@ -83391,24 +83391,24 @@ definitions:
     properties:
       address:
         type: string
-        title: the depositor should send their btc to this address
+        title: the vault address for deposit
       pub_key:
         type: string
-        title: the pub key to which the voucher is sent
+        title: public key of the vault
       asset_type:
-        title: the address to which the voucher is sent
+        title: the asset type supported by the vault
         type: string
         enum:
           - ASSET_TYPE_UNSPECIFIED
           - ASSET_TYPE_BTC
           - ASSET_TYPE_BRC20
-          - ASSET_TYPE_RUNE
+          - ASSET_TYPE_RUNES
         default: ASSET_TYPE_UNSPECIFIED
         description: |-
           - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
            - ASSET_TYPE_BTC: BTC
            - ASSET_TYPE_BRC20: BRC20: ordi, sats
-           - ASSET_TYPE_RUNE: RUNE, dog*go*to*the*moon
+           - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
       version:
         type: string
         format: uint64

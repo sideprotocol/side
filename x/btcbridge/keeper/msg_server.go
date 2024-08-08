@@ -7,8 +7,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"cosmossdk.io/errors"
 	"github.com/btcsuite/btcd/btcutil/psbt"
+
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
@@ -22,6 +23,7 @@ type msgServer struct {
 // SubmitBlockHeaders implements types.MsgServer.
 func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmitBlockHeaders) (*types.MsgSubmitBlockHeadersResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
@@ -35,7 +37,7 @@ func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmi
 	return &types.MsgSubmitBlockHeadersResponse{}, nil
 }
 
-// SubmitTransaction implements types.MsgServer.
+// SubmitDepositTransaction implements types.MsgServer.
 // No Permission check required for this message
 // Since everyone can submit a transaction to mint voucher tokens
 // This message is usually sent by relayers
@@ -63,9 +65,8 @@ func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.Ms
 	return &types.MsgSubmitDepositTransactionResponse{}, nil
 }
 
-// SubmitTransaction implements types.MsgServer.
+// SubmitWithdrawTransaction implements types.MsgServer.
 // No Permission check required for this message
-// Since everyone can submit a transaction to mint voucher tokens
 // This message is usually sent by relayers
 func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.MsgSubmitWithdrawTransaction) (*types.MsgSubmitWithdrawTransactionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
@@ -90,6 +91,7 @@ func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.M
 	return &types.MsgSubmitWithdrawTransactionResponse{}, nil
 }
 
+// WithdrawToBitcoin withdraws the asset to the bitcoin chain.
 func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdrawToBitcoin) (*types.MsgWithdrawToBitcoinResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
@@ -148,7 +150,7 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 	return &types.MsgWithdrawToBitcoinResponse{}, nil
 }
 
-// SubmitWithdrawSignatures submits the signatures of the withdraw transaction.
+// SubmitWithdrawSignatures submits the signatures of the withdrawal transaction.
 func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.MsgSubmitWithdrawSignatures) (*types.MsgSubmitWithdrawSignaturesResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err

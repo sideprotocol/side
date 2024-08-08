@@ -17,6 +17,7 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+
 	"github.com/sideprotocol/side/x/btcbridge/client/cli"
 	"github.com/sideprotocol/side/x/btcbridge/keeper"
 	"github.com/sideprotocol/side/x/btcbridge/types"

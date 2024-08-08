@@ -11,7 +11,7 @@ import (
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
-// Process Bitcoin Deposit Transaction
+// ProcessBitcoinDepositTransaction handles the deposit transaction
 func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.MsgSubmitDepositTransaction) (*chainhash.Hash, btcutil.Address, error) {
 	ctx.Logger().Info("accept bitcoin deposit tx", "blockhash", msg.Blockhash)
 
@@ -28,7 +28,7 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 	return tx.Hash(), recipient, nil
 }
 
-// mint performs the minting operation of the voucher token
+// Mint performs the minting operation of the voucher token
 func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height uint64) (btcutil.Address, error) {
 	params := k.GetParams(ctx)
 	chainCfg := sdk.GetConfig().GetBtcChainCfg()
@@ -80,7 +80,7 @@ func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height
 				return nil, err
 			}
 
-		case types.AssetType_ASSET_TYPE_RUNE:
+		case types.AssetType_ASSET_TYPE_RUNES:
 			if isRunes && edict.Output == uint32(i) {
 				if err := k.mintRunes(ctx, tx, height, recipient.EncodeAddress(), vault, out, i, edict.Id, edict.Amount); err != nil {
 					return nil, err

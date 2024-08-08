@@ -2,6 +2,7 @@ package btcbridge
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sideprotocol/side/x/btcbridge/keeper"
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )

@@ -6,13 +6,15 @@ import (
 
 	// "strings"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/sideprotocol/side/x/btcbridge/types"
 	"github.com/spf13/cobra"
+
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module
@@ -41,7 +43,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 func CmdQueryParams() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "params",
-		Short: "shows the parameters of the module",
+		Short: "Query the parameters of the module",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -68,7 +70,7 @@ func CmdQueryParams() *cobra.Command {
 func CmdBestBlock() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "best-block",
-		Short: "shows the best block header of the light client",
+		Short: "Query the best block header of the btc bridge",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -186,7 +188,7 @@ func CmdQueryWithdrawRequest() *cobra.Command {
 func CmdQueryUTXOs() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "utxos [address]",
-		Short: "query utxos with an optional address",
+		Short: "Query utxos with the optional address",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
