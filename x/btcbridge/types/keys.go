@@ -42,7 +42,7 @@ var (
 	DKGRequestIDKey               = []byte{0x30} // key for the DKG request id
 	DKGRequestKeyPrefix           = []byte{0x31} // prefix for each key to a DKG request
 	DKGCompletionRequestKeyPrefix = []byte{0x32} // prefix for each key to a DKG completion request
-	VaultVersionKey               = []byte{0x33} // key for vault version; default to 0 in the genesis and increased by 1 once updated
+	VaultVersionKey               = []byte{0x33} // key for vault version increased by 1 once updated
 )
 
 func Int64ToBytes(number uint64) []byte {
