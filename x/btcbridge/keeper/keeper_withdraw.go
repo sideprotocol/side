@@ -33,16 +33,18 @@ func (k Keeper) IncrementRequestSequence(ctx sdk.Context) uint64 {
 
 // NewWithdrawRequest creates a new withdrawal request
 func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64) (*types.BitcoinWithdrawRequest, error) {
+	sequence := k.IncrementRequestSequence(ctx)
+
 	p := k.GetParams(ctx)
 	btcVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_BTC)
 
 	switch types.AssetTypeFromDenom(amount.Denom, p) {
 	case types.AssetType_ASSET_TYPE_BTC:
-		return k.NewBtcWithdrawRequest(ctx, sender, amount, feeRate, btcVault.Address)
+		return k.NewBtcWithdrawRequest(ctx, sender, amount, feeRate, btcVault.Address, sequence)
 
 	case types.AssetType_ASSET_TYPE_RUNE:
 		runesVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_RUNE)
-		return k.NewRunesWithdrawRequest(ctx, sender, amount, feeRate, runesVault.Address, btcVault.Address)
+		return k.NewRunesWithdrawRequest(ctx, sender, amount, feeRate, runesVault.Address, btcVault.Address, sequence)
 
 	default:
 		return nil, types.ErrAssetNotSupported
@@ -50,10 +52,10 @@ func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Co
 }
 
 // NewBtcWithdrawRequest creates the request for btc withdrawal
-func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string) (*types.BitcoinWithdrawRequest, error) {
+func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, sequence uint64) (*types.BitcoinWithdrawRequest, error) {
 	utxoIterator := k.GetUTXOIteratorByAddr(ctx, vault)
 
-	psbt, selectedUTXOs, _, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault)
+	psbt, selectedUTXOs, _, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault, sequence)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +79,7 @@ func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, amount sdk
 
 	withdrawRequest := &types.BitcoinWithdrawRequest{
 		Address:  sender,
-		Sequence: k.IncrementRequestSequence(ctx),
+		Sequence: sequence,
 		Txid:     psbt.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
 		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
@@ -89,7 +91,7 @@ func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, amount sdk
 }
 
 // NewRunesWithdrawRequest creates the request for runes withdrawal
-func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, btcVault string) (*types.BitcoinWithdrawRequest, error) {
+func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, btcVault string, sequence uint64) (*types.BitcoinWithdrawRequest, error) {
 	var runeId types.RuneId
 	runeId.FromDenom(amount.Denom)
 
@@ -102,7 +104,7 @@ func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, amount s
 
 	paymentUTXOIterator := k.GetUTXOIteratorByAddr(ctx, btcVault)
 
-	psbt, selectedUTXOs, changeUTXO, runesChangeUTXO, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, amountDelta, vault, btcVault)
+	psbt, selectedUTXOs, changeUTXO, runesChangeUTXO, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, amountDelta, vault, btcVault, sequence)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +136,7 @@ func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, amount s
 
 	withdrawRequest := &types.BitcoinWithdrawRequest{
 		Address:  sender,
-		Sequence: k.IncrementRequestSequence(ctx),
+		Sequence: sequence,
 		Txid:     psbt.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
 		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
