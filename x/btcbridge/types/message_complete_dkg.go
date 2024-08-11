@@ -14,15 +14,15 @@ func NewMsgCompleteDKG(
 	sender string,
 	id uint64,
 	vaults []string,
-	validator string,
+	consAddress string,
 	signature string,
 ) *MsgCompleteDKG {
 	return &MsgCompleteDKG{
-		Sender:    sender,
-		Id:        id,
-		Vaults:    vaults,
-		Validator: validator,
-		Signature: signature,
+		Sender:           sender,
+		Id:               id,
+		Vaults:           vaults,
+		ConsensusAddress: consAddress,
+		Signature:        signature,
 	}
 }
 
@@ -67,7 +67,7 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 		vaults[v] = true
 	}
 
-	if _, err := sdk.ConsAddressFromHex(m.Validator); err != nil {
+	if _, err := sdk.ConsAddressFromHex(m.ConsensusAddress); err != nil {
 		return ErrInvalidDKGCompletionRequest
 	}
 

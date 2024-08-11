@@ -120,14 +120,14 @@ func (k Keeper) SetDKGCompletionRequest(ctx sdk.Context, req *types.DKGCompletio
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(req)
-	store.Set(types.DKGCompletionRequestKey(req.Id, req.Validator), bz)
+	store.Set(types.DKGCompletionRequestKey(req.Id, req.ConsensusAddress), bz)
 }
 
 // HasDKGCompletionRequest returns true if the given completion request exists, false otherwise
-func (k Keeper) HasDKGCompletionRequest(ctx sdk.Context, id uint64, validator string) bool {
+func (k Keeper) HasDKGCompletionRequest(ctx sdk.Context, id uint64, consAddress string) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.DKGCompletionRequestKey(id, validator))
+	return store.Has(types.DKGCompletionRequestKey(id, consAddress))
 }
 
 // GetDKGCompletionRequests gets DKG completion requests by the given id
@@ -167,11 +167,11 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return types.ErrDKGRequestDoesNotExist
 	}
 
-	if !types.ParticipantExists(dkgReq.Participants, req.Validator) {
+	if !types.ParticipantExists(dkgReq.Participants, req.ConsensusAddress) {
 		return types.ErrUnauthorizedDKGCompletionRequest
 	}
 
-	if k.HasDKGCompletionRequest(ctx, req.Id, req.Validator) {
+	if k.HasDKGCompletionRequest(ctx, req.Id, req.ConsensusAddress) {
 		return types.ErrDKGCompletionRequestExists
 	}
 
@@ -187,8 +187,8 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return err
 	}
 
-	validatorConsAddr, _ := sdk.ConsAddressFromHex(req.Validator)
-	validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, validatorConsAddr)
+	consAddress, _ := sdk.ConsAddressFromHex(req.ConsensusAddress)
+	validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
 	if !found {
 		return types.ErrInvalidDKGCompletionRequest
 	}
