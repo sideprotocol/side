@@ -234,7 +234,7 @@ func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG)
 	return &types.MsgInitiateDKGResponse{}, nil
 }
 
-// CompleteDKG initiates the DKG request.
+// CompleteDKG completes the DKG request by the DKG participant
 func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG) (*types.MsgCompleteDKGResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
@@ -243,9 +243,11 @@ func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	req := &types.DKGCompletionRequest{
-		Id:     msg.Id,
-		Sender: msg.Sender,
-		Vaults: msg.Vaults,
+		Id:               msg.Id,
+		Sender:           msg.Sender,
+		Vaults:           msg.Vaults,
+		ConsensusAddress: msg.ConsensusAddress,
+		Signature:        msg.Signature,
 	}
 
 	if err := m.Keeper.CompleteDKG(ctx, req); err != nil {
