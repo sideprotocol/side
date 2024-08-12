@@ -15,6 +15,8 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 		// check if the DKG request expired
 		if !ctx.BlockTime().Before(*req.Expiration) {
 			req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_TIMEDOUT
+			k.SetDKGRequest(ctx, req)
+
 			continue
 		}
 
@@ -27,6 +29,8 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 		// check if the DKG completion requests are valid
 		if !types.CheckDKGCompletionRequests(completionRequests) {
 			req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_FAILED
+			k.SetDKGRequest(ctx, req)
+
 			continue
 		}
 
@@ -35,5 +39,6 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 
 		// update status
 		req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_COMPLETED
+		k.SetDKGRequest(ctx, req)
 	}
 }

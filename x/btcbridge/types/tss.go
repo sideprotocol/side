@@ -2,6 +2,7 @@ package types
 
 import (
 	"crypto/ed25519"
+	"encoding/binary"
 	"encoding/hex"
 	"reflect"
 
@@ -50,7 +51,8 @@ func VerifySignature(signature string, pubKey []byte, req *DKGCompletionRequest)
 
 // GetSigMsgFromDKGCompletionReq gets the msg to be signed from the given DKG completion request
 func GetSigMsgFromDKGCompletionReq(req *DKGCompletionRequest) []byte {
-	rawMsg := Int64ToBytes(req.Id)
+	rawMsg := make([]byte, 8)
+	binary.BigEndian.PutUint64(rawMsg, req.Id)
 
 	for _, v := range req.Vaults {
 		rawMsg = append(rawMsg, []byte(v)...)
