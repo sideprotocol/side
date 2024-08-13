@@ -4,6 +4,7 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
@@ -176,11 +177,11 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	}
 
 	if dkgReq.Status != types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING {
-		return types.ErrInvalidDKGCompletionRequest
+		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid dkg request status")
 	}
 
 	if !ctx.BlockTime().Before(*dkgReq.Expiration) {
-		return types.ErrInvalidDKGCompletionRequest
+		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "dkg request expired")
 	}
 
 	if err := k.CheckVaults(ctx, req.Vaults); err != nil {
@@ -190,7 +191,7 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	consAddress, _ := sdk.ConsAddressFromHex(req.ConsensusAddress)
 	validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
 	if !found {
-		return types.ErrInvalidDKGCompletionRequest
+		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
 	}
 
 	pubKey, err := validator.ConsPubKey()
@@ -199,7 +200,7 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	}
 
 	if !types.VerifySignature(req.Signature, pubKey.Bytes(), req) {
-		return types.ErrInvalidDKGCompletionRequest
+		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid signature")
 	}
 
 	k.SetDKGCompletionRequest(ctx, req)
@@ -211,9 +212,10 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 func (k Keeper) CheckVaults(ctx sdk.Context, vaults []string) error {
 	currentVaults := k.GetParams(ctx).Vaults
 
-	if len(vaults) != len(currentVaults) {
-		return types.ErrInvalidDKGCompletionRequest
-	}
+	// commented out for now
+	// if len(vaults) != len(currentVaults) {
+	// 	return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid vaults")
+	// }
 
 	for _, v := range vaults {
 		if types.SelectVaultByAddress(currentVaults, v) != nil {
