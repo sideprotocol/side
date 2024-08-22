@@ -35,7 +35,7 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 		}
 
 		// update vaults
-		k.UpdateVaults(ctx, completionRequests[0].Vaults)
+		k.UpdateVaults(ctx, completionRequests[0].Vaults, req.VaultTypes)
 
 		// update status
 		req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_COMPLETED

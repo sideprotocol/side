@@ -104,6 +104,8 @@ message MsgInitiateDKG {
   repeated DKGParticipant participants = 2;
   // threshold required to perform DKG
   uint32 threshold = 3;
+  // asset types of vaults to be generated
+  repeated AssetType vault_types = 4;
 }
 
 // MsgInitiateDKGResponse defines the Msg/InitiateDKG response type.

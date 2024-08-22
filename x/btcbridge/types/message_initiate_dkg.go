@@ -53,5 +53,15 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		}
 	}
 
+	if len(m.VaultTypes) == 0 {
+		return sdkerrors.Wrap(ErrInvalidDKGParams, "vault types can not be empty")
+	}
+
+	for _, t := range m.VaultTypes {
+		if t == AssetType_ASSET_TYPE_UNSPECIFIED {
+			return sdkerrors.Wrap(ErrInvalidDKGParams, "invalid vault types")
+		}
+	}
+
 	return nil
 }
