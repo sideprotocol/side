@@ -218,6 +218,7 @@ func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG)
 		Id:           m.Keeper.GetNextDKGRequestID(ctx),
 		Participants: msg.Participants,
 		Threshold:    msg.Threshold,
+		VaultTypes:   msg.VaultTypes,
 		Expiration:   m.Keeper.GetDKGRequestExpirationTime(ctx),
 		Status:       types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING,
 	}

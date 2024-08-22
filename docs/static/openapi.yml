@@ -49737,6 +49737,23 @@ paths:
                       type: integer
                       format: int64
                       title: threshold required to perform DKG
+                    vault_types:
+                      type: array
+                      items:
+                        type: string
+                        enum:
+                          - ASSET_TYPE_UNSPECIFIED
+                          - ASSET_TYPE_BTC
+                          - ASSET_TYPE_BRC20
+                          - ASSET_TYPE_RUNES
+                        default: ASSET_TYPE_UNSPECIFIED
+                        description: |-
+                          - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
+                           - ASSET_TYPE_BTC: BTC
+                           - ASSET_TYPE_BRC20: BRC20: ordi, sats
+                           - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+                        title: AssetType defines the type of asset
+                      title: asset types of vaults to be generated
                     expiration:
                       type: string
                       format: date-time
@@ -49997,6 +50014,23 @@ paths:
                     type: integer
                     format: int64
                     title: threshold required to perform DKG
+                  vault_types:
+                    type: array
+                    items:
+                      type: string
+                      enum:
+                        - ASSET_TYPE_UNSPECIFIED
+                        - ASSET_TYPE_BTC
+                        - ASSET_TYPE_BRC20
+                        - ASSET_TYPE_RUNES
+                      default: ASSET_TYPE_UNSPECIFIED
+                      description: |-
+                        - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
+                         - ASSET_TYPE_BTC: BTC
+                         - ASSET_TYPE_BRC20: BRC20: ordi, sats
+                         - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+                      title: AssetType defines the type of asset
+                    title: asset types of vaults to be generated
                   expiration:
                     type: string
                     format: date-time
@@ -50251,6 +50285,23 @@ paths:
                       type: integer
                       format: int64
                       title: threshold required to perform DKG
+                    vault_types:
+                      type: array
+                      items:
+                        type: string
+                        enum:
+                          - ASSET_TYPE_UNSPECIFIED
+                          - ASSET_TYPE_BTC
+                          - ASSET_TYPE_BRC20
+                          - ASSET_TYPE_RUNES
+                        default: ASSET_TYPE_UNSPECIFIED
+                        description: |-
+                          - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
+                           - ASSET_TYPE_BTC: BTC
+                           - ASSET_TYPE_BRC20: BRC20: ordi, sats
+                           - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+                        title: AssetType defines the type of asset
+                      title: asset types of vaults to be generated
                     expiration:
                       type: string
                       format: date-time
@@ -50963,7 +51014,6 @@ paths:
                           type: string
                           title: public key of the vault
                         asset_type:
-                          title: the asset type supported by the vault
                           type: string
                           enum:
                             - ASSET_TYPE_UNSPECIFIED
@@ -50976,6 +51026,7 @@ paths:
                              - ASSET_TYPE_BTC: BTC
                              - ASSET_TYPE_BRC20: BRC20: ordi, sats
                              - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+                          title: AssetType defines the type of asset
                         version:
                           type: string
                           format: uint64
@@ -82525,6 +82576,23 @@ definitions:
         type: integer
         format: int64
         title: threshold required to perform DKG
+      vault_types:
+        type: array
+        items:
+          type: string
+          enum:
+            - ASSET_TYPE_UNSPECIFIED
+            - ASSET_TYPE_BTC
+            - ASSET_TYPE_BRC20
+            - ASSET_TYPE_RUNES
+          default: ASSET_TYPE_UNSPECIFIED
+          description: |-
+            - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
+             - ASSET_TYPE_BTC: BTC
+             - ASSET_TYPE_BRC20: BRC20: ordi, sats
+             - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+          title: AssetType defines the type of asset
+        title: asset types of vaults to be generated
       expiration:
         type: string
         format: date-time
@@ -82623,7 +82691,6 @@ definitions:
               type: string
               title: public key of the vault
             asset_type:
-              title: the asset type supported by the vault
               type: string
               enum:
                 - ASSET_TYPE_UNSPECIFIED
@@ -82636,6 +82703,7 @@ definitions:
                  - ASSET_TYPE_BTC: BTC
                  - ASSET_TYPE_BRC20: BRC20: ordi, sats
                  - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+              title: AssetType defines the type of asset
             version:
               type: string
               format: uint64
@@ -82756,6 +82824,23 @@ definitions:
               type: integer
               format: int64
               title: threshold required to perform DKG
+            vault_types:
+              type: array
+              items:
+                type: string
+                enum:
+                  - ASSET_TYPE_UNSPECIFIED
+                  - ASSET_TYPE_BTC
+                  - ASSET_TYPE_BRC20
+                  - ASSET_TYPE_RUNES
+                default: ASSET_TYPE_UNSPECIFIED
+                description: |-
+                  - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
+                   - ASSET_TYPE_BTC: BTC
+                   - ASSET_TYPE_BRC20: BRC20: ordi, sats
+                   - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+                title: AssetType defines the type of asset
+              title: asset types of vaults to be generated
             expiration:
               type: string
               format: date-time
@@ -82909,6 +82994,23 @@ definitions:
             type: integer
             format: int64
             title: threshold required to perform DKG
+          vault_types:
+            type: array
+            items:
+              type: string
+              enum:
+                - ASSET_TYPE_UNSPECIFIED
+                - ASSET_TYPE_BTC
+                - ASSET_TYPE_BRC20
+                - ASSET_TYPE_RUNES
+              default: ASSET_TYPE_UNSPECIFIED
+              description: |-
+                - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
+                 - ASSET_TYPE_BTC: BTC
+                 - ASSET_TYPE_BRC20: BRC20: ordi, sats
+                 - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+              title: AssetType defines the type of asset
+            title: asset types of vaults to be generated
           expiration:
             type: string
             format: date-time
@@ -82959,6 +83061,23 @@ definitions:
               type: integer
               format: int64
               title: threshold required to perform DKG
+            vault_types:
+              type: array
+              items:
+                type: string
+                enum:
+                  - ASSET_TYPE_UNSPECIFIED
+                  - ASSET_TYPE_BTC
+                  - ASSET_TYPE_BRC20
+                  - ASSET_TYPE_RUNES
+                default: ASSET_TYPE_UNSPECIFIED
+                description: |-
+                  - ASSET_TYPE_UNSPECIFIED: Unspecified asset type
+                   - ASSET_TYPE_BTC: BTC
+                   - ASSET_TYPE_BRC20: BRC20: ordi, sats
+                   - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+                title: AssetType defines the type of asset
+              title: asset types of vaults to be generated
             expiration:
               type: string
               format: date-time
@@ -83011,7 +83130,6 @@ definitions:
                   type: string
                   title: public key of the vault
                 asset_type:
-                  title: the asset type supported by the vault
                   type: string
                   enum:
                     - ASSET_TYPE_UNSPECIFIED
@@ -83024,6 +83142,7 @@ definitions:
                      - ASSET_TYPE_BTC: BTC
                      - ASSET_TYPE_BRC20: BRC20: ordi, sats
                      - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+                  title: AssetType defines the type of asset
                 version:
                   type: string
                   format: uint64
@@ -83396,7 +83515,6 @@ definitions:
         type: string
         title: public key of the vault
       asset_type:
-        title: the asset type supported by the vault
         type: string
         enum:
           - ASSET_TYPE_UNSPECIFIED
@@ -83409,6 +83527,7 @@ definitions:
            - ASSET_TYPE_BTC: BTC
            - ASSET_TYPE_BRC20: BRC20: ordi, sats
            - ASSET_TYPE_RUNES: RUNE: dog•go•to•the•moon
+        title: AssetType defines the type of asset
       version:
         type: string
         format: uint64

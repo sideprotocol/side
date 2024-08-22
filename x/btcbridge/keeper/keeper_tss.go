@@ -184,7 +184,7 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "dkg request expired")
 	}
 
-	if err := k.CheckVaults(ctx, req.Vaults); err != nil {
+	if err := k.CheckVaults(ctx, req.Vaults, dkgReq.VaultTypes); err != nil {
 		return err
 	}
 
@@ -209,13 +209,12 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 }
 
 // CheckVaults checks if the provided vaults are valid
-func (k Keeper) CheckVaults(ctx sdk.Context, vaults []string) error {
+func (k Keeper) CheckVaults(ctx sdk.Context, vaults []string, vaultTypes []types.AssetType) error {
 	currentVaults := k.GetParams(ctx).Vaults
 
-	// commented out for now
-	// if len(vaults) != len(currentVaults) {
-	// 	return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid vaults")
-	// }
+	if len(vaults) != len(vaultTypes) {
+		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid vaults")
+	}
 
 	for _, v := range vaults {
 		if types.SelectVaultByAddress(currentVaults, v) != nil {
@@ -227,14 +226,17 @@ func (k Keeper) CheckVaults(ctx sdk.Context, vaults []string) error {
 }
 
 // UpdateVaults updates the asset vaults of the btc bridge
-func (k Keeper) UpdateVaults(ctx sdk.Context, newVaults []string) {
+// Assume that vaults are validated and match vault types
+func (k Keeper) UpdateVaults(ctx sdk.Context, newVaults []string, vaultTypes []types.AssetType) {
 	params := k.GetParams(ctx)
+
+	version := k.IncreaseVaultVersion(ctx)
 
 	for i, v := range newVaults {
 		newVault := &types.Vault{
 			Address:   v,
-			AssetType: params.Vaults[i].AssetType,
-			Version:   k.IncreaseVaultVersion(ctx),
+			AssetType: vaultTypes[i],
+			Version:   version,
 		}
 
 		params.Vaults = append(params.Vaults, newVault)

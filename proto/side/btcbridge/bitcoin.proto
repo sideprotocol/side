@@ -113,10 +113,12 @@ message DKGRequest {
   repeated DKGParticipant participants = 2;
   // threshold required to perform DKG
   uint32 threshold = 3;
+  // asset types of vaults to be generated
+  repeated AssetType vault_types = 4;
   // expiration time
-  google.protobuf.Timestamp expiration = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  google.protobuf.Timestamp expiration = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
   // status
-  DKGRequestStatus status = 5;
+  DKGRequestStatus status = 6;
 }
 
 // DKG Completion Request
