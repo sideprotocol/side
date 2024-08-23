@@ -5,8 +5,6 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -18,11 +16,6 @@ const (
 
 	// allowed number of edicts in the runes payload for the runes deposit transaction
 	RunesEdictNum = 1
-)
-
-var (
-	// withdrawal identifier which is used in the OP_RETURN script of the withdrawal tx
-	WithdrawIdentifier = []byte("side")
 )
 
 // ExtractRecipientAddr extracts the recipient address for minting voucher token by the type of the asset to be deposited
@@ -155,21 +148,4 @@ func CheckRunesDepositTransaction(tx *wire.MsgTx, vaults []*Vault) (*Edict, erro
 	}
 
 	return edicts[0], nil
-}
-
-// BuildWithdrawScript builds the OP_RETURN script using the withdrawal sequence
-// Panic if any error occurred (not expected)
-func BuildWithdrawScript(sequence uint64) []byte {
-	scriptBuilder := txscript.NewScriptBuilder()
-
-	scriptBuilder.AddOp(txscript.OP_RETURN)
-	scriptBuilder.AddData(WithdrawIdentifier)
-	scriptBuilder.AddData(sdk.Uint64ToBigEndian(sequence))
-
-	script, err := scriptBuilder.Script()
-	if err != nil {
-		panic(err)
-	}
-
-	return script
 }

@@ -26,7 +26,7 @@ const (
 
 // BuildPsbt builds a bitcoin psbt from the given params.
 // Assume that the utxo script type is witness.
-func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRate int64, change string, sequence uint64) (*psbt.Packet, []*UTXO, *UTXO, error) {
+func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRate int64, change string) (*psbt.Packet, []*UTXO, *UTXO, error) {
 	chaincfg := sdk.GetConfig().GetBtcChainCfg()
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
@@ -45,7 +45,6 @@ func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRat
 	}
 
 	txOuts := make([]*wire.TxOut, 0)
-	txOuts = append(txOuts, wire.NewTxOut(0, BuildWithdrawScript(sequence)))
 	txOuts = append(txOuts, wire.NewTxOut(amount, recipientPkScript))
 
 	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction([]*UTXO{}, txOuts, utxoIterator, feeRate, changeAddr)
@@ -68,7 +67,7 @@ func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRat
 
 // BuildRunesPsbt builds a bitcoin psbt for runes edict from the given params.
 // Assume that the utxo script type is witness.
-func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runesChangeAmount uint128.Uint128, runesChange string, change string, sequence uint64) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
+func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runesChangeAmount uint128.Uint128, runesChange string, change string) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
 	chaincfg := sdk.GetConfig().GetBtcChainCfg()
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
@@ -97,17 +96,16 @@ func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient s
 	}
 
 	txOuts := make([]*wire.TxOut, 0)
-	txOuts = append(txOuts, wire.NewTxOut(0, BuildWithdrawScript(sequence)))
 
 	// fill the runes protocol script with empty output script first
 	txOuts = append(txOuts, wire.NewTxOut(0, []byte{}))
 
 	var runesChangeUTXO *UTXO
-	edictOutputIndex := uint32(len(txOuts))
+	edictOutputIndex := uint32(1)
 
 	if runesChangeAmount.Cmp64(0) > 0 {
 		// we can guarantee that every runes UTXO only includes a single rune by the deposit policy
-		runesChangeUTXO = GetRunesChangeUTXO(runeId, runesChangeAmount, runesChange, runesChangePkScript, uint32(len(txOuts)))
+		runesChangeUTXO = GetRunesChangeUTXO(runeId, runesChangeAmount, runesChange, runesChangePkScript, 1)
 
 		// allocate the remaining runes to the first non-OP_RETURN output by default
 		txOuts = append(txOuts, wire.NewTxOut(RunesOutValue, runesChangePkScript))
