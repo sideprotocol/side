@@ -3,6 +3,7 @@ package types
 import (
 	"lukechampine.com/uint128"
 
+	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
@@ -19,6 +20,9 @@ const (
 
 	// default minimum relay fee
 	MinRelayFee = 1000
+
+	// default maximum allowed transaction weight
+	MaxTransactionWeight = 400000
 
 	// default sig hash type
 	DefaultSigHashType = txscript.SigHashDefault
@@ -185,6 +189,10 @@ func BuildUnsignedTransaction(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOIt
 		return nil, nil, nil, err
 	}
 
+	if err := CheckTransactionWeight(tx); err != nil {
+		return nil, nil, nil, err
+	}
+
 	var changeUTXO *UTXO
 	if len(tx.TxOut) > len(txOuts) {
 		changeUTXO = GetChangeUTXO(tx, change.EncodeAddress())
@@ -339,6 +347,16 @@ func CheckOutputAmount(address string, amount int64) error {
 
 	if IsDustOut(&wire.TxOut{Value: amount, PkScript: pkScript}) {
 		return ErrDustOutput
+	}
+
+	return nil
+}
+
+// CheckTransactionWeight checks if the weight of the given tx exceeds the allowed maximum weight
+func CheckTransactionWeight(tx *wire.MsgTx) error {
+	weight := blockchain.GetTransactionWeight(btcutil.NewTx(tx))
+	if weight > MaxTransactionWeight {
+		return ErrMaxTransactionWeightExceeded
 	}
 
 	return nil
