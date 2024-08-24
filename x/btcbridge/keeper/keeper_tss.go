@@ -111,7 +111,7 @@ func (k Keeper) GetDKGRequestExpirationTime(ctx sdk.Context) *time.Time {
 	creationTime := ctx.BlockTime()
 	timeout := k.GetParams(ctx).TssParams.DkgTimeoutPeriod
 
-	expiration := creationTime.Add(*timeout)
+	expiration := creationTime.Add(timeout)
 
 	return &expiration
 }

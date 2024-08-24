@@ -328,30 +328,6 @@ func GetTxVirtualSize(tx *wire.MsgTx, utxos []*UTXO) int64 {
 	return mempool.GetTxVirtualSize(btcutil.NewTx(newTx))
 }
 
-// IsDustOut returns true if the given output is dust, false otherwise
-func IsDustOut(out *wire.TxOut) bool {
-	return !IsOpReturnOutput(out) && mempool.IsDust(out, MinRelayFee)
-}
-
-// CheckOutputAmount checks if the given output amount is dust
-func CheckOutputAmount(address string, amount int64) error {
-	addr, err := btcutil.DecodeAddress(address, sdk.GetConfig().GetBtcChainCfg())
-	if err != nil {
-		return err
-	}
-
-	pkScript, err := txscript.PayToAddrScript(addr)
-	if err != nil {
-		return err
-	}
-
-	if IsDustOut(&wire.TxOut{Value: amount, PkScript: pkScript}) {
-		return ErrDustOutput
-	}
-
-	return nil
-}
-
 // CheckTransactionWeight checks if the weight of the given tx exceeds the allowed maximum weight
 func CheckTransactionWeight(tx *wire.MsgTx) error {
 	weight := blockchain.GetTransactionWeight(btcutil.NewTx(tx))
@@ -360,6 +336,11 @@ func CheckTransactionWeight(tx *wire.MsgTx) error {
 	}
 
 	return nil
+}
+
+// IsDustOut returns true if the given output is dust, false otherwise
+func IsDustOut(out *wire.TxOut) bool {
+	return !IsOpReturnOutput(out) && mempool.IsDust(out, MinRelayFee)
 }
 
 // IsOpReturnOutput returns true if the script of the given out starts with OP_RETURN

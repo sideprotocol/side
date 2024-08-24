@@ -292,6 +292,30 @@ func (k Keeper) spendUTXOs(ctx sdk.Context, uTx *btcutil.Tx) {
 	}
 }
 
+// handleWithdrawProtocolFee performs the protocol fee handling and returns the actual withdrawal amount
+func (k Keeper) handleWithdrawProtocolFee(ctx sdk.Context, sender string, amount sdk.Coin) (sdk.Coin, error) {
+	params := k.GetParams(ctx)
+
+	protocolFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.ProtocolFees.WithdrawFee)
+	protocoFeeCollector := sdk.MustAccAddressFromBech32(params.ProtocolFees.Collector)
+
+	var err error
+	withdrawAmount := amount
+
+	if amount.Denom == params.BtcVoucherDenom {
+		withdrawAmount, err = amount.SafeSub(protocolFee)
+		if err != nil || withdrawAmount.Amount.Int64() < params.ProtocolLimits.BtcMinWithdraw || withdrawAmount.Amount.Int64() > params.ProtocolLimits.BtcMaxWithdraw {
+			return sdk.Coin{}, types.ErrInvalidWithdrawAmount
+		}
+	}
+
+	if err := k.bankKeeper.SendCoins(ctx, sdk.MustAccAddressFromBech32(sender), protocoFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
+		return sdk.Coin{}, err
+	}
+
+	return withdrawAmount, nil
+}
+
 // handleBtcTxFee performs the network fee handling for the btc withdrawal tx
 // Make sure that the given psbt is valid
 // There are at most two outputs and the change output is the last one if any
@@ -342,6 +366,11 @@ func (k Keeper) handleRunesTxFee(ctx sdk.Context, p *psbt.Packet, recipient stri
 	k.lockAsset(ctx, p.UnsignedTx.TxHash().String(), feeCoin)
 
 	return nil
+}
+
+// ProtocolWithdrawFeeEnabled returns true if the protocol fee is required for withdrawal, false otherwise
+func (k Keeper) ProtocolWithdrawFeeEnabled(ctx sdk.Context) bool {
+	return k.GetParams(ctx).ProtocolFees.WithdrawFee > 0
 }
 
 // lockAsset locks the given asset by the tx hash

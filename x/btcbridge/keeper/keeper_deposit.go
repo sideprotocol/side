@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
@@ -30,6 +31,13 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 
 // Mint performs the minting operation of the voucher token
 func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height uint64) (btcutil.Address, error) {
+	hash := tx.Hash().String()
+	if k.existsInHistory(ctx, hash) {
+		return nil, types.ErrTransactionAlreadyMinted
+	}
+
+	k.addToMintHistory(ctx, hash)
+
 	params := k.GetParams(ctx)
 	chainCfg := sdk.GetConfig().GetBtcChainCfg()
 
@@ -49,70 +57,33 @@ func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height
 		return nil, err
 	}
 
-	// mint voucher token if the receiver is a vault address
-	for i, out := range tx.MsgTx().TxOut {
-		if types.IsOpReturnOutput(out) {
-			continue
-		}
-
-		// check if the output is a valid address
-		pks, err := txscript.ParsePkScript(out.PkScript)
-		if err != nil {
-			return nil, err
-		}
-		addr, err := pks.Address(chainCfg)
+	if !isRunes {
+		out, vout, vault, err := k.getOutputForMintBTC(ctx, tx.MsgTx(), chainCfg)
 		if err != nil {
 			return nil, err
 		}
 
-		// check if the receiver is one of the vault addresses
-		vault := types.SelectVaultByAddress(params.Vaults, addr.EncodeAddress())
-		if vault == nil {
-			continue
+		if err := k.mintBTC(ctx, tx, height, recipient.EncodeAddress(), vault, out, vout, params.BtcVoucherDenom); err != nil {
+			return nil, err
+		}
+	} else {
+		outs, vouts, vaults, err := k.getOutputsForMintRunes(ctx, tx.MsgTx(), edict, chainCfg)
+		if err != nil {
+			return nil, err
 		}
 
-		// mint the voucher token by asset type
-		// skip if the asset type of the sender address is unspecified
-		switch vault.AssetType {
-		case types.AssetType_ASSET_TYPE_BTC:
-			err := k.mintBTC(ctx, tx, height, recipient.EncodeAddress(), vault, out, i, params.BtcVoucherDenom)
-			if err != nil {
-				return nil, err
-			}
-
-		case types.AssetType_ASSET_TYPE_RUNES:
-			if isRunes && edict.Output == uint32(i) {
-				if err := k.mintRunes(ctx, tx, height, recipient.EncodeAddress(), vault, out, i, edict.Id, edict.Amount); err != nil {
-					return nil, err
-				}
-			}
+		if err := k.mintRunes(ctx, tx, height, recipient.EncodeAddress(), vaults, outs, vouts, edict.Id, edict.Amount); err != nil {
+			return nil, err
 		}
 	}
 
 	return recipient, nil
 }
 
-func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, sender string, vault *types.Vault, out *wire.TxOut, vout int, denom string) error {
-	// save the hash of the transaction to prevent double minting
-	hash := tx.Hash().String()
-	if k.existsInHistory(ctx, hash) {
-		return types.ErrTransactionAlreadyMinted
-	}
-	k.addToMintHistory(ctx, hash)
-
-	params := k.GetParams(ctx)
-
-	protocolFee := sdk.NewInt64Coin(denom, params.ProtocolFees.DepositFee)
-	protocolFeeCollector := sdk.MustAccAddressFromBech32(params.ProtocolFees.Collector)
-
+func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vault string, out *wire.TxOut, vout int, denom string) error {
 	amount := sdk.NewInt64Coin(denom, out.Value)
 
-	depositAmount := amount.Sub(protocolFee)
-	if depositAmount.Amount.Int64() < params.ProtocolLimits.BtcMinDeposit {
-		return types.ErrInvalidDepositAmount
-	}
-
-	receipient, err := sdk.AccAddressFromBech32(sender)
+	recipientAddr, err := sdk.AccAddressFromBech32(recipient)
 	if err != nil {
 		return err
 	}
@@ -121,21 +92,17 @@ func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, sender s
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receipient, sdk.NewCoins(depositAmount)); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, protocolFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
+	if err := k.mintBTCWithProtocolFee(ctx, recipientAddr, amount); err != nil {
 		return err
 	}
 
 	utxo := types.UTXO{
-		Txid:         hash,
+		Txid:         tx.Hash().String(),
 		Vout:         uint64(vout),
 		Amount:       uint64(out.Value),
 		PubKeyScript: out.PkScript,
 		Height:       height,
-		Address:      vault.Address,
+		Address:      vault,
 		IsLocked:     false,
 	}
 
@@ -144,17 +111,10 @@ func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, sender s
 	return nil
 }
 
-func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vault *types.Vault, out *wire.TxOut, vout int, id *types.RuneId, amount string) error {
-	// save the hash of the transaction to prevent double minting
-	hash := tx.Hash().String()
-	if k.existsInHistory(ctx, hash) {
-		return types.ErrTransactionAlreadyMinted
-	}
-	k.addToMintHistory(ctx, hash)
-
+func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vaults []string, outs []*wire.TxOut, vouts []int, id *types.RuneId, amount string) error {
 	coins := sdk.NewCoins(sdk.NewCoin(id.Denom(), sdk.NewIntFromBigInt(types.RuneAmountFromString(amount).Big())))
 
-	receipientAddr, err := sdk.AccAddressFromBech32(recipient)
+	recipientAddr, err := sdk.AccAddressFromBech32(recipient)
 	if err != nil {
 		return err
 	}
@@ -163,17 +123,23 @@ func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipi
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receipientAddr, coins); err != nil {
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipientAddr, coins); err != nil {
 		return err
 	}
 
+	if k.ProtocolDepositFeeEnabled(ctx) {
+		if err := k.handleRunesProtocolFee(ctx, tx.Hash().String(), height, outs[1], vouts[1], vaults[1]); err != nil {
+			return err
+		}
+	}
+
 	utxo := types.UTXO{
-		Txid:         hash,
-		Vout:         uint64(vout),
-		Amount:       uint64(out.Value),
-		PubKeyScript: out.PkScript,
+		Txid:         tx.Hash().String(),
+		Vout:         uint64(vouts[0]),
+		Amount:       uint64(outs[0].Value),
+		PubKeyScript: outs[0].PkScript,
 		Height:       height,
-		Address:      vault.Address,
+		Address:      vaults[0],
 		IsLocked:     false,
 		Runes: []*types.RuneBalance{{
 			Id:     id.ToString(),
@@ -184,6 +150,162 @@ func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipi
 	k.saveUTXO(ctx, &utxo)
 
 	return nil
+}
+
+// mintBTCWithProtocolFee performs btc minting along with the protocol fee handling
+func (k Keeper) mintBTCWithProtocolFee(ctx sdk.Context, recipient sdk.AccAddress, amount sdk.Coin) error {
+	params := k.GetParams(ctx)
+
+	var err error
+	depositAmount := amount
+
+	if k.ProtocolDepositFeeEnabled(ctx) {
+		protocolFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.ProtocolFees.DepositFee)
+		protocolFeeCollector := sdk.MustAccAddressFromBech32(params.ProtocolFees.Collector)
+
+		depositAmount, err = depositAmount.SafeSub(protocolFee)
+		if err != nil {
+			return err
+		}
+
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, protocolFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
+			return err
+		}
+	}
+
+	if depositAmount.Amount.Int64() < params.ProtocolLimits.BtcMinDeposit {
+		return types.ErrInvalidDepositAmount
+	}
+
+	return k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(depositAmount))
+}
+
+// handleRunesProtocolFee performs the protocol fee handling for runes deposit
+// Assume that the protocol deposit fee is enabled
+func (k Keeper) handleRunesProtocolFee(ctx sdk.Context, txHash string, height uint64, btcOut *wire.TxOut, btcVout int, btcVault string) error {
+	params := k.GetParams(ctx)
+
+	btcAmount := sdk.NewInt64Coin(params.BtcVoucherDenom, btcOut.Value)
+
+	protocolFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.ProtocolFees.DepositFee)
+	protocolFeeCollector := sdk.MustAccAddressFromBech32(params.ProtocolFees.Collector)
+
+	if btcAmount.IsLT(protocolFee) {
+		return types.ErrInvalidDepositAmount
+	}
+
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(btcAmount)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, protocolFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
+		return err
+	}
+
+	utxo := types.UTXO{
+		Txid:         txHash,
+		Vout:         uint64(btcVout),
+		Amount:       uint64(btcOut.Value),
+		PubKeyScript: btcOut.PkScript,
+		Height:       height,
+		Address:      btcVault,
+		IsLocked:     false,
+	}
+
+	k.saveUTXO(ctx, &utxo)
+
+	return nil
+}
+
+func (k Keeper) getOutputForMintBTC(ctx sdk.Context, tx *wire.MsgTx, chainCfg *chaincfg.Params) (*wire.TxOut, int, string, error) {
+	params := k.GetParams(ctx)
+
+	for i, out := range tx.TxOut {
+		if types.IsOpReturnOutput(out) {
+			continue
+		}
+
+		// check if the output is a valid address
+		pks, err := txscript.ParsePkScript(out.PkScript)
+		if err != nil {
+			return nil, 0, "", err
+		}
+
+		addr, err := pks.Address(chainCfg)
+		if err != nil {
+			return nil, 0, "", err
+		}
+
+		// check if the address is one of the vault addresses
+		vault := types.SelectVaultByAddress(params.Vaults, addr.EncodeAddress())
+		if vault == nil {
+			continue
+		}
+
+		if vault.AssetType == types.AssetType_ASSET_TYPE_BTC {
+			return out, i, vault.Address, nil
+		}
+	}
+
+	return nil, 0, "", types.ErrInvalidDepositTransaction
+}
+
+func (k Keeper) getOutputsForMintRunes(ctx sdk.Context, tx *wire.MsgTx, edict *types.Edict, chainCfg *chaincfg.Params) ([]*wire.TxOut, []int, []string, error) {
+	params := k.GetParams(ctx)
+
+	outs := make([]*wire.TxOut, 2)
+	vouts := make([]int, 2)
+	vaults := make([]string, 2)
+
+	for i, out := range tx.TxOut {
+		if types.IsOpReturnOutput(out) {
+			continue
+		}
+
+		// check if the output is a valid address
+		pks, err := txscript.ParsePkScript(out.PkScript)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+
+		addr, err := pks.Address(chainCfg)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+
+		// check if the address is one of the vault addresses
+		vault := types.SelectVaultByAddress(params.Vaults, addr.EncodeAddress())
+		if vault == nil {
+			continue
+		}
+
+		switch vault.AssetType {
+		case types.AssetType_ASSET_TYPE_RUNES:
+			outs[0] = out
+			vouts[0] = i
+			vaults[0] = vault.Address
+
+		case types.AssetType_ASSET_TYPE_BTC:
+			outs[1] = out
+			vouts[1] = i
+			vaults[1] = vault.Address
+		}
+	}
+
+	if outs[0] == nil || vouts[0] != int(edict.Output) {
+		return nil, nil, nil, types.ErrInvalidDepositTransaction
+	}
+
+	if k.ProtocolDepositFeeEnabled(ctx) && outs[1] == nil {
+		return nil, nil, nil, types.ErrInvalidDepositTransaction
+	}
+
+	return outs, vouts, vaults, nil
+}
+
+// ProtocolDepositFeeEnabled returns true if the protocol fee is required for deposit, false otherwise
+func (k Keeper) ProtocolDepositFeeEnabled(ctx sdk.Context) bool {
+	return k.GetParams(ctx).ProtocolFees.DepositFee > 0
 }
 
 func (k Keeper) existsInHistory(ctx sdk.Context, txHash string) bool {

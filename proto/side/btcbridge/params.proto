@@ -18,15 +18,11 @@ message Params {
   // Asset vaults
   repeated Vault vaults = 4;
   // Protocol limitations
-  ProtocolLimits protocol_limits = 5;
+  ProtocolLimits protocol_limits = 5 [(gogoproto.nullable) = false];
   // Protocol fees
-  ProtocolFees protocol_fees = 6;
-  // Network fee for withdrawal to bitcoin
-  int64 network_fee = 7;
-  // Reward epoch for relayer and TSS participant incentivization
-  google.protobuf.Duration reward_epoch = 8 [(gogoproto.stdduration) = true];
+  ProtocolFees protocol_fees = 6 [(gogoproto.nullable) = false];
   // TSS params
-  TSSParams tss_params = 9;
+  TSSParams tss_params = 7 [(gogoproto.nullable) = false];
 }
 
 // AssetType defines the type of asset
@@ -55,19 +51,19 @@ message Vault {
 
 // ProtocolLimits defines the params related to the the protocol limitations
 message ProtocolLimits {
-  // The minimum deposit amount for btc
+  // The minimum deposit amount for btc in sat
   int64 btc_min_deposit = 1;
-  // The minimum withdrawal amount for btc
+  // The minimum withdrawal amount for btc in sat
   int64 btc_min_withdraw = 2;
-  // The maximum withdrawal amount for btc
+  // The maximum withdrawal amount for btc in sat
   int64 btc_max_withdraw = 3;
 }
 
 // ProtocolFees defines the params related to the protocol fees
 message ProtocolFees {
-  // Protocol fee amount for deposit
+  // Protocol fee amount for deposit in sat
   int64 deposit_fee = 1;
-  // Protocol fee amount for withdrawal
+  // Protocol fee amount for withdrawal in sat
   int64 withdraw_fee = 2;
   // Protocol fee collector
   string collector = 3;
@@ -75,8 +71,8 @@ message ProtocolFees {
 
 // TSSParams defines the params related to TSS
 message TSSParams {
-  // timeout duration for DKG request
-  google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.stdduration) = true];
+  // Timeout duration for DKG request
+  google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
   // Transition period after which TSS participants update process is completed
-  google.protobuf.Duration participant_update_transition_period = 2 [(gogoproto.stdduration) = true];
+  google.protobuf.Duration participant_update_transition_period = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }
