@@ -51040,15 +51040,15 @@ paths:
                       btc_min_deposit:
                         type: string
                         format: int64
-                        title: The minimum deposit amount for btc
+                        title: The minimum deposit amount for btc in sat
                       btc_min_withdraw:
                         type: string
                         format: int64
-                        title: The minimum withdrawal amount for btc
+                        title: The minimum withdrawal amount for btc in sat
                       btc_max_withdraw:
                         type: string
                         format: int64
-                        title: The maximum withdrawal amount for btc
+                        title: The maximum withdrawal amount for btc in sat
                   protocol_fees:
                     title: Protocol fees
                     type: object
@@ -51056,30 +51056,21 @@ paths:
                       deposit_fee:
                         type: string
                         format: int64
-                        title: Protocol fee amount for deposit
+                        title: Protocol fee amount for deposit in sat
                       withdraw_fee:
                         type: string
                         format: int64
-                        title: Protocol fee amount for withdrawal
+                        title: Protocol fee amount for withdrawal in sat
                       collector:
                         type: string
                         title: Protocol fee collector
-                  network_fee:
-                    type: string
-                    format: int64
-                    title: Network fee for withdrawal to bitcoin
-                  reward_epoch:
-                    type: string
-                    title: >-
-                      Reward epoch for relayer and TSS participant
-                      incentivization
                   tss_params:
                     title: TSS params
                     type: object
                     properties:
                       dkg_timeout_period:
                         type: string
-                        title: timeout duration for DKG request
+                        title: Timeout duration for DKG request
                       participant_update_transition_period:
                         type: string
                         title: >-
@@ -82717,15 +82708,15 @@ definitions:
           btc_min_deposit:
             type: string
             format: int64
-            title: The minimum deposit amount for btc
+            title: The minimum deposit amount for btc in sat
           btc_min_withdraw:
             type: string
             format: int64
-            title: The minimum withdrawal amount for btc
+            title: The minimum withdrawal amount for btc in sat
           btc_max_withdraw:
             type: string
             format: int64
-            title: The maximum withdrawal amount for btc
+            title: The maximum withdrawal amount for btc in sat
       protocol_fees:
         title: Protocol fees
         type: object
@@ -82733,28 +82724,21 @@ definitions:
           deposit_fee:
             type: string
             format: int64
-            title: Protocol fee amount for deposit
+            title: Protocol fee amount for deposit in sat
           withdraw_fee:
             type: string
             format: int64
-            title: Protocol fee amount for withdrawal
+            title: Protocol fee amount for withdrawal in sat
           collector:
             type: string
             title: Protocol fee collector
-      network_fee:
-        type: string
-        format: int64
-        title: Network fee for withdrawal to bitcoin
-      reward_epoch:
-        type: string
-        title: Reward epoch for relayer and TSS participant incentivization
       tss_params:
         title: TSS params
         type: object
         properties:
           dkg_timeout_period:
             type: string
-            title: timeout duration for DKG request
+            title: Timeout duration for DKG request
           participant_update_transition_period:
             type: string
             title: >-
@@ -82767,11 +82751,11 @@ definitions:
       deposit_fee:
         type: string
         format: int64
-        title: Protocol fee amount for deposit
+        title: Protocol fee amount for deposit in sat
       withdraw_fee:
         type: string
         format: int64
-        title: Protocol fee amount for withdrawal
+        title: Protocol fee amount for withdrawal in sat
       collector:
         type: string
         title: Protocol fee collector
@@ -82782,15 +82766,15 @@ definitions:
       btc_min_deposit:
         type: string
         format: int64
-        title: The minimum deposit amount for btc
+        title: The minimum deposit amount for btc in sat
       btc_min_withdraw:
         type: string
         format: int64
-        title: The minimum withdrawal amount for btc
+        title: The minimum withdrawal amount for btc in sat
       btc_max_withdraw:
         type: string
         format: int64
-        title: The maximum withdrawal amount for btc
+        title: The maximum withdrawal amount for btc in sat
     title: ProtocolLimits defines the params related to the the protocol limitations
   side.btcbridge.QueryAllDKGRequestsResponse:
     type: object
@@ -83156,15 +83140,15 @@ definitions:
               btc_min_deposit:
                 type: string
                 format: int64
-                title: The minimum deposit amount for btc
+                title: The minimum deposit amount for btc in sat
               btc_min_withdraw:
                 type: string
                 format: int64
-                title: The minimum withdrawal amount for btc
+                title: The minimum withdrawal amount for btc in sat
               btc_max_withdraw:
                 type: string
                 format: int64
-                title: The maximum withdrawal amount for btc
+                title: The maximum withdrawal amount for btc in sat
           protocol_fees:
             title: Protocol fees
             type: object
@@ -83172,28 +83156,21 @@ definitions:
               deposit_fee:
                 type: string
                 format: int64
-                title: Protocol fee amount for deposit
+                title: Protocol fee amount for deposit in sat
               withdraw_fee:
                 type: string
                 format: int64
-                title: Protocol fee amount for withdrawal
+                title: Protocol fee amount for withdrawal in sat
               collector:
                 type: string
                 title: Protocol fee collector
-          network_fee:
-            type: string
-            format: int64
-            title: Network fee for withdrawal to bitcoin
-          reward_epoch:
-            type: string
-            title: Reward epoch for relayer and TSS participant incentivization
           tss_params:
             title: TSS params
             type: object
             properties:
               dkg_timeout_period:
                 type: string
-                title: timeout duration for DKG request
+                title: Timeout duration for DKG request
               participant_update_transition_period:
                 type: string
                 title: >-
@@ -83463,7 +83440,7 @@ definitions:
     properties:
       dkg_timeout_period:
         type: string
-        title: timeout duration for DKG request
+        title: Timeout duration for DKG request
       participant_update_transition_period:
         type: string
         title: >-

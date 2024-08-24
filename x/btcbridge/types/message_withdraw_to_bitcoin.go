@@ -45,7 +45,7 @@ func (msg *MsgWithdrawToBitcoin) GetSignBytes() []byte {
 func (msg *MsgWithdrawToBitcoin) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return sdkerrors.Wrapf(err, "invalid Sender address (%s)", err)
+		return sdkerrors.Wrapf(err, "invalid sender address (%s)", err)
 	}
 
 	_, err = sdk.ParseCoinNormalized(msg.Amount)

@@ -11,9 +11,7 @@ import (
 
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
-	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
@@ -53,9 +51,9 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.runesVault, _ = bech32.Encode(chainCfg.Bech32HRPSegwit, segwit.GenPrivKey().PubKey().Address())
 	suite.sender, _ = bech32.Encode(chainCfg.Bech32HRPSegwit, segwit.GenPrivKey().PubKey().Address())
 
-	suite.btcVaultPkScript = MustPkScriptFromAddress(suite.btcVault, chainCfg)
-	suite.runesVaultPkScript = MustPkScriptFromAddress(suite.runesVault, chainCfg)
-	suite.senderPkScript = MustPkScriptFromAddress(suite.sender, chainCfg)
+	suite.btcVaultPkScript = types.MustPkScriptFromAddress(suite.btcVault)
+	suite.runesVaultPkScript = types.MustPkScriptFromAddress(suite.runesVault)
+	suite.senderPkScript = types.MustPkScriptFromAddress(suite.sender)
 
 	suite.setupParams(suite.btcVault, suite.runesVault)
 }
@@ -211,18 +209,4 @@ func (suite *KeeperTestSuite) TestWithdrawRunes() {
 	suite.Equal(suite.runesVaultPkScript, p.UnsignedTx.TxOut[1].PkScript, "the second output should be runes change output")
 	suite.Equal(suite.senderPkScript, p.UnsignedTx.TxOut[2].PkScript, "the third output should be sender output")
 	suite.Equal(suite.btcVaultPkScript, p.UnsignedTx.TxOut[3].PkScript, "the fouth output should be btc change output")
-}
-
-func MustPkScriptFromAddress(addr string, chainCfg *chaincfg.Params) []byte {
-	address, err := btcutil.DecodeAddress(addr, chainCfg)
-	if err != nil {
-		panic(err)
-	}
-
-	pkScript, err := txscript.PayToAddrScript(address)
-	if err != nil {
-		panic(err)
-	}
-
-	return pkScript
 }

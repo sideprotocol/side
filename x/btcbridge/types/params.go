@@ -14,9 +14,6 @@ import (
 )
 
 var (
-	// default reward epoch
-	DefaultRewardEpoch = time.Duration(1209600) * time.Second // 14 days
-
 	// default DKG timeout period
 	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
 
@@ -30,32 +27,20 @@ func NewParams() Params {
 		Confirmations:           1,
 		MaxAcceptableBlockDepth: 100,
 		BtcVoucherDenom:         "sat",
-		Vaults: []*Vault{{
-			Address:   "",
-			PubKey:    "",
-			AssetType: AssetType_ASSET_TYPE_BTC,
-			Version:   0,
-		}, {
-			Address:   "",
-			PubKey:    "",
-			AssetType: AssetType_ASSET_TYPE_RUNES,
-			Version:   0,
-		}},
-		ProtocolLimits: &ProtocolLimits{
+		Vaults:                  []*Vault{},
+		ProtocolLimits: ProtocolLimits{
 			BtcMinDeposit:  50000,     // 0.0005 BTC
 			BtcMinWithdraw: 30000,     // 0.0003 BTC
 			BtcMaxWithdraw: 500000000, // 5 BTC
 		},
-		ProtocolFees: &ProtocolFees{
+		ProtocolFees: ProtocolFees{
 			DepositFee:  8000,  // 0.00008 BTC
 			WithdrawFee: 12000, // 0.00012 BTC
 			Collector:   authtypes.NewModuleAddress(ModuleName).String(),
 		},
-		NetworkFee:  8000, // 0.00008 BTC
-		RewardEpoch: &DefaultRewardEpoch,
-		TssParams: &TSSParams{
-			DkgTimeoutPeriod:                  &DefaultDKGTimeoutPeriod,
-			ParticipantUpdateTransitionPeriod: &DefaultTSSParticipantUpdateTransitionPeriod,
+		TssParams: TSSParams{
+			DkgTimeoutPeriod:                  DefaultDKGTimeoutPeriod,
+			ParticipantUpdateTransitionPeriod: DefaultTSSParticipantUpdateTransitionPeriod,
 		},
 	}
 }
@@ -75,22 +60,11 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if p.ProtocolLimits != nil {
-		if p.ProtocolLimits.BtcMinWithdraw > p.ProtocolLimits.BtcMaxWithdraw {
-			return ErrInvalidParams
-		}
+	if err := validateProtocolParams(&p.ProtocolLimits, &p.ProtocolFees); err != nil {
+		return err
 	}
 
-	if p.ProtocolFees != nil {
-		if len(p.ProtocolFees.Collector) != 0 {
-			_, err := sdk.AccAddressFromBech32(p.ProtocolFees.Collector)
-			if err != nil {
-				return ErrInvalidParams
-			}
-		}
-	}
-
-	return nil
+	return validateTSSParams(&p.TssParams)
 }
 
 // SelectVaultByAddress returns the vault by the address
@@ -153,18 +127,16 @@ func validateVaults(vaults []*Vault) error {
 	vaultMap := make(map[string]bool)
 
 	for _, v := range vaults {
-		if len(v.Address) != 0 {
-			_, err := sdk.AccAddressFromBech32(v.Address)
-			if err != nil {
-				return err
-			}
-
-			if vaultMap[v.Address] {
-				return ErrInvalidParams
-			}
-
-			vaultMap[v.Address] = true
+		_, err := sdk.AccAddressFromBech32(v.Address)
+		if err != nil {
+			return err
 		}
+
+		if vaultMap[v.Address] {
+			return ErrInvalidParams
+		}
+
+		vaultMap[v.Address] = true
 
 		if len(v.PubKey) != 0 {
 			pkBytes, err := hex.DecodeString(v.PubKey)
@@ -181,6 +153,39 @@ func validateVaults(vaults []*Vault) error {
 		if v.AssetType == AssetType_ASSET_TYPE_UNSPECIFIED {
 			return ErrInvalidParams
 		}
+	}
+
+	return nil
+}
+
+// validateProtocolParams validates the given protocol limits and fees
+func validateProtocolParams(protocolLimits *ProtocolLimits, protocolFees *ProtocolFees) error {
+	if protocolLimits.BtcMinWithdraw > protocolLimits.BtcMaxWithdraw {
+		return ErrInvalidParams
+	}
+
+	if (protocolFees.DepositFee != 0 || protocolFees.WithdrawFee != 0) && len(protocolFees.Collector) == 0 {
+		return ErrInvalidParams
+	}
+
+	if len(protocolFees.Collector) != 0 {
+		_, err := sdk.AccAddressFromBech32(protocolFees.Collector)
+		if err != nil {
+			return ErrInvalidParams
+		}
+	}
+
+	return nil
+}
+
+// validateTSSParams validates the given TSS params
+func validateTSSParams(params *TSSParams) error {
+	if params.DkgTimeoutPeriod == 0 {
+		return ErrInvalidParams
+	}
+
+	if params.ParticipantUpdateTransitionPeriod == 0 {
+		return ErrInvalidParams
 	}
 
 	return nil
