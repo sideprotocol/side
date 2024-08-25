@@ -16,6 +16,9 @@ const (
 
 	// allowed number of edicts in the runes payload for the runes deposit transaction
 	RunesEdictNum = 1
+
+	// transaction input sequence intended to identify the withdrawal txs (for relayers' convenience)
+	MagicSequence = 1<<31 + 0xde
 )
 
 // ExtractRecipientAddr extracts the recipient address for minting voucher token by the type of the asset to be deposited

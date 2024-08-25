@@ -261,6 +261,7 @@ func AddUTXOToTx(tx *wire.MsgTx, utxo *UTXO) {
 	}
 
 	txIn.PreviousOutPoint = *wire.NewOutPoint(hash, uint32(utxo.Vout))
+	txIn.Sequence = MagicSequence
 
 	tx.AddTxIn(txIn)
 }
