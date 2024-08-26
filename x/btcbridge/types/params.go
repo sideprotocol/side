@@ -3,6 +3,7 @@ package types
 import (
 	"bytes"
 	"encoding/hex"
+	"sort"
 	"time"
 
 	secp256k1 "github.com/btcsuite/btcd/btcec/v2"
@@ -88,8 +89,12 @@ func SelectVaultByPubKey(vaults []*Vault, pubKey string) *Vault {
 	return nil
 }
 
-// SelectVaultByAssetType returns the vault by the asset type
+// SelectVaultByAssetType returns the vault by the asset type of the highest version
 func SelectVaultByAssetType(vaults []*Vault, assetType AssetType) *Vault {
+	sort.Slice(vaults, func(i int, j int) bool {
+		return vaults[i].Version > vaults[j].Version
+	})
+
 	for _, v := range vaults {
 		if v.AssetType == assetType {
 			return v
