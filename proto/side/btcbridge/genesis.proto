@@ -3,11 +3,11 @@ package side.btcbridge;
 
 import "gogoproto/gogo.proto";
 import "side/btcbridge/params.proto";
-import "side/btcbridge/bitcoin.proto";
+import "side/btcbridge/btcbridge.proto";
 
 option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
 
-// GenesisState defines the btc light client module's genesis state.
+// GenesisState defines the btc bridge module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
   // the chain tip of the bitcoin chain
