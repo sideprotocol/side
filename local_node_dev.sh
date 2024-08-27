@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KEYS=("validator" "test" "fee-collector")
+KEYS=("validator" "test")
 CHAINID="devnet"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
@@ -18,8 +18,9 @@ BLOCK_GAS=10000000
 MAX_GAS=10000000000
 
 # btcbridge params
-BTC_VAULT=() # ("<address>" "<pk>")
+BTC_VAULT=() # ("<address>" "<pk>", "<asset type>")
 RUNES_VAULT=()
+PROTOCOL_FEE_COLLECTOR=""
 
 # gov params
 GOV_VOTING_PERIOD="600s"
@@ -92,22 +93,29 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg denom "${DENOMS[0]}" '.app_state["crisis"]["constant_fee"]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	jq --arg voting_period "${GOV_VOTING_PERIOD}" '.app_state["gov"]["params"]["voting_period"]=$voting_period' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg gas "$BLOCK_GAS" '.app_state["feemarket"]["block_gas"]=$gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	# Set gas limit in genesis
 	jq --arg max_gas "$MAX_GAS" '.consensus_params["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	
+
+    # set gov voting period
+	if [ -n "$GOV_VOTING_PERIOD" ]; then
+        jq --arg voting_period "${GOV_VOTING_PERIOD}" '.app_state["gov"]["params"]["voting_period"]=$voting_period' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	fi
+
 	# set vaults if provided
-    if [[ "${#BTC_VAULT[@]}" -eq 2 && "${#RUNES_VAULT[@]}" -eq 2 ]]; then
+    if [[ "${#BTC_VAULT[@]}" -eq 3 && "${#RUNES_VAULT[@]}" -eq 3 ]]; then
 	    jq --arg btc_vault "${BTC_VAULT[0]}" '.app_state["btcbridge"]["params"]["vaults"][0]["address"]=$btc_vault' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 		jq --arg btc_vault_pk "${BTC_VAULT[1]}" '.app_state["btcbridge"]["params"]["vaults"][0]["pub_key"]=$btc_vault_pk' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+		jq --arg btc_vault_asset_type "${BTC_VAULT[2]}" '.app_state["btcbridge"]["params"]["vaults"][0]["asset_type"]=$btc_vault_asset_type' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 		jq --arg runes_vault "${RUNES_VAULT[0]}" '.app_state["btcbridge"]["params"]["vaults"][1]["address"]=$runes_vault' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 		jq --arg runes_vault_pk "${RUNES_VAULT[1]}" '.app_state["btcbridge"]["params"]["vaults"][1]["pub_key"]=$runes_vault_pk' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+		jq --arg runes_vault_asset_type "${RUNES_VAULT[2]}" '.app_state["btcbridge"]["params"]["vaults"][1]["asset_type"]=$runes_vault_asset_type' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
     fi
 
 	# set protocol fee collector
-	PROTOCOL_FEE_COLLECTOR=$($BINARY keys show "${KEYS[2]}" -a --keyring-backend $KEYRING --home "$HOMEDIR")
-	jq --arg fee_collector "$PROTOCOL_FEE_COLLECTOR" '.app_state["btcbridge"]["params"]["protocol_fees"]["collector"]=$fee_collector' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	if [ -n "$PROTOCOL_FEE_COLLECTOR" ]; then
+	    jq --arg fee_collector "$PROTOCOL_FEE_COLLECTOR" '.app_state["btcbridge"]["params"]["protocol_fees"]["collector"]=$fee_collector' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+    fi
 
 	# set custom pruning settings
 	sed -i.bak 's/pruning = "default"/pruning = "custom"/g' "$APP_TOML"
