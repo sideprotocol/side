@@ -1,20 +1,21 @@
 package keeper
 
 import (
+	"bytes"
+
 	"lukechampine.com/uint128"
 
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
-// GetRequestSeqence returns the request sequence
-func (k Keeper) GetRequestSeqence(ctx sdk.Context) uint64 {
+// GetRequestSequence returns the request sequence
+func (k Keeper) GetRequestSequence(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.SequenceKey)
 	if bz == nil {
@@ -26,7 +27,7 @@ func (k Keeper) GetRequestSeqence(ctx sdk.Context) uint64 {
 // IncrementRequestSequence increments the request sequence and returns the new sequence
 func (k Keeper) IncrementRequestSequence(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
-	seq := k.GetRequestSeqence(ctx) + 1
+	seq := k.GetRequestSequence(ctx) + 1
 	store.Set(types.SequenceKey, sdk.Uint64ToBigEndian(seq))
 	return seq
 }
@@ -53,12 +54,7 @@ func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Co
 func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string) (*types.BitcoinWithdrawRequest, error) {
 	utxoIterator := k.GetUTXOIteratorByAddr(ctx, vault)
 
-	psbt, selectedUTXOs, _, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault)
-	if err != nil {
-		return nil, err
-	}
-
-	changeUTXO, err := k.handleBtcTxFee(psbt, vault)
+	psbt, selectedUTXOs, changeUTXO, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault)
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +68,10 @@ func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, amount sdk
 	_ = k.LockUTXOs(ctx, selectedUTXOs)
 
 	// save the change utxo and mark minted
-	k.saveUTXO(ctx, changeUTXO)
-	k.addToMintHistory(ctx, psbt.UnsignedTx.TxHash().String())
+	if changeUTXO != nil {
+		k.saveUTXO(ctx, changeUTXO)
+		k.addToMintHistory(ctx, psbt.UnsignedTx.TxHash().String())
+	}
 
 	withdrawRequest := &types.BitcoinWithdrawRequest{
 		Address:  sender,
@@ -104,10 +102,6 @@ func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, amount s
 
 	psbt, selectedUTXOs, changeUTXO, runesChangeUTXO, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, amountDelta, vault, btcVault)
 	if err != nil {
-		return nil, err
-	}
-
-	if err := k.handleRunesTxFee(ctx, psbt, sender); err != nil {
 		return nil, err
 	}
 
@@ -280,6 +274,23 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 	return txHash, nil
 }
 
+// LockAssets locks the related assets for the given withdrawal request
+func (k Keeper) LockAssets(ctx sdk.Context, req *types.BitcoinWithdrawRequest, amount sdk.Coin) error {
+	btcNetworkFee, err := k.getBtcNetworkFee(ctx, req.Psbt)
+	if err != nil {
+		return err
+	}
+
+	if err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(req.Address), types.ModuleName, sdk.NewCoins(amount, btcNetworkFee)); err != nil {
+		return err
+	}
+
+	// lock the assets sent to the module account, which will be burned when the withdrawal tx is relayed back
+	k.lockAssets(ctx, req.Txid, amount, btcNetworkFee)
+
+	return nil
+}
+
 // spendUTXOs spends locked utxos
 func (k Keeper) spendUTXOs(ctx sdk.Context, uTx *btcutil.Tx) {
 	for _, in := range uTx.MsgTx().TxIn {
@@ -293,7 +304,7 @@ func (k Keeper) spendUTXOs(ctx sdk.Context, uTx *btcutil.Tx) {
 }
 
 // handleWithdrawProtocolFee performs the protocol fee handling and returns the actual withdrawal amount
-func (k Keeper) handleWithdrawProtocolFee(ctx sdk.Context, sender string, amount sdk.Coin) (sdk.Coin, error) {
+func (k Keeper) handleWithdrawProtocolFee(ctx sdk.Context, sender sdk.AccAddress, amount sdk.Coin) (sdk.Coin, error) {
 	params := k.GetParams(ctx)
 
 	protocolFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.ProtocolFees.WithdrawFee)
@@ -309,77 +320,36 @@ func (k Keeper) handleWithdrawProtocolFee(ctx sdk.Context, sender string, amount
 		}
 	}
 
-	if err := k.bankKeeper.SendCoins(ctx, sdk.MustAccAddressFromBech32(sender), protocoFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
+	if err := k.bankKeeper.SendCoins(ctx, sender, protocoFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
 		return sdk.Coin{}, err
 	}
 
 	return withdrawAmount, nil
 }
 
-// handleBtcTxFee performs the network fee handling for the btc withdrawal tx
-// Make sure that the given psbt is valid
-// There are at most two outputs and the change output is the last one if any
-func (k Keeper) handleBtcTxFee(p *psbt.Packet, changeAddr string) (*types.UTXO, error) {
-	recipientOut := p.UnsignedTx.TxOut[0]
-
-	changeOut := new(wire.TxOut)
-	if len(p.UnsignedTx.TxOut) > 1 {
-		changeOut = p.UnsignedTx.TxOut[1]
-	} else {
-		changeOut = wire.NewTxOut(0, types.MustPkScriptFromAddress(changeAddr))
-		p.UnsignedTx.TxOut = append(p.UnsignedTx.TxOut, changeOut)
+// getBtcNetworkFee gets the bitcoin network fee for the given withdrawal psbt
+func (k Keeper) getBtcNetworkFee(ctx sdk.Context, packet string) (sdk.Coin, error) {
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(packet)), true)
+	if err != nil {
+		return sdk.Coin{}, err
 	}
 
 	txFee, err := p.GetTxFee()
 	if err != nil {
-		return nil, err
+		return sdk.Coin{}, err
 	}
 
-	recipientOut.Value -= int64(txFee)
-	changeOut.Value += int64(txFee)
-
-	if types.IsDustOut(recipientOut) || types.IsDustOut(changeOut) {
-		return nil, types.ErrDustOutput
-	}
-
-	return &types.UTXO{
-		Txid:         p.UnsignedTx.TxHash().String(),
-		Vout:         2,
-		Address:      changeAddr,
-		Amount:       uint64(changeOut.Value),
-		PubKeyScript: changeOut.PkScript,
-	}, nil
+	return sdk.NewCoin(k.GetParams(ctx).BtcVoucherDenom, sdk.NewInt(int64(txFee))), nil
 }
 
-// handleRunesTxFee performs the fee handling for the runes withdrawal tx
-func (k Keeper) handleRunesTxFee(ctx sdk.Context, p *psbt.Packet, recipient string) error {
-	txFee, err := p.GetTxFee()
-	if err != nil {
-		return err
-	}
-
-	feeCoin := sdk.NewCoin(k.GetParams(ctx).BtcVoucherDenom, sdk.NewInt(int64(txFee)))
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(recipient), types.ModuleName, sdk.NewCoins(feeCoin)); err != nil {
-		return err
-	}
-
-	k.lockAsset(ctx, p.UnsignedTx.TxHash().String(), feeCoin)
-
-	return nil
-}
-
-// ProtocolWithdrawFeeEnabled returns true if the protocol fee is required for withdrawal, false otherwise
-func (k Keeper) ProtocolWithdrawFeeEnabled(ctx sdk.Context) bool {
-	return k.GetParams(ctx).ProtocolFees.WithdrawFee > 0
-}
-
-// lockAsset locks the given asset by the tx hash
-// we can guarantee that the keys do not overlap
-func (k Keeper) lockAsset(ctx sdk.Context, txHash string, coin sdk.Coin) {
+// lockAssets locks the given assets by the tx hash
+func (k Keeper) lockAssets(ctx sdk.Context, txHash string, coins ...sdk.Coin) {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := k.cdc.MustMarshal(&coin)
-	store.Set(types.BtcLockedAssetKey(txHash, bz), []byte{})
+	for i, coin := range coins {
+		bz := k.cdc.MustMarshal(&coin)
+		store.Set(types.BtcLockedAssetKey(txHash, i), bz)
+	}
 }
 
 // burnLockedAssets burns the locked assets
@@ -390,17 +360,20 @@ func (k Keeper) burnLockedAssets(ctx sdk.Context, txHash string) error {
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		key := iterator.Key()
-
 		var lockedAsset sdk.Coin
-		k.cdc.MustUnmarshal(key[1+len(txHash):], &lockedAsset)
+		k.cdc.MustUnmarshal(iterator.Value(), &lockedAsset)
 
 		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(lockedAsset)); err != nil {
 			return err
 		}
 
-		store.Delete(key)
+		store.Delete(iterator.Key())
 	}
 
 	return nil
+}
+
+// ProtocolWithdrawFeeEnabled returns true if the protocol fee is required for withdrawal, false otherwise
+func (k Keeper) ProtocolWithdrawFeeEnabled(ctx sdk.Context) bool {
+	return k.GetParams(ctx).ProtocolFees.WithdrawFee > 0
 }
