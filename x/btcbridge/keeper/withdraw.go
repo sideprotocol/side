@@ -372,8 +372,3 @@ func (k Keeper) burnLockedAssets(ctx sdk.Context, txHash string) error {
 
 	return nil
 }
-
-// ProtocolWithdrawFeeEnabled returns true if the protocol fee is required for withdrawal, false otherwise
-func (k Keeper) ProtocolWithdrawFeeEnabled(ctx sdk.Context) bool {
-	return k.GetParams(ctx).ProtocolFees.WithdrawFee > 0
-}

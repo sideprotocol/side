@@ -28,6 +28,8 @@ func NewParams() Params {
 		Confirmations:           1,
 		MaxAcceptableBlockDepth: 100,
 		BtcVoucherDenom:         "sat",
+		DepositEnabled:          true,
+		WithdrawEnabled:         true,
 		Vaults:                  []*Vault{},
 		ProtocolLimits: ProtocolLimits{
 			BtcMinDeposit:  50000,     // 0.0005 BTC

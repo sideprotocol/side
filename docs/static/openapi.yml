@@ -51002,6 +51002,12 @@ paths:
                   btc_voucher_denom:
                     type: string
                     title: The denomination of the voucher
+                  deposit_enabled:
+                    type: boolean
+                    title: Indicates if deposit is enabled
+                  withdraw_enabled:
+                    type: boolean
+                    title: Indicates if withdrawal is enabled
                   vaults:
                     type: array
                     items:
@@ -82670,6 +82676,12 @@ definitions:
       btc_voucher_denom:
         type: string
         title: The denomination of the voucher
+      deposit_enabled:
+        type: boolean
+        title: Indicates if deposit is enabled
+      withdraw_enabled:
+        type: boolean
+        title: Indicates if withdrawal is enabled
       vaults:
         type: array
         items:
@@ -83102,6 +83114,12 @@ definitions:
           btc_voucher_denom:
             type: string
             title: The denomination of the voucher
+          deposit_enabled:
+            type: boolean
+            title: Indicates if deposit is enabled
+          withdraw_enabled:
+            type: boolean
+            title: Indicates if withdrawal is enabled
           vaults:
             type: array
             items:
