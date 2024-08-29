@@ -21,6 +21,7 @@ var (
 	ErrTransactionAlreadyMinted  = errorsmod.Register(ModuleName, 2107, "transaction already minted")
 	ErrInvalidDepositTransaction = errorsmod.Register(ModuleName, 2108, "invalid deposit transaction")
 	ErrInvalidDepositAmount      = errorsmod.Register(ModuleName, 2109, "invalid deposit amount")
+	ErrDepositNotEnabled         = errorsmod.Register(ModuleName, 2110, "deposit not enabled")
 
 	ErrInvalidAmount                = errorsmod.Register(ModuleName, 3100, "invalid amount")
 	ErrInvalidFeeRate               = errorsmod.Register(ModuleName, 3101, "invalid fee rate")
@@ -33,6 +34,7 @@ var (
 	ErrInvalidSignatures            = errorsmod.Register(ModuleName, 3108, "invalid signatures")
 	ErrWithdrawRequestNotExist      = errorsmod.Register(ModuleName, 3109, "withdrawal request does not exist")
 	ErrWithdrawRequestConfirmed     = errorsmod.Register(ModuleName, 3110, "withdrawal request has been confirmed")
+	ErrWithdrawNotEnabled           = errorsmod.Register(ModuleName, 3111, "withdrawal not enabled")
 
 	ErrUTXODoesNotExist = errorsmod.Register(ModuleName, 4100, "utxo does not exist")
 	ErrUTXOLocked       = errorsmod.Register(ModuleName, 4101, "utxo locked")

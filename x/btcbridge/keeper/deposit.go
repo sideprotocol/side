@@ -303,11 +303,6 @@ func (k Keeper) getOutputsForMintRunes(ctx sdk.Context, tx *wire.MsgTx, edict *t
 	return outs, vouts, vaults, nil
 }
 
-// ProtocolDepositFeeEnabled returns true if the protocol fee is required for deposit, false otherwise
-func (k Keeper) ProtocolDepositFeeEnabled(ctx sdk.Context) bool {
-	return k.GetParams(ctx).ProtocolFees.DepositFee > 0
-}
-
 func (k Keeper) existsInHistory(ctx sdk.Context, txHash string) bool {
 	store := ctx.KVStore(k.storeKey)
 

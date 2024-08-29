@@ -48,6 +48,10 @@ func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.Ms
 		return nil, err
 	}
 
+	if !m.DepositEnabled(ctx) {
+		return nil, types.ErrDepositNotEnabled
+	}
+
 	txHash, recipient, err := m.ProcessBitcoinDepositTransaction(ctx, msg)
 	if err != nil {
 		ctx.Logger().Error("Error processing bitcoin deposit transaction", "error", err)
@@ -97,6 +101,10 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.WithdrawEnabled(ctx) {
+		return nil, types.ErrWithdrawNotEnabled
+	}
 
 	sender := sdk.MustAccAddressFromBech32(msg.Sender)
 
