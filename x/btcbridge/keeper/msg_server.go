@@ -3,7 +3,6 @@ package keeper
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"fmt"
 	"strconv"
 
@@ -107,27 +106,24 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 	}
 
 	if m.ProtocolWithdrawFeeEnabled(ctx) {
-		amount, err = m.handleWithdrawProtocolFee(ctx, msg.Sender, amount)
+		// deduct the protocol fee and get the actual withdrawal amount
+		amount, err = m.handleWithdrawProtocolFee(ctx, sender, amount)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	feeRate, err := strconv.ParseInt(msg.FeeRate, 10, 64)
-	if err != nil {
-		return nil, err
-	}
+	feeRate, _ := strconv.ParseInt(msg.FeeRate, 10, 64)
 
 	req, err := m.Keeper.NewWithdrawRequest(ctx, msg.Sender, amount, feeRate)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = m.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(amount)); err != nil {
+	// lock assets
+	if err := m.LockAssets(ctx, req, amount); err != nil {
 		return nil, err
 	}
-
-	m.lockAsset(ctx, req.Txid, amount)
 
 	// Emit events
 	m.EmitEvent(ctx, msg.Sender,
@@ -155,14 +151,9 @@ func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.Ms
 		return nil, types.ErrInvalidSignatures
 	}
 
-	b, err := base64.StdEncoding.DecodeString(msg.Psbt)
+	packet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Psbt)), true)
 	if err != nil {
 		return nil, types.ErrInvalidSignatures
-	}
-
-	packet, err := psbt.NewFromRawBytes(bytes.NewReader(b), false)
-	if err != nil {
-		return nil, err
 	}
 
 	if packet.UnsignedTx.TxHash().String() != msg.Txid {
@@ -172,6 +163,7 @@ func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.Ms
 	if err = packet.SanityCheck(); err != nil {
 		return nil, err
 	}
+
 	if !packet.IsComplete() {
 		return nil, types.ErrInvalidSignatures
 	}
