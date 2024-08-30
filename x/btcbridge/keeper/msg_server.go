@@ -36,6 +36,26 @@ func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmi
 	return &types.MsgSubmitBlockHeadersResponse{}, nil
 }
 
+// UpdateNonBtcRelayers implements types.MsgServer.
+func (m msgServer) UpdateNonBtcRelayers(goCtx context.Context, msg *types.MsgUpdateNonBtcRelayers) (*types.MsgUpdateNonBtcRelayersResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	if !m.IsAuthorizedNonBtcRelayer(ctx, msg.Sender) {
+		return nil, types.ErrUnauthorizedNonBtcRelayer
+	}
+
+	// update non-btc relayers
+	params := m.GetParams(ctx)
+	params.NonBtcRelayers = msg.Relayers
+	m.SetParams(ctx, params)
+
+	return &types.MsgUpdateNonBtcRelayersResponse{}, nil
+}
+
 // SubmitDepositTransaction implements types.MsgServer.
 // No Permission check required for this message
 // Since everyone can submit a transaction to mint voucher tokens

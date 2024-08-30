@@ -59,6 +59,10 @@ func (p Params) Validate() error {
 		return err
 	}
 
+	if err := validateNonBtcRelayers(p.NonBtcRelayers); err != nil {
+		return err
+	}
+
 	if err := validateVaults(p.Vaults); err != nil {
 		return err
 	}
@@ -123,6 +127,21 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 
 		if bytes.Equal(addrScript, pkScript) {
 			return v
+		}
+	}
+
+	return nil
+}
+
+func validateNonBtcRelayers(relayers []string) error {
+	if len(relayers) == 0 {
+		return ErrInvalidParams
+	}
+
+	for _, relayer := range relayers {
+		_, err := sdk.AccAddressFromBech32(relayer)
+		if err != nil {
+			return ErrInvalidParams
 		}
 	}
 

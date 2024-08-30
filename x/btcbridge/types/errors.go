@@ -22,6 +22,7 @@ var (
 	ErrInvalidDepositTransaction = errorsmod.Register(ModuleName, 2108, "invalid deposit transaction")
 	ErrInvalidDepositAmount      = errorsmod.Register(ModuleName, 2109, "invalid deposit amount")
 	ErrDepositNotEnabled         = errorsmod.Register(ModuleName, 2110, "deposit not enabled")
+	ErrUnauthorizedNonBtcRelayer = errorsmod.Register(ModuleName, 2111, "unauthorized non btc relayer")
 
 	ErrInvalidAmount                = errorsmod.Register(ModuleName, 3100, "invalid amount")
 	ErrInvalidFeeRate               = errorsmod.Register(ModuleName, 3101, "invalid fee rate")
@@ -43,7 +44,8 @@ var (
 	ErrInvalidRunes  = errorsmod.Register(ModuleName, 5100, "invalid runes")
 	ErrInvalidRuneId = errorsmod.Register(ModuleName, 5101, "invalid rune id")
 
-	ErrInvalidParams = errorsmod.Register(ModuleName, 6100, "invalid module params")
+	ErrInvalidParams   = errorsmod.Register(ModuleName, 6100, "invalid module params")
+	ErrInvalidRelayers = errorsmod.Register(ModuleName, 6101, "invalid relayers")
 
 	ErrInvalidDKGParams                 = errorsmod.Register(ModuleName, 7100, "invalid dkg params")
 	ErrDKGRequestDoesNotExist           = errorsmod.Register(ModuleName, 7101, "dkg request does not exist")

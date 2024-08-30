@@ -39,6 +39,7 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdSubmitBlocks())
+	cmd.AddCommand(CmdUpdateNonBtcRelayers())
 	cmd.AddCommand(CmdWithdrawToBitcoin())
 	cmd.AddCommand(CmdSubmitWithdrawSignatures())
 	cmd.AddCommand(CmdCompleteDKG())
@@ -70,6 +71,35 @@ func CmdSubmitBlocks() *cobra.Command {
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdUpdateNonBtcRelayers() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "update-non-btc-relayers [relayers]",
+		Short: "Update non-btc asset relayers",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgUpdateNonBtcRelayers(
+				clientCtx.GetFromAddress().String(),
+				strings.Split(args[0], listSeparator),
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}

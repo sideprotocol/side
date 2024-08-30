@@ -51008,6 +51008,11 @@ paths:
                   withdraw_enabled:
                     type: boolean
                     title: Indicates if withdrawal is enabled
+                  non_btc_relayers:
+                    type: array
+                    items:
+                      type: string
+                    title: Authorized relayers for non-btc asset deposit
                   vaults:
                     type: array
                     items:
@@ -82863,6 +82868,11 @@ definitions:
     description: >-
       MsgSubmitWithdrawTransactionResponse defines the
       Msg/SubmitWithdrawTransaction response type.
+  side.btcbridge.MsgUpdateNonBtcRelayersResponse:
+    type: object
+    description: >-
+      MsgUpdateNonBtcRelayersResponse defines the Msg/UpdateNonBtcRelayers
+      response type.
   side.btcbridge.MsgUpdateParamsResponse:
     type: object
     description: |-
@@ -82898,6 +82908,11 @@ definitions:
       withdraw_enabled:
         type: boolean
         title: Indicates if withdrawal is enabled
+      non_btc_relayers:
+        type: array
+        items:
+          type: string
+        title: Authorized relayers for non-btc asset deposit
       vaults:
         type: array
         items:
@@ -83336,6 +83351,11 @@ definitions:
           withdraw_enabled:
             type: boolean
             title: Indicates if withdrawal is enabled
+          non_btc_relayers:
+            type: array
+            items:
+              type: string
+            title: Authorized relayers for non-btc asset deposit
           vaults:
             type: array
             items:
