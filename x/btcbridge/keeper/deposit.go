@@ -21,7 +21,7 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 		return nil, nil, err
 	}
 
-	recipient, err := k.Mint(ctx, tx, prevTx, k.GetBlockHeader(ctx, msg.Blockhash).Height)
+	recipient, err := k.Mint(ctx, msg.Sender, tx, prevTx, k.GetBlockHeader(ctx, msg.Blockhash).Height)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -30,7 +30,7 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 }
 
 // Mint performs the minting operation of the voucher token
-func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height uint64) (btcutil.Address, error) {
+func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btcutil.Tx, height uint64) (btcutil.Address, error) {
 	hash := tx.Hash().String()
 	if k.existsInHistory(ctx, hash) {
 		return nil, types.ErrTransactionAlreadyMinted
@@ -50,6 +50,11 @@ func (k Keeper) Mint(ctx sdk.Context, tx *btcutil.Tx, prevTx *btcutil.Tx, height
 	}
 
 	isRunes := edict != nil
+
+	// check if the sender is authorized to relay runes deposit
+	if isRunes && !k.IsAuthorizedNonBtcRelayer(ctx, sender) {
+		return nil, types.ErrUnauthorizedNonBtcRelayer
+	}
 
 	// extract the recipient for minting voucher token
 	recipient, err := types.ExtractRecipientAddr(tx.MsgTx(), prevTx.MsgTx(), params.Vaults, isRunes, chainCfg)
