@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"strconv"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -106,6 +107,35 @@ func (k Keeper) QueryWithdrawRequestByTxHash(goCtx context.Context, req *types.Q
 	}
 
 	return &types.QueryWithdrawRequestByTxHashResponse{Request: request}, nil
+}
+
+func (k Keeper) QueryWithdrawNetworkFee(goCtx context.Context, req *types.QueryWithdrawNetworkFeeRequest) (*types.QueryWithdrawNetworkFeeResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	amount, err := sdk.ParseCoinNormalized(req.Amount)
+	if err != nil {
+		return nil, err
+	}
+
+	feeRate, err := strconv.ParseInt(req.FeeRate, 10, 64)
+	if err != nil {
+		return nil, types.ErrInvalidFeeRate
+	}
+
+	withdrawReq, err := k.NewWithdrawRequest(ctx, req.Sender, amount, feeRate)
+	if err != nil {
+		return nil, err
+	}
+
+	fee, err := k.getBtcNetworkFee(ctx, withdrawReq.Psbt)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryWithdrawNetworkFeeResponse{Fee: fee.Amount.Int64()}, nil
 }
 
 func (k Keeper) QueryUTXOs(goCtx context.Context, req *types.QueryUTXOsRequest) (*types.QueryUTXOsResponse, error) {

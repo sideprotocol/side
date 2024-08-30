@@ -39,6 +39,10 @@ service Query {
   rpc QueryWithdrawRequestByTxHash(QueryWithdrawRequestByTxHashRequest) returns (QueryWithdrawRequestByTxHashResponse) {
     option (google.api.http).get = "/side/btcbridge/withdrawal/request/tx/{txid}";
   }
+  // QueryWithdrawNetworkFee queries the bitcoin network fee for withdrawal.
+  rpc QueryWithdrawNetworkFee(QueryWithdrawNetworkFeeRequest) returns (QueryWithdrawNetworkFeeResponse) {
+    option (google.api.http).get = "/side/btcbridge/withdrawal/fee";
+  }
   // QueryUTXOs queries all utxos.
   rpc QueryUTXOs(QueryUTXOsRequest) returns (QueryUTXOsResponse) {
     option (google.api.http).get = "/side/btcbridge/utxos";
@@ -97,6 +101,18 @@ message QueryWithdrawRequestByTxHashRequest {
 // QueryWithdrawRequestByTxHashResponse is response type for the Query/WithdrawRequestByTxHash RPC method.
 message QueryWithdrawRequestByTxHashResponse {
   BitcoinWithdrawRequest request = 1;
+}
+
+// QueryWithdrawNetworkFeeRequest is request type for the Query/WithdrawNetworkFee RPC method.
+message QueryWithdrawNetworkFeeRequest {
+  string sender = 1;
+  string amount = 2;
+  string fee_rate = 3;
+}
+
+// QueryWithdrawNetworkFeeResponse is response type for the Query/WithdrawNetworkFee RPC method.
+message QueryWithdrawNetworkFeeResponse {
+  int64 fee = 1;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
