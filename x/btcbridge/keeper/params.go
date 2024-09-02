@@ -24,8 +24,8 @@ func (k Keeper) ProtocolWithdrawFeeEnabled(ctx sdk.Context) bool {
 	return k.GetParams(ctx).ProtocolFees.WithdrawFee > 0
 }
 
-// IsAuthorizedNonBtcRelayer returns true if the given address is an authorized non-btc relayer, false otherwise
-func (k Keeper) IsAuthorizedNonBtcRelayer(ctx sdk.Context, addr string) bool {
+// IsTrustedNonBtcRelayer returns true if the given address is a trusted non-btc relayer, false otherwise
+func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
 	for _, relayer := range k.GetParams(ctx).NonBtcRelayers {
 		if relayer == addr {
 			return true

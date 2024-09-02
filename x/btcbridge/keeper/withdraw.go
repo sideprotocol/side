@@ -166,11 +166,12 @@ func (k Keeper) GetWithdrawRequest(ctx sdk.Context, sequence uint64) *types.Bitc
 func (k Keeper) GetWithdrawRequestByTxHash(ctx sdk.Context, hash string) *types.BitcoinWithdrawRequest {
 	store := ctx.KVStore(k.storeKey)
 
-	var withdrawRequest types.BitcoinWithdrawRequest
 	bz := store.Get(types.BtcWithdrawRequestByTxHashKey(hash))
-	k.cdc.MustUnmarshal(bz, &withdrawRequest)
+	if bz != nil {
+		return k.GetWithdrawRequest(ctx, sdk.BigEndianToUint64(bz))
+	}
 
-	return &withdrawRequest
+	return nil
 }
 
 // SetWithdrawRequest sets the withdrawal request
@@ -180,7 +181,7 @@ func (k Keeper) SetWithdrawRequest(ctx sdk.Context, withdrawRequest *types.Bitco
 	bz := k.cdc.MustMarshal(withdrawRequest)
 
 	store.Set(types.BtcWithdrawRequestKey(withdrawRequest.Sequence), bz)
-	store.Set(types.BtcWithdrawRequestByTxHashKey(withdrawRequest.Txid), types.Int64ToBytes(withdrawRequest.Sequence))
+	store.Set(types.BtcWithdrawRequestByTxHashKey(withdrawRequest.Txid), sdk.Uint64ToBigEndian(withdrawRequest.Sequence))
 }
 
 // IterateWithdrawRequests iterates through all withdrawal requests
@@ -281,11 +282,15 @@ func (k Keeper) LockAssets(ctx sdk.Context, req *types.BitcoinWithdrawRequest, a
 		return err
 	}
 
-	if err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(req.Address), types.ModuleName, sdk.NewCoins(amount, btcNetworkFee)); err != nil {
+	if err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(req.Address), types.ModuleName, sdk.NewCoins(amount)); err != nil {
 		return err
 	}
 
-	// lock the assets sent to the module account, which will be burned when the withdrawal tx is relayed back
+	if err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(req.Address), types.ModuleName, sdk.NewCoins(btcNetworkFee)); err != nil {
+		return err
+	}
+
+	// mark locked assets which will be burned when the withdrawal tx is relayed back
 	k.lockAssets(ctx, req.Txid, amount, btcNetworkFee)
 
 	return nil
