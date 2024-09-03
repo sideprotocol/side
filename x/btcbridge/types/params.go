@@ -74,17 +74,18 @@ func (p Params) Validate() error {
 	return validateTSSParams(&p.TssParams)
 }
 
-// SelectVaultByAddress returns the vault by the address
+// SelectVaultByAddress returns the vault by the given address
 func SelectVaultByAddress(vaults []*Vault, address string) *Vault {
 	for _, v := range vaults {
 		if v.Address == address {
 			return v
 		}
 	}
+
 	return nil
 }
 
-// SelectVaultByPubKey returns the vault by the public key
+// SelectVaultByPubKey returns the vault by the given public key
 func SelectVaultByPubKey(vaults []*Vault, pubKey string) *Vault {
 	for _, v := range vaults {
 		if v.PubKey == pubKey {
@@ -110,7 +111,7 @@ func SelectVaultByAssetType(vaults []*Vault, assetType AssetType) *Vault {
 	return nil
 }
 
-// SelectVaultByPkScript returns the vault by the pk script
+// SelectVaultByPkScript returns the vault by the given pk script for convenience
 func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 	chainCfg := sdk.GetConfig().GetBtcChainCfg()
 
@@ -133,6 +134,7 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 	return nil
 }
 
+// validateNonBtcRelayers validates the given relayers
 func validateNonBtcRelayers(relayers []string) error {
 	if len(relayers) == 0 {
 		return ErrInvalidParams

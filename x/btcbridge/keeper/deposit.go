@@ -51,8 +51,8 @@ func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btc
 
 	isRunes := edict != nil
 
-	// check if the sender is authorized to relay runes deposit
-	if isRunes && !k.IsAuthorizedNonBtcRelayer(ctx, sender) {
+	// check if the sender is trusted to relay runes deposit
+	if isRunes && !k.IsTrustedNonBtcRelayer(ctx, sender) {
 		return nil, types.ErrUnauthorizedNonBtcRelayer
 	}
 
