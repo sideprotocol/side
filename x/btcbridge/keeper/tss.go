@@ -147,7 +147,7 @@ func (k Keeper) GetDKGCompletionRequests(ctx sdk.Context, id uint64) []*types.DK
 func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func(req *types.DKGCompletionRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, append(types.DKGCompletionRequestKeyPrefix, types.Int64ToBytes(id)...))
+	iterator := sdk.KVStorePrefixIterator(store, append(types.DKGCompletionRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {

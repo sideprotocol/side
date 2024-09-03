@@ -1,7 +1,7 @@
 package types
 
 import (
-	"math/big"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -17,10 +17,6 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_btcbridge"
 )
-
-func KeyPrefix(p string) []byte {
-	return []byte(p)
-}
 
 var (
 	ParamsStoreKey = []byte{0x1}
@@ -45,22 +41,16 @@ var (
 	VaultVersionKey               = []byte{0x33} // key for vault version increased by 1 once updated
 )
 
-func Int64ToBytes(number uint64) []byte {
-	big := new(big.Int)
-	big.SetUint64(number)
-	return big.Bytes()
-}
-
 func BtcBlockHeaderHashKey(hash string) []byte {
 	return append(BtcBlockHeaderHashPrefix, []byte(hash)...)
 }
 
 func BtcBlockHeaderHeightKey(height uint64) []byte {
-	return append(BtcBlockHeaderHeightPrefix, Int64ToBytes(height)...)
+	return append(BtcBlockHeaderHeightPrefix, sdk.Uint64ToBigEndian(height)...)
 }
 
 func BtcWithdrawRequestKey(sequence uint64) []byte {
-	return append(BtcWithdrawRequestPrefix, Int64ToBytes(sequence)...)
+	return append(BtcWithdrawRequestPrefix, sdk.Uint64ToBigEndian(sequence)...)
 }
 
 func BtcWithdrawRequestByTxHashKey(txid string) []byte {
@@ -71,17 +61,17 @@ func BtcMintedTxHashKey(hash string) []byte {
 	return append(BtcMintedTxHashKeyPrefix, []byte(hash)...)
 }
 
-func BtcLockedAssetKey(txHash string, index int) []byte {
-	return append(append(BtcLockedAssetKeyPrefix, []byte(txHash)...), Int64ToBytes(uint64(index))...)
+func BtcLockedAssetKey(txHash string, index uint8) []byte {
+	return append(append(BtcLockedAssetKeyPrefix, []byte(txHash)...), byte(index))
 }
 
 func BtcUtxoKey(hash string, vout uint64) []byte {
-	return append(append(BtcUtxoKeyPrefix, []byte(hash)...), Int64ToBytes(vout)...)
+	return append(append(BtcUtxoKeyPrefix, []byte(hash)...), sdk.Uint64ToBigEndian(vout)...)
 }
 
 func BtcOwnerUtxoKey(owner string, hash string, vout uint64) []byte {
 	key := append(append(BtcOwnerUtxoKeyPrefix, []byte(owner)...), []byte(hash)...)
-	key = append(key, Int64ToBytes(vout)...)
+	key = append(key, sdk.Uint64ToBigEndian(vout)...)
 
 	return key
 }
@@ -89,15 +79,15 @@ func BtcOwnerUtxoKey(owner string, hash string, vout uint64) []byte {
 func BtcOwnerRunesUtxoKey(owner string, id string, hash string, vout uint64) []byte {
 	key := append(append(BtcOwnerRunesUtxoKeyPrefix, []byte(owner)...), []byte(id)...)
 	key = append(key, []byte(hash)...)
-	key = append(key, Int64ToBytes(vout)...)
+	key = append(key, sdk.Uint64ToBigEndian(vout)...)
 
 	return key
 }
 
 func DKGRequestKey(id uint64) []byte {
-	return append(DKGRequestKeyPrefix, Int64ToBytes(id)...)
+	return append(DKGRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
 func DKGCompletionRequestKey(id uint64, consAddress string) []byte {
-	return append(append(DKGCompletionRequestKeyPrefix, Int64ToBytes(id)...), []byte(consAddress)...)
+	return append(append(DKGCompletionRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...), []byte(consAddress)...)
 }

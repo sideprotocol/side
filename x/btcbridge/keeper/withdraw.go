@@ -353,7 +353,7 @@ func (k Keeper) lockAssets(ctx sdk.Context, txHash string, coins ...sdk.Coin) {
 
 	for i, coin := range coins {
 		bz := k.cdc.MustMarshal(&coin)
-		store.Set(types.BtcLockedAssetKey(txHash, i), bz)
+		store.Set(types.BtcLockedAssetKey(txHash, uint8(i)), bz)
 	}
 }
 
