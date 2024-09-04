@@ -114,7 +114,7 @@ func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeader []*types.BlockHeade
 			oldNode := k.GetBlockHeaderByHeight(ctx, header.Height)
 			worksOld := blockchain.CalcWork(BitsToTargetUint32(oldNode.Bits))
 			worksNew := blockchain.CalcWork(BitsToTargetUint32(header.Bits))
-			if worksNew.Cmp(worksOld) <= 0 {
+			if sdk.GetConfig().GetBtcChainCfg().Net == wire.MainNet && worksNew.Cmp(worksOld) <= 0 || worksNew.Cmp(worksOld) < 0 {
 				return types.ErrForkedBlockHeader
 			}
 
