@@ -19,7 +19,7 @@ message Params {
   bool deposit_enabled = 4;
   // Indicates if withdrawal is enabled
   bool withdraw_enabled = 5;
-  // Authorized relayers for non-btc asset deposit
+  // Trusted relayers for non-btc asset deposit
   repeated string non_btc_relayers = 6;
   // Asset vaults
   repeated Vault vaults = 7;

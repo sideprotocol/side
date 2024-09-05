@@ -22,7 +22,7 @@ var (
 	ErrInvalidDepositTransaction = errorsmod.Register(ModuleName, 2108, "invalid deposit transaction")
 	ErrInvalidDepositAmount      = errorsmod.Register(ModuleName, 2109, "invalid deposit amount")
 	ErrDepositNotEnabled         = errorsmod.Register(ModuleName, 2110, "deposit not enabled")
-	ErrUnauthorizedNonBtcRelayer = errorsmod.Register(ModuleName, 2111, "unauthorized non btc relayer")
+	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2111, "untrusted non btc relayer")
 
 	ErrInvalidAmount                = errorsmod.Register(ModuleName, 3100, "invalid amount")
 	ErrInvalidFeeRate               = errorsmod.Register(ModuleName, 3101, "invalid fee rate")

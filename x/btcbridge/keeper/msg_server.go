@@ -45,7 +45,7 @@ func (m msgServer) UpdateNonBtcRelayers(goCtx context.Context, msg *types.MsgUpd
 	}
 
 	if !m.IsTrustedNonBtcRelayer(ctx, msg.Sender) {
-		return nil, types.ErrUnauthorizedNonBtcRelayer
+		return nil, types.ErrUntrustedNonBtcRelayer
 	}
 
 	// update non-btc relayers
