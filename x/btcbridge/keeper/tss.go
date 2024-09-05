@@ -5,6 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
@@ -160,8 +161,38 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 	}
 }
 
-// CompleteDKG attempts to complete the DKG request
-// The DKG request is completed when all participants submit the valid completion request before timeout
+// InitiateDKG initiates the DKG request by the specified params
+func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType) (*types.DKGRequest, error) {
+	for _, p := range participants {
+		consAddress, _ := sdk.ConsAddressFromHex(p.ConsensusAddress)
+
+		validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
+		if !found {
+			return nil, sdkerrors.Wrap(types.ErrInvalidDKGParams, "non validator")
+		}
+
+		if validator.Status != stakingtypes.Bonded {
+			return nil, sdkerrors.Wrap(types.ErrInvalidDKGParams, "validator not bonded")
+		}
+	}
+
+	req := &types.DKGRequest{
+		Id:           k.GetNextDKGRequestID(ctx),
+		Participants: participants,
+		Threshold:    threshold,
+		VaultTypes:   vaultTypes,
+		Expiration:   k.GetDKGRequestExpirationTime(ctx),
+		Status:       types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING,
+	}
+
+	k.SetDKGRequest(ctx, req)
+	k.SetDKGRequestID(ctx, req.Id)
+
+	return req, nil
+}
+
+// CompleteDKG completes the DKG request by the DKG participant
+// The DKG request will be completed when all participants submit the valid completion request before timeout
 func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) error {
 	dkgReq := k.GetDKGRequest(ctx, req.Id)
 	if dkgReq == nil {
@@ -192,6 +223,10 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
 	if !found {
 		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
+	}
+
+	if validator.Status != stakingtypes.Bonded {
+		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "validator not bonded")
 	}
 
 	pubKey, err := validator.ConsPubKey()

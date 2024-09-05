@@ -222,17 +222,10 @@ func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	req := &types.DKGRequest{
-		Id:           m.Keeper.GetNextDKGRequestID(ctx),
-		Participants: msg.Participants,
-		Threshold:    msg.Threshold,
-		VaultTypes:   msg.VaultTypes,
-		Expiration:   m.Keeper.GetDKGRequestExpirationTime(ctx),
-		Status:       types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING,
+	req, err := m.Keeper.InitiateDKG(ctx, msg.Participants, msg.Threshold, msg.VaultTypes)
+	if err != nil {
+		return nil, err
 	}
-
-	m.Keeper.SetDKGRequest(ctx, req)
-	m.Keeper.SetDKGRequestID(ctx, req.Id)
 
 	// Emit events
 	m.EmitEvent(ctx, msg.Authority,
