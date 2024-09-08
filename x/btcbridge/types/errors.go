@@ -52,4 +52,8 @@ var (
 	ErrDKGCompletionRequestExists       = errorsmod.Register(ModuleName, 7102, "dkg completion request already exists")
 	ErrInvalidDKGCompletionRequest      = errorsmod.Register(ModuleName, 7103, "invalid dkg completion request")
 	ErrUnauthorizedDKGCompletionRequest = errorsmod.Register(ModuleName, 7104, "unauthorized dkg completion request")
+	ErrInvalidVaultVersion              = errorsmod.Register(ModuleName, 7105, "invalid vault version")
+	ErrInvalidVault                     = errorsmod.Register(ModuleName, 7106, "invalid vault")
+	ErrVaultDoesNotExist                = errorsmod.Register(ModuleName, 7107, "vault does not exist")
+	ErrInvalidPsbt                      = errorsmod.Register(ModuleName, 7108, "invalid psbt")
 )

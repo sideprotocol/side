@@ -26,6 +26,8 @@ service Msg {
   rpc InitiateDKG (MsgInitiateDKG) returns (MsgInitiateDKGResponse);
   // CompleteDKG completes the given DKG request.
   rpc CompleteDKG (MsgCompleteDKG) returns (MsgCompleteDKGResponse);
+  // TransferVault transfers the vault asset from the source version to the destination version.
+  rpc TransferVault (MsgTransferVault) returns (MsgTransferVaultResponse);
   // UpdateParams defines a governance operation for updating the x/btcbridge module
   // parameters. The authority defaults to the x/gov module account.
   //
@@ -139,6 +141,23 @@ message MsgCompleteDKG {
 
 // MsgCompleteDKGResponse defines the Msg/CompleteDKG response type.
 message MsgCompleteDKGResponse {}
+
+// MsgTransferVault is the Msg/TransferVault request type.
+message MsgTransferVault {
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // version of the source vault
+  uint64 source_version = 2;
+  // version of the destination vault
+  uint64 dest_version = 3;
+  // asset type
+  AssetType asset_type = 4;
+  // a set of pre-built PSBTs to perform the asset transfer
+  repeated string psbts = 5;
+}
+
+// MsgTransferVaultResponse defines the Msg/TransferVault response type.
+message MsgTransferVaultResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //
