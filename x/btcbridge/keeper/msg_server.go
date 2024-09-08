@@ -264,6 +264,32 @@ func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG)
 	return &types.MsgCompleteDKGResponse{}, nil
 }
 
+// TransferVault performs the vault asset transfer from the source version to the destination version
+func (m msgServer) TransferVault(goCtx context.Context, msg *types.MsgTransferVault) (*types.MsgTransferVaultResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := m.Keeper.TransferVault(ctx, msg.SourceVersion, msg.DestVersion, msg.AssetType, msg.Psbts); err != nil {
+		return nil, err
+	}
+
+	// Emit events
+	m.EmitEvent(ctx, msg.Authority,
+		sdk.NewAttribute("source_version", fmt.Sprintf("%d", msg.SourceVersion)),
+		sdk.NewAttribute("dest_version", fmt.Sprintf("%d", msg.DestVersion)),
+		sdk.NewAttribute("asset_type", msg.AssetType.String()),
+	)
+
+	return &types.MsgTransferVaultResponse{}, nil
+}
+
 // UpdateParams updates the module params.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {

@@ -1,7 +1,11 @@
 package keeper
 
 import (
+	"bytes"
 	"time"
+
+	"github.com/btcsuite/btcd/btcutil/psbt"
+	"github.com/btcsuite/btcd/txscript"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -243,6 +247,141 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	return nil
 }
 
+// TransferVault performs the vault asset transfer from the source version to the destination version
+func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion uint64, assetType types.AssetType, psbts []string) error {
+	sourceVault := k.GetVaultByAssetTypeAndVersion(ctx, assetType, sourceVersion)
+	if sourceVault == nil {
+		return types.ErrVaultDoesNotExist
+	}
+
+	destVault := k.GetVaultByAssetTypeAndVersion(ctx, assetType, destVersion)
+	if destVault == nil {
+		return types.ErrVaultDoesNotExist
+	}
+
+	for i := range psbts {
+		p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(psbts[i])), true)
+
+		if err := k.handleTransferTx(ctx, p, sourceVault, destVault, assetType); err != nil {
+			return err
+		}
+
+		signingReq := &types.BitcoinWithdrawRequest{
+			Address:  k.authority,
+			Sequence: k.IncrementRequestSequence(ctx),
+			Txid:     p.UnsignedTx.TxHash().String(),
+			Psbt:     psbts[i],
+			Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+		}
+
+		k.SetWithdrawRequest(ctx, signingReq)
+	}
+
+	return nil
+}
+
+// handleTransferTx handles the specified tx for the vault transfer
+func (k Keeper) handleTransferTx(ctx sdk.Context, p *psbt.Packet, sourceVault, destVault *types.Vault, assetType types.AssetType) error {
+	txHash := p.UnsignedTx.TxHash().String()
+
+	if assetType == types.AssetType_ASSET_TYPE_RUNES {
+		if edicts, err := types.ParseRunes(p.UnsignedTx); err != nil || len(edicts) != types.RunesEdictNum {
+			return types.ErrInvalidRunes
+		}
+	}
+
+	runeBalances := make([]*types.RuneBalance, 0)
+
+	for i, ti := range p.UnsignedTx.TxIn {
+		hash := ti.PreviousOutPoint.Hash.String()
+		vout := ti.PreviousOutPoint.Index
+
+		if !k.HasUTXO(ctx, hash, uint64(vout)) {
+			return types.ErrUTXODoesNotExist
+		}
+
+		if k.IsUTXOLocked(ctx, hash, uint64(vout)) {
+			return types.ErrUTXOLocked
+		}
+
+		utxo := k.GetUTXO(ctx, hash, uint64(vout))
+		if !bytes.Equal(utxo.PubKeyScript, p.Inputs[i].WitnessUtxo.PkScript) || utxo.Amount != uint64(p.Inputs[i].WitnessUtxo.Value) {
+			return types.ErrInvalidPsbt
+		}
+
+		vault := types.SelectVaultByAddress(k.GetParams(ctx).Vaults, utxo.Address)
+		if vault == nil {
+			return types.ErrVaultDoesNotExist
+		}
+
+		if vault.Version != sourceVault.Version {
+			return types.ErrInvalidVaultVersion
+		}
+
+		if assetType == types.AssetType_ASSET_TYPE_BTC && vault.AssetType != sourceVault.AssetType {
+			return types.ErrInvalidVault
+		}
+
+		if assetType == types.AssetType_ASSET_TYPE_RUNES && vault.AssetType == types.AssetType_ASSET_TYPE_RUNES {
+			runeBalances = append(runeBalances, utxo.Runes...)
+		}
+	}
+
+	for i, out := range p.UnsignedTx.TxOut {
+		if !txscript.IsNullData(out.PkScript) {
+			vault := types.SelectVaultByPkScript(k.GetParams(ctx).Vaults, out.PkScript)
+			if vault == nil {
+				return types.ErrVaultDoesNotExist
+			}
+
+			if vault.Version != destVault.Version {
+				return types.ErrInvalidVault
+			}
+
+			if assetType == types.AssetType_ASSET_TYPE_BTC && vault.AssetType != destVault.AssetType {
+				return types.ErrInvalidVault
+			}
+
+			if vault.AssetType == types.AssetType_ASSET_TYPE_RUNES && i != 1 {
+				return types.ErrInvalidRunes
+			}
+
+			if vault.AssetType == types.AssetType_ASSET_TYPE_BTC {
+				utxo := &types.UTXO{
+					Txid:         txHash,
+					Vout:         uint64(i),
+					Address:      vault.Address,
+					Amount:       uint64(out.Value),
+					PubKeyScript: out.PkScript,
+					IsLocked:     false,
+				}
+
+				k.saveUTXO(ctx, utxo)
+			}
+
+			if vault.AssetType == types.AssetType_ASSET_TYPE_RUNES {
+				if len(runeBalances) == 0 {
+					return types.ErrInvalidRunes
+				}
+
+				utxo := &types.UTXO{
+					Txid:         txHash,
+					Vout:         uint64(i),
+					Address:      vault.Address,
+					Amount:       uint64(out.Value),
+					PubKeyScript: out.PkScript,
+					IsLocked:     false,
+					Runes:        types.GetCompactRuneBalances(runeBalances),
+				}
+
+				k.saveUTXO(ctx, utxo)
+			}
+		}
+	}
+
+	return nil
+}
+
 // CheckVaults checks if the provided vaults are valid
 func (k Keeper) CheckVaults(ctx sdk.Context, vaults []string, vaultTypes []types.AssetType) error {
 	currentVaults := k.GetParams(ctx).Vaults
@@ -284,14 +423,21 @@ func (k Keeper) UpdateVaults(ctx sdk.Context, newVaults []string, vaultTypes []t
 func (k Keeper) IncreaseVaultVersion(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 
-	version := uint64(0)
-
-	bz := store.Get(types.VaultVersionKey)
-	if bz != nil {
-		version = sdk.BigEndianToUint64(bz)
-	}
+	version := k.GetLatestVaultVersion(ctx)
 
 	store.Set(types.VaultVersionKey, sdk.Uint64ToBigEndian(version+1))
 
 	return version + 1
+}
+
+// GetLatestVaultVersion gets the latest vault version
+func (k Keeper) GetLatestVaultVersion(ctx sdk.Context) uint64 {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.VaultVersionKey)
+	if bz != nil {
+		return sdk.BigEndianToUint64(bz)
+	}
+
+	return 0
 }
