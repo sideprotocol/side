@@ -197,6 +197,22 @@ func (e *Edict) MustMarshalLEB128() []byte {
 	return payload
 }
 
+// GetCompactRuneBalances gets the compact rune balances
+func GetCompactRuneBalances(runeBalances []*RuneBalance) []*RuneBalance {
+	balanceMap := make(map[string]uint128.Uint128)
+
+	for _, balance := range runeBalances {
+		balanceMap[balance.Id] = balanceMap[balance.Id].Add(RuneAmountFromString(balance.Amount))
+	}
+
+	compactBalances := make([]*RuneBalance, 0, len(balanceMap))
+	for id, amount := range balanceMap {
+		compactBalances = append(compactBalances, &RuneBalance{Id: id, Amount: amount.String()})
+	}
+
+	return compactBalances
+}
+
 // RuneAmountFromString converts the given string to the rune amount
 // Panic if any error occurred
 func RuneAmountFromString(str string) uint128.Uint128 {

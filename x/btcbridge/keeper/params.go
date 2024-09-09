@@ -2,6 +2,8 @@ package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
 // DepositEnabled returns true if deposit enabled, false otherwise
@@ -33,4 +35,15 @@ func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
 	}
 
 	return false
+}
+
+// GetVaultByAssetTypeAndVersion gets the vault by the given asset type and version
+func (k Keeper) GetVaultByAssetTypeAndVersion(ctx sdk.Context, assetType types.AssetType, version uint64) *types.Vault {
+	for _, v := range k.GetParams(ctx).Vaults {
+		if v.AssetType == assetType && v.Version == version {
+			return v
+		}
+	}
+
+	return nil
 }
