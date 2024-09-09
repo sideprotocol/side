@@ -76,7 +76,7 @@ type Params struct {
 	DepositEnabled bool `protobuf:"varint,4,opt,name=deposit_enabled,json=depositEnabled,proto3" json:"deposit_enabled,omitempty"`
 	// Indicates if withdrawal is enabled
 	WithdrawEnabled bool `protobuf:"varint,5,opt,name=withdraw_enabled,json=withdrawEnabled,proto3" json:"withdraw_enabled,omitempty"`
-	// Authorized relayers for non-btc asset deposit
+	// Trusted relayers for non-btc asset deposit
 	NonBtcRelayers []string `protobuf:"bytes,6,rep,name=non_btc_relayers,json=nonBtcRelayers,proto3" json:"non_btc_relayers,omitempty"`
 	// Asset vaults
 	Vaults []*Vault `protobuf:"bytes,7,rep,name=vaults,proto3" json:"vaults,omitempty"`

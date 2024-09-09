@@ -53,7 +53,7 @@ func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btc
 
 	// check if the sender is trusted to relay runes deposit
 	if isRunes && !k.IsTrustedNonBtcRelayer(ctx, sender) {
-		return nil, types.ErrUnauthorizedNonBtcRelayer
+		return nil, types.ErrUntrustedNonBtcRelayer
 	}
 
 	// extract the recipient for minting voucher token

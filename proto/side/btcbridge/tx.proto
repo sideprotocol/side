@@ -12,7 +12,7 @@ option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
 service Msg {
   // SubmitBlockHeaders submits bitcoin block headers to the side chain.
   rpc SubmitBlockHeaders (MsgSubmitBlockHeaders) returns (MsgSubmitBlockHeadersResponse);
-  // UpdateNonBtcRelayers updates the authorized non-btc asset relayers.
+  // UpdateNonBtcRelayers updates the trusted non-btc asset relayers.
   rpc UpdateNonBtcRelayers (MsgUpdateNonBtcRelayers) returns (MsgUpdateNonBtcRelayersResponse);
   // SubmitDepositTransaction submits bitcoin transaction to the side chain.
   rpc SubmitDepositTransaction (MsgSubmitDepositTransaction) returns (MsgSubmitDepositTransactionResponse);

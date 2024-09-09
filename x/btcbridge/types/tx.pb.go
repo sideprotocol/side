@@ -1055,7 +1055,7 @@ const _ = grpc.SupportPackageIsVersion4
 type MsgClient interface {
 	// SubmitBlockHeaders submits bitcoin block headers to the side chain.
 	SubmitBlockHeaders(ctx context.Context, in *MsgSubmitBlockHeaders, opts ...grpc.CallOption) (*MsgSubmitBlockHeadersResponse, error)
-	// UpdateNonBtcRelayers updates the authorized non-btc asset relayers.
+	// UpdateNonBtcRelayers updates the trusted non-btc asset relayers.
 	UpdateNonBtcRelayers(ctx context.Context, in *MsgUpdateNonBtcRelayers, opts ...grpc.CallOption) (*MsgUpdateNonBtcRelayersResponse, error)
 	// SubmitDepositTransaction submits bitcoin transaction to the side chain.
 	SubmitDepositTransaction(ctx context.Context, in *MsgSubmitDepositTransaction, opts ...grpc.CallOption) (*MsgSubmitDepositTransactionResponse, error)
@@ -1169,7 +1169,7 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 type MsgServer interface {
 	// SubmitBlockHeaders submits bitcoin block headers to the side chain.
 	SubmitBlockHeaders(context.Context, *MsgSubmitBlockHeaders) (*MsgSubmitBlockHeadersResponse, error)
-	// UpdateNonBtcRelayers updates the authorized non-btc asset relayers.
+	// UpdateNonBtcRelayers updates the trusted non-btc asset relayers.
 	UpdateNonBtcRelayers(context.Context, *MsgUpdateNonBtcRelayers) (*MsgUpdateNonBtcRelayersResponse, error)
 	// SubmitDepositTransaction submits bitcoin transaction to the side chain.
 	SubmitDepositTransaction(context.Context, *MsgSubmitDepositTransaction) (*MsgSubmitDepositTransactionResponse, error)

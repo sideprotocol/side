@@ -51012,7 +51012,7 @@ paths:
                     type: array
                     items:
                       type: string
-                    title: Authorized relayers for non-btc asset deposit
+                    title: Trusted relayers for non-btc asset deposit
                   vaults:
                     type: array
                     items:
@@ -82912,7 +82912,7 @@ definitions:
         type: array
         items:
           type: string
-        title: Authorized relayers for non-btc asset deposit
+        title: Trusted relayers for non-btc asset deposit
       vaults:
         type: array
         items:
@@ -83355,7 +83355,7 @@ definitions:
             type: array
             items:
               type: string
-            title: Authorized relayers for non-btc asset deposit
+            title: Trusted relayers for non-btc asset deposit
           vaults:
             type: array
             items:
