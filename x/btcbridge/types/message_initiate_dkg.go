@@ -57,10 +57,18 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		return sdkerrors.Wrap(ErrInvalidDKGParams, "vault types can not be empty")
 	}
 
+	vaultTypes := make(map[AssetType]bool)
+
 	for _, t := range m.VaultTypes {
 		if t == AssetType_ASSET_TYPE_UNSPECIFIED {
-			return sdkerrors.Wrap(ErrInvalidDKGParams, "invalid vault types")
+			return sdkerrors.Wrap(ErrInvalidDKGParams, "invalid vault type")
 		}
+
+		if vaultTypes[t] {
+			return sdkerrors.Wrap(ErrInvalidDKGParams, "duplicate vault type")
+		}
+
+		vaultTypes[t] = true
 	}
 
 	return nil
