@@ -71,7 +71,7 @@ func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRat
 
 // BuildRunesPsbt builds a bitcoin psbt for runes edict from the given params.
 // Assume that the utxo script type is witness.
-func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runesChangeAmount uint128.Uint128, runesChange string, change string) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
+func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runeBalancesDelta []*RuneBalance, runesChange string, change string) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
 	chaincfg := sdk.GetConfig().GetBtcChainCfg()
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
@@ -107,9 +107,8 @@ func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient s
 	var runesChangeUTXO *UTXO
 	edictOutputIndex := uint32(1)
 
-	if runesChangeAmount.Cmp64(0) > 0 {
-		// we can guarantee that every runes UTXO only includes a single rune by the deposit policy
-		runesChangeUTXO = GetRunesChangeUTXO(runeId, runesChangeAmount, runesChange, runesChangePkScript, 1)
+	if len(runeBalancesDelta) > 0 {
+		runesChangeUTXO = GetRunesChangeUTXO(runeId, runeBalancesDelta, runesChange, runesChangePkScript, 1)
 
 		// allocate the remaining runes to the first non-OP_RETURN output by default
 		txOuts = append(txOuts, wire.NewTxOut(RunesOutValue, runesChangePkScript))
@@ -281,18 +280,13 @@ func GetChangeUTXO(tx *wire.MsgTx, change string) *UTXO {
 }
 
 // GetRunesChangeUTXO gets the runes change utxo.
-func GetRunesChangeUTXO(runeId string, changeAmount uint128.Uint128, change string, changePkScript []byte, outIndex uint32) *UTXO {
+func GetRunesChangeUTXO(runeId string, runeBalancesDelta []*RuneBalance, change string, changePkScript []byte, outIndex uint32) *UTXO {
 	return &UTXO{
 		Vout:         uint64(outIndex),
 		Address:      change,
 		Amount:       RunesOutValue,
 		PubKeyScript: changePkScript,
-		Runes: []*RuneBalance{
-			{
-				Id:     runeId,
-				Amount: changeAmount.String(),
-			},
-		},
+		Runes:        runeBalancesDelta,
 	}
 }
 

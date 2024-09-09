@@ -83,6 +83,7 @@ func ParseEdicts(tx *wire.MsgTx, payload []byte) ([]*Edict, error) {
 			return nil, ErrInvalidRunes
 		}
 
+		// actually we only support one edict for now, so delta is unnecessary
 		edict := Edict{
 			Id: &RuneId{
 				Block: integers[i].Big().Uint64(),
@@ -197,11 +198,14 @@ func (e *Edict) MustMarshalLEB128() []byte {
 	return payload
 }
 
-// GetCompactRuneBalances gets the compact rune balances
-func GetCompactRuneBalances(runeBalances []*RuneBalance) []*RuneBalance {
+// RuneBalances defines a set of rune balances
+type RuneBalances []*RuneBalance
+
+// Compact gets the compact rune balances
+func (rbs RuneBalances) Compact() RuneBalances {
 	balanceMap := make(map[string]uint128.Uint128)
 
-	for _, balance := range runeBalances {
+	for _, balance := range rbs {
 		balanceMap[balance.Id] = balanceMap[balance.Id].Add(RuneAmountFromString(balance.Amount))
 	}
 
@@ -211,6 +215,25 @@ func GetCompactRuneBalances(runeBalances []*RuneBalance) []*RuneBalance {
 	}
 
 	return compactBalances
+}
+
+// Update updates the balance to the specified amount for the given rune id
+// The rune balance will be removed if the given amount is zero
+// Assume that the given RuneBalances is compact
+func (rbs RuneBalances) Update(id string, amount uint128.Uint128) RuneBalances {
+	for i, balance := range rbs {
+		if balance.Id == id {
+			if !amount.IsZero() {
+				rbs[i].Amount = amount.String()
+			} else {
+				rbs = append(rbs[:i], rbs[i+1:]...)
+			}
+
+			break
+		}
+	}
+
+	return rbs
 }
 
 // RuneAmountFromString converts the given string to the rune amount
