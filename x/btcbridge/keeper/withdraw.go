@@ -93,14 +93,14 @@ func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, amount s
 
 	runeAmount := uint128.FromBig(amount.Amount.BigInt())
 
-	runesUTXOs, amountDelta := k.GetTargetRunesUTXOs(ctx, vault, runeId.ToString(), runeAmount)
+	runesUTXOs, runeBalancesDelta := k.GetTargetRunesUTXOs(ctx, vault, runeId.ToString(), runeAmount)
 	if len(runesUTXOs) == 0 {
 		return nil, types.ErrInsufficientUTXOs
 	}
 
 	paymentUTXOIterator := k.GetUTXOIteratorByAddr(ctx, btcVault)
 
-	psbt, selectedUTXOs, changeUTXO, runesChangeUTXO, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, amountDelta, vault, btcVault)
+	psbt, selectedUTXOs, changeUTXO, runesChangeUTXO, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, runeBalancesDelta, vault, btcVault)
 	if err != nil {
 		return nil, err
 	}

@@ -290,7 +290,7 @@ func (k Keeper) handleTransferTx(ctx sdk.Context, p *psbt.Packet, sourceVault, d
 		}
 	}
 
-	runeBalances := make([]*types.RuneBalance, 0)
+	runeBalances := make(types.RuneBalances, 0)
 
 	for i, ti := range p.UnsignedTx.TxIn {
 		hash := ti.PreviousOutPoint.Hash.String()
@@ -371,7 +371,7 @@ func (k Keeper) handleTransferTx(ctx sdk.Context, p *psbt.Packet, sourceVault, d
 					Amount:       uint64(out.Value),
 					PubKeyScript: out.PkScript,
 					IsLocked:     false,
-					Runes:        types.GetCompactRuneBalances(runeBalances),
+					Runes:        runeBalances.Compact(),
 				}
 
 				k.saveUTXO(ctx, utxo)

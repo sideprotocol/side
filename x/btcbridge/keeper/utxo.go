@@ -25,7 +25,7 @@ type UTXOViewKeeper interface {
 	GetUnlockedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO
 	GetOrderedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO
 
-	GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128) ([]*types.UTXO, uint128.Uint128)
+	GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128) ([]*types.UTXO, []*types.RuneBalance)
 
 	IterateAllUTXOs(ctx sdk.Context, cb func(utxo *types.UTXO) (stop bool))
 	IterateUTXOsByAddr(ctx sdk.Context, addr string, cb func(addr string, utxo *types.UTXO) (stop bool))
@@ -150,10 +150,11 @@ func (bvk *BaseUTXOViewKeeper) GetOrderedUTXOsByAddr(ctx sdk.Context, addr strin
 }
 
 // GetTargetRunesUTXOs gets the unlocked runes utxos targeted by the given params
-func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128) ([]*types.UTXO, uint128.Uint128) {
+func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128) ([]*types.UTXO, []*types.RuneBalance) {
 	utxos := make([]*types.UTXO, 0)
 
 	totalAmount := uint128.Zero
+	totalRuneBalances := make(types.RuneBalances, 0)
 
 	bvk.IterateRunesUTXOs(ctx, addr, runeId, func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool) {
 		if utxo.IsLocked {
@@ -163,15 +164,18 @@ func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string,
 		utxos = append(utxos, utxo)
 
 		totalAmount = totalAmount.Add(amount)
+		totalRuneBalances = append(totalRuneBalances, utxo.Runes...)
 
 		return totalAmount.Cmp(targetAmount) >= 0
 	})
 
 	if totalAmount.Cmp(targetAmount) < 0 {
-		return nil, uint128.Zero
+		return nil, nil
 	}
 
-	return utxos, totalAmount.Sub(targetAmount)
+	runeBalancesDelta := totalRuneBalances.Compact().Update(runeId, totalAmount.Sub(targetAmount))
+
+	return utxos, runeBalancesDelta
 }
 
 func (bvk *BaseUTXOViewKeeper) IterateAllUTXOs(ctx sdk.Context, cb func(utxo *types.UTXO) (stop bool)) {
