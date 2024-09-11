@@ -1,6 +1,8 @@
 package types
 
 import (
+	"strconv"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -69,6 +71,16 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		}
 
 		vaultTypes[t] = true
+	}
+
+	if m.EnableTransfer {
+		if m.TargetUtxoNum == 0 {
+			return sdkerrors.Wrap(ErrInvalidDKGParams, "target number of utxos must be greater than 0")
+		}
+
+		if feeRate, err := strconv.ParseInt(m.FeeRate, 10, 64); err != nil || feeRate <= 0 {
+			return ErrInvalidFeeRate
+		}
 	}
 
 	return nil

@@ -51,6 +51,10 @@ service Query {
   rpc QueryUTXOsByAddress(QueryUTXOsByAddressRequest) returns (QueryUTXOsByAddressResponse) {
     option (google.api.http).get = "/side/btcbridge/utxos/{address}";
   }
+  // QueryUTXOCountAndBalancesByAddress queries the total count and balances of the unlocked utxos by the given address.
+  rpc QueryUTXOCountAndBalancesByAddress(QueryUTXOCountAndBalancesByAddressRequest) returns (QueryUTXOCountAndBalancesByAddressResponse) {
+    option (google.api.http).get = "/side/btcbridge/utxos/{address}/stats";
+  }
   // QueryDKGRequest queries the DKG request by the given id.
   rpc QueryDKGRequest(QueryDKGRequestRequest) returns (QueryDKGRequestResponse) {
     option (google.api.http).get = "/side/btcbridge/dkg/request/{id}";
@@ -169,6 +173,18 @@ message QueryUTXOsByAddressRequest {
 // QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method.
 message QueryUTXOsByAddressResponse {
   repeated UTXO utxos = 1;
+}
+
+// QueryUTXOCountAndBalancesByAddressRequest is the request type for the Query/UTXOCountAndBalancesByAddress RPC method.
+message QueryUTXOCountAndBalancesByAddressRequest {
+  string address = 1;
+}
+
+// QueryUTXOCountAndBalancesByAddressResponse is the response type for the Query/UTXOCountAndBalancesByAddress RPC method.
+message QueryUTXOCountAndBalancesByAddressResponse {
+  uint32 count = 1;
+  int64 value = 2;
+  repeated RuneBalance runeBalances = 3;
 }
 
 // QueryDKGRequestRequest is the request type for the Query/DKGRequest RPC method.

@@ -134,7 +134,7 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddr(ctx sdk.Context, addr stri
 }
 
 // GetOrderedUTXOsByAddr gets all unlocked utxos of the given address in the descending order by amount
-// Note: high gas is required due to sort
+// Note: high gas is required due to sorting
 func (bvk *BaseUTXOViewKeeper) GetOrderedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO {
 	// get unlocked utxos
 	utxos := bvk.GetUnlockedUTXOsByAddr(ctx, addr)
@@ -176,6 +176,24 @@ func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string,
 	runeBalancesDelta := totalRuneBalances.Compact().Update(runeId, totalAmount.Sub(targetAmount))
 
 	return utxos, runeBalancesDelta
+}
+
+func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOCountAndBalancesByAddr(ctx sdk.Context, addr string) (uint32, int64, []*types.RuneBalance) {
+	count := uint32(0)
+	value := int64(0)
+	runeBalances := make(types.RuneBalances, 0)
+
+	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
+		if !utxo.IsLocked {
+			count += 1
+			value += int64(utxo.Amount)
+			runeBalances = append(runeBalances, utxo.Runes...)
+		}
+
+		return false
+	})
+
+	return count, value, runeBalances.Compact()
 }
 
 func (bvk *BaseUTXOViewKeeper) IterateAllUTXOs(ctx sdk.Context, cb func(utxo *types.UTXO) (stop bool)) {

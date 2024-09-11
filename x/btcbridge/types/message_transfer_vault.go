@@ -2,6 +2,7 @@ package types
 
 import (
 	"bytes"
+	"strconv"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
@@ -46,17 +47,13 @@ func (m *MsgTransferVault) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid asset type")
 	}
 
-	if len(m.Psbts) == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "psbt not provided")
-	}
-
 	for _, p := range m.Psbts {
 		packet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(p)), true)
 		if err != nil {
 			return err
 		}
 
-		if err := CheckTransactionWeight(packet.UnsignedTx); err != nil {
+		if err := CheckTransactionWeight(packet.UnsignedTx, nil); err != nil {
 			return err
 		}
 
@@ -74,6 +71,16 @@ func (m *MsgTransferVault) ValidateBasic() error {
 			if IsDustOut(out) {
 				return ErrDustOutput
 			}
+		}
+	}
+
+	if len(m.Psbts) == 0 {
+		if m.TargetUtxoNum == 0 {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "target number of utxos must be greater than 0")
+		}
+
+		if feeRate, err := strconv.ParseInt(m.FeeRate, 10, 64); err != nil || feeRate <= 0 {
+			return ErrInvalidFeeRate
 		}
 	}
 

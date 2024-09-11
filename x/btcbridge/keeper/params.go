@@ -47,3 +47,23 @@ func (k Keeper) GetVaultByAssetTypeAndVersion(ctx sdk.Context, assetType types.A
 
 	return nil
 }
+
+// EnableBridge enables the bridge deposit and withdrawal
+func (k Keeper) EnableBridge(ctx sdk.Context) {
+	params := k.GetParams(ctx)
+
+	params.DepositEnabled = true
+	params.WithdrawEnabled = true
+
+	k.SetParams(ctx, params)
+}
+
+// DisableBridge disables the bridge deposit and withdrawal
+func (k Keeper) DisableBridge(ctx sdk.Context) {
+	params := k.GetParams(ctx)
+
+	params.DepositEnabled = false
+	params.WithdrawEnabled = false
+
+	k.SetParams(ctx, params)
+}

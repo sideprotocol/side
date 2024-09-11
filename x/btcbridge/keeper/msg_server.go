@@ -222,7 +222,7 @@ func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	req, err := m.Keeper.InitiateDKG(ctx, msg.Participants, msg.Threshold, msg.VaultTypes)
+	req, err := m.Keeper.InitiateDKG(ctx, msg.Participants, msg.Threshold, msg.VaultTypes, msg.DisableBridge, msg.EnableTransfer, msg.TargetUtxoNum, msg.FeeRate)
 	if err != nil {
 		return nil, err
 	}
@@ -276,7 +276,7 @@ func (m msgServer) TransferVault(goCtx context.Context, msg *types.MsgTransferVa
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.TransferVault(ctx, msg.SourceVersion, msg.DestVersion, msg.AssetType, msg.Psbts); err != nil {
+	if err := m.Keeper.TransferVault(ctx, msg.SourceVersion, msg.DestVersion, msg.AssetType, msg.Psbts, msg.TargetUtxoNum, msg.FeeRate); err != nil {
 		return nil, err
 	}
 
