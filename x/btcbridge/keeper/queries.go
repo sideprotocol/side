@@ -165,6 +165,26 @@ func (k Keeper) QueryUTXOsByAddress(goCtx context.Context, req *types.QueryUTXOs
 	return &types.QueryUTXOsByAddressResponse{Utxos: utxos}, nil
 }
 
+func (k Keeper) QueryUTXOCountAndBalancesByAddress(goCtx context.Context, req *types.QueryUTXOCountAndBalancesByAddressRequest) (*types.QueryUTXOCountAndBalancesByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	_, err := sdk.AccAddressFromBech32(req.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	count, value, runeBalances := k.GetUnlockedUTXOCountAndBalancesByAddr(ctx, req.Address)
+
+	return &types.QueryUTXOCountAndBalancesByAddressResponse{
+		Count:        count,
+		Value:        value,
+		RuneBalances: runeBalances,
+	}, nil
+}
+
 func (k Keeper) QueryDKGRequest(goCtx context.Context, req *types.QueryDKGRequestRequest) (*types.QueryDKGRequestResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")

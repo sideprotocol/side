@@ -120,6 +120,14 @@ message MsgInitiateDKG {
   uint32 threshold = 3;
   // asset types of vaults to be generated
   repeated AssetType vault_types = 4;
+  // indicates if disabling bridge functionalities including deposit and withdrawal
+  bool disable_bridge = 5;
+  // indicates if transferring the current vaults to the newly generated vaults when the DKG request is completed
+  bool enable_transfer = 6;
+  // target number of the UTXOs to be transferred each time
+  uint32 target_utxo_num = 7;
+  // fee rate for vault transfer
+  string fee_rate = 8;
 }
 
 // MsgInitiateDKGResponse defines the Msg/InitiateDKG response type.
@@ -152,8 +160,12 @@ message MsgTransferVault {
   uint64 dest_version = 3;
   // asset type
   AssetType asset_type = 4;
-  // a set of pre-built PSBTs to perform the asset transfer
+  // a set of optional pre-built PSBTs to perform the asset transfer
   repeated string psbts = 5;
+  // target number of the UTXOs to be transferred; only take effect when psbt not provided
+  uint32 target_utxo_num = 6;
+  // fee rate; only take effect when psbt not provided
+  string fee_rate = 7;
 }
 
 // MsgTransferVaultResponse defines the Msg/TransferVault response type.

@@ -31,8 +31,9 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdBestBlock())
 	cmd.AddCommand(CmdQueryBlock())
-	cmd.AddCommand(CmdQueryWithdrawRequest())
+	cmd.AddCommand(CmdQueryWithdrawRequests())
 	cmd.AddCommand(CmdQueryUTXOs())
+	cmd.AddCommand(CmdQueryUTXOStats())
 	cmd.AddCommand(CmdQueryDKGRequests())
 	cmd.AddCommand(CmdQueryDKGCompletionRequests())
 	// this line is used by starport scaffolding # 1
@@ -94,7 +95,7 @@ func CmdBestBlock() *cobra.Command {
 	return cmd
 }
 
-// CmdQueryBlock returns the command to query the heights of the light client
+// CmdQueryBlock returns the command to query the block by hash or height
 func CmdQueryBlock() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "block [hash or height]",
@@ -132,10 +133,10 @@ func CmdQueryBlock() *cobra.Command {
 	return cmd
 }
 
-// CmdQueryWithdrawRequest returns the command to query withdrawal request
-func CmdQueryWithdrawRequest() *cobra.Command {
+// CmdQueryWithdrawRequests returns the command to query withdrawal requests
+func CmdQueryWithdrawRequests() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "withdraw-request [status | address | tx hash]",
+		Use:   "withdraw-requests [status | address | tx hash]",
 		Short: "Query withdrawal requests by status, address or tx hash",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -185,6 +186,7 @@ func CmdQueryWithdrawRequest() *cobra.Command {
 	return cmd
 }
 
+// CmdQueryUTXOs returns the command to query utxos by the optional address
 func CmdQueryUTXOs() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "utxos [address]",
@@ -213,6 +215,41 @@ func CmdQueryUTXOs() *cobra.Command {
 			}
 
 			res, err := queryClient.QueryUTXOsByAddress(cmd.Context(), &types.QueryUTXOsByAddressRequest{
+				Address: args[0],
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryUTXOStats returns the command to query the utxo statistics by address
+func CmdQueryUTXOStats() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "utxo-stats [address]",
+		Short: "Query the utxo statistics by the given address",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			_, err = sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryUTXOCountAndBalancesByAddress(cmd.Context(), &types.QueryUTXOCountAndBalancesByAddressRequest{
 				Address: args[0],
 			})
 			if err != nil {

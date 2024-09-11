@@ -2,11 +2,11 @@ package keeper
 
 import (
 	"bytes"
+	"strconv"
 	"time"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -166,7 +166,7 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 }
 
 // InitiateDKG initiates the DKG request by the specified params
-func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType) (*types.DKGRequest, error) {
+func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, disableBridge bool, enableTransfer bool, targetUtxoNum uint32, feeRate string) (*types.DKGRequest, error) {
 	for _, p := range participants {
 		consAddress, _ := sdk.ConsAddressFromHex(p.ConsensusAddress)
 
@@ -180,13 +180,21 @@ func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipan
 		}
 	}
 
+	if disableBridge {
+		k.DisableBridge(ctx)
+	}
+
 	req := &types.DKGRequest{
-		Id:           k.GetNextDKGRequestID(ctx),
-		Participants: participants,
-		Threshold:    threshold,
-		VaultTypes:   vaultTypes,
-		Expiration:   k.GetDKGRequestExpirationTime(ctx),
-		Status:       types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING,
+		Id:             k.GetNextDKGRequestID(ctx),
+		Participants:   participants,
+		Threshold:      threshold,
+		VaultTypes:     vaultTypes,
+		DisableBridge:  disableBridge,
+		EnableTransfer: enableTransfer,
+		TargetUtxoNum:  targetUtxoNum,
+		FeeRate:        feeRate,
+		Expiration:     k.GetDKGRequestExpirationTime(ctx),
+		Status:         types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING,
 	}
 
 	k.SetDKGRequest(ctx, req)
@@ -248,7 +256,7 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 }
 
 // TransferVault performs the vault asset transfer from the source version to the destination version
-func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion uint64, assetType types.AssetType, psbts []string) error {
+func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion uint64, assetType types.AssetType, psbts []string, targetUtxoNum uint32, feeRate string) error {
 	sourceVault := k.GetVaultByAssetTypeAndVersion(ctx, assetType, sourceVersion)
 	if sourceVault == nil {
 		return types.ErrVaultDoesNotExist
@@ -259,29 +267,55 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 		return types.ErrVaultDoesNotExist
 	}
 
-	for i := range psbts {
-		p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(psbts[i])), true)
+	// handle pre-built psbts if any
+	if len(psbts) > 0 {
+		for i := range psbts {
+			p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(psbts[i])), true)
 
-		if err := k.handleTransferTx(ctx, p, sourceVault, destVault, assetType); err != nil {
+			if err := k.handleTransferVaultTx(ctx, p, sourceVault, destVault, assetType); err != nil {
+				return err
+			}
+
+			signingReq := &types.BitcoinWithdrawRequest{
+				Address:  k.authority,
+				Sequence: k.IncrementRequestSequence(ctx),
+				Txid:     p.UnsignedTx.TxHash().String(),
+				Psbt:     psbts[i],
+				Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+			}
+
+			k.SetWithdrawRequest(ctx, signingReq)
+		}
+
+		return nil
+	}
+
+	parsedFeeRate, _ := strconv.ParseInt(feeRate, 10, 64)
+
+	var err error
+	var signingReq *types.BitcoinWithdrawRequest
+
+	switch assetType {
+	case types.AssetType_ASSET_TYPE_BTC:
+		signingReq, err = k.BuildTransferVaultBtcSigningRequest(ctx, sourceVault, destVault, targetUtxoNum, parsedFeeRate)
+		if err != nil {
 			return err
 		}
 
-		signingReq := &types.BitcoinWithdrawRequest{
-			Address:  k.authority,
-			Sequence: k.IncrementRequestSequence(ctx),
-			Txid:     p.UnsignedTx.TxHash().String(),
-			Psbt:     psbts[i],
-			Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+	case types.AssetType_ASSET_TYPE_RUNES:
+		signingReq, err = k.BuildTransferVaultRunesSigningRequest(ctx, sourceVault, destVault, targetUtxoNum, parsedFeeRate)
+		if err != nil {
+			return err
 		}
-
-		k.SetWithdrawRequest(ctx, signingReq)
 	}
+
+	k.SetWithdrawRequest(ctx, signingReq)
 
 	return nil
 }
 
-// handleTransferTx handles the specified tx for the vault transfer
-func (k Keeper) handleTransferTx(ctx sdk.Context, p *psbt.Packet, sourceVault, destVault *types.Vault, assetType types.AssetType) error {
+// handleTransferVaultTx handles the pre-built tx for the vault transfer
+func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVault, destVault *types.Vault, assetType types.AssetType) error {
 	txHash := p.UnsignedTx.TxHash().String()
 
 	if assetType == types.AssetType_ASSET_TYPE_RUNES {
@@ -325,6 +359,8 @@ func (k Keeper) handleTransferTx(ctx sdk.Context, p *psbt.Packet, sourceVault, d
 		if assetType == types.AssetType_ASSET_TYPE_RUNES && vault.AssetType == types.AssetType_ASSET_TYPE_RUNES {
 			runeBalances = append(runeBalances, utxo.Runes...)
 		}
+
+		_ = k.LockUTXO(ctx, hash, uint64(vout))
 	}
 
 	for i, out := range p.UnsignedTx.TxOut {
@@ -379,7 +415,123 @@ func (k Keeper) handleTransferTx(ctx sdk.Context, p *psbt.Packet, sourceVault, d
 		}
 	}
 
+	// mark minted
+	k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
+
 	return nil
+}
+
+// BuildTransferVaultBtcSigningRequest builds the signing request to transfer btc of the given vault
+func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault *types.Vault, destVault *types.Vault, targetUtxoNum uint32, feeRate int64) (*types.BitcoinWithdrawRequest, error) {
+	utxos := make([]*types.UTXO, 0)
+
+	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
+		if utxo.IsLocked {
+			return false
+		}
+
+		utxos = append(utxos, utxo)
+
+		return len(utxos) >= int(targetUtxoNum)
+	})
+
+	if len(utxos) == 0 {
+		return nil, types.ErrInsufficientUTXOs
+	}
+
+	p, selectedUtxos, changeUtxo, err := types.BuildTransferAllBtcPsbt(utxos, destVault.Address, feeRate)
+	if err != nil {
+		return nil, err
+	}
+
+	psbtB64, err := p.B64Encode()
+	if err != nil {
+		return nil, types.ErrFailToSerializePsbt
+	}
+
+	// lock the involved utxos
+	_ = k.LockUTXOs(ctx, utxos)
+	_ = k.LockUTXOs(ctx, selectedUtxos)
+
+	// save the change utxo and mark minted
+	if changeUtxo != nil {
+		k.saveUTXO(ctx, changeUtxo)
+		// mark minted
+		k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
+	}
+
+	signingReq := &types.BitcoinWithdrawRequest{
+		Address:  k.authority,
+		Sequence: k.IncrementRequestSequence(ctx),
+		Txid:     p.UnsignedTx.TxHash().String(),
+		Psbt:     psbtB64,
+		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+	}
+
+	return signingReq, nil
+}
+
+// BuildTransferVaultRunesSigningRequest builds the signing request to transfer runes of the given vault
+func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVault *types.Vault, destVault *types.Vault, targetUtxoNum uint32, feeRate int64) (*types.BitcoinWithdrawRequest, error) {
+	runesUtxos := make([]*types.UTXO, 0)
+	runeBalances := make(types.RuneBalances, 0)
+
+	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
+		if utxo.IsLocked {
+			return false
+		}
+
+		runesUtxos = append(runesUtxos, utxo)
+		runeBalances = append(runeBalances, utxo.Runes...)
+
+		return len(runesUtxos) >= int(targetUtxoNum)
+	})
+
+	if len(runesUtxos) == 0 {
+		return nil, types.ErrInsufficientUTXOs
+	}
+
+	sourceBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, sourceVault.Version).Address
+	destBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, destVault.Version).Address
+
+	btcUtxoIterator := k.GetUTXOIteratorByAddr(ctx, sourceBtcVault)
+
+	p, selectedUtxos, changeUtxo, runesChangeUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destBtcVault, runeBalances.Compact(), feeRate, destBtcVault)
+	if err != nil {
+		return nil, err
+	}
+
+	psbtB64, err := p.B64Encode()
+	if err != nil {
+		return nil, types.ErrFailToSerializePsbt
+	}
+
+	// lock the involved utxos
+	_ = k.LockUTXOs(ctx, runesUtxos)
+	_ = k.LockUTXOs(ctx, selectedUtxos)
+
+	// save the change utxo and mark minted
+	if changeUtxo != nil {
+		k.saveUTXO(ctx, changeUtxo)
+		// mark minted
+		k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
+	}
+
+	// save the runes change utxo and mark minted
+	if runesChangeUtxo != nil {
+		k.saveUTXO(ctx, runesChangeUtxo)
+		k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
+	}
+
+	signingReq := &types.BitcoinWithdrawRequest{
+		Address:  k.authority,
+		Sequence: k.IncrementRequestSequence(ctx),
+		Txid:     p.UnsignedTx.TxHash().String(),
+		Psbt:     psbtB64,
+		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+	}
+
+	return signingReq, nil
 }
 
 // CheckVaults checks if the provided vaults are valid

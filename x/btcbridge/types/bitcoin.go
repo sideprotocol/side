@@ -69,6 +69,42 @@ func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRat
 	return p, selectedUTXOs, changeUTXO, nil
 }
 
+// BuildTransferAllBtcPsbt builds a bitcoin psbt to transfer all given btc.
+// Assume that the utxo script type is witness.
+func BuildTransferAllBtcPsbt(utxos []*UTXO, recipient string, feeRate int64) (*psbt.Packet, []*UTXO, *UTXO, error) {
+	chaincfg := sdk.GetConfig().GetBtcChainCfg()
+
+	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	recipientPkScript, err := txscript.PayToAddrScript(recipientAddr)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	txOuts := make([]*wire.TxOut, 0)
+	txOuts = append(txOuts, wire.NewTxOut(0, recipientPkScript))
+
+	unsignedTx, selectedUTXOs, err := BuildUnsignedTransactionWithoutExtraChange([]*UTXO{}, txOuts, utxos, feeRate)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	p, err := psbt.NewFromUnsignedTx(unsignedTx)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	for i, utxo := range selectedUTXOs {
+		p.Inputs[i].SighashType = DefaultSigHashType
+		p.Inputs[i].WitnessUtxo = wire.NewTxOut(int64(utxo.Amount), utxo.PubKeyScript)
+	}
+
+	return p, selectedUTXOs, GetChangeUTXO(unsignedTx, recipient), nil
+}
+
 // BuildRunesPsbt builds a bitcoin psbt for runes edict from the given params.
 // Assume that the utxo script type is witness.
 func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runeBalancesDelta []*RuneBalance, runesChange string, change string) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
@@ -108,7 +144,7 @@ func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient s
 	edictOutputIndex := uint32(1)
 
 	if len(runeBalancesDelta) > 0 {
-		runesChangeUTXO = GetRunesChangeUTXO(runeId, runeBalancesDelta, runesChange, runesChangePkScript, 1)
+		runesChangeUTXO = GetRunesChangeUTXO(runeBalancesDelta, runesChange, runesChangePkScript, 1)
 
 		// allocate the remaining runes to the first non-OP_RETURN output by default
 		txOuts = append(txOuts, wire.NewTxOut(RunesOutValue, runesChangePkScript))
@@ -141,6 +177,60 @@ func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient s
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
+
+	for i, utxo := range utxos {
+		p.Inputs[i].SighashType = DefaultSigHashType
+		p.Inputs[i].WitnessUtxo = wire.NewTxOut(int64(utxo.Amount), utxo.PubKeyScript)
+	}
+
+	for i, utxo := range selectedUTXOs {
+		p.Inputs[i+len(utxos)].SighashType = DefaultSigHashType
+		p.Inputs[i+len(utxos)].WitnessUtxo = wire.NewTxOut(int64(utxo.Amount), utxo.PubKeyScript)
+	}
+
+	return p, selectedUTXOs, changeUTXO, runesChangeUTXO, nil
+}
+
+// BuildTransferAllRunesPsbt builds a bitcoin psbt to transfer all specified runes.
+// Assume that the utxo script type is witness.
+func BuildTransferAllRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeBalancesDelta []*RuneBalance, feeRate int64, btcChange string) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
+	chaincfg := sdk.GetConfig().GetBtcChainCfg()
+
+	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	recipientPkScript, err := txscript.PayToAddrScript(recipientAddr)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	changeAddr, err := btcutil.DecodeAddress(btcChange, chaincfg)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	txOuts := make([]*wire.TxOut, 0)
+
+	// fill the runes protocol script without payload
+	txOuts = append(txOuts, wire.NewTxOut(0, []byte{txscript.OP_RETURN, txscript.OP_13}))
+
+	// allocate the remaining runes to the first non-OP_RETURN output by default
+	txOuts = append(txOuts, wire.NewTxOut(RunesOutValue, recipientPkScript))
+
+	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction(utxos, txOuts, paymentUTXOIterator, feeRate, changeAddr)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	p, err := psbt.NewFromUnsignedTx(unsignedTx)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	runesChangeUTXO := GetRunesChangeUTXO(runeBalancesDelta, recipient, recipientPkScript, 1)
+	runesChangeUTXO.Txid = unsignedTx.TxHash().String()
 
 	for i, utxo := range utxos {
 		p.Inputs[i].SighashType = DefaultSigHashType
@@ -188,7 +278,7 @@ func BuildUnsignedTransaction(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOIt
 		return nil, nil, nil, err
 	}
 
-	if err := CheckTransactionWeight(tx); err != nil {
+	if err := CheckTransactionWeight(tx, append(utxos, selectedUTXOs...)); err != nil {
 		return nil, nil, nil, err
 	}
 
@@ -198,6 +288,52 @@ func BuildUnsignedTransaction(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOIt
 	}
 
 	return tx, selectedUTXOs, changeUTXO, nil
+}
+
+// BuildUnsignedTransactionWithoutExtraChange builds an unsigned tx from the given params.
+// All payment utxos will be spent and the last out is the recipient (and change) out.
+func BuildUnsignedTransactionWithoutExtraChange(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOs []*UTXO, feeRate int64) (*wire.MsgTx, []*UTXO, error) {
+	tx := wire.NewMsgTx(TxVersion)
+
+	inAmount := int64(0)
+	outAmount := int64(0)
+
+	for _, utxo := range utxos {
+		AddUTXOToTx(tx, utxo)
+		inAmount += int64(utxo.Amount)
+	}
+
+	for _, utxo := range paymentUTXOs {
+		AddUTXOToTx(tx, utxo)
+		inAmount += int64(utxo.Amount)
+	}
+
+	for i, txOut := range txOuts {
+		if i != len(txOuts)-1 && IsDustOut(txOut) {
+			return nil, nil, ErrDustOutput
+		}
+
+		tx.AddTxOut(txOut)
+		outAmount += txOut.Value
+	}
+
+	fee := GetTxVirtualSize(tx, append(utxos, paymentUTXOs...)) * feeRate
+
+	change := inAmount - outAmount - fee
+	if change <= 0 {
+		return nil, nil, ErrInsufficientUTXOs
+	}
+
+	txOuts[len(txOuts)-1].Value += change
+	if IsDustOut(txOuts[len(txOuts)-1]) {
+		return nil, nil, ErrDustOutput
+	}
+
+	if err := CheckTransactionWeight(tx, append(utxos, paymentUTXOs...)); err != nil {
+		return nil, nil, err
+	}
+
+	return tx, paymentUTXOs, nil
 }
 
 // AddPaymentUTXOsToTx adds the given payment utxos to the tx.
@@ -280,7 +416,7 @@ func GetChangeUTXO(tx *wire.MsgTx, change string) *UTXO {
 }
 
 // GetRunesChangeUTXO gets the runes change utxo.
-func GetRunesChangeUTXO(runeId string, runeBalancesDelta []*RuneBalance, change string, changePkScript []byte, outIndex uint32) *UTXO {
+func GetRunesChangeUTXO(runeBalancesDelta []*RuneBalance, change string, changePkScript []byte, outIndex uint32) *UTXO {
 	return &UTXO{
 		Vout:         uint64(outIndex),
 		Address:      change,
@@ -291,46 +427,66 @@ func GetRunesChangeUTXO(runeId string, runeBalancesDelta []*RuneBalance, change 
 }
 
 // GetTxVirtualSize gets the virtual size of the given tx.
-// Assume that the utxo script type is p2tr, p2wpkh, p2sh-p2wpkh or p2pkh.
 func GetTxVirtualSize(tx *wire.MsgTx, utxos []*UTXO) int64 {
-	newTx := tx.Copy()
-
-	for i, txIn := range newTx.TxIn {
-		var dummySigScript []byte
-		var dummyWitness []byte
-
-		switch txscript.GetScriptClass(utxos[i].PubKeyScript) {
-		case txscript.WitnessV1TaprootTy:
-			dummyWitness = make([]byte, 65)
-
-		case txscript.WitnessV0PubKeyHashTy:
-			dummyWitness = make([]byte, 73+33)
-
-		case txscript.ScriptHashTy:
-			dummySigScript = make([]byte, 1+1+1+20)
-			dummyWitness = make([]byte, 73+33)
-
-		case txscript.PubKeyHashTy:
-			dummySigScript = make([]byte, 1+73+1+33)
-
-		default:
-		}
-
-		txIn.SignatureScript = dummySigScript
-		txIn.Witness = wire.TxWitness{dummyWitness}
-	}
+	newTx := PopulateTxWithDummyWitness(tx, utxos)
 
 	return mempool.GetTxVirtualSize(btcutil.NewTx(newTx))
 }
 
 // CheckTransactionWeight checks if the weight of the given tx exceeds the allowed maximum weight
-func CheckTransactionWeight(tx *wire.MsgTx) error {
-	weight := blockchain.GetTransactionWeight(btcutil.NewTx(tx))
+func CheckTransactionWeight(tx *wire.MsgTx, utxos []*UTXO) error {
+	newTx := PopulateTxWithDummyWitness(tx, utxos)
+
+	weight := blockchain.GetTransactionWeight(btcutil.NewTx(newTx))
 	if weight > MaxTransactionWeight {
 		return ErrMaxTransactionWeightExceeded
 	}
 
 	return nil
+}
+
+// PopulateTxWithDummyWitness populates the given tx with the dummy witness
+// Assume that the utxo script type is the witness type.
+// If utxos are not provided, the witness type is defaulted to taproot
+func PopulateTxWithDummyWitness(tx *wire.MsgTx, utxos []*UTXO) *wire.MsgTx {
+	if len(utxos) == 0 {
+		return PopulateTxWithDummyTaprootWitness(tx)
+	}
+
+	newTx := tx.Copy()
+
+	for i, txIn := range newTx.TxIn {
+		var dummyWitness []byte
+
+		switch txscript.GetScriptClass(utxos[i].PubKeyScript) {
+		case txscript.WitnessV1TaprootTy:
+			// maximum size when the sig hash is not SigHashDefault
+			dummyWitness = make([]byte, 65)
+
+		case txscript.WitnessV0PubKeyHashTy:
+			dummyWitness = make([]byte, 73+33)
+
+		default:
+		}
+
+		txIn.Witness = wire.TxWitness{dummyWitness}
+	}
+
+	return newTx
+}
+
+// PopulateTxWithDummyTaprootWitness populates the given tx with the dummy taproot witness
+func PopulateTxWithDummyTaprootWitness(tx *wire.MsgTx) *wire.MsgTx {
+	newTx := tx.Copy()
+
+	for _, txIn := range newTx.TxIn {
+		// maximum size when the sig hash is not SigHashDefault
+		dummyWitness := make([]byte, 65)
+
+		txIn.Witness = wire.TxWitness{dummyWitness}
+	}
+
+	return newTx
 }
 
 // IsDustOut returns true if the given output is dust, false otherwise
