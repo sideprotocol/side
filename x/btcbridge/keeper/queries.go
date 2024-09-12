@@ -70,7 +70,7 @@ func (k Keeper) QuerySigningRequests(goCtx context.Context, req *types.QuerySign
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
-	if req.Status == types.SigningRequestStatus_SIGNING_REQUEST_STATUS_UNSPECIFIED {
+	if req.Status == types.SigningStatus_SIGNING_STATUS_UNSPECIFIED {
 		return nil, status.Error(codes.InvalidArgument, "invalid status")
 	}
 

@@ -23,18 +23,18 @@ message BlockHeader {
   uint64 ntx = 9;
 }
 
-// Signing Request Status
-enum SigningRequestStatus {
-  // SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value, should not be used
-  SIGNING_REQUEST_STATUS_UNSPECIFIED = 0;
-  // SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-  SIGNING_REQUEST_STATUS_PENDING = 1;
-  // SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-  SIGNING_REQUEST_STATUS_BROADCASTED = 2;
-  // SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-  SIGNING_REQUEST_STATUS_CONFIRMED = 3;
-  // SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-  SIGNING_REQUEST_STATUS_FAILED = 4;
+// Bitcoin Signing Status
+enum SigningStatus {
+  // SIGNING_STATUS_UNSPECIFIED - Default value, should not be used
+  SIGNING_STATUS_UNSPECIFIED = 0;
+  // SIGNING_STATUS_PENDING - The signing request is pending
+  SIGNING_STATUS_PENDING = 1;
+  // SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+  SIGNING_STATUS_BROADCASTED = 2;
+  // SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+  SIGNING_STATUS_CONFIRMED = 3;
+  // SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+  SIGNING_STATUS_FAILED = 4;
 }
 
 // Bitcoin Signing Request
@@ -43,7 +43,7 @@ message SigningRequest {
   uint64 sequence = 2;
   string txid = 3;
   string psbt = 4;
-  SigningRequestStatus status = 5;
+  SigningStatus status = 5;
 }
 
 // Bitcoin UTXO

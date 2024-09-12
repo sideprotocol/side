@@ -75,7 +75,7 @@ service Query {
 
 // QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method.
 message QuerySigningRequestsRequest {
-  SigningRequestStatus status = 1;
+  SigningStatus status = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 

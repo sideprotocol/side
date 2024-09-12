@@ -281,7 +281,7 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 				Sequence: k.IncrementRequestSequence(ctx),
 				Txid:     p.UnsignedTx.TxHash().String(),
 				Psbt:     psbts[i],
-				Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
+				Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 			}
 
 			k.SetSigningRequest(ctx, signingReq)
@@ -465,7 +465,7 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 		Sequence: k.IncrementRequestSequence(ctx),
 		Txid:     p.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
-		Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
+		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	return signingReq, nil
@@ -528,7 +528,7 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 		Sequence: k.IncrementRequestSequence(ctx),
 		Txid:     p.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
-		Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
+		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	return signingReq, nil

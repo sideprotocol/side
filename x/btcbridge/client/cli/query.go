@@ -172,7 +172,7 @@ func CmdQuerySigningRequests() *cobra.Command {
 				return clientCtx.PrintProto(res)
 			}
 
-			res, err := queryClient.QuerySigningRequests(cmd.Context(), &types.QuerySigningRequestsRequest{Status: types.SigningRequestStatus(status)})
+			res, err := queryClient.QuerySigningRequests(cmd.Context(), &types.QuerySigningRequestsRequest{Status: types.SigningStatus(status)})
 			if err != nil {
 				return err
 			}

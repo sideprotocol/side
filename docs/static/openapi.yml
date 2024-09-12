@@ -51349,21 +51349,20 @@ paths:
                     status:
                       type: string
                       enum:
-                        - SIGNING_REQUEST_STATUS_UNSPECIFIED
-                        - SIGNING_REQUEST_STATUS_PENDING
-                        - SIGNING_REQUEST_STATUS_BROADCASTED
-                        - SIGNING_REQUEST_STATUS_CONFIRMED
-                        - SIGNING_REQUEST_STATUS_FAILED
-                      default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+                        - SIGNING_STATUS_UNSPECIFIED
+                        - SIGNING_STATUS_PENDING
+                        - SIGNING_STATUS_BROADCASTED
+                        - SIGNING_STATUS_CONFIRMED
+                        - SIGNING_STATUS_FAILED
+                      default: SIGNING_STATUS_UNSPECIFIED
                       description: >-
-                        - SIGNING_REQUEST_STATUS_UNSPECIFIED:
-                        SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value,
-                        should not be used
-                         - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-                         - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-                         - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-                         - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-                      title: Signing Request Status
+                        - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED
+                        - Default value, should not be used
+                         - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+                         - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+                         - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+                         - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+                      title: Bitcoin Signing Status
                   title: Bitcoin Signing Request
               pagination:
                 type: object
@@ -51584,21 +51583,21 @@ paths:
       parameters:
         - name: status
           description: |2-
-             - SIGNING_REQUEST_STATUS_UNSPECIFIED: SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value, should not be used
-             - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-             - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-             - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-             - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+             - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED - Default value, should not be used
+             - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+             - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+             - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+             - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
           in: query
           required: false
           type: string
           enum:
-            - SIGNING_REQUEST_STATUS_UNSPECIFIED
-            - SIGNING_REQUEST_STATUS_PENDING
-            - SIGNING_REQUEST_STATUS_BROADCASTED
-            - SIGNING_REQUEST_STATUS_CONFIRMED
-            - SIGNING_REQUEST_STATUS_FAILED
-          default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+            - SIGNING_STATUS_UNSPECIFIED
+            - SIGNING_STATUS_PENDING
+            - SIGNING_STATUS_BROADCASTED
+            - SIGNING_STATUS_CONFIRMED
+            - SIGNING_STATUS_FAILED
+          default: SIGNING_STATUS_UNSPECIFIED
         - name: pagination.next_key
           description: |-
             next_key is the key to be passed to PageRequest.key to
@@ -51649,21 +51648,20 @@ paths:
                     status:
                       type: string
                       enum:
-                        - SIGNING_REQUEST_STATUS_UNSPECIFIED
-                        - SIGNING_REQUEST_STATUS_PENDING
-                        - SIGNING_REQUEST_STATUS_BROADCASTED
-                        - SIGNING_REQUEST_STATUS_CONFIRMED
-                        - SIGNING_REQUEST_STATUS_FAILED
-                      default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+                        - SIGNING_STATUS_UNSPECIFIED
+                        - SIGNING_STATUS_PENDING
+                        - SIGNING_STATUS_BROADCASTED
+                        - SIGNING_STATUS_CONFIRMED
+                        - SIGNING_STATUS_FAILED
+                      default: SIGNING_STATUS_UNSPECIFIED
                       description: >-
-                        - SIGNING_REQUEST_STATUS_UNSPECIFIED:
-                        SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value,
-                        should not be used
-                         - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-                         - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-                         - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-                         - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-                      title: Signing Request Status
+                        - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED
+                        - Default value, should not be used
+                         - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+                         - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+                         - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+                         - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+                      title: Bitcoin Signing Status
                   title: Bitcoin Signing Request
               pagination:
                 type: object
@@ -51934,21 +51932,20 @@ paths:
                   status:
                     type: string
                     enum:
-                      - SIGNING_REQUEST_STATUS_UNSPECIFIED
-                      - SIGNING_REQUEST_STATUS_PENDING
-                      - SIGNING_REQUEST_STATUS_BROADCASTED
-                      - SIGNING_REQUEST_STATUS_CONFIRMED
-                      - SIGNING_REQUEST_STATUS_FAILED
-                    default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+                      - SIGNING_STATUS_UNSPECIFIED
+                      - SIGNING_STATUS_PENDING
+                      - SIGNING_STATUS_BROADCASTED
+                      - SIGNING_STATUS_CONFIRMED
+                      - SIGNING_STATUS_FAILED
+                    default: SIGNING_STATUS_UNSPECIFIED
                     description: >-
-                      - SIGNING_REQUEST_STATUS_UNSPECIFIED:
-                      SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value, should
-                      not be used
-                       - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-                       - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-                       - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-                       - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-                    title: Signing Request Status
+                      - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED -
+                      Default value, should not be used
+                       - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+                       - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+                       - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+                       - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+                    title: Bitcoin Signing Status
                 title: Bitcoin Signing Request
             description: >-
               QuerySigningRequestByTxHashResponse is response type for the
@@ -83751,21 +83748,20 @@ definitions:
           status:
             type: string
             enum:
-              - SIGNING_REQUEST_STATUS_UNSPECIFIED
-              - SIGNING_REQUEST_STATUS_PENDING
-              - SIGNING_REQUEST_STATUS_BROADCASTED
-              - SIGNING_REQUEST_STATUS_CONFIRMED
-              - SIGNING_REQUEST_STATUS_FAILED
-            default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+              - SIGNING_STATUS_UNSPECIFIED
+              - SIGNING_STATUS_PENDING
+              - SIGNING_STATUS_BROADCASTED
+              - SIGNING_STATUS_CONFIRMED
+              - SIGNING_STATUS_FAILED
+            default: SIGNING_STATUS_UNSPECIFIED
             description: >-
-              - SIGNING_REQUEST_STATUS_UNSPECIFIED:
-              SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value, should not be
-              used
-               - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-               - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-               - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-               - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-            title: Signing Request Status
+              - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED - Default
+              value, should not be used
+               - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+               - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+               - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+               - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+            title: Bitcoin Signing Status
         title: Bitcoin Signing Request
     description: >-
       QuerySigningRequestByTxHashResponse is response type for the
@@ -83790,21 +83786,20 @@ definitions:
             status:
               type: string
               enum:
-                - SIGNING_REQUEST_STATUS_UNSPECIFIED
-                - SIGNING_REQUEST_STATUS_PENDING
-                - SIGNING_REQUEST_STATUS_BROADCASTED
-                - SIGNING_REQUEST_STATUS_CONFIRMED
-                - SIGNING_REQUEST_STATUS_FAILED
-              default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+                - SIGNING_STATUS_UNSPECIFIED
+                - SIGNING_STATUS_PENDING
+                - SIGNING_STATUS_BROADCASTED
+                - SIGNING_STATUS_CONFIRMED
+                - SIGNING_STATUS_FAILED
+              default: SIGNING_STATUS_UNSPECIFIED
               description: >-
-                - SIGNING_REQUEST_STATUS_UNSPECIFIED:
-                SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value, should not
-                be used
-                 - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-                 - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-                 - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-                 - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-              title: Signing Request Status
+                - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED -
+                Default value, should not be used
+                 - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+                 - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+                 - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+                 - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+              title: Bitcoin Signing Status
           title: Bitcoin Signing Request
       pagination:
         type: object
@@ -83855,21 +83850,20 @@ definitions:
             status:
               type: string
               enum:
-                - SIGNING_REQUEST_STATUS_UNSPECIFIED
-                - SIGNING_REQUEST_STATUS_PENDING
-                - SIGNING_REQUEST_STATUS_BROADCASTED
-                - SIGNING_REQUEST_STATUS_CONFIRMED
-                - SIGNING_REQUEST_STATUS_FAILED
-              default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+                - SIGNING_STATUS_UNSPECIFIED
+                - SIGNING_STATUS_PENDING
+                - SIGNING_STATUS_BROADCASTED
+                - SIGNING_STATUS_CONFIRMED
+                - SIGNING_STATUS_FAILED
+              default: SIGNING_STATUS_UNSPECIFIED
               description: >-
-                - SIGNING_REQUEST_STATUS_UNSPECIFIED:
-                SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value, should not
-                be used
-                 - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-                 - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-                 - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-                 - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-              title: Signing Request Status
+                - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED -
+                Default value, should not be used
+                 - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+                 - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+                 - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+                 - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+              title: Bitcoin Signing Status
           title: Bitcoin Signing Request
       pagination:
         type: object
@@ -84042,38 +84036,38 @@ definitions:
       status:
         type: string
         enum:
-          - SIGNING_REQUEST_STATUS_UNSPECIFIED
-          - SIGNING_REQUEST_STATUS_PENDING
-          - SIGNING_REQUEST_STATUS_BROADCASTED
-          - SIGNING_REQUEST_STATUS_CONFIRMED
-          - SIGNING_REQUEST_STATUS_FAILED
-        default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+          - SIGNING_STATUS_UNSPECIFIED
+          - SIGNING_STATUS_PENDING
+          - SIGNING_STATUS_BROADCASTED
+          - SIGNING_STATUS_CONFIRMED
+          - SIGNING_STATUS_FAILED
+        default: SIGNING_STATUS_UNSPECIFIED
         description: >-
-          - SIGNING_REQUEST_STATUS_UNSPECIFIED:
-          SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value, should not be used
-           - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-           - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-           - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-           - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-        title: Signing Request Status
+          - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED - Default
+          value, should not be used
+           - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+           - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+           - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+           - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+        title: Bitcoin Signing Status
     title: Bitcoin Signing Request
-  side.btcbridge.SigningRequestStatus:
+  side.btcbridge.SigningStatus:
     type: string
     enum:
-      - SIGNING_REQUEST_STATUS_UNSPECIFIED
-      - SIGNING_REQUEST_STATUS_PENDING
-      - SIGNING_REQUEST_STATUS_BROADCASTED
-      - SIGNING_REQUEST_STATUS_CONFIRMED
-      - SIGNING_REQUEST_STATUS_FAILED
-    default: SIGNING_REQUEST_STATUS_UNSPECIFIED
+      - SIGNING_STATUS_UNSPECIFIED
+      - SIGNING_STATUS_PENDING
+      - SIGNING_STATUS_BROADCASTED
+      - SIGNING_STATUS_CONFIRMED
+      - SIGNING_STATUS_FAILED
+    default: SIGNING_STATUS_UNSPECIFIED
     description: >-
-      - SIGNING_REQUEST_STATUS_UNSPECIFIED: SIGNING_REQUEST_STATUS_UNSPECIFIED -
-      Default value, should not be used
-       - SIGNING_REQUEST_STATUS_PENDING: SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
-       - SIGNING_REQUEST_STATUS_BROADCASTED: SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
-       - SIGNING_REQUEST_STATUS_CONFIRMED: SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
-       - SIGNING_REQUEST_STATUS_FAILED: SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
-    title: Signing Request Status
+      - SIGNING_STATUS_UNSPECIFIED: SIGNING_STATUS_UNSPECIFIED - Default value,
+      should not be used
+       - SIGNING_STATUS_PENDING: SIGNING_STATUS_PENDING - The signing request is pending
+       - SIGNING_STATUS_BROADCASTED: SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+       - SIGNING_STATUS_CONFIRMED: SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+       - SIGNING_STATUS_FAILED: SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+    title: Bitcoin Signing Status
   side.btcbridge.TSSParams:
     type: object
     properties:

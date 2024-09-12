@@ -78,7 +78,7 @@ func (k Keeper) NewBtcSigningRequest(ctx sdk.Context, sender string, amount sdk.
 		Sequence: k.IncrementRequestSequence(ctx),
 		Txid:     psbt.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
-		Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
+		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	k.SetSigningRequest(ctx, signingRequest)
@@ -131,7 +131,7 @@ func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sd
 		Sequence: k.IncrementRequestSequence(ctx),
 		Txid:     psbt.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
-		Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
+		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	k.SetSigningRequest(ctx, signingRequest)
@@ -257,11 +257,11 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 	}
 
 	signingRequest := k.GetSigningRequestByTxHash(ctx, txHash.String())
-	if signingRequest.Status == types.SigningRequestStatus_SIGNING_REQUEST_STATUS_CONFIRMED {
+	if signingRequest.Status == types.SigningStatus_SIGNING_STATUS_CONFIRMED {
 		return nil, types.ErrSigningRequestConfirmed
 	}
 
-	signingRequest.Status = types.SigningRequestStatus_SIGNING_REQUEST_STATUS_CONFIRMED
+	signingRequest.Status = types.SigningStatus_SIGNING_STATUS_CONFIRMED
 	k.SetSigningRequest(ctx, signingRequest)
 
 	// spend the locked utxos

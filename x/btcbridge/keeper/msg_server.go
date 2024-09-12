@@ -175,7 +175,7 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	}
 
 	signingRequest := m.GetSigningRequestByTxHash(ctx, msg.Txid)
-	if signingRequest.Status != types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING {
+	if signingRequest.Status != types.SigningStatus_SIGNING_STATUS_PENDING {
 		return nil, types.ErrInvalidSignatures
 	}
 
@@ -203,7 +203,7 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 
 	// set the signing request status to broadcasted
 	signingRequest.Psbt = msg.Psbt
-	signingRequest.Status = types.SigningRequestStatus_SIGNING_REQUEST_STATUS_BROADCASTED
+	signingRequest.Status = types.SigningStatus_SIGNING_STATUS_BROADCASTED
 
 	m.SetSigningRequest(ctx, signingRequest)
 
