@@ -143,7 +143,7 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 
 	feeRate, _ := strconv.ParseInt(msg.FeeRate, 10, 64)
 
-	req, err := m.Keeper.NewWithdrawRequest(ctx, msg.Sender, amount, feeRate)
+	req, err := m.Keeper.NewSigningRequest(ctx, msg.Sender, amount, feeRate)
 	if err != nil {
 		return nil, err
 	}
@@ -162,20 +162,20 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 	return &types.MsgWithdrawToBitcoinResponse{}, nil
 }
 
-// SubmitWithdrawSignatures submits the signatures of the withdrawal transaction.
-func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.MsgSubmitWithdrawSignatures) (*types.MsgSubmitWithdrawSignaturesResponse, error) {
+// SubmitSignatures submits the signatures of the signing request.
+func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitSignatures) (*types.MsgSubmitSignaturesResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasWithdrawRequestByTxHash(ctx, msg.Txid) {
-		return nil, types.ErrWithdrawRequestNotExist
+	if !m.HasSigningRequestByTxHash(ctx, msg.Txid) {
+		return nil, types.ErrSigningRequestNotExist
 	}
 
-	withdrawRequest := m.GetWithdrawRequestByTxHash(ctx, msg.Txid)
-	if withdrawRequest.Status != types.WithdrawStatus_WITHDRAW_STATUS_CREATED {
+	signingRequest := m.GetSigningRequestByTxHash(ctx, msg.Txid)
+	if signingRequest.Status != types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING {
 		return nil, types.ErrInvalidSignatures
 	}
 
@@ -201,13 +201,13 @@ func (m msgServer) SubmitWithdrawSignatures(goCtx context.Context, msg *types.Ms
 		return nil, types.ErrInvalidSignatures
 	}
 
-	// set the withdraw status to broadcasted
-	withdrawRequest.Psbt = msg.Psbt
-	withdrawRequest.Status = types.WithdrawStatus_WITHDRAW_STATUS_BROADCASTED
+	// set the signing request status to broadcasted
+	signingRequest.Psbt = msg.Psbt
+	signingRequest.Status = types.SigningRequestStatus_SIGNING_REQUEST_STATUS_BROADCASTED
 
-	m.SetWithdrawRequest(ctx, withdrawRequest)
+	m.SetSigningRequest(ctx, signingRequest)
 
-	return &types.MsgSubmitWithdrawSignaturesResponse{}, nil
+	return &types.MsgSubmitSignaturesResponse{}, nil
 }
 
 // InitiateDKG initiates the DKG request.

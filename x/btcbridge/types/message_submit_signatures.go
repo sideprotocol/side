@@ -5,29 +5,29 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgSubmitWithdrawSignatures = "submit_withdraw_signatures"
+const TypeMsgSubmitSignatures = "submit_signatures"
 
-func NewMsgSubmitWithdrawSignatures(
+func NewMsgSubmitSignatures(
 	sender string,
 	txid string,
 	pbst string,
-) *MsgSubmitWithdrawSignatures {
-	return &MsgSubmitWithdrawSignatures{
+) *MsgSubmitSignatures {
+	return &MsgSubmitSignatures{
 		Sender: sender,
 		Txid:   txid,
 		Psbt:   pbst,
 	}
 }
 
-func (msg *MsgSubmitWithdrawSignatures) Route() string {
+func (msg *MsgSubmitSignatures) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgSubmitWithdrawSignatures) Type() string {
-	return TypeMsgSubmitWithdrawSignatures
+func (msg *MsgSubmitSignatures) Type() string {
+	return TypeMsgSubmitSignatures
 }
 
-func (msg *MsgSubmitWithdrawSignatures) GetSigners() []sdk.AccAddress {
+func (msg *MsgSubmitSignatures) GetSigners() []sdk.AccAddress {
 	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
@@ -35,12 +35,12 @@ func (msg *MsgSubmitWithdrawSignatures) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{Sender}
 }
 
-func (msg *MsgSubmitWithdrawSignatures) GetSignBytes() []byte {
+func (msg *MsgSubmitSignatures) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgSubmitWithdrawSignatures) ValidateBasic() error {
+func (msg *MsgSubmitSignatures) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return sdkerrors.Wrapf(err, "invalid sender address (%s)", err)

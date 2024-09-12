@@ -27,17 +27,17 @@ service Query {
   rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
     option (google.api.http).get = "/side/btcbridge/hash/{hash}";
   }
-  // QueryWithdrawRequests queries the withdrawal requests by the given status.
-  rpc QueryWithdrawRequests(QueryWithdrawRequestsRequest) returns (QueryWithdrawRequestsResponse) {
-    option (google.api.http).get = "/side/btcbridge/withdrawal/request";
+  // QuerySigningRequests queries the signing requests by the given status.
+  rpc QuerySigningRequests(QuerySigningRequestsRequest) returns (QuerySigningRequestsResponse) {
+    option (google.api.http).get = "/side/btcbridge/signing/requests";
   }
-  // QueryWithdrawRequestsByAddress queries the withdrawal requests by the given address.
-  rpc QueryWithdrawRequestsByAddress(QueryWithdrawRequestsByAddressRequest) returns (QueryWithdrawRequestsByAddressResponse) {
-    option (google.api.http).get = "/side/btcbridge/withdrawal/request/address/{address}";
+  // QuerySigningRequestsByAddress queries the signing requests by the given address.
+  rpc QuerySigningRequestsByAddress(QuerySigningRequestsByAddressRequest) returns (QuerySigningRequestsByAddressResponse) {
+    option (google.api.http).get = "/side/btcbridge/signing/requests/address/{address}";
   }
-  // QueryWithdrawRequestByTxHash queries the withdrawal request by the given tx hash.
-  rpc QueryWithdrawRequestByTxHash(QueryWithdrawRequestByTxHashRequest) returns (QueryWithdrawRequestByTxHashResponse) {
-    option (google.api.http).get = "/side/btcbridge/withdrawal/request/tx/{txid}";
+  // QuerySigningRequestByTxHash queries the signing request by the given tx hash.
+  rpc QuerySigningRequestByTxHash(QuerySigningRequestByTxHashRequest) returns (QuerySigningRequestByTxHashResponse) {
+    option (google.api.http).get = "/side/btcbridge/signing/requests/tx/{txid}";
   }
   // QueryWithdrawNetworkFee queries the bitcoin network fee for withdrawal.
   rpc QueryWithdrawNetworkFee(QueryWithdrawNetworkFeeRequest) returns (QueryWithdrawNetworkFeeResponse) {
@@ -73,38 +73,38 @@ service Query {
   }
 }
 
-// QueryWithdrawRequestsRequest is request type for the Query/WithdrawRequests RPC method.
-message QueryWithdrawRequestsRequest {
-  WithdrawStatus status = 1;
+// QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method.
+message QuerySigningRequestsRequest {
+  SigningRequestStatus status = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 
-// QueryWithdrawRequestsResponse is response type for the Query/WithdrawRequests RPC method.
-message QueryWithdrawRequestsResponse {
-  repeated BitcoinWithdrawRequest requests = 1;
+// QuerySigningRequestsResponse is response type for the Query/SigningRequests RPC method.
+message QuerySigningRequestsResponse {
+  repeated SigningRequest requests = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 
-// QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method.
-message QueryWithdrawRequestsByAddressRequest {
+// QuerySigningRequestsByAddressRequest is request type for the Query/SigningRequestsByAddress RPC method.
+message QuerySigningRequestsByAddressRequest {
   string address = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 
-// QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method.
-message QueryWithdrawRequestsByAddressResponse {
-  repeated BitcoinWithdrawRequest requests = 1;
+// QuerySigningRequestsByAddressResponse is response type for the Query/SigningRequestsByAddress RPC method.
+message QuerySigningRequestsByAddressResponse {
+  repeated SigningRequest requests = 1;
   cosmos.base.query.v1beta1.PageResponse pagination            = 2;
 }
 
-// QueryWithdrawRequestByTxHashRequest is request type for the Query/WithdrawRequestByTxHash RPC method.
-message QueryWithdrawRequestByTxHashRequest {
+// QuerySigningRequestByTxHashRequest is request type for the Query/SigningRequestByTxHash RPC method.
+message QuerySigningRequestByTxHashRequest {
   string txid = 1;
 }
 
-// QueryWithdrawRequestByTxHashResponse is response type for the Query/WithdrawRequestByTxHash RPC method.
-message QueryWithdrawRequestByTxHashResponse {
-  BitcoinWithdrawRequest request = 1;
+// QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHashResponse RPC method.
+message QuerySigningRequestByTxHashResponse {
+  SigningRequest request = 1;
 }
 
 // QueryWithdrawNetworkFeeRequest is request type for the Query/WithdrawNetworkFee RPC method.

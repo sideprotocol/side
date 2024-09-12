@@ -276,15 +276,15 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 				return err
 			}
 
-			signingReq := &types.BitcoinWithdrawRequest{
+			signingReq := &types.SigningRequest{
 				Address:  k.authority,
 				Sequence: k.IncrementRequestSequence(ctx),
 				Txid:     p.UnsignedTx.TxHash().String(),
 				Psbt:     psbts[i],
-				Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+				Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
 			}
 
-			k.SetWithdrawRequest(ctx, signingReq)
+			k.SetSigningRequest(ctx, signingReq)
 		}
 
 		return nil
@@ -293,7 +293,7 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 	parsedFeeRate, _ := strconv.ParseInt(feeRate, 10, 64)
 
 	var err error
-	var signingReq *types.BitcoinWithdrawRequest
+	var signingReq *types.SigningRequest
 
 	switch assetType {
 	case types.AssetType_ASSET_TYPE_BTC:
@@ -309,7 +309,7 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 		}
 	}
 
-	k.SetWithdrawRequest(ctx, signingReq)
+	k.SetSigningRequest(ctx, signingReq)
 
 	return nil
 }
@@ -422,7 +422,7 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 }
 
 // BuildTransferVaultBtcSigningRequest builds the signing request to transfer btc of the given vault
-func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault *types.Vault, destVault *types.Vault, targetUtxoNum uint32, feeRate int64) (*types.BitcoinWithdrawRequest, error) {
+func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault *types.Vault, destVault *types.Vault, targetUtxoNum uint32, feeRate int64) (*types.SigningRequest, error) {
 	utxos := make([]*types.UTXO, 0)
 
 	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
@@ -460,19 +460,19 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 		k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
 	}
 
-	signingReq := &types.BitcoinWithdrawRequest{
+	signingReq := &types.SigningRequest{
 		Address:  k.authority,
 		Sequence: k.IncrementRequestSequence(ctx),
 		Txid:     p.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
-		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+		Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
 	}
 
 	return signingReq, nil
 }
 
 // BuildTransferVaultRunesSigningRequest builds the signing request to transfer runes of the given vault
-func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVault *types.Vault, destVault *types.Vault, targetUtxoNum uint32, feeRate int64) (*types.BitcoinWithdrawRequest, error) {
+func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVault *types.Vault, destVault *types.Vault, targetUtxoNum uint32, feeRate int64) (*types.SigningRequest, error) {
 	runesUtxos := make([]*types.UTXO, 0)
 	runeBalances := make(types.RuneBalances, 0)
 
@@ -523,12 +523,12 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 		k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
 	}
 
-	signingReq := &types.BitcoinWithdrawRequest{
+	signingReq := &types.SigningRequest{
 		Address:  k.authority,
 		Sequence: k.IncrementRequestSequence(ctx),
 		Txid:     p.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
-		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+		Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
 	}
 
 	return signingReq, nil

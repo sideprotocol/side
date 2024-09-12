@@ -31,7 +31,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdBestBlock())
 	cmd.AddCommand(CmdQueryBlock())
-	cmd.AddCommand(CmdQueryWithdrawRequests())
+	cmd.AddCommand(CmdQuerySigningRequests())
 	cmd.AddCommand(CmdQueryUTXOs())
 	cmd.AddCommand(CmdQueryUTXOStats())
 	cmd.AddCommand(CmdQueryDKGRequests())
@@ -133,11 +133,11 @@ func CmdQueryBlock() *cobra.Command {
 	return cmd
 }
 
-// CmdQueryWithdrawRequests returns the command to query withdrawal requests
-func CmdQueryWithdrawRequests() *cobra.Command {
+// CmdQuerySigningRequests returns the command to query signing requests
+func CmdQuerySigningRequests() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "withdraw-requests [status | address | tx hash]",
-		Short: "Query withdrawal requests by status, address or tx hash",
+		Use:   "signing-requests [status | address | tx hash]",
+		Short: "Query signing requests by status, address or tx hash",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -156,7 +156,7 @@ func CmdQueryWithdrawRequests() *cobra.Command {
 						return fmt.Errorf("invalid arg, neither status, address nor tx hash: %s", args[0])
 					}
 
-					res, err := queryClient.QueryWithdrawRequestByTxHash(cmd.Context(), &types.QueryWithdrawRequestByTxHashRequest{Txid: args[0]})
+					res, err := queryClient.QuerySigningRequestByTxHash(cmd.Context(), &types.QuerySigningRequestByTxHashRequest{Txid: args[0]})
 					if err != nil {
 						return err
 					}
@@ -164,7 +164,7 @@ func CmdQueryWithdrawRequests() *cobra.Command {
 					return clientCtx.PrintProto(res)
 				}
 
-				res, err := queryClient.QueryWithdrawRequestsByAddress(cmd.Context(), &types.QueryWithdrawRequestsByAddressRequest{Address: args[0]})
+				res, err := queryClient.QuerySigningRequestsByAddress(cmd.Context(), &types.QuerySigningRequestsByAddressRequest{Address: args[0]})
 				if err != nil {
 					return err
 				}
@@ -172,7 +172,7 @@ func CmdQueryWithdrawRequests() *cobra.Command {
 				return clientCtx.PrintProto(res)
 			}
 
-			res, err := queryClient.QueryWithdrawRequests(cmd.Context(), &types.QueryWithdrawRequestsRequest{Status: types.WithdrawStatus(status)})
+			res, err := queryClient.QuerySigningRequests(cmd.Context(), &types.QuerySigningRequestsRequest{Status: types.SigningRequestStatus(status)})
 			if err != nil {
 				return err
 			}

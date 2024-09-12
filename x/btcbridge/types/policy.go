@@ -17,7 +17,7 @@ const (
 	// allowed number of edicts in the runes payload for the runes deposit transaction
 	RunesEdictNum = 1
 
-	// transaction input sequence intended to identify the withdrawal txs (for relayers' convenience)
+	// transaction input sequence intended to identify the txs built by the bridge (for relayers' convenience)
 	MagicSequence = 1<<31 + 0xde
 )
 
