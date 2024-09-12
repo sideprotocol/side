@@ -593,3 +593,25 @@ func (k Keeper) GetLatestVaultVersion(ctx sdk.Context) uint64 {
 
 	return 0
 }
+
+// SetVaultVersion sets the vault version
+func (k Keeper) SetVaultVersion(ctx sdk.Context, version uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.VaultVersionKey, sdk.Uint64ToBigEndian(version))
+}
+
+// VaultTransferCompleted returns true if the asset transfer completed for the given vault, false otherwise
+func (k Keeper) VaultTransferCompleted(ctx sdk.Context, vault string) bool {
+	count, _, _ := k.GetUnlockedUTXOCountAndBalancesByAddr(ctx, vault)
+
+	return count == 0
+}
+
+// VaultsTransferCompleted returns true if all asset transfer completed for the given vault version, false otherwise
+func (k Keeper) VaultsTransferCompleted(ctx sdk.Context, version uint64) bool {
+	btcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, version).Address
+	runesVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_RUNES, version).Address
+
+	return k.VaultTransferCompleted(ctx, btcVault) && k.VaultTransferCompleted(ctx, runesVault)
+}

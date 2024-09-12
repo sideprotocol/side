@@ -9,6 +9,12 @@ import (
 
 // EndBlocker called at every block to handle DKG requests
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+	handleDKGRequests(ctx, k)
+	handleVaultTransfer(ctx, k)
+}
+
+// handleDKGRequests performs the DKG request handling
+func handleDKGRequests(ctx sdk.Context, k keeper.Keeper) {
 	pendingDKGRequests := k.GetPendingDKGRequests(ctx)
 
 	for _, req := range pendingDKGRequests {
@@ -40,34 +46,48 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 		// update status
 		req.Status = types.DKGRequestStatus_DKG_REQUEST_STATUS_COMPLETED
 		k.SetDKGRequest(ctx, req)
-
-		// transfer vaults if the EnableTransfer flag set
-		if req.EnableTransfer {
-			err := transferVaults(ctx, k, req.TargetUtxoNum, req.FeeRate)
-
-			// reenable bridge when successfully transferred
-			if err == nil && req.DisableBridge {
-				k.EnableBridge(ctx)
-			}
-		}
 	}
 }
 
-// transferVaults performs the vault asset transfer (possibly partially)
-func transferVaults(ctx sdk.Context, k keeper.Keeper, targetUtxoNum uint32, feeRate string) error {
-	latestVaultVersion := k.GetLatestVaultVersion(ctx)
+// handleVaultTransfer performs the vault asset transfer
+func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
+	completedDKGRequests := k.GetDKGRequests(ctx, types.DKGRequestStatus_DKG_REQUEST_STATUS_COMPLETED)
 
-	if err := k.TransferVault(ctx, latestVaultVersion-1, latestVaultVersion, types.AssetType_ASSET_TYPE_RUNES, nil, targetUtxoNum, feeRate); err != nil {
-		k.Logger(ctx).Error("transfer vault errored", "source version", latestVaultVersion-1, "destination version", latestVaultVersion, "asset type", types.AssetType_ASSET_TYPE_RUNES, "target utxo num", targetUtxoNum, "fee rate", feeRate, "err", err)
+	for _, req := range completedDKGRequests {
+		if req.EnableTransfer {
+			completions := k.GetDKGCompletionRequests(ctx, req.Id)
+			dkgVaultVersion, _ := k.GetVaultVersionByAddress(ctx, completions[0].Vaults[0])
 
-		return err
+			sourceVersion := dkgVaultVersion - 1
+			destVersion := k.GetLatestVaultVersion(ctx)
+
+			if k.VaultsTransferCompleted(ctx, sourceVersion) {
+				return
+			}
+
+			sourceBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, sourceVersion).Address
+			sourceRunesVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_RUNES, sourceVersion).Address
+
+			// transfer runes
+			if !k.VaultTransferCompleted(ctx, sourceRunesVault) {
+				if err := k.TransferVault(ctx, sourceVersion, destVersion, types.AssetType_ASSET_TYPE_RUNES, nil, req.TargetUtxoNum, req.FeeRate); err != nil {
+					k.Logger(ctx).Error("transfer vault errored", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_RUNES, "target utxo num", req.TargetUtxoNum, "fee rate", req.FeeRate, "err", err)
+				}
+			}
+
+			// transfer btc only when runes transfer completed
+			if k.VaultTransferCompleted(ctx, sourceRunesVault) && !k.VaultTransferCompleted(ctx, sourceBtcVault) {
+				if err := k.TransferVault(ctx, sourceVersion, destVersion, types.AssetType_ASSET_TYPE_BTC, nil, req.TargetUtxoNum, req.FeeRate); err != nil {
+					k.Logger(ctx).Error("transfer vault errored", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_BTC, "target utxo num", req.TargetUtxoNum, "fee rate", req.FeeRate, "err", err)
+				}
+			}
+
+			// reenable bridge functions if disabled
+			if k.VaultsTransferCompleted(ctx, sourceVersion) {
+				if req.DisableBridge {
+					k.EnableBridge(ctx)
+				}
+			}
+		}
 	}
-
-	if err := k.TransferVault(ctx, latestVaultVersion-1, latestVaultVersion, types.AssetType_ASSET_TYPE_BTC, nil, targetUtxoNum, feeRate); err != nil {
-		k.Logger(ctx).Error("transfer vault errored", "source version", latestVaultVersion-1, "destination version", latestVaultVersion, "asset type", types.AssetType_ASSET_TYPE_BTC, "target utxo num", targetUtxoNum, "fee rate", feeRate, "err", err)
-
-		return err
-	}
-
-	return nil
 }

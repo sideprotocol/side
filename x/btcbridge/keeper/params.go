@@ -48,6 +48,17 @@ func (k Keeper) GetVaultByAssetTypeAndVersion(ctx sdk.Context, assetType types.A
 	return nil
 }
 
+// GetVaultVersionByAddress gets the vault version of the given address
+func (k Keeper) GetVaultVersionByAddress(ctx sdk.Context, address string) (uint64, bool) {
+	for _, v := range k.GetParams(ctx).Vaults {
+		if v.Address == address {
+			return v.Version, true
+		}
+	}
+
+	return 0, false
+}
+
 // EnableBridge enables the bridge deposit and withdrawal
 func (k Keeper) EnableBridge(ctx sdk.Context) {
 	params := k.GetParams(ctx)
