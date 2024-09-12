@@ -439,7 +439,7 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 		return nil, types.ErrInsufficientUTXOs
 	}
 
-	p, selectedUtxos, changeUtxo, err := types.BuildTransferAllBtcPsbt(utxos, destVault.Address, feeRate)
+	p, recipientUTXO, err := types.BuildTransferAllBtcPsbt(utxos, destVault.Address, feeRate)
 	if err != nil {
 		return nil, err
 	}
@@ -451,14 +451,10 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 
 	// lock the involved utxos
 	_ = k.LockUTXOs(ctx, utxos)
-	_ = k.LockUTXOs(ctx, selectedUtxos)
 
-	// save the change utxo and mark minted
-	if changeUtxo != nil {
-		k.saveUTXO(ctx, changeUtxo)
-		// mark minted
-		k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
-	}
+	// save the recipient utxo and mark minted
+	k.saveUTXO(ctx, recipientUTXO)
+	k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
 
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
@@ -496,7 +492,7 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 
 	btcUtxoIterator := k.GetUTXOIteratorByAddr(ctx, sourceBtcVault)
 
-	p, selectedUtxos, changeUtxo, runesChangeUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destBtcVault, runeBalances.Compact(), feeRate, destBtcVault)
+	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destVault.Address, runeBalances.Compact(), feeRate, destBtcVault)
 	if err != nil {
 		return nil, err
 	}
@@ -510,18 +506,16 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 	_ = k.LockUTXOs(ctx, runesUtxos)
 	_ = k.LockUTXOs(ctx, selectedUtxos)
 
-	// save the change utxo and mark minted
+	// save the change utxo
 	if changeUtxo != nil {
 		k.saveUTXO(ctx, changeUtxo)
-		// mark minted
-		k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
 	}
 
-	// save the runes change utxo and mark minted
-	if runesChangeUtxo != nil {
-		k.saveUTXO(ctx, runesChangeUtxo)
-		k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
-	}
+	// save the runes recipient utxo
+	k.saveUTXO(ctx, runesRecipientUtxo)
+
+	// mark minted
+	k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
 
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,

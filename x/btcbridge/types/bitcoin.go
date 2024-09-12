@@ -71,38 +71,40 @@ func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRat
 
 // BuildTransferAllBtcPsbt builds a bitcoin psbt to transfer all given btc.
 // Assume that the utxo script type is witness.
-func BuildTransferAllBtcPsbt(utxos []*UTXO, recipient string, feeRate int64) (*psbt.Packet, []*UTXO, *UTXO, error) {
+func BuildTransferAllBtcPsbt(utxos []*UTXO, recipient string, feeRate int64) (*psbt.Packet, *UTXO, error) {
 	chaincfg := sdk.GetConfig().GetBtcChainCfg()
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, err
 	}
 
 	recipientPkScript, err := txscript.PayToAddrScript(recipientAddr)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, err
 	}
 
 	txOuts := make([]*wire.TxOut, 0)
 	txOuts = append(txOuts, wire.NewTxOut(0, recipientPkScript))
 
-	unsignedTx, selectedUTXOs, err := BuildUnsignedTransactionWithoutExtraChange([]*UTXO{}, txOuts, utxos, feeRate)
+	unsignedTx, err := BuildUnsignedTransactionWithoutExtraChange([]*UTXO{}, txOuts, utxos, feeRate)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, err
 	}
 
 	p, err := psbt.NewFromUnsignedTx(unsignedTx)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, err
 	}
 
-	for i, utxo := range selectedUTXOs {
+	for i, utxo := range utxos {
 		p.Inputs[i].SighashType = DefaultSigHashType
 		p.Inputs[i].WitnessUtxo = wire.NewTxOut(int64(utxo.Amount), utxo.PubKeyScript)
 	}
 
-	return p, selectedUTXOs, GetChangeUTXO(unsignedTx, recipient), nil
+	recipientUTXO := GetChangeUTXO(unsignedTx, recipient)
+
+	return p, recipientUTXO, nil
 }
 
 // BuildRunesPsbt builds a bitcoin psbt for runes edict from the given params.
@@ -229,8 +231,8 @@ func BuildTransferAllRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, 
 		return nil, nil, nil, nil, err
 	}
 
-	runesChangeUTXO := GetRunesChangeUTXO(runeBalancesDelta, recipient, recipientPkScript, 1)
-	runesChangeUTXO.Txid = unsignedTx.TxHash().String()
+	runesRecipientUTXO := GetRunesChangeUTXO(runeBalancesDelta, recipient, recipientPkScript, 1)
+	runesRecipientUTXO.Txid = unsignedTx.TxHash().String()
 
 	for i, utxo := range utxos {
 		p.Inputs[i].SighashType = DefaultSigHashType
@@ -242,7 +244,7 @@ func BuildTransferAllRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, 
 		p.Inputs[i+len(utxos)].WitnessUtxo = wire.NewTxOut(int64(utxo.Amount), utxo.PubKeyScript)
 	}
 
-	return p, selectedUTXOs, changeUTXO, runesChangeUTXO, nil
+	return p, selectedUTXOs, changeUTXO, runesRecipientUTXO, nil
 }
 
 // BuildUnsignedTransaction builds an unsigned tx from the given params.
@@ -292,7 +294,7 @@ func BuildUnsignedTransaction(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOIt
 
 // BuildUnsignedTransactionWithoutExtraChange builds an unsigned tx from the given params.
 // All payment utxos will be spent and the last out is the recipient (and change) out.
-func BuildUnsignedTransactionWithoutExtraChange(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOs []*UTXO, feeRate int64) (*wire.MsgTx, []*UTXO, error) {
+func BuildUnsignedTransactionWithoutExtraChange(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOs []*UTXO, feeRate int64) (*wire.MsgTx, error) {
 	tx := wire.NewMsgTx(TxVersion)
 
 	inAmount := int64(0)
@@ -310,7 +312,7 @@ func BuildUnsignedTransactionWithoutExtraChange(utxos []*UTXO, txOuts []*wire.Tx
 
 	for i, txOut := range txOuts {
 		if i != len(txOuts)-1 && IsDustOut(txOut) {
-			return nil, nil, ErrDustOutput
+			return nil, ErrDustOutput
 		}
 
 		tx.AddTxOut(txOut)
@@ -321,19 +323,19 @@ func BuildUnsignedTransactionWithoutExtraChange(utxos []*UTXO, txOuts []*wire.Tx
 
 	change := inAmount - outAmount - fee
 	if change <= 0 {
-		return nil, nil, ErrInsufficientUTXOs
+		return nil, ErrInsufficientUTXOs
 	}
 
 	txOuts[len(txOuts)-1].Value += change
 	if IsDustOut(txOuts[len(txOuts)-1]) {
-		return nil, nil, ErrDustOutput
+		return nil, ErrDustOutput
 	}
 
 	if err := CheckTransactionWeight(tx, append(utxos, paymentUTXOs...)); err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	return tx, paymentUTXOs, nil
+	return tx, nil
 }
 
 // AddPaymentUTXOsToTx adds the given payment utxos to the tx.

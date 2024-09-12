@@ -62,7 +62,7 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 			destVersion := k.GetLatestVaultVersion(ctx)
 
 			if k.VaultsTransferCompleted(ctx, sourceVersion) {
-				return
+				continue
 			}
 
 			sourceBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, sourceVersion).Address
@@ -82,7 +82,7 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 				}
 			}
 
-			// reenable bridge functions if disabled
+			// reenable bridge functions if disabled when all asset transfer completed
 			if k.VaultsTransferCompleted(ctx, sourceVersion) {
 				if req.DisableBridge {
 					k.EnableBridge(ctx)
