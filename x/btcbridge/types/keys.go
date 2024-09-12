@@ -23,13 +23,13 @@ var (
 	SequenceKey    = []byte{0x2}
 
 	// Host chain keys prefix the HostChain structs
-	BtcBlockHeaderHashPrefix         = []byte{0x11} // prefix for each key to a block header, for a hash
-	BtcBlockHeaderHeightPrefix       = []byte{0x12} // prefix for each key to a block hash, for a height
-	BtcBestBlockHeaderKey            = []byte{0x13} // key for the best block height
-	BtcWithdrawRequestPrefix         = []byte{0x14} // prefix for each key to a withdrawal request
-	BtcWithdrawRequestByTxHashPrefix = []byte{0x15} // prefix for each key to a withdrawal request from tx hash
-	BtcMintedTxHashKeyPrefix         = []byte{0x16} // prefix for each key to a minted tx hash
-	BtcLockedAssetKeyPrefix          = []byte{0x17} // prefix for each key to the locked asset
+	BtcBlockHeaderHashPrefix        = []byte{0x11} // prefix for each key to a block header, for a hash
+	BtcBlockHeaderHeightPrefix      = []byte{0x12} // prefix for each key to a block hash, for a height
+	BtcBestBlockHeaderKey           = []byte{0x13} // key for the best block height
+	BtcSigningRequestPrefix         = []byte{0x14} // prefix for each key to a signing request
+	BtcSigningRequestByTxHashPrefix = []byte{0x15} // prefix for each key to a signing request from tx hash
+	BtcMintedTxHashKeyPrefix        = []byte{0x16} // prefix for each key to a minted tx hash
+	BtcLockedAssetKeyPrefix         = []byte{0x17} // prefix for each key to the locked asset
 
 	BtcUtxoKeyPrefix           = []byte{0x20} // prefix for each key to a utxo
 	BtcOwnerUtxoKeyPrefix      = []byte{0x21} // prefix for each key to an owned utxo
@@ -49,12 +49,12 @@ func BtcBlockHeaderHeightKey(height uint64) []byte {
 	return append(BtcBlockHeaderHeightPrefix, sdk.Uint64ToBigEndian(height)...)
 }
 
-func BtcWithdrawRequestKey(sequence uint64) []byte {
-	return append(BtcWithdrawRequestPrefix, sdk.Uint64ToBigEndian(sequence)...)
+func BtcSigningRequestKey(sequence uint64) []byte {
+	return append(BtcSigningRequestPrefix, sdk.Uint64ToBigEndian(sequence)...)
 }
 
-func BtcWithdrawRequestByTxHashKey(txid string) []byte {
-	return append(BtcWithdrawRequestByTxHashPrefix, []byte(txid)...)
+func BtcSigningRequestByTxHashKey(txid string) []byte {
+	return append(BtcSigningRequestByTxHashPrefix, []byte(txid)...)
 }
 
 func BtcMintedTxHashKey(hash string) []byte {

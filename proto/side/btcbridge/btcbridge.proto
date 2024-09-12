@@ -23,27 +23,27 @@ message BlockHeader {
   uint64 ntx = 9;
 }
 
-// Bitcoin Withdrawal Status
-enum WithdrawStatus {
-  // WITHDRAW_STATUS_UNSPECIFIED - Default value, should not be used
-  WITHDRAW_STATUS_UNSPECIFIED = 0;
-  // WITHDRAW_STATUS_CREATED - The withdrawal tx is created
-  WITHDRAW_STATUS_CREATED = 1;
-  // WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted
-  WITHDRAW_STATUS_BROADCASTED = 2;
-  // WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed
-  WITHDRAW_STATUS_CONFIRMED = 3;
-  // WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness
-  WITHDRAW_STATUS_FAILED = 4;
+// Signing Request Status
+enum SigningRequestStatus {
+  // SIGNING_REQUEST_STATUS_UNSPECIFIED - Default value, should not be used
+  SIGNING_REQUEST_STATUS_UNSPECIFIED = 0;
+  // SIGNING_REQUEST_STATUS_PENDING - The signing request is pending
+  SIGNING_REQUEST_STATUS_PENDING = 1;
+  // SIGNING_REQUEST_STATUS_BROADCASTED - The signing request is broadcasted
+  SIGNING_REQUEST_STATUS_BROADCASTED = 2;
+  // SIGNING_REQUEST_STATUS_CONFIRMED - The signing request is confirmed
+  SIGNING_REQUEST_STATUS_CONFIRMED = 3;
+  // SIGNING_REQUEST_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+  SIGNING_REQUEST_STATUS_FAILED = 4;
 }
 
-// Bitcoin Withdrawal Request
-message BitcoinWithdrawRequest {
+// Bitcoin Signing Request
+message SigningRequest {
   string address = 1;
   uint64 sequence = 2;
   string txid = 3;
   string psbt = 4;
-  WithdrawStatus status = 5;
+  SigningRequestStatus status = 5;
 }
 
 // Bitcoin UTXO

@@ -32,26 +32,26 @@ func (k Keeper) IncrementRequestSequence(ctx sdk.Context) uint64 {
 	return seq
 }
 
-// NewWithdrawRequest creates a new withdrawal request
-func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64) (*types.BitcoinWithdrawRequest, error) {
+// NewSigningRequest creates a new withdrawal request
+func (k Keeper) NewSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64) (*types.SigningRequest, error) {
 	p := k.GetParams(ctx)
 	btcVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_BTC)
 
 	switch types.AssetTypeFromDenom(amount.Denom, p) {
 	case types.AssetType_ASSET_TYPE_BTC:
-		return k.NewBtcWithdrawRequest(ctx, sender, amount, feeRate, btcVault.Address)
+		return k.NewBtcSigningRequest(ctx, sender, amount, feeRate, btcVault.Address)
 
 	case types.AssetType_ASSET_TYPE_RUNES:
 		runesVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_RUNES)
-		return k.NewRunesWithdrawRequest(ctx, sender, amount, feeRate, runesVault.Address, btcVault.Address)
+		return k.NewRunesSigningRequest(ctx, sender, amount, feeRate, runesVault.Address, btcVault.Address)
 
 	default:
 		return nil, types.ErrAssetNotSupported
 	}
 }
 
-// NewBtcWithdrawRequest creates the request for btc withdrawal
-func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string) (*types.BitcoinWithdrawRequest, error) {
+// NewBtcSigningRequest creates the signing request for btc withdrawal
+func (k Keeper) NewBtcSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string) (*types.SigningRequest, error) {
 	utxoIterator := k.GetUTXOIteratorByAddr(ctx, vault)
 
 	psbt, selectedUTXOs, changeUTXO, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault)
@@ -73,21 +73,21 @@ func (k Keeper) NewBtcWithdrawRequest(ctx sdk.Context, sender string, amount sdk
 		k.addToMintHistory(ctx, psbt.UnsignedTx.TxHash().String())
 	}
 
-	withdrawRequest := &types.BitcoinWithdrawRequest{
+	signingRequest := &types.SigningRequest{
 		Address:  sender,
 		Sequence: k.IncrementRequestSequence(ctx),
 		Txid:     psbt.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
-		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+		Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
 	}
 
-	k.SetWithdrawRequest(ctx, withdrawRequest)
+	k.SetSigningRequest(ctx, signingRequest)
 
-	return withdrawRequest, nil
+	return signingRequest, nil
 }
 
-// NewRunesWithdrawRequest creates the request for runes withdrawal
-func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, btcVault string) (*types.BitcoinWithdrawRequest, error) {
+// NewRunesSigningRequest creates the signing request for runes withdrawal
+func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, btcVault string) (*types.SigningRequest, error) {
 	var runeId types.RuneId
 	runeId.FromDenom(amount.Denom)
 
@@ -126,119 +126,119 @@ func (k Keeper) NewRunesWithdrawRequest(ctx sdk.Context, sender string, amount s
 		k.addToMintHistory(ctx, psbt.UnsignedTx.TxHash().String())
 	}
 
-	withdrawRequest := &types.BitcoinWithdrawRequest{
+	signingRequest := &types.SigningRequest{
 		Address:  sender,
 		Sequence: k.IncrementRequestSequence(ctx),
 		Txid:     psbt.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
-		Status:   types.WithdrawStatus_WITHDRAW_STATUS_CREATED,
+		Status:   types.SigningRequestStatus_SIGNING_REQUEST_STATUS_PENDING,
 	}
 
-	k.SetWithdrawRequest(ctx, withdrawRequest)
+	k.SetSigningRequest(ctx, signingRequest)
 
-	return withdrawRequest, nil
+	return signingRequest, nil
 }
 
-// HasWithdrawRequest returns true if the given withdrawal request exists, false otherwise
-func (k Keeper) HasWithdrawRequest(ctx sdk.Context, sequence uint64) bool {
+// HasSigningRequest returns true if the given signing request exists, false otherwise
+func (k Keeper) HasSigningRequest(ctx sdk.Context, sequence uint64) bool {
 	store := ctx.KVStore(k.storeKey)
-	return store.Has(types.BtcWithdrawRequestKey(sequence))
+	return store.Has(types.BtcSigningRequestKey(sequence))
 }
 
-// HasWithdrawRequestByTxHash returns true if the given withdrawal request exists, false otherwise
-func (k Keeper) HasWithdrawRequestByTxHash(ctx sdk.Context, hash string) bool {
+// HasSigningRequestByTxHash returns true if the given withdrawal request exists, false otherwise
+func (k Keeper) HasSigningRequestByTxHash(ctx sdk.Context, hash string) bool {
 	store := ctx.KVStore(k.storeKey)
-	return store.Has(types.BtcWithdrawRequestByTxHashKey(hash))
+	return store.Has(types.BtcSigningRequestByTxHashKey(hash))
 }
 
-// GetWithdrawRequest returns the withdrawal request by the given sequence
-func (k Keeper) GetWithdrawRequest(ctx sdk.Context, sequence uint64) *types.BitcoinWithdrawRequest {
+// GetSigningRequest returns the withdrawal request by the given sequence
+func (k Keeper) GetSigningRequest(ctx sdk.Context, sequence uint64) *types.SigningRequest {
 	store := ctx.KVStore(k.storeKey)
 
-	var withdrawRequest types.BitcoinWithdrawRequest
-	bz := store.Get(types.BtcWithdrawRequestKey(sequence))
-	k.cdc.MustUnmarshal(bz, &withdrawRequest)
+	var signingRequest types.SigningRequest
+	bz := store.Get(types.BtcSigningRequestKey(sequence))
+	k.cdc.MustUnmarshal(bz, &signingRequest)
 
-	return &withdrawRequest
+	return &signingRequest
 }
 
-// GetWithdrawRequestByTxHash returns the withdrawal request by the given hash
-func (k Keeper) GetWithdrawRequestByTxHash(ctx sdk.Context, hash string) *types.BitcoinWithdrawRequest {
+// GetSigningRequestByTxHash returns the withdrawal request by the given hash
+func (k Keeper) GetSigningRequestByTxHash(ctx sdk.Context, hash string) *types.SigningRequest {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := store.Get(types.BtcWithdrawRequestByTxHashKey(hash))
+	bz := store.Get(types.BtcSigningRequestByTxHashKey(hash))
 	if bz != nil {
-		return k.GetWithdrawRequest(ctx, sdk.BigEndianToUint64(bz))
+		return k.GetSigningRequest(ctx, sdk.BigEndianToUint64(bz))
 	}
 
 	return nil
 }
 
-// SetWithdrawRequest sets the withdrawal request
-func (k Keeper) SetWithdrawRequest(ctx sdk.Context, withdrawRequest *types.BitcoinWithdrawRequest) {
+// SetSigningRequest sets the withdrawal request
+func (k Keeper) SetSigningRequest(ctx sdk.Context, signingRequest *types.SigningRequest) {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := k.cdc.MustMarshal(withdrawRequest)
+	bz := k.cdc.MustMarshal(signingRequest)
 
-	store.Set(types.BtcWithdrawRequestKey(withdrawRequest.Sequence), bz)
-	store.Set(types.BtcWithdrawRequestByTxHashKey(withdrawRequest.Txid), sdk.Uint64ToBigEndian(withdrawRequest.Sequence))
+	store.Set(types.BtcSigningRequestKey(signingRequest.Sequence), bz)
+	store.Set(types.BtcSigningRequestByTxHashKey(signingRequest.Txid), sdk.Uint64ToBigEndian(signingRequest.Sequence))
 }
 
-// IterateWithdrawRequests iterates through all withdrawal requests
-func (k Keeper) IterateWithdrawRequests(ctx sdk.Context, cb func(withdrawRequest *types.BitcoinWithdrawRequest) (stop bool)) {
+// IterateSigningRequests iterates through all withdrawal requests
+func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *types.SigningRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.BtcWithdrawRequestPrefix)
+	iterator := sdk.KVStorePrefixIterator(store, types.BtcSigningRequestPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var withdrawRequest types.BitcoinWithdrawRequest
-		k.cdc.MustUnmarshal(iterator.Value(), &withdrawRequest)
+		var signingRequest types.SigningRequest
+		k.cdc.MustUnmarshal(iterator.Value(), &signingRequest)
 
-		if cb(&withdrawRequest) {
+		if cb(&signingRequest) {
 			break
 		}
 	}
 }
 
-// FilterWithdrawRequestsByStatus filters withdrawal requests by status with pagination
-func (k Keeper) FilterWithdrawRequestsByStatus(ctx sdk.Context, req *types.QueryWithdrawRequestsRequest) []*types.BitcoinWithdrawRequest {
-	var withdrawRequests []*types.BitcoinWithdrawRequest
+// FilterSigningRequestsByStatus filters withdrawal requests by status with pagination
+func (k Keeper) FilterSigningRequestsByStatus(ctx sdk.Context, req *types.QuerySigningRequestsRequest) []*types.SigningRequest {
+	var signingRequests []*types.SigningRequest
 
-	k.IterateWithdrawRequests(ctx, func(withdrawRequest *types.BitcoinWithdrawRequest) (stop bool) {
-		if withdrawRequest.Status == req.Status {
-			withdrawRequests = append(withdrawRequests, withdrawRequest)
+	k.IterateSigningRequests(ctx, func(signingRequest *types.SigningRequest) (stop bool) {
+		if signingRequest.Status == req.Status {
+			signingRequests = append(signingRequests, signingRequest)
 		}
 
 		// pagination TODO: limit the number of withdrawal requests
-		if len(withdrawRequests) >= 100 {
+		if len(signingRequests) >= 100 {
 			return true
 		}
 
 		return false
 	})
 
-	return withdrawRequests
+	return signingRequests
 }
 
-// FilterWithdrawRequestsByAddr filters withdrawal requests by address with pagination
-func (k Keeper) FilterWithdrawRequestsByAddr(ctx sdk.Context, req *types.QueryWithdrawRequestsByAddressRequest) []*types.BitcoinWithdrawRequest {
-	var withdrawRequests []*types.BitcoinWithdrawRequest
+// FilterSigningRequestsByAddr filters signing requests by address with pagination
+func (k Keeper) FilterSigningRequestsByAddr(ctx sdk.Context, req *types.QuerySigningRequestsByAddressRequest) []*types.SigningRequest {
+	var signingRequests []*types.SigningRequest
 
-	k.IterateWithdrawRequests(ctx, func(withdrawRequest *types.BitcoinWithdrawRequest) (stop bool) {
-		if withdrawRequest.Address == req.Address {
-			withdrawRequests = append(withdrawRequests, withdrawRequest)
+	k.IterateSigningRequests(ctx, func(signingRequest *types.SigningRequest) (stop bool) {
+		if signingRequest.Address == req.Address {
+			signingRequests = append(signingRequests, signingRequest)
 		}
 
-		// pagination TODO: limit the number of withdrawal requests
-		if len(withdrawRequests) >= 100 {
+		// pagination TODO: limit the number of signing requests
+		if len(signingRequests) >= 100 {
 			return true
 		}
 
 		return false
 	})
 
-	return withdrawRequests
+	return signingRequests
 }
 
 // ProcessBitcoinWithdrawTransaction handles the withdrawal transaction
@@ -252,17 +252,17 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 
 	txHash := tx.Hash()
 
-	if !k.HasWithdrawRequestByTxHash(ctx, txHash.String()) {
-		return nil, types.ErrWithdrawRequestNotExist
+	if !k.HasSigningRequestByTxHash(ctx, txHash.String()) {
+		return nil, types.ErrSigningRequestNotExist
 	}
 
-	withdrawRequest := k.GetWithdrawRequestByTxHash(ctx, txHash.String())
-	if withdrawRequest.Status == types.WithdrawStatus_WITHDRAW_STATUS_CONFIRMED {
-		return nil, types.ErrWithdrawRequestConfirmed
+	signingRequest := k.GetSigningRequestByTxHash(ctx, txHash.String())
+	if signingRequest.Status == types.SigningRequestStatus_SIGNING_REQUEST_STATUS_CONFIRMED {
+		return nil, types.ErrSigningRequestConfirmed
 	}
 
-	withdrawRequest.Status = types.WithdrawStatus_WITHDRAW_STATUS_CONFIRMED
-	k.SetWithdrawRequest(ctx, withdrawRequest)
+	signingRequest.Status = types.SigningRequestStatus_SIGNING_REQUEST_STATUS_CONFIRMED
+	k.SetSigningRequest(ctx, signingRequest)
 
 	// spend the locked utxos
 	k.spendUTXOs(ctx, tx)
@@ -275,8 +275,8 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 	return txHash, nil
 }
 
-// LockAssets locks the related assets for the given withdrawal request
-func (k Keeper) LockAssets(ctx sdk.Context, req *types.BitcoinWithdrawRequest, amount sdk.Coin) error {
+// LockAssets locks the related assets for the given signing request
+func (k Keeper) LockAssets(ctx sdk.Context, req *types.SigningRequest, amount sdk.Coin) error {
 	btcNetworkFee, err := k.getBtcNetworkFee(ctx, req.Psbt)
 	if err != nil {
 		return err

@@ -41,7 +41,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdSubmitBlocks())
 	cmd.AddCommand(CmdUpdateNonBtcRelayers())
 	cmd.AddCommand(CmdWithdrawToBitcoin())
-	cmd.AddCommand(CmdSubmitWithdrawSignatures())
+	cmd.AddCommand(CmdSubmitSignatures())
 	cmd.AddCommand(CmdCompleteDKG())
 
 	return cmd
@@ -145,7 +145,7 @@ func CmdWithdrawToBitcoin() *cobra.Command {
 	return cmd
 }
 
-func CmdSubmitWithdrawSignatures() *cobra.Command {
+func CmdSubmitSignatures() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "submit-signatures [psbt]",
 		Short: "Submit the signed psbt",
@@ -166,7 +166,7 @@ func CmdSubmitWithdrawSignatures() *cobra.Command {
 				return fmt.Errorf("failed to extract tx from psbt")
 			}
 
-			msg := types.NewMsgSubmitWithdrawSignatures(
+			msg := types.NewMsgSubmitSignatures(
 				clientCtx.GetFromAddress().String(),
 				signedTx.TxHash().String(),
 				args[0],

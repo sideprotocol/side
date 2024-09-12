@@ -20,8 +20,8 @@ service Msg {
   rpc SubmitWithdrawTransaction (MsgSubmitWithdrawTransaction) returns (MsgSubmitWithdrawTransactionResponse);
   // WithdrawToBitcoin withdraws the asset to bitcoin.
   rpc WithdrawToBitcoin (MsgWithdrawToBitcoin) returns (MsgWithdrawToBitcoinResponse);
-  // SubmitWithdrawSignatures submits the signatures of the withdraw transaction.
-  rpc SubmitWithdrawSignatures (MsgSubmitWithdrawSignatures) returns (MsgSubmitWithdrawSignaturesResponse);
+  // SubmitSignatures submits the signatures of the signing request.
+  rpc SubmitSignatures (MsgSubmitSignatures) returns (MsgSubmitSignaturesResponse);
   // InitiateDKG initiates the DKG request.
   rpc InitiateDKG (MsgInitiateDKG) returns (MsgInitiateDKGResponse);
   // CompleteDKG completes the given DKG request.
@@ -99,15 +99,15 @@ message MsgWithdrawToBitcoin {
 message MsgWithdrawToBitcoinResponse {
 }
 
-// MsgSubmitWithdrawSignatures defines the Msg/SubmitWithdrawSignatures request type.
-message MsgSubmitWithdrawSignatures {
+// MsgSubmitSignatures defines the Msg/SubmitSignatures request type.
+message MsgSubmitSignatures {
   string sender = 1;
   string txid = 2;
   string psbt = 3;
 }
 
-// MsgSubmitWithdrawSignaturesResponse defines the Msg/SubmitWithdrawSignatures response type.
-message MsgSubmitWithdrawSignaturesResponse {
+// MsgSubmitSignaturesResponse defines the Msg/SubmitSignatures response type.
+message MsgSubmitSignaturesResponse {
 }
 
 // MsgInitiateDKG is the Msg/InitiateDKG request type.

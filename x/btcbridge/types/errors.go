@@ -33,8 +33,8 @@ var (
 	ErrMaxTransactionWeightExceeded = errorsmod.Register(ModuleName, 3106, "maximum transaction weight exceeded")
 	ErrFailToSerializePsbt          = errorsmod.Register(ModuleName, 3107, "failed to serialize psbt")
 	ErrInvalidSignatures            = errorsmod.Register(ModuleName, 3108, "invalid signatures")
-	ErrWithdrawRequestNotExist      = errorsmod.Register(ModuleName, 3109, "withdrawal request does not exist")
-	ErrWithdrawRequestConfirmed     = errorsmod.Register(ModuleName, 3110, "withdrawal request has been confirmed")
+	ErrSigningRequestNotExist       = errorsmod.Register(ModuleName, 3109, "signing request does not exist")
+	ErrSigningRequestConfirmed      = errorsmod.Register(ModuleName, 3110, "signing request has been confirmed")
 	ErrWithdrawNotEnabled           = errorsmod.Register(ModuleName, 3111, "withdrawal not enabled")
 
 	ErrUTXODoesNotExist = errorsmod.Register(ModuleName, 4100, "utxo does not exist")

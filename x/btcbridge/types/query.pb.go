@@ -30,24 +30,24 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QueryWithdrawRequestsRequest is request type for the Query/WithdrawRequests RPC method.
-type QueryWithdrawRequestsRequest struct {
-	Status     WithdrawStatus      `protobuf:"varint,1,opt,name=status,proto3,enum=side.btcbridge.WithdrawStatus" json:"status,omitempty"`
-	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+// QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method.
+type QuerySigningRequestsRequest struct {
+	Status     SigningRequestStatus `protobuf:"varint,1,opt,name=status,proto3,enum=side.btcbridge.SigningRequestStatus" json:"status,omitempty"`
+	Pagination *query.PageResponse  `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryWithdrawRequestsRequest) Reset()         { *m = QueryWithdrawRequestsRequest{} }
-func (m *QueryWithdrawRequestsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryWithdrawRequestsRequest) ProtoMessage()    {}
-func (*QueryWithdrawRequestsRequest) Descriptor() ([]byte, []int) {
+func (m *QuerySigningRequestsRequest) Reset()         { *m = QuerySigningRequestsRequest{} }
+func (m *QuerySigningRequestsRequest) String() string { return proto.CompactTextString(m) }
+func (*QuerySigningRequestsRequest) ProtoMessage()    {}
+func (*QuerySigningRequestsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fb547edb49d5502d, []int{0}
 }
-func (m *QueryWithdrawRequestsRequest) XXX_Unmarshal(b []byte) error {
+func (m *QuerySigningRequestsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryWithdrawRequestsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QuerySigningRequestsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryWithdrawRequestsRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QuerySigningRequestsRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -57,50 +57,50 @@ func (m *QueryWithdrawRequestsRequest) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *QueryWithdrawRequestsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryWithdrawRequestsRequest.Merge(m, src)
+func (m *QuerySigningRequestsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuerySigningRequestsRequest.Merge(m, src)
 }
-func (m *QueryWithdrawRequestsRequest) XXX_Size() int {
+func (m *QuerySigningRequestsRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryWithdrawRequestsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryWithdrawRequestsRequest.DiscardUnknown(m)
+func (m *QuerySigningRequestsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuerySigningRequestsRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryWithdrawRequestsRequest proto.InternalMessageInfo
+var xxx_messageInfo_QuerySigningRequestsRequest proto.InternalMessageInfo
 
-func (m *QueryWithdrawRequestsRequest) GetStatus() WithdrawStatus {
+func (m *QuerySigningRequestsRequest) GetStatus() SigningRequestStatus {
 	if m != nil {
 		return m.Status
 	}
-	return WithdrawStatus_WITHDRAW_STATUS_UNSPECIFIED
+	return SigningRequestStatus_SIGNING_REQUEST_STATUS_UNSPECIFIED
 }
 
-func (m *QueryWithdrawRequestsRequest) GetPagination() *query.PageResponse {
+func (m *QuerySigningRequestsRequest) GetPagination() *query.PageResponse {
 	if m != nil {
 		return m.Pagination
 	}
 	return nil
 }
 
-// QueryWithdrawRequestsResponse is response type for the Query/WithdrawRequests RPC method.
-type QueryWithdrawRequestsResponse struct {
-	Requests   []*BitcoinWithdrawRequest `protobuf:"bytes,1,rep,name=requests,proto3" json:"requests,omitempty"`
-	Pagination *query.PageResponse       `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+// QuerySigningRequestsResponse is response type for the Query/SigningRequests RPC method.
+type QuerySigningRequestsResponse struct {
+	Requests   []*SigningRequest   `protobuf:"bytes,1,rep,name=requests,proto3" json:"requests,omitempty"`
+	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryWithdrawRequestsResponse) Reset()         { *m = QueryWithdrawRequestsResponse{} }
-func (m *QueryWithdrawRequestsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryWithdrawRequestsResponse) ProtoMessage()    {}
-func (*QueryWithdrawRequestsResponse) Descriptor() ([]byte, []int) {
+func (m *QuerySigningRequestsResponse) Reset()         { *m = QuerySigningRequestsResponse{} }
+func (m *QuerySigningRequestsResponse) String() string { return proto.CompactTextString(m) }
+func (*QuerySigningRequestsResponse) ProtoMessage()    {}
+func (*QuerySigningRequestsResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fb547edb49d5502d, []int{1}
 }
-func (m *QueryWithdrawRequestsResponse) XXX_Unmarshal(b []byte) error {
+func (m *QuerySigningRequestsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryWithdrawRequestsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QuerySigningRequestsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryWithdrawRequestsResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QuerySigningRequestsResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -110,50 +110,50 @@ func (m *QueryWithdrawRequestsResponse) XXX_Marshal(b []byte, deterministic bool
 		return b[:n], nil
 	}
 }
-func (m *QueryWithdrawRequestsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryWithdrawRequestsResponse.Merge(m, src)
+func (m *QuerySigningRequestsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuerySigningRequestsResponse.Merge(m, src)
 }
-func (m *QueryWithdrawRequestsResponse) XXX_Size() int {
+func (m *QuerySigningRequestsResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryWithdrawRequestsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryWithdrawRequestsResponse.DiscardUnknown(m)
+func (m *QuerySigningRequestsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuerySigningRequestsResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryWithdrawRequestsResponse proto.InternalMessageInfo
+var xxx_messageInfo_QuerySigningRequestsResponse proto.InternalMessageInfo
 
-func (m *QueryWithdrawRequestsResponse) GetRequests() []*BitcoinWithdrawRequest {
+func (m *QuerySigningRequestsResponse) GetRequests() []*SigningRequest {
 	if m != nil {
 		return m.Requests
 	}
 	return nil
 }
 
-func (m *QueryWithdrawRequestsResponse) GetPagination() *query.PageResponse {
+func (m *QuerySigningRequestsResponse) GetPagination() *query.PageResponse {
 	if m != nil {
 		return m.Pagination
 	}
 	return nil
 }
 
-// QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method.
-type QueryWithdrawRequestsByAddressRequest struct {
+// QuerySigningRequestsByAddressRequest is request type for the Query/SigningRequestsByAddress RPC method.
+type QuerySigningRequestsByAddressRequest struct {
 	Address    string              `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryWithdrawRequestsByAddressRequest) Reset()         { *m = QueryWithdrawRequestsByAddressRequest{} }
-func (m *QueryWithdrawRequestsByAddressRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryWithdrawRequestsByAddressRequest) ProtoMessage()    {}
-func (*QueryWithdrawRequestsByAddressRequest) Descriptor() ([]byte, []int) {
+func (m *QuerySigningRequestsByAddressRequest) Reset()         { *m = QuerySigningRequestsByAddressRequest{} }
+func (m *QuerySigningRequestsByAddressRequest) String() string { return proto.CompactTextString(m) }
+func (*QuerySigningRequestsByAddressRequest) ProtoMessage()    {}
+func (*QuerySigningRequestsByAddressRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fb547edb49d5502d, []int{2}
 }
-func (m *QueryWithdrawRequestsByAddressRequest) XXX_Unmarshal(b []byte) error {
+func (m *QuerySigningRequestsByAddressRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryWithdrawRequestsByAddressRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QuerySigningRequestsByAddressRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryWithdrawRequestsByAddressRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QuerySigningRequestsByAddressRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -163,52 +163,50 @@ func (m *QueryWithdrawRequestsByAddressRequest) XXX_Marshal(b []byte, determinis
 		return b[:n], nil
 	}
 }
-func (m *QueryWithdrawRequestsByAddressRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryWithdrawRequestsByAddressRequest.Merge(m, src)
+func (m *QuerySigningRequestsByAddressRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuerySigningRequestsByAddressRequest.Merge(m, src)
 }
-func (m *QueryWithdrawRequestsByAddressRequest) XXX_Size() int {
+func (m *QuerySigningRequestsByAddressRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryWithdrawRequestsByAddressRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryWithdrawRequestsByAddressRequest.DiscardUnknown(m)
+func (m *QuerySigningRequestsByAddressRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuerySigningRequestsByAddressRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryWithdrawRequestsByAddressRequest proto.InternalMessageInfo
+var xxx_messageInfo_QuerySigningRequestsByAddressRequest proto.InternalMessageInfo
 
-func (m *QueryWithdrawRequestsByAddressRequest) GetAddress() string {
+func (m *QuerySigningRequestsByAddressRequest) GetAddress() string {
 	if m != nil {
 		return m.Address
 	}
 	return ""
 }
 
-func (m *QueryWithdrawRequestsByAddressRequest) GetPagination() *query.PageResponse {
+func (m *QuerySigningRequestsByAddressRequest) GetPagination() *query.PageResponse {
 	if m != nil {
 		return m.Pagination
 	}
 	return nil
 }
 
-// QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method.
-type QueryWithdrawRequestsByAddressResponse struct {
-	Requests   []*BitcoinWithdrawRequest `protobuf:"bytes,1,rep,name=requests,proto3" json:"requests,omitempty"`
-	Pagination *query.PageResponse       `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+// QuerySigningRequestsByAddressResponse is response type for the Query/SigningRequestsByAddress RPC method.
+type QuerySigningRequestsByAddressResponse struct {
+	Requests   []*SigningRequest   `protobuf:"bytes,1,rep,name=requests,proto3" json:"requests,omitempty"`
+	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryWithdrawRequestsByAddressResponse) Reset() {
-	*m = QueryWithdrawRequestsByAddressResponse{}
-}
-func (m *QueryWithdrawRequestsByAddressResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryWithdrawRequestsByAddressResponse) ProtoMessage()    {}
-func (*QueryWithdrawRequestsByAddressResponse) Descriptor() ([]byte, []int) {
+func (m *QuerySigningRequestsByAddressResponse) Reset()         { *m = QuerySigningRequestsByAddressResponse{} }
+func (m *QuerySigningRequestsByAddressResponse) String() string { return proto.CompactTextString(m) }
+func (*QuerySigningRequestsByAddressResponse) ProtoMessage()    {}
+func (*QuerySigningRequestsByAddressResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fb547edb49d5502d, []int{3}
 }
-func (m *QueryWithdrawRequestsByAddressResponse) XXX_Unmarshal(b []byte) error {
+func (m *QuerySigningRequestsByAddressResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryWithdrawRequestsByAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QuerySigningRequestsByAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryWithdrawRequestsByAddressResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QuerySigningRequestsByAddressResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -218,49 +216,49 @@ func (m *QueryWithdrawRequestsByAddressResponse) XXX_Marshal(b []byte, determini
 		return b[:n], nil
 	}
 }
-func (m *QueryWithdrawRequestsByAddressResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryWithdrawRequestsByAddressResponse.Merge(m, src)
+func (m *QuerySigningRequestsByAddressResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuerySigningRequestsByAddressResponse.Merge(m, src)
 }
-func (m *QueryWithdrawRequestsByAddressResponse) XXX_Size() int {
+func (m *QuerySigningRequestsByAddressResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryWithdrawRequestsByAddressResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryWithdrawRequestsByAddressResponse.DiscardUnknown(m)
+func (m *QuerySigningRequestsByAddressResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuerySigningRequestsByAddressResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryWithdrawRequestsByAddressResponse proto.InternalMessageInfo
+var xxx_messageInfo_QuerySigningRequestsByAddressResponse proto.InternalMessageInfo
 
-func (m *QueryWithdrawRequestsByAddressResponse) GetRequests() []*BitcoinWithdrawRequest {
+func (m *QuerySigningRequestsByAddressResponse) GetRequests() []*SigningRequest {
 	if m != nil {
 		return m.Requests
 	}
 	return nil
 }
 
-func (m *QueryWithdrawRequestsByAddressResponse) GetPagination() *query.PageResponse {
+func (m *QuerySigningRequestsByAddressResponse) GetPagination() *query.PageResponse {
 	if m != nil {
 		return m.Pagination
 	}
 	return nil
 }
 
-// QueryWithdrawRequestByTxHashRequest is request type for the Query/WithdrawRequestByTxHash RPC method.
-type QueryWithdrawRequestByTxHashRequest struct {
+// QuerySigningRequestByTxHashRequest is request type for the Query/SigningRequestByTxHash RPC method.
+type QuerySigningRequestByTxHashRequest struct {
 	Txid string `protobuf:"bytes,1,opt,name=txid,proto3" json:"txid,omitempty"`
 }
 
-func (m *QueryWithdrawRequestByTxHashRequest) Reset()         { *m = QueryWithdrawRequestByTxHashRequest{} }
-func (m *QueryWithdrawRequestByTxHashRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryWithdrawRequestByTxHashRequest) ProtoMessage()    {}
-func (*QueryWithdrawRequestByTxHashRequest) Descriptor() ([]byte, []int) {
+func (m *QuerySigningRequestByTxHashRequest) Reset()         { *m = QuerySigningRequestByTxHashRequest{} }
+func (m *QuerySigningRequestByTxHashRequest) String() string { return proto.CompactTextString(m) }
+func (*QuerySigningRequestByTxHashRequest) ProtoMessage()    {}
+func (*QuerySigningRequestByTxHashRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fb547edb49d5502d, []int{4}
 }
-func (m *QueryWithdrawRequestByTxHashRequest) XXX_Unmarshal(b []byte) error {
+func (m *QuerySigningRequestByTxHashRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryWithdrawRequestByTxHashRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QuerySigningRequestByTxHashRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryWithdrawRequestByTxHashRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QuerySigningRequestByTxHashRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -270,42 +268,42 @@ func (m *QueryWithdrawRequestByTxHashRequest) XXX_Marshal(b []byte, deterministi
 		return b[:n], nil
 	}
 }
-func (m *QueryWithdrawRequestByTxHashRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryWithdrawRequestByTxHashRequest.Merge(m, src)
+func (m *QuerySigningRequestByTxHashRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuerySigningRequestByTxHashRequest.Merge(m, src)
 }
-func (m *QueryWithdrawRequestByTxHashRequest) XXX_Size() int {
+func (m *QuerySigningRequestByTxHashRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryWithdrawRequestByTxHashRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryWithdrawRequestByTxHashRequest.DiscardUnknown(m)
+func (m *QuerySigningRequestByTxHashRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuerySigningRequestByTxHashRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryWithdrawRequestByTxHashRequest proto.InternalMessageInfo
+var xxx_messageInfo_QuerySigningRequestByTxHashRequest proto.InternalMessageInfo
 
-func (m *QueryWithdrawRequestByTxHashRequest) GetTxid() string {
+func (m *QuerySigningRequestByTxHashRequest) GetTxid() string {
 	if m != nil {
 		return m.Txid
 	}
 	return ""
 }
 
-// QueryWithdrawRequestByTxHashResponse is response type for the Query/WithdrawRequestByTxHash RPC method.
-type QueryWithdrawRequestByTxHashResponse struct {
-	Request *BitcoinWithdrawRequest `protobuf:"bytes,1,opt,name=request,proto3" json:"request,omitempty"`
+// QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHashResponse RPC method.
+type QuerySigningRequestByTxHashResponse struct {
+	Request *SigningRequest `protobuf:"bytes,1,opt,name=request,proto3" json:"request,omitempty"`
 }
 
-func (m *QueryWithdrawRequestByTxHashResponse) Reset()         { *m = QueryWithdrawRequestByTxHashResponse{} }
-func (m *QueryWithdrawRequestByTxHashResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryWithdrawRequestByTxHashResponse) ProtoMessage()    {}
-func (*QueryWithdrawRequestByTxHashResponse) Descriptor() ([]byte, []int) {
+func (m *QuerySigningRequestByTxHashResponse) Reset()         { *m = QuerySigningRequestByTxHashResponse{} }
+func (m *QuerySigningRequestByTxHashResponse) String() string { return proto.CompactTextString(m) }
+func (*QuerySigningRequestByTxHashResponse) ProtoMessage()    {}
+func (*QuerySigningRequestByTxHashResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fb547edb49d5502d, []int{5}
 }
-func (m *QueryWithdrawRequestByTxHashResponse) XXX_Unmarshal(b []byte) error {
+func (m *QuerySigningRequestByTxHashResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryWithdrawRequestByTxHashResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QuerySigningRequestByTxHashResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryWithdrawRequestByTxHashResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QuerySigningRequestByTxHashResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -315,19 +313,19 @@ func (m *QueryWithdrawRequestByTxHashResponse) XXX_Marshal(b []byte, determinist
 		return b[:n], nil
 	}
 }
-func (m *QueryWithdrawRequestByTxHashResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryWithdrawRequestByTxHashResponse.Merge(m, src)
+func (m *QuerySigningRequestByTxHashResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuerySigningRequestByTxHashResponse.Merge(m, src)
 }
-func (m *QueryWithdrawRequestByTxHashResponse) XXX_Size() int {
+func (m *QuerySigningRequestByTxHashResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryWithdrawRequestByTxHashResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryWithdrawRequestByTxHashResponse.DiscardUnknown(m)
+func (m *QuerySigningRequestByTxHashResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuerySigningRequestByTxHashResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryWithdrawRequestByTxHashResponse proto.InternalMessageInfo
+var xxx_messageInfo_QuerySigningRequestByTxHashResponse proto.InternalMessageInfo
 
-func (m *QueryWithdrawRequestByTxHashResponse) GetRequest() *BitcoinWithdrawRequest {
+func (m *QuerySigningRequestByTxHashResponse) GetRequest() *SigningRequest {
 	if m != nil {
 		return m.Request
 	}
@@ -1432,12 +1430,12 @@ func (m *QueryDKGCompletionRequestsResponse) GetRequests() []*DKGCompletionReque
 }
 
 func init() {
-	proto.RegisterType((*QueryWithdrawRequestsRequest)(nil), "side.btcbridge.QueryWithdrawRequestsRequest")
-	proto.RegisterType((*QueryWithdrawRequestsResponse)(nil), "side.btcbridge.QueryWithdrawRequestsResponse")
-	proto.RegisterType((*QueryWithdrawRequestsByAddressRequest)(nil), "side.btcbridge.QueryWithdrawRequestsByAddressRequest")
-	proto.RegisterType((*QueryWithdrawRequestsByAddressResponse)(nil), "side.btcbridge.QueryWithdrawRequestsByAddressResponse")
-	proto.RegisterType((*QueryWithdrawRequestByTxHashRequest)(nil), "side.btcbridge.QueryWithdrawRequestByTxHashRequest")
-	proto.RegisterType((*QueryWithdrawRequestByTxHashResponse)(nil), "side.btcbridge.QueryWithdrawRequestByTxHashResponse")
+	proto.RegisterType((*QuerySigningRequestsRequest)(nil), "side.btcbridge.QuerySigningRequestsRequest")
+	proto.RegisterType((*QuerySigningRequestsResponse)(nil), "side.btcbridge.QuerySigningRequestsResponse")
+	proto.RegisterType((*QuerySigningRequestsByAddressRequest)(nil), "side.btcbridge.QuerySigningRequestsByAddressRequest")
+	proto.RegisterType((*QuerySigningRequestsByAddressResponse)(nil), "side.btcbridge.QuerySigningRequestsByAddressResponse")
+	proto.RegisterType((*QuerySigningRequestByTxHashRequest)(nil), "side.btcbridge.QuerySigningRequestByTxHashRequest")
+	proto.RegisterType((*QuerySigningRequestByTxHashResponse)(nil), "side.btcbridge.QuerySigningRequestByTxHashResponse")
 	proto.RegisterType((*QueryWithdrawNetworkFeeRequest)(nil), "side.btcbridge.QueryWithdrawNetworkFeeRequest")
 	proto.RegisterType((*QueryWithdrawNetworkFeeResponse)(nil), "side.btcbridge.QueryWithdrawNetworkFeeResponse")
 	proto.RegisterType((*QueryParamsRequest)(nil), "side.btcbridge.QueryParamsRequest")
@@ -1467,94 +1465,94 @@ func init() {
 func init() { proto.RegisterFile("side/btcbridge/query.proto", fileDescriptor_fb547edb49d5502d) }
 
 var fileDescriptor_fb547edb49d5502d = []byte{
-	// 1382 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x98, 0xcf, 0x6f, 0xdc, 0x44,
-	0x14, 0xc7, 0xe3, 0x24, 0x4d, 0xdb, 0x97, 0xb6, 0x94, 0xd7, 0x34, 0x5d, 0x9c, 0x74, 0xbb, 0x9d,
-	0xa6, 0x49, 0x48, 0x1b, 0x9b, 0x26, 0x21, 0xa2, 0x08, 0x41, 0xbb, 0x01, 0x1a, 0x54, 0x89, 0x16,
-	0xb7, 0x15, 0x88, 0x4b, 0x99, 0xdd, 0x9d, 0xec, 0x5a, 0xd9, 0xac, 0xb7, 0xb6, 0xb7, 0x4d, 0x14,
-	0xe5, 0xc2, 0xb1, 0xe2, 0x80, 0x04, 0x12, 0x42, 0x42, 0x02, 0x71, 0xe0, 0xc4, 0x15, 0x89, 0x1b,
-	0xd7, 0x0a, 0x09, 0xa9, 0x12, 0x17, 0x4e, 0x08, 0xb5, 0xf0, 0x7f, 0x20, 0x8f, 0x9f, 0xbd, 0xbb,
-	0x63, 0x7b, 0x77, 0x53, 0x7a, 0xe0, 0xd2, 0xd8, 0x9e, 0xf7, 0xe3, 0xf3, 0x9e, 0x9f, 0x67, 0xbe,
-	0x5b, 0xd0, 0x3d, 0xbb, 0x22, 0xcc, 0x92, 0x5f, 0x2e, 0xb9, 0x76, 0xa5, 0x2a, 0xcc, 0x7b, 0x2d,
-	0xe1, 0xee, 0x18, 0x4d, 0xd7, 0xf1, 0x1d, 0x3c, 0x16, 0xac, 0x19, 0xf1, 0x9a, 0x3e, 0x51, 0x75,
-	0xaa, 0x8e, 0x5c, 0x32, 0x83, 0xab, 0xd0, 0x4a, 0x9f, 0xae, 0x3a, 0x4e, 0xb5, 0x2e, 0x4c, 0xde,
-	0xb4, 0x4d, 0xde, 0x68, 0x38, 0x3e, 0xf7, 0x6d, 0xa7, 0xe1, 0xd1, 0xea, 0x42, 0xd9, 0xf1, 0xb6,
-	0x1c, 0xcf, 0x2c, 0x71, 0x8f, 0x82, 0x9b, 0xf7, 0x2f, 0x95, 0x84, 0xcf, 0x2f, 0x99, 0x4d, 0x5e,
-	0xb5, 0x1b, 0xd2, 0x98, 0x6c, 0xa7, 0x14, 0x96, 0x26, 0x77, 0xf9, 0x56, 0x14, 0x28, 0xaf, 0x2c,
-	0xc6, 0x57, 0xe1, 0x3a, 0xfb, 0x56, 0x83, 0xe9, 0x0f, 0x82, 0xf8, 0x1f, 0xda, 0x7e, 0xad, 0xe2,
-	0xf2, 0x07, 0x96, 0xb8, 0xd7, 0x12, 0x9e, 0xef, 0xd1, 0x5f, 0x5c, 0x85, 0x31, 0xcf, 0xe7, 0x7e,
-	0xcb, 0xcb, 0x69, 0x05, 0x6d, 0xfe, 0xd8, 0x52, 0xde, 0xe8, 0x2e, 0xcf, 0x88, 0x1c, 0x6f, 0x49,
-	0x2b, 0x8b, 0xac, 0xf1, 0x1a, 0x40, 0x9b, 0x34, 0x37, 0x5c, 0xd0, 0xe6, 0xc7, 0x97, 0xe6, 0x8c,
-	0xb0, 0x2c, 0x23, 0x28, 0xcb, 0x08, 0x7b, 0x46, 0x65, 0x19, 0x37, 0x79, 0x55, 0x58, 0xc2, 0x6b,
-	0x3a, 0x0d, 0x4f, 0x58, 0x1d, 0xae, 0xec, 0x47, 0x0d, 0x4e, 0x67, 0x10, 0x86, 0xd6, 0x58, 0x84,
-	0x43, 0x2e, 0x3d, 0xcb, 0x69, 0x85, 0x91, 0xf9, 0xf1, 0xa5, 0x59, 0x15, 0xb2, 0x68, 0xfb, 0x65,
-	0xc7, 0x6e, 0x28, 0x21, 0xac, 0xd8, 0xef, 0xf9, 0xe1, 0x3e, 0xd4, 0xe0, 0x7c, 0x2a, 0x6e, 0x71,
-	0xe7, 0x6a, 0xa5, 0xe2, 0x0a, 0x2f, 0xee, 0x6c, 0x0e, 0x0e, 0xf2, 0xf0, 0x89, 0x6c, 0xed, 0x61,
-	0x2b, 0xba, 0x7d, 0x7e, 0x30, 0x3f, 0x69, 0x30, 0xdb, 0x0f, 0xe6, 0xff, 0xd8, 0xc4, 0xcb, 0x70,
-	0x2e, 0x0d, 0xbb, 0xb8, 0x73, 0x7b, 0x7b, 0x9d, 0x7b, 0xb5, 0xa8, 0x83, 0x08, 0xa3, 0xfe, 0xb6,
-	0x5d, 0xa1, 0xf6, 0xc9, 0x6b, 0x56, 0x83, 0x99, 0xde, 0xae, 0x54, 0xef, 0x15, 0x38, 0x48, 0xdc,
-	0xd2, 0x7d, 0xf0, 0x72, 0x23, 0x37, 0xb6, 0x09, 0xf9, 0xae, 0x4c, 0xef, 0x0b, 0xff, 0x81, 0xe3,
-	0x6e, 0xbe, 0x2b, 0x44, 0xc4, 0x37, 0x09, 0x63, 0x9e, 0x68, 0x54, 0x84, 0x4b, 0x84, 0x74, 0x17,
-	0x3c, 0xe7, 0x5b, 0x4e, 0xab, 0xe1, 0xcb, 0x1e, 0x1d, 0xb6, 0xe8, 0x0e, 0x5f, 0x82, 0x43, 0x1b,
-	0x42, 0xdc, 0x75, 0xb9, 0x2f, 0x72, 0x23, 0xe1, 0x48, 0x6c, 0x08, 0x61, 0x71, 0x5f, 0xb0, 0x65,
-	0x38, 0x93, 0x99, 0x8c, 0x2a, 0x3a, 0x0e, 0x23, 0x1b, 0x42, 0xc8, 0x54, 0x23, 0x56, 0x70, 0xc9,
-	0x26, 0x00, 0xa5, 0xd3, 0x4d, 0xb9, 0x23, 0x10, 0x15, 0xbb, 0x0e, 0x27, 0xba, 0x9e, 0x92, 0xfb,
-	0x0a, 0x8c, 0x85, 0x3b, 0x07, 0xf5, 0x63, 0x52, 0xed, 0x47, 0x68, 0x5f, 0x1c, 0x7d, 0xf4, 0xe7,
-	0x99, 0x21, 0x8b, 0x6c, 0xd9, 0x24, 0x4c, 0xc8, 0x60, 0x6b, 0x35, 0x6e, 0x37, 0x6e, 0xdb, 0xcd,
-	0x28, 0xc9, 0x1a, 0x9c, 0x54, 0x9e, 0x53, 0x1a, 0x84, 0xd1, 0x1a, 0xf7, 0x6a, 0xd1, 0x3b, 0x0b,
-	0xae, 0x83, 0x7e, 0xd4, 0x84, 0x5d, 0xad, 0x85, 0xfd, 0x18, 0xb5, 0xe8, 0x8e, 0x5d, 0xa6, 0xa2,
-	0x8b, 0x75, 0xa7, 0xbc, 0xb9, 0x2e, 0x78, 0x45, 0xb8, 0xc5, 0x9d, 0x75, 0xb9, 0xd6, 0xd1, 0x62,
-	0x72, 0xd5, 0xba, 0x5c, 0x4b, 0x50, 0xc8, 0x76, 0x25, 0x94, 0x37, 0xe1, 0x48, 0x29, 0x58, 0xbe,
-	0x5b, 0x93, 0xeb, 0x54, 0xf7, 0x54, 0x62, 0x0e, 0xda, 0x21, 0xac, 0xf1, 0x52, 0xfb, 0x86, 0x2d,
-	0xd3, 0xc6, 0xd4, 0x9d, 0xa3, 0x7b, 0x3e, 0xd5, 0x5a, 0xd9, 0x27, 0x34, 0x35, 0x29, 0x4e, 0xcf,
-	0x09, 0xeb, 0x04, 0xbc, 0x28, 0x33, 0xdc, 0xb9, 0xfd, 0xd1, 0x8d, 0xf8, 0xa5, 0x5f, 0xa1, 0x51,
-	0xa0, 0x87, 0x94, 0x6a, 0x01, 0x0e, 0xb4, 0xfc, 0x6d, 0x27, 0xfa, 0xe2, 0x27, 0xd4, 0x1c, 0x81,
-	0xb5, 0x15, 0x9a, 0xb0, 0x55, 0xd0, 0xdb, 0x11, 0x06, 0xdf, 0xcc, 0xd8, 0x7b, 0x30, 0x95, 0xea,
-	0xf7, 0x0c, 0x08, 0xef, 0xc0, 0xcb, 0x71, 0xa8, 0xb5, 0xe0, 0x8b, 0xb9, 0xda, 0xa8, 0x14, 0x79,
-	0x9d, 0x37, 0xca, 0x62, 0x3f, 0x44, 0x5f, 0x6b, 0xb0, 0x30, 0x48, 0x1c, 0x22, 0x9c, 0x80, 0x03,
-	0x65, 0xf9, 0xb1, 0x06, 0x61, 0x8e, 0x5a, 0xe1, 0x4d, 0xf0, 0xf4, 0x3e, 0xaf, 0xb7, 0x84, 0x1c,
-	0xd9, 0x11, 0x2b, 0xbc, 0xc1, 0xb7, 0xe0, 0x88, 0xdb, 0x6a, 0x88, 0x28, 0x58, 0x6e, 0x44, 0x16,
-	0x95, 0x78, 0x77, 0x56, 0xdb, 0xc6, 0xea, 0x72, 0x60, 0xf3, 0x30, 0x29, 0xd1, 0xde, 0xbe, 0x7e,
-	0x2d, 0xda, 0x70, 0xa8, 0x9e, 0x63, 0x30, 0x4c, 0x5b, 0xdd, 0xa8, 0x35, 0x6c, 0x57, 0xd8, 0x0d,
-	0x38, 0x95, 0xb0, 0x8c, 0x3f, 0x65, 0x65, 0x6f, 0xd3, 0x55, 0x80, 0x0e, 0xa7, 0x78, 0x3f, 0xbb,
-	0x95, 0x08, 0x18, 0xf7, 0xf2, 0x35, 0x45, 0x04, 0x14, 0xb2, 0xe3, 0x75, 0xcb, 0x00, 0x66, 0x41,
-	0x2e, 0x19, 0x94, 0x30, 0x57, 0x13, 0x47, 0x4e, 0x2f, 0xce, 0xd8, 0x96, 0x4d, 0xd3, 0x24, 0x5e,
-	0xad, 0xd7, 0x93, 0xac, 0xec, 0x0e, 0xcd, 0x9b, 0xba, 0xfa, 0x1f, 0x93, 0x2e, 0xc3, 0xd9, 0xa8,
-	0x90, 0x35, 0x67, 0xab, 0x59, 0x17, 0xc1, 0x41, 0xa5, 0xf6, 0x49, 0x7d, 0x47, 0x1b, 0xc0, 0x7a,
-	0x39, 0xc5, 0x47, 0x91, 0x8a, 0x34, 0x93, 0x82, 0x94, 0x08, 0xd0, 0x86, 0x5b, 0xfa, 0x07, 0xe1,
-	0x80, 0x4c, 0x84, 0xf7, 0x61, 0xbc, 0x63, 0x73, 0x47, 0xa6, 0x06, 0x4a, 0x9e, 0x07, 0xfa, 0xb9,
-	0x9e, 0x36, 0x21, 0x23, 0xcb, 0x7f, 0xfa, 0xfb, 0xdf, 0x5f, 0x0c, 0xe7, 0x70, 0xd2, 0x4c, 0x55,
-	0x9b, 0xb8, 0x03, 0x47, 0xbb, 0xf6, 0x7b, 0x9c, 0x49, 0x8d, 0xaa, 0x1c, 0x13, 0xfa, 0xf9, 0x3e,
-	0x56, 0x94, 0x7d, 0x4a, 0x66, 0x3f, 0x89, 0x27, 0xd4, 0xec, 0xbe, 0xdd, 0xc4, 0x1f, 0x34, 0x9a,
-	0xb1, 0x94, 0xbd, 0x1e, 0xcd, 0xd4, 0x04, 0xd9, 0x07, 0x8a, 0xfe, 0xca, 0xe0, 0x0e, 0x04, 0x37,
-	0x27, 0xe1, 0xce, 0xe2, 0x19, 0x15, 0x2e, 0x3c, 0x8a, 0xcc, 0xdd, 0xf0, 0xef, 0x1e, 0x7e, 0xa3,
-	0xd1, 0xc7, 0x9d, 0xd8, 0xfb, 0x71, 0x71, 0x80, 0xac, 0xed, 0x83, 0x45, 0x37, 0x06, 0x35, 0x27,
-	0xc4, 0x73, 0x12, 0xf1, 0x34, 0x4e, 0x25, 0x10, 0xb9, 0x57, 0x33, 0x77, 0x83, 0x7f, 0xf7, 0xf0,
-	0x3b, 0x8d, 0xce, 0x6c, 0x55, 0x2c, 0xe2, 0xc5, 0xd4, 0x74, 0x19, 0xbf, 0x18, 0xf4, 0xc5, 0x01,
-	0xad, 0x89, 0x6d, 0x41, 0xb2, 0xcd, 0x20, 0x53, 0xd9, 0x1e, 0x90, 0x07, 0xaf, 0x9b, 0x34, 0xe8,
-	0xf8, 0x9b, 0xa6, 0x68, 0xae, 0x84, 0x9e, 0xc5, 0x57, 0x07, 0xca, 0xae, 0x9e, 0x16, 0xfa, 0xea,
-	0x7e, 0xdd, 0x88, 0xfe, 0x0d, 0x49, 0xbf, 0x8a, 0x2b, 0xfd, 0xe9, 0x4d, 0x3a, 0x7f, 0xcc, 0x5d,
-	0xba, 0xd8, 0xc3, 0x5f, 0x32, 0x7e, 0x7d, 0x45, 0x6a, 0x15, 0x97, 0x07, 0xc1, 0x52, 0x64, 0xb1,
-	0xbe, 0xb2, 0x3f, 0x27, 0xaa, 0x64, 0x45, 0x56, 0x62, 0xe0, 0xc5, 0x01, 0x2a, 0xf1, 0xb7, 0xcd,
-	0xdd, 0x40, 0x6d, 0xef, 0xe1, 0xf7, 0x1a, 0x9d, 0x1a, 0x49, 0x61, 0x8a, 0x46, 0x4f, 0x8e, 0x84,
-	0x5c, 0xd6, 0xcd, 0x81, 0xed, 0x09, 0x79, 0x56, 0x22, 0x17, 0x30, 0xdf, 0x03, 0x79, 0x43, 0x08,
-	0x74, 0x01, 0xda, 0x12, 0x04, 0xcf, 0xa6, 0xa6, 0xe9, 0x54, 0x4b, 0x3a, 0xeb, 0x65, 0x42, 0xc9,
-	0x4f, 0xcb, 0xe4, 0xa7, 0xf0, 0xa4, 0x9a, 0x5c, 0x6a, 0x15, 0xfc, 0x4a, 0x23, 0x99, 0xdd, 0xad,
-	0x7b, 0x70, 0x21, 0x3b, 0x74, 0x62, 0x28, 0x2f, 0x0c, 0x64, 0xdb, 0x6f, 0x1b, 0x92, 0x3c, 0x1d,
-	0x43, 0xf7, 0xab, 0x46, 0xa7, 0x52, 0x4f, 0xf9, 0x83, 0x97, 0x33, 0x93, 0xf7, 0x93, 0x5e, 0xfa,
-	0xeb, 0xcf, 0xe2, 0x4a, 0x65, 0x2c, 0xca, 0x32, 0xe6, 0xf0, 0x7c, 0x9f, 0x32, 0xcc, 0x40, 0x60,
-	0x78, 0xf8, 0x99, 0x06, 0x2f, 0x28, 0x02, 0x03, 0x67, 0x53, 0xd3, 0x27, 0x14, 0x95, 0x3e, 0xd7,
-	0xd7, 0x8e, 0x98, 0xe6, 0x25, 0x13, 0xc3, 0x82, 0xca, 0x54, 0xd9, 0xac, 0xc6, 0xdf, 0xc4, 0x6e,
-	0xf0, 0x39, 0x3c, 0xd4, 0xe0, 0xb8, 0xaa, 0x77, 0xb0, 0x5f, 0x9e, 0xb8, 0x6f, 0xf3, 0xfd, 0x0d,
-	0xfb, 0x6d, 0xe8, 0x1d, 0x44, 0xf8, 0x65, 0x34, 0x82, 0xdd, 0x52, 0x28, 0x63, 0x04, 0x53, 0xd5,
-	0x54, 0xc6, 0x08, 0xa6, 0x6b, 0x2b, 0x36, 0x23, 0xa9, 0xf2, 0x38, 0xdd, 0x83, 0xca, 0xc3, 0x9f,
-	0x35, 0xd2, 0x6f, 0xa9, 0xaa, 0x08, 0x2f, 0x65, 0x35, 0x21, 0x53, 0x76, 0xe9, 0x4b, 0xfb, 0x71,
-	0x21, 0xd6, 0x65, 0xc9, 0xba, 0x88, 0x17, 0xd2, 0x58, 0xcb, 0xb1, 0x5f, 0xd7, 0xeb, 0x2d, 0xae,
-	0x3f, 0x7a, 0x92, 0xd7, 0x1e, 0x3f, 0xc9, 0x6b, 0x7f, 0x3d, 0xc9, 0x6b, 0x9f, 0x3f, 0xcd, 0x0f,
-	0x3d, 0x7e, 0x9a, 0x1f, 0xfa, 0xe3, 0x69, 0x7e, 0xe8, 0x63, 0xa3, 0x6a, 0xfb, 0xb5, 0x56, 0xc9,
-	0x28, 0x3b, 0x5b, 0x32, 0xa0, 0xfc, 0xdf, 0xb5, 0xb2, 0x53, 0x0f, 0xa3, 0x6f, 0x77, 0x4a, 0x96,
-	0x9d, 0xa6, 0xf0, 0x4a, 0x63, 0xd2, 0x60, 0xf9, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x57, 0x6b,
-	0x73, 0xab, 0x49, 0x14, 0x00, 0x00,
+	// 1378 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x58, 0xdf, 0x6f, 0x14, 0xd5,
+	0x17, 0xef, 0x74, 0x4b, 0x81, 0x5b, 0xe0, 0xcb, 0xf7, 0x50, 0xca, 0x3a, 0x2d, 0xc3, 0x72, 0x29,
+	0x74, 0x2d, 0xb0, 0x23, 0xbb, 0x48, 0x80, 0x18, 0x85, 0xad, 0x4a, 0x0d, 0x89, 0xe0, 0x00, 0xd1,
+	0xf8, 0x82, 0x77, 0x77, 0x6f, 0x77, 0x27, 0xdd, 0xce, 0x2c, 0x33, 0xb3, 0xd0, 0x4d, 0xd3, 0x17,
+	0xdf, 0x34, 0x3e, 0x98, 0x68, 0x62, 0x8c, 0x3e, 0xa9, 0xf1, 0xc9, 0x3f, 0xc0, 0xf8, 0x17, 0x10,
+	0x9f, 0x48, 0x4c, 0x8c, 0x4f, 0xc6, 0x50, 0xff, 0x10, 0x33, 0x77, 0xce, 0xcc, 0xee, 0xde, 0x99,
+	0xd9, 0xd9, 0x62, 0x1f, 0x7c, 0xa1, 0x73, 0xef, 0x3d, 0x3f, 0x3e, 0xe7, 0xdc, 0x73, 0xcf, 0xf9,
+	0x2c, 0x44, 0x75, 0xcd, 0x06, 0xd7, 0x6b, 0x5e, 0xbd, 0xe6, 0x98, 0x8d, 0x26, 0xd7, 0x1f, 0x75,
+	0xb9, 0xd3, 0x2b, 0x75, 0x1c, 0xdb, 0xb3, 0xe1, 0x88, 0x7f, 0x56, 0x8a, 0xce, 0xd4, 0xd9, 0xa6,
+	0xdd, 0xb4, 0xc5, 0x91, 0xee, 0x7f, 0x05, 0x52, 0xea, 0x42, 0xd3, 0xb6, 0x9b, 0x6d, 0xae, 0xb3,
+	0x8e, 0xa9, 0x33, 0xcb, 0xb2, 0x3d, 0xe6, 0x99, 0xb6, 0xe5, 0xe2, 0xe9, 0x72, 0xdd, 0x76, 0x37,
+	0x6c, 0x57, 0xaf, 0x31, 0x17, 0x8d, 0xeb, 0x8f, 0x2f, 0xd5, 0xb8, 0xc7, 0x2e, 0xe9, 0x1d, 0xd6,
+	0x34, 0x2d, 0x21, 0x8c, 0xb2, 0xf3, 0x12, 0x96, 0x0e, 0x73, 0xd8, 0x46, 0x68, 0x48, 0x93, 0x0e,
+	0xa3, 0xaf, 0xe0, 0x9c, 0xfe, 0xa0, 0x90, 0xf9, 0xf7, 0x7c, 0xfb, 0xf7, 0xcc, 0xa6, 0x65, 0x5a,
+	0x4d, 0x83, 0x3f, 0xea, 0x72, 0xd7, 0x73, 0xf1, 0x2f, 0xbc, 0x46, 0xa6, 0x5d, 0x8f, 0x79, 0x5d,
+	0x37, 0xaf, 0x14, 0x94, 0xe2, 0x91, 0xf2, 0x62, 0x69, 0x38, 0xba, 0xd2, 0xb0, 0xde, 0x3d, 0x21,
+	0x6b, 0xa0, 0x0e, 0xdc, 0x22, 0xa4, 0x0f, 0x37, 0x3f, 0x59, 0x50, 0x8a, 0x33, 0xe5, 0xa5, 0x52,
+	0x10, 0x5b, 0xc9, 0x8f, 0xad, 0x14, 0x24, 0x0e, 0x63, 0x2b, 0xdd, 0x65, 0x4d, 0x6e, 0x70, 0xb7,
+	0x63, 0x5b, 0x2e, 0x37, 0x06, 0x54, 0xe9, 0xf7, 0x0a, 0x59, 0x48, 0x86, 0x19, 0x08, 0xc3, 0x75,
+	0x72, 0xc0, 0xc1, 0xbd, 0xbc, 0x52, 0xc8, 0x15, 0x67, 0xca, 0xda, 0x68, 0xa4, 0x46, 0x24, 0xbf,
+	0x77, 0x28, 0x3f, 0x51, 0xc8, 0x62, 0x12, 0xca, 0x6a, 0xef, 0x66, 0xa3, 0xe1, 0x70, 0x37, 0xca,
+	0x6a, 0x9e, 0xec, 0x67, 0xc1, 0x8e, 0x48, 0xeb, 0x41, 0x23, 0x5c, 0xee, 0x1d, 0x96, 0x9f, 0x14,
+	0x72, 0x36, 0x03, 0xcb, 0x7f, 0x29, 0x75, 0x57, 0x09, 0x4d, 0x40, 0x5b, 0xed, 0xdd, 0xdf, 0x5c,
+	0x65, 0x6e, 0x2b, 0xcc, 0x1b, 0x90, 0x29, 0x6f, 0xd3, 0x6c, 0x60, 0xd2, 0xc4, 0x37, 0x7d, 0x48,
+	0xce, 0x8c, 0xd4, 0xc4, 0x28, 0xaf, 0x92, 0xfd, 0x88, 0x5a, 0x68, 0x67, 0x07, 0x19, 0x8a, 0xd3,
+	0x75, 0xa2, 0x09, 0x07, 0xef, 0x9b, 0x5e, 0xab, 0xe1, 0xb0, 0x27, 0xef, 0x72, 0xef, 0x89, 0xed,
+	0xac, 0xbf, 0xcd, 0x79, 0x08, 0x6b, 0x8e, 0x4c, 0xbb, 0xdc, 0x6a, 0x70, 0x07, 0x81, 0xe1, 0xca,
+	0xdf, 0x67, 0x1b, 0x76, 0xd7, 0xf2, 0x44, 0x66, 0x0e, 0x1a, 0xb8, 0x82, 0x97, 0xc8, 0x81, 0x35,
+	0xce, 0x1f, 0x3a, 0xcc, 0xe3, 0xf9, 0x5c, 0x70, 0xff, 0x6b, 0x9c, 0x1b, 0xcc, 0xe3, 0xb4, 0x42,
+	0x4e, 0xa5, 0x3a, 0xc3, 0x48, 0x8e, 0x92, 0xdc, 0x1a, 0xe7, 0xc2, 0x55, 0xce, 0xf0, 0x3f, 0xe9,
+	0x2c, 0x01, 0xa1, 0x74, 0x57, 0xbc, 0x7c, 0x44, 0x45, 0x6f, 0x93, 0x63, 0x43, 0xbb, 0xa8, 0x7e,
+	0x99, 0x4c, 0x07, 0x1d, 0x02, 0xf3, 0x30, 0x27, 0xe7, 0x21, 0x90, 0xaf, 0x4e, 0x3d, 0xfd, 0xf3,
+	0xd4, 0x84, 0x81, 0xb2, 0x74, 0x8e, 0xcc, 0x0a, 0x63, 0x2b, 0x2d, 0x66, 0x5a, 0xf7, 0xcd, 0x4e,
+	0xe8, 0x64, 0x85, 0x1c, 0x97, 0xf6, 0xd1, 0x0d, 0x90, 0xa9, 0x16, 0x73, 0x5b, 0xe1, 0x55, 0xf9,
+	0xdf, 0x7e, 0x3e, 0x5a, 0xdc, 0x6c, 0xb6, 0x82, 0x7c, 0x4c, 0x19, 0xb8, 0xa2, 0xd7, 0x30, 0xe8,
+	0x6a, 0xdb, 0xae, 0xaf, 0xaf, 0x72, 0xd6, 0xe0, 0x4e, 0xb5, 0xb7, 0x2a, 0xce, 0x06, 0x52, 0x8c,
+	0xaa, 0xca, 0x90, 0x6a, 0x8d, 0x14, 0xd2, 0x55, 0x11, 0xca, 0xeb, 0xe4, 0x50, 0xcd, 0x3f, 0x7e,
+	0xd8, 0x12, 0xe7, 0x18, 0xf7, 0xbc, 0x1c, 0xf7, 0x80, 0x09, 0x63, 0xa6, 0xd6, 0x5f, 0xd0, 0x0a,
+	0x39, 0x99, 0xe0, 0x63, 0xb8, 0x2c, 0xe5, 0x58, 0xe9, 0x47, 0x58, 0x35, 0x09, 0x4a, 0x7b, 0x04,
+	0xeb, 0x18, 0xf9, 0xbf, 0xf0, 0xf0, 0xe0, 0xfe, 0x07, 0x77, 0xa2, 0x4b, 0xbf, 0x81, 0xa5, 0x80,
+	0x9b, 0xe8, 0x6a, 0x99, 0xec, 0xeb, 0x7a, 0x9b, 0x76, 0xf8, 0xbe, 0x67, 0x65, 0x1f, 0xbe, 0xb4,
+	0x11, 0x88, 0xd0, 0x2b, 0x44, 0xed, 0x5b, 0x18, 0xbf, 0x73, 0xd1, 0x77, 0x70, 0x90, 0xc8, 0x7a,
+	0x2f, 0x00, 0xe1, 0x2d, 0xf2, 0x72, 0x64, 0x6a, 0xc5, 0x7f, 0x31, 0x37, 0xad, 0x46, 0x95, 0xb5,
+	0x99, 0x55, 0xe7, 0xbb, 0x41, 0xf4, 0xb5, 0x42, 0x96, 0xc7, 0xb1, 0x83, 0x08, 0x67, 0xc9, 0xbe,
+	0xba, 0x78, 0xac, 0xbe, 0x99, 0xc3, 0x46, 0xb0, 0xf0, 0x77, 0x1f, 0xb3, 0x76, 0x97, 0x8b, 0x92,
+	0xcd, 0x19, 0xc1, 0x02, 0xde, 0x20, 0x87, 0x9c, 0xae, 0xc5, 0x43, 0x63, 0xf9, 0x9c, 0x08, 0x2a,
+	0x76, 0x77, 0x46, 0x5f, 0xc6, 0x18, 0x52, 0xa0, 0x45, 0x32, 0x27, 0xa0, 0xbd, 0x79, 0xfb, 0x56,
+	0xd8, 0x70, 0x30, 0x9e, 0x23, 0x64, 0x12, 0x3b, 0xdc, 0x94, 0x31, 0x69, 0x36, 0xe8, 0x1d, 0x72,
+	0x22, 0x26, 0x19, 0x3d, 0x65, 0xa9, 0xa7, 0xa9, 0x32, 0x80, 0x01, 0xa5, 0xa8, 0x9f, 0xdd, 0x8b,
+	0x19, 0x8c, 0x72, 0x79, 0x55, 0x9a, 0xf6, 0x85, 0x74, 0x7b, 0xc3, 0x93, 0x9e, 0x1a, 0x24, 0x1f,
+	0x37, 0x8a, 0x30, 0xaf, 0xc4, 0x06, 0xcc, 0x28, 0x9c, 0x91, 0x2c, 0x5d, 0xc0, 0x4a, 0xbc, 0xd9,
+	0x6e, 0xc7, 0xb1, 0xd2, 0x07, 0x58, 0x6f, 0xf2, 0xe9, 0xbf, 0x74, 0x5a, 0x21, 0xa7, 0xc3, 0x40,
+	0x56, 0xec, 0x8d, 0x4e, 0x9b, 0xfb, 0xe3, 0x49, 0xce, 0x93, 0x7c, 0x47, 0x6b, 0x38, 0xbd, 0x52,
+	0x94, 0x10, 0xd2, 0x8d, 0x18, 0xa4, 0xc5, 0x04, 0x48, 0x31, 0x03, 0x7d, 0x70, 0xe5, 0xdf, 0x81,
+	0xec, 0x13, 0x8e, 0xe0, 0x31, 0x99, 0x19, 0x68, 0xee, 0x40, 0x65, 0x43, 0xf1, 0x79, 0xa0, 0x9e,
+	0x19, 0x29, 0x13, 0x60, 0xa4, 0xda, 0xc7, 0xbf, 0xfd, 0xfd, 0xc5, 0x64, 0x1e, 0xe6, 0xf4, 0x44,
+	0x56, 0x09, 0x3d, 0x72, 0x78, 0xa8, 0xdf, 0xc3, 0x62, 0xa2, 0x55, 0x69, 0x4c, 0xa8, 0x67, 0x33,
+	0xa4, 0xd0, 0xfb, 0xbc, 0xf0, 0x7e, 0x1c, 0x8e, 0xc9, 0xde, 0x3d, 0xb3, 0x03, 0x3f, 0x2a, 0x58,
+	0x63, 0x09, 0xbd, 0x1e, 0xf4, 0x44, 0x07, 0xe9, 0x03, 0x45, 0x7d, 0x65, 0x7c, 0x05, 0x04, 0xb7,
+	0x24, 0xc0, 0x9d, 0x86, 0x53, 0x32, 0xb8, 0x60, 0x14, 0xe9, 0x5b, 0xc1, 0xdf, 0x6d, 0xf8, 0x56,
+	0xc1, 0xc7, 0x1d, 0xeb, 0xfd, 0x70, 0x71, 0x0c, 0xaf, 0xfd, 0xc1, 0xa2, 0x96, 0xc6, 0x15, 0x47,
+	0x88, 0x67, 0x04, 0xc4, 0x93, 0x30, 0x1f, 0x83, 0xc8, 0xdc, 0x96, 0xbe, 0xe5, 0xff, 0xbb, 0x0d,
+	0xdf, 0x28, 0x38, 0xcb, 0x25, 0x66, 0x08, 0xe7, 0x13, 0xbd, 0x25, 0xff, 0x30, 0x50, 0x2f, 0x8c,
+	0x27, 0x8c, 0xc0, 0x8a, 0x02, 0x18, 0x85, 0x82, 0x0c, 0xcc, 0x0d, 0x14, 0xf4, 0x88, 0x51, 0x3e,
+	0x55, 0x70, 0xda, 0xa6, 0xf1, 0x56, 0xb8, 0x3c, 0x8e, 0x67, 0x79, 0x4c, 0xa8, 0xaf, 0xee, 0x52,
+	0x0b, 0x81, 0x5f, 0x17, 0xc0, 0x2f, 0x43, 0x39, 0x0b, 0xb8, 0x8e, 0x53, 0x47, 0xdf, 0xc2, 0x8f,
+	0x6d, 0xf8, 0x25, 0xf9, 0xb7, 0x55, 0x48, 0x4d, 0xa1, 0x3c, 0x06, 0x24, 0x89, 0x01, 0xab, 0x95,
+	0x5d, 0xe9, 0x60, 0x10, 0x65, 0x11, 0xc4, 0x05, 0x58, 0xce, 0x0c, 0xc2, 0xdb, 0xd4, 0xb7, 0x7c,
+	0x56, 0xbd, 0x0d, 0xdf, 0x29, 0x38, 0x26, 0xe2, 0x4c, 0x14, 0x92, 0xcb, 0x32, 0x95, 0x1f, 0xab,
+	0xfa, 0xd8, 0xf2, 0x08, 0xf8, 0x9c, 0x00, 0x5c, 0x00, 0x4d, 0x06, 0xfc, 0x04, 0x75, 0x58, 0x5b,
+	0x5f, 0xe3, 0x1c, 0x1c, 0x42, 0xfa, 0x9c, 0x03, 0x4e, 0x27, 0xba, 0x19, 0xa4, 0x47, 0x2a, 0x1d,
+	0x25, 0x82, 0xce, 0x4f, 0x0a, 0xe7, 0x27, 0xe0, 0xb8, 0xec, 0x5c, 0x90, 0x13, 0xf8, 0x4a, 0x41,
+	0x5e, 0x3d, 0x4c, 0x74, 0x60, 0x39, 0xdd, 0x74, 0xac, 0x18, 0xcf, 0x8f, 0x25, 0x9b, 0xd5, 0x77,
+	0x04, 0x9e, 0x81, 0x7a, 0xfb, 0x55, 0xc1, 0x31, 0x34, 0x92, 0xef, 0xc0, 0xb5, 0x54, 0xe7, 0x59,
+	0x5c, 0x4b, 0xbd, 0xfe, 0x22, 0xaa, 0x18, 0xc6, 0x45, 0x11, 0xc6, 0x12, 0x9c, 0xcd, 0x08, 0x43,
+	0xf7, 0x19, 0x85, 0x0b, 0x9f, 0x29, 0xe4, 0x7f, 0x12, 0xa3, 0x80, 0x73, 0x89, 0xee, 0x63, 0x14,
+	0x4a, 0x5d, 0xca, 0x94, 0xcb, 0x6a, 0x4b, 0x8d, 0xf5, 0xe8, 0x51, 0xe8, 0x5b, 0xfe, 0x73, 0xf8,
+	0x54, 0x21, 0x47, 0x65, 0x82, 0x03, 0x59, 0x7e, 0xa2, 0xbc, 0x15, 0xb3, 0x05, 0xb3, 0x3a, 0xf8,
+	0x00, 0x22, 0xf8, 0x32, 0x2c, 0xc1, 0x61, 0xee, 0x93, 0x52, 0x82, 0x89, 0xf4, 0x29, 0xa5, 0x04,
+	0x93, 0xc9, 0x14, 0x5d, 0x14, 0xa8, 0x34, 0x58, 0x18, 0x81, 0xca, 0x85, 0x9f, 0x15, 0x24, 0x6c,
+	0x89, 0x34, 0x08, 0x2e, 0xa5, 0x25, 0x21, 0x95, 0x67, 0xa9, 0xe5, 0xdd, 0xa8, 0x20, 0xd6, 0x8a,
+	0xc0, 0x7a, 0x11, 0xce, 0x27, 0x61, 0xad, 0x47, 0x7a, 0x43, 0xd7, 0x5b, 0x5d, 0x7d, 0xfa, 0x5c,
+	0x53, 0x9e, 0x3d, 0xd7, 0x94, 0xbf, 0x9e, 0x6b, 0xca, 0xe7, 0x3b, 0xda, 0xc4, 0xb3, 0x1d, 0x6d,
+	0xe2, 0x8f, 0x1d, 0x6d, 0xe2, 0xc3, 0x52, 0xd3, 0xf4, 0x5a, 0xdd, 0x5a, 0xa9, 0x6e, 0x6f, 0x08,
+	0x83, 0xe2, 0xbf, 0xcd, 0xea, 0x76, 0x3b, 0xb0, 0xbe, 0x39, 0xc8, 0x51, 0x7a, 0x1d, 0xee, 0xd6,
+	0xa6, 0x85, 0x40, 0xe5, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x60, 0x60, 0x7a, 0x55, 0x22, 0x14,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1577,12 +1575,12 @@ type QueryClient interface {
 	QueryBlockHeaderByHeight(ctx context.Context, in *QueryBlockHeaderByHeightRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHeightResponse, error)
 	// BlockHeaderByHash queries the block header by hash.
 	QueryBlockHeaderByHash(ctx context.Context, in *QueryBlockHeaderByHashRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHashResponse, error)
-	// QueryWithdrawRequests queries the withdrawal requests by the given status.
-	QueryWithdrawRequests(ctx context.Context, in *QueryWithdrawRequestsRequest, opts ...grpc.CallOption) (*QueryWithdrawRequestsResponse, error)
-	// QueryWithdrawRequestsByAddress queries the withdrawal requests by the given address.
-	QueryWithdrawRequestsByAddress(ctx context.Context, in *QueryWithdrawRequestsByAddressRequest, opts ...grpc.CallOption) (*QueryWithdrawRequestsByAddressResponse, error)
-	// QueryWithdrawRequestByTxHash queries the withdrawal request by the given tx hash.
-	QueryWithdrawRequestByTxHash(ctx context.Context, in *QueryWithdrawRequestByTxHashRequest, opts ...grpc.CallOption) (*QueryWithdrawRequestByTxHashResponse, error)
+	// QuerySigningRequests queries the signing requests by the given status.
+	QuerySigningRequests(ctx context.Context, in *QuerySigningRequestsRequest, opts ...grpc.CallOption) (*QuerySigningRequestsResponse, error)
+	// QuerySigningRequestsByAddress queries the signing requests by the given address.
+	QuerySigningRequestsByAddress(ctx context.Context, in *QuerySigningRequestsByAddressRequest, opts ...grpc.CallOption) (*QuerySigningRequestsByAddressResponse, error)
+	// QuerySigningRequestByTxHash queries the signing request by the given tx hash.
+	QuerySigningRequestByTxHash(ctx context.Context, in *QuerySigningRequestByTxHashRequest, opts ...grpc.CallOption) (*QuerySigningRequestByTxHashResponse, error)
 	// QueryWithdrawNetworkFee queries the bitcoin network fee for withdrawal.
 	QueryWithdrawNetworkFee(ctx context.Context, in *QueryWithdrawNetworkFeeRequest, opts ...grpc.CallOption) (*QueryWithdrawNetworkFeeResponse, error)
 	// QueryUTXOs queries all utxos.
@@ -1645,27 +1643,27 @@ func (c *queryClient) QueryBlockHeaderByHash(ctx context.Context, in *QueryBlock
 	return out, nil
 }
 
-func (c *queryClient) QueryWithdrawRequests(ctx context.Context, in *QueryWithdrawRequestsRequest, opts ...grpc.CallOption) (*QueryWithdrawRequestsResponse, error) {
-	out := new(QueryWithdrawRequestsResponse)
-	err := c.cc.Invoke(ctx, "/side.btcbridge.Query/QueryWithdrawRequests", in, out, opts...)
+func (c *queryClient) QuerySigningRequests(ctx context.Context, in *QuerySigningRequestsRequest, opts ...grpc.CallOption) (*QuerySigningRequestsResponse, error) {
+	out := new(QuerySigningRequestsResponse)
+	err := c.cc.Invoke(ctx, "/side.btcbridge.Query/QuerySigningRequests", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) QueryWithdrawRequestsByAddress(ctx context.Context, in *QueryWithdrawRequestsByAddressRequest, opts ...grpc.CallOption) (*QueryWithdrawRequestsByAddressResponse, error) {
-	out := new(QueryWithdrawRequestsByAddressResponse)
-	err := c.cc.Invoke(ctx, "/side.btcbridge.Query/QueryWithdrawRequestsByAddress", in, out, opts...)
+func (c *queryClient) QuerySigningRequestsByAddress(ctx context.Context, in *QuerySigningRequestsByAddressRequest, opts ...grpc.CallOption) (*QuerySigningRequestsByAddressResponse, error) {
+	out := new(QuerySigningRequestsByAddressResponse)
+	err := c.cc.Invoke(ctx, "/side.btcbridge.Query/QuerySigningRequestsByAddress", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) QueryWithdrawRequestByTxHash(ctx context.Context, in *QueryWithdrawRequestByTxHashRequest, opts ...grpc.CallOption) (*QueryWithdrawRequestByTxHashResponse, error) {
-	out := new(QueryWithdrawRequestByTxHashResponse)
-	err := c.cc.Invoke(ctx, "/side.btcbridge.Query/QueryWithdrawRequestByTxHash", in, out, opts...)
+func (c *queryClient) QuerySigningRequestByTxHash(ctx context.Context, in *QuerySigningRequestByTxHashRequest, opts ...grpc.CallOption) (*QuerySigningRequestByTxHashResponse, error) {
+	out := new(QuerySigningRequestByTxHashResponse)
+	err := c.cc.Invoke(ctx, "/side.btcbridge.Query/QuerySigningRequestByTxHash", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1754,12 +1752,12 @@ type QueryServer interface {
 	QueryBlockHeaderByHeight(context.Context, *QueryBlockHeaderByHeightRequest) (*QueryBlockHeaderByHeightResponse, error)
 	// BlockHeaderByHash queries the block header by hash.
 	QueryBlockHeaderByHash(context.Context, *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error)
-	// QueryWithdrawRequests queries the withdrawal requests by the given status.
-	QueryWithdrawRequests(context.Context, *QueryWithdrawRequestsRequest) (*QueryWithdrawRequestsResponse, error)
-	// QueryWithdrawRequestsByAddress queries the withdrawal requests by the given address.
-	QueryWithdrawRequestsByAddress(context.Context, *QueryWithdrawRequestsByAddressRequest) (*QueryWithdrawRequestsByAddressResponse, error)
-	// QueryWithdrawRequestByTxHash queries the withdrawal request by the given tx hash.
-	QueryWithdrawRequestByTxHash(context.Context, *QueryWithdrawRequestByTxHashRequest) (*QueryWithdrawRequestByTxHashResponse, error)
+	// QuerySigningRequests queries the signing requests by the given status.
+	QuerySigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error)
+	// QuerySigningRequestsByAddress queries the signing requests by the given address.
+	QuerySigningRequestsByAddress(context.Context, *QuerySigningRequestsByAddressRequest) (*QuerySigningRequestsByAddressResponse, error)
+	// QuerySigningRequestByTxHash queries the signing request by the given tx hash.
+	QuerySigningRequestByTxHash(context.Context, *QuerySigningRequestByTxHashRequest) (*QuerySigningRequestByTxHashResponse, error)
 	// QueryWithdrawNetworkFee queries the bitcoin network fee for withdrawal.
 	QueryWithdrawNetworkFee(context.Context, *QueryWithdrawNetworkFeeRequest) (*QueryWithdrawNetworkFeeResponse, error)
 	// QueryUTXOs queries all utxos.
@@ -1794,14 +1792,14 @@ func (*UnimplementedQueryServer) QueryBlockHeaderByHeight(ctx context.Context, r
 func (*UnimplementedQueryServer) QueryBlockHeaderByHash(ctx context.Context, req *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryBlockHeaderByHash not implemented")
 }
-func (*UnimplementedQueryServer) QueryWithdrawRequests(ctx context.Context, req *QueryWithdrawRequestsRequest) (*QueryWithdrawRequestsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryWithdrawRequests not implemented")
+func (*UnimplementedQueryServer) QuerySigningRequests(ctx context.Context, req *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QuerySigningRequests not implemented")
 }
-func (*UnimplementedQueryServer) QueryWithdrawRequestsByAddress(ctx context.Context, req *QueryWithdrawRequestsByAddressRequest) (*QueryWithdrawRequestsByAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryWithdrawRequestsByAddress not implemented")
+func (*UnimplementedQueryServer) QuerySigningRequestsByAddress(ctx context.Context, req *QuerySigningRequestsByAddressRequest) (*QuerySigningRequestsByAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QuerySigningRequestsByAddress not implemented")
 }
-func (*UnimplementedQueryServer) QueryWithdrawRequestByTxHash(ctx context.Context, req *QueryWithdrawRequestByTxHashRequest) (*QueryWithdrawRequestByTxHashResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryWithdrawRequestByTxHash not implemented")
+func (*UnimplementedQueryServer) QuerySigningRequestByTxHash(ctx context.Context, req *QuerySigningRequestByTxHashRequest) (*QuerySigningRequestByTxHashResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QuerySigningRequestByTxHash not implemented")
 }
 func (*UnimplementedQueryServer) QueryWithdrawNetworkFee(ctx context.Context, req *QueryWithdrawNetworkFeeRequest) (*QueryWithdrawNetworkFeeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryWithdrawNetworkFee not implemented")
@@ -1904,56 +1902,56 @@ func _Query_QueryBlockHeaderByHash_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_QueryWithdrawRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryWithdrawRequestsRequest)
+func _Query_QuerySigningRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySigningRequestsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).QueryWithdrawRequests(ctx, in)
+		return srv.(QueryServer).QuerySigningRequests(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.btcbridge.Query/QueryWithdrawRequests",
+		FullMethod: "/side.btcbridge.Query/QuerySigningRequests",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).QueryWithdrawRequests(ctx, req.(*QueryWithdrawRequestsRequest))
+		return srv.(QueryServer).QuerySigningRequests(ctx, req.(*QuerySigningRequestsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_QueryWithdrawRequestsByAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryWithdrawRequestsByAddressRequest)
+func _Query_QuerySigningRequestsByAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySigningRequestsByAddressRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).QueryWithdrawRequestsByAddress(ctx, in)
+		return srv.(QueryServer).QuerySigningRequestsByAddress(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.btcbridge.Query/QueryWithdrawRequestsByAddress",
+		FullMethod: "/side.btcbridge.Query/QuerySigningRequestsByAddress",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).QueryWithdrawRequestsByAddress(ctx, req.(*QueryWithdrawRequestsByAddressRequest))
+		return srv.(QueryServer).QuerySigningRequestsByAddress(ctx, req.(*QuerySigningRequestsByAddressRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_QueryWithdrawRequestByTxHash_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryWithdrawRequestByTxHashRequest)
+func _Query_QuerySigningRequestByTxHash_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySigningRequestByTxHashRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).QueryWithdrawRequestByTxHash(ctx, in)
+		return srv.(QueryServer).QuerySigningRequestByTxHash(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.btcbridge.Query/QueryWithdrawRequestByTxHash",
+		FullMethod: "/side.btcbridge.Query/QuerySigningRequestByTxHash",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).QueryWithdrawRequestByTxHash(ctx, req.(*QueryWithdrawRequestByTxHashRequest))
+		return srv.(QueryServer).QuerySigningRequestByTxHash(ctx, req.(*QuerySigningRequestByTxHashRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2123,16 +2121,16 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_QueryBlockHeaderByHash_Handler,
 		},
 		{
-			MethodName: "QueryWithdrawRequests",
-			Handler:    _Query_QueryWithdrawRequests_Handler,
+			MethodName: "QuerySigningRequests",
+			Handler:    _Query_QuerySigningRequests_Handler,
 		},
 		{
-			MethodName: "QueryWithdrawRequestsByAddress",
-			Handler:    _Query_QueryWithdrawRequestsByAddress_Handler,
+			MethodName: "QuerySigningRequestsByAddress",
+			Handler:    _Query_QuerySigningRequestsByAddress_Handler,
 		},
 		{
-			MethodName: "QueryWithdrawRequestByTxHash",
-			Handler:    _Query_QueryWithdrawRequestByTxHash_Handler,
+			MethodName: "QuerySigningRequestByTxHash",
+			Handler:    _Query_QuerySigningRequestByTxHash_Handler,
 		},
 		{
 			MethodName: "QueryWithdrawNetworkFee",
@@ -2171,7 +2169,7 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 	Metadata: "side/btcbridge/query.proto",
 }
 
-func (m *QueryWithdrawRequestsRequest) Marshal() (dAtA []byte, err error) {
+func (m *QuerySigningRequestsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2181,12 +2179,12 @@ func (m *QueryWithdrawRequestsRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryWithdrawRequestsRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestsRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryWithdrawRequestsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2211,7 +2209,7 @@ func (m *QueryWithdrawRequestsRequest) MarshalToSizedBuffer(dAtA []byte) (int, e
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryWithdrawRequestsResponse) Marshal() (dAtA []byte, err error) {
+func (m *QuerySigningRequestsResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2221,12 +2219,12 @@ func (m *QueryWithdrawRequestsResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryWithdrawRequestsResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestsResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryWithdrawRequestsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2260,7 +2258,7 @@ func (m *QueryWithdrawRequestsResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryWithdrawRequestsByAddressRequest) Marshal() (dAtA []byte, err error) {
+func (m *QuerySigningRequestsByAddressRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2270,12 +2268,12 @@ func (m *QueryWithdrawRequestsByAddressRequest) Marshal() (dAtA []byte, err erro
 	return dAtA[:n], nil
 }
 
-func (m *QueryWithdrawRequestsByAddressRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestsByAddressRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryWithdrawRequestsByAddressRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestsByAddressRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2302,7 +2300,7 @@ func (m *QueryWithdrawRequestsByAddressRequest) MarshalToSizedBuffer(dAtA []byte
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryWithdrawRequestsByAddressResponse) Marshal() (dAtA []byte, err error) {
+func (m *QuerySigningRequestsByAddressResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2312,12 +2310,12 @@ func (m *QueryWithdrawRequestsByAddressResponse) Marshal() (dAtA []byte, err err
 	return dAtA[:n], nil
 }
 
-func (m *QueryWithdrawRequestsByAddressResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestsByAddressResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryWithdrawRequestsByAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestsByAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2351,7 +2349,7 @@ func (m *QueryWithdrawRequestsByAddressResponse) MarshalToSizedBuffer(dAtA []byt
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryWithdrawRequestByTxHashRequest) Marshal() (dAtA []byte, err error) {
+func (m *QuerySigningRequestByTxHashRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2361,12 +2359,12 @@ func (m *QueryWithdrawRequestByTxHashRequest) Marshal() (dAtA []byte, err error)
 	return dAtA[:n], nil
 }
 
-func (m *QueryWithdrawRequestByTxHashRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestByTxHashRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryWithdrawRequestByTxHashRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestByTxHashRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2381,7 +2379,7 @@ func (m *QueryWithdrawRequestByTxHashRequest) MarshalToSizedBuffer(dAtA []byte) 
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryWithdrawRequestByTxHashResponse) Marshal() (dAtA []byte, err error) {
+func (m *QuerySigningRequestByTxHashResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2391,12 +2389,12 @@ func (m *QueryWithdrawRequestByTxHashResponse) Marshal() (dAtA []byte, err error
 	return dAtA[:n], nil
 }
 
-func (m *QueryWithdrawRequestByTxHashResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestByTxHashResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryWithdrawRequestByTxHashResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QuerySigningRequestByTxHashResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -3198,7 +3196,7 @@ func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *QueryWithdrawRequestsRequest) Size() (n int) {
+func (m *QuerySigningRequestsRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3214,7 +3212,7 @@ func (m *QueryWithdrawRequestsRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryWithdrawRequestsResponse) Size() (n int) {
+func (m *QuerySigningRequestsResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3233,7 +3231,7 @@ func (m *QueryWithdrawRequestsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryWithdrawRequestsByAddressRequest) Size() (n int) {
+func (m *QuerySigningRequestsByAddressRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3250,7 +3248,7 @@ func (m *QueryWithdrawRequestsByAddressRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryWithdrawRequestsByAddressResponse) Size() (n int) {
+func (m *QuerySigningRequestsByAddressResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3269,7 +3267,7 @@ func (m *QueryWithdrawRequestsByAddressResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryWithdrawRequestByTxHashRequest) Size() (n int) {
+func (m *QuerySigningRequestByTxHashRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3282,7 +3280,7 @@ func (m *QueryWithdrawRequestByTxHashRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryWithdrawRequestByTxHashResponse) Size() (n int) {
+func (m *QuerySigningRequestByTxHashResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3619,7 +3617,7 @@ func sovQuery(x uint64) (n int) {
 func sozQuery(x uint64) (n int) {
 	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *QueryWithdrawRequestsRequest) Unmarshal(dAtA []byte) error {
+func (m *QuerySigningRequestsRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3642,10 +3640,10 @@ func (m *QueryWithdrawRequestsRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryWithdrawRequestsRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QuerySigningRequestsRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryWithdrawRequestsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QuerySigningRequestsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3662,7 +3660,7 @@ func (m *QueryWithdrawRequestsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= WithdrawStatus(b&0x7F) << shift
+				m.Status |= SigningRequestStatus(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3724,7 +3722,7 @@ func (m *QueryWithdrawRequestsRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryWithdrawRequestsResponse) Unmarshal(dAtA []byte) error {
+func (m *QuerySigningRequestsResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3747,10 +3745,10 @@ func (m *QueryWithdrawRequestsResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryWithdrawRequestsResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QuerySigningRequestsResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryWithdrawRequestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QuerySigningRequestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3782,7 +3780,7 @@ func (m *QueryWithdrawRequestsResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Requests = append(m.Requests, &BitcoinWithdrawRequest{})
+			m.Requests = append(m.Requests, &SigningRequest{})
 			if err := m.Requests[len(m.Requests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3844,7 +3842,7 @@ func (m *QueryWithdrawRequestsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryWithdrawRequestsByAddressRequest) Unmarshal(dAtA []byte) error {
+func (m *QuerySigningRequestsByAddressRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3867,10 +3865,10 @@ func (m *QueryWithdrawRequestsByAddressRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryWithdrawRequestsByAddressRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QuerySigningRequestsByAddressRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryWithdrawRequestsByAddressRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QuerySigningRequestsByAddressRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3962,7 +3960,7 @@ func (m *QueryWithdrawRequestsByAddressRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryWithdrawRequestsByAddressResponse) Unmarshal(dAtA []byte) error {
+func (m *QuerySigningRequestsByAddressResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3985,10 +3983,10 @@ func (m *QueryWithdrawRequestsByAddressResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryWithdrawRequestsByAddressResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QuerySigningRequestsByAddressResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryWithdrawRequestsByAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QuerySigningRequestsByAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4020,7 +4018,7 @@ func (m *QueryWithdrawRequestsByAddressResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Requests = append(m.Requests, &BitcoinWithdrawRequest{})
+			m.Requests = append(m.Requests, &SigningRequest{})
 			if err := m.Requests[len(m.Requests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4082,7 +4080,7 @@ func (m *QueryWithdrawRequestsByAddressResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryWithdrawRequestByTxHashRequest) Unmarshal(dAtA []byte) error {
+func (m *QuerySigningRequestByTxHashRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4105,10 +4103,10 @@ func (m *QueryWithdrawRequestByTxHashRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryWithdrawRequestByTxHashRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QuerySigningRequestByTxHashRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryWithdrawRequestByTxHashRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QuerySigningRequestByTxHashRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4164,7 +4162,7 @@ func (m *QueryWithdrawRequestByTxHashRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryWithdrawRequestByTxHashResponse) Unmarshal(dAtA []byte) error {
+func (m *QuerySigningRequestByTxHashResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4187,10 +4185,10 @@ func (m *QueryWithdrawRequestByTxHashResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryWithdrawRequestByTxHashResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QuerySigningRequestByTxHashResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryWithdrawRequestByTxHashResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QuerySigningRequestByTxHashResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4223,7 +4221,7 @@ func (m *QueryWithdrawRequestByTxHashResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Request == nil {
-				m.Request = &BitcoinWithdrawRequest{}
+				m.Request = &SigningRequest{}
 			}
 			if err := m.Request.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
