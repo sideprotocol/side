@@ -56,4 +56,6 @@ var (
 	ErrInvalidVault                     = errorsmod.Register(ModuleName, 7106, "invalid vault")
 	ErrVaultDoesNotExist                = errorsmod.Register(ModuleName, 7107, "vault does not exist")
 	ErrInvalidPsbt                      = errorsmod.Register(ModuleName, 7108, "invalid psbt")
+
+	ErrInvalidConsolidation = errorsmod.Register(ModuleName, 8100, "invalid consolidation")
 )

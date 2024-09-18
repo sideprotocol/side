@@ -210,6 +210,25 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	return &types.MsgSubmitSignaturesResponse{}, nil
 }
 
+// ConsolidateVaults performs the UTXO consolidation for the given vaults.
+func (m msgServer) ConsolidateVaults(goCtx context.Context, msg *types.MsgConsolidateVaults) (*types.MsgConsolidateVaultsResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := m.Keeper.ConsolidateVaults(ctx, msg.VaultVersion, msg.BtcConsolidation, msg.RunesConsolidations, msg.FeeRate); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgConsolidateVaultsResponse{}, nil
+}
+
 // InitiateDKG initiates the DKG request.
 func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG) (*types.MsgInitiateDKGResponse, error) {
 	if m.authority != msg.Authority {

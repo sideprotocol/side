@@ -82968,6 +82968,18 @@ definitions:
         type: string
         format: uint64
     title: Bitcoin Block Header
+  side.btcbridge.BtcConsolidation:
+    type: object
+    properties:
+      target_threshold:
+        type: string
+        format: int64
+        title: maximum threshold of the btc value
+      max_num:
+        type: integer
+        format: int64
+        title: maximum number of the utxos to be consolidated; 0 means all
+    title: BTC UTXO Consolidation
   side.btcbridge.DKGCompletionRequest:
     type: object
     properties:
@@ -83096,6 +83108,11 @@ definitions:
   side.btcbridge.MsgCompleteDKGResponse:
     type: object
     description: MsgCompleteDKGResponse defines the Msg/CompleteDKG response type.
+  side.btcbridge.MsgConsolidateVaultsResponse:
+    type: object
+    description: >-
+      MsgConsolidateVaultsResponse defines the Msg/ConsolidateVaults response
+      type.
   side.btcbridge.MsgInitiateDKGResponse:
     type: object
     description: MsgInitiateDKGResponse defines the Msg/InitiateDKG response type.
@@ -84021,6 +84038,20 @@ definitions:
         type: string
         title: rune amount
     title: Rune Balance
+  side.btcbridge.RunesConsolidation:
+    type: object
+    properties:
+      rune_id:
+        type: string
+        title: rune id
+      target_threshold:
+        type: string
+        title: maximum threshold of the corresponding rune balance
+      max_num:
+        type: integer
+        format: int64
+        title: maximum number of the utxos to be consolidated; 0 means all
+    title: Runes UTXO Consolidation
   side.btcbridge.SigningRequest:
     type: object
     properties:

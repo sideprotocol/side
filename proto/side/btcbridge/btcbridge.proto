@@ -82,6 +82,24 @@ message Edict {
   uint32 output = 3;
 }
 
+// BTC UTXO Consolidation
+message BtcConsolidation {
+  // maximum threshold of the btc value
+  int64 target_threshold = 1;
+  // maximum number of the utxos to be consolidated; 0 means all
+  uint32 max_num = 2;
+}
+
+// Runes UTXO Consolidation
+message RunesConsolidation {
+  // rune id
+  string rune_id = 1;
+  // maximum threshold of the corresponding rune balance
+  string target_threshold = 2;
+  // maximum number of the utxos to be consolidated; 0 means all
+  uint32 max_num = 3;
+}
+
 // DKG Participant
 message DKGParticipant {
   // the moniker of the corresponding validator

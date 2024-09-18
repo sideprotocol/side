@@ -7,6 +7,7 @@ import (
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -487,12 +488,19 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 		return nil, types.ErrInsufficientUTXOs
 	}
 
-	sourceBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, sourceVault.Version).Address
-	destBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, destVault.Version).Address
+	sourceBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, sourceVault.Version)
+	if sourceBtcVault == nil {
+		return nil, types.ErrVaultDoesNotExist
+	}
 
-	btcUtxoIterator := k.GetUTXOIteratorByAddr(ctx, sourceBtcVault)
+	destBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, destVault.Version)
+	if destBtcVault == nil {
+		return nil, types.ErrVaultDoesNotExist
+	}
 
-	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destVault.Address, runeBalances.Compact(), feeRate, destBtcVault)
+	btcUtxoIterator := k.GetUTXOIteratorByAddr(ctx, sourceBtcVault.Address)
+
+	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destVault.Address, runeBalances.Compact(), feeRate, destBtcVault.Address)
 	if err != nil {
 		return nil, err
 	}

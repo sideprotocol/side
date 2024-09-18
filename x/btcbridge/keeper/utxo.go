@@ -133,6 +133,24 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddr(ctx sdk.Context, addr stri
 	return utxos
 }
 
+// GetUnlockedUTXOsByAddrAndThreshold gets the unlocked utxos that satisfy the maximum threshold by the given address and maximum number
+// Note: return all satisfying utxos if the maximum number set to 0
+func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddrAndThreshold(ctx sdk.Context, addr string, threshold int64, maxNum uint32) []*types.UTXO {
+	utxos := make([]*types.UTXO, 0)
+
+	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
+		if utxo.IsLocked || utxo.Amount > uint64(threshold) {
+			return false
+		}
+
+		utxos = append(utxos, utxo)
+
+		return maxNum != 0 && len(utxos) >= int(maxNum)
+	})
+
+	return utxos
+}
+
 // GetOrderedUTXOsByAddr gets all unlocked utxos of the given address in the descending order by amount
 // Note: high gas is required due to sorting
 func (bvk *BaseUTXOViewKeeper) GetOrderedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO {
@@ -176,6 +194,26 @@ func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string,
 	runeBalancesDelta := totalRuneBalances.Compact().Update(runeId, totalAmount.Sub(targetAmount))
 
 	return utxos, runeBalancesDelta
+}
+
+// GetTargetRunesUTXOsByAddrAndThreshold gets the unlocked runes utxos that satisfy the maximum threshold for the specified rune id by the given address and maximum number
+// Note: return all satisfying utxos if the maximum number set to 0
+func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOsByAddrAndThreshold(ctx sdk.Context, addr string, runeId string, threshold uint128.Uint128, maxNum uint32) ([]*types.UTXO, []*types.RuneBalance) {
+	utxos := make([]*types.UTXO, 0)
+	runeBalances := make(types.RuneBalances, 0)
+
+	bvk.IterateRunesUTXOs(ctx, addr, runeId, func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool) {
+		if utxo.IsLocked || amount.Cmp(threshold) > 0 {
+			return false
+		}
+
+		utxos = append(utxos, utxo)
+		runeBalances = append(runeBalances, utxo.Runes...)
+
+		return maxNum != 0 && len(utxos) >= int(maxNum)
+	})
+
+	return utxos, runeBalances.Compact()
 }
 
 func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOCountAndBalancesByAddr(ctx sdk.Context, addr string) (uint32, int64, []*types.RuneBalance) {
