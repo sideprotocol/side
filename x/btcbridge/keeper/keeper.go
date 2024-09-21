@@ -84,36 +84,41 @@ func (k Keeper) SetBestBlockHeader(ctx sdk.Context, header *types.BlockHeader) {
 	store.Set(types.BtcBestBlockHeaderKey, bz)
 }
 
-func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeader []*types.BlockHeader) error {
+func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHeader) error {
 	store := ctx.KVStore(k.storeKey)
-	// check if the previous block header exists
-	best := k.GetBestBlockHeader(ctx)
-	for _, header := range blockHeader {
 
-		// check the block header sanity
-		err := blockchain.CheckBlockHeaderSanity(
-			HeaderConvert(header),
-			sdk.GetConfig().GetBtcChainCfg().PowLimit,
-			blockchain.NewMedianTime(),
-			blockchain.BFNone,
-		)
-		if err != nil {
+	// get the best block header
+	best := k.GetBestBlockHeader(ctx)
+
+	for _, header := range blockHeaders {
+		// check the block header
+		if err := header.Validate(); err != nil {
 			return err
+		}
+
+		// check if the block header already exists
+		if store.Has(types.BtcBlockHeaderHashKey(header.Hash)) {
+			return types.ErrBlockHeaderExists
+		}
+
+		// check if the previous block exists
+		if !store.Has(types.BtcBlockHeaderHashKey(header.PreviousBlockHash)) {
+			return types.ErrInvalidBlockHeader
+		}
+
+		// check the block height
+		prevBlock := k.GetBlockHeader(ctx, header.PreviousBlockHash)
+		if header.Height != prevBlock.Height+1 {
+			return types.ErrInvalidBlockHeader
 		}
 
 		// check whether it's next block header or not
 		if best.Hash != header.PreviousBlockHash {
-			// check if the block header already exists
-			// if exists, then it is a forked block header
-			if !store.Has(types.BtcBlockHeaderHeightKey(header.Height)) {
-				return types.ErrInvalidHeader
-			}
-
 			// a forked block header is detected
 			// check if the new block header has more work than the old one
 			oldNode := k.GetBlockHeaderByHeight(ctx, header.Height)
-			worksOld := blockchain.CalcWork(BitsToTargetUint32(oldNode.Bits))
-			worksNew := blockchain.CalcWork(BitsToTargetUint32(header.Bits))
+			worksOld := blockchain.CalcWork(types.BitsToTargetUint32(oldNode.Bits))
+			worksNew := blockchain.CalcWork(types.BitsToTargetUint32(header.Bits))
 			if sdk.GetConfig().GetBtcChainCfg().Net == wire.MainNet && worksNew.Cmp(worksOld) <= 0 || worksNew.Cmp(worksOld) < 0 {
 				return types.ErrForkedBlockHeader
 			}
@@ -137,10 +142,8 @@ func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeader []*types.BlockHeade
 		best = header
 	}
 
-	if len(blockHeader) > 0 {
-		// set the best block header
-		k.SetBestBlockHeader(ctx, best)
-	}
+	// set the best block header
+	k.SetBestBlockHeader(ctx, best)
 
 	return nil
 }

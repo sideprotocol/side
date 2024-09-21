@@ -45,7 +45,7 @@ func (msg *MsgSubmitBlockHeaders) ValidateBasic() error {
 	}
 
 	if len(msg.BlockHeaders) == 0 {
-		return sdkerrors.Wrap(ErrInvalidHeader, "block headers cannot be empty")
+		return sdkerrors.Wrap(ErrInvalidBlockHeader, "block headers cannot be empty")
 	}
 
 	return nil
