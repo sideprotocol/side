@@ -13,6 +13,7 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
+
 	k.SetBestBlockHeader(ctx, genState.BestBlockHeader)
 	if len(genState.BlockHeaders) > 0 {
 		err := k.SetBlockHeaders(ctx, genState.BlockHeaders)

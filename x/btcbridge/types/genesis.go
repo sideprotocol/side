@@ -2,6 +2,7 @@ package types
 
 import (
 	"github.com/btcsuite/btcd/chaincfg"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -78,9 +79,12 @@ func DefaultGenesis() *GenesisState {
 // failure.
 func (gs GenesisState) Validate() error {
 	// this line is used by starport scaffolding # genesis/types/validate
-	// need to be improved by checking the block headers & best block header
-	if gs.BestBlockHeader == nil || gs.BestBlockHeader.Hash == "" || gs.BestBlockHeader.PreviousBlockHash == "" || gs.BestBlockHeader.MerkleRoot == "" {
-		return ErrInvalidHeader
+
+	// validate the best block header
+	if err := gs.BestBlockHeader.Validate(); err != nil {
+		return err
 	}
+
+	// validate params
 	return gs.Params.Validate()
 }
