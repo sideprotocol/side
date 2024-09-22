@@ -18,8 +18,9 @@ BLOCK_GAS=10000000
 MAX_GAS=10000000000
 
 # btcbridge params
-BTC_VAULT=() # ("<address>" "<pk>", "<asset type>")
+BTC_VAULT=() # ("<address>" "<pk>" "<asset type>")
 RUNES_VAULT=()
+TRUSTED_NON_BTC_RELAYER=""
 PROTOCOL_FEE_COLLECTOR=""
 
 # gov params
@@ -110,6 +111,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		jq --arg runes_vault "${RUNES_VAULT[0]}" '.app_state["btcbridge"]["params"]["vaults"][1]["address"]=$runes_vault' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 		jq --arg runes_vault_pk "${RUNES_VAULT[1]}" '.app_state["btcbridge"]["params"]["vaults"][1]["pub_key"]=$runes_vault_pk' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 		jq --arg runes_vault_asset_type "${RUNES_VAULT[2]}" '.app_state["btcbridge"]["params"]["vaults"][1]["asset_type"]=$runes_vault_asset_type' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+    fi
+
+	# set trusted non btc relayer
+	if [ -n "$TRUSTED_NON_BTC_RELAYER" ]; then
+	    jq --arg relayer "$TRUSTED_NON_BTC_RELAYER" '.app_state["btcbridge"]["params"]["non_btc_relayers"][0]=$relayer' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
     fi
 
 	# set protocol fee collector
