@@ -84,6 +84,15 @@ func (k Keeper) SetBestBlockHeader(ctx sdk.Context, header *types.BlockHeader) {
 	store.Set(types.BtcBestBlockHeaderKey, bz)
 }
 
+func (k Keeper) SetBlockHeader(ctx sdk.Context, header *types.BlockHeader) {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := k.cdc.MustMarshal(header)
+
+	store.Set(types.BtcBlockHeaderHashKey(header.Hash), bz)
+	store.Set(types.BtcBlockHeaderHeightKey(header.Height), []byte(header.Hash))
+}
+
 func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHeader) error {
 	store := ctx.KVStore(k.storeKey)
 
@@ -133,11 +142,9 @@ func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHead
 			}
 		}
 
-		// store the block header
-		bz := k.cdc.MustMarshal(header)
-		store.Set(types.BtcBlockHeaderHashKey(header.Hash), bz)
-		// store the height to hash mapping
-		store.Set(types.BtcBlockHeaderHeightKey(header.Height), []byte(header.Hash))
+		// set the block header
+		k.SetBlockHeader(ctx, header)
+
 		// update the best block header
 		best = header
 	}

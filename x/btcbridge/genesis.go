@@ -15,6 +15,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	k.SetParams(ctx, genState.Params)
 
 	k.SetBestBlockHeader(ctx, genState.BestBlockHeader)
+	k.SetBlockHeader(ctx, genState.BestBlockHeader)
+
 	if len(genState.BlockHeaders) > 0 {
 		err := k.SetBlockHeaders(ctx, genState.BlockHeaders)
 		if err != nil {
