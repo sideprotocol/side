@@ -12,12 +12,16 @@ option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
 service Msg {
   // SubmitBlockHeaders submits bitcoin block headers to the side chain.
   rpc SubmitBlockHeaders (MsgSubmitBlockHeaders) returns (MsgSubmitBlockHeadersResponse);
-  // UpdateNonBtcRelayers updates the trusted non-btc asset relayers.
-  rpc UpdateNonBtcRelayers (MsgUpdateNonBtcRelayers) returns (MsgUpdateNonBtcRelayersResponse);
-  // SubmitDepositTransaction submits bitcoin transaction to the side chain.
+  // SubmitDepositTransaction submits the bitcoin deposit transaction to the side chain.
   rpc SubmitDepositTransaction (MsgSubmitDepositTransaction) returns (MsgSubmitDepositTransactionResponse);
-  // SubmitWithdrawalTransaction submits bitcoin transaction to the side chain.
+  // SubmitWithdrawalTransaction submits the bitcoin withdrawal transaction to the side chain.
   rpc SubmitWithdrawTransaction (MsgSubmitWithdrawTransaction) returns (MsgSubmitWithdrawTransactionResponse);
+  // SubmitFeeRate submits the bitcoin network fee rate to the side chain.
+  rpc SubmitFeeRate (MsgSubmitFeeRate) returns (MsgSubmitFeeRateResponse);
+  // UpdateTrustedNonBtcRelayers updates the trusted non-btc asset relayers.
+  rpc UpdateTrustedNonBtcRelayers (MsgUpdateTrustedNonBtcRelayers) returns (MsgUpdateTrustedNonBtcRelayersResponse);
+  // UpdateTrustedOracles updates the trusted oracles.
+  rpc UpdateTrustedOracles (MsgUpdateTrustedOracles) returns (MsgUpdateTrustedOraclesResponse);
   // WithdrawToBitcoin withdraws the asset to bitcoin.
   rpc WithdrawToBitcoin (MsgWithdrawToBitcoin) returns (MsgWithdrawToBitcoinResponse);
   // SubmitSignatures submits the signatures of the signing request to the side chain.
@@ -45,16 +49,6 @@ message MsgSubmitBlockHeaders {
 
 // MsgSubmitBlockHeadersResponse defines the Msg/SubmitBlockHeaders response type.
 message MsgSubmitBlockHeadersResponse {
-}
-
-// MsgUpdateNonBtcRelayers defines the Msg/UpdateNonBtcRelayers request type.
-message MsgUpdateNonBtcRelayers {
-  string sender = 1;
-  repeated string relayers = 2;
-}
-
-// MsgUpdateNonBtcRelayersResponse defines the Msg/UpdateNonBtcRelayers response type.
-message MsgUpdateNonBtcRelayersResponse {
 }
 
 // MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type.
@@ -88,13 +82,41 @@ message MsgSubmitWithdrawTransaction {
 message MsgSubmitWithdrawTransactionResponse {
 }
 
+// MsgSubmitFeeRate defines the Msg/SubmitFeeRate request type.
+message MsgSubmitFeeRate {
+  string sender = 1;
+  int64 fee_rate = 2;
+}
+
+// MsgSubmitFeeRateResponse defines the Msg/SubmitFeeRate response type.
+message MsgSubmitFeeRateResponse {
+}
+
+// MsgUpdateTrustedNonBtcRelayers defines the Msg/UpdateTrustedNonBtcRelayers request type.
+message MsgUpdateTrustedNonBtcRelayers {
+  string sender = 1;
+  repeated string relayers = 2;
+}
+
+// MsgUpdateTrustedNonBtcRelayersResponse defines the Msg/UpdateTrustedNonBtcRelayers response type.
+message MsgUpdateTrustedNonBtcRelayersResponse {
+}
+
+// MsgUpdateTrustedOracles defines the Msg/UpdateTrustedOracles request type.
+message MsgUpdateTrustedOracles {
+  string sender = 1;
+  repeated string oracles = 2;
+}
+
+// MsgUpdateTrustedOraclesResponse defines the Msg/UpdateTrustedOracles response type.
+message MsgUpdateTrustedOraclesResponse {
+}
+
 // MsgWithdrawToBitcoin defines the Msg/WithdrawToBitcoin request type.
 message MsgWithdrawToBitcoin {
   string sender = 1;
   // withdraw amount in satoshi, etc: 100000000sat = 1btc
   string amount = 2;
-  // fee rate in sats/vB
-  string fee_rate = 3;
 }
 
 // MsgWithdrawToBitcoinResponse defines the Msg/WithdrawToBitcoin response type.

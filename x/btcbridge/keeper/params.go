@@ -26,10 +26,26 @@ func (k Keeper) ProtocolWithdrawFeeEnabled(ctx sdk.Context) bool {
 	return k.GetParams(ctx).ProtocolFees.WithdrawFee > 0
 }
 
+// ProtocolFeeCollector gets the protocol fee collector
+func (k Keeper) ProtocolFeeCollector(ctx sdk.Context) string {
+	return k.GetParams(ctx).ProtocolFees.Collector
+}
+
 // IsTrustedNonBtcRelayer returns true if the given address is a trusted non-btc relayer, false otherwise
 func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
-	for _, relayer := range k.GetParams(ctx).NonBtcRelayers {
+	for _, relayer := range k.GetParams(ctx).TrustedNonBtcRelayers {
 		if relayer == addr {
+			return true
+		}
+	}
+
+	return false
+}
+
+// IsTrustedOracle returns true if the given address is a trusted oracle, false otherwise
+func (k Keeper) IsTrustedOracle(ctx sdk.Context, addr string) bool {
+	for _, oracle := range k.GetParams(ctx).TrustedOracles {
+		if oracle == addr {
 			return true
 		}
 	}

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"strconv"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
@@ -36,8 +35,8 @@ func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmi
 	return &types.MsgSubmitBlockHeadersResponse{}, nil
 }
 
-// UpdateNonBtcRelayers implements types.MsgServer.
-func (m msgServer) UpdateNonBtcRelayers(goCtx context.Context, msg *types.MsgUpdateNonBtcRelayers) (*types.MsgUpdateNonBtcRelayersResponse, error) {
+// UpdateTrustedNonBtcRelayers implements types.MsgServer.
+func (m msgServer) UpdateTrustedNonBtcRelayers(goCtx context.Context, msg *types.MsgUpdateTrustedNonBtcRelayers) (*types.MsgUpdateTrustedNonBtcRelayersResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if err := msg.ValidateBasic(); err != nil {
@@ -50,10 +49,30 @@ func (m msgServer) UpdateNonBtcRelayers(goCtx context.Context, msg *types.MsgUpd
 
 	// update non-btc relayers
 	params := m.GetParams(ctx)
-	params.NonBtcRelayers = msg.Relayers
+	params.TrustedNonBtcRelayers = msg.Relayers
 	m.SetParams(ctx, params)
 
-	return &types.MsgUpdateNonBtcRelayersResponse{}, nil
+	return &types.MsgUpdateTrustedNonBtcRelayersResponse{}, nil
+}
+
+// UpdateTrustedOracles implements types.MsgServer.
+func (m msgServer) UpdateTrustedOracles(goCtx context.Context, msg *types.MsgUpdateTrustedOracles) (*types.MsgUpdateTrustedOraclesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	if !m.IsTrustedOracle(ctx, msg.Sender) {
+		return nil, types.ErruntrustedOracle
+	}
+
+	// update oracles
+	params := m.GetParams(ctx)
+	params.TrustedOracles = msg.Oracles
+	m.SetParams(ctx, params)
+
+	return &types.MsgUpdateTrustedOraclesResponse{}, nil
 }
 
 // SubmitDepositTransaction implements types.MsgServer.
@@ -114,6 +133,28 @@ func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.M
 	return &types.MsgSubmitWithdrawTransactionResponse{}, nil
 }
 
+// SubmitFeeRate submits the bitcoin network fee rate
+func (m msgServer) SubmitFeeRate(goCtx context.Context, msg *types.MsgSubmitFeeRate) (*types.MsgSubmitFeeRateResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	if !m.IsTrustedOracle(ctx, msg.Sender) {
+		return nil, types.ErruntrustedOracle
+	}
+
+	m.SetFeeRate(ctx, msg.FeeRate)
+
+	// Emit Events
+	m.EmitEvent(ctx, msg.Sender,
+		sdk.NewAttribute("fee_rate", fmt.Sprintf("%d", msg.FeeRate)),
+	)
+
+	return &types.MsgSubmitFeeRateResponse{}, nil
+}
+
 // WithdrawToBitcoin withdraws the asset to the bitcoin chain.
 func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdrawToBitcoin) (*types.MsgWithdrawToBitcoinResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -141,22 +182,15 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 		}
 	}
 
-	feeRate, _ := strconv.ParseInt(msg.FeeRate, 10, 64)
-
-	req, err := m.Keeper.NewSigningRequest(ctx, msg.Sender, amount, feeRate)
+	withdrawRequest, err := m.HandleWithdrawal(ctx, msg.Sender, amount)
 	if err != nil {
-		return nil, err
-	}
-
-	// lock assets
-	if err := m.LockAssets(ctx, req, amount); err != nil {
 		return nil, err
 	}
 
 	// Emit events
 	m.EmitEvent(ctx, msg.Sender,
-		sdk.NewAttribute("amount", msg.Amount),
-		sdk.NewAttribute("txid", req.Txid),
+		sdk.NewAttribute("amount", amount.String()),
+		sdk.NewAttribute("txid", withdrawRequest.Txid),
 	)
 
 	return &types.MsgWithdrawToBitcoinResponse{}, nil

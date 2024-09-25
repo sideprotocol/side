@@ -107,6 +107,42 @@ func BuildTransferAllBtcPsbt(utxos []*UTXO, recipient string, feeRate int64) (*p
 	return p, recipientUTXO, nil
 }
 
+// BuildBtcBatchWithdrawPsbt builds the psbt to perform btc batch withdrawal
+func BuildBtcBatchWithdrawPsbt(utxoIterator UTXOIterator, withdrawRequests []*WithdrawRequest, feeRate int64, change string) (*psbt.Packet, []*UTXO, *UTXO, error) {
+	chainCfg := sdk.GetConfig().GetBtcChainCfg()
+
+	txOuts := make([]*wire.TxOut, len(withdrawRequests))
+
+	for _, req := range withdrawRequests {
+		amount, _ := sdk.ParseCoinNormalized(req.Amount)
+
+		address, _ := btcutil.DecodeAddress(req.Address, chainCfg)
+		pkScript, _ := txscript.PayToAddrScript(address)
+
+		txOut := wire.NewTxOut(int64(amount.Amount.Uint64()), pkScript)
+		txOuts = append(txOuts, txOut)
+	}
+
+	changeAddress, _ := btcutil.DecodeAddress(change, chainCfg)
+
+	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction([]*UTXO{}, txOuts, utxoIterator, feeRate, changeAddress)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	p, err := psbt.NewFromUnsignedTx(unsignedTx)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	for i, utxo := range selectedUTXOs {
+		p.Inputs[i].SighashType = DefaultSigHashType
+		p.Inputs[i].WitnessUtxo = wire.NewTxOut(int64(utxo.Amount), utxo.PubKeyScript)
+	}
+
+	return p, selectedUTXOs, changeUTXO, nil
+}
+
 // BuildRunesPsbt builds a bitcoin psbt for runes edict from the given params.
 // Assume that the utxo script type is witness.
 func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runeBalancesDelta []*RuneBalance, runesChange string, change string) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {

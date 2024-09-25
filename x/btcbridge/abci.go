@@ -7,10 +7,57 @@ import (
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
-// EndBlocker called at every block to handle DKG requests
+// EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+	handleBtcWithdrawRequests(ctx, k)
 	handleDKGRequests(ctx, k)
 	handleVaultTransfer(ctx, k)
+}
+
+// handleBtcWithdrawRequests performs the batch btc withdrawal request handling
+func handleBtcWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
+	p := k.GetParams(ctx)
+
+	// check block height
+	if ctx.BlockHeight()%p.WithdrawParams.BtcBatchWithdrawPeriod != 0 {
+		return
+	}
+
+	// get the pending btc withdrawal request
+	pendingWithdrawRequests := k.GetPendingBtcWithdrawRequests(ctx, p.WithdrawParams.MaxBtcBatchWithdrawNum)
+	if len(pendingWithdrawRequests) == 0 {
+		return
+	}
+
+	feeRate := k.GetFeeRate(ctx)
+	if feeRate == 0 {
+		k.Logger(ctx).Error("invalid fee rate", feeRate)
+		return
+	}
+
+	vault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_BTC)
+	if vault == nil {
+		k.Logger(ctx).Error("btc vault does not exist")
+		return
+	}
+
+	signingRequest, err := k.BuildBtcBatchWithdrawSigningRequest(ctx, pendingWithdrawRequests, feeRate, vault.Address)
+	if err != nil {
+		k.Logger(ctx).Error("failed to build signing request", "err", err)
+		return
+	}
+
+	for _, req := range pendingWithdrawRequests {
+		// update withdrawal request
+		req.Txid = signingRequest.Txid
+		k.SetWithdrawRequest(ctx, req)
+
+		// remove from the pending queue
+		k.RemoveFromBtcWithdrawRequestQueue(ctx, req)
+
+		// emit event
+		k.EmitEvent(ctx, req.Address, sdk.NewAttribute("txid", req.Txid))
+	}
 }
 
 // handleDKGRequests performs the DKG request handling
@@ -72,6 +119,7 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 			if !k.VaultTransferCompleted(ctx, sourceRunesVault) {
 				if err := k.TransferVault(ctx, sourceVersion, destVersion, types.AssetType_ASSET_TYPE_RUNES, nil, req.TargetUtxoNum, req.FeeRate); err != nil {
 					k.Logger(ctx).Error("transfer vault errored", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_RUNES, "target utxo num", req.TargetUtxoNum, "fee rate", req.FeeRate, "err", err)
+					continue
 				}
 			}
 
@@ -79,6 +127,7 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 			if k.VaultTransferCompleted(ctx, sourceRunesVault) && !k.VaultTransferCompleted(ctx, sourceBtcVault) {
 				if err := k.TransferVault(ctx, sourceVersion, destVersion, types.AssetType_ASSET_TYPE_BTC, nil, req.TargetUtxoNum, req.FeeRate); err != nil {
 					k.Logger(ctx).Error("transfer vault errored", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_BTC, "target utxo num", req.TargetUtxoNum, "fee rate", req.FeeRate, "err", err)
+					continue
 				}
 			}
 

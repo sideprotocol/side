@@ -118,96 +118,6 @@ func (m *MsgSubmitBlockHeadersResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubmitBlockHeadersResponse proto.InternalMessageInfo
 
-// MsgUpdateNonBtcRelayers defines the Msg/UpdateNonBtcRelayers request type.
-type MsgUpdateNonBtcRelayers struct {
-	Sender   string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Relayers []string `protobuf:"bytes,2,rep,name=relayers,proto3" json:"relayers,omitempty"`
-}
-
-func (m *MsgUpdateNonBtcRelayers) Reset()         { *m = MsgUpdateNonBtcRelayers{} }
-func (m *MsgUpdateNonBtcRelayers) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateNonBtcRelayers) ProtoMessage()    {}
-func (*MsgUpdateNonBtcRelayers) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{2}
-}
-func (m *MsgUpdateNonBtcRelayers) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgUpdateNonBtcRelayers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgUpdateNonBtcRelayers.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgUpdateNonBtcRelayers) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateNonBtcRelayers.Merge(m, src)
-}
-func (m *MsgUpdateNonBtcRelayers) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgUpdateNonBtcRelayers) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateNonBtcRelayers.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgUpdateNonBtcRelayers proto.InternalMessageInfo
-
-func (m *MsgUpdateNonBtcRelayers) GetSender() string {
-	if m != nil {
-		return m.Sender
-	}
-	return ""
-}
-
-func (m *MsgUpdateNonBtcRelayers) GetRelayers() []string {
-	if m != nil {
-		return m.Relayers
-	}
-	return nil
-}
-
-// MsgUpdateNonBtcRelayersResponse defines the Msg/UpdateNonBtcRelayers response type.
-type MsgUpdateNonBtcRelayersResponse struct {
-}
-
-func (m *MsgUpdateNonBtcRelayersResponse) Reset()         { *m = MsgUpdateNonBtcRelayersResponse{} }
-func (m *MsgUpdateNonBtcRelayersResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateNonBtcRelayersResponse) ProtoMessage()    {}
-func (*MsgUpdateNonBtcRelayersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{3}
-}
-func (m *MsgUpdateNonBtcRelayersResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgUpdateNonBtcRelayersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgUpdateNonBtcRelayersResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgUpdateNonBtcRelayersResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateNonBtcRelayersResponse.Merge(m, src)
-}
-func (m *MsgUpdateNonBtcRelayersResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgUpdateNonBtcRelayersResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateNonBtcRelayersResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgUpdateNonBtcRelayersResponse proto.InternalMessageInfo
-
 // MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type.
 type MsgSubmitDepositTransaction struct {
 	// this is the relayer address who submits the bitcoin transaction to the side chain
@@ -225,7 +135,7 @@ func (m *MsgSubmitDepositTransaction) Reset()         { *m = MsgSubmitDepositTra
 func (m *MsgSubmitDepositTransaction) String() string { return proto.CompactTextString(m) }
 func (*MsgSubmitDepositTransaction) ProtoMessage()    {}
 func (*MsgSubmitDepositTransaction) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{4}
+	return fileDescriptor_785ca8e1e4227068, []int{2}
 }
 func (m *MsgSubmitDepositTransaction) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -297,7 +207,7 @@ func (m *MsgSubmitDepositTransactionResponse) Reset()         { *m = MsgSubmitDe
 func (m *MsgSubmitDepositTransactionResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgSubmitDepositTransactionResponse) ProtoMessage()    {}
 func (*MsgSubmitDepositTransactionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{5}
+	return fileDescriptor_785ca8e1e4227068, []int{3}
 }
 func (m *MsgSubmitDepositTransactionResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -340,7 +250,7 @@ func (m *MsgSubmitWithdrawTransaction) Reset()         { *m = MsgSubmitWithdrawT
 func (m *MsgSubmitWithdrawTransaction) String() string { return proto.CompactTextString(m) }
 func (*MsgSubmitWithdrawTransaction) ProtoMessage()    {}
 func (*MsgSubmitWithdrawTransaction) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{6}
+	return fileDescriptor_785ca8e1e4227068, []int{4}
 }
 func (m *MsgSubmitWithdrawTransaction) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -405,7 +315,7 @@ func (m *MsgSubmitWithdrawTransactionResponse) Reset()         { *m = MsgSubmitW
 func (m *MsgSubmitWithdrawTransactionResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgSubmitWithdrawTransactionResponse) ProtoMessage()    {}
 func (*MsgSubmitWithdrawTransactionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{7}
+	return fileDescriptor_785ca8e1e4227068, []int{5}
 }
 func (m *MsgSubmitWithdrawTransactionResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -434,20 +344,290 @@ func (m *MsgSubmitWithdrawTransactionResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubmitWithdrawTransactionResponse proto.InternalMessageInfo
 
+// MsgSubmitFeeRate defines the Msg/SubmitFeeRate request type.
+type MsgSubmitFeeRate struct {
+	Sender  string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	FeeRate int64  `protobuf:"varint,2,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
+}
+
+func (m *MsgSubmitFeeRate) Reset()         { *m = MsgSubmitFeeRate{} }
+func (m *MsgSubmitFeeRate) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitFeeRate) ProtoMessage()    {}
+func (*MsgSubmitFeeRate) Descriptor() ([]byte, []int) {
+	return fileDescriptor_785ca8e1e4227068, []int{6}
+}
+func (m *MsgSubmitFeeRate) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitFeeRate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitFeeRate.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitFeeRate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitFeeRate.Merge(m, src)
+}
+func (m *MsgSubmitFeeRate) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitFeeRate) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitFeeRate.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitFeeRate proto.InternalMessageInfo
+
+func (m *MsgSubmitFeeRate) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgSubmitFeeRate) GetFeeRate() int64 {
+	if m != nil {
+		return m.FeeRate
+	}
+	return 0
+}
+
+// MsgSubmitFeeRateResponse defines the Msg/SubmitFeeRate response type.
+type MsgSubmitFeeRateResponse struct {
+}
+
+func (m *MsgSubmitFeeRateResponse) Reset()         { *m = MsgSubmitFeeRateResponse{} }
+func (m *MsgSubmitFeeRateResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitFeeRateResponse) ProtoMessage()    {}
+func (*MsgSubmitFeeRateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_785ca8e1e4227068, []int{7}
+}
+func (m *MsgSubmitFeeRateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitFeeRateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitFeeRateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitFeeRateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitFeeRateResponse.Merge(m, src)
+}
+func (m *MsgSubmitFeeRateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitFeeRateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitFeeRateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitFeeRateResponse proto.InternalMessageInfo
+
+// MsgUpdateTrustedNonBtcRelayers defines the Msg/UpdateTrustedNonBtcRelayers request type.
+type MsgUpdateTrustedNonBtcRelayers struct {
+	Sender   string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Relayers []string `protobuf:"bytes,2,rep,name=relayers,proto3" json:"relayers,omitempty"`
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayers) Reset()         { *m = MsgUpdateTrustedNonBtcRelayers{} }
+func (m *MsgUpdateTrustedNonBtcRelayers) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateTrustedNonBtcRelayers) ProtoMessage()    {}
+func (*MsgUpdateTrustedNonBtcRelayers) Descriptor() ([]byte, []int) {
+	return fileDescriptor_785ca8e1e4227068, []int{8}
+}
+func (m *MsgUpdateTrustedNonBtcRelayers) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateTrustedNonBtcRelayers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateTrustedNonBtcRelayers.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateTrustedNonBtcRelayers) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateTrustedNonBtcRelayers.Merge(m, src)
+}
+func (m *MsgUpdateTrustedNonBtcRelayers) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateTrustedNonBtcRelayers) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateTrustedNonBtcRelayers.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateTrustedNonBtcRelayers proto.InternalMessageInfo
+
+func (m *MsgUpdateTrustedNonBtcRelayers) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayers) GetRelayers() []string {
+	if m != nil {
+		return m.Relayers
+	}
+	return nil
+}
+
+// MsgUpdateTrustedNonBtcRelayersResponse defines the Msg/UpdateTrustedNonBtcRelayers response type.
+type MsgUpdateTrustedNonBtcRelayersResponse struct {
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) Reset() {
+	*m = MsgUpdateTrustedNonBtcRelayersResponse{}
+}
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateTrustedNonBtcRelayersResponse) ProtoMessage()    {}
+func (*MsgUpdateTrustedNonBtcRelayersResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_785ca8e1e4227068, []int{9}
+}
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateTrustedNonBtcRelayersResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateTrustedNonBtcRelayersResponse.Merge(m, src)
+}
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateTrustedNonBtcRelayersResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateTrustedNonBtcRelayersResponse proto.InternalMessageInfo
+
+// MsgUpdateTrustedOracles defines the Msg/UpdateTrustedOracles request type.
+type MsgUpdateTrustedOracles struct {
+	Sender  string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Oracles []string `protobuf:"bytes,2,rep,name=oracles,proto3" json:"oracles,omitempty"`
+}
+
+func (m *MsgUpdateTrustedOracles) Reset()         { *m = MsgUpdateTrustedOracles{} }
+func (m *MsgUpdateTrustedOracles) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateTrustedOracles) ProtoMessage()    {}
+func (*MsgUpdateTrustedOracles) Descriptor() ([]byte, []int) {
+	return fileDescriptor_785ca8e1e4227068, []int{10}
+}
+func (m *MsgUpdateTrustedOracles) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateTrustedOracles) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateTrustedOracles.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateTrustedOracles) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateTrustedOracles.Merge(m, src)
+}
+func (m *MsgUpdateTrustedOracles) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateTrustedOracles) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateTrustedOracles.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateTrustedOracles proto.InternalMessageInfo
+
+func (m *MsgUpdateTrustedOracles) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgUpdateTrustedOracles) GetOracles() []string {
+	if m != nil {
+		return m.Oracles
+	}
+	return nil
+}
+
+// MsgUpdateTrustedOraclesResponse defines the Msg/UpdateTrustedOracles response type.
+type MsgUpdateTrustedOraclesResponse struct {
+}
+
+func (m *MsgUpdateTrustedOraclesResponse) Reset()         { *m = MsgUpdateTrustedOraclesResponse{} }
+func (m *MsgUpdateTrustedOraclesResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateTrustedOraclesResponse) ProtoMessage()    {}
+func (*MsgUpdateTrustedOraclesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_785ca8e1e4227068, []int{11}
+}
+func (m *MsgUpdateTrustedOraclesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateTrustedOraclesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateTrustedOraclesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateTrustedOraclesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateTrustedOraclesResponse.Merge(m, src)
+}
+func (m *MsgUpdateTrustedOraclesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateTrustedOraclesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateTrustedOraclesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateTrustedOraclesResponse proto.InternalMessageInfo
+
 // MsgWithdrawToBitcoin defines the Msg/WithdrawToBitcoin request type.
 type MsgWithdrawToBitcoin struct {
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// withdraw amount in satoshi, etc: 100000000sat = 1btc
 	Amount string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
-	// fee rate in sats/vB
-	FeeRate string `protobuf:"bytes,3,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
 }
 
 func (m *MsgWithdrawToBitcoin) Reset()         { *m = MsgWithdrawToBitcoin{} }
 func (m *MsgWithdrawToBitcoin) String() string { return proto.CompactTextString(m) }
 func (*MsgWithdrawToBitcoin) ProtoMessage()    {}
 func (*MsgWithdrawToBitcoin) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{8}
+	return fileDescriptor_785ca8e1e4227068, []int{12}
 }
 func (m *MsgWithdrawToBitcoin) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -490,13 +670,6 @@ func (m *MsgWithdrawToBitcoin) GetAmount() string {
 	return ""
 }
 
-func (m *MsgWithdrawToBitcoin) GetFeeRate() string {
-	if m != nil {
-		return m.FeeRate
-	}
-	return ""
-}
-
 // MsgWithdrawToBitcoinResponse defines the Msg/WithdrawToBitcoin response type.
 type MsgWithdrawToBitcoinResponse struct {
 }
@@ -505,7 +678,7 @@ func (m *MsgWithdrawToBitcoinResponse) Reset()         { *m = MsgWithdrawToBitco
 func (m *MsgWithdrawToBitcoinResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgWithdrawToBitcoinResponse) ProtoMessage()    {}
 func (*MsgWithdrawToBitcoinResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{9}
+	return fileDescriptor_785ca8e1e4227068, []int{13}
 }
 func (m *MsgWithdrawToBitcoinResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -545,7 +718,7 @@ func (m *MsgSubmitSignatures) Reset()         { *m = MsgSubmitSignatures{} }
 func (m *MsgSubmitSignatures) String() string { return proto.CompactTextString(m) }
 func (*MsgSubmitSignatures) ProtoMessage()    {}
 func (*MsgSubmitSignatures) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{10}
+	return fileDescriptor_785ca8e1e4227068, []int{14}
 }
 func (m *MsgSubmitSignatures) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -603,7 +776,7 @@ func (m *MsgSubmitSignaturesResponse) Reset()         { *m = MsgSubmitSignatures
 func (m *MsgSubmitSignaturesResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgSubmitSignaturesResponse) ProtoMessage()    {}
 func (*MsgSubmitSignaturesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{11}
+	return fileDescriptor_785ca8e1e4227068, []int{15}
 }
 func (m *MsgSubmitSignaturesResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -650,7 +823,7 @@ func (m *MsgConsolidateVaults) Reset()         { *m = MsgConsolidateVaults{} }
 func (m *MsgConsolidateVaults) String() string { return proto.CompactTextString(m) }
 func (*MsgConsolidateVaults) ProtoMessage()    {}
 func (*MsgConsolidateVaults) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{12}
+	return fileDescriptor_785ca8e1e4227068, []int{16}
 }
 func (m *MsgConsolidateVaults) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -722,7 +895,7 @@ func (m *MsgConsolidateVaultsResponse) Reset()         { *m = MsgConsolidateVaul
 func (m *MsgConsolidateVaultsResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgConsolidateVaultsResponse) ProtoMessage()    {}
 func (*MsgConsolidateVaultsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{13}
+	return fileDescriptor_785ca8e1e4227068, []int{17}
 }
 func (m *MsgConsolidateVaultsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -775,7 +948,7 @@ func (m *MsgInitiateDKG) Reset()         { *m = MsgInitiateDKG{} }
 func (m *MsgInitiateDKG) String() string { return proto.CompactTextString(m) }
 func (*MsgInitiateDKG) ProtoMessage()    {}
 func (*MsgInitiateDKG) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{14}
+	return fileDescriptor_785ca8e1e4227068, []int{18}
 }
 func (m *MsgInitiateDKG) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -868,7 +1041,7 @@ func (m *MsgInitiateDKGResponse) Reset()         { *m = MsgInitiateDKGResponse{}
 func (m *MsgInitiateDKGResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgInitiateDKGResponse) ProtoMessage()    {}
 func (*MsgInitiateDKGResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{15}
+	return fileDescriptor_785ca8e1e4227068, []int{19}
 }
 func (m *MsgInitiateDKGResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -915,7 +1088,7 @@ func (m *MsgCompleteDKG) Reset()         { *m = MsgCompleteDKG{} }
 func (m *MsgCompleteDKG) String() string { return proto.CompactTextString(m) }
 func (*MsgCompleteDKG) ProtoMessage()    {}
 func (*MsgCompleteDKG) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{16}
+	return fileDescriptor_785ca8e1e4227068, []int{20}
 }
 func (m *MsgCompleteDKG) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -987,7 +1160,7 @@ func (m *MsgCompleteDKGResponse) Reset()         { *m = MsgCompleteDKGResponse{}
 func (m *MsgCompleteDKGResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgCompleteDKGResponse) ProtoMessage()    {}
 func (*MsgCompleteDKGResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{17}
+	return fileDescriptor_785ca8e1e4227068, []int{21}
 }
 func (m *MsgCompleteDKGResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1038,7 +1211,7 @@ func (m *MsgTransferVault) Reset()         { *m = MsgTransferVault{} }
 func (m *MsgTransferVault) String() string { return proto.CompactTextString(m) }
 func (*MsgTransferVault) ProtoMessage()    {}
 func (*MsgTransferVault) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{18}
+	return fileDescriptor_785ca8e1e4227068, []int{22}
 }
 func (m *MsgTransferVault) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1124,7 +1297,7 @@ func (m *MsgTransferVaultResponse) Reset()         { *m = MsgTransferVaultRespon
 func (m *MsgTransferVaultResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgTransferVaultResponse) ProtoMessage()    {}
 func (*MsgTransferVaultResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{19}
+	return fileDescriptor_785ca8e1e4227068, []int{23}
 }
 func (m *MsgTransferVaultResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1169,7 +1342,7 @@ func (m *MsgUpdateParams) Reset()         { *m = MsgUpdateParams{} }
 func (m *MsgUpdateParams) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParams) ProtoMessage()    {}
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{20}
+	return fileDescriptor_785ca8e1e4227068, []int{24}
 }
 func (m *MsgUpdateParams) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1222,7 +1395,7 @@ func (m *MsgUpdateParamsResponse) Reset()         { *m = MsgUpdateParamsResponse
 func (m *MsgUpdateParamsResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParamsResponse) ProtoMessage()    {}
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_785ca8e1e4227068, []int{21}
+	return fileDescriptor_785ca8e1e4227068, []int{25}
 }
 func (m *MsgUpdateParamsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1254,12 +1427,16 @@ var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 func init() {
 	proto.RegisterType((*MsgSubmitBlockHeaders)(nil), "side.btcbridge.MsgSubmitBlockHeaders")
 	proto.RegisterType((*MsgSubmitBlockHeadersResponse)(nil), "side.btcbridge.MsgSubmitBlockHeadersResponse")
-	proto.RegisterType((*MsgUpdateNonBtcRelayers)(nil), "side.btcbridge.MsgUpdateNonBtcRelayers")
-	proto.RegisterType((*MsgUpdateNonBtcRelayersResponse)(nil), "side.btcbridge.MsgUpdateNonBtcRelayersResponse")
 	proto.RegisterType((*MsgSubmitDepositTransaction)(nil), "side.btcbridge.MsgSubmitDepositTransaction")
 	proto.RegisterType((*MsgSubmitDepositTransactionResponse)(nil), "side.btcbridge.MsgSubmitDepositTransactionResponse")
 	proto.RegisterType((*MsgSubmitWithdrawTransaction)(nil), "side.btcbridge.MsgSubmitWithdrawTransaction")
 	proto.RegisterType((*MsgSubmitWithdrawTransactionResponse)(nil), "side.btcbridge.MsgSubmitWithdrawTransactionResponse")
+	proto.RegisterType((*MsgSubmitFeeRate)(nil), "side.btcbridge.MsgSubmitFeeRate")
+	proto.RegisterType((*MsgSubmitFeeRateResponse)(nil), "side.btcbridge.MsgSubmitFeeRateResponse")
+	proto.RegisterType((*MsgUpdateTrustedNonBtcRelayers)(nil), "side.btcbridge.MsgUpdateTrustedNonBtcRelayers")
+	proto.RegisterType((*MsgUpdateTrustedNonBtcRelayersResponse)(nil), "side.btcbridge.MsgUpdateTrustedNonBtcRelayersResponse")
+	proto.RegisterType((*MsgUpdateTrustedOracles)(nil), "side.btcbridge.MsgUpdateTrustedOracles")
+	proto.RegisterType((*MsgUpdateTrustedOraclesResponse)(nil), "side.btcbridge.MsgUpdateTrustedOraclesResponse")
 	proto.RegisterType((*MsgWithdrawToBitcoin)(nil), "side.btcbridge.MsgWithdrawToBitcoin")
 	proto.RegisterType((*MsgWithdrawToBitcoinResponse)(nil), "side.btcbridge.MsgWithdrawToBitcoinResponse")
 	proto.RegisterType((*MsgSubmitSignatures)(nil), "side.btcbridge.MsgSubmitSignatures")
@@ -1279,81 +1456,87 @@ func init() {
 func init() { proto.RegisterFile("side/btcbridge/tx.proto", fileDescriptor_785ca8e1e4227068) }
 
 var fileDescriptor_785ca8e1e4227068 = []byte{
-	// 1174 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x57, 0x4d, 0x6f, 0xdb, 0x46,
-	0x13, 0xb6, 0x3e, 0xa2, 0xd8, 0x23, 0x4b, 0xb6, 0x19, 0xbf, 0x8e, 0x4c, 0x27, 0xb2, 0x23, 0xc7,
-	0x1f, 0x80, 0xf3, 0x4a, 0x80, 0x92, 0x43, 0xd1, 0x53, 0x23, 0x1b, 0x48, 0x8a, 0x40, 0x41, 0xc0,
-	0xd8, 0x69, 0xd1, 0x1e, 0x84, 0x25, 0xb9, 0xa6, 0xd8, 0x4a, 0x5c, 0x76, 0x77, 0xe9, 0xca, 0x40,
-	0x81, 0x9e, 0x7a, 0x2c, 0xd0, 0x73, 0xfb, 0x07, 0xfa, 0x53, 0x72, 0xcc, 0xb1, 0xa7, 0xb6, 0xb0,
-	0x7f, 0x48, 0x8b, 0x5d, 0x52, 0x2b, 0x4a, 0x24, 0x2d, 0x07, 0xbd, 0xed, 0xce, 0x3c, 0x9c, 0x79,
-	0x66, 0x76, 0x66, 0x67, 0x09, 0xf7, 0x99, 0x6b, 0xe3, 0x96, 0xc9, 0x2d, 0x93, 0xba, 0xb6, 0x83,
-	0x5b, 0x7c, 0xd4, 0xf4, 0x29, 0xe1, 0x44, 0xab, 0x0a, 0x45, 0x53, 0x29, 0xf4, 0x75, 0x87, 0x38,
-	0x44, 0xaa, 0x5a, 0x62, 0x15, 0xa2, 0xf4, 0xad, 0x99, 0xcf, 0x7d, 0x44, 0xd1, 0x90, 0x45, 0xca,
-	0xfa, 0x8c, 0x52, 0xad, 0x42, 0x7d, 0xe3, 0x3b, 0xf8, 0x5f, 0x97, 0x39, 0x6f, 0x03, 0x73, 0xe8,
-	0xf2, 0xce, 0x80, 0x58, 0xdf, 0xbe, 0xc4, 0xc8, 0xc6, 0x94, 0x69, 0x1b, 0x50, 0x62, 0xd8, 0xb3,
-	0x31, 0xad, 0xe5, 0x76, 0x72, 0x87, 0x4b, 0x46, 0xb4, 0xd3, 0x3e, 0x83, 0x8a, 0x29, 0x70, 0xbd,
-	0x7e, 0x08, 0xac, 0xe5, 0x77, 0x0a, 0x87, 0xe5, 0xf6, 0x56, 0x73, 0x9a, 0x6b, 0x33, 0x66, 0xcc,
-	0x58, 0x36, 0x63, 0x96, 0x1b, 0xdb, 0xf0, 0x30, 0xd5, 0xa5, 0x81, 0x99, 0x4f, 0x3c, 0x86, 0x1b,
-	0x5d, 0xb8, 0xdf, 0x65, 0xce, 0x99, 0x6f, 0x23, 0x8e, 0x5f, 0x13, 0xaf, 0xc3, 0x2d, 0x03, 0x0f,
-	0xd0, 0xe5, 0x4d, 0xac, 0x74, 0x58, 0xa4, 0x11, 0x46, 0x12, 0x5a, 0x32, 0xd4, 0xbe, 0xf1, 0x08,
-	0xb6, 0x33, 0xcc, 0x29, 0x8f, 0xbf, 0xe7, 0x60, 0x4b, 0x71, 0x3a, 0xc1, 0x3e, 0x61, 0x2e, 0x3f,
-	0xa5, 0xc8, 0x63, 0xc8, 0xe2, 0x2e, 0xf1, 0x32, 0xdd, 0x3e, 0x80, 0x25, 0x19, 0x5a, 0x1f, 0xb1,
-	0x7e, 0x2d, 0x2f, 0x55, 0x13, 0x81, 0xd6, 0x80, 0x8a, 0x4f, 0xf1, 0x45, 0x8f, 0x8f, 0x7a, 0xe6,
-	0x25, 0xc7, 0xac, 0x56, 0x90, 0x88, 0xb2, 0x10, 0x9e, 0x8e, 0x3a, 0x42, 0xa4, 0x6d, 0xc2, 0xa2,
-	0x52, 0x17, 0xa5, 0xfa, 0x2e, 0x8f, 0x54, 0xeb, 0x70, 0xc7, 0xa7, 0x84, 0x9c, 0xd7, 0xee, 0xc8,
-	0x80, 0xc2, 0x4d, 0x63, 0x0f, 0x76, 0x6f, 0x60, 0xaa, 0x22, 0xfa, 0x29, 0x07, 0x0f, 0x14, 0xee,
-	0x0b, 0x97, 0xf7, 0x6d, 0x8a, 0xbe, 0xff, 0xef, 0x21, 0xc5, 0xe9, 0x16, 0x32, 0xe8, 0x16, 0xe3,
-	0x74, 0xf7, 0xe1, 0xf1, 0x4d, 0x34, 0x14, 0x5f, 0x04, 0xeb, 0x5d, 0xe6, 0x28, 0x04, 0xe9, 0xb8,
-	0xdc, 0x22, 0x6e, 0x36, 0xcd, 0x0d, 0x28, 0xa1, 0x21, 0x09, 0x3c, 0x1e, 0x71, 0x8c, 0x76, 0x82,
-	0xe0, 0x39, 0xc6, 0x3d, 0x8a, 0x38, 0x1e, 0x13, 0x3c, 0xc7, 0xd8, 0x40, 0x1c, 0x37, 0xea, 0x32,
-	0x23, 0x09, 0x17, 0x8a, 0xc2, 0x19, 0xdc, 0x53, 0x54, 0xdf, 0xba, 0x8e, 0x87, 0x78, 0x40, 0x71,
-	0x76, 0xc9, 0x69, 0x50, 0xe4, 0x23, 0xd7, 0x8e, 0xfc, 0xcb, 0xb5, 0x90, 0xf9, 0xcc, 0xe4, 0x91,
-	0x67, 0xb9, 0x6e, 0x3c, 0x8c, 0x95, 0xd6, 0xc4, 0xac, 0xf2, 0xfa, 0x6b, 0x5e, 0x46, 0x7e, 0x4c,
-	0x3c, 0x46, 0x06, 0xae, 0xa8, 0xd1, 0x77, 0x28, 0x18, 0x70, 0x26, 0x0e, 0x02, 0x05, 0xbc, 0x4f,
-	0xa8, 0xcb, 0x2f, 0x23, 0xd7, 0x13, 0x81, 0xb6, 0x0b, 0x95, 0x0b, 0x81, 0xeb, 0x5d, 0x60, 0xca,
-	0x5c, 0xe2, 0x49, 0x1a, 0x45, 0x63, 0x59, 0x0a, 0xdf, 0x85, 0xb2, 0x44, 0x32, 0x0a, 0x2a, 0x19,
-	0x5a, 0x17, 0xd6, 0x4c, 0x6e, 0xf5, 0x2c, 0xe5, 0x56, 0xd8, 0x10, 0x05, 0x58, 0x6e, 0xef, 0x24,
-	0x5a, 0x99, 0x5b, 0xc7, 0x71, 0x9c, 0xb1, 0x6a, 0xce, 0x48, 0xb4, 0x33, 0x58, 0xa7, 0x81, 0x87,
-	0xd9, 0xb4, 0x41, 0x26, 0x4b, 0xb7, 0xdc, 0x6e, 0xcc, 0x5a, 0x34, 0x04, 0x76, 0xda, 0xe6, 0x3d,
-	0x9a, 0x90, 0xb1, 0xe8, 0xc8, 0x12, 0xb9, 0x51, 0xc9, 0xfb, 0x2b, 0x0f, 0xd5, 0x2e, 0x73, 0x3e,
-	0xf7, 0x5c, 0xee, 0x22, 0x8e, 0x4f, 0x5e, 0xbd, 0x98, 0x93, 0xb6, 0x0e, 0x2c, 0xfb, 0x88, 0x72,
-	0xd7, 0x72, 0x7d, 0xe4, 0xf1, 0xf1, 0xe5, 0x55, 0x9f, 0xe5, 0x77, 0xf2, 0xea, 0xc5, 0x9b, 0x09,
-	0xcc, 0x98, 0xfa, 0x46, 0x78, 0xe0, 0x7d, 0x8a, 0x59, 0x9f, 0x0c, 0x6c, 0x99, 0xd6, 0x8a, 0x31,
-	0x11, 0x68, 0x9f, 0x42, 0x39, 0x3c, 0x18, 0x7e, 0xe9, 0xcb, 0x9e, 0x2e, 0x1c, 0x56, 0xdb, 0x9b,
-	0xb3, 0x0e, 0x9e, 0x33, 0x86, 0xf9, 0xe9, 0xa5, 0x8f, 0x0d, 0x90, 0x68, 0xb1, 0x64, 0xda, 0x1e,
-	0x54, 0x6d, 0x97, 0x21, 0x73, 0x80, 0x7b, 0x21, 0xae, 0x76, 0x67, 0x27, 0x77, 0xb8, 0x68, 0x54,
-	0x22, 0x69, 0x47, 0x0a, 0xb5, 0x03, 0x58, 0xc1, 0x9e, 0x44, 0x71, 0xd1, 0x49, 0xe7, 0x98, 0xd6,
-	0x4a, 0x12, 0x57, 0x0d, 0xc5, 0xa7, 0x91, 0x54, 0xdb, 0x87, 0x15, 0x8e, 0xa8, 0x83, 0x79, 0x2f,
-	0xe0, 0x23, 0xd2, 0xf3, 0x82, 0x61, 0xed, 0xae, 0xe4, 0x5b, 0x09, 0xc5, 0x67, 0x7c, 0x44, 0x5e,
-	0x07, 0xc3, 0xa9, 0x3a, 0x59, 0x9c, 0x6e, 0x9a, 0x1a, 0x6c, 0x4c, 0x27, 0x58, 0xe5, 0xfe, 0xb7,
-	0x9c, 0xcc, 0xfd, 0x31, 0x19, 0xfa, 0x03, 0x1c, 0xe6, 0x3e, 0xab, 0x55, 0xaa, 0x90, 0x8f, 0x1a,
-	0xa5, 0x68, 0xe4, 0x5d, 0x5b, 0xe0, 0x64, 0xd4, 0xe2, 0x0e, 0x11, 0x77, 0x45, 0xb4, 0xd3, 0x8e,
-	0x60, 0x4d, 0xd4, 0x0f, 0xf6, 0x58, 0xc0, 0x7a, 0xc8, 0xb6, 0x29, 0x66, 0xe3, 0x5b, 0x71, 0x55,
-	0x29, 0x9e, 0x87, 0x72, 0x71, 0x0c, 0x6c, 0xdc, 0x4e, 0x32, 0x4f, 0x4b, 0xc6, 0x44, 0x10, 0xf1,
-	0x8e, 0x91, 0x53, 0xbc, 0x7f, 0xce, 0xc3, 0x6a, 0x97, 0x39, 0xe3, 0x24, 0xc9, 0x8a, 0x9a, 0x53,
-	0x35, 0x7b, 0x50, 0x65, 0x24, 0xa0, 0x16, 0x9e, 0xe9, 0xb6, 0x4a, 0x28, 0x1d, 0xb7, 0xdb, 0x23,
-	0x58, 0xb6, 0x31, 0x9b, 0xb4, 0x64, 0x41, 0x82, 0xca, 0x42, 0x36, 0x86, 0x7c, 0x02, 0x80, 0xc4,
-	0xd1, 0xcb, 0xea, 0x90, 0xa1, 0xdd, 0x58, 0x1c, 0x4b, 0x68, 0xbc, 0x94, 0xd7, 0x2b, 0x33, 0x39,
-	0x53, 0xd3, 0x40, 0x6c, 0xd2, 0x4e, 0xb8, 0x34, 0xef, 0x84, 0xef, 0x4e, 0x9f, 0xb0, 0x0e, 0xb5,
-	0xd9, 0x74, 0xa8, 0x5c, 0x61, 0x58, 0x51, 0xa3, 0xf3, 0x8d, 0x7c, 0x56, 0xcc, 0xc9, 0xd4, 0x33,
-	0x28, 0x85, 0xcf, 0x0f, 0x99, 0xa1, 0x72, 0x7b, 0x63, 0x36, 0xb6, 0xd0, 0x4a, 0xa7, 0xf8, 0xfe,
-	0xcf, 0xed, 0x05, 0x23, 0xc2, 0x36, 0x36, 0x63, 0x03, 0x3f, 0x04, 0x8c, 0x19, 0xb4, 0xff, 0x59,
-	0x84, 0x42, 0x97, 0x39, 0xda, 0x37, 0xa0, 0xa5, 0x3c, 0x52, 0xf6, 0x66, 0xcd, 0xa7, 0x3e, 0x2c,
-	0xf4, 0xff, 0xdf, 0x0a, 0x36, 0xf6, 0xa9, 0xf9, 0xb0, 0x9e, 0xfa, 0xf8, 0x38, 0x48, 0x31, 0x93,
-	0x06, 0xd4, 0x5b, 0xb7, 0x04, 0x2a, 0x8f, 0x3f, 0x40, 0x2d, 0xf3, 0xed, 0x71, 0x94, 0x49, 0x3e,
-	0x09, 0xd6, 0x9f, 0x7e, 0x04, 0x58, 0x79, 0xff, 0x11, 0x36, 0xb3, 0xdf, 0x09, 0x4f, 0x32, 0x2d,
-	0xa6, 0xa0, 0xf5, 0x67, 0x1f, 0x83, 0x56, 0x04, 0x1c, 0x58, 0x4b, 0x4e, 0xfe, 0xc7, 0x29, 0xa6,
-	0x12, 0x28, 0xfd, 0xc9, 0x6d, 0x50, 0xca, 0x91, 0x0d, 0xab, 0x89, 0xf9, 0xbe, 0x9b, 0x49, 0x79,
-	0x02, 0xd2, 0x8f, 0x6e, 0x01, 0x8a, 0x87, 0x93, 0x1c, 0xe7, 0x69, 0xe1, 0x24, 0x50, 0xa9, 0xe1,
-	0x64, 0x8e, 0x3f, 0xed, 0x0c, 0xca, 0xf1, 0xd1, 0x57, 0x4f, 0xf9, 0x38, 0xa6, 0xd7, 0xf7, 0x6f,
-	0xd6, 0xc7, 0xcd, 0xc6, 0x6f, 0xf5, 0x7a, 0x2a, 0x27, 0xa5, 0x4f, 0x35, 0x9b, 0x72, 0xf1, 0x6a,
-	0x5f, 0x43, 0x65, 0xfa, 0xd2, 0xdd, 0x49, 0xf9, 0x70, 0x0a, 0xa1, 0x1f, 0xce, 0x43, 0x28, 0xe3,
-	0x5f, 0xc2, 0xf2, 0xd4, 0x35, 0xb5, 0x9d, 0xd9, 0x82, 0x21, 0x40, 0x3f, 0x98, 0x03, 0x18, 0x5b,
-	0xee, 0xbc, 0x7c, 0x7f, 0x55, 0xcf, 0x7d, 0xb8, 0xaa, 0xe7, 0xfe, 0xbe, 0xaa, 0xe7, 0x7e, 0xb9,
-	0xae, 0x2f, 0x7c, 0xb8, 0xae, 0x2f, 0xfc, 0x71, 0x5d, 0x5f, 0xf8, 0xaa, 0xe9, 0xb8, 0xbc, 0x1f,
-	0x98, 0x4d, 0x8b, 0x0c, 0x5b, 0xc2, 0x98, 0xfc, 0xa3, 0xb2, 0xc8, 0x40, 0x6e, 0x5a, 0xa3, 0xf8,
-	0x1f, 0x9d, 0x18, 0xef, 0x66, 0x49, 0x02, 0x9e, 0xfe, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x77, 0x2f,
-	0x7b, 0x68, 0xf0, 0x0d, 0x00, 0x00,
+	// 1265 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x57, 0xcf, 0x6e, 0xdb, 0x46,
+	0x13, 0xb7, 0x24, 0xc7, 0x7f, 0x46, 0x96, 0xe2, 0x30, 0xfe, 0x1c, 0x99, 0x4e, 0x68, 0x87, 0x89,
+	0x1d, 0x01, 0xc9, 0x27, 0x03, 0x4e, 0x50, 0x14, 0x3d, 0x35, 0x4a, 0x9a, 0xa4, 0x08, 0x9c, 0x06,
+	0x8c, 0x9d, 0x16, 0xed, 0x41, 0x58, 0x92, 0x6b, 0x8a, 0xad, 0xc4, 0x65, 0x77, 0x97, 0xa9, 0x0c,
+	0x14, 0xe8, 0x29, 0xc7, 0x02, 0x3d, 0xb7, 0x2f, 0xd0, 0x47, 0xc9, 0x31, 0xc7, 0x9e, 0xda, 0x22,
+	0xe9, 0x83, 0x14, 0xbb, 0x24, 0x57, 0xa4, 0x44, 0x4a, 0x0e, 0x7a, 0xdb, 0x9d, 0xf9, 0xf1, 0x37,
+	0xb3, 0xb3, 0x33, 0xb3, 0x43, 0xb8, 0xc2, 0x7c, 0x17, 0x1f, 0xd8, 0xdc, 0xb1, 0xa9, 0xef, 0x7a,
+	0xf8, 0x80, 0x8f, 0x3a, 0x21, 0x25, 0x9c, 0x68, 0x4d, 0xa1, 0xe8, 0x28, 0x85, 0xbe, 0xe1, 0x11,
+	0x8f, 0x48, 0xd5, 0x81, 0x58, 0xc5, 0x28, 0x7d, 0x7b, 0xe2, 0xf3, 0x10, 0x51, 0x34, 0x64, 0x89,
+	0xd2, 0x98, 0x50, 0xaa, 0x55, 0xac, 0x37, 0xbf, 0x87, 0xff, 0x1d, 0x31, 0xef, 0x45, 0x64, 0x0f,
+	0x7d, 0xde, 0x1d, 0x10, 0xe7, 0xbb, 0x27, 0x18, 0xb9, 0x98, 0x32, 0x6d, 0x13, 0x96, 0x18, 0x0e,
+	0x5c, 0x4c, 0x5b, 0x95, 0xdd, 0x4a, 0x7b, 0xd5, 0x4a, 0x76, 0xda, 0xa7, 0xd0, 0xb0, 0x05, 0xae,
+	0xd7, 0x8f, 0x81, 0xad, 0xea, 0x6e, 0xad, 0x5d, 0x3f, 0xdc, 0xee, 0xe4, 0x7d, 0xed, 0x64, 0xc8,
+	0xac, 0x35, 0x3b, 0xc3, 0x6c, 0xee, 0xc0, 0xb5, 0x42, 0x93, 0x16, 0x66, 0x21, 0x09, 0x18, 0x36,
+	0x7f, 0xaf, 0xc0, 0xb6, 0x42, 0x3c, 0xc4, 0x21, 0x61, 0x3e, 0x3f, 0xa6, 0x28, 0x60, 0xc8, 0xe1,
+	0x3e, 0x09, 0x4a, 0x5d, 0xbb, 0x0a, 0xab, 0xd2, 0x50, 0x1f, 0xb1, 0x7e, 0xab, 0x2a, 0x55, 0x63,
+	0x81, 0x66, 0x42, 0x23, 0xa4, 0xf8, 0x55, 0x8f, 0x8f, 0x7a, 0xf6, 0x19, 0xc7, 0xac, 0x55, 0x93,
+	0x88, 0xba, 0x10, 0x1e, 0x8f, 0xba, 0x42, 0xa4, 0x6d, 0xc1, 0x8a, 0x52, 0x2f, 0x4a, 0xf5, 0x32,
+	0x4f, 0x54, 0x1b, 0x70, 0x21, 0xa4, 0x84, 0x9c, 0xb6, 0x2e, 0xec, 0xd6, 0xda, 0xab, 0x56, 0xbc,
+	0x31, 0xf7, 0xe0, 0xc6, 0x0c, 0x4f, 0xd5, 0x89, 0x5e, 0x57, 0xe0, 0xaa, 0xc2, 0x7d, 0xe9, 0xf3,
+	0xbe, 0x4b, 0xd1, 0x0f, 0xff, 0xfd, 0x48, 0x59, 0x77, 0x6b, 0x25, 0xee, 0x2e, 0x66, 0xdd, 0xdd,
+	0x87, 0x9b, 0xb3, 0xdc, 0x50, 0xfe, 0x7e, 0x06, 0xeb, 0x0a, 0xf7, 0x08, 0x63, 0x0b, 0x71, 0x5c,
+	0xea, 0xe2, 0x16, 0xac, 0x9c, 0x62, 0xdc, 0xa3, 0x88, 0x63, 0xe9, 0x61, 0xcd, 0x5a, 0x3e, 0x8d,
+	0x3f, 0x31, 0x75, 0x68, 0x4d, 0xd2, 0x28, 0x13, 0xc7, 0x60, 0x1c, 0x31, 0xef, 0x24, 0x74, 0x11,
+	0xc7, 0xc7, 0x34, 0x62, 0x1c, 0xbb, 0xcf, 0x48, 0xd0, 0xe5, 0x8e, 0x85, 0x07, 0xe8, 0x6c, 0x56,
+	0x06, 0xea, 0xb0, 0x42, 0x13, 0x8c, 0x4c, 0xbe, 0x55, 0x4b, 0xed, 0xcd, 0x36, 0xec, 0xcf, 0x66,
+	0x55, 0xf6, 0x9f, 0xc2, 0x95, 0x49, 0xe4, 0x17, 0x14, 0x39, 0x03, 0x5c, 0x6e, 0xb8, 0x05, 0xcb,
+	0x24, 0x86, 0x24, 0x76, 0xd3, 0xad, 0x79, 0x1d, 0x76, 0x4a, 0xc8, 0x94, 0xbd, 0x47, 0xb0, 0x71,
+	0xc4, 0x3c, 0x15, 0x74, 0xd2, 0xf5, 0xb9, 0x43, 0xfc, 0xf2, 0x9b, 0xdf, 0x84, 0x25, 0x34, 0x24,
+	0x51, 0xc0, 0x93, 0x6b, 0x4f, 0x76, 0xa6, 0x21, 0x33, 0x69, 0x8a, 0x47, 0xd9, 0x39, 0x81, 0xcb,
+	0x2a, 0xe6, 0x2f, 0x7c, 0x2f, 0x40, 0x3c, 0xa2, 0x33, 0xce, 0xa4, 0xc1, 0x22, 0x1f, 0xf9, 0x6e,
+	0x62, 0x44, 0xae, 0x85, 0x2c, 0x64, 0x36, 0x4f, 0x52, 0x4a, 0xae, 0xcd, 0x6b, 0x99, 0x92, 0x1c,
+	0xd3, 0x2a, 0xab, 0xbf, 0x56, 0xe5, 0xf1, 0x1e, 0x90, 0x80, 0x91, 0x81, 0x2f, 0xc2, 0xf0, 0x12,
+	0x45, 0x03, 0xce, 0x44, 0x02, 0xa3, 0x88, 0xf7, 0x09, 0xf5, 0xf9, 0x59, 0x62, 0x7a, 0x2c, 0xd0,
+	0x6e, 0x40, 0xe3, 0x95, 0xc0, 0xf5, 0x5e, 0x61, 0xca, 0x7c, 0x12, 0x48, 0x37, 0x16, 0xad, 0x35,
+	0x29, 0x7c, 0x19, 0xcb, 0x72, 0x09, 0x56, 0xcb, 0x25, 0x98, 0x76, 0x04, 0x97, 0x6c, 0xee, 0xf4,
+	0x1c, 0x65, 0x56, 0x70, 0x88, 0xc2, 0xad, 0x1f, 0xee, 0x4e, 0x35, 0x24, 0xee, 0x3c, 0xc8, 0xe2,
+	0xac, 0x75, 0x7b, 0x42, 0xa2, 0x9d, 0xc0, 0x06, 0x8d, 0x02, 0xcc, 0xf2, 0x84, 0x4c, 0x96, 0x7c,
+	0xfd, 0xd0, 0x9c, 0x64, 0xb4, 0x04, 0x36, 0xcf, 0x79, 0x99, 0x4e, 0xc9, 0x58, 0x72, 0x65, 0x53,
+	0xb1, 0x51, 0xc1, 0xfb, 0xab, 0x0a, 0xcd, 0x23, 0xe6, 0x7d, 0x1e, 0xf8, 0xdc, 0x47, 0x1c, 0x3f,
+	0x7c, 0xfa, 0x78, 0x4e, 0xd8, 0xba, 0xb0, 0x16, 0x22, 0xca, 0x7d, 0xc7, 0x0f, 0x51, 0xc0, 0xd3,
+	0x16, 0x6c, 0x4c, 0xfa, 0xf7, 0xf0, 0xe9, 0xe3, 0xe7, 0x63, 0x98, 0x95, 0xfb, 0x46, 0x58, 0xe0,
+	0x7d, 0x8a, 0x59, 0x9f, 0x0c, 0x5c, 0x19, 0xd6, 0x86, 0x35, 0x16, 0x68, 0x9f, 0x40, 0x3d, 0xbe,
+	0x18, 0x7e, 0x16, 0xca, 0x5e, 0x58, 0x6b, 0x37, 0x0f, 0xb7, 0x26, 0x0d, 0xdc, 0x67, 0x0c, 0xf3,
+	0xe3, 0xb3, 0x10, 0x5b, 0x20, 0xd1, 0x62, 0xc9, 0xb4, 0x3d, 0x68, 0xba, 0x3e, 0x43, 0xf6, 0x00,
+	0xf7, 0x62, 0x5c, 0xeb, 0xc2, 0x6e, 0xa5, 0xbd, 0x62, 0x35, 0x12, 0x69, 0x57, 0x0a, 0xb5, 0x5b,
+	0x70, 0x11, 0x07, 0x12, 0xc5, 0x45, 0x07, 0x3a, 0xc5, 0xb4, 0xb5, 0x24, 0x71, 0xcd, 0x58, 0x7c,
+	0x9c, 0x48, 0xb5, 0x7d, 0xb8, 0xc8, 0x11, 0xf5, 0x30, 0xef, 0x45, 0x7c, 0x44, 0x7a, 0x41, 0x34,
+	0x6c, 0x2d, 0x4b, 0x7f, 0x1b, 0xb1, 0xf8, 0x84, 0x8f, 0xc8, 0xb3, 0x68, 0x98, 0xcb, 0x93, 0x95,
+	0xb8, 0x1b, 0xa6, 0x8d, 0xa8, 0x05, 0x9b, 0xf9, 0x00, 0xab, 0xd8, 0xff, 0x56, 0x91, 0xb1, 0x7f,
+	0x40, 0x86, 0xe1, 0x00, 0xc7, 0xb1, 0x2f, 0x2b, 0x95, 0x26, 0x54, 0x93, 0x42, 0x59, 0xb4, 0xaa,
+	0xbe, 0x2b, 0x70, 0xf2, 0xd4, 0xa2, 0xf7, 0x8a, 0x6e, 0x90, 0xec, 0xb4, 0xdb, 0x70, 0x49, 0xe4,
+	0x0f, 0x0e, 0x58, 0xc4, 0x7a, 0xc8, 0x75, 0x29, 0x66, 0xe9, 0x6b, 0xb2, 0xae, 0x14, 0xf7, 0x63,
+	0xb9, 0xb8, 0x06, 0x96, 0x96, 0x93, 0x8c, 0xd3, 0xaa, 0x35, 0x16, 0x24, 0x7e, 0x67, 0x9c, 0x53,
+	0x7e, 0xff, 0x5c, 0x95, 0x2d, 0x3a, 0x0d, 0x92, 0xcc, 0xa8, 0x39, 0x59, 0xb3, 0x07, 0x4d, 0x46,
+	0x22, 0xea, 0xe0, 0x89, 0x6a, 0x6b, 0xc4, 0xd2, 0xb4, 0xdc, 0xae, 0xc3, 0x9a, 0x8b, 0xd9, 0xb8,
+	0x24, 0x6b, 0x12, 0x54, 0x17, 0xb2, 0x14, 0xf2, 0x31, 0x00, 0x12, 0x57, 0x2f, 0xb3, 0x43, 0x1e,
+	0x6d, 0x66, 0x72, 0xac, 0xa2, 0x74, 0x29, 0x9f, 0x25, 0x66, 0x73, 0xa6, 0x5e, 0x51, 0xb1, 0x29,
+	0xba, 0xe1, 0xa5, 0x79, 0x37, 0xbc, 0x9c, 0xbf, 0xe1, 0xf8, 0xa9, 0xc9, 0x85, 0x43, 0xc5, 0x0a,
+	0xc3, 0x45, 0xd5, 0x9d, 0x9f, 0xcb, 0xe1, 0x68, 0x4e, 0xa4, 0xee, 0xc1, 0x52, 0x3c, 0x44, 0xc9,
+	0x08, 0xd5, 0x0f, 0x37, 0x27, 0xcf, 0x16, 0xb3, 0x74, 0x17, 0xdf, 0xfc, 0xb9, 0xb3, 0x60, 0x25,
+	0x58, 0x73, 0x2b, 0xf3, 0xa2, 0xc4, 0x80, 0xd4, 0x83, 0xc3, 0x7f, 0x00, 0x6a, 0x47, 0xcc, 0xd3,
+	0xbe, 0x05, 0xad, 0x60, 0xd4, 0xda, 0x9b, 0xa4, 0x2f, 0x1c, 0x8f, 0xf4, 0xff, 0x9f, 0x0b, 0x96,
+	0xda, 0xd4, 0x7e, 0x84, 0x56, 0xe9, 0x04, 0x75, 0xbb, 0x94, 0x6a, 0x1a, 0xac, 0xdf, 0xfd, 0x00,
+	0xb0, 0xb2, 0xfe, 0x13, 0x6c, 0x95, 0x4f, 0x3b, 0x77, 0x4a, 0x19, 0x0b, 0xd0, 0xfa, 0xbd, 0x0f,
+	0x41, 0x2b, 0x07, 0xbe, 0x81, 0x46, 0x7e, 0x7e, 0xd9, 0x2d, 0xa5, 0x49, 0x10, 0x7a, 0x7b, 0x1e,
+	0x42, 0x91, 0xbf, 0xae, 0xc0, 0xf6, 0xac, 0xd1, 0xa5, 0x53, 0xc0, 0x34, 0x03, 0xaf, 0x7f, 0xf4,
+	0x61, 0x78, 0xe5, 0x47, 0x08, 0x1b, 0x85, 0x13, 0xcc, 0xad, 0x79, 0x7c, 0x09, 0x50, 0x3f, 0x38,
+	0x27, 0x50, 0x59, 0xf4, 0xe0, 0xd2, 0xf4, 0x0c, 0x73, 0xb3, 0x80, 0x65, 0x0a, 0xa5, 0xdf, 0x39,
+	0x0f, 0x4a, 0x19, 0x72, 0x61, 0x7d, 0x6a, 0x88, 0xb9, 0x51, 0x7a, 0x41, 0x63, 0x90, 0x7e, 0xfb,
+	0x1c, 0xa0, 0xec, 0x71, 0xa6, 0x67, 0x96, 0xa2, 0xe3, 0x4c, 0xa1, 0x0a, 0x8f, 0x53, 0xfa, 0xc6,
+	0x6b, 0x27, 0x50, 0xcf, 0xbe, 0xef, 0x46, 0xc1, 0xc7, 0x19, 0xbd, 0xbe, 0x3f, 0x5b, 0x9f, 0xa5,
+	0xcd, 0x3e, 0x5d, 0x46, 0xa1, 0x4f, 0x4a, 0x5f, 0x48, 0x5b, 0xf0, 0xba, 0x88, 0xe2, 0xc9, 0xbf,
+	0x2c, 0x45, 0xc5, 0x93, 0x43, 0x14, 0x16, 0x4f, 0x61, 0x3b, 0xd6, 0xbe, 0x82, 0xb5, 0x5c, 0x2f,
+	0xde, 0x29, 0xcd, 0xc1, 0x18, 0xa0, 0xdf, 0x9a, 0x03, 0x48, 0x99, 0xbb, 0x4f, 0xde, 0xbc, 0x33,
+	0x2a, 0x6f, 0xdf, 0x19, 0x95, 0xbf, 0xdf, 0x19, 0x95, 0x5f, 0xde, 0x1b, 0x0b, 0x6f, 0xdf, 0x1b,
+	0x0b, 0x7f, 0xbc, 0x37, 0x16, 0xbe, 0xee, 0x78, 0x3e, 0xef, 0x47, 0x76, 0xc7, 0x21, 0xc3, 0x03,
+	0x41, 0x26, 0x7f, 0x7e, 0x1d, 0x32, 0x90, 0x9b, 0x83, 0x51, 0xf6, 0xe7, 0x5b, 0xcc, 0x30, 0xf6,
+	0x92, 0x04, 0xdc, 0xfd, 0x37, 0x00, 0x00, 0xff, 0xff, 0x42, 0x95, 0xfb, 0xbc, 0x9b, 0x0f, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1370,12 +1553,16 @@ const _ = grpc.SupportPackageIsVersion4
 type MsgClient interface {
 	// SubmitBlockHeaders submits bitcoin block headers to the side chain.
 	SubmitBlockHeaders(ctx context.Context, in *MsgSubmitBlockHeaders, opts ...grpc.CallOption) (*MsgSubmitBlockHeadersResponse, error)
-	// UpdateNonBtcRelayers updates the trusted non-btc asset relayers.
-	UpdateNonBtcRelayers(ctx context.Context, in *MsgUpdateNonBtcRelayers, opts ...grpc.CallOption) (*MsgUpdateNonBtcRelayersResponse, error)
-	// SubmitDepositTransaction submits bitcoin transaction to the side chain.
+	// SubmitDepositTransaction submits the bitcoin deposit transaction to the side chain.
 	SubmitDepositTransaction(ctx context.Context, in *MsgSubmitDepositTransaction, opts ...grpc.CallOption) (*MsgSubmitDepositTransactionResponse, error)
-	// SubmitWithdrawalTransaction submits bitcoin transaction to the side chain.
+	// SubmitWithdrawalTransaction submits the bitcoin withdrawal transaction to the side chain.
 	SubmitWithdrawTransaction(ctx context.Context, in *MsgSubmitWithdrawTransaction, opts ...grpc.CallOption) (*MsgSubmitWithdrawTransactionResponse, error)
+	// SubmitFeeRate submits the bitcoin network fee rate to the side chain.
+	SubmitFeeRate(ctx context.Context, in *MsgSubmitFeeRate, opts ...grpc.CallOption) (*MsgSubmitFeeRateResponse, error)
+	// UpdateTrustedNonBtcRelayers updates the trusted non-btc asset relayers.
+	UpdateTrustedNonBtcRelayers(ctx context.Context, in *MsgUpdateTrustedNonBtcRelayers, opts ...grpc.CallOption) (*MsgUpdateTrustedNonBtcRelayersResponse, error)
+	// UpdateTrustedOracles updates the trusted oracles.
+	UpdateTrustedOracles(ctx context.Context, in *MsgUpdateTrustedOracles, opts ...grpc.CallOption) (*MsgUpdateTrustedOraclesResponse, error)
 	// WithdrawToBitcoin withdraws the asset to bitcoin.
 	WithdrawToBitcoin(ctx context.Context, in *MsgWithdrawToBitcoin, opts ...grpc.CallOption) (*MsgWithdrawToBitcoinResponse, error)
 	// SubmitSignatures submits the signatures of the signing request to the side chain.
@@ -1412,15 +1599,6 @@ func (c *msgClient) SubmitBlockHeaders(ctx context.Context, in *MsgSubmitBlockHe
 	return out, nil
 }
 
-func (c *msgClient) UpdateNonBtcRelayers(ctx context.Context, in *MsgUpdateNonBtcRelayers, opts ...grpc.CallOption) (*MsgUpdateNonBtcRelayersResponse, error) {
-	out := new(MsgUpdateNonBtcRelayersResponse)
-	err := c.cc.Invoke(ctx, "/side.btcbridge.Msg/UpdateNonBtcRelayers", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) SubmitDepositTransaction(ctx context.Context, in *MsgSubmitDepositTransaction, opts ...grpc.CallOption) (*MsgSubmitDepositTransactionResponse, error) {
 	out := new(MsgSubmitDepositTransactionResponse)
 	err := c.cc.Invoke(ctx, "/side.btcbridge.Msg/SubmitDepositTransaction", in, out, opts...)
@@ -1433,6 +1611,33 @@ func (c *msgClient) SubmitDepositTransaction(ctx context.Context, in *MsgSubmitD
 func (c *msgClient) SubmitWithdrawTransaction(ctx context.Context, in *MsgSubmitWithdrawTransaction, opts ...grpc.CallOption) (*MsgSubmitWithdrawTransactionResponse, error) {
 	out := new(MsgSubmitWithdrawTransactionResponse)
 	err := c.cc.Invoke(ctx, "/side.btcbridge.Msg/SubmitWithdrawTransaction", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SubmitFeeRate(ctx context.Context, in *MsgSubmitFeeRate, opts ...grpc.CallOption) (*MsgSubmitFeeRateResponse, error) {
+	out := new(MsgSubmitFeeRateResponse)
+	err := c.cc.Invoke(ctx, "/side.btcbridge.Msg/SubmitFeeRate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdateTrustedNonBtcRelayers(ctx context.Context, in *MsgUpdateTrustedNonBtcRelayers, opts ...grpc.CallOption) (*MsgUpdateTrustedNonBtcRelayersResponse, error) {
+	out := new(MsgUpdateTrustedNonBtcRelayersResponse)
+	err := c.cc.Invoke(ctx, "/side.btcbridge.Msg/UpdateTrustedNonBtcRelayers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdateTrustedOracles(ctx context.Context, in *MsgUpdateTrustedOracles, opts ...grpc.CallOption) (*MsgUpdateTrustedOraclesResponse, error) {
+	out := new(MsgUpdateTrustedOraclesResponse)
+	err := c.cc.Invoke(ctx, "/side.btcbridge.Msg/UpdateTrustedOracles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1506,12 +1711,16 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 type MsgServer interface {
 	// SubmitBlockHeaders submits bitcoin block headers to the side chain.
 	SubmitBlockHeaders(context.Context, *MsgSubmitBlockHeaders) (*MsgSubmitBlockHeadersResponse, error)
-	// UpdateNonBtcRelayers updates the trusted non-btc asset relayers.
-	UpdateNonBtcRelayers(context.Context, *MsgUpdateNonBtcRelayers) (*MsgUpdateNonBtcRelayersResponse, error)
-	// SubmitDepositTransaction submits bitcoin transaction to the side chain.
+	// SubmitDepositTransaction submits the bitcoin deposit transaction to the side chain.
 	SubmitDepositTransaction(context.Context, *MsgSubmitDepositTransaction) (*MsgSubmitDepositTransactionResponse, error)
-	// SubmitWithdrawalTransaction submits bitcoin transaction to the side chain.
+	// SubmitWithdrawalTransaction submits the bitcoin withdrawal transaction to the side chain.
 	SubmitWithdrawTransaction(context.Context, *MsgSubmitWithdrawTransaction) (*MsgSubmitWithdrawTransactionResponse, error)
+	// SubmitFeeRate submits the bitcoin network fee rate to the side chain.
+	SubmitFeeRate(context.Context, *MsgSubmitFeeRate) (*MsgSubmitFeeRateResponse, error)
+	// UpdateTrustedNonBtcRelayers updates the trusted non-btc asset relayers.
+	UpdateTrustedNonBtcRelayers(context.Context, *MsgUpdateTrustedNonBtcRelayers) (*MsgUpdateTrustedNonBtcRelayersResponse, error)
+	// UpdateTrustedOracles updates the trusted oracles.
+	UpdateTrustedOracles(context.Context, *MsgUpdateTrustedOracles) (*MsgUpdateTrustedOraclesResponse, error)
 	// WithdrawToBitcoin withdraws the asset to bitcoin.
 	WithdrawToBitcoin(context.Context, *MsgWithdrawToBitcoin) (*MsgWithdrawToBitcoinResponse, error)
 	// SubmitSignatures submits the signatures of the signing request to the side chain.
@@ -1538,14 +1747,20 @@ type UnimplementedMsgServer struct {
 func (*UnimplementedMsgServer) SubmitBlockHeaders(ctx context.Context, req *MsgSubmitBlockHeaders) (*MsgSubmitBlockHeadersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitBlockHeaders not implemented")
 }
-func (*UnimplementedMsgServer) UpdateNonBtcRelayers(ctx context.Context, req *MsgUpdateNonBtcRelayers) (*MsgUpdateNonBtcRelayersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateNonBtcRelayers not implemented")
-}
 func (*UnimplementedMsgServer) SubmitDepositTransaction(ctx context.Context, req *MsgSubmitDepositTransaction) (*MsgSubmitDepositTransactionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitDepositTransaction not implemented")
 }
 func (*UnimplementedMsgServer) SubmitWithdrawTransaction(ctx context.Context, req *MsgSubmitWithdrawTransaction) (*MsgSubmitWithdrawTransactionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitWithdrawTransaction not implemented")
+}
+func (*UnimplementedMsgServer) SubmitFeeRate(ctx context.Context, req *MsgSubmitFeeRate) (*MsgSubmitFeeRateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitFeeRate not implemented")
+}
+func (*UnimplementedMsgServer) UpdateTrustedNonBtcRelayers(ctx context.Context, req *MsgUpdateTrustedNonBtcRelayers) (*MsgUpdateTrustedNonBtcRelayersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTrustedNonBtcRelayers not implemented")
+}
+func (*UnimplementedMsgServer) UpdateTrustedOracles(ctx context.Context, req *MsgUpdateTrustedOracles) (*MsgUpdateTrustedOraclesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTrustedOracles not implemented")
 }
 func (*UnimplementedMsgServer) WithdrawToBitcoin(ctx context.Context, req *MsgWithdrawToBitcoin) (*MsgWithdrawToBitcoinResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WithdrawToBitcoin not implemented")
@@ -1591,24 +1806,6 @@ func _Msg_SubmitBlockHeaders_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_UpdateNonBtcRelayers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdateNonBtcRelayers)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).UpdateNonBtcRelayers(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/side.btcbridge.Msg/UpdateNonBtcRelayers",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdateNonBtcRelayers(ctx, req.(*MsgUpdateNonBtcRelayers))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Msg_SubmitDepositTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgSubmitDepositTransaction)
 	if err := dec(in); err != nil {
@@ -1641,6 +1838,60 @@ func _Msg_SubmitWithdrawTransaction_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).SubmitWithdrawTransaction(ctx, req.(*MsgSubmitWithdrawTransaction))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SubmitFeeRate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitFeeRate)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitFeeRate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.btcbridge.Msg/SubmitFeeRate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitFeeRate(ctx, req.(*MsgSubmitFeeRate))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdateTrustedNonBtcRelayers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateTrustedNonBtcRelayers)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateTrustedNonBtcRelayers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.btcbridge.Msg/UpdateTrustedNonBtcRelayers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateTrustedNonBtcRelayers(ctx, req.(*MsgUpdateTrustedNonBtcRelayers))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdateTrustedOracles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateTrustedOracles)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateTrustedOracles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.btcbridge.Msg/UpdateTrustedOracles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateTrustedOracles(ctx, req.(*MsgUpdateTrustedOracles))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1780,16 +2031,24 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitBlockHeaders_Handler,
 		},
 		{
-			MethodName: "UpdateNonBtcRelayers",
-			Handler:    _Msg_UpdateNonBtcRelayers_Handler,
-		},
-		{
 			MethodName: "SubmitDepositTransaction",
 			Handler:    _Msg_SubmitDepositTransaction_Handler,
 		},
 		{
 			MethodName: "SubmitWithdrawTransaction",
 			Handler:    _Msg_SubmitWithdrawTransaction_Handler,
+		},
+		{
+			MethodName: "SubmitFeeRate",
+			Handler:    _Msg_SubmitFeeRate_Handler,
+		},
+		{
+			MethodName: "UpdateTrustedNonBtcRelayers",
+			Handler:    _Msg_UpdateTrustedNonBtcRelayers_Handler,
+		},
+		{
+			MethodName: "UpdateTrustedOracles",
+			Handler:    _Msg_UpdateTrustedOracles_Handler,
 		},
 		{
 			MethodName: "WithdrawToBitcoin",
@@ -1884,68 +2143,6 @@ func (m *MsgSubmitBlockHeadersResponse) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *MsgSubmitBlockHeadersResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgUpdateNonBtcRelayers) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgUpdateNonBtcRelayers) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgUpdateNonBtcRelayers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Relayers) > 0 {
-		for iNdEx := len(m.Relayers) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Relayers[iNdEx])
-			copy(dAtA[i:], m.Relayers[iNdEx])
-			i = encodeVarintTx(dAtA, i, uint64(len(m.Relayers[iNdEx])))
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Sender) > 0 {
-		i -= len(m.Sender)
-		copy(dAtA[i:], m.Sender)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgUpdateNonBtcRelayersResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgUpdateNonBtcRelayersResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgUpdateNonBtcRelayersResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2112,6 +2309,188 @@ func (m *MsgSubmitWithdrawTransactionResponse) MarshalToSizedBuffer(dAtA []byte)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgSubmitFeeRate) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitFeeRate) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitFeeRate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.FeeRate != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.FeeRate))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitFeeRateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitFeeRateResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitFeeRateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayers) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayers) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Relayers) > 0 {
+		for iNdEx := len(m.Relayers) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Relayers[iNdEx])
+			copy(dAtA[i:], m.Relayers[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Relayers[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateTrustedOracles) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateTrustedOracles) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateTrustedOracles) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Oracles) > 0 {
+		for iNdEx := len(m.Oracles) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Oracles[iNdEx])
+			copy(dAtA[i:], m.Oracles[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Oracles[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateTrustedOraclesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateTrustedOraclesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateTrustedOraclesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func (m *MsgWithdrawToBitcoin) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2132,13 +2511,6 @@ func (m *MsgWithdrawToBitcoin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.FeeRate) > 0 {
-		i -= len(m.FeeRate)
-		copy(dAtA[i:], m.FeeRate)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.FeeRate)))
-		i--
-		dAtA[i] = 0x1a
-	}
 	if len(m.Amount) > 0 {
 		i -= len(m.Amount)
 		copy(dAtA[i:], m.Amount)
@@ -2729,34 +3101,6 @@ func (m *MsgSubmitBlockHeadersResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgUpdateNonBtcRelayers) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Sender)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	if len(m.Relayers) > 0 {
-		for _, s := range m.Relayers {
-			l = len(s)
-			n += 1 + l + sovTx(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *MsgUpdateNonBtcRelayersResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
 func (m *MsgSubmitDepositTransaction) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2833,6 +3177,87 @@ func (m *MsgSubmitWithdrawTransactionResponse) Size() (n int) {
 	return n
 }
 
+func (m *MsgSubmitFeeRate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.FeeRate != 0 {
+		n += 1 + sovTx(uint64(m.FeeRate))
+	}
+	return n
+}
+
+func (m *MsgSubmitFeeRateResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayers) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.Relayers) > 0 {
+		for _, s := range m.Relayers {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgUpdateTrustedOracles) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.Oracles) > 0 {
+		for _, s := range m.Oracles {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MsgUpdateTrustedOraclesResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func (m *MsgWithdrawToBitcoin) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2844,10 +3269,6 @@ func (m *MsgWithdrawToBitcoin) Size() (n int) {
 		n += 1 + l + sovTx(uint64(l))
 	}
 	l = len(m.Amount)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.FeeRate)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -3238,170 +3659,6 @@ func (m *MsgSubmitBlockHeadersResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgSubmitBlockHeadersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgUpdateNonBtcRelayers) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateNonBtcRelayers: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateNonBtcRelayers: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Relayers", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Relayers = append(m.Relayers, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgUpdateNonBtcRelayersResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateNonBtcRelayersResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateNonBtcRelayersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -3913,6 +4170,485 @@ func (m *MsgSubmitWithdrawTransactionResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MsgSubmitFeeRate) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitFeeRate: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitFeeRate: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FeeRate", wireType)
+			}
+			m.FeeRate = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.FeeRate |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitFeeRateResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitFeeRateResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitFeeRateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateTrustedNonBtcRelayers) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateTrustedNonBtcRelayers: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateTrustedNonBtcRelayers: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Relayers", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Relayers = append(m.Relayers, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateTrustedNonBtcRelayersResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateTrustedNonBtcRelayersResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateTrustedNonBtcRelayersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateTrustedOracles) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateTrustedOracles: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateTrustedOracles: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Oracles", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Oracles = append(m.Oracles, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateTrustedOraclesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateTrustedOraclesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateTrustedOraclesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *MsgWithdrawToBitcoin) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -4005,38 +4741,6 @@ func (m *MsgWithdrawToBitcoin) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Amount = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FeeRate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FeeRate = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -24,6 +24,7 @@ var (
 	ErrInvalidDepositAmount      = errorsmod.Register(ModuleName, 2109, "invalid deposit amount")
 	ErrDepositNotEnabled         = errorsmod.Register(ModuleName, 2110, "deposit not enabled")
 	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2111, "untrusted non btc relayer")
+	ErruntrustedOracle           = errorsmod.Register(ModuleName, 2112, "untrusted oracle")
 
 	ErrInvalidAmount                = errorsmod.Register(ModuleName, 3100, "invalid amount")
 	ErrInvalidFeeRate               = errorsmod.Register(ModuleName, 3101, "invalid fee rate")
@@ -32,11 +33,12 @@ var (
 	ErrDustOutput                   = errorsmod.Register(ModuleName, 3104, "too small output amount")
 	ErrInsufficientUTXOs            = errorsmod.Register(ModuleName, 3105, "insufficient utxos")
 	ErrMaxTransactionWeightExceeded = errorsmod.Register(ModuleName, 3106, "maximum transaction weight exceeded")
-	ErrFailToSerializePsbt          = errorsmod.Register(ModuleName, 3107, "failed to serialize psbt")
-	ErrInvalidSignatures            = errorsmod.Register(ModuleName, 3108, "invalid signatures")
-	ErrSigningRequestNotExist       = errorsmod.Register(ModuleName, 3109, "signing request does not exist")
-	ErrSigningRequestConfirmed      = errorsmod.Register(ModuleName, 3110, "signing request has been confirmed")
-	ErrWithdrawNotEnabled           = errorsmod.Register(ModuleName, 3111, "withdrawal not enabled")
+	ErrMaxUTXONumExceeded           = errorsmod.Register(ModuleName, 3107, "maximum utxo number exceeded")
+	ErrFailToSerializePsbt          = errorsmod.Register(ModuleName, 3108, "failed to serialize psbt")
+	ErrInvalidSignatures            = errorsmod.Register(ModuleName, 3109, "invalid signatures")
+	ErrSigningRequestNotExist       = errorsmod.Register(ModuleName, 3110, "signing request does not exist")
+	ErrSigningRequestConfirmed      = errorsmod.Register(ModuleName, 3111, "signing request has been confirmed")
+	ErrWithdrawNotEnabled           = errorsmod.Register(ModuleName, 3112, "withdrawal not enabled")
 
 	ErrUTXODoesNotExist = errorsmod.Register(ModuleName, 4100, "utxo does not exist")
 	ErrUTXOLocked       = errorsmod.Register(ModuleName, 4101, "utxo locked")
@@ -47,6 +49,7 @@ var (
 
 	ErrInvalidParams   = errorsmod.Register(ModuleName, 6100, "invalid module params")
 	ErrInvalidRelayers = errorsmod.Register(ModuleName, 6101, "invalid relayers")
+	ErrInvalidOracles  = errorsmod.Register(ModuleName, 6102, "invalid oracles")
 
 	ErrInvalidDKGParams                 = errorsmod.Register(ModuleName, 7100, "invalid dkg params")
 	ErrDKGRequestDoesNotExist           = errorsmod.Register(ModuleName, 7101, "dkg request does not exist")

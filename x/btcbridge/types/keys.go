@@ -20,25 +20,30 @@ const (
 
 var (
 	ParamsStoreKey = []byte{0x1}
-	SequenceKey    = []byte{0x2}
 
-	// Host chain keys prefix the HostChain structs
-	BtcBlockHeaderHashPrefix        = []byte{0x11} // prefix for each key to a block header, for a hash
-	BtcBlockHeaderHeightPrefix      = []byte{0x12} // prefix for each key to a block hash, for a height
-	BtcBestBlockHeaderKey           = []byte{0x13} // key for the best block height
-	BtcSigningRequestPrefix         = []byte{0x14} // prefix for each key to a signing request
-	BtcSigningRequestByTxHashPrefix = []byte{0x15} // prefix for each key to a signing request from tx hash
-	BtcMintedTxHashKeyPrefix        = []byte{0x16} // prefix for each key to a minted tx hash
-	BtcLockedAssetKeyPrefix         = []byte{0x17} // prefix for each key to the locked asset
+	BtcBlockHeaderHashPrefix   = []byte{0x10} // prefix for each key to a block header, for a hash
+	BtcBlockHeaderHeightPrefix = []byte{0x11} // prefix for each key to a block hash, for a height
+	BtcBestBlockHeaderKey      = []byte{0x12} // key for the best block height
+	BtcFeeRateKey              = []byte{0x13} // key for the bitcoin network fee rate
 
-	BtcUtxoKeyPrefix           = []byte{0x20} // prefix for each key to a utxo
-	BtcOwnerUtxoKeyPrefix      = []byte{0x21} // prefix for each key to an owned utxo
-	BtcOwnerRunesUtxoKeyPrefix = []byte{0x22} // prefix for each key to an owned runes utxo
+	BtcWithdrawRequestSequenceKey       = []byte{0x20} // key for the withdrawal request sequence
+	BtcWithdrawRequestKeyPrefix         = []byte{0x21} // prefix for each key to a withdrawal request
+	BtcWithdrawRequestByTxHashKeyPrefix = []byte{0x22} // prefix for each key to a withdrawal request by tx hash
+	BtcWithdrawRequestQueueKeyPrefix    = []byte{0x23} // prefix for each key to a pending btc withdrawal request
+	BtcSigningRequestSequenceKey        = []byte{0x24} // key for the signing request sequence
+	BtcSigningRequestPrefix             = []byte{0x25} // prefix for each key to a signing request
+	BtcSigningRequestByTxHashPrefix     = []byte{0x26} // prefix for each key to a signing request from tx hash
+	BtcMintedTxHashKeyPrefix            = []byte{0x27} // prefix for each key to a minted tx hash
 
-	DKGRequestIDKey               = []byte{0x30} // key for the DKG request id
-	DKGRequestKeyPrefix           = []byte{0x31} // prefix for each key to a DKG request
-	DKGCompletionRequestKeyPrefix = []byte{0x32} // prefix for each key to a DKG completion request
-	VaultVersionKey               = []byte{0x33} // key for vault version increased by 1 once updated
+	BtcUtxoKeyPrefix              = []byte{0x30} // prefix for each key to a utxo
+	BtcOwnerUtxoKeyPrefix         = []byte{0x31} // prefix for each key to an owned utxo
+	BtcOwnerUtxoByAmountKeyPrefix = []byte{0x32} // prefix for each key to an owned utxo by amount
+	BtcOwnerRunesUtxoKeyPrefix    = []byte{0x33} // prefix for each key to an owned runes utxo
+
+	DKGRequestIDKey               = []byte{0x40} // key for the DKG request id
+	DKGRequestKeyPrefix           = []byte{0x41} // prefix for each key to a DKG request
+	DKGCompletionRequestKeyPrefix = []byte{0x42} // prefix for each key to a DKG completion request
+	VaultVersionKey               = []byte{0x43} // key for vault version increased by 1 once updated
 )
 
 func BtcBlockHeaderHashKey(hash string) []byte {
@@ -47,6 +52,18 @@ func BtcBlockHeaderHashKey(hash string) []byte {
 
 func BtcBlockHeaderHeightKey(height uint64) []byte {
 	return append(BtcBlockHeaderHeightPrefix, sdk.Uint64ToBigEndian(height)...)
+}
+
+func BtcWithdrawRequestKey(sequence uint64) []byte {
+	return append(BtcWithdrawRequestKeyPrefix, sdk.Uint64ToBigEndian(sequence)...)
+}
+
+func BtcWithdrawRequestByTxHashKey(txid string, sequence uint64) []byte {
+	return append(append(BtcWithdrawRequestByTxHashKeyPrefix, []byte(txid)...), sdk.Uint64ToBigEndian(sequence)...)
+}
+
+func BtcWithdrawRequestQueueKey(sequence uint64) []byte {
+	return append(BtcWithdrawRequestQueueKeyPrefix, sdk.Uint64ToBigEndian(sequence)...)
 }
 
 func BtcSigningRequestKey(sequence uint64) []byte {
@@ -61,16 +78,20 @@ func BtcMintedTxHashKey(hash string) []byte {
 	return append(BtcMintedTxHashKeyPrefix, []byte(hash)...)
 }
 
-func BtcLockedAssetKey(txHash string, index uint8) []byte {
-	return append(append(BtcLockedAssetKeyPrefix, []byte(txHash)...), byte(index))
-}
-
 func BtcUtxoKey(hash string, vout uint64) []byte {
 	return append(append(BtcUtxoKeyPrefix, []byte(hash)...), sdk.Uint64ToBigEndian(vout)...)
 }
 
 func BtcOwnerUtxoKey(owner string, hash string, vout uint64) []byte {
 	key := append(append(BtcOwnerUtxoKeyPrefix, []byte(owner)...), []byte(hash)...)
+	key = append(key, sdk.Uint64ToBigEndian(vout)...)
+
+	return key
+}
+
+func BtcOwnerUtxoByAmountKey(owner string, amount uint64, hash string, vout uint64) []byte {
+	key := append(append(BtcOwnerUtxoByAmountKeyPrefix, []byte(owner)...), sdk.Uint64ToBigEndian(amount)...)
+	key = append(key, []byte(hash)...)
 	key = append(key, sdk.Uint64ToBigEndian(vout)...)
 
 	return key

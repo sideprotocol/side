@@ -39,7 +39,9 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdSubmitBlocks())
-	cmd.AddCommand(CmdUpdateNonBtcRelayers())
+	cmd.AddCommand(CmdSubmitFeeRate())
+	cmd.AddCommand(CmdUpdateTrustedNonBtcRelayers())
+	cmd.AddCommand(CmdUpdateTrustedOracles())
 	cmd.AddCommand(CmdWithdrawToBitcoin())
 	cmd.AddCommand(CmdSubmitSignatures())
 	cmd.AddCommand(CmdCompleteDKG())
@@ -80,10 +82,10 @@ func CmdSubmitBlocks() *cobra.Command {
 	return cmd
 }
 
-func CmdUpdateNonBtcRelayers() *cobra.Command {
+func CmdSubmitFeeRate() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-non-btc-relayers [relayers]",
-		Short: "Update non-btc asset relayers",
+		Use:   "submit-fee-rate [fee rate]",
+		Short: "Submit the latest fee rate of the bitcoin network",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -91,7 +93,70 @@ func CmdUpdateNonBtcRelayers() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateNonBtcRelayers(
+			feeRate, err := strconv.ParseInt(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgSubmitFeeRate(
+				clientCtx.GetFromAddress().String(),
+				feeRate,
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdUpdateTrustedNonBtcRelayers() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "update-trusted-relayers [relayers]",
+		Short: "Update trusted non-btc asset relayers",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgUpdateTrustedNonBtcRelayers(
+				clientCtx.GetFromAddress().String(),
+				strings.Split(args[0], listSeparator),
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdUpdateTrustedOracles() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "update-trusted-oracles [oracles]",
+		Short: "Update trusted oracles",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgUpdateTrustedOracles(
 				clientCtx.GetFromAddress().String(),
 				strings.Split(args[0], listSeparator),
 			)
@@ -112,9 +177,9 @@ func CmdUpdateNonBtcRelayers() *cobra.Command {
 // Withdraw To Bitcoin
 func CmdWithdrawToBitcoin() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "withdraw [amount] [fee-rate]",
+		Use:   "withdraw [amount]",
 		Short: "Withdraw bitcoin asset to the given sender",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -129,7 +194,6 @@ func CmdWithdrawToBitcoin() *cobra.Command {
 			msg := types.NewMsgWithdrawToBitcoin(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				args[1],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

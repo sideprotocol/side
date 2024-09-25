@@ -15,6 +15,15 @@ import (
 )
 
 var (
+	// default maximum number of utxos used to build the signing request
+	DefaultMaxUtxoNum = uint32(500)
+
+	// default btc batch withdrawal period
+	DefaultBtcBatchWithdrawPeriod = int64(10)
+
+	// default maximum number of btc batch withdrawal per batch
+	DefaultMaxBtcBatchWithdrawNum = uint32(100)
+
 	// default DKG timeout period
 	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
 
@@ -30,8 +39,14 @@ func NewParams() Params {
 		BtcVoucherDenom:         "sat",
 		DepositEnabled:          true,
 		WithdrawEnabled:         true,
-		NonBtcRelayers:          []string{},
+		TrustedNonBtcRelayers:   []string{},
+		TrustedOracles:          []string{},
 		Vaults:                  []*Vault{},
+		WithdrawParams: WithdrawParams{
+			MaxUtxoNum:             DefaultMaxUtxoNum,
+			BtcBatchWithdrawPeriod: DefaultBtcBatchWithdrawPeriod,
+			MaxBtcBatchWithdrawNum: DefaultMaxBtcBatchWithdrawNum,
+		},
 		ProtocolLimits: ProtocolLimits{
 			BtcMinDeposit:  50000,     // 0.0005 BTC
 			BtcMinWithdraw: 30000,     // 0.0003 BTC
@@ -60,11 +75,19 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if err := validateNonBtcRelayers(p.NonBtcRelayers); err != nil {
+	if err := validateNonBtcRelayers(p.TrustedNonBtcRelayers); err != nil {
+		return err
+	}
+
+	if err := validateOracles(p.TrustedOracles); err != nil {
 		return err
 	}
 
 	if err := validateVaults(p.Vaults); err != nil {
+		return err
+	}
+
+	if err := validateWithdrawParams(&p.WithdrawParams); err != nil {
 		return err
 	}
 
@@ -138,13 +161,29 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 // validateNonBtcRelayers validates the given relayers
 func validateNonBtcRelayers(relayers []string) error {
 	if len(relayers) == 0 {
-		return ErrInvalidParams
+		return ErrInvalidRelayers
 	}
 
 	for _, relayer := range relayers {
 		_, err := sdk.AccAddressFromBech32(relayer)
 		if err != nil {
-			return ErrInvalidParams
+			return ErrInvalidRelayers
+		}
+	}
+
+	return nil
+}
+
+// validateOracles validates the given oracles
+func validateOracles(oracles []string) error {
+	if len(oracles) == 0 {
+		return ErrInvalidOracles
+	}
+
+	for _, oracle := range oracles {
+		_, err := sdk.AccAddressFromBech32(oracle)
+		if err != nil {
+			return ErrInvalidOracles
 		}
 	}
 
@@ -182,6 +221,14 @@ func validateVaults(vaults []*Vault) error {
 		if v.AssetType == AssetType_ASSET_TYPE_UNSPECIFIED {
 			return ErrInvalidParams
 		}
+	}
+
+	return nil
+}
+
+func validateWithdrawParams(withdrawParams *WithdrawParams) error {
+	if withdrawParams.BtcBatchWithdrawPeriod == 0 || withdrawParams.MaxBtcBatchWithdrawNum == 0 {
+		return ErrInvalidParams
 	}
 
 	return nil

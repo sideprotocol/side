@@ -46,6 +46,14 @@ message SigningRequest {
   SigningStatus status = 5;
 }
 
+// Withdrawal Request
+message WithdrawRequest {
+  string address = 1;
+  string amount = 2;
+  uint64 sequence = 3;
+  string txid = 4;
+}
+
 // Bitcoin UTXO
 message UTXO {
   string txid = 1;

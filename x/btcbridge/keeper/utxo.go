@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"math/big"
-	"sort"
 
 	"lukechampine.com/uint128"
 
@@ -23,7 +22,6 @@ type UTXOViewKeeper interface {
 	GetUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO
 	GetUTXOIteratorByAddr(ctx sdk.Context, addr string) types.UTXOIterator
 	GetUnlockedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO
-	GetOrderedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO
 
 	GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128) ([]*types.UTXO, []*types.RuneBalance)
 
@@ -109,7 +107,7 @@ func (bvk *BaseUTXOViewKeeper) GetUTXOsByAddr(ctx sdk.Context, addr string) []*t
 
 func (bvk *BaseUTXOViewKeeper) GetUTXOIteratorByAddr(ctx sdk.Context, addr string) types.UTXOIterator {
 	store := ctx.KVStore(bvk.storeKey)
-	iterator := sdk.KVStorePrefixIterator(store, append(types.BtcOwnerUtxoKeyPrefix, []byte(addr)...))
+	iterator := sdk.KVStoreReversePrefixIterator(store, append(types.BtcOwnerUtxoByAmountKeyPrefix, []byte(addr)...))
 
 	return &UTXOIterator{
 		ctx:      ctx,
@@ -147,22 +145,6 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddrAndThreshold(ctx sdk.Contex
 
 		return maxNum != 0 && len(utxos) >= int(maxNum)
 	})
-
-	return utxos
-}
-
-// GetOrderedUTXOsByAddr gets all unlocked utxos of the given address in the descending order by amount
-// Note: high gas is required due to sorting
-func (bvk *BaseUTXOViewKeeper) GetOrderedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO {
-	// get unlocked utxos
-	utxos := bvk.GetUnlockedUTXOsByAddr(ctx, addr)
-
-	if len(utxos) > 1 {
-		// sort utxos in the descending order
-		sort.SliceStable(utxos, func(i int, j int) bool {
-			return utxos[i].Amount > utxos[j].Amount
-		})
-	}
 
 	return utxos
 }
@@ -321,6 +303,12 @@ func (bk *BaseUTXOKeeper) SetOwnerUTXO(ctx sdk.Context, utxo *types.UTXO) {
 	store.Set(types.BtcOwnerUtxoKey(utxo.Address, utxo.Txid, utxo.Vout), []byte{})
 }
 
+func (bk *BaseUTXOKeeper) SetOwnerUTXOByAmount(ctx sdk.Context, utxo *types.UTXO) {
+	store := ctx.KVStore(bk.storeKey)
+
+	store.Set(types.BtcOwnerUtxoByAmountKey(utxo.Address, utxo.Amount, utxo.Txid, utxo.Vout), []byte{})
+}
+
 func (bk *BaseUTXOKeeper) SetOwnerRunesUTXO(ctx sdk.Context, utxo *types.UTXO, id string, amount string) {
 	store := ctx.KVStore(bk.storeKey)
 
@@ -409,6 +397,7 @@ func (bk *BaseUTXOKeeper) SaveUTXO(ctx sdk.Context, utxo *types.UTXO) {
 func (bk *BaseUTXOKeeper) saveUTXO(ctx sdk.Context, utxo *types.UTXO) {
 	bk.SetUTXO(ctx, utxo)
 	bk.SetOwnerUTXO(ctx, utxo)
+	bk.SetOwnerUTXOByAmount(ctx, utxo)
 
 	for _, r := range utxo.Runes {
 		bk.SetOwnerRunesUTXO(ctx, utxo, r.Id, r.Amount)
@@ -422,13 +411,15 @@ func (bk *BaseUTXOKeeper) removeUTXO(ctx sdk.Context, hash string, vout uint64) 
 
 	store.Delete(types.BtcUtxoKey(hash, vout))
 	store.Delete(types.BtcOwnerUtxoKey(utxo.Address, hash, vout))
+	store.Delete(types.BtcOwnerUtxoByAmountKey(utxo.Address, utxo.Amount, hash, vout))
 
 	for _, r := range utxo.Runes {
 		store.Delete(types.BtcOwnerRunesUtxoKey(utxo.Address, r.Id, hash, vout))
 	}
 }
 
-// UTXOIterator defines the iterator over utxos by address
+// UTXOIterator implements types.UTXOIterator
+// The iterator iterates over utxos by address and amount
 type UTXOIterator struct {
 	ctx    sdk.Context
 	keeper UTXOViewKeeper
@@ -451,9 +442,10 @@ func (i *UTXOIterator) Close() error {
 
 func (i *UTXOIterator) GetUTXO() *types.UTXO {
 	key := i.iterator.Key()
+	prefixLen := 1 + len(i.address) + 8
 
-	hash := key[1+len(i.address) : 1+len(i.address)+64]
-	vout := key[1+len(i.address)+64:]
+	hash := key[prefixLen : prefixLen+64]
+	vout := key[prefixLen+64:]
 
-	return i.keeper.GetUTXO(i.ctx, string(hash), new(big.Int).SetBytes(vout).Uint64())
+	return i.keeper.GetUTXO(i.ctx, string(hash), sdk.BigEndianToUint64(vout))
 }
