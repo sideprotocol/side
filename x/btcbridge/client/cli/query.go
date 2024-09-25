@@ -31,6 +31,8 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdBestBlock())
 	cmd.AddCommand(CmdQueryBlock())
+	cmd.AddCommand(CmdQueryFeeRate())
+	cmd.AddCommand(CmdQueryWithdrawRequests())
 	cmd.AddCommand(CmdQuerySigningRequests())
 	cmd.AddCommand(CmdQueryUTXOs())
 	cmd.AddCommand(CmdQueryUTXOStats())
@@ -153,6 +155,58 @@ func CmdQueryFeeRate() *cobra.Command {
 			}
 
 			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryWithdrawRequests returns the command to query withdrawal requests
+func CmdQueryWithdrawRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "withdraw-requests [address | tx hash | pending]",
+		Short: `Query withdrawal requests by address, tx hash or "pending"`,
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if args[0] == "pending" {
+				res, err := queryClient.QueryPendingBtcWithdrawRequests(cmd.Context(), &types.QueryPendingBtcWithdrawRequestsRequest{})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			} else {
+				_, err = sdk.AccAddressFromBech32(args[0])
+				if err != nil {
+					_, err := chainhash.NewHashFromStr(args[0])
+					if err != nil {
+						return fmt.Errorf("invalid arg, neither address nor tx hash or pending: %s", args[0])
+					}
+
+					res, err := queryClient.QueryWithdrawRequestsByTxHash(cmd.Context(), &types.QueryWithdrawRequestsByTxHashRequest{Txid: args[0]})
+					if err != nil {
+						return err
+					}
+
+					return clientCtx.PrintProto(res)
+				}
+
+				res, err := queryClient.QueryWithdrawRequestsByAddress(cmd.Context(), &types.QueryWithdrawRequestsByAddressRequest{Address: args[0]})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
 		},
 	}
 

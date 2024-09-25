@@ -77,6 +77,42 @@ func (k Keeper) QueryFeeRate(goCtx context.Context, req *types.QueryFeeRateReque
 	return &types.QueryFeeRateResponse{FeeRate: feeRate}, nil
 }
 
+func (k Keeper) QueryWithdrawRequestsByAddress(goCtx context.Context, req *types.QueryWithdrawRequestsByAddressRequest) (*types.QueryWithdrawRequestsByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	requests := k.GetWithdrawRequestsByAddress(ctx, req.Address)
+
+	return &types.QueryWithdrawRequestsByAddressResponse{Requests: requests}, nil
+}
+
+func (k Keeper) QueryWithdrawRequestsByTxHash(goCtx context.Context, req *types.QueryWithdrawRequestsByTxHashRequest) (*types.QueryWithdrawRequestsByTxHashResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	requests := k.GetWithdrawRequestsByTxHash(ctx, req.Txid)
+
+	return &types.QueryWithdrawRequestsByTxHashResponse{Requests: requests}, nil
+}
+
+func (k Keeper) QueryPendingBtcWithdrawRequests(goCtx context.Context, req *types.QueryPendingBtcWithdrawRequestsRequest) (*types.QueryPendingBtcWithdrawRequestsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	requests := k.GetPendingBtcWithdrawRequests(ctx, 0)
+
+	return &types.QueryPendingBtcWithdrawRequestsResponse{Requests: requests}, nil
+}
+
 func (k Keeper) QuerySigningRequests(goCtx context.Context, req *types.QuerySigningRequestsRequest) (*types.QuerySigningRequestsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")

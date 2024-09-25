@@ -336,7 +336,7 @@ func (k Keeper) GetPendingBtcWithdrawRequests(ctx sdk.Context, maxNum uint32) []
 	k.IterateBtcWithdrawRequestQueue(ctx, func(req *types.WithdrawRequest) (stop bool) {
 		requests = append(requests, req)
 
-		return len(requests) >= int(maxNum)
+		return maxNum != 0 && len(requests) >= int(maxNum)
 	})
 
 	return requests

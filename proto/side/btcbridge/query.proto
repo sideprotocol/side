@@ -31,6 +31,18 @@ service Query {
   rpc QueryFeeRate(QueryFeeRateRequest) returns (QueryFeeRateResponse) {
     option (google.api.http).get = "/side/btcbridge/feerate";
   }
+  // QueryWithdrawRequestsByAddress queries the withdrawal requests by the given address.
+  rpc QueryWithdrawRequestsByAddress(QueryWithdrawRequestsByAddressRequest) returns (QueryWithdrawRequestsByAddressResponse) {
+    option (google.api.http).get = "/side/btcbridge/withdrawal/requests/address/{address}";
+  }
+  // QueryWithdrawRequestsByTxHash queries the withdrawal requests by the given tx hash.
+  rpc QueryWithdrawRequestsByTxHash(QueryWithdrawRequestsByTxHashRequest) returns (QueryWithdrawRequestsByTxHashResponse) {
+    option (google.api.http).get = "/side/btcbridge/withdrawal/requests/tx/{txid}";
+  }
+  // QueryPendingBtcWithdrawRequests queries the pending btc withdrawal requests.
+  rpc QueryPendingBtcWithdrawRequests(QueryPendingBtcWithdrawRequestsRequest) returns (QueryPendingBtcWithdrawRequestsResponse) {
+    option (google.api.http).get = "/side/btcbridge/withdrawal/requests/btc/pending";
+  }
   // QuerySigningRequests queries the signing requests by the given status.
   rpc QuerySigningRequests(QuerySigningRequestsRequest) returns (QuerySigningRequestsResponse) {
     option (google.api.http).get = "/side/btcbridge/signing/requests";
@@ -71,6 +83,39 @@ service Query {
   rpc QueryDKGCompletionRequests(QueryDKGCompletionRequestsRequest) returns (QueryDKGCompletionRequestsResponse) {
     option (google.api.http).get = "/side/btcbridge/dkg/completion/request/{id}";
   }
+}
+
+// QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method.
+message QueryWithdrawRequestsByAddressRequest {
+  string address = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method.
+message QueryWithdrawRequestsByAddressResponse {
+  repeated WithdrawRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryWithdrawRequestsByTxHashRequest is request type for the Query/WithdrawRequestsByTxHash RPC method.
+message QueryWithdrawRequestsByTxHashRequest {
+  string txid = 1;
+}
+
+// QueryWithdrawRequestsByTxHashResponse is response type for the Query/WithdrawRequestsByTxHash RPC method.
+message QueryWithdrawRequestsByTxHashResponse {
+  repeated WithdrawRequest requests = 1;
+}
+
+// QueryPendingBtcWithdrawRequestsRequest is request type for the Query/PendingBtcWithdrawRequests RPC method.
+message QueryPendingBtcWithdrawRequestsRequest {
+  cosmos.base.query.v1beta1.PageResponse pagination = 1;
+}
+
+// QueryPendingBtcWithdrawRequestsResponse is response type for the Query/PendingBtcWithdrawRequests RPC method.
+message QueryPendingBtcWithdrawRequestsResponse {
+  repeated WithdrawRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method.
