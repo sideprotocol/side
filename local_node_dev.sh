@@ -21,6 +21,7 @@ MAX_GAS=10000000000
 BTC_VAULT=() # ("<address>" "<pk>" "<asset type>")
 RUNES_VAULT=()
 TRUSTED_NON_BTC_RELAYER=""
+TRUSTED_ORACLE=""
 PROTOCOL_FEE_COLLECTOR=""
 
 # gov params
@@ -115,7 +116,12 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 
 	# set trusted non btc relayer
 	if [ -n "$TRUSTED_NON_BTC_RELAYER" ]; then
-	    jq --arg relayer "$TRUSTED_NON_BTC_RELAYER" '.app_state["btcbridge"]["params"]["non_btc_relayers"][0]=$relayer' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	    jq --arg relayer "$TRUSTED_NON_BTC_RELAYER" '.app_state["btcbridge"]["params"]["trusted_non_btc_relayers"][0]=$relayer' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+    fi
+
+	# set trusted oracle
+	if [ -n "$TRUSTED_ORACLE" ]; then
+	    jq --arg oracle "$TRUSTED_ORACLE" '.app_state["btcbridge"]["params"]["trusted_oracles"][0]=$oracle' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
     fi
 
 	# set protocol fee collector

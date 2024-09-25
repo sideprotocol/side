@@ -20,15 +20,19 @@ message Params {
   // Indicates if withdrawal is enabled
   bool withdraw_enabled = 5;
   // Trusted relayers for non-btc asset deposit
-  repeated string non_btc_relayers = 6;
+  repeated string trusted_non_btc_relayers = 6;
+  // Trusted oracles for providing offchain data, e.g. bitcoin fee rate
+  repeated string trusted_oracles = 7;
   // Asset vaults
-  repeated Vault vaults = 7;
+  repeated Vault vaults = 8;
+  // Withdrawal params
+  WithdrawParams withdraw_params = 9 [(gogoproto.nullable) = false];
   // Protocol limitations
-  ProtocolLimits protocol_limits = 8 [(gogoproto.nullable) = false];
+  ProtocolLimits protocol_limits = 10 [(gogoproto.nullable) = false];
   // Protocol fees
-  ProtocolFees protocol_fees = 9 [(gogoproto.nullable) = false];
+  ProtocolFees protocol_fees = 11 [(gogoproto.nullable) = false];
   // TSS params
-  TSSParams tss_params = 10 [(gogoproto.nullable) = false];
+  TSSParams tss_params = 12 [(gogoproto.nullable) = false];
 }
 
 // AssetType defines the type of asset
@@ -53,6 +57,15 @@ message Vault {
   AssetType asset_type = 3;
   // version
   uint64 version = 4;
+}
+
+message WithdrawParams {
+  // Maximum number of utxos used to build the signing request; O means unlimited
+  uint32 max_utxo_num = 1;
+  // Period for handling btc withdrawal requests
+  int64 btc_batch_withdraw_period = 2;
+  // Maximum number of btc withdrawal requests to be handled per batch
+  uint32 max_btc_batch_withdraw_num = 3;
 }
 
 // ProtocolLimits defines the params related to the the protocol limitations

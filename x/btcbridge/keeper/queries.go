@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"strconv"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -66,6 +65,18 @@ func (k Keeper) QueryBlockHeaderByHeight(goCtx context.Context, req *types.Query
 	return &types.QueryBlockHeaderByHeightResponse{BlockHeader: header}, nil
 }
 
+func (k Keeper) QueryFeeRate(goCtx context.Context, req *types.QueryFeeRateRequest) (*types.QueryFeeRateResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	feeRate := k.GetFeeRate(ctx)
+
+	return &types.QueryFeeRateResponse{FeeRate: feeRate}, nil
+}
+
 func (k Keeper) QuerySigningRequests(goCtx context.Context, req *types.QuerySigningRequestsRequest) (*types.QuerySigningRequestsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
@@ -107,35 +118,6 @@ func (k Keeper) QuerySigningRequestByTxHash(goCtx context.Context, req *types.Qu
 	}
 
 	return &types.QuerySigningRequestByTxHashResponse{Request: request}, nil
-}
-
-func (k Keeper) QueryWithdrawNetworkFee(goCtx context.Context, req *types.QueryWithdrawNetworkFeeRequest) (*types.QueryWithdrawNetworkFeeResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	amount, err := sdk.ParseCoinNormalized(req.Amount)
-	if err != nil {
-		return nil, err
-	}
-
-	feeRate, err := strconv.ParseInt(req.FeeRate, 10, 64)
-	if err != nil {
-		return nil, types.ErrInvalidFeeRate
-	}
-
-	signingReq, err := k.NewSigningRequest(ctx, req.Sender, amount, feeRate)
-	if err != nil {
-		return nil, err
-	}
-
-	fee, err := k.getBtcNetworkFee(ctx, signingReq.Psbt)
-	if err != nil {
-		return nil, err
-	}
-
-	return &types.QueryWithdrawNetworkFeeResponse{Fee: fee.Amount.Int64()}, nil
 }
 
 func (k Keeper) QueryUTXOs(goCtx context.Context, req *types.QueryUTXOsRequest) (*types.QueryUTXOsResponse, error) {

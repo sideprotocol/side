@@ -37,6 +37,10 @@ func (k Keeper) handleBtcConsolidation(ctx sdk.Context, vaultVersion uint64, tar
 		return types.ErrInsufficientUTXOs
 	}
 
+	if err := k.checkUtxos(ctx, targetUTXOs); err != nil {
+		return err
+	}
+
 	p, recipientUTXO, err := types.BuildTransferAllBtcPsbt(targetUTXOs, vault.Address, feeRate)
 	if err != nil {
 		return err
@@ -57,7 +61,7 @@ func (k Keeper) handleBtcConsolidation(ctx sdk.Context, vaultVersion uint64, tar
 	// set signing request
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
-		Sequence: k.IncrementRequestSequence(ctx),
+		Sequence: k.IncrementSigningRequestSequence(ctx),
 		Txid:     p.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
@@ -97,6 +101,10 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 		return err
 	}
 
+	if err := k.checkUtxos(ctx, targetRunesUTXOs, selectedUtxos); err != nil {
+		return err
+	}
+
 	psbtB64, err := p.B64Encode()
 	if err != nil {
 		return types.ErrFailToSerializePsbt
@@ -120,11 +128,12 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 	// set signing request
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
-		Sequence: k.IncrementRequestSequence(ctx),
+		Sequence: k.IncrementSigningRequestSequence(ctx),
 		Txid:     p.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
+	k.SetSigningRequest(ctx, signingReq)
 
 	// Emit events
 	k.EmitEvent(ctx, k.authority,

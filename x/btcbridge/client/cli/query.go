@@ -133,6 +133,34 @@ func CmdQueryBlock() *cobra.Command {
 	return cmd
 }
 
+// CmdQueryFeeRate returns the command to query the bitcoin network fee rate
+func CmdQueryFeeRate() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "fee-rate",
+		Short: "Query the current bitcoin network fee rate on the side chain",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.QueryFeeRate(cmd.Context(), &types.QueryFeeRateRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
 // CmdQuerySigningRequests returns the command to query signing requests
 func CmdQuerySigningRequests() *cobra.Command {
 	cmd := &cobra.Command{

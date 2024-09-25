@@ -279,7 +279,7 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 
 			signingReq := &types.SigningRequest{
 				Address:  k.authority,
-				Sequence: k.IncrementRequestSequence(ctx),
+				Sequence: k.IncrementSigningRequestSequence(ctx),
 				Txid:     p.UnsignedTx.TxHash().String(),
 				Psbt:     psbts[i],
 				Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
@@ -317,6 +317,10 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 
 // handleTransferVaultTx handles the pre-built tx for the vault transfer
 func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVault, destVault *types.Vault, assetType types.AssetType) error {
+	if err := k.checkUtxoCount(ctx, len(p.UnsignedTx.TxIn)); err != nil {
+		return err
+	}
+
 	txHash := p.UnsignedTx.TxHash().String()
 
 	if assetType == types.AssetType_ASSET_TYPE_RUNES {
@@ -440,6 +444,10 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 		return nil, types.ErrInsufficientUTXOs
 	}
 
+	if err := k.checkUtxos(ctx, utxos); err != nil {
+		return nil, err
+	}
+
 	p, recipientUTXO, err := types.BuildTransferAllBtcPsbt(utxos, destVault.Address, feeRate)
 	if err != nil {
 		return nil, err
@@ -459,7 +467,7 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
-		Sequence: k.IncrementRequestSequence(ctx),
+		Sequence: k.IncrementSigningRequestSequence(ctx),
 		Txid:     p.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
@@ -505,6 +513,10 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 		return nil, err
 	}
 
+	if err := k.checkUtxos(ctx, runesUtxos, selectedUtxos); err != nil {
+		return nil, err
+	}
+
 	psbtB64, err := p.B64Encode()
 	if err != nil {
 		return nil, types.ErrFailToSerializePsbt
@@ -527,7 +539,7 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
-		Sequence: k.IncrementRequestSequence(ctx),
+		Sequence: k.IncrementSigningRequestSequence(ctx),
 		Txid:     p.UnsignedTx.TxHash().String(),
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
