@@ -190,6 +190,7 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 	// Emit events
 	m.EmitEvent(ctx, msg.Sender,
 		sdk.NewAttribute("amount", amount.String()),
+		sdk.NewAttribute("sequence", fmt.Sprintf("%d", withdrawRequest.Sequence)),
 		sdk.NewAttribute("txid", withdrawRequest.Txid),
 	)
 

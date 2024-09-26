@@ -1,6 +1,8 @@
 package btcbridge
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/keeper"
@@ -56,7 +58,10 @@ func handleBtcWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 		k.RemoveFromBtcWithdrawRequestQueue(ctx, req)
 
 		// emit event
-		k.EmitEvent(ctx, req.Address, sdk.NewAttribute("txid", req.Txid))
+		k.EmitEvent(ctx, req.Address,
+			sdk.NewAttribute("sequence", fmt.Sprintf("%d", req.Sequence)),
+			sdk.NewAttribute("txid", req.Txid),
+		)
 	}
 }
 
