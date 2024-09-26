@@ -51,18 +51,19 @@ func (k Keeper) handleBtcConsolidation(ctx sdk.Context, vaultVersion uint64, tar
 		return types.ErrFailToSerializePsbt
 	}
 
+	txHash := p.UnsignedTx.TxHash().String()
+
 	// lock the involved utxos
 	_ = k.LockUTXOs(ctx, targetUTXOs)
 
-	// save the recipient utxo and mark minted
-	k.saveUTXO(ctx, recipientUTXO)
-	k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
+	// save the recipient(change) utxo
+	k.saveChangeUTXOs(ctx, txHash, recipientUTXO)
 
 	// set signing request
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
 		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     p.UnsignedTx.TxHash().String(),
+		Txid:     txHash,
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
@@ -110,26 +111,20 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 		return types.ErrFailToSerializePsbt
 	}
 
+	txHash := p.UnsignedTx.TxHash().String()
+
 	// lock the involved utxos
 	_ = k.LockUTXOs(ctx, targetRunesUTXOs)
 	_ = k.LockUTXOs(ctx, selectedUtxos)
 
-	// save the change utxo
-	if changeUtxo != nil {
-		k.saveUTXO(ctx, changeUtxo)
-	}
-
-	// save the runes recipient utxo
-	k.saveUTXO(ctx, runesRecipientUtxo)
-
-	// mark minted
-	k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
+	// save the change utxos
+	k.saveChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
 
 	// set signing request
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
 		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     p.UnsignedTx.TxHash().String(),
+		Txid:     txHash,
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}

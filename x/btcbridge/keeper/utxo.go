@@ -27,6 +27,7 @@ type UTXOViewKeeper interface {
 
 	IterateAllUTXOs(ctx sdk.Context, cb func(utxo *types.UTXO) (stop bool))
 	IterateUTXOsByAddr(ctx sdk.Context, addr string, cb func(addr string, utxo *types.UTXO) (stop bool))
+	IterateUTXOsByTxHash(ctx sdk.Context, hash string, cb func(utxo *types.UTXO) (stop bool))
 }
 
 type UTXOKeeper interface {
@@ -246,6 +247,22 @@ func (bvk *BaseUTXOViewKeeper) IterateUTXOsByAddr(ctx sdk.Context, addr string, 
 
 		utxo := bvk.GetUTXO(ctx, string(hash), new(big.Int).SetBytes(vout).Uint64())
 		if cb(addr, utxo) {
+			break
+		}
+	}
+}
+
+func (bvk *BaseUTXOViewKeeper) IterateUTXOsByTxHash(ctx sdk.Context, hash string, cb func(utxo *types.UTXO) (stop bool)) {
+	store := ctx.KVStore(bvk.storeKey)
+
+	iterator := sdk.KVStorePrefixIterator(store, append(types.BtcUtxoKeyPrefix, []byte(hash)...))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var utxo types.UTXO
+		bvk.cdc.MustUnmarshal(iterator.Value(), &utxo)
+
+		if cb(&utxo) {
 			break
 		}
 	}

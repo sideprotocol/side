@@ -394,7 +394,7 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 					Address:      vault.Address,
 					Amount:       uint64(out.Value),
 					PubKeyScript: out.PkScript,
-					IsLocked:     false,
+					IsLocked:     true,
 				}
 
 				k.saveUTXO(ctx, utxo)
@@ -411,7 +411,7 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 					Address:      vault.Address,
 					Amount:       uint64(out.Value),
 					PubKeyScript: out.PkScript,
-					IsLocked:     false,
+					IsLocked:     true,
 					Runes:        runeBalances.Compact(),
 				}
 
@@ -458,17 +458,18 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 		return nil, types.ErrFailToSerializePsbt
 	}
 
+	txHash := p.UnsignedTx.TxHash().String()
+
 	// lock the involved utxos
 	_ = k.LockUTXOs(ctx, utxos)
 
-	// save the recipient utxo and mark minted
-	k.saveUTXO(ctx, recipientUTXO)
-	k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
+	// save the recipient(change) utxo
+	k.saveChangeUTXOs(ctx, txHash, recipientUTXO)
 
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
 		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     p.UnsignedTx.TxHash().String(),
+		Txid:     txHash,
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
@@ -522,25 +523,19 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 		return nil, types.ErrFailToSerializePsbt
 	}
 
+	txHash := p.UnsignedTx.TxHash().String()
+
 	// lock the involved utxos
 	_ = k.LockUTXOs(ctx, runesUtxos)
 	_ = k.LockUTXOs(ctx, selectedUtxos)
 
-	// save the change utxo
-	if changeUtxo != nil {
-		k.saveUTXO(ctx, changeUtxo)
-	}
-
-	// save the runes recipient utxo
-	k.saveUTXO(ctx, runesRecipientUtxo)
-
-	// mark minted
-	k.addToMintHistory(ctx, p.UnsignedTx.TxHash().String())
+	// save the change utxos
+	k.saveChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
 
 	signingReq := &types.SigningRequest{
 		Address:  k.authority,
 		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     p.UnsignedTx.TxHash().String(),
+		Txid:     txHash,
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}

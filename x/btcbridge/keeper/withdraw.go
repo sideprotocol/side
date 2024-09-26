@@ -175,19 +175,18 @@ func (k Keeper) NewBtcSigningRequest(ctx sdk.Context, sender string, amount sdk.
 		return nil, types.ErrFailToSerializePsbt
 	}
 
+	txHash := psbt.UnsignedTx.TxHash().String()
+
 	// lock the selected utxos
 	_ = k.LockUTXOs(ctx, selectedUTXOs)
 
-	// save the change utxo and mark minted
-	if changeUTXO != nil {
-		k.saveUTXO(ctx, changeUTXO)
-		k.addToMintHistory(ctx, psbt.UnsignedTx.TxHash().String())
-	}
+	// save the change utxo
+	k.saveChangeUTXOs(ctx, txHash, changeUTXO)
 
 	signingRequest := &types.SigningRequest{
 		Address:  sender,
 		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     psbt.UnsignedTx.TxHash().String(),
+		Txid:     txHash,
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
@@ -225,26 +224,19 @@ func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sd
 		return nil, types.ErrFailToSerializePsbt
 	}
 
+	txHash := psbt.UnsignedTx.TxHash().String()
+
 	// lock the involved utxos
 	_ = k.LockUTXOs(ctx, runesUTXOs)
 	_ = k.LockUTXOs(ctx, selectedUTXOs)
 
-	// save the change utxo and mark minted
-	if changeUTXO != nil {
-		k.saveUTXO(ctx, changeUTXO)
-		k.addToMintHistory(ctx, psbt.UnsignedTx.TxHash().String())
-	}
-
-	// save the runes change utxo and mark minted
-	if runesChangeUTXO != nil {
-		k.saveUTXO(ctx, runesChangeUTXO)
-		k.addToMintHistory(ctx, psbt.UnsignedTx.TxHash().String())
-	}
+	// save the change utxos
+	k.saveChangeUTXOs(ctx, txHash, changeUTXO, runesChangeUTXO)
 
 	signingRequest := &types.SigningRequest{
 		Address:  sender,
 		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     psbt.UnsignedTx.TxHash().String(),
+		Txid:     txHash,
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
@@ -272,6 +264,8 @@ func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawReq
 		return nil, types.ErrFailToSerializePsbt
 	}
 
+	txHash := psbt.UnsignedTx.TxHash().String()
+
 	// first burn btc network fee to prevent the following state change when an error returned
 	// avoid panic in EndBlocker
 	if err := k.BurnBtcNetworkFee(ctx, psbtB64); err != nil {
@@ -281,16 +275,13 @@ func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawReq
 	// lock the selected utxos
 	_ = k.LockUTXOs(ctx, selectedUTXOs)
 
-	// save the change utxo and mark minted
-	if changeUTXO != nil {
-		k.saveUTXO(ctx, changeUTXO)
-		k.addToMintHistory(ctx, psbt.UnsignedTx.TxHash().String())
-	}
+	// save the change utxo
+	k.saveChangeUTXOs(ctx, txHash, changeUTXO)
 
 	signingRequest := &types.SigningRequest{
 		Address:  authtypes.NewModuleAddress(types.ModuleName).String(),
 		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     psbt.UnsignedTx.TxHash().String(),
+		Txid:     txHash,
 		Psbt:     psbtB64,
 		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
@@ -567,6 +558,9 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 	// spend the locked utxos
 	k.spendUTXOs(ctx, tx)
 
+	// unlock the change utxos
+	k.unlockChangeUTXOs(ctx, txHash.String())
+
 	return txHash, nil
 }
 
@@ -580,6 +574,30 @@ func (k Keeper) spendUTXOs(ctx sdk.Context, uTx *btcutil.Tx) {
 			_ = k.SpendUTXO(ctx, hash, uint64(vout))
 		}
 	}
+}
+
+// saveChangeUTXOs saves the change utxos of the given tx and marks minted
+func (k Keeper) saveChangeUTXOs(ctx sdk.Context, txHash string, utxos ...*types.UTXO) {
+	for _, utxo := range utxos {
+		if utxo == nil {
+			continue
+		}
+
+		utxo.IsLocked = true
+		k.saveUTXO(ctx, utxo)
+
+		k.addToMintHistory(ctx, txHash)
+	}
+}
+
+// unlockChangeUTXOs unlocks the change utxos of the given tx
+func (k Keeper) unlockChangeUTXOs(ctx sdk.Context, txHash string) {
+	k.IterateUTXOsByTxHash(ctx, txHash, func(utxo *types.UTXO) (stop bool) {
+		utxo.IsLocked = false
+		k.SetUTXO(ctx, utxo)
+
+		return false
+	})
 }
 
 // BurnAsset burns the asset related to the withdrawal
