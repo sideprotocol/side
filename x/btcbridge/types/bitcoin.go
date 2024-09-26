@@ -113,17 +113,26 @@ func BuildBtcBatchWithdrawPsbt(utxoIterator UTXOIterator, withdrawRequests []*Wi
 
 	txOuts := make([]*wire.TxOut, len(withdrawRequests))
 
-	for _, req := range withdrawRequests {
+	for i, req := range withdrawRequests {
 		amount, _ := sdk.ParseCoinNormalized(req.Amount)
 
-		address, _ := btcutil.DecodeAddress(req.Address, chainCfg)
-		pkScript, _ := txscript.PayToAddrScript(address)
+		address, err := btcutil.DecodeAddress(req.Address, chainCfg)
+		if err != nil {
+			return nil, nil, nil, err
+		}
 
-		txOut := wire.NewTxOut(int64(amount.Amount.Uint64()), pkScript)
-		txOuts = append(txOuts, txOut)
+		pkScript, err := txscript.PayToAddrScript(address)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+
+		txOuts[i] = wire.NewTxOut(int64(amount.Amount.Uint64()), pkScript)
 	}
 
-	changeAddress, _ := btcutil.DecodeAddress(change, chainCfg)
+	changeAddress, err := btcutil.DecodeAddress(change, chainCfg)
+	if err != nil {
+		return nil, nil, nil, err
+	}
 
 	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction([]*UTXO{}, txOuts, utxoIterator, feeRate, changeAddress)
 	if err != nil {
