@@ -20,6 +20,11 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 func handleBtcWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 	p := k.GetParams(ctx)
 
+	// check if withdrawal is enabled
+	if !p.WithdrawEnabled {
+		return
+	}
+
 	// check block height
 	if ctx.BlockHeight()%p.WithdrawParams.BtcBatchWithdrawPeriod != 0 {
 		return

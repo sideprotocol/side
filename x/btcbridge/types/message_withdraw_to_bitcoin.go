@@ -44,9 +44,13 @@ func (msg *MsgWithdrawToBitcoin) ValidateBasic() error {
 		return sdkerrors.Wrapf(err, "invalid sender address (%s)", err)
 	}
 
+	if !IsValidBtcAddress(msg.Sender) {
+		return ErrInvalidBtcAddress
+	}
+
 	_, err = sdk.ParseCoinNormalized(msg.Amount)
 	if err != nil {
-		return sdkerrors.Wrapf(ErrInvalidAmount, "invalid amount %s", msg.Amount)
+		return sdkerrors.Wrapf(err, "invalid withdrawal amount")
 	}
 
 	return nil

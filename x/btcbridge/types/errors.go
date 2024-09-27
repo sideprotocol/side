@@ -26,10 +26,10 @@ var (
 	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2111, "untrusted non btc relayer")
 	ErruntrustedOracle           = errorsmod.Register(ModuleName, 2112, "untrusted oracle")
 
-	ErrInvalidAmount                = errorsmod.Register(ModuleName, 3100, "invalid amount")
-	ErrInvalidFeeRate               = errorsmod.Register(ModuleName, 3101, "invalid fee rate")
+	ErrInvalidWithdrawAmount        = errorsmod.Register(ModuleName, 3100, "invalid withdrawal amount")
+	ErrInvalidBtcAddress            = errorsmod.Register(ModuleName, 3101, "invalid btc address")
 	ErrAssetNotSupported            = errorsmod.Register(ModuleName, 3102, "asset not supported")
-	ErrInvalidWithdrawAmount        = errorsmod.Register(ModuleName, 3103, "invalid withdrawal amount")
+	ErrInvalidFeeRate               = errorsmod.Register(ModuleName, 3103, "invalid fee rate")
 	ErrDustOutput                   = errorsmod.Register(ModuleName, 3104, "too small output amount")
 	ErrInsufficientUTXOs            = errorsmod.Register(ModuleName, 3105, "insufficient utxos")
 	ErrMaxTransactionWeightExceeded = errorsmod.Register(ModuleName, 3106, "maximum transaction weight exceeded")

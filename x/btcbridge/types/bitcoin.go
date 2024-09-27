@@ -546,6 +546,12 @@ func IsOpReturnOutput(out *wire.TxOut) bool {
 	return len(out.PkScript) > 0 && out.PkScript[0] == txscript.OP_RETURN
 }
 
+// IsValidBtcAddress returns true if the given address is a standard bitcoin address, false otherwise
+func IsValidBtcAddress(address string) bool {
+	_, err := btcutil.DecodeAddress(address, sdk.GetConfig().GetBtcChainCfg())
+	return err == nil
+}
+
 // MustPkScriptFromAddress returns the public key script of the given address
 // Panic if any error occurred
 func MustPkScriptFromAddress(address string) []byte {
