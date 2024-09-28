@@ -77,12 +77,54 @@ func (k Keeper) QueryFeeRate(goCtx context.Context, req *types.QueryFeeRateReque
 	return &types.QueryFeeRateResponse{FeeRate: feeRate}, nil
 }
 
+func (k Keeper) QueryWithdrawalNetworkFee(goCtx context.Context, req *types.QueryWithdrawalNetworkFeeRequest) (*types.QueryWithdrawalNetworkFeeResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	_, err := sdk.AccAddressFromBech32(req.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	amount, err := sdk.ParseCoinNormalized(req.Amount)
+	if err != nil {
+		return nil, err
+	}
+
+	feeRate := req.FeeRate
+	if feeRate < 0 {
+		return nil, types.ErrInvalidFeeRate
+	}
+
+	if feeRate == 0 {
+		feeRate = k.GetFeeRate(ctx)
+		if feeRate == 0 {
+			return nil, types.ErrInvalidFeeRate
+		}
+	}
+
+	networkFee, err := k.EstimateWithdrawalNetworkFee(ctx, req.Address, amount, feeRate)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryWithdrawalNetworkFeeResponse{FeeRate: feeRate, Fee: networkFee.String()}, nil
+}
+
 func (k Keeper) QueryWithdrawRequestsByAddress(goCtx context.Context, req *types.QueryWithdrawRequestsByAddressRequest) (*types.QueryWithdrawRequestsByAddressResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	_, err := sdk.AccAddressFromBech32(req.Address)
+	if err != nil {
+		return nil, err
+	}
 
 	requests := k.GetWithdrawRequestsByAddress(ctx, req.Address)
 

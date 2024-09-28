@@ -19,14 +19,14 @@ import (
 func (k Keeper) IncreaseWithdrawRequestSequence(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 
-	sequence := k.GetWithdrawSequence(ctx)
+	sequence := k.GetWithdrawRequestSequence(ctx)
 	store.Set(types.BtcWithdrawRequestSequenceKey, sdk.Uint64ToBigEndian(sequence+1))
 
 	return sequence + 1
 }
 
 // GetWithdrawRequestSequence gets the withdrawal request sequence
-func (k Keeper) GetWithdrawSequence(ctx sdk.Context) uint64 {
+func (k Keeper) GetWithdrawRequestSequence(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.BtcWithdrawRequestSequenceKey)
@@ -83,8 +83,24 @@ func (k Keeper) HandleBtcWithdrawal(ctx sdk.Context, sender string, amount sdk.C
 	// add to the pending queue
 	k.AddToBtcWithdrawRequestQueue(ctx, withdrawRequest)
 
+	feeRate := k.GetFeeRate(ctx)
+	if feeRate == 0 {
+		return nil, types.ErrInvalidFeeRate
+	}
+
+	// estimate the btc network fee
+	networkFee, err := k.EstimateWithdrawalNetworkFee(ctx, sender, amount, feeRate)
+	if err != nil {
+		return nil, err
+	}
+
 	// burn asset
 	if err := k.BurnAsset(ctx, sender, amount); err != nil {
+		return nil, err
+	}
+
+	// burn btc network fee
+	if err := k.BurnAsset(ctx, sender, networkFee); err != nil {
 		return nil, err
 	}
 
@@ -123,7 +139,7 @@ func (k Keeper) HandleRunesWithdrawal(ctx sdk.Context, sender string, amount sdk
 	}
 
 	// burn btc network fee
-	if err := k.BurnBtcNetworkFee(ctx, signingRequest.Psbt); err != nil {
+	if err := k.BurnBtcNetworkFee(ctx, sender, signingRequest.Psbt); err != nil {
 		return nil, err
 	}
 
@@ -266,12 +282,6 @@ func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawReq
 
 	txHash := psbt.UnsignedTx.TxHash().String()
 
-	// first burn btc network fee to prevent the following state change when an error returned
-	// avoid panic in EndBlocker
-	if err := k.BurnBtcNetworkFee(ctx, psbtB64); err != nil {
-		return nil, err
-	}
-
 	// lock the selected utxos
 	_ = k.LockUTXOs(ctx, selectedUTXOs)
 
@@ -289,6 +299,86 @@ func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawReq
 	k.SetSigningRequest(ctx, signingRequest)
 
 	return signingRequest, nil
+}
+
+// BuildWithdrawTx builds the bitcoin tx for the given withdrawal
+func (k Keeper) BuildWithdrawTx(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64) (*psbt.Packet, error) {
+	p := k.GetParams(ctx)
+	btcVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_BTC)
+
+	switch types.AssetTypeFromDenom(amount.Denom, p) {
+	case types.AssetType_ASSET_TYPE_BTC:
+		return k.BuildWithdrawBtcTx(ctx, sender, amount, feeRate, btcVault.Address)
+
+	case types.AssetType_ASSET_TYPE_RUNES:
+		runesVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_RUNES)
+		return k.BuildWithdrawRunesTx(ctx, sender, amount, feeRate, runesVault.Address, btcVault.Address)
+
+	default:
+		return nil, types.ErrAssetNotSupported
+	}
+}
+
+// BuildWithdrawBtcTx builds the bitcoin tx for the btc withdrawal
+func (k Keeper) BuildWithdrawBtcTx(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string) (*psbt.Packet, error) {
+	utxoIterator := k.GetUTXOIteratorByAddr(ctx, vault)
+
+	psbt, selectedUTXOs, _, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := k.checkUtxos(ctx, selectedUTXOs); err != nil {
+		return nil, err
+	}
+
+	return psbt, nil
+}
+
+// BuildWithdrawRunesTx builds the bitcoin tx for the runes withdrawal
+func (k Keeper) BuildWithdrawRunesTx(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, btcVault string) (*psbt.Packet, error) {
+	var runeId types.RuneId
+	runeId.FromDenom(amount.Denom)
+
+	runeAmount := uint128.FromBig(amount.Amount.BigInt())
+
+	runesUTXOs, runeBalancesDelta := k.GetTargetRunesUTXOs(ctx, vault, runeId.ToString(), runeAmount)
+	if len(runesUTXOs) == 0 {
+		return nil, types.ErrInsufficientUTXOs
+	}
+
+	paymentUTXOIterator := k.GetUTXOIteratorByAddr(ctx, btcVault)
+
+	psbt, selectedUTXOs, _, _, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, runeBalancesDelta, vault, btcVault)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := k.checkUtxos(ctx, runesUTXOs, selectedUTXOs); err != nil {
+		return nil, err
+	}
+
+	return psbt, nil
+}
+
+// EstimateBtcNetworkFee estimates the btc network fee for the given withdrawal
+func (k Keeper) EstimateWithdrawalNetworkFee(ctx sdk.Context, address string, amount sdk.Coin, feeRate int64) (sdk.Coin, error) {
+	psbt, err := k.BuildWithdrawTx(ctx, address, amount, feeRate)
+	if err != nil {
+		return sdk.Coin{}, err
+	}
+
+	psbtB64, err := psbt.B64Encode()
+	if err != nil {
+		return sdk.Coin{}, types.ErrFailToSerializePsbt
+	}
+
+	networkFee, err := k.getBtcNetworkFee(ctx, psbtB64)
+	if err != nil {
+		return sdk.Coin{}, err
+	}
+
+	return networkFee, nil
 }
 
 // GetWithdrawRequest gets the withdrawal request by the given sequence
@@ -614,13 +704,13 @@ func (k Keeper) BurnAsset(ctx sdk.Context, address string, amount sdk.Coin) erro
 }
 
 // BurnBtcNetworkFee burns the bitcoin network fee of the withdrawal psbt
-func (k Keeper) BurnBtcNetworkFee(ctx sdk.Context, packet string) error {
+func (k Keeper) BurnBtcNetworkFee(ctx sdk.Context, sender string, packet string) error {
 	networkFee, err := k.getBtcNetworkFee(ctx, packet)
 	if err != nil {
 		return err
 	}
 
-	return k.BurnAsset(ctx, k.ProtocolFeeCollector(ctx), networkFee)
+	return k.BurnAsset(ctx, sender, networkFee)
 }
 
 // handleWithdrawProtocolFee performs the protocol fee handling and returns the actual withdrawal amount

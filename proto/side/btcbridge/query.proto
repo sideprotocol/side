@@ -31,6 +31,10 @@ service Query {
   rpc QueryFeeRate(QueryFeeRateRequest) returns (QueryFeeRateResponse) {
     option (google.api.http).get = "/side/btcbridge/feerate";
   }
+  // QueryWithdrawalNetworkFee queries the estimated btc network fee for the given withdrawal.
+  rpc QueryWithdrawalNetworkFee(QueryWithdrawalNetworkFeeRequest) returns (QueryWithdrawalNetworkFeeResponse) {
+    option (google.api.http).get = "/side/btcbridge/withdrawal/fee/estimation";
+  }
   // QueryWithdrawRequestsByAddress queries the withdrawal requests by the given address.
   rpc QueryWithdrawRequestsByAddress(QueryWithdrawRequestsByAddressRequest) returns (QueryWithdrawRequestsByAddressResponse) {
     option (google.api.http).get = "/side/btcbridge/withdrawal/requests/address/{address}";
@@ -158,6 +162,19 @@ message QueryFeeRateRequest {}
 // QueryFeeRateResponse is response type for the Query/FeeRate RPC method.
 message QueryFeeRateResponse {
   int64 fee_rate = 1;
+}
+
+// QueryWithdrawalNetworkFeeRequest is request type for the Query/WithdrawalNetworkFee RPC method.
+message QueryWithdrawalNetworkFeeRequest {
+  string address = 1;
+  string amount = 2;
+  int64 fee_rate = 3;
+}
+
+// QueryWithdrawalNetworkFeeResponse is response type for the Query/WithdrawalNetworkFee RPC method.
+message QueryWithdrawalNetworkFeeResponse {
+  int64 fee_rate = 1;
+  string fee = 2;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
