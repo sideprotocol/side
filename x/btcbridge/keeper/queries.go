@@ -159,15 +159,19 @@ func (k Keeper) QuerySigningRequests(goCtx context.Context, req *types.QuerySign
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
+
 	if req.Status == types.SigningStatus_SIGNING_STATUS_UNSPECIFIED {
 		return nil, status.Error(codes.InvalidArgument, "invalid status")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	requests := k.FilterSigningRequestsByStatus(ctx, req)
+	requests, pagination, err := k.FilterSigningRequestsByStatus(ctx, req)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	return &types.QuerySigningRequestsResponse{Requests: requests}, nil
+	return &types.QuerySigningRequestsResponse{Requests: requests, Pagination: pagination}, nil
 }
 
 func (k Keeper) QuerySigningRequestsByAddress(goCtx context.Context, req *types.QuerySigningRequestsByAddressRequest) (*types.QuerySigningRequestsByAddressResponse, error) {

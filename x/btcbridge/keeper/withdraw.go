@@ -9,7 +9,9 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 
+	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
@@ -583,23 +585,27 @@ func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *
 }
 
 // FilterSigningRequestsByStatus filters signing requests by status with pagination
-func (k Keeper) FilterSigningRequestsByStatus(ctx sdk.Context, req *types.QuerySigningRequestsRequest) []*types.SigningRequest {
+func (k Keeper) FilterSigningRequestsByStatus(ctx sdk.Context, req *types.QuerySigningRequestsRequest) ([]*types.SigningRequest, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	signingRequestStore := prefix.NewStore(store, types.BtcSigningRequestPrefix)
+
 	var signingRequests []*types.SigningRequest
 
-	k.IterateSigningRequests(ctx, func(signingRequest *types.SigningRequest) (stop bool) {
+	pageRes, err := query.Paginate(signingRequestStore, req.Pagination, func(key []byte, value []byte) error {
+		var signingRequest types.SigningRequest
+		k.cdc.MustUnmarshal(value, &signingRequest)
+
 		if signingRequest.Status == req.Status {
-			signingRequests = append(signingRequests, signingRequest)
+			signingRequests = append(signingRequests, &signingRequest)
 		}
 
-		// pagination TODO: limit the number of signing requests
-		if len(signingRequests) >= 100 {
-			return true
-		}
-
-		return false
+		return nil
 	})
+	if err != nil {
+		return nil, nil, err
+	}
 
-	return signingRequests
+	return signingRequests, pageRes, nil
 }
 
 // FilterSigningRequestsByAddr filters signing requests by address with pagination

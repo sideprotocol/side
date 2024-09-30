@@ -92,7 +92,7 @@ service Query {
 // QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method.
 message QueryWithdrawRequestsByAddressRequest {
   string address = 1;
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 // QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method.
@@ -113,7 +113,7 @@ message QueryWithdrawRequestsByTxHashResponse {
 
 // QueryPendingBtcWithdrawRequestsRequest is request type for the Query/PendingBtcWithdrawRequests RPC method.
 message QueryPendingBtcWithdrawRequestsRequest {
-  cosmos.base.query.v1beta1.PageResponse pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
 // QueryPendingBtcWithdrawRequestsResponse is response type for the Query/PendingBtcWithdrawRequests RPC method.
@@ -125,7 +125,7 @@ message QueryPendingBtcWithdrawRequestsResponse {
 // QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method.
 message QuerySigningRequestsRequest {
   SigningStatus status = 1;
-  cosmos.base.query.v1beta1.PageResponse pagination            = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination            = 2;
 }
 
 // QuerySigningRequestsResponse is response type for the Query/SigningRequests RPC method.
@@ -137,7 +137,7 @@ message QuerySigningRequestsResponse {
 // QuerySigningRequestsByAddressRequest is request type for the Query/SigningRequestsByAddress RPC method.
 message QuerySigningRequestsByAddressRequest {
   string address = 1;
-  cosmos.base.query.v1beta1.PageResponse pagination            = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination            = 2;
 }
 
 // QuerySigningRequestsByAddressResponse is response type for the Query/SigningRequestsByAddress RPC method.
