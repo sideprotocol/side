@@ -1,7 +1,7 @@
 #!/bin/bash
 
 KEYS=("validator" "test")
-CHAINID="grimoria-testnet-1"
+CHAINID="sidechain-testnet-4"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
 DENOM_STR="uside,uusdc,uusdt"
@@ -23,6 +23,9 @@ RUNES_VAULT=()
 TRUSTED_NON_BTC_RELAYER=""
 TRUSTED_ORACLE=""
 PROTOCOL_FEE_COLLECTOR=""
+
+# gov params
+GOV_VOTING_PERIOD="1800s"
 
 # Remember to change to other types of keyring like 'file' in-case exposing to outside world,
 # otherwise your balance will be wiped quickly
@@ -95,6 +98,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg gas "$BLOCK_GAS" '.app_state["feemarket"]["block_gas"]=$gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	# Set gas limit in genesis
 	jq --arg max_gas "$MAX_GAS" '.consensus_params["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+
+    # set gov voting period
+	if [ -n "$GOV_VOTING_PERIOD" ]; then
+        jq --arg voting_period "${GOV_VOTING_PERIOD}" '.app_state["gov"]["params"]["voting_period"]=$voting_period' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	fi
 
 	# set vaults if provided
     if [[ "${#BTC_VAULT[@]}" -eq 3 && "${#RUNES_VAULT[@]}" -eq 3 ]]; then
