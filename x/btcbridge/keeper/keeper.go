@@ -211,7 +211,7 @@ func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes
 
 	best := k.GetBestBlockHeader(ctx)
 	// Check if the block is confirmed
-	if best.Height-header.Height < uint64(params.Confirmations) {
+	if best.Height-header.Height+1 < uint64(params.Confirmations) {
 		return nil, nil, types.ErrNotConfirmed
 	}
 	// Check if the block is within the acceptable depth
