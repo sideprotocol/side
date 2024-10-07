@@ -145,6 +145,11 @@ func (k Keeper) HandleRunesWithdrawal(ctx sdk.Context, sender string, amount sdk
 		return nil, err
 	}
 
+	// burn the btc value attached to the runes
+	if err := k.BurnAsset(ctx, sender, sdk.NewInt64Coin(k.BtcDenom(ctx), types.RunesOutValue)); err != nil {
+		return nil, err
+	}
+
 	return withdrawRequest, nil
 }
 
@@ -755,7 +760,7 @@ func (k Keeper) getBtcNetworkFee(ctx sdk.Context, packet string) (sdk.Coin, erro
 		return sdk.Coin{}, err
 	}
 
-	return sdk.NewCoin(k.GetParams(ctx).BtcVoucherDenom, sdk.NewInt(int64(txFee))), nil
+	return sdk.NewInt64Coin(k.BtcDenom(ctx), int64(txFee)), nil
 }
 
 // checkUtxos checks if the total count of the given utxos exceeds the allowed maximum number

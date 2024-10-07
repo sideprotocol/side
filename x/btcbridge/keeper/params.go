@@ -31,6 +31,11 @@ func (k Keeper) ProtocolFeeCollector(ctx sdk.Context) string {
 	return k.GetParams(ctx).ProtocolFees.Collector
 }
 
+// BtcDenom gets the btc denomination
+func (k Keeper) BtcDenom(ctx sdk.Context) string {
+	return k.GetParams(ctx).BtcVoucherDenom
+}
+
 // IsTrustedNonBtcRelayer returns true if the given address is a trusted non-btc relayer, false otherwise
 func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
 	for _, relayer := range k.GetParams(ctx).TrustedNonBtcRelayers {
