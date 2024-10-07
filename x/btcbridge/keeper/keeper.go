@@ -96,6 +96,8 @@ func (k Keeper) SetBlockHeader(ctx sdk.Context, header *types.BlockHeader) {
 func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHeader) error {
 	store := ctx.KVStore(k.storeKey)
 
+	params := k.GetParams(ctx)
+
 	// get the best block header
 	best := k.GetBestBlockHeader(ctx)
 
@@ -123,7 +125,11 @@ func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHead
 
 		// check whether it's next block header or not
 		if best.Hash != header.PreviousBlockHash {
-			// a forked block header is detected
+			// check if the reorg depth exceeds the safe confirmations
+			if best.Height-header.Height+1 > uint64(params.Confirmations) {
+				return types.ErrInvalidReorgDepth
+			}
+
 			// check if the new block header has more work than the old one
 			oldNode := k.GetBlockHeaderByHeight(ctx, header.Height)
 			worksOld := blockchain.CalcWork(types.BitsToTargetUint32(oldNode.Bits))
