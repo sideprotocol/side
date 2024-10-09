@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"math/big"
-
 	"lukechampine.com/uint128"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -157,7 +155,7 @@ func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string,
 	totalAmount := uint128.Zero
 	totalRuneBalances := make(types.RuneBalances, 0)
 
-	bvk.IterateRunesUTXOs(ctx, addr, runeId, func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool) {
+	bvk.IterateRunesUTXOsReverse(ctx, addr, runeId, func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool) {
 		if utxo.IsLocked {
 			return false
 		}
@@ -242,10 +240,10 @@ func (bvk *BaseUTXOViewKeeper) IterateUTXOsByAddr(ctx sdk.Context, addr string, 
 	for ; iterator.Valid(); iterator.Next() {
 		key := iterator.Key()
 
-		hash := key[1+len(addr) : 1+len(addr)+64]
-		vout := key[1+len(addr)+64:]
+		hash := string(key[1+len(addr) : 1+len(addr)+64])
+		vout := sdk.BigEndianToUint64(key[1+len(addr)+64:])
 
-		utxo := bvk.GetUTXO(ctx, string(hash), new(big.Int).SetBytes(vout).Uint64())
+		utxo := bvk.GetUTXO(ctx, hash, vout)
 		if cb(addr, utxo) {
 			break
 		}
@@ -271,21 +269,41 @@ func (bvk *BaseUTXOViewKeeper) IterateUTXOsByTxHash(ctx sdk.Context, hash string
 func (bvk *BaseUTXOViewKeeper) IterateRunesUTXOs(ctx sdk.Context, addr string, id string, cb func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool)) {
 	store := ctx.KVStore(bvk.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, append(append(types.BtcOwnerRunesUtxoKeyPrefix, []byte(addr)...), []byte(id)...))
+	iterator := sdk.KVStorePrefixIterator(store, append(append(types.BtcOwnerRunesUtxoKeyPrefix, []byte(addr)...), types.MarshalRuneIdFromString(id)...))
 	defer iterator.Close()
 
-	prefixLen := 1 + len(addr) + len(id)
+	prefixLen := 1 + len(addr) + 12
 
 	for ; iterator.Valid(); iterator.Next() {
 		key := iterator.Key()
-		value := iterator.Value()
 
-		hash := key[prefixLen : prefixLen+64]
-		vout := key[prefixLen+64:]
+		amount := types.UnmarshalRuneAmount(key[prefixLen : prefixLen+16])
+		hash := string(key[prefixLen+16 : prefixLen+16+64])
+		vout := sdk.BigEndianToUint64(key[prefixLen+16+64:])
 
-		amount := types.RuneAmountFromString(string(value))
+		utxo := bvk.GetUTXO(ctx, hash, vout)
+		if cb(addr, id, amount, utxo) {
+			break
+		}
+	}
+}
 
-		utxo := bvk.GetUTXO(ctx, string(hash), new(big.Int).SetBytes(vout).Uint64())
+func (bvk *BaseUTXOViewKeeper) IterateRunesUTXOsReverse(ctx sdk.Context, addr string, id string, cb func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool)) {
+	store := ctx.KVStore(bvk.storeKey)
+
+	iterator := sdk.KVStoreReversePrefixIterator(store, append(append(types.BtcOwnerRunesUtxoKeyPrefix, []byte(addr)...), types.MarshalRuneIdFromString(id)...))
+	defer iterator.Close()
+
+	prefixLen := 1 + len(addr) + 12
+
+	for ; iterator.Valid(); iterator.Next() {
+		key := iterator.Key()
+
+		amount := types.UnmarshalRuneAmount(key[prefixLen : prefixLen+16])
+		hash := string(key[prefixLen+16 : prefixLen+16+64])
+		vout := sdk.BigEndianToUint64(key[prefixLen+16+64:])
+
+		utxo := bvk.GetUTXO(ctx, hash, vout)
 		if cb(addr, id, amount, utxo) {
 			break
 		}
@@ -329,7 +347,7 @@ func (bk *BaseUTXOKeeper) SetOwnerUTXOByAmount(ctx sdk.Context, utxo *types.UTXO
 func (bk *BaseUTXOKeeper) SetOwnerRunesUTXO(ctx sdk.Context, utxo *types.UTXO, id string, amount string) {
 	store := ctx.KVStore(bk.storeKey)
 
-	store.Set(types.BtcOwnerRunesUtxoKey(utxo.Address, id, utxo.Txid, utxo.Vout), []byte(amount))
+	store.Set(types.BtcOwnerRunesUtxoKey(utxo.Address, id, amount, utxo.Txid, utxo.Vout), []byte{})
 }
 
 func (bk *BaseUTXOKeeper) LockUTXO(ctx sdk.Context, hash string, vout uint64) error {
@@ -431,7 +449,7 @@ func (bk *BaseUTXOKeeper) removeUTXO(ctx sdk.Context, hash string, vout uint64) 
 	store.Delete(types.BtcOwnerUtxoByAmountKey(utxo.Address, utxo.Amount, hash, vout))
 
 	for _, r := range utxo.Runes {
-		store.Delete(types.BtcOwnerRunesUtxoKey(utxo.Address, r.Id, hash, vout))
+		store.Delete(types.BtcOwnerRunesUtxoKey(utxo.Address, r.Id, r.Amount, hash, vout))
 	}
 }
 

@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/binary"
 	"fmt"
 	"strconv"
 	"strings"
@@ -123,7 +124,7 @@ func ParseEdict(payload []byte) (*Edict, error) {
 // BuildEdictScript builds the edict script
 func BuildEdictScript(runeId string, amount uint128.Uint128, output uint32) ([]byte, error) {
 	var id RuneId
-	id.MustUnmarshal([]byte(runeId))
+	id.MustUnmarshalFromString(runeId)
 
 	edict := Edict{
 		Id:     &id,
@@ -166,11 +167,25 @@ func (id *RuneId) FromString(idStr string) error {
 	return nil
 }
 
-func (id *RuneId) MustUnmarshal(bz []byte) {
-	err := id.FromString(string(bz))
+func (id *RuneId) MustUnmarshalFromString(s string) {
+	err := id.FromString(s)
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (id *RuneId) MarshalToBytes() []byte {
+	bz := make([]byte, 8+4)
+
+	binary.LittleEndian.PutUint64(bz, id.Block)
+	binary.LittleEndian.PutUint32(bz, id.Tx)
+
+	return bz
+}
+
+func (id *RuneId) UnmarshalFromBytes(bz []byte) {
+	id.Block = binary.LittleEndian.Uint64(bz[:8])
+	id.Tx = binary.LittleEndian.Uint32(bz[8:])
 }
 
 // Denom returns the corresponding denom for the runes voucher token
@@ -182,7 +197,23 @@ func (id *RuneId) Denom() string {
 func (id *RuneId) FromDenom(denom string) {
 	idStr := strings.TrimPrefix(denom, fmt.Sprintf("%s/", RunesProtocolName))
 
-	id.MustUnmarshal([]byte(idStr))
+	id.MustUnmarshalFromString(idStr)
+}
+
+// MarshalRuneIdFromString marshals the given id string
+func MarshalRuneIdFromString(s string) []byte {
+	var id RuneId
+	id.MustUnmarshalFromString(s)
+
+	return id.MarshalToBytes()
+}
+
+// UnmarshalRuneId unmarshals the given bytes to the rune id
+func UnmarshalRuneId(bz []byte) RuneId {
+	var id RuneId
+	id.UnmarshalFromBytes(bz)
+
+	return id
 }
 
 func (e *Edict) MustMarshalLEB128() []byte {
@@ -238,11 +269,31 @@ func (rbs RuneBalances) Update(id string, amount uint128.Uint128) RuneBalances {
 
 // RuneAmountFromString converts the given string to the rune amount
 // Panic if any error occurred
-func RuneAmountFromString(str string) uint128.Uint128 {
-	amount, err := uint128.FromString(str)
+func RuneAmountFromString(s string) uint128.Uint128 {
+	amount, err := uint128.FromString(s)
 	if err != nil {
 		panic(err)
 	}
 
 	return amount
+}
+
+// MarshalRuneAmount marshals the given amount
+func MarshalRuneAmount(amount uint128.Uint128) []byte {
+	bz := make([]byte, 16)
+	amount.PutBytes(bz)
+
+	return bz
+}
+
+// MarshalRuneAmountFromString marshals the given amount string
+func MarshalRuneAmountFromString(s string) []byte {
+	amount := RuneAmountFromString(s)
+
+	return MarshalRuneAmount(amount)
+}
+
+// UnmarshalRuneAmount unmarshals the given bytes to the rune amount
+func UnmarshalRuneAmount(bz []byte) uint128.Uint128 {
+	return uint128.FromBytes(bz)
 }

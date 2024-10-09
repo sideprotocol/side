@@ -97,8 +97,9 @@ func BtcOwnerUtxoByAmountKey(owner string, amount uint64, hash string, vout uint
 	return key
 }
 
-func BtcOwnerRunesUtxoKey(owner string, id string, hash string, vout uint64) []byte {
-	key := append(append(BtcOwnerRunesUtxoKeyPrefix, []byte(owner)...), []byte(id)...)
+func BtcOwnerRunesUtxoKey(owner string, id string, amount string, hash string, vout uint64) []byte {
+	key := append(append(BtcOwnerRunesUtxoKeyPrefix, []byte(owner)...), MarshalRuneIdFromString(id)...)
+	key = append(key, MarshalRuneAmountFromString(amount)...)
 	key = append(key, []byte(hash)...)
 	key = append(key, sdk.Uint64ToBigEndian(vout)...)
 
