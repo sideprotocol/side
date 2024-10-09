@@ -42,7 +42,7 @@ const (
 	SigningStatus_SIGNING_STATUS_BROADCASTED SigningStatus = 2
 	// SIGNING_STATUS_CONFIRMED - The signing request is confirmed
 	SigningStatus_SIGNING_STATUS_CONFIRMED SigningStatus = 3
-	// SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness
+	// SIGNING_STATUS_FAILED - The signing request failed to be signed or broadcast due to unexpected exceptions
 	SigningStatus_SIGNING_STATUS_FAILED SigningStatus = 4
 )
 
