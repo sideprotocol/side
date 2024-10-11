@@ -14,14 +14,13 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 
+	// set the best block header
 	k.SetBestBlockHeader(ctx, genState.BestBlockHeader)
 	k.SetBlockHeader(ctx, genState.BestBlockHeader)
 
-	if len(genState.BlockHeaders) > 0 {
-		err := k.SetBlockHeaders(ctx, genState.BlockHeaders)
-		if err != nil {
-			panic(err)
-		}
+	// set block headers
+	for _, header := range genState.BlockHeaders {
+		k.SetBlockHeader(ctx, header)
 	}
 
 	// import utxos
