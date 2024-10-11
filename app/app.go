@@ -124,6 +124,7 @@ import (
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "github.com/sideprotocol/side/app/params"
+	upgradev092 "github.com/sideprotocol/side/app/upgrades/v092"
 	"github.com/sideprotocol/side/docs"
 )
 
@@ -778,6 +779,9 @@ func New(
 	app.mm.RegisterInvariants(app.CrisisKeeper)
 	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 	app.mm.RegisterServices(app.configurator)
+
+	// set upgrade handlers
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev092.UpgradeName, upgradev092.CreateUpgradeHandler(app.mm, app.configurator))
 
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.mm.Modules))
 	reflectionSvc, err := runtimeservices.NewReflectionService()
