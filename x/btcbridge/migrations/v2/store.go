@@ -26,19 +26,21 @@ func rollbackBlockHeader(ctx sdk.Context, storeKey storetypes.StoreKey, cdc code
 	forkedBlockHeight := uint64(3077817)
 	newBestBlockHeight := forkedBlockHeight - 1
 
-	forkedBlockHeaderBz := store.Get(types.BtcBlockHeaderHeightKey(forkedBlockHeight))
-	if forkedBlockHeaderBz == nil {
+	forkedBlockHash := store.Get(types.BtcBlockHeaderHeightKey(forkedBlockHeight))
+	if forkedBlockHash == nil {
 		panic(types.ErrInvalidBlockHeader)
 	}
 
+	forkedBlockHeaderBz := store.Get(types.BtcBlockHeaderHashKey(string(forkedBlockHash)))
 	var forkedBlockHeader types.BlockHeader
 	cdc.MustUnmarshal(forkedBlockHeaderBz, &forkedBlockHeader)
 
-	newBestBlockHeaderBz := store.Get(types.BtcBlockHeaderHeightKey(newBestBlockHeight))
-	if newBestBlockHeaderBz == nil {
+	newBestBlockHash := store.Get(types.BtcBlockHeaderHeightKey(newBestBlockHeight))
+	if newBestBlockHash == nil {
 		panic(types.ErrInvalidBlockHeader)
 	}
 
+	newBestBlockHeaderBz := store.Get(types.BtcBlockHeaderHashKey(string(newBestBlockHash)))
 	var newBestBlockHeader types.BlockHeader
 	cdc.MustUnmarshal(newBestBlockHeaderBz, &newBestBlockHeader)
 
