@@ -1,6 +1,8 @@
 package v2
 
 import (
+	"time"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,7 +14,8 @@ import (
 // version 2
 func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
 	rollbackBlockHeader(ctx, storeKey, cdc)
-	markPendingSigningRequestsFailed(ctx, storeKey, cdc)
+
+	migrateSigningRequests(ctx, storeKey, cdc)
 	migrateRunes(ctx, storeKey, cdc)
 
 	return nil
@@ -53,24 +56,34 @@ func rollbackBlockHeader(ctx sdk.Context, storeKey storetypes.StoreKey, cdc code
 	store.Set(types.BtcBestBlockHeaderKey, bz)
 }
 
-// markPendingSigningRequestsFailed marks the previous pending signing requests failed to avoid bo be constantly fetched from TSSigner
-func markPendingSigningRequestsFailed(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) {
+// migrateSigningRequests migrates the signing requests to add the status store and new `CreationTime` field
+// Note: the migration will NOT add the status store for pending signing requests to avoid bo be fetched from Shutter(TSSigner)
+func migrateSigningRequests(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) {
 	store := ctx.KVStore(storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.BtcSigningRequestPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var signingRequest types.SigningRequest
-		cdc.MustUnmarshal(iterator.Value(), &signingRequest)
+		var signingRequestV1 types.SigningRequestV1
+		cdc.MustUnmarshal(iterator.Value(), &signingRequestV1)
 
-		if signingRequest.Status == types.SigningStatus_SIGNING_STATUS_PENDING {
-			signingRequest.Status = types.SigningStatus_SIGNING_STATUS_FAILED
+		// add the new `CreationTime` field
+		signingRequest := &types.SigningRequest{
+			Address:      signingRequestV1.Address,
+			Sequence:     signingRequestV1.Sequence,
+			Txid:         signingRequestV1.Txid,
+			Psbt:         signingRequestV1.Psbt,
+			CreationTime: time.Time{},
+			Status:       signingRequestV1.Status,
+		}
 
-			sequence := sdk.BigEndianToUint64(iterator.Key())
-			bz := cdc.MustMarshal(&signingRequest)
+		bz := cdc.MustMarshal(signingRequest)
+		store.Set(types.BtcSigningRequestKey(signingRequest.Sequence), bz)
 
-			store.Set(types.BtcSigningRequestKey(sequence), bz)
+		if signingRequest.Status != types.SigningStatus_SIGNING_STATUS_PENDING {
+			// add the status store
+			store.Set(types.BtcSigningRequestByStatusKey(signingRequest.Status, signingRequest.Sequence), []byte{})
 		}
 	}
 }

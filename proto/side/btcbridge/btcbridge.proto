@@ -47,6 +47,15 @@ message SigningRequest {
   SigningStatus status = 6;
 }
 
+// Bitcoin Signing Request V1
+message SigningRequestV1 {
+  string address = 1;
+  uint64 sequence = 2;
+  string txid = 3;
+  string psbt = 4;
+  SigningStatus status = 5;
+}
+
 // Withdrawal Request
 message WithdrawRequest {
   string address = 1;
