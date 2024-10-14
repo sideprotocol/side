@@ -568,8 +568,30 @@ func (k Keeper) SetSigningRequest(ctx sdk.Context, signingRequest *types.Signing
 
 	bz := k.cdc.MustMarshal(signingRequest)
 
+	k.SetSigningRequestStatus(ctx, signingRequest.Sequence, signingRequest.Status)
+
 	store.Set(types.BtcSigningRequestKey(signingRequest.Sequence), bz)
 	store.Set(types.BtcSigningRequestByTxHashKey(signingRequest.Txid), sdk.Uint64ToBigEndian(signingRequest.Sequence))
+}
+
+// SetSigningRequestStatus sets the status store of the signing request
+func (k Keeper) SetSigningRequestStatus(ctx sdk.Context, sequence uint64, status types.SigningStatus) {
+	store := ctx.KVStore(k.storeKey)
+
+	if k.HasSigningRequest(ctx, sequence) {
+		k.RemoveSigningRequestStatus(ctx, sequence)
+	}
+
+	store.Set(types.BtcSigningRequestByStatusKey(status, sequence), []byte{})
+}
+
+// RemoveSigningRequestStatus removes the status store of the signing request
+func (k Keeper) RemoveSigningRequestStatus(ctx sdk.Context, sequence uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	signingRequest := k.GetSigningRequest(ctx, sequence)
+
+	store.Delete(types.BtcSigningRequestByStatusKey(signingRequest.Status, sequence))
 }
 
 // IterateSigningRequests iterates through all signing requests
@@ -592,17 +614,15 @@ func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *
 // FilterSigningRequestsByStatus filters signing requests by status with pagination
 func (k Keeper) FilterSigningRequestsByStatus(ctx sdk.Context, req *types.QuerySigningRequestsRequest) ([]*types.SigningRequest, *query.PageResponse, error) {
 	store := ctx.KVStore(k.storeKey)
-	signingRequestStore := prefix.NewStore(store, types.BtcSigningRequestPrefix)
+	signingRequestStatusStore := prefix.NewStore(store, append(types.BtcSigningRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(req.Status))...))
 
 	var signingRequests []*types.SigningRequest
 
-	pageRes, err := query.Paginate(signingRequestStore, req.Pagination, func(key []byte, value []byte) error {
-		var signingRequest types.SigningRequest
-		k.cdc.MustUnmarshal(value, &signingRequest)
+	pageRes, err := query.Paginate(signingRequestStatusStore, req.Pagination, func(key []byte, value []byte) error {
+		sequence := sdk.BigEndianToUint64(key)
+		signingRequest := k.GetSigningRequest(ctx, sequence)
 
-		if signingRequest.Status == req.Status {
-			signingRequests = append(signingRequests, &signingRequest)
-		}
+		signingRequests = append(signingRequests, signingRequest)
 
 		return nil
 	})

@@ -33,7 +33,8 @@ var (
 	BtcSigningRequestSequenceKey        = []byte{0x24} // key for the signing request sequence
 	BtcSigningRequestPrefix             = []byte{0x25} // prefix for each key to a signing request
 	BtcSigningRequestByTxHashPrefix     = []byte{0x26} // prefix for each key to a signing request from tx hash
-	BtcMintedTxHashKeyPrefix            = []byte{0x27} // prefix for each key to a minted tx hash
+	BtcSigningRequestByStatusKeyPrefix  = []byte{0x27} // prefix for each key to a signing request by status
+	BtcMintedTxHashKeyPrefix            = []byte{0x28} // prefix for each key to a minted tx hash
 
 	BtcUtxoKeyPrefix              = []byte{0x30} // prefix for each key to a utxo
 	BtcOwnerUtxoKeyPrefix         = []byte{0x31} // prefix for each key to an owned utxo
@@ -72,6 +73,12 @@ func BtcSigningRequestKey(sequence uint64) []byte {
 
 func BtcSigningRequestByTxHashKey(txid string) []byte {
 	return append(BtcSigningRequestByTxHashPrefix, []byte(txid)...)
+}
+
+func BtcSigningRequestByStatusKey(status SigningStatus, sequence uint64) []byte {
+	key := append(BtcSigningRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...)
+
+	return append(key, sdk.Uint64ToBigEndian(sequence)...)
 }
 
 func BtcMintedTxHashKey(hash string) []byte {
