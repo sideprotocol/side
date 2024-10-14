@@ -43,7 +43,8 @@ message SigningRequest {
   uint64 sequence = 2;
   string txid = 3;
   string psbt = 4;
-  SigningStatus status = 5;
+  google.protobuf.Timestamp creation_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  SigningStatus status = 6;
 }
 
 // Withdrawal Request

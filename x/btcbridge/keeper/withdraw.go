@@ -207,11 +207,12 @@ func (k Keeper) NewBtcSigningRequest(ctx sdk.Context, sender string, amount sdk.
 	k.saveChangeUTXOs(ctx, txHash, changeUTXO)
 
 	signingRequest := &types.SigningRequest{
-		Address:  sender,
-		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     txHash,
-		Psbt:     psbtB64,
-		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
+		Address:      sender,
+		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Txid:         txHash,
+		Psbt:         psbtB64,
+		CreationTime: ctx.BlockTime(),
+		Status:       types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	k.SetSigningRequest(ctx, signingRequest)
@@ -257,11 +258,12 @@ func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sd
 	k.saveChangeUTXOs(ctx, txHash, changeUTXO, runesChangeUTXO)
 
 	signingRequest := &types.SigningRequest{
-		Address:  sender,
-		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     txHash,
-		Psbt:     psbtB64,
-		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
+		Address:      sender,
+		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Txid:         txHash,
+		Psbt:         psbtB64,
+		CreationTime: ctx.BlockTime(),
+		Status:       types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	k.SetSigningRequest(ctx, signingRequest)
@@ -296,11 +298,12 @@ func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawReq
 	k.saveChangeUTXOs(ctx, txHash, changeUTXO)
 
 	signingRequest := &types.SigningRequest{
-		Address:  authtypes.NewModuleAddress(types.ModuleName).String(),
-		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     txHash,
-		Psbt:     psbtB64,
-		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
+		Address:      authtypes.NewModuleAddress(types.ModuleName).String(),
+		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Txid:         txHash,
+		Psbt:         psbtB64,
+		CreationTime: ctx.BlockTime(),
+		Status:       types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	k.SetSigningRequest(ctx, signingRequest)

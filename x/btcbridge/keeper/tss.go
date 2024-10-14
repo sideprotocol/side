@@ -278,11 +278,12 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 			}
 
 			signingReq := &types.SigningRequest{
-				Address:  k.authority,
-				Sequence: k.IncrementSigningRequestSequence(ctx),
-				Txid:     p.UnsignedTx.TxHash().String(),
-				Psbt:     psbts[i],
-				Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
+				Address:      k.authority,
+				Sequence:     k.IncrementSigningRequestSequence(ctx),
+				Txid:         p.UnsignedTx.TxHash().String(),
+				Psbt:         psbts[i],
+				CreationTime: ctx.BlockTime(),
+				Status:       types.SigningStatus_SIGNING_STATUS_PENDING,
 			}
 
 			k.SetSigningRequest(ctx, signingReq)
@@ -467,11 +468,12 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 	k.saveChangeUTXOs(ctx, txHash, recipientUTXO)
 
 	signingReq := &types.SigningRequest{
-		Address:  k.authority,
-		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     txHash,
-		Psbt:     psbtB64,
-		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
+		Address:      k.authority,
+		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Txid:         txHash,
+		Psbt:         psbtB64,
+		CreationTime: ctx.BlockTime(),
+		Status:       types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	return signingReq, nil
@@ -533,11 +535,12 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 	k.saveChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
 
 	signingReq := &types.SigningRequest{
-		Address:  k.authority,
-		Sequence: k.IncrementSigningRequestSequence(ctx),
-		Txid:     txHash,
-		Psbt:     psbtB64,
-		Status:   types.SigningStatus_SIGNING_STATUS_PENDING,
+		Address:      k.authority,
+		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Txid:         txHash,
+		Psbt:         psbtB64,
+		CreationTime: ctx.BlockTime(),
+		Status:       types.SigningStatus_SIGNING_STATUS_PENDING,
 	}
 
 	return signingReq, nil
