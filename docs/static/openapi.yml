@@ -51578,6 +51578,9 @@ paths:
                       type: string
                     psbt:
                       type: string
+                    creation_time:
+                      type: string
+                      format: date-time
                     status:
                       type: string
                       enum:
@@ -51914,6 +51917,9 @@ paths:
                       type: string
                     psbt:
                       type: string
+                    creation_time:
+                      type: string
+                      format: date-time
                     status:
                       type: string
                       enum:
@@ -52235,6 +52241,9 @@ paths:
                     type: string
                   psbt:
                     type: string
+                  creation_time:
+                    type: string
+                    format: date-time
                   status:
                     type: string
                     enum:
@@ -85013,6 +85022,9 @@ definitions:
             type: string
           psbt:
             type: string
+          creation_time:
+            type: string
+            format: date-time
           status:
             type: string
             enum:
@@ -85051,6 +85063,9 @@ definitions:
               type: string
             psbt:
               type: string
+            creation_time:
+              type: string
+              format: date-time
             status:
               type: string
               enum:
@@ -85115,6 +85130,9 @@ definitions:
               type: string
             psbt:
               type: string
+            creation_time:
+              type: string
+              format: date-time
             status:
               type: string
               enum:
@@ -85385,6 +85403,9 @@ definitions:
         type: string
       psbt:
         type: string
+      creation_time:
+        type: string
+        format: date-time
       status:
         type: string
         enum:
