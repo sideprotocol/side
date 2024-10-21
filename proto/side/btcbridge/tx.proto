@@ -26,6 +26,8 @@ service Msg {
   rpc WithdrawToBitcoin (MsgWithdrawToBitcoin) returns (MsgWithdrawToBitcoinResponse);
   // SubmitSignatures submits the signatures of the signing request to the side chain.
   rpc SubmitSignatures (MsgSubmitSignatures) returns (MsgSubmitSignaturesResponse);
+  // TerminateSigningRequests terminates the pending signing requests of the given vault version.
+  rpc TerminateSigningRequests (MsgTerminateSigningRequests) returns (MsgTerminateSigningRequestsResponse);
   // ConsolidateVaults performs the utxo consolidation for the given vaults.
   rpc ConsolidateVaults (MsgConsolidateVaults) returns (MsgConsolidateVaultsResponse);
   // InitiateDKG initiates the DKG request.
@@ -133,6 +135,17 @@ message MsgSubmitSignatures {
 // MsgSubmitSignaturesResponse defines the Msg/SubmitSignatures response type.
 message MsgSubmitSignaturesResponse {
 }
+
+// MsgTerminateSigningRequests is the Msg/TerminateSigningRequests request type.
+message MsgTerminateSigningRequests {
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // vault version
+  uint64 vault_version = 2;
+}
+
+// MsgTerminateSigningRequestsResponse defines the Msg/TerminateSigningRequests response type.
+message MsgTerminateSigningRequestsResponse {}
 
 // MsgConsolidateVaults is the Msg/ConsolidateVaults request type.
 message MsgConsolidateVaults {

@@ -1,6 +1,11 @@
 package keeper
 
 import (
+	"bytes"
+
+	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcd/txscript"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
@@ -69,6 +74,29 @@ func (k Keeper) GetVaultByAssetTypeAndVersion(ctx sdk.Context, assetType types.A
 	return nil
 }
 
+// GetVaultByPkScript returns the vault by the given pk script
+func (k Keeper) GetVaultByPkScript(ctx sdk.Context, pkScript []byte) *types.Vault {
+	chainCfg := sdk.GetConfig().GetBtcChainCfg()
+
+	for _, v := range k.GetParams(ctx).Vaults {
+		addr, err := btcutil.DecodeAddress(v.Address, chainCfg)
+		if err != nil {
+			continue
+		}
+
+		addrScript, err := txscript.PayToAddrScript(addr)
+		if err != nil {
+			continue
+		}
+
+		if bytes.Equal(addrScript, pkScript) {
+			return v
+		}
+	}
+
+	return nil
+}
+
 // GetVaultVersionByAddress gets the vault version of the given address
 func (k Keeper) GetVaultVersionByAddress(ctx sdk.Context, address string) (uint64, bool) {
 	for _, v := range k.GetParams(ctx).Vaults {
@@ -78,6 +106,17 @@ func (k Keeper) GetVaultVersionByAddress(ctx sdk.Context, address string) (uint6
 	}
 
 	return 0, false
+}
+
+// VaultVersionExists returns true if the given vault version exists, false otherwise
+func (k Keeper) VaultVersionExists(ctx sdk.Context, version uint64) bool {
+	for _, v := range k.GetParams(ctx).Vaults {
+		if v.Version == version {
+			return true
+		}
+	}
+
+	return false
 }
 
 // EnableBridge enables the bridge deposit and withdrawal

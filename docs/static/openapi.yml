@@ -84289,6 +84289,11 @@ definitions:
     description: >-
       MsgSubmitWithdrawTransactionResponse defines the
       Msg/SubmitWithdrawTransaction response type.
+  side.btcbridge.MsgTerminateSigningRequestsResponse:
+    type: object
+    description: >-
+      MsgTerminateSigningRequestsResponse defines the
+      Msg/TerminateSigningRequests response type.
   side.btcbridge.MsgTransferVaultResponse:
     type: object
     description: MsgTransferVaultResponse defines the Msg/TransferVault response type.

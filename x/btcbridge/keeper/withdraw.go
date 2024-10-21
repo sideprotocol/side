@@ -614,6 +614,24 @@ func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *
 	}
 }
 
+// IterateSigningRequestsByStatus iterates through signing requests by the given status
+func (k Keeper) IterateSigningRequestsByStatus(ctx sdk.Context, status types.SigningStatus, cb func(signingRequest *types.SigningRequest) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+	signingRequestStatusStore := prefix.NewStore(store, append(types.BtcSigningRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...))
+
+	iterator := signingRequestStatusStore.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		sequence := sdk.BigEndianToUint64(iterator.Key())
+		signingRequest := k.GetSigningRequest(ctx, sequence)
+
+		if cb(signingRequest) {
+			break
+		}
+	}
+}
+
 // FilterSigningRequestsByStatus filters signing requests by status with pagination
 func (k Keeper) FilterSigningRequestsByStatus(ctx sdk.Context, req *types.QuerySigningRequestsRequest) ([]*types.SigningRequest, *query.PageResponse, error) {
 	store := ctx.KVStore(k.storeKey)
@@ -686,6 +704,30 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 	k.unlockChangeUTXOs(ctx, txHash.String())
 
 	return txHash, nil
+}
+
+// TerminateSigningRequests terminates the pending signing requests of the given vault version
+func (k Keeper) TerminateSigningRequests(ctx sdk.Context, vaultVersion uint64) error {
+	if !k.VaultVersionExists(ctx, vaultVersion) {
+		return types.ErrInvalidVaultVersion
+	}
+
+	k.IterateSigningRequestsByStatus(ctx, types.SigningStatus_SIGNING_STATUS_PENDING, func(signingRequest *types.SigningRequest) (stop bool) {
+		// error ignored due to that the psbt is valid
+		p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(signingRequest.Psbt)), true)
+
+		// check if the first input address conforms to the vault version
+		vault := k.GetVaultByPkScript(ctx, p.Inputs[0].WitnessUtxo.PkScript)
+		if vault != nil && vault.Version == vaultVersion {
+			// update the status to failed
+			signingRequest.Status = types.SigningStatus_SIGNING_STATUS_FAILED
+			k.SetSigningRequest(ctx, signingRequest)
+		}
+
+		return false
+	})
+
+	return nil
 }
 
 // spendUTXOs spends locked utxos

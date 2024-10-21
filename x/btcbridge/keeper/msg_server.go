@@ -245,6 +245,25 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	return &types.MsgSubmitSignaturesResponse{}, nil
 }
 
+// TerminateSigningRequests terminates the pending signing requests of the specified vault version
+func (m msgServer) TerminateSigningRequests(goCtx context.Context, msg *types.MsgTerminateSigningRequests) (*types.MsgTerminateSigningRequestsResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := m.Keeper.TerminateSigningRequests(ctx, msg.VaultVersion); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgTerminateSigningRequestsResponse{}, nil
+}
+
 // ConsolidateVaults performs the UTXO consolidation for the given vaults.
 func (m msgServer) ConsolidateVaults(goCtx context.Context, msg *types.MsgConsolidateVaults) (*types.MsgConsolidateVaultsResponse, error) {
 	if m.authority != msg.Authority {
