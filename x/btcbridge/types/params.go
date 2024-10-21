@@ -29,6 +29,9 @@ var (
 
 	// default TSS participant update transition period
 	DefaultTSSParticipantUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
+
+	// default duration per TSS signing epoch
+	DefaultTSSSigningEpochDuration = time.Duration(5) * time.Minute // 5 mins
 )
 
 // NewParams creates a new Params instance
@@ -60,6 +63,7 @@ func NewParams() Params {
 		TssParams: TSSParams{
 			DkgTimeoutPeriod:                  DefaultDKGTimeoutPeriod,
 			ParticipantUpdateTransitionPeriod: DefaultTSSParticipantUpdateTransitionPeriod,
+			SigningEpochDuration:              DefaultTSSSigningEpochDuration,
 		},
 	}
 }

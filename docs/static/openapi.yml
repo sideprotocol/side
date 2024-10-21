@@ -51364,6 +51364,9 @@ paths:
                         title: >-
                           Transition period after which TSS participants update
                           process is completed
+                      signing_epoch_duration:
+                        type: string
+                        title: Duration per signing epoch
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -84444,6 +84447,9 @@ definitions:
             title: >-
               Transition period after which TSS participants update process is
               completed
+          signing_epoch_duration:
+            type: string
+            title: Duration per signing epoch
     description: Params defines the parameters for the module.
   side.btcbridge.ProtocolFees:
     type: object
@@ -84964,6 +84970,9 @@ definitions:
                 title: >-
                   Transition period after which TSS participants update process
                   is completed
+              signing_epoch_duration:
+                type: string
+                title: Duration per signing epoch
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   side.btcbridge.QueryPendingBtcWithdrawRequestsResponse:
     type: object
@@ -85457,6 +85466,9 @@ definitions:
         title: >-
           Transition period after which TSS participants update process is
           completed
+      signing_epoch_duration:
+        type: string
+        title: Duration per signing epoch
     title: TSSParams defines the params related to TSS
   side.btcbridge.UTXO:
     type: object

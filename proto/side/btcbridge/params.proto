@@ -35,6 +35,34 @@ message Params {
   TSSParams tss_params = 12 [(gogoproto.nullable) = false];
 }
 
+// ParamsV1 defines the parameters for the module v1.
+message ParamsV1 {
+  // The minimum number of confirmations required for a block to be accepted
+  int32 confirmations = 1;
+  // Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
+  uint64 max_acceptable_block_depth = 2;
+  // The denomination of the voucher
+  string btc_voucher_denom = 3;
+  // Indicates if deposit is enabled
+  bool deposit_enabled = 4;
+  // Indicates if withdrawal is enabled
+  bool withdraw_enabled = 5;
+  // Trusted relayers for non-btc asset deposit
+  repeated string trusted_non_btc_relayers = 6;
+  // Trusted oracles for providing offchain data, e.g. bitcoin fee rate
+  repeated string trusted_oracles = 7;
+  // Asset vaults
+  repeated Vault vaults = 8;
+  // Withdrawal params
+  WithdrawParams withdraw_params = 9 [(gogoproto.nullable) = false];
+  // Protocol limitations
+  ProtocolLimits protocol_limits = 10 [(gogoproto.nullable) = false];
+  // Protocol fees
+  ProtocolFees protocol_fees = 11 [(gogoproto.nullable) = false];
+  // TSS params
+  TSSParamsV1 tss_params = 12 [(gogoproto.nullable) = false];
+}
+
 // AssetType defines the type of asset
 enum AssetType {
   // Unspecified asset type
@@ -90,6 +118,16 @@ message ProtocolFees {
 
 // TSSParams defines the params related to TSS
 message TSSParams {
+  // Timeout duration for DKG request
+  google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  // Transition period after which TSS participants update process is completed
+  google.protobuf.Duration participant_update_transition_period = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  // Duration per signing epoch
+  google.protobuf.Duration signing_epoch_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// TSSParamsV1 defines the params related to TSS for v1
+message TSSParamsV1 {
   // Timeout duration for DKG request
   google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
   // Transition period after which TSS participants update process is completed
