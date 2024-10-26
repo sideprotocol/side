@@ -126,6 +126,7 @@ import (
 	appparams "github.com/sideprotocol/side/app/params"
 	upgradev092 "github.com/sideprotocol/side/app/upgrades/v092"
 	upgradev093 "github.com/sideprotocol/side/app/upgrades/v093"
+	upgradev094 "github.com/sideprotocol/side/app/upgrades/v094"
 	"github.com/sideprotocol/side/docs"
 )
 
@@ -784,6 +785,7 @@ func New(
 	// set upgrade handlers
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev092.UpgradeName, upgradev092.CreateUpgradeHandler(app.mm, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev093.UpgradeName, upgradev093.CreateUpgradeHandler(app.mm, app.configurator))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev094.UpgradeName, upgradev094.CreateUpgradeHandler(app.mm, app.configurator))
 
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.mm.Modules))
 	reflectionSvc, err := runtimeservices.NewReflectionService()
