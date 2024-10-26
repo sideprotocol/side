@@ -363,7 +363,7 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 		}
 
 		if assetType == types.AssetType_ASSET_TYPE_RUNES && vault.AssetType == types.AssetType_ASSET_TYPE_RUNES {
-			runeBalances = append(runeBalances, utxo.Runes...)
+			runeBalances = runeBalances.Merge(utxo.Runes)
 		}
 
 		_ = k.LockUTXO(ctx, hash, uint64(vout))
@@ -413,7 +413,7 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 					Amount:       uint64(out.Value),
 					PubKeyScript: out.PkScript,
 					IsLocked:     true,
-					Runes:        runeBalances.Compact(),
+					Runes:        runeBalances,
 				}
 
 				k.saveUTXO(ctx, utxo)
@@ -490,7 +490,7 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 		}
 
 		runesUtxos = append(runesUtxos, utxo)
-		runeBalances = append(runeBalances, utxo.Runes...)
+		runeBalances = runeBalances.Merge(utxo.Runes)
 
 		return len(runesUtxos) >= int(targetUtxoNum)
 	})
@@ -511,7 +511,7 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 
 	btcUtxoIterator := k.GetUTXOIteratorByAddr(ctx, sourceBtcVault.Address)
 
-	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destVault.Address, runeBalances.Compact(), feeRate, destBtcVault.Address)
+	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destVault.Address, runeBalances, feeRate, destBtcVault.Address)
 	if err != nil {
 		return nil, err
 	}

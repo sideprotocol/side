@@ -232,20 +232,32 @@ func (e *Edict) MustMarshalLEB128() []byte {
 // RuneBalances defines a set of rune balances
 type RuneBalances []*RuneBalance
 
-// Compact gets the compact rune balances
-func (rbs RuneBalances) Compact() RuneBalances {
-	balanceMap := make(map[string]uint128.Uint128)
-
-	for _, balance := range rbs {
-		balanceMap[balance.Id] = balanceMap[balance.Id].Add(RuneAmountFromString(balance.Amount))
+// GetBalance gets the rune balance by id
+func (rbs RuneBalances) GetBalance(id string) (int, uint128.Uint128) {
+	for i, balance := range rbs {
+		if balance.Id == id {
+			return i, RuneAmountFromString(balance.Amount)
+		}
 	}
 
-	compactBalances := make([]*RuneBalance, 0, len(balanceMap))
-	for id, amount := range balanceMap {
-		compactBalances = append(compactBalances, &RuneBalance{Id: id, Amount: amount.String()})
+	return -1, uint128.Zero
+}
+
+// Merge merges the another rune balances
+func (rbs RuneBalances) Merge(other RuneBalances) RuneBalances {
+	var result RuneBalances
+	result = append(result, rbs...)
+
+	for _, ob := range other {
+		i, b := result.GetBalance(ob.Id)
+		if !b.IsZero() {
+			result[i].Amount = b.Add(RuneAmountFromString(ob.Amount)).String()
+		} else {
+			result = append(result, ob)
+		}
 	}
 
-	return compactBalances
+	return result
 }
 
 // Update updates the balance to the specified amount for the given rune id

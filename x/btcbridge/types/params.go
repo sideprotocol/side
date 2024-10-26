@@ -122,7 +122,7 @@ func SelectVaultByPubKey(vaults []*Vault, pubKey string) *Vault {
 
 // SelectVaultByAssetType returns the vault by the asset type of the highest version
 func SelectVaultByAssetType(vaults []*Vault, assetType AssetType) *Vault {
-	sort.Slice(vaults, func(i int, j int) bool {
+	sort.SliceStable(vaults, func(i int, j int) bool {
 		return vaults[i].Version > vaults[j].Version
 	})
 
