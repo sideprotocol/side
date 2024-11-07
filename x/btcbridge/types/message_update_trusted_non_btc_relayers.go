@@ -1,7 +1,7 @@
 package types
 
 import (
-	sdkerrors "cosmossdk.io/errors"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -41,17 +41,17 @@ func (msg *MsgUpdateTrustedNonBtcRelayers) GetSignBytes() []byte {
 func (msg *MsgUpdateTrustedNonBtcRelayers) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return sdkerrors.Wrapf(err, "invalid sender address (%s)", err)
+		return errorsmod.Wrapf(err, "invalid sender address (%s)", err)
 	}
 
 	if len(msg.Relayers) == 0 {
-		return sdkerrors.Wrapf(ErrInvalidRelayers, "relayers can not be empty")
+		return errorsmod.Wrapf(ErrInvalidRelayers, "relayers can not be empty")
 	}
 
 	for _, relayer := range msg.Relayers {
 		_, err := sdk.AccAddressFromBech32(relayer)
 		if err != nil {
-			return sdkerrors.Wrapf(err, "invalid relayer address (%s)", err)
+			return errorsmod.Wrapf(err, "invalid relayer address (%s)", err)
 		}
 	}
 

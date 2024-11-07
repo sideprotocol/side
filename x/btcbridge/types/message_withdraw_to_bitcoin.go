@@ -1,7 +1,7 @@
 package types
 
 import (
-	sdkerrors "cosmossdk.io/errors"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -41,7 +41,7 @@ func (msg *MsgWithdrawToBitcoin) GetSignBytes() []byte {
 func (msg *MsgWithdrawToBitcoin) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return sdkerrors.Wrapf(err, "invalid sender address (%s)", err)
+		return errorsmod.Wrapf(err, "invalid sender address (%s)", err)
 	}
 
 	if !IsValidBtcAddress(msg.Sender) {
@@ -50,7 +50,7 @@ func (msg *MsgWithdrawToBitcoin) ValidateBasic() error {
 
 	_, err = sdk.ParseCoinNormalized(msg.Amount)
 	if err != nil {
-		return sdkerrors.Wrapf(err, "invalid withdrawal amount")
+		return errorsmod.Wrapf(err, "invalid withdrawal amount")
 	}
 
 	return nil

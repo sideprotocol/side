@@ -1,7 +1,7 @@
 package types
 
 import (
-	sdkerrors "cosmossdk.io/errors"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -47,23 +47,23 @@ func (msg *MsgSubmitDepositTransaction) GetSignBytes() []byte {
 func (msg *MsgSubmitDepositTransaction) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return sdkerrors.Wrapf(err, "invalid sender address (%s)", err)
+		return errorsmod.Wrapf(err, "invalid sender address (%s)", err)
 	}
 
 	if len(msg.Blockhash) == 0 {
-		return sdkerrors.Wrap(ErrInvalidBtcTransaction, "blockhash cannot be empty")
+		return errorsmod.Wrap(ErrInvalidBtcTransaction, "blockhash cannot be empty")
 	}
 
 	if len(msg.PrevTxBytes) == 0 {
-		return sdkerrors.Wrap(ErrInvalidBtcTransaction, "previous transaction cannot be empty")
+		return errorsmod.Wrap(ErrInvalidBtcTransaction, "previous transaction cannot be empty")
 	}
 
 	if len(msg.TxBytes) == 0 {
-		return sdkerrors.Wrap(ErrInvalidBtcTransaction, "transaction cannot be empty")
+		return errorsmod.Wrap(ErrInvalidBtcTransaction, "transaction cannot be empty")
 	}
 
 	if len(msg.Proof) == 0 {
-		return sdkerrors.Wrap(ErrInvalidBtcTransaction, "proof cannot be empty")
+		return errorsmod.Wrap(ErrInvalidBtcTransaction, "proof cannot be empty")
 	}
 
 	return nil

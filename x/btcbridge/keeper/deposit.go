@@ -7,6 +7,7 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
@@ -117,7 +118,7 @@ func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipien
 }
 
 func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vaults []string, outs []*wire.TxOut, vouts []int, id *types.RuneId, amount string) error {
-	coins := sdk.NewCoins(sdk.NewCoin(id.Denom(), sdk.NewIntFromBigInt(types.RuneAmountFromString(amount).Big())))
+	coins := sdk.NewCoins(sdk.NewCoin(id.Denom(), sdkmath.NewIntFromBigInt(types.RuneAmountFromString(amount).Big())))
 
 	recipientAddr, err := sdk.AccAddressFromBech32(recipient)
 	if err != nil {

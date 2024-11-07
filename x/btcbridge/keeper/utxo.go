@@ -3,8 +3,8 @@ package keeper
 import (
 	"lukechampine.com/uint128"
 
+	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
@@ -106,7 +106,7 @@ func (bvk *BaseUTXOViewKeeper) GetUTXOsByAddr(ctx sdk.Context, addr string) []*t
 
 func (bvk *BaseUTXOViewKeeper) GetUTXOIteratorByAddr(ctx sdk.Context, addr string) types.UTXOIterator {
 	store := ctx.KVStore(bvk.storeKey)
-	iterator := sdk.KVStoreReversePrefixIterator(store, append(types.BtcOwnerUtxoByAmountKeyPrefix, []byte(addr)...))
+	iterator := storetypes.KVStoreReversePrefixIterator(store, append(types.BtcOwnerUtxoByAmountKeyPrefix, []byte(addr)...))
 
 	return &UTXOIterator{
 		ctx:      ctx,
@@ -218,7 +218,7 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOCountAndBalancesByAddr(ctx sdk.Con
 func (bvk *BaseUTXOViewKeeper) IterateAllUTXOs(ctx sdk.Context, cb func(utxo *types.UTXO) (stop bool)) {
 	store := ctx.KVStore(bvk.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.BtcUtxoKeyPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcUtxoKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -234,7 +234,7 @@ func (bvk *BaseUTXOViewKeeper) IterateAllUTXOs(ctx sdk.Context, cb func(utxo *ty
 func (bvk *BaseUTXOViewKeeper) IterateUTXOsByAddr(ctx sdk.Context, addr string, cb func(addr string, utxo *types.UTXO) (stop bool)) {
 	store := ctx.KVStore(bvk.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, append(types.BtcOwnerUtxoKeyPrefix, []byte(addr)...))
+	iterator := storetypes.KVStorePrefixIterator(store, append(types.BtcOwnerUtxoKeyPrefix, []byte(addr)...))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -253,7 +253,7 @@ func (bvk *BaseUTXOViewKeeper) IterateUTXOsByAddr(ctx sdk.Context, addr string, 
 func (bvk *BaseUTXOViewKeeper) IterateUTXOsByTxHash(ctx sdk.Context, hash string, cb func(utxo *types.UTXO) (stop bool)) {
 	store := ctx.KVStore(bvk.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, append(types.BtcUtxoKeyPrefix, []byte(hash)...))
+	iterator := storetypes.KVStorePrefixIterator(store, append(types.BtcUtxoKeyPrefix, []byte(hash)...))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -269,7 +269,7 @@ func (bvk *BaseUTXOViewKeeper) IterateUTXOsByTxHash(ctx sdk.Context, hash string
 func (bvk *BaseUTXOViewKeeper) IterateRunesUTXOs(ctx sdk.Context, addr string, id string, cb func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool)) {
 	store := ctx.KVStore(bvk.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, append(append(types.BtcOwnerRunesUtxoKeyPrefix, []byte(addr)...), types.MarshalRuneIdFromString(id)...))
+	iterator := storetypes.KVStorePrefixIterator(store, append(append(types.BtcOwnerRunesUtxoKeyPrefix, []byte(addr)...), types.MarshalRuneIdFromString(id)...))
 	defer iterator.Close()
 
 	prefixLen := 1 + len(addr) + 12
@@ -291,7 +291,7 @@ func (bvk *BaseUTXOViewKeeper) IterateRunesUTXOs(ctx sdk.Context, addr string, i
 func (bvk *BaseUTXOViewKeeper) IterateRunesUTXOsReverse(ctx sdk.Context, addr string, id string, cb func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool)) {
 	store := ctx.KVStore(bvk.storeKey)
 
-	iterator := sdk.KVStoreReversePrefixIterator(store, append(append(types.BtcOwnerRunesUtxoKeyPrefix, []byte(addr)...), types.MarshalRuneIdFromString(id)...))
+	iterator := storetypes.KVStoreReversePrefixIterator(store, append(append(types.BtcOwnerRunesUtxoKeyPrefix, []byte(addr)...), types.MarshalRuneIdFromString(id)...))
 	defer iterator.Close()
 
 	prefixLen := 1 + len(addr) + 12
@@ -459,7 +459,7 @@ type UTXOIterator struct {
 	ctx    sdk.Context
 	keeper UTXOViewKeeper
 
-	iterator sdk.Iterator
+	iterator storetypes.Iterator
 	address  string
 }
 

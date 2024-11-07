@@ -9,7 +9,8 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 
-	"github.com/cosmos/cosmos-sdk/store/prefix"
+	"cosmossdk.io/store/prefix"
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -483,7 +484,7 @@ func (k Keeper) RemoveFromBtcWithdrawRequestQueue(ctx sdk.Context, req *types.Wi
 func (k Keeper) IterateWithdrawRequests(ctx sdk.Context, cb func(req *types.WithdrawRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.BtcWithdrawRequestKeyPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcWithdrawRequestKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -500,7 +501,7 @@ func (k Keeper) IterateWithdrawRequests(ctx sdk.Context, cb func(req *types.With
 func (k Keeper) IterateWithdrawRequestsByTxHash(ctx sdk.Context, txHash string, cb func(req *types.WithdrawRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, append(types.BtcWithdrawRequestByTxHashKeyPrefix, []byte(txHash)...))
+	iterator := storetypes.KVStorePrefixIterator(store, append(types.BtcWithdrawRequestByTxHashKeyPrefix, []byte(txHash)...))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -517,7 +518,7 @@ func (k Keeper) IterateWithdrawRequestsByTxHash(ctx sdk.Context, txHash string, 
 func (k Keeper) IterateBtcWithdrawRequestQueue(ctx sdk.Context, cb func(req *types.WithdrawRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.BtcWithdrawRequestQueueKeyPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcWithdrawRequestQueueKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -601,7 +602,7 @@ func (k Keeper) RemoveSigningRequestStatus(ctx sdk.Context, sequence uint64) {
 func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *types.SigningRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.BtcSigningRequestPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcSigningRequestPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {

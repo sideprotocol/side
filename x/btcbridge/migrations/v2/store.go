@@ -3,8 +3,8 @@ package v2
 import (
 	"time"
 
+	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
@@ -61,7 +61,7 @@ func rollbackBlockHeader(ctx sdk.Context, storeKey storetypes.StoreKey, cdc code
 func migrateSigningRequests(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) {
 	store := ctx.KVStore(storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.BtcSigningRequestPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcSigningRequestPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -92,7 +92,7 @@ func migrateSigningRequests(ctx sdk.Context, storeKey storetypes.StoreKey, cdc c
 func migrateRunes(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) {
 	store := ctx.KVStore(storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.BtcOwnerRunesUtxoKeyPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcOwnerRunesUtxoKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
