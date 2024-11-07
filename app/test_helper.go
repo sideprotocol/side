@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/cometbft/cometbft/crypto/secp256k1"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	tmtypes "github.com/cometbft/cometbft/types"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	cmttypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/testutil/mock"
 	"github.com/stretchr/testify/require"
 
@@ -44,8 +44,8 @@ func Setup(t *testing.T) *App {
 	require.NoError(t, err)
 
 	// create validator set with single validator
-	validator := tmtypes.NewValidator(pubKey, 1)
-	valSet := tmtypes.NewValidatorSet([]*tmtypes.Validator{validator})
+	validator := cmttypes.NewValidator(pubKey, 1)
+	valSet := cmttypes.NewValidatorSet([]*cmttypes.Validator{validator})
 
 	// generate genesis account
 	senderPrivKey := secp256k1.GenPrivKey()
@@ -65,7 +65,7 @@ func Setup(t *testing.T) *App {
 
 func genesisStateWithValSet(t *testing.T,
 	app *App, genesisState GenesisState,
-	valSet *tmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount,
+	valSet *cmttypes.ValidatorSet, genAccs []authtypes.GenesisAccount,
 	balances ...banktypes.Balance,
 ) GenesisState {
 	// set genesis accounts
@@ -135,7 +135,7 @@ func genesisStateWithValSet(t *testing.T,
 // that also act as delegators. For simplicity, each validator is bonded with a delegation
 // of one consensus engine unit (10^6) in the default token of the simapp from first genesis
 // account. A Nop logger is set in App.
-func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *App {
+func SetupWithGenesisValSet(t *testing.T, valSet *cmttypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *App {
 	t.Helper()
 
 	app, genesisState := setup(true, 5)
@@ -156,7 +156,7 @@ func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs 
 	// commit genesis changes
 	app.Commit()
 
-	_, err = app.BeginBlocker(app.NewContextLegacy(true, tmproto.Header{
+	_, err = app.BeginBlocker(app.NewContextLegacy(true, cmtproto.Header{
 		Height:             app.LastBlockHeight() + 1,
 		AppHash:            app.LastCommitID().Hash,
 		ValidatorsHash:     valSet.Hash(),
