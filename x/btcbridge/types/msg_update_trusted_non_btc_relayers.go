@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgUpdateTrustedNonBtcRelayers = "update_trusted_non_btc_relayers"
+var _ sdk.Msg = &MsgUpdateTrustedNonBtcRelayers{}
 
 func NewMsgUpdateTrustedNonBtcRelayers(
 	sender string,
@@ -15,27 +15,6 @@ func NewMsgUpdateTrustedNonBtcRelayers(
 		Sender:   sender,
 		Relayers: relayers,
 	}
-}
-
-func (msg *MsgUpdateTrustedNonBtcRelayers) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgUpdateTrustedNonBtcRelayers) Type() string {
-	return TypeMsgUpdateTrustedNonBtcRelayers
-}
-
-func (msg *MsgUpdateTrustedNonBtcRelayers) GetSigners() []sdk.AccAddress {
-	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{Sender}
-}
-
-func (msg *MsgUpdateTrustedNonBtcRelayers) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgUpdateTrustedNonBtcRelayers) ValidateBasic() error {

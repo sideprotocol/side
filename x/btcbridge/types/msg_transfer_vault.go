@@ -11,28 +11,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-const TypeMsgTransferVault = "transfer_vault"
-
-// Route returns the route of MsgTransferVault.
-func (msg *MsgTransferVault) Route() string {
-	return RouterKey
-}
-
-// Type returns the type of MsgTransferVault.
-func (msg *MsgTransferVault) Type() string {
-	return TypeMsgTransferVault
-}
-
-// GetSignBytes implements the LegacyMsg interface.
-func (m MsgTransferVault) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
-
-// GetSigners returns the expected signers for a MsgTransferVault message.
-func (m *MsgTransferVault) GetSigners() []sdk.AccAddress {
-	addr, _ := sdk.AccAddressFromBech32(m.Authority)
-	return []sdk.AccAddress{addr}
-}
+var _ sdk.Msg = &MsgTransferVault{}
 
 // ValidateBasic performs basic MsgTransferVault message validation.
 func (m *MsgTransferVault) ValidateBasic() error {

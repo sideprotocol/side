@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgWithdrawToBitcoin = "withdraw_to_bitcoin"
+var _ sdk.Msg = &MsgWithdrawToBitcoin{}
 
 func NewMsgWithdrawToBitcoin(
 	sender string,
@@ -15,27 +15,6 @@ func NewMsgWithdrawToBitcoin(
 		Sender: sender,
 		Amount: amount,
 	}
-}
-
-func (msg *MsgWithdrawToBitcoin) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgWithdrawToBitcoin) Type() string {
-	return TypeMsgWithdrawToBitcoin
-}
-
-func (msg *MsgWithdrawToBitcoin) GetSigners() []sdk.AccAddress {
-	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{Sender}
-}
-
-func (msg *MsgWithdrawToBitcoin) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgWithdrawToBitcoin) ValidateBasic() error {

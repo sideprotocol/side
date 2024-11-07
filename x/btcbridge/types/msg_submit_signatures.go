@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgSubmitSignatures = "submit_signatures"
+var _ sdk.Msg = &MsgSubmitSignatures{}
 
 func NewMsgSubmitSignatures(
 	sender string,
@@ -17,27 +17,6 @@ func NewMsgSubmitSignatures(
 		Txid:   txid,
 		Psbt:   pbst,
 	}
-}
-
-func (msg *MsgSubmitSignatures) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgSubmitSignatures) Type() string {
-	return TypeMsgSubmitSignatures
-}
-
-func (msg *MsgSubmitSignatures) GetSigners() []sdk.AccAddress {
-	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{Sender}
-}
-
-func (msg *MsgSubmitSignatures) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgSubmitSignatures) ValidateBasic() error {

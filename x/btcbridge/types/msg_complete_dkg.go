@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgCompleteDKG = "complete_dkg"
+var _ sdk.Msg = &MsgCompleteDKG{}
 
 func NewMsgCompleteDKG(
 	sender string,
@@ -24,27 +24,6 @@ func NewMsgCompleteDKG(
 		ConsensusAddress: consAddress,
 		Signature:        signature,
 	}
-}
-
-// Route returns the route of MsgCompleteDKG.
-func (msg *MsgCompleteDKG) Route() string {
-	return RouterKey
-}
-
-// Type returns the type of MsgCompleteDKG.
-func (msg *MsgCompleteDKG) Type() string {
-	return TypeMsgCompleteDKG
-}
-
-// GetSignBytes implements the LegacyMsg interface.
-func (m MsgCompleteDKG) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
-
-// GetSigners returns the expected signers for a MsgCompleteDKG message.
-func (m *MsgCompleteDKG) GetSigners() []sdk.AccAddress {
-	addr, _ := sdk.AccAddressFromBech32(m.Sender)
-	return []sdk.AccAddress{addr}
 }
 
 // ValidateBasic performs basic MsgCompleteDKG message validation.
