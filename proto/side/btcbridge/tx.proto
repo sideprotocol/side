@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package side.btcbridge;
 
+import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
 import "side/btcbridge/params.proto";
 import "side/btcbridge/btcbridge.proto";
@@ -10,6 +11,8 @@ option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
 
 // Msg defines the Msg service.
 service Msg {
+  option (cosmos.msg.v1.service) = true;
+
   // SubmitBlockHeaders submits bitcoin block headers to the side chain.
   rpc SubmitBlockHeaders (MsgSubmitBlockHeaders) returns (MsgSubmitBlockHeadersResponse);
   // SubmitDepositTransaction submits the bitcoin deposit transaction to the side chain.
@@ -43,6 +46,8 @@ service Msg {
 
 // MsgSubmitBlockHeaders defines the Msg/SubmitBlockHeaders request type.
 message MsgSubmitBlockHeaders {
+  option (cosmos.msg.v1.signer) = "sender";
+
   string sender = 1;
   repeated BlockHeader block_headers = 2;
 }
@@ -53,6 +58,8 @@ message MsgSubmitBlockHeadersResponse {
 
 // MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type.
 message MsgSubmitDepositTransaction {
+  option (cosmos.msg.v1.signer) = "sender";
+
   // this is the relayer address who submits the bitcoin transaction to the side chain
   string sender = 1;
   string blockhash = 2;
@@ -70,6 +77,8 @@ message MsgSubmitDepositTransactionResponse {
 
 // MsgSubmitWithdrawTransaction defines the Msg/SubmitWithdrawTransaction request type.
 message MsgSubmitWithdrawTransaction {
+  option (cosmos.msg.v1.signer) = "sender";
+
   // this is the relayer address who submits the bitcoin transaction to the side chain
   string sender = 1;
   string blockhash = 2;
@@ -84,6 +93,8 @@ message MsgSubmitWithdrawTransactionResponse {
 
 // MsgSubmitFeeRate defines the Msg/SubmitFeeRate request type.
 message MsgSubmitFeeRate {
+  option (cosmos.msg.v1.signer) = "sender";
+
   string sender = 1;
   int64 fee_rate = 2;
 }
@@ -94,6 +105,8 @@ message MsgSubmitFeeRateResponse {
 
 // MsgUpdateTrustedNonBtcRelayers defines the Msg/UpdateTrustedNonBtcRelayers request type.
 message MsgUpdateTrustedNonBtcRelayers {
+  option (cosmos.msg.v1.signer) = "sender";
+
   string sender = 1;
   repeated string relayers = 2;
 }
@@ -104,6 +117,8 @@ message MsgUpdateTrustedNonBtcRelayersResponse {
 
 // MsgUpdateTrustedOracles defines the Msg/UpdateTrustedOracles request type.
 message MsgUpdateTrustedOracles {
+  option (cosmos.msg.v1.signer) = "sender";
+
   string sender = 1;
   repeated string oracles = 2;
 }
@@ -114,6 +129,8 @@ message MsgUpdateTrustedOraclesResponse {
 
 // MsgWithdrawToBitcoin defines the Msg/WithdrawToBitcoin request type.
 message MsgWithdrawToBitcoin {
+  option (cosmos.msg.v1.signer) = "sender";
+
   string sender = 1;
   // withdraw amount in satoshi, etc: 100000000sat = 1btc
   string amount = 2;
@@ -125,6 +142,8 @@ message MsgWithdrawToBitcoinResponse {
 
 // MsgSubmitSignatures defines the Msg/SubmitSignatures request type.
 message MsgSubmitSignatures {
+  option (cosmos.msg.v1.signer) = "sender";
+
   string sender = 1;
   string txid = 2;
   string psbt = 3;
@@ -136,6 +155,8 @@ message MsgSubmitSignaturesResponse {
 
 // MsgConsolidateVaults is the Msg/ConsolidateVaults request type.
 message MsgConsolidateVaults {
+  option (cosmos.msg.v1.signer) = "authority";
+
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1;
   // vault version
@@ -153,6 +174,8 @@ message MsgConsolidateVaultsResponse {}
 
 // MsgInitiateDKG is the Msg/InitiateDKG request type.
 message MsgInitiateDKG {
+  option (cosmos.msg.v1.signer) = "authority";
+
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1;
   // expected participant set
@@ -176,6 +199,8 @@ message MsgInitiateDKGResponse {}
 
 // MsgCompleteDKG is the Msg/CompleteDKG request type.
 message MsgCompleteDKG {
+  option (cosmos.msg.v1.signer) = "sender";
+
   // the sender
   string sender = 1;
   // DKG request id
@@ -193,6 +218,8 @@ message MsgCompleteDKGResponse {}
 
 // MsgTransferVault is the Msg/TransferVault request type.
 message MsgTransferVault {
+  option (cosmos.msg.v1.signer) = "authority";
+
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1;
   // version of the source vault
@@ -216,6 +243,8 @@ message MsgTransferVaultResponse {}
 //
 // Since: cosmos-sdk 0.47
 message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1;
 
