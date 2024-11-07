@@ -123,6 +123,7 @@ import (
 
 	"github.com/sideprotocol/side/docs"
 	"github.com/sideprotocol/side/x/btcbridge"
+	btcbridgecodec "github.com/sideprotocol/side/x/btcbridge/codec"
 	btcbridgekeeper "github.com/sideprotocol/side/x/btcbridge/keeper"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 
@@ -292,9 +293,10 @@ func New(
 	interfaceRegistry, err := types.NewInterfaceRegistryWithOptions(types.InterfaceRegistryOptions{
 		ProtoFiles: proto.HybridResolver,
 		SigningOptions: signing.Options{
-			AddressCodec: address.Bech32Codec{
-				Bech32Prefix: sdk.GetConfig().GetBech32AccountAddrPrefix(),
-			},
+			AddressCodec: btcbridgecodec.NewBech32Codec(
+				sdk.GetConfig().GetBech32AccountAddrPrefix(),
+				sdk.GetConfig().GetBtcChainCfg().Bech32HRPSegwit,
+			),
 			ValidatorAddressCodec: address.Bech32Codec{
 				Bech32Prefix: sdk.GetConfig().GetBech32ValidatorAddrPrefix(),
 			},
@@ -389,7 +391,10 @@ func New(
 		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
 		maccPerms,
-		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
+		btcbridgecodec.NewBech32Codec(
+			sdk.GetConfig().GetBech32AccountAddrPrefix(),
+			sdk.GetConfig().GetBtcChainCfg().Bech32HRPSegwit,
+		),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
@@ -995,9 +1000,12 @@ func (app *App) AutoCliOpts() autocli.AppOptions {
 	}
 
 	return autocli.AppOptions{
-		Modules:               modules,
-		ModuleOptions:         runtimeservices.ExtractAutoCLIOptions(app.ModuleManager.Modules),
-		AddressCodec:          authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
+		Modules:       modules,
+		ModuleOptions: runtimeservices.ExtractAutoCLIOptions(app.ModuleManager.Modules),
+		AddressCodec: btcbridgecodec.NewBech32Codec(
+			sdk.GetConfig().GetBech32AccountAddrPrefix(),
+			sdk.GetConfig().GetBtcChainCfg().Bech32HRPSegwit,
+		),
 		ValidatorAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		ConsensusAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	}
