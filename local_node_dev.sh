@@ -26,6 +26,7 @@ PROTOCOL_FEE_COLLECTOR=""
 
 # gov params
 GOV_VOTING_PERIOD="600s"
+GOV_EXPEDITED_VOTING_PERIOD="300s"
 
 # Remember to change to other types of keyring like 'file' in-case exposing to outside world,
 # otherwise your balance will be wiped quickly
@@ -104,6 +105,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
         jq --arg voting_period "${GOV_VOTING_PERIOD}" '.app_state["gov"]["params"]["voting_period"]=$voting_period' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	fi
 
+	# set gov expedited voting period
+	if [ -n "$GOV_EXPEDITED_VOTING_PERIOD" ]; then
+        jq --arg expedited_voting_period "${GOV_EXPEDITED_VOTING_PERIOD}" '.app_state["gov"]["params"]["expedited_voting_period"]=$expedited_voting_period' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	fi
+
 	# set vaults if provided
     if [[ "${#BTC_VAULT[@]}" -eq 3 && "${#RUNES_VAULT[@]}" -eq 3 ]]; then
 	    jq --arg btc_vault "${BTC_VAULT[0]}" '.app_state["btcbridge"]["params"]["vaults"][0]["address"]=$btc_vault' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
@@ -145,7 +151,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	        BALANCES+=",${INITIAL_SUPPLY}${DENOMS[$key]}"
 	    done
 	    echo ${BALANCES:1}
-	    $BINARY add-genesis-account "$KEY" ${BALANCES:1} --keyring-backend $KEYRING --home "$HOMEDIR"
+	    $BINARY genesis add-genesis-account "$KEY" ${BALANCES:1} --keyring-backend $KEYRING --home "$HOMEDIR"
 	done
 
 	echo "Genesis accounts allocated for local accounts"
@@ -157,7 +163,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	        BALANCES+=",${INITIAL_SUPPLY}${DENOMS[$key]}"
 	    done
 	    echo ${BALANCES:1}
-	    $BINARY add-genesis-account "$ADDR" ${BALANCES:1} --home "$HOMEDIR"
+	    $BINARY genesis add-genesis-account "$ADDR" ${BALANCES:1} --home "$HOMEDIR"
 	done
 	echo "Genesis accounts allocated for initial accounts"
 
@@ -165,7 +171,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 
 	# Sign genesis transaction
 	# echo $INITIAL_SUPPLY${DENOMS[0]}
-	$BINARY gentx "${KEYS[0]}" $INITIAL_SUPPLY${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home "$HOMEDIR"
+	$BINARY genesis gentx "${KEYS[0]}" $INITIAL_SUPPLY${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home "$HOMEDIR"
 	echo "Genesis transaction signed"
 
 	## In case you want to create multiple validators at genesis
@@ -176,11 +182,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	## 5. Copy the `gentx-*` folders under `~/.clonedCascadiad/config/gentx/` folders into the original `~/.$BINARY/config/gentx`
 
 	# Collect genesis tx
-	$BINARY collect-gentxs --home "$HOMEDIR"
+	$BINARY genesis collect-gentxs --home "$HOMEDIR"
 	echo "Genesis transactions collected"
 
 	# Run this to ensure everything worked and that the genesis file is setup correctly
-	$BINARY validate-genesis --home "$HOMEDIR"
+	$BINARY genesis validate --home "$HOMEDIR"
 	echo "Genesis file validated"
 
 	if [[ $1 == "pending" ]]; then

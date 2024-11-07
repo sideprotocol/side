@@ -1,7 +1,7 @@
 #!/bin/bash
 
 KEYS=("dev0" "dev1")
-CHAINID="grimoria-testnet-1"
+CHAINID="sidechain-testnet-4"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
 DENOM_STR="uside,uusdt,uusdc"
