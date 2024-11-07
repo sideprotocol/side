@@ -122,9 +122,9 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	"github.com/sideprotocol/side/docs"
-	"github.com/sideprotocol/side/x/btcbridge"
 	btcbridgecodec "github.com/sideprotocol/side/x/btcbridge/codec"
 	btcbridgekeeper "github.com/sideprotocol/side/x/btcbridge/keeper"
+	btcbridgemodule "github.com/sideprotocol/side/x/btcbridge/module"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
@@ -180,7 +180,7 @@ var (
 		vesting.AppModuleBasic{},
 		consensus.AppModuleBasic{},
 		wasm.AppModuleBasic{},
-		btcbridge.AppModuleBasic{},
+		btcbridgemodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -600,7 +600,7 @@ func New(
 		app.StakingKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	btcbridgeModule := btcbridge.NewAppModule(appCodec, app.BtcBridgeKeeper)
+	btcbridgeModule := btcbridgemodule.NewAppModule(appCodec, app.BtcBridgeKeeper)
 
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
