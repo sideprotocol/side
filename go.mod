@@ -269,6 +269,9 @@ require (
 
 replace (
 	github.com/cosmos/cosmos-sdk => github.com/sideprotocol/cosmos-sdk v0.50.9-btc1
-	github.com/cosmos/interchain-security/v3 => github.com/Stride-Labs/interchain-security/v3 v3.1.0-remove-validation-bug-7d3d9d
+
+	// Fix upstream GHSA-h395-qcrw-5vmq and GHSA-3vp4-m3rf-835h vulnerabilities.
+	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
+
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
