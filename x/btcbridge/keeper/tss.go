@@ -8,8 +8,9 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
 
+	errorsmod "cosmossdk.io/errors"
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
@@ -99,7 +100,7 @@ func (k Keeper) GetAllDKGRequests(ctx sdk.Context) []*types.DKGRequest {
 func (k Keeper) IterateDKGRequests(ctx sdk.Context, cb func(req *types.DKGRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.DKGRequestKeyPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.DKGRequestKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -153,7 +154,7 @@ func (k Keeper) GetDKGCompletionRequests(ctx sdk.Context, id uint64) []*types.DK
 func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func(req *types.DKGCompletionRequest) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, append(types.DKGCompletionRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...))
+	iterator := storetypes.KVStorePrefixIterator(store, append(types.DKGCompletionRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -171,13 +172,13 @@ func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipan
 	for _, p := range participants {
 		consAddress, _ := sdk.ConsAddressFromHex(p.ConsensusAddress)
 
-		validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
-		if !found {
-			return nil, sdkerrors.Wrap(types.ErrInvalidDKGParams, "non validator")
+		validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
+		if err != nil {
+			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "non validator")
 		}
 
 		if validator.Status != stakingtypes.Bonded {
-			return nil, sdkerrors.Wrap(types.ErrInvalidDKGParams, "validator not bonded")
+			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "validator not bonded")
 		}
 	}
 
@@ -221,11 +222,11 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	}
 
 	if dkgReq.Status != types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING {
-		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid dkg request status")
+		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid dkg request status")
 	}
 
 	if !ctx.BlockTime().Before(*dkgReq.Expiration) {
-		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "dkg request expired")
+		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "dkg request expired")
 	}
 
 	if err := k.CheckVaults(ctx, req.Vaults, dkgReq.VaultTypes); err != nil {
@@ -233,13 +234,13 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	}
 
 	consAddress, _ := sdk.ConsAddressFromHex(req.ConsensusAddress)
-	validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
-	if !found {
-		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
+	validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
+	if err != nil {
+		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
 	}
 
 	if validator.Status != stakingtypes.Bonded {
-		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "validator not bonded")
+		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "validator not bonded")
 	}
 
 	pubKey, err := validator.ConsPubKey()
@@ -248,7 +249,7 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 	}
 
 	if !types.VerifySignature(req.Signature, pubKey.Bytes(), req) {
-		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid signature")
+		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid signature")
 	}
 
 	k.SetDKGCompletionRequest(ctx, req)
@@ -551,7 +552,7 @@ func (k Keeper) CheckVaults(ctx sdk.Context, vaults []string, vaultTypes []types
 	currentVaults := k.GetParams(ctx).Vaults
 
 	if len(vaults) != len(vaultTypes) {
-		return sdkerrors.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid vaults")
+		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid vaults")
 	}
 
 	for _, v := range vaults {

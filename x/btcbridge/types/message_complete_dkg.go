@@ -3,9 +3,9 @@ package types
 import (
 	"encoding/hex"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const TypeMsgCompleteDKG = "complete_dkg"
@@ -50,7 +50,7 @@ func (m *MsgCompleteDKG) GetSigners() []sdk.AccAddress {
 // ValidateBasic performs basic MsgCompleteDKG message validation.
 func (m *MsgCompleteDKG) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Sender); err != nil {
-		return sdkerrors.Wrap(err, "invalid sender address")
+		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	if len(m.Vaults) == 0 {

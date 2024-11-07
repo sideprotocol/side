@@ -5,13 +5,13 @@ import (
 	"testing"
 	"time"
 
-	tmdb "github.com/cometbft/cometbft-db"
+	pruningtypes "cosmossdk.io/store/pruning/types"
 	tmrand "github.com/cometbft/cometbft/libs/rand"
+	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	pruningtypes "github.com/cosmos/cosmos-sdk/store/pruning/types"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -54,7 +54,7 @@ func DefaultConfig() network.Config {
 		chainID  = "chain-" + tmrand.NewRand().Str(6)
 	)
 	return network.Config{
-		Codec:             encoding.Marshaler,
+		Codec:             encoding.Codec,
 		TxConfig:          encoding.TxConfig,
 		LegacyAmino:       encoding.Amino,
 		InterfaceRegistry: encoding.InterfaceRegistry,
@@ -62,20 +62,16 @@ func DefaultConfig() network.Config {
 		AppConstructor: func(val network.ValidatorI) servertypes.Application {
 			return app.New(
 				val.GetCtx().Logger,
-				tmdb.NewMemDB(),
+				dbm.NewMemDB(),
 				nil,
 				true,
-				map[int64]bool{},
-				val.GetCtx().Config.RootDir,
-				0,
-				encoding,
 				simtestutil.EmptyAppOptions{},
 				baseapp.SetPruning(pruningtypes.NewPruningOptionsFromString(val.GetAppConfig().Pruning)),
 				baseapp.SetMinGasPrices(val.GetAppConfig().MinGasPrices),
 				baseapp.SetChainID(chainID),
 			)
 		},
-		GenesisState:    app.ModuleBasics.DefaultGenesis(encoding.Marshaler),
+		GenesisState:    app.ModuleBasics.DefaultGenesis(encoding.Codec),
 		TimeoutCommit:   2 * time.Second,
 		ChainID:         chainID,
 		NumValidators:   1,

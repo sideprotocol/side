@@ -6,6 +6,7 @@ import (
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -36,7 +37,7 @@ func (m *MsgTransferVault) GetSigners() []sdk.AccAddress {
 // ValidateBasic performs basic MsgTransferVault message validation.
 func (m *MsgTransferVault) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
-		return sdkerrors.Wrap(err, "invalid authority address")
+		return errorsmod.Wrap(err, "invalid authority address")
 	}
 
 	if m.SourceVersion == m.DestVersion {
@@ -44,7 +45,7 @@ func (m *MsgTransferVault) ValidateBasic() error {
 	}
 
 	if m.AssetType == AssetType_ASSET_TYPE_UNSPECIFIED {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid asset type")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid asset type")
 	}
 
 	for _, p := range m.Psbts {
@@ -76,7 +77,7 @@ func (m *MsgTransferVault) ValidateBasic() error {
 
 	if len(m.Psbts) == 0 {
 		if m.TargetUtxoNum == 0 {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "target number of utxos must be greater than 0")
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "target number of utxos must be greater than 0")
 		}
 
 		if feeRate, err := strconv.ParseInt(m.FeeRate, 10, 64); err != nil || feeRate <= 0 {

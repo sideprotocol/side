@@ -11,17 +11,19 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/mock"
 	"github.com/stretchr/testify/require"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	dbm "github.com/cometbft/cometbft-db"
 	abci "github.com/cometbft/cometbft/abci/types"
+	dbm "github.com/cosmos/cosmos-db"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	"github.com/cosmos/cosmos-sdk/server"
 
-	"github.com/cometbft/cometbft/libs/log"
+	"cosmossdk.io/log"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 )
 
@@ -51,8 +53,8 @@ func Setup(t *testing.T) *App {
 	balance := banktypes.Balance{
 		Address: acc.GetAddress().String(),
 		Coins: sdk.NewCoins(
-			sdk.NewCoin(DefaultBondDenom, sdk.NewInt(100000000000000)),
-			sdk.NewCoin(USDC, sdk.NewInt(100000000000000)),
+			sdk.NewCoin(DefaultBondDenom, sdkmath.NewInt(100000000000000)),
+			sdk.NewCoin(USDC, sdkmath.NewInt(100000000000000)),
 		),
 	}
 
@@ -87,21 +89,21 @@ func genesisStateWithValSet(t *testing.T,
 			Jailed:            false,
 			Status:            stakingtypes.Bonded,
 			Tokens:            bondAmt,
-			DelegatorShares:   sdk.OneDec(),
+			DelegatorShares:   sdkmath.LegacyOneDec(),
 			Description:       stakingtypes.Description{},
 			UnbondingHeight:   int64(0),
 			UnbondingTime:     time.Unix(0, 0).UTC(),
-			Commission:        stakingtypes.NewCommission(sdk.OneDec(), sdk.OneDec(), sdk.OneDec()),
-			MinSelfDelegation: sdk.ZeroInt(),
+			Commission:        stakingtypes.NewCommission(sdkmath.LegacyOneDec(), sdkmath.LegacyOneDec(), sdkmath.LegacyOneDec()),
+			MinSelfDelegation: sdkmath.ZeroInt(),
 		}
 		validators = append(validators, validator)
-		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].GetAddress(), val.Address.Bytes(), sdk.OneDec()))
+		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].GetAddress().String(), sdk.ValAddress(val.Address).String(), sdkmath.LegacyOneDec()))
 
 	}
 	// set validators and delegations
 	stakingParams := stakingtypes.DefaultParams()
 	stakingParams.BondDenom = DefaultBondDenom
-	stakingParams.MinCommissionRate = sdk.OneDec()
+	stakingParams.MinCommissionRate = sdkmath.LegacyOneDec()
 	stakingGenesis := stakingtypes.NewGenesisState(stakingParams, validators, delegations)
 	genesisState[stakingtypes.ModuleName] = app.AppCodec().MustMarshalJSON(stakingGenesis)
 
@@ -144,7 +146,7 @@ func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs 
 
 	// init chain will set the validator set and initialize the genesis accounts
 	app.InitChain(
-		abci.RequestInitChain{
+		&abci.RequestInitChain{
 			Validators:      []abci.ValidatorUpdate{},
 			ConsensusParams: simtestutil.DefaultConsensusParams,
 			AppStateBytes:   stateBytes,
@@ -153,12 +155,14 @@ func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs 
 
 	// commit genesis changes
 	app.Commit()
-	app.BeginBlock(abci.RequestBeginBlock{Header: tmproto.Header{
+
+	_, err = app.BeginBlocker(app.NewContextLegacy(true, tmproto.Header{
 		Height:             app.LastBlockHeight() + 1,
 		AppHash:            app.LastCommitID().Hash,
 		ValidatorsHash:     valSet.Hash(),
 		NextValidatorsHash: valSet.Hash(),
-	}})
+	}))
+	require.NoError(t, err)
 
 	return app
 }
@@ -167,13 +171,17 @@ func setup(withGenesis bool, invCheckPeriod uint) (*App, GenesisState) {
 	db := dbm.NewMemDB()
 	encCdc := MakeEncodingConfig()
 	appOptions := make(simtestutil.AppOptionsMap, 0)
+	appOptions[server.FlagInvCheckPeriod] = invCheckPeriod
 
 	app := New(
 		log.NewNopLogger(),
 		db,
-		nil, true, map[int64]bool{}, DefaultNodeHome, invCheckPeriod, encCdc, appOptions)
+		nil,
+		true,
+		appOptions,
+	)
 	if withGenesis {
-		return app, NewDefaultGenesisState(encCdc.Marshaler)
+		return app, NewDefaultGenesisState(encCdc.Codec)
 	}
 	return app, GenesisState{}
 }

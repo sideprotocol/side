@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/suite"
 	"lukechampine.com/uint128"
@@ -14,7 +13,6 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
 
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/btcutil/bech32"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/segwit"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -40,7 +38,7 @@ type KeeperTestSuite struct {
 
 func (suite *KeeperTestSuite) SetupTest() {
 	app := simapp.Setup(suite.T())
-	ctx := app.BaseApp.NewContext(false, tmproto.Header{Time: time.Now().UTC()})
+	ctx := app.BaseApp.NewContext(false)
 
 	suite.ctx = ctx
 	suite.app = app
@@ -158,13 +156,13 @@ func (suite *KeeperTestSuite) TestWithdrawRunes() {
 	amount := runeAmount + 1
 
 	denom := fmt.Sprintf("%s/%s", types.RunesProtocolName, runeId)
-	coin := sdk.NewCoin(denom, sdk.NewInt(int64(amount)))
+	coin := sdk.NewInt64Coin(denom, int64(amount))
 
 	_, err := suite.app.BtcBridgeKeeper.NewSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate))
 	suite.ErrorIs(err, types.ErrInsufficientUTXOs, "should fail due to insufficient runes utxos")
 
 	amount = 100000000
-	coin = sdk.NewCoin(denom, sdk.NewInt(int64(amount)))
+	coin = sdk.NewInt64Coin(denom, int64(amount))
 
 	_, err = suite.app.BtcBridgeKeeper.NewSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate))
 	suite.ErrorIs(err, types.ErrInsufficientUTXOs, "should fail due to insufficient payment utxos")

@@ -3,8 +3,8 @@ package types
 import (
 	"lukechampine.com/uint128"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const TypeMsgConsolidateVaults = "consolidate_vaults"
@@ -33,7 +33,7 @@ func (m *MsgConsolidateVaults) GetSigners() []sdk.AccAddress {
 // ValidateBasic performs basic MsgConsolidateVaults message validation.
 func (m *MsgConsolidateVaults) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
-		return sdkerrors.Wrap(err, "invalid authority address")
+		return errorsmod.Wrap(err, "invalid authority address")
 	}
 
 	if m.FeeRate <= 0 {
@@ -41,7 +41,7 @@ func (m *MsgConsolidateVaults) ValidateBasic() error {
 	}
 
 	if m.BtcConsolidation == nil && len(m.RunesConsolidations) == 0 {
-		return sdkerrors.Wrap(ErrInvalidConsolidation, "neither btc nor runes consolidation provided")
+		return errorsmod.Wrap(ErrInvalidConsolidation, "neither btc nor runes consolidation provided")
 	}
 
 	if m.BtcConsolidation != nil {
@@ -62,7 +62,7 @@ func (m *MsgConsolidateVaults) ValidateBasic() error {
 // ensureBtcConsolidation checks the given btc consolidation
 func ensureBtcConsolidation(consolidation *BtcConsolidation) error {
 	if consolidation.TargetThreshold <= 0 {
-		return sdkerrors.Wrap(ErrInvalidConsolidation, "btc target threshold must be greater than 0")
+		return errorsmod.Wrap(ErrInvalidConsolidation, "btc target threshold must be greater than 0")
 	}
 
 	return nil
@@ -79,7 +79,7 @@ func ensureRunesConsolidations(consolidations []*RunesConsolidation) error {
 
 		threshold, err := uint128.FromString(c.TargetThreshold)
 		if err != nil || threshold.IsZero() {
-			return sdkerrors.Wrap(ErrInvalidConsolidation, "invalid runes target threshold")
+			return errorsmod.Wrap(ErrInvalidConsolidation, "invalid runes target threshold")
 		}
 	}
 

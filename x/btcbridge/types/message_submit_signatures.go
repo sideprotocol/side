@@ -1,7 +1,7 @@
 package types
 
 import (
-	sdkerrors "cosmossdk.io/errors"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -43,15 +43,15 @@ func (msg *MsgSubmitSignatures) GetSignBytes() []byte {
 func (msg *MsgSubmitSignatures) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return sdkerrors.Wrapf(err, "invalid sender address (%s)", err)
+		return errorsmod.Wrapf(err, "invalid sender address (%s)", err)
 	}
 
 	if len(msg.Txid) == 0 {
-		return sdkerrors.Wrap(ErrInvalidSignatures, "txid cannot be empty")
+		return errorsmod.Wrap(ErrInvalidSignatures, "txid cannot be empty")
 	}
 
 	if len(msg.Psbt) == 0 {
-		return sdkerrors.Wrap(ErrInvalidSignatures, "psbt cannot be empty")
+		return errorsmod.Wrap(ErrInvalidSignatures, "psbt cannot be empty")
 	}
 
 	return nil
