@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgUpdateTrustedOracles = "update_trusted_oracles"
+var _ sdk.Msg = &MsgUpdateTrustedOracles{}
 
 func NewMsgUpdateTrustedOracles(
 	sender string,
@@ -15,27 +15,6 @@ func NewMsgUpdateTrustedOracles(
 		Sender:  sender,
 		Oracles: oracles,
 	}
-}
-
-func (msg *MsgUpdateTrustedOracles) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgUpdateTrustedOracles) Type() string {
-	return TypeMsgUpdateTrustedOracles
-}
-
-func (msg *MsgUpdateTrustedOracles) GetSigners() []sdk.AccAddress {
-	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{Sender}
-}
-
-func (msg *MsgUpdateTrustedOracles) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgUpdateTrustedOracles) ValidateBasic() error {

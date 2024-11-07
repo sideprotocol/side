@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgSubmitBlockHeader = "submit_block_header"
+var _ sdk.Msg = &MsgSubmitBlockHeaders{}
 
 func NewMsgSubmitBlockHeaders(
 	sender string,
@@ -15,27 +15,6 @@ func NewMsgSubmitBlockHeaders(
 		Sender:       sender,
 		BlockHeaders: headers,
 	}
-}
-
-func (msg *MsgSubmitBlockHeaders) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgSubmitBlockHeaders) Type() string {
-	return TypeMsgSubmitBlockHeader
-}
-
-func (msg *MsgSubmitBlockHeaders) GetSigners() []sdk.AccAddress {
-	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{Sender}
-}
-
-func (msg *MsgSubmitBlockHeaders) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgSubmitBlockHeaders) ValidateBasic() error {

@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgSubmitFeeRate = "submit_fee_rate"
+var _ sdk.Msg = &MsgSubmitFeeRate{}
 
 func NewMsgSubmitFeeRate(
 	sender string,
@@ -15,27 +15,6 @@ func NewMsgSubmitFeeRate(
 		Sender:  sender,
 		FeeRate: feeRate,
 	}
-}
-
-func (msg *MsgSubmitFeeRate) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgSubmitFeeRate) Type() string {
-	return TypeMsgSubmitFeeRate
-}
-
-func (msg *MsgSubmitFeeRate) GetSigners() []sdk.AccAddress {
-	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{Sender}
-}
-
-func (msg *MsgSubmitFeeRate) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgSubmitFeeRate) ValidateBasic() error {

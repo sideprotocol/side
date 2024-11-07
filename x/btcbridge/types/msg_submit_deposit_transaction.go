@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const TypeMsgSubmitDepositTransaction = "submit_deposit_transaction"
+var _ sdk.Msg = &MsgSubmitDepositTransaction{}
 
 func NewMsgSubmitDepositTransaction(
 	sender string,
@@ -21,27 +21,6 @@ func NewMsgSubmitDepositTransaction(
 		TxBytes:     tx,
 		Proof:       proof,
 	}
-}
-
-func (msg *MsgSubmitDepositTransaction) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgSubmitDepositTransaction) Type() string {
-	return TypeMsgSubmitDepositTransaction
-}
-
-func (msg *MsgSubmitDepositTransaction) GetSigners() []sdk.AccAddress {
-	Sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{Sender}
-}
-
-func (msg *MsgSubmitDepositTransaction) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgSubmitDepositTransaction) ValidateBasic() error {

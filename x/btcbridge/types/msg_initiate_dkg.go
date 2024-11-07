@@ -8,28 +8,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
-const TypeMsgInitiateDKG = "initiate_dkg"
-
-// Route returns the route of MsgInitiateDKG.
-func (msg *MsgInitiateDKG) Route() string {
-	return RouterKey
-}
-
-// Type returns the type of MsgInitiateDKG.
-func (msg *MsgInitiateDKG) Type() string {
-	return TypeMsgInitiateDKG
-}
-
-// GetSignBytes implements the LegacyMsg interface.
-func (m MsgInitiateDKG) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
-
-// GetSigners returns the expected signers for a MsgInitiateDKG message.
-func (m *MsgInitiateDKG) GetSigners() []sdk.AccAddress {
-	addr, _ := sdk.AccAddressFromBech32(m.Authority)
-	return []sdk.AccAddress{addr}
-}
+var _ sdk.Msg = &MsgInitiateDKG{}
 
 // ValidateBasic performs basic MsgInitiateDKG message validation.
 func (m *MsgInitiateDKG) ValidateBasic() error {
