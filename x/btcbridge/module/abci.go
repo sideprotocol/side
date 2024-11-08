@@ -38,19 +38,19 @@ func handleBtcWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 
 	feeRate := k.GetFeeRate(ctx)
 	if feeRate == 0 {
-		k.Logger(ctx).Error("invalid fee rate", feeRate)
+		k.Logger(ctx).Info("invalid fee rate", feeRate)
 		return
 	}
 
 	vault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_BTC)
 	if vault == nil {
-		k.Logger(ctx).Error("btc vault does not exist")
+		k.Logger(ctx).Info("btc vault does not exist")
 		return
 	}
 
 	signingRequest, err := k.BuildBtcBatchWithdrawSigningRequest(ctx, pendingWithdrawRequests, feeRate, vault.Address)
 	if err != nil {
-		k.Logger(ctx).Error("failed to build signing request", "err", err)
+		k.Logger(ctx).Info("failed to build signing request", "err", err)
 		return
 	}
 
@@ -128,7 +128,7 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 			// transfer runes
 			if !k.VaultTransferCompleted(ctx, sourceRunesVault) {
 				if err := k.TransferVault(ctx, sourceVersion, destVersion, types.AssetType_ASSET_TYPE_RUNES, nil, req.TargetUtxoNum, req.FeeRate); err != nil {
-					k.Logger(ctx).Error("transfer vault errored", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_RUNES, "target utxo num", req.TargetUtxoNum, "fee rate", req.FeeRate, "err", err)
+					k.Logger(ctx).Info("failed to transfer vault", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_RUNES, "target utxo num", req.TargetUtxoNum, "fee rate", req.FeeRate, "err", err)
 					continue
 				}
 			}
@@ -136,7 +136,7 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 			// transfer btc only when runes transfer completed
 			if k.VaultTransferCompleted(ctx, sourceRunesVault) && !k.VaultTransferCompleted(ctx, sourceBtcVault) {
 				if err := k.TransferVault(ctx, sourceVersion, destVersion, types.AssetType_ASSET_TYPE_BTC, nil, req.TargetUtxoNum, req.FeeRate); err != nil {
-					k.Logger(ctx).Error("transfer vault errored", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_BTC, "target utxo num", req.TargetUtxoNum, "fee rate", req.FeeRate, "err", err)
+					k.Logger(ctx).Info("failed to transfer vault", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_BTC, "target utxo num", req.TargetUtxoNum, "fee rate", req.FeeRate, "err", err)
 					continue
 				}
 			}

@@ -83,7 +83,6 @@ func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.Ms
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if err := msg.ValidateBasic(); err != nil {
-		ctx.Logger().Error("Error validating basic", "error", err)
 		return nil, err
 	}
 
@@ -93,7 +92,6 @@ func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.Ms
 
 	txHash, recipient, err := m.ProcessBitcoinDepositTransaction(ctx, msg)
 	if err != nil {
-		ctx.Logger().Error("Error processing bitcoin deposit transaction", "error", err)
 		return nil, err
 	}
 
@@ -114,13 +112,11 @@ func (m msgServer) SubmitWithdrawTransaction(goCtx context.Context, msg *types.M
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if err := msg.ValidateBasic(); err != nil {
-		ctx.Logger().Error("Error validating basic", "error", err)
 		return nil, err
 	}
 
 	txHash, err := m.ProcessBitcoinWithdrawTransaction(ctx, msg)
 	if err != nil {
-		ctx.Logger().Error("Error processing bitcoin withdraw transaction", "error", err)
 		return nil, err
 	}
 
