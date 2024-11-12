@@ -36,7 +36,7 @@ var (
 	ErrMaxUTXONumExceeded           = errorsmod.Register(ModuleName, 3107, "maximum utxo number exceeded")
 	ErrFailToSerializePsbt          = errorsmod.Register(ModuleName, 3108, "failed to serialize psbt")
 	ErrInvalidSignatures            = errorsmod.Register(ModuleName, 3109, "invalid signatures")
-	ErrSigningRequestNotExist       = errorsmod.Register(ModuleName, 3110, "signing request does not exist")
+	ErrSigningRequestDoesNotExist   = errorsmod.Register(ModuleName, 3110, "signing request does not exist")
 	ErrSigningRequestConfirmed      = errorsmod.Register(ModuleName, 3111, "signing request has been confirmed")
 	ErrWithdrawNotEnabled           = errorsmod.Register(ModuleName, 3112, "withdrawal not enabled")
 

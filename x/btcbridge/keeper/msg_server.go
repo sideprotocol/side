@@ -7,7 +7,7 @@ import (
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
-	"cosmossdk.io/errors"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
@@ -202,21 +202,22 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.HasSigningRequestByTxHash(ctx, msg.Txid) {
-		return nil, types.ErrSigningRequestNotExist
+		return nil, types.ErrSigningRequestDoesNotExist
 	}
 
 	signingRequest := m.GetSigningRequestByTxHash(ctx, msg.Txid)
 	if signingRequest.Status != types.SigningStatus_SIGNING_STATUS_PENDING {
-		return nil, types.ErrInvalidSignatures
+		// return without error
+		return nil, nil
 	}
 
 	packet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Psbt)), true)
 	if err != nil {
-		return nil, types.ErrInvalidSignatures
+		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "invalid psbt")
 	}
 
 	if packet.UnsignedTx.TxHash().String() != msg.Txid {
-		return nil, types.ErrInvalidSignatures
+		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "tx hash mismatch")
 	}
 
 	if err = packet.SanityCheck(); err != nil {
@@ -224,12 +225,12 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	}
 
 	if !packet.IsComplete() {
-		return nil, types.ErrInvalidSignatures
+		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "psbt not complete")
 	}
 
 	// verify the signatures
 	if !types.VerifyPsbtSignatures(packet) {
-		return nil, types.ErrInvalidSignatures
+		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "failed to verify")
 	}
 
 	// set the signing request status to broadcasted
@@ -244,7 +245,7 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 // TerminateSigningRequests terminates the pending signing requests of the specified vault version
 func (m msgServer) TerminateSigningRequests(goCtx context.Context, msg *types.MsgTerminateSigningRequests) (*types.MsgTerminateSigningRequestsResponse, error) {
 	if m.authority != msg.Authority {
-		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
 	}
 
 	if err := msg.ValidateBasic(); err != nil {
@@ -263,7 +264,7 @@ func (m msgServer) TerminateSigningRequests(goCtx context.Context, msg *types.Ms
 // ConsolidateVaults performs the UTXO consolidation for the given vaults.
 func (m msgServer) ConsolidateVaults(goCtx context.Context, msg *types.MsgConsolidateVaults) (*types.MsgConsolidateVaultsResponse, error) {
 	if m.authority != msg.Authority {
-		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
 	}
 
 	if err := msg.ValidateBasic(); err != nil {
@@ -282,7 +283,7 @@ func (m msgServer) ConsolidateVaults(goCtx context.Context, msg *types.MsgConsol
 // InitiateDKG initiates the DKG request.
 func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG) (*types.MsgInitiateDKGResponse, error) {
 	if m.authority != msg.Authority {
-		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
 	}
 
 	if err := msg.ValidateBasic(); err != nil {
@@ -336,7 +337,7 @@ func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG)
 // TransferVault performs the vault asset transfer from the source version to the destination version
 func (m msgServer) TransferVault(goCtx context.Context, msg *types.MsgTransferVault) (*types.MsgTransferVaultResponse, error) {
 	if m.authority != msg.Authority {
-		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
 	}
 
 	if err := msg.ValidateBasic(); err != nil {
@@ -362,7 +363,7 @@ func (m msgServer) TransferVault(goCtx context.Context, msg *types.MsgTransferVa
 // UpdateParams updates the module params.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {
-		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
 	}
 
 	if err := msg.ValidateBasic(); err != nil {

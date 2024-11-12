@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
 
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -97,31 +98,34 @@ func (k Keeper) SetBlockHeader(ctx sdk.Context, header *types.BlockHeader) {
 func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHeader) error {
 	store := ctx.KVStore(k.storeKey)
 
+	// first check if some block header already exists
+	for _, header := range blockHeaders {
+		if store.Has(types.BtcBlockHeaderHashKey(header.Hash)) {
+			// return no error
+			return nil
+		}
+	}
+
 	params := k.GetParams(ctx)
 
 	// get the best block header
 	best := k.GetBestBlockHeader(ctx)
 
 	for _, header := range blockHeaders {
-		// check the block header
+		// validate the block header
 		if err := header.Validate(); err != nil {
 			return err
 		}
 
-		// check if the block header already exists
-		if store.Has(types.BtcBlockHeaderHashKey(header.Hash)) {
-			return types.ErrBlockHeaderExists
-		}
-
 		// check if the previous block exists
 		if !store.Has(types.BtcBlockHeaderHashKey(header.PreviousBlockHash)) {
-			return types.ErrInvalidBlockHeader
+			return errorsmod.Wrap(types.ErrInvalidBlockHeader, "previous block does not exist")
 		}
 
 		// check the block height
 		prevBlock := k.GetBlockHeader(ctx, header.PreviousBlockHash)
 		if header.Height != prevBlock.Height+1 {
-			return types.ErrInvalidBlockHeader
+			return errorsmod.Wrap(types.ErrInvalidBlockHeader, "incorrect block height")
 		}
 
 		// check whether it's next block header or not
