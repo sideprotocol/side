@@ -432,6 +432,11 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault *types.Vault, destVault *types.Vault, targetUtxoNum uint32, feeRate int64) (*types.SigningRequest, error) {
 	utxos := make([]*types.UTXO, 0)
 
+	maxUtxoNum := uint32(k.GetMaxUtxoNum(ctx))
+	if targetUtxoNum > maxUtxoNum {
+		targetUtxoNum = maxUtxoNum
+	}
+
 	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
 		if utxo.IsLocked {
 			return false
@@ -444,10 +449,6 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 
 	if len(utxos) == 0 {
 		return nil, types.ErrInsufficientUTXOs
-	}
-
-	if err := k.checkUtxos(ctx, utxos); err != nil {
-		return nil, err
 	}
 
 	p, recipientUTXO, err := types.BuildTransferAllBtcPsbt(utxos, destVault.Address, feeRate)
@@ -485,6 +486,11 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 	runesUtxos := make([]*types.UTXO, 0)
 	runeBalances := make(types.RuneBalances, 0)
 
+	maxUtxoNum := uint32(k.GetMaxUtxoNum(ctx))
+	if targetUtxoNum > maxUtxoNum {
+		targetUtxoNum = maxUtxoNum
+	}
+
 	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
 		if utxo.IsLocked {
 			return false
@@ -512,12 +518,8 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 
 	btcUtxoIterator := k.GetUTXOIteratorByAddr(ctx, sourceBtcVault.Address)
 
-	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destVault.Address, runeBalances, feeRate, destBtcVault.Address)
+	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(runesUtxos, btcUtxoIterator, destVault.Address, runeBalances, feeRate, destBtcVault.Address, k.GetMaxUtxoNum(ctx))
 	if err != nil {
-		return nil, err
-	}
-
-	if err := k.checkUtxos(ctx, runesUtxos, selectedUtxos); err != nil {
 		return nil, err
 	}
 

@@ -30,7 +30,7 @@ const (
 
 // BuildPsbt builds a bitcoin psbt from the given params.
 // Assume that the utxo script type is witness.
-func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRate int64, change string) (*psbt.Packet, []*UTXO, *UTXO, error) {
+func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRate int64, change string, maxUTXONum int) (*psbt.Packet, []*UTXO, *UTXO, error) {
 	chaincfg := sdk.GetConfig().GetBtcChainCfg()
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
@@ -51,7 +51,7 @@ func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRat
 	txOuts := make([]*wire.TxOut, 0)
 	txOuts = append(txOuts, wire.NewTxOut(amount, recipientPkScript))
 
-	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction([]*UTXO{}, txOuts, utxoIterator, feeRate, changeAddr)
+	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction([]*UTXO{}, txOuts, utxoIterator, feeRate, changeAddr, maxUTXONum)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -108,7 +108,7 @@ func BuildTransferAllBtcPsbt(utxos []*UTXO, recipient string, feeRate int64) (*p
 }
 
 // BuildBtcBatchWithdrawPsbt builds the psbt to perform btc batch withdrawal
-func BuildBtcBatchWithdrawPsbt(utxoIterator UTXOIterator, withdrawRequests []*WithdrawRequest, feeRate int64, change string) (*psbt.Packet, []*UTXO, *UTXO, error) {
+func BuildBtcBatchWithdrawPsbt(utxoIterator UTXOIterator, withdrawRequests []*WithdrawRequest, feeRate int64, change string, maxUTXONum int) (*psbt.Packet, []*UTXO, *UTXO, error) {
 	chainCfg := sdk.GetConfig().GetBtcChainCfg()
 
 	txOuts := make([]*wire.TxOut, len(withdrawRequests))
@@ -134,7 +134,7 @@ func BuildBtcBatchWithdrawPsbt(utxoIterator UTXOIterator, withdrawRequests []*Wi
 		return nil, nil, nil, err
 	}
 
-	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction([]*UTXO{}, txOuts, utxoIterator, feeRate, changeAddress)
+	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction([]*UTXO{}, txOuts, utxoIterator, feeRate, changeAddress, maxUTXONum)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -154,7 +154,7 @@ func BuildBtcBatchWithdrawPsbt(utxoIterator UTXOIterator, withdrawRequests []*Wi
 
 // BuildRunesPsbt builds a bitcoin psbt for runes edict from the given params.
 // Assume that the utxo script type is witness.
-func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runeBalancesDelta []*RuneBalance, runesChange string, change string) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
+func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runeBalancesDelta []*RuneBalance, runesChange string, change string, maxUTXONum int) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
 	chaincfg := sdk.GetConfig().GetBtcChainCfg()
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
@@ -211,7 +211,7 @@ func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient s
 	// populate the runes protocol script
 	txOuts[0].PkScript = runesScript
 
-	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction(utxos, txOuts, paymentUTXOIterator, feeRate, changeAddr)
+	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction(utxos, txOuts, paymentUTXOIterator, feeRate, changeAddr, maxUTXONum)
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
@@ -240,7 +240,7 @@ func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient s
 
 // BuildTransferAllRunesPsbt builds a bitcoin psbt to transfer all specified runes.
 // Assume that the utxo script type is witness.
-func BuildTransferAllRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeBalancesDelta []*RuneBalance, feeRate int64, btcChange string) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
+func BuildTransferAllRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeBalancesDelta []*RuneBalance, feeRate int64, btcChange string, maxUTXONum int) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
 	chaincfg := sdk.GetConfig().GetBtcChainCfg()
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
@@ -266,7 +266,7 @@ func BuildTransferAllRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, 
 	// allocate the remaining runes to the first non-OP_RETURN output by default
 	txOuts = append(txOuts, wire.NewTxOut(RunesOutValue, recipientPkScript))
 
-	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction(utxos, txOuts, paymentUTXOIterator, feeRate, changeAddr)
+	unsignedTx, selectedUTXOs, changeUTXO, err := BuildUnsignedTransaction(utxos, txOuts, paymentUTXOIterator, feeRate, changeAddr, maxUTXONum)
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
@@ -293,7 +293,7 @@ func BuildTransferAllRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, 
 }
 
 // BuildUnsignedTransaction builds an unsigned tx from the given params.
-func BuildUnsignedTransaction(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOIterator UTXOIterator, feeRate int64, change btcutil.Address) (*wire.MsgTx, []*UTXO, *UTXO, error) {
+func BuildUnsignedTransaction(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOIterator UTXOIterator, feeRate int64, change btcutil.Address, maxUTXONum int) (*wire.MsgTx, []*UTXO, *UTXO, error) {
 	tx := wire.NewMsgTx(TxVersion)
 
 	inAmount := int64(0)
@@ -320,7 +320,7 @@ func BuildUnsignedTransaction(utxos []*UTXO, txOuts []*wire.TxOut, paymentUTXOIt
 
 	changeOut := wire.NewTxOut(0, changePkScript)
 
-	selectedUTXOs, err := AddPaymentUTXOsToTx(tx, utxos, inAmount-outAmount, paymentUTXOIterator, changeOut, feeRate)
+	selectedUTXOs, err := AddPaymentUTXOsToTx(tx, utxos, inAmount-outAmount, paymentUTXOIterator, changeOut, feeRate, maxUTXONum)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -384,7 +384,7 @@ func BuildUnsignedTransactionWithoutExtraChange(utxos []*UTXO, txOuts []*wire.Tx
 }
 
 // AddPaymentUTXOsToTx adds the given payment utxos to the tx.
-func AddPaymentUTXOsToTx(tx *wire.MsgTx, utxos []*UTXO, inOutDiff int64, paymentUTXOIterator UTXOIterator, changeOut *wire.TxOut, feeRate int64) ([]*UTXO, error) {
+func AddPaymentUTXOsToTx(tx *wire.MsgTx, utxos []*UTXO, inOutDiff int64, paymentUTXOIterator UTXOIterator, changeOut *wire.TxOut, feeRate int64, maxUTXONum int) ([]*UTXO, error) {
 	selectedUTXOs := make([]*UTXO, 0)
 	paymentValue := int64(0)
 
@@ -396,11 +396,15 @@ func AddPaymentUTXOsToTx(tx *wire.MsgTx, utxos []*UTXO, inOutDiff int64, payment
 			continue
 		}
 
+		utxos = append(utxos, utxo)
+		if maxUTXONum != 0 && len(utxos) > maxUTXONum {
+			return nil, ErrMaxUTXONumExceeded
+		}
+
+		selectedUTXOs = append(selectedUTXOs, utxo)
+
 		AddUTXOToTx(tx, utxo)
 		tx.AddTxOut(changeOut)
-
-		utxos = append(utxos, utxo)
-		selectedUTXOs = append(selectedUTXOs, utxo)
 
 		paymentValue += int64(utxo.Amount)
 		fee := GetTxVirtualSize(tx, utxos) * feeRate

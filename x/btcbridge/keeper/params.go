@@ -80,6 +80,13 @@ func (k Keeper) GetVaultVersionByAddress(ctx sdk.Context, address string) (uint6
 	return 0, false
 }
 
+// GetMaxUtxoNum gets the maximum utxo number for the signing request
+func (k Keeper) GetMaxUtxoNum(ctx sdk.Context) int {
+	params := k.GetParams(ctx)
+
+	return int(params.WithdrawParams.MaxUtxoNum)
+}
+
 // EnableBridge enables the bridge deposit and withdrawal
 func (k Keeper) EnableBridge(ctx sdk.Context) {
 	params := k.GetParams(ctx)
