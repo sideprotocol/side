@@ -367,7 +367,7 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 			runeBalances = runeBalances.Merge(utxo.Runes)
 		}
 
-		_ = k.LockUTXO(ctx, hash, uint64(vout))
+		_ = k.SpendUTXO(ctx, hash, uint64(vout))
 	}
 
 	for i, out := range p.UnsignedTx.TxOut {
@@ -399,7 +399,7 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 					IsLocked:     true,
 				}
 
-				k.saveUTXO(ctx, utxo)
+				k.SetUTXO(ctx, utxo)
 			}
 
 			if vault.AssetType == types.AssetType_ASSET_TYPE_RUNES {
@@ -417,7 +417,7 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 					Runes:        runeBalances,
 				}
 
-				k.saveUTXO(ctx, utxo)
+				k.SetUTXO(ctx, utxo)
 			}
 		}
 	}
@@ -463,11 +463,11 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 
 	txHash := p.UnsignedTx.TxHash().String()
 
-	// lock the involved utxos
-	_ = k.LockUTXOs(ctx, utxos)
+	// spend the involved utxos
+	_ = k.SpendUTXOs(ctx, utxos)
 
-	// save the recipient(change) utxo
-	k.saveChangeUTXOs(ctx, txHash, recipientUTXO)
+	// lock the recipient(change) utxo
+	k.lockChangeUTXOs(ctx, txHash, recipientUTXO)
 
 	signingReq := &types.SigningRequest{
 		Address:      k.authority,
@@ -530,12 +530,12 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 
 	txHash := p.UnsignedTx.TxHash().String()
 
-	// lock the involved utxos
-	_ = k.LockUTXOs(ctx, runesUtxos)
-	_ = k.LockUTXOs(ctx, selectedUtxos)
+	// spend the involved utxos
+	_ = k.SpendUTXOs(ctx, runesUtxos)
+	_ = k.SpendUTXOs(ctx, selectedUtxos)
 
-	// save the change utxos
-	k.saveChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
+	// lock the change utxos
+	k.lockChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
 
 	signingReq := &types.SigningRequest{
 		Address:      k.authority,

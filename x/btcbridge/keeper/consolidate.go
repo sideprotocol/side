@@ -54,11 +54,11 @@ func (k Keeper) handleBtcConsolidation(ctx sdk.Context, vaultVersion uint64, tar
 
 	txHash := p.UnsignedTx.TxHash().String()
 
-	// lock the involved utxos
-	_ = k.LockUTXOs(ctx, targetUTXOs)
+	// spend the involved utxos
+	_ = k.SpendUTXOs(ctx, targetUTXOs)
 
-	// save the recipient(change) utxo
-	k.saveChangeUTXOs(ctx, txHash, recipientUTXO)
+	// lock the recipient(change) utxo
+	k.lockChangeUTXOs(ctx, txHash, recipientUTXO)
 
 	// set signing request
 	signingReq := &types.SigningRequest{
@@ -116,12 +116,12 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 
 	txHash := p.UnsignedTx.TxHash().String()
 
-	// lock the involved utxos
-	_ = k.LockUTXOs(ctx, targetRunesUTXOs)
-	_ = k.LockUTXOs(ctx, selectedUtxos)
+	// spend the involved utxos
+	_ = k.SpendUTXOs(ctx, targetRunesUTXOs)
+	_ = k.SpendUTXOs(ctx, selectedUtxos)
 
-	// save the change utxos
-	k.saveChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
+	// lock the change utxos
+	k.lockChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
 
 	// set signing request
 	signingReq := &types.SigningRequest{
