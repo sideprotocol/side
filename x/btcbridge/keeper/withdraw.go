@@ -646,7 +646,7 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 	txHash := tx.Hash()
 
 	if !k.HasSigningRequestByTxHash(ctx, txHash.String()) {
-		return nil, types.ErrSigningRequestNotExist
+		return nil, types.ErrSigningRequestDoesNotExist
 	}
 
 	signingRequest := k.GetSigningRequestByTxHash(ctx, txHash.String())

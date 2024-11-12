@@ -8,6 +8,7 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -21,11 +22,11 @@ func (header *BlockHeader) Validate() error {
 		blockchain.NewMedianTime(),
 		blockchain.BFNone,
 	); err != nil {
-		return err
+		return errorsmod.Wrapf(ErrInvalidBlockHeader, "check failed: %v", err)
 	}
 
 	if header.Hash != wireHeader.BlockHash().String() {
-		return ErrInvalidBlockHeader
+		return errorsmod.Wrap(ErrInvalidBlockHeader, "incorrect block hash")
 	}
 
 	return nil
