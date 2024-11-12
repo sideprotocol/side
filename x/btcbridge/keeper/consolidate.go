@@ -32,13 +32,14 @@ func (k Keeper) handleBtcConsolidation(ctx sdk.Context, vaultVersion uint64, tar
 		return types.ErrVaultDoesNotExist
 	}
 
+	maxUtxoNum := uint32(k.GetMaxUtxoNum(ctx))
+	if maxNum > maxUtxoNum {
+		maxNum = maxUtxoNum
+	}
+
 	targetUTXOs := k.GetUnlockedUTXOsByAddrAndThreshold(ctx, vault.Address, targetThreshold, maxNum)
 	if len(targetUTXOs) == 0 {
 		return types.ErrInsufficientUTXOs
-	}
-
-	if err := k.checkUtxos(ctx, targetUTXOs); err != nil {
-		return err
 	}
 
 	p, recipientUTXO, err := types.BuildTransferAllBtcPsbt(targetUTXOs, vault.Address, feeRate)
@@ -91,6 +92,11 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 		return types.ErrVaultDoesNotExist
 	}
 
+	maxUtxoNum := uint32(k.GetMaxUtxoNum(ctx))
+	if maxNum > maxUtxoNum {
+		maxNum = maxUtxoNum
+	}
+
 	targetRunesUTXOs, runeBalances := k.GetTargetRunesUTXOsByAddrAndThreshold(ctx, vault.Address, runeId, types.RuneAmountFromString(targetThreshold), maxNum)
 	if len(targetRunesUTXOs) == 0 {
 		return types.ErrInsufficientUTXOs
@@ -98,12 +104,8 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 
 	btcUtxoIterator := k.GetUTXOIteratorByAddr(ctx, btcVault.Address)
 
-	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(targetRunesUTXOs, btcUtxoIterator, vault.Address, runeBalances, feeRate, btcVault.Address)
+	p, selectedUtxos, changeUtxo, runesRecipientUtxo, err := types.BuildTransferAllRunesPsbt(targetRunesUTXOs, btcUtxoIterator, vault.Address, runeBalances, feeRate, btcVault.Address, k.GetMaxUtxoNum(ctx))
 	if err != nil {
-		return err
-	}
-
-	if err := k.checkUtxos(ctx, targetRunesUTXOs, selectedUtxos); err != nil {
 		return err
 	}
 

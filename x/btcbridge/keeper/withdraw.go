@@ -185,12 +185,8 @@ func (k Keeper) NewSigningRequest(ctx sdk.Context, sender string, amount sdk.Coi
 func (k Keeper) NewBtcSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string) (*types.SigningRequest, error) {
 	utxoIterator := k.GetUTXOIteratorByAddr(ctx, vault)
 
-	psbt, selectedUTXOs, changeUTXO, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault)
+	psbt, selectedUTXOs, changeUTXO, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault, k.GetMaxUtxoNum(ctx))
 	if err != nil {
-		return nil, err
-	}
-
-	if err := k.checkUtxos(ctx, selectedUTXOs); err != nil {
 		return nil, err
 	}
 
@@ -228,19 +224,15 @@ func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sd
 
 	runeAmount := uint128.FromBig(amount.Amount.BigInt())
 
-	runesUTXOs, runeBalancesDelta := k.GetTargetRunesUTXOs(ctx, vault, runeId.ToString(), runeAmount)
+	runesUTXOs, runeBalancesDelta := k.GetTargetRunesUTXOs(ctx, vault, runeId.ToString(), runeAmount, k.GetMaxUtxoNum(ctx))
 	if len(runesUTXOs) == 0 {
 		return nil, types.ErrInsufficientUTXOs
 	}
 
 	paymentUTXOIterator := k.GetUTXOIteratorByAddr(ctx, btcVault)
 
-	psbt, selectedUTXOs, changeUTXO, runesChangeUTXO, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, runeBalancesDelta, vault, btcVault)
+	psbt, selectedUTXOs, changeUTXO, runesChangeUTXO, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, runeBalancesDelta, vault, btcVault, k.GetMaxUtxoNum(ctx))
 	if err != nil {
-		return nil, err
-	}
-
-	if err := k.checkUtxos(ctx, runesUTXOs, selectedUTXOs); err != nil {
 		return nil, err
 	}
 
@@ -276,12 +268,8 @@ func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sd
 func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawRequests []*types.WithdrawRequest, feeRate int64, vault string) (*types.SigningRequest, error) {
 	utxoIterator := k.GetUTXOIteratorByAddr(ctx, vault)
 
-	psbt, selectedUTXOs, changeUTXO, err := types.BuildBtcBatchWithdrawPsbt(utxoIterator, withdrawRequests, feeRate, vault)
+	psbt, selectedUTXOs, changeUTXO, err := types.BuildBtcBatchWithdrawPsbt(utxoIterator, withdrawRequests, feeRate, vault, k.GetMaxUtxoNum(ctx))
 	if err != nil {
-		return nil, err
-	}
-
-	if err := k.checkUtxos(ctx, selectedUTXOs); err != nil {
 		return nil, err
 	}
 
@@ -334,12 +322,8 @@ func (k Keeper) BuildWithdrawTx(ctx sdk.Context, sender string, amount sdk.Coin,
 func (k Keeper) BuildWithdrawBtcTx(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string) (*psbt.Packet, error) {
 	utxoIterator := k.GetUTXOIteratorByAddr(ctx, vault)
 
-	psbt, selectedUTXOs, _, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault)
+	psbt, _, _, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault, k.GetMaxUtxoNum(ctx))
 	if err != nil {
-		return nil, err
-	}
-
-	if err := k.checkUtxos(ctx, selectedUTXOs); err != nil {
 		return nil, err
 	}
 
@@ -353,19 +337,15 @@ func (k Keeper) BuildWithdrawRunesTx(ctx sdk.Context, sender string, amount sdk.
 
 	runeAmount := uint128.FromBig(amount.Amount.BigInt())
 
-	runesUTXOs, runeBalancesDelta := k.GetTargetRunesUTXOs(ctx, vault, runeId.ToString(), runeAmount)
+	runesUTXOs, runeBalancesDelta := k.GetTargetRunesUTXOs(ctx, vault, runeId.ToString(), runeAmount, k.GetMaxUtxoNum(ctx))
 	if len(runesUTXOs) == 0 {
 		return nil, types.ErrInsufficientUTXOs
 	}
 
 	paymentUTXOIterator := k.GetUTXOIteratorByAddr(ctx, btcVault)
 
-	psbt, selectedUTXOs, _, _, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, runeBalancesDelta, vault, btcVault)
+	psbt, _, _, _, err := types.BuildRunesPsbt(runesUTXOs, paymentUTXOIterator, sender, runeId.ToString(), runeAmount, feeRate, runeBalancesDelta, vault, btcVault, k.GetMaxUtxoNum(ctx))
 	if err != nil {
-		return nil, err
-	}
-
-	if err := k.checkUtxos(ctx, runesUTXOs, selectedUTXOs); err != nil {
 		return nil, err
 	}
 
@@ -825,17 +805,6 @@ func (k Keeper) getBtcNetworkFee(ctx sdk.Context, packet string) (sdk.Coin, erro
 	}
 
 	return sdk.NewInt64Coin(k.BtcDenom(ctx), int64(txFee)), nil
-}
-
-// checkUtxos checks if the total count of the given utxos exceeds the allowed maximum number
-func (k Keeper) checkUtxos(ctx sdk.Context, utxoSets ...[]*types.UTXO) error {
-	count := 0
-
-	for _, utxoSet := range utxoSets {
-		count += len(utxoSet)
-	}
-
-	return k.checkUtxoCount(ctx, count)
 }
 
 // checkUtxoCount checks if the given utxo count exceeds the allowed maximum number

@@ -21,7 +21,7 @@ type UTXOViewKeeper interface {
 	GetUTXOIteratorByAddr(ctx sdk.Context, addr string) types.UTXOIterator
 	GetUnlockedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO
 
-	GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128) ([]*types.UTXO, []*types.RuneBalance)
+	GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128, maxNum int) ([]*types.UTXO, []*types.RuneBalance)
 
 	IterateAllUTXOs(ctx sdk.Context, cb func(utxo *types.UTXO) (stop bool))
 	IterateUTXOsByAddr(ctx sdk.Context, addr string, cb func(addr string, utxo *types.UTXO) (stop bool))
@@ -149,7 +149,7 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddrAndThreshold(ctx sdk.Contex
 }
 
 // GetTargetRunesUTXOs gets the unlocked runes utxos targeted by the given params
-func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128) ([]*types.UTXO, []*types.RuneBalance) {
+func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128, maxNum int) ([]*types.UTXO, []*types.RuneBalance) {
 	utxos := make([]*types.UTXO, 0)
 
 	totalAmount := uint128.Zero
@@ -165,7 +165,7 @@ func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string,
 		totalAmount = totalAmount.Add(amount)
 		totalRuneBalances = totalRuneBalances.Merge(utxo.Runes)
 
-		return totalAmount.Cmp(targetAmount) >= 0
+		return maxNum != 0 && len(utxos) >= maxNum || totalAmount.Cmp(targetAmount) >= 0
 	})
 
 	if totalAmount.Cmp(targetAmount) < 0 {
