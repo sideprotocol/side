@@ -120,9 +120,7 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddr(ctx sdk.Context, addr stri
 	utxos := make([]*types.UTXO, 0)
 
 	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
-		if !utxo.IsLocked {
-			utxos = append(utxos, utxo)
-		}
+		utxos = append(utxos, utxo)
 
 		return false
 	})
@@ -136,7 +134,7 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddrAndThreshold(ctx sdk.Contex
 	utxos := make([]*types.UTXO, 0)
 
 	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
-		if utxo.IsLocked || utxo.Amount > uint64(threshold) {
+		if utxo.Amount > uint64(threshold) {
 			return false
 		}
 
@@ -156,10 +154,6 @@ func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOs(ctx sdk.Context, addr string,
 	totalRuneBalances := make(types.RuneBalances, 0)
 
 	bvk.IterateRunesUTXOsReverse(ctx, addr, runeId, func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool) {
-		if utxo.IsLocked {
-			return false
-		}
-
 		utxos = append(utxos, utxo)
 
 		totalAmount = totalAmount.Add(amount)
@@ -184,7 +178,7 @@ func (bvk *BaseUTXOViewKeeper) GetTargetRunesUTXOsByAddrAndThreshold(ctx sdk.Con
 	runeBalances := make(types.RuneBalances, 0)
 
 	bvk.IterateRunesUTXOs(ctx, addr, runeId, func(addr string, id string, amount uint128.Uint128, utxo *types.UTXO) (stop bool) {
-		if utxo.IsLocked || amount.Cmp(threshold) > 0 {
+		if amount.Cmp(threshold) > 0 {
 			return false
 		}
 
@@ -203,11 +197,9 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOCountAndBalancesByAddr(ctx sdk.Con
 	runeBalances := make(types.RuneBalances, 0)
 
 	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
-		if !utxo.IsLocked {
-			count += 1
-			value += int64(utxo.Amount)
-			runeBalances = runeBalances.Merge(utxo.Runes)
-		}
+		count += 1
+		value += int64(utxo.Amount)
+		runeBalances = runeBalances.Merge(utxo.Runes)
 
 		return false
 	})

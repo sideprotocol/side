@@ -5,7 +5,6 @@ import (
 
 	"lukechampine.com/uint128"
 
-	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 
@@ -197,11 +196,11 @@ func (k Keeper) NewBtcSigningRequest(ctx sdk.Context, sender string, amount sdk.
 
 	txHash := psbt.UnsignedTx.TxHash().String()
 
-	// lock the selected utxos
-	_ = k.LockUTXOs(ctx, selectedUTXOs)
+	// spend the selected utxos
+	_ = k.SpendUTXOs(ctx, selectedUTXOs)
 
-	// save the change utxo
-	k.saveChangeUTXOs(ctx, txHash, changeUTXO)
+	// lock the change utxo
+	k.lockChangeUTXOs(ctx, txHash, changeUTXO)
 
 	signingRequest := &types.SigningRequest{
 		Address:      sender,
@@ -243,12 +242,12 @@ func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sd
 
 	txHash := psbt.UnsignedTx.TxHash().String()
 
-	// lock the involved utxos
-	_ = k.LockUTXOs(ctx, runesUTXOs)
-	_ = k.LockUTXOs(ctx, selectedUTXOs)
+	// spend the involved utxos
+	_ = k.SpendUTXOs(ctx, runesUTXOs)
+	_ = k.SpendUTXOs(ctx, selectedUTXOs)
 
-	// save the change utxos
-	k.saveChangeUTXOs(ctx, txHash, changeUTXO, runesChangeUTXO)
+	// lock the change utxos
+	k.lockChangeUTXOs(ctx, txHash, changeUTXO, runesChangeUTXO)
 
 	signingRequest := &types.SigningRequest{
 		Address:      sender,
@@ -280,11 +279,11 @@ func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawReq
 
 	txHash := psbt.UnsignedTx.TxHash().String()
 
-	// lock the selected utxos
-	_ = k.LockUTXOs(ctx, selectedUTXOs)
+	// spend the selected utxos
+	_ = k.SpendUTXOs(ctx, selectedUTXOs)
 
-	// save the change utxo
-	k.saveChangeUTXOs(ctx, txHash, changeUTXO)
+	// lock the change utxo
+	k.lockChangeUTXOs(ctx, txHash, changeUTXO)
 
 	signingRequest := &types.SigningRequest{
 		Address:      authtypes.NewModuleAddress(types.ModuleName).String(),
@@ -658,36 +657,21 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 	signingRequest.Status = types.SigningStatus_SIGNING_STATUS_CONFIRMED
 	k.SetSigningRequest(ctx, signingRequest)
 
-	// spend the locked utxos
-	k.spendUTXOs(ctx, tx)
-
 	// unlock the change utxos
 	k.unlockChangeUTXOs(ctx, txHash.String())
 
 	return txHash, nil
 }
 
-// spendUTXOs spends locked utxos
-func (k Keeper) spendUTXOs(ctx sdk.Context, uTx *btcutil.Tx) {
-	for _, in := range uTx.MsgTx().TxIn {
-		hash := in.PreviousOutPoint.Hash.String()
-		vout := in.PreviousOutPoint.Index
-
-		if k.IsUTXOLocked(ctx, hash, uint64(vout)) {
-			_ = k.SpendUTXO(ctx, hash, uint64(vout))
-		}
-	}
-}
-
-// saveChangeUTXOs saves the change utxos of the given tx and marks minted
-func (k Keeper) saveChangeUTXOs(ctx sdk.Context, txHash string, utxos ...*types.UTXO) {
+// lockChangeUTXOs locks the change utxos of the given tx and marks minted
+func (k Keeper) lockChangeUTXOs(ctx sdk.Context, txHash string, utxos ...*types.UTXO) {
 	for _, utxo := range utxos {
 		if utxo == nil {
 			continue
 		}
 
 		utxo.IsLocked = true
-		k.saveUTXO(ctx, utxo)
+		k.SetUTXO(ctx, utxo)
 
 		k.addToMintHistory(ctx, txHash)
 	}
@@ -697,7 +681,7 @@ func (k Keeper) saveChangeUTXOs(ctx sdk.Context, txHash string, utxos ...*types.
 func (k Keeper) unlockChangeUTXOs(ctx sdk.Context, txHash string) {
 	k.IterateUTXOsByTxHash(ctx, txHash, func(utxo *types.UTXO) (stop bool) {
 		utxo.IsLocked = false
-		k.SetUTXO(ctx, utxo)
+		k.saveUTXO(ctx, utxo)
 
 		return false
 	})
