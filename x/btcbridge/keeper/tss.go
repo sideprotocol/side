@@ -618,9 +618,14 @@ func (k Keeper) SetVaultVersion(ctx sdk.Context, version uint64) {
 
 // VaultTransferCompleted returns true if the asset transfer completed for the given vault, false otherwise
 func (k Keeper) VaultTransferCompleted(ctx sdk.Context, vault string) bool {
-	count, _, _ := k.GetUnlockedUTXOCountAndBalancesByAddr(ctx, vault)
+	completed := true
 
-	return count == 0
+	k.IterateUTXOsByAddr(ctx, vault, func(addr string, utxo *types.UTXO) (stop bool) {
+		completed = false
+		return true
+	})
+
+	return completed
 }
 
 // VaultsTransferCompleted returns true if all asset transfer completed for the given vault version, false otherwise
