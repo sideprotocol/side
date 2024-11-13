@@ -132,6 +132,7 @@ import (
 	upgradev092 "github.com/sideprotocol/side/app/upgrades/v092"
 	upgradev093 "github.com/sideprotocol/side/app/upgrades/v093"
 	upgradev094 "github.com/sideprotocol/side/app/upgrades/v094"
+	upgradev095 "github.com/sideprotocol/side/app/upgrades/v095"
 )
 
 const (
@@ -843,9 +844,7 @@ func New(
 	}
 
 	// set upgrade handlers
-	app.UpgradeKeeper.SetUpgradeHandler(upgradev092.UpgradeName, upgradev092.CreateUpgradeHandler(app.ModuleManager, app.configurator))
-	app.UpgradeKeeper.SetUpgradeHandler(upgradev093.UpgradeName, upgradev093.CreateUpgradeHandler(app.ModuleManager, app.configurator))
-	app.UpgradeKeeper.SetUpgradeHandler(upgradev094.UpgradeName, upgradev094.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+	app.SetUpgradeHandlers()
 
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.ModuleManager.Modules))
 
@@ -1108,6 +1107,14 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 // SimulationManager returns the app SimulationManager
 func (app *App) SimulationManager() *module.SimulationManager {
 	return app.sm
+}
+
+// SetUpgradeHandlers sets the upgrade handlers
+func (app *App) SetUpgradeHandlers() {
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev092.UpgradeName, upgradev092.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev093.UpgradeName, upgradev093.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev094.UpgradeName, upgradev094.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev095.UpgradeName, upgradev095.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 }
 
 func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {
