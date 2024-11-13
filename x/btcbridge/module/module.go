@@ -24,7 +24,7 @@ import (
 )
 
 // ConsensusVersion defines the current x/btcbridge module consensus version.
-const ConsensusVersion = 3
+const ConsensusVersion = 4
 
 var (
 	_ module.AppModule      = AppModule{}
@@ -128,6 +128,9 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 	}
 	if err := cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2to3); err != nil {
 		panic(fmt.Sprintf("failed to migrate x/%s from version 2 to 3: %v", types.ModuleName, err))
+	}
+	if err := cfg.RegisterMigration(types.ModuleName, 3, m.Migrate3to4); err != nil {
+		panic(fmt.Sprintf("failed to migrate x/%s from version 3 to 4: %v", types.ModuleName, err))
 	}
 }
 
