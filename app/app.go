@@ -1122,7 +1122,7 @@ func (app *App) SetUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev092.UpgradeName, upgradev092.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev093.UpgradeName, upgradev093.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev094.UpgradeName, upgradev094.CreateUpgradeHandler(app.ModuleManager, app.configurator))
-	app.UpgradeKeeper.SetUpgradeHandler(upgradev095.UpgradeName, upgradev095.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev095.UpgradeName, upgradev095.CreateUpgradeHandler(app.ModuleManager, app.configurator, app.ParamsKeeper, app.ConsensusParamsKeeper))
 }
 
 func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {
