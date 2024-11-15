@@ -11,7 +11,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
@@ -172,14 +171,15 @@ func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipan
 	for _, p := range participants {
 		consAddress, _ := sdk.ConsAddressFromHex(p.ConsensusAddress)
 
-		validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
-		if err != nil {
-			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "non validator")
-		}
+		_ = consAddress
+		// validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
+		// if err != nil {
+		// 	return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "non validator")
+		// }
 
-		if validator.Status != stakingtypes.Bonded {
-			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "validator not bonded")
-		}
+		// if validator.Status != stakingtypes.Bonded {
+		// 	return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "validator not bonded")
+		// }
 	}
 
 	if disableBridge {
@@ -233,24 +233,24 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return err
 	}
 
-	consAddress, _ := sdk.ConsAddressFromHex(req.ConsensusAddress)
-	validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
-	if err != nil {
-		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
-	}
+	// consAddress, _ := sdk.ConsAddressFromHex(req.ConsensusAddress)
+	// validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
+	// if err != nil {
+	// 	return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
+	// }
 
-	if validator.Status != stakingtypes.Bonded {
-		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "validator not bonded")
-	}
+	// if validator.Status != stakingtypes.Bonded {
+	// 	return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "validator not bonded")
+	// }
 
-	pubKey, err := validator.ConsPubKey()
-	if err != nil {
-		return err
-	}
+	// pubKey, err := validator.ConsPubKey()
+	// if err != nil {
+	// 	return err
+	// }
 
-	if !types.VerifySignature(req.Signature, pubKey.Bytes(), req) {
-		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid signature")
-	}
+	// if !types.VerifySignature(req.Signature, pubKey.Bytes(), req) {
+	// 	return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid signature")
+	// }
 
 	k.SetDKGCompletionRequest(ctx, req)
 
