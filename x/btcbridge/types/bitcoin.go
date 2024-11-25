@@ -397,7 +397,7 @@ func AddPaymentUTXOsToTx(tx *wire.MsgTx, utxos []*UTXO, inOutDiff int64, payment
 		}
 
 		utxos = append(utxos, utxo)
-		if maxUTXONum != 0 && len(utxos) > maxUTXONum {
+		if len(utxos) > maxUTXONum {
 			return nil, ErrMaxUTXONumExceeded
 		}
 

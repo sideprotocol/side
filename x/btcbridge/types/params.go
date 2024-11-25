@@ -231,7 +231,7 @@ func validateVaults(vaults []*Vault) error {
 }
 
 func validateWithdrawParams(withdrawParams *WithdrawParams) error {
-	if withdrawParams.BtcBatchWithdrawPeriod == 0 || withdrawParams.MaxBtcBatchWithdrawNum == 0 {
+	if withdrawParams.MaxUtxoNum == 0 || withdrawParams.BtcBatchWithdrawPeriod == 0 || withdrawParams.MaxBtcBatchWithdrawNum == 0 {
 		return ErrInvalidParams
 	}
 

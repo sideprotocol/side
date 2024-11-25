@@ -793,8 +793,8 @@ func (k Keeper) getBtcNetworkFee(ctx sdk.Context, packet string) (sdk.Coin, erro
 
 // checkUtxoCount checks if the given utxo count exceeds the allowed maximum number
 func (k Keeper) checkUtxoCount(ctx sdk.Context, utxoCount int) error {
-	maxUtxoNum := k.GetParams(ctx).WithdrawParams.MaxUtxoNum
-	if maxUtxoNum != 0 && utxoCount > int(maxUtxoNum) {
+	maxUtxoNum := k.GetMaxUtxoNum(ctx)
+	if utxoCount > maxUtxoNum {
 		return types.ErrMaxUTXONumExceeded
 	}
 
