@@ -23,6 +23,14 @@ message BlockHeader {
   uint64 ntx = 9;
 }
 
+// Fee rate
+message FeeRate {
+  // fee rate
+  int64 value = 1;
+  // block height at which the fee rate is submitted
+  int64 height = 2;
+}
+
 // Bitcoin Signing Status
 enum SigningStatus {
   // SIGNING_STATUS_UNSPECIFIED - Default value, should not be used

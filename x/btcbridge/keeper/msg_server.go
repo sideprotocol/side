@@ -146,6 +146,7 @@ func (m msgServer) SubmitFeeRate(goCtx context.Context, msg *types.MsgSubmitFeeR
 	// Emit Events
 	m.EmitEvent(ctx, msg.Sender,
 		sdk.NewAttribute("fee_rate", fmt.Sprintf("%d", msg.FeeRate)),
+		sdk.NewAttribute("height", fmt.Sprintf("%d", ctx.BlockHeight())),
 	)
 
 	return &types.MsgSubmitFeeRateResponse{}, nil

@@ -37,8 +37,8 @@ func handleBtcWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 	}
 
 	feeRate := k.GetFeeRate(ctx)
-	if feeRate == 0 {
-		k.Logger(ctx).Info("invalid fee rate", feeRate)
+	if err := k.CheckFeeRate(ctx, feeRate); err != nil {
+		k.Logger(ctx).Info("invalid fee rate", "value", feeRate.Value, "height", feeRate.Height)
 		return
 	}
 
@@ -48,7 +48,7 @@ func handleBtcWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 		return
 	}
 
-	signingRequest, err := k.BuildBtcBatchWithdrawSigningRequest(ctx, pendingWithdrawRequests, feeRate, vault.Address)
+	signingRequest, err := k.BuildBtcBatchWithdrawSigningRequest(ctx, pendingWithdrawRequests, feeRate.Value, vault.Address)
 	if err != nil {
 		k.Logger(ctx).Info("failed to build signing request", "err", err)
 		return

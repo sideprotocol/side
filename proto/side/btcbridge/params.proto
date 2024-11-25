@@ -23,16 +23,18 @@ message Params {
   repeated string trusted_non_btc_relayers = 6;
   // Trusted oracles for providing offchain data, e.g. bitcoin fee rate
   repeated string trusted_oracles = 7;
+  // Period of validity for the fee rate
+  int64 fee_rate_validity_period = 8;
   // Asset vaults
-  repeated Vault vaults = 8;
+  repeated Vault vaults = 9;
   // Withdrawal params
-  WithdrawParams withdraw_params = 9 [(gogoproto.nullable) = false];
+  WithdrawParams withdraw_params = 10 [(gogoproto.nullable) = false];
   // Protocol limitations
-  ProtocolLimits protocol_limits = 10 [(gogoproto.nullable) = false];
+  ProtocolLimits protocol_limits = 11 [(gogoproto.nullable) = false];
   // Protocol fees
-  ProtocolFees protocol_fees = 11 [(gogoproto.nullable) = false];
+  ProtocolFees protocol_fees = 12 [(gogoproto.nullable) = false];
   // TSS params
-  TSSParams tss_params = 12 [(gogoproto.nullable) = false];
+  TSSParams tss_params = 13 [(gogoproto.nullable) = false];
 }
 
 // ParamsV1 defines the parameters for the module v1.

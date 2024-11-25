@@ -52,7 +52,7 @@ type QueryClient interface {
 	QueryBlockHeaderByHeight(ctx context.Context, in *QueryBlockHeaderByHeightRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHeightResponse, error)
 	// BlockHeaderByHash queries the block header by hash.
 	QueryBlockHeaderByHash(ctx context.Context, in *QueryBlockHeaderByHashRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHashResponse, error)
-	// QueryFeeRate queries the current bitcoin network fee rate on the side chain.
+	// QueryFeeRate queries the bitcoin network fee rate on the side chain.
 	QueryFeeRate(ctx context.Context, in *QueryFeeRateRequest, opts ...grpc.CallOption) (*QueryFeeRateResponse, error)
 	// QueryWithdrawalNetworkFee queries the estimated btc network fee for the given withdrawal.
 	QueryWithdrawalNetworkFee(ctx context.Context, in *QueryWithdrawalNetworkFeeRequest, opts ...grpc.CallOption) (*QueryWithdrawalNetworkFeeResponse, error)
@@ -275,7 +275,7 @@ type QueryServer interface {
 	QueryBlockHeaderByHeight(context.Context, *QueryBlockHeaderByHeightRequest) (*QueryBlockHeaderByHeightResponse, error)
 	// BlockHeaderByHash queries the block header by hash.
 	QueryBlockHeaderByHash(context.Context, *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error)
-	// QueryFeeRate queries the current bitcoin network fee rate on the side chain.
+	// QueryFeeRate queries the bitcoin network fee rate on the side chain.
 	QueryFeeRate(context.Context, *QueryFeeRateRequest) (*QueryFeeRateResponse, error)
 	// QueryWithdrawalNetworkFee queries the estimated btc network fee for the given withdrawal.
 	QueryWithdrawalNetworkFee(context.Context, *QueryWithdrawalNetworkFeeRequest) (*QueryWithdrawalNetworkFeeResponse, error)
