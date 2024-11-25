@@ -392,9 +392,6 @@ func AddPaymentUTXOsToTx(tx *wire.MsgTx, utxos []*UTXO, inOutDiff int64, payment
 
 	for ; paymentUTXOIterator.Valid(); paymentUTXOIterator.Next() {
 		utxo := paymentUTXOIterator.GetUTXO()
-		if utxo.IsLocked {
-			continue
-		}
 
 		utxos = append(utxos, utxo)
 		if len(utxos) > maxUTXONum {

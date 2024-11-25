@@ -438,10 +438,6 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 	}
 
 	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
-		if utxo.IsLocked {
-			return false
-		}
-
 		utxos = append(utxos, utxo)
 
 		return len(utxos) >= int(targetUtxoNum)
@@ -492,10 +488,6 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 	}
 
 	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
-		if utxo.IsLocked {
-			return false
-		}
-
 		runesUtxos = append(runesUtxos, utxo)
 		runeBalances = runeBalances.Merge(utxo.Runes)
 
