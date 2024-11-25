@@ -27,7 +27,7 @@ service Query {
   rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
     option (google.api.http).get = "/side/btcbridge/hash/{hash}";
   }
-  // QueryFeeRate queries the current bitcoin network fee rate on the side chain.
+  // QueryFeeRate queries the bitcoin network fee rate on the side chain.
   rpc QueryFeeRate(QueryFeeRateRequest) returns (QueryFeeRateResponse) {
     option (google.api.http).get = "/side/btcbridge/feerate";
   }
@@ -161,7 +161,7 @@ message QueryFeeRateRequest {}
 
 // QueryFeeRateResponse is response type for the Query/FeeRate RPC method.
 message QueryFeeRateResponse {
-  int64 fee_rate = 1;
+  FeeRate fee_rate = 1;
 }
 
 // QueryWithdrawalNetworkFeeRequest is request type for the Query/WithdrawalNetworkFee RPC method.

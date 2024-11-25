@@ -100,10 +100,12 @@ func (k Keeper) QueryWithdrawalNetworkFee(goCtx context.Context, req *types.Quer
 	}
 
 	if feeRate == 0 {
-		feeRate = k.GetFeeRate(ctx)
-		if feeRate == 0 {
-			return nil, types.ErrInvalidFeeRate
+		currentFeeRate := k.GetFeeRate(ctx)
+		if err := k.CheckFeeRate(ctx, currentFeeRate); err != nil {
+			return nil, err
 		}
+
+		feeRate = currentFeeRate.Value
 	}
 
 	networkFee, err := k.EstimateWithdrawalNetworkFee(ctx, req.Address, amount, feeRate)

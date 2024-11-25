@@ -86,12 +86,12 @@ func (k Keeper) HandleBtcWithdrawal(ctx sdk.Context, sender string, amount sdk.C
 	k.AddToBtcWithdrawRequestQueue(ctx, withdrawRequest)
 
 	feeRate := k.GetFeeRate(ctx)
-	if feeRate == 0 {
-		return nil, types.ErrInvalidFeeRate
+	if err := k.CheckFeeRate(ctx, feeRate); err != nil {
+		return nil, err
 	}
 
 	// estimate the btc network fee
-	networkFee, err := k.EstimateWithdrawalNetworkFee(ctx, sender, amount, feeRate)
+	networkFee, err := k.EstimateWithdrawalNetworkFee(ctx, sender, amount, feeRate.Value)
 	if err != nil {
 		return nil, err
 	}
@@ -122,11 +122,11 @@ func (k Keeper) HandleRunesWithdrawal(ctx sdk.Context, sender string, amount sdk
 	runesVault := types.SelectVaultByAssetType(vaults, types.AssetType_ASSET_TYPE_RUNES)
 
 	feeRate := k.GetFeeRate(ctx)
-	if feeRate == 0 {
-		return nil, types.ErrInvalidFeeRate
+	if err := k.CheckFeeRate(ctx, feeRate); err != nil {
+		return nil, err
 	}
 
-	signingRequest, err := k.NewRunesSigningRequest(ctx, sender, amount, feeRate, runesVault.Address, btcVault.Address)
+	signingRequest, err := k.NewRunesSigningRequest(ctx, sender, amount, feeRate.Value, runesVault.Address, btcVault.Address)
 	if err != nil {
 		return nil, err
 	}
