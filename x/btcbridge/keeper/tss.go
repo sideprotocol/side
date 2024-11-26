@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"bytes"
-	"strconv"
 	"time"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -168,7 +167,7 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 }
 
 // InitiateDKG initiates the DKG request by the specified params
-func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, disableBridge bool, enableTransfer bool, targetUtxoNum uint32, feeRate string) (*types.DKGRequest, error) {
+func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, disableBridge bool, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
 	for _, p := range participants {
 		consAddress, _ := sdk.ConsAddressFromHex(p.ConsensusAddress)
 
@@ -194,7 +193,6 @@ func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipan
 		DisableBridge:  disableBridge,
 		EnableTransfer: enableTransfer,
 		TargetUtxoNum:  targetUtxoNum,
-		FeeRate:        feeRate,
 		Expiration:     k.GetDKGRequestExpirationTime(ctx),
 		Status:         types.DKGRequestStatus_DKG_REQUEST_STATUS_PENDING,
 	}
@@ -258,7 +256,7 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 }
 
 // TransferVault performs the vault asset transfer from the source version to the destination version
-func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion uint64, assetType types.AssetType, psbts []string, targetUtxoNum uint32, feeRate string) error {
+func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion uint64, assetType types.AssetType, psbts []string, targetUtxoNum uint32) error {
 	sourceVault := k.GetVaultByAssetTypeAndVersion(ctx, assetType, sourceVersion)
 	if sourceVault == nil {
 		return types.ErrVaultDoesNotExist
@@ -293,20 +291,23 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 		return nil
 	}
 
-	parsedFeeRate, _ := strconv.ParseInt(feeRate, 10, 64)
+	feeRate := k.GetFeeRate(ctx)
+	if err := k.CheckFeeRate(ctx, feeRate); err != nil {
+		return err
+	}
 
 	var err error
 	var signingReq *types.SigningRequest
 
 	switch assetType {
 	case types.AssetType_ASSET_TYPE_BTC:
-		signingReq, err = k.BuildTransferVaultBtcSigningRequest(ctx, sourceVault, destVault, targetUtxoNum, parsedFeeRate)
+		signingReq, err = k.BuildTransferVaultBtcSigningRequest(ctx, sourceVault, destVault, targetUtxoNum, feeRate.Value)
 		if err != nil {
 			return err
 		}
 
 	case types.AssetType_ASSET_TYPE_RUNES:
-		signingReq, err = k.BuildTransferVaultRunesSigningRequest(ctx, sourceVault, destVault, targetUtxoNum, parsedFeeRate)
+		signingReq, err = k.BuildTransferVaultRunesSigningRequest(ctx, sourceVault, destVault, targetUtxoNum, feeRate.Value)
 		if err != nil {
 			return err
 		}

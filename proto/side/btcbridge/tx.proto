@@ -161,12 +161,10 @@ message MsgConsolidateVaults {
   string authority = 1;
   // vault version
   uint64 vault_version = 2;
-  // fee rate
-  int64 fee_rate = 3;
   // btc consolidation
-  BtcConsolidation btc_consolidation = 4;
+  BtcConsolidation btc_consolidation = 3;
   // runes consolidations
-  repeated RunesConsolidation runes_consolidations = 5;
+  repeated RunesConsolidation runes_consolidations = 4;
 }
 
 // MsgConsolidateVaultsResponse defines the Msg/ConsolidateVaults response type.
@@ -190,8 +188,6 @@ message MsgInitiateDKG {
   bool enable_transfer = 6;
   // target number of the UTXOs to be transferred each time
   uint32 target_utxo_num = 7;
-  // fee rate for vault transfer
-  string fee_rate = 8;
 }
 
 // MsgInitiateDKGResponse defines the Msg/InitiateDKG response type.
@@ -232,8 +228,6 @@ message MsgTransferVault {
   repeated string psbts = 5;
   // target number of the UTXOs to be transferred; only take effect when psbt not provided
   uint32 target_utxo_num = 6;
-  // fee rate; only take effect when psbt not provided
-  string fee_rate = 7;
 }
 
 // MsgTransferVaultResponse defines the Msg/TransferVault response type.
