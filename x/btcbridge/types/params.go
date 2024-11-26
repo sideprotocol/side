@@ -15,8 +15,17 @@ import (
 )
 
 var (
+	// default confirmation number for bitcoin network
+	DefaultConfirmations = int32(6)
+
+	// default BTC voucher denom
+	DefaultBtcVoucherDenom = "sat"
+
+	// default period of validity for the fee rate provided by oracle
+	DefaultFeeRateValidityPeriod = int64(100) // 100 blocks
+
 	// default maximum number of utxos used to build the signing request
-	DefaultMaxUtxoNum = uint32(500)
+	DefaultMaxUtxoNum = uint32(200)
 
 	// default btc batch withdrawal period
 	DefaultBtcBatchWithdrawPeriod = int64(10)
@@ -27,7 +36,7 @@ var (
 	// default DKG timeout period
 	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
 
-	// default TSS participant update transition period
+	// default TSS participant update transition period; not used for now
 	DefaultTSSParticipantUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
 
 	// default duration per TSS signing epoch
@@ -37,13 +46,14 @@ var (
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		Confirmations:           1,
+		Confirmations:           DefaultConfirmations,
 		MaxAcceptableBlockDepth: 100,
-		BtcVoucherDenom:         "sat",
+		BtcVoucherDenom:         DefaultBtcVoucherDenom,
 		DepositEnabled:          true,
 		WithdrawEnabled:         true,
 		TrustedNonBtcRelayers:   []string{},
 		TrustedOracles:          []string{},
+		FeeRateValidityPeriod:   DefaultFeeRateValidityPeriod,
 		Vaults:                  []*Vault{},
 		WithdrawParams: WithdrawParams{
 			MaxUtxoNum:             DefaultMaxUtxoNum,
