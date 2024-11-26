@@ -167,7 +167,7 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 }
 
 // InitiateDKG initiates the DKG request by the specified params
-func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, disableBridge bool, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
+func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
 	for _, p := range participants {
 		consAddress, _ := sdk.ConsAddressFromHex(p.ConsensusAddress)
 
@@ -181,16 +181,11 @@ func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipan
 		}
 	}
 
-	if disableBridge {
-		k.DisableBridge(ctx)
-	}
-
 	req := &types.DKGRequest{
 		Id:             k.GetNextDKGRequestID(ctx),
 		Participants:   participants,
 		Threshold:      threshold,
 		VaultTypes:     vaultTypes,
-		DisableBridge:  disableBridge,
 		EnableTransfer: enableTransfer,
 		TargetUtxoNum:  targetUtxoNum,
 		Expiration:     k.GetDKGRequestExpirationTime(ctx),

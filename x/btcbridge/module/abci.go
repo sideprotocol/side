@@ -141,11 +141,8 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 				}
 			}
 
-			// reenable bridge functions if disabled when all asset transfer completed
 			if k.VaultsTransferCompleted(ctx, sourceVersion) {
-				if req.DisableBridge {
-					k.EnableBridge(ctx)
-				}
+				k.Logger(ctx).Info("vaults transfer completed", "source version", sourceVersion, "destination version", destVersion)
 			}
 		}
 	}
