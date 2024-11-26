@@ -9,15 +9,20 @@ import (
 )
 
 // ConsolidateVaults performs the UTXO consolidation for the given vaults
-func (k Keeper) ConsolidateVaults(ctx sdk.Context, vaultVersion uint64, btcConsolidation *types.BtcConsolidation, runesConsolidations []*types.RunesConsolidation, feeRate int64) error {
+func (k Keeper) ConsolidateVaults(ctx sdk.Context, vaultVersion uint64, btcConsolidation *types.BtcConsolidation, runesConsolidations []*types.RunesConsolidation) error {
+	feeRate := k.GetFeeRate(ctx)
+	if err := k.CheckFeeRate(ctx, feeRate); err != nil {
+		return err
+	}
+
 	if btcConsolidation != nil {
-		if err := k.handleBtcConsolidation(ctx, vaultVersion, btcConsolidation.TargetThreshold, btcConsolidation.MaxNum, feeRate); err != nil {
+		if err := k.handleBtcConsolidation(ctx, vaultVersion, btcConsolidation.TargetThreshold, btcConsolidation.MaxNum, feeRate.Value); err != nil {
 			return err
 		}
 	}
 
 	for _, rc := range runesConsolidations {
-		if err := k.handleRunesConsolidation(ctx, vaultVersion, rc.RuneId, rc.TargetThreshold, rc.MaxNum, feeRate); err != nil {
+		if err := k.handleRunesConsolidation(ctx, vaultVersion, rc.RuneId, rc.TargetThreshold, rc.MaxNum, feeRate.Value); err != nil {
 			return err
 		}
 	}

@@ -15,10 +15,6 @@ func (m *MsgConsolidateVaults) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	if m.FeeRate <= 0 {
-		return ErrInvalidFeeRate
-	}
-
 	if m.BtcConsolidation == nil && len(m.RunesConsolidations) == 0 {
 		return errorsmod.Wrap(ErrInvalidConsolidation, "neither btc nor runes consolidation provided")
 	}

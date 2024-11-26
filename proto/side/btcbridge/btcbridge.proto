@@ -165,12 +165,10 @@ message DKGRequest {
   bool enable_transfer = 6;
   // target number of the UTXOs to be transferred each time
   uint32 target_utxo_num = 7;
-  // fee rate for vault transfer
-  string fee_rate = 8;
   // expiration time
-  google.protobuf.Timestamp expiration = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  google.protobuf.Timestamp expiration = 8 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
   // status
-  DKGRequestStatus status = 10;
+  DKGRequestStatus status = 9;
 }
 
 // DKG Completion Request

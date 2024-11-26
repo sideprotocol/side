@@ -2,7 +2,6 @@ package types
 
 import (
 	"bytes"
-	"strconv"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
@@ -57,10 +56,6 @@ func (m *MsgTransferVault) ValidateBasic() error {
 	if len(m.Psbts) == 0 {
 		if m.TargetUtxoNum == 0 {
 			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "target number of utxos must be greater than 0")
-		}
-
-		if feeRate, err := strconv.ParseInt(m.FeeRate, 10, 64); err != nil || feeRate <= 0 {
-			return ErrInvalidFeeRate
 		}
 	}
 
