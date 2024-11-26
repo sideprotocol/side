@@ -293,7 +293,7 @@ func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	req, err := m.Keeper.InitiateDKG(ctx, msg.Participants, msg.Threshold, msg.VaultTypes, msg.DisableBridge, msg.EnableTransfer, msg.TargetUtxoNum)
+	req, err := m.Keeper.InitiateDKG(ctx, msg.Participants, msg.Threshold, msg.VaultTypes, msg.EnableTransfer, msg.TargetUtxoNum)
 	if err != nil {
 		return nil, err
 	}
