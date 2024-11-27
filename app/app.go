@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
 
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
@@ -413,7 +414,7 @@ func New(
 		appCodec,
 		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
 		app.AccountKeeper,
-		app.BlockedModuleAccountAddrs(),
+		BlockedAddresses(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		logger,
 	)
@@ -943,25 +944,6 @@ func (app *App) LoadHeight(height int64) error {
 	return app.LoadVersion(height)
 }
 
-// ModuleAccountAddrs returns all the app's module account addresses.
-func (app *App) ModuleAccountAddrs() map[string]bool {
-	modAccAddrs := make(map[string]bool)
-	for acc := range maccPerms {
-		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
-	}
-
-	return modAccAddrs
-}
-
-// BlockedModuleAccountAddrs returns all the app's blocked module account
-// addresses.
-func (app *App) BlockedModuleAccountAddrs() map[string]bool {
-	modAccAddrs := app.ModuleAccountAddrs()
-	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
-
-	return modAccAddrs
-}
-
 // LegacyAmino returns SimApp's amino codec.
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
@@ -1010,6 +992,23 @@ func (app *App) AutoCliOpts() autocli.AppOptions {
 		ValidatorAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		ConsensusAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	}
+}
+
+// DefaultGenesis returns a default genesis from the registered AppModuleBasic's.
+func (app *App) DefaultGenesis() map[string]json.RawMessage {
+	return app.BasicModuleManager.DefaultGenesis(app.appCodec)
+}
+
+// GetStoreKeys returns all the stored store keys.
+func (app *App) GetStoreKeys() []storetypes.StoreKey {
+	keys := make([]storetypes.StoreKey, 0, len(app.keys))
+	for _, key := range app.keys {
+		keys = append(keys, key)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return keys[i].Name() < keys[j].Name()
+	})
+	return keys
 }
 
 // GetKey returns the KVStoreKey for the provided store key.
@@ -1115,6 +1114,19 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 // SimulationManager returns the app SimulationManager
 func (app *App) SimulationManager() *module.SimulationManager {
 	return app.sm
+}
+
+// BlockedAddresses returns all the app's blocked account addresses.
+func BlockedAddresses() map[string]bool {
+	modAccAddrs := make(map[string]bool)
+	for acc := range maccPerms {
+		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
+	}
+
+	// allow the following addresses to receive funds
+	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
+
+	return modAccAddrs
 }
 
 // SetUpgradeHandlers sets the upgrade handlers
