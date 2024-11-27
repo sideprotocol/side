@@ -16,9 +16,15 @@ import (
 	"github.com/cosmos/btcutil/bech32"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/segwit"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	simapp "github.com/sideprotocol/side/app"
 	"github.com/sideprotocol/side/x/btcbridge/types"
+)
+
+var (
+	InitCoinAmount = int64(1000000000000)
 )
 
 type KeeperTestSuite struct {
@@ -53,15 +59,19 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.runesVaultPkScript = types.MustPkScriptFromAddress(suite.runesVault)
 	suite.senderPkScript = types.MustPkScriptFromAddress(suite.sender)
 
-	suite.setupParams(suite.btcVault, suite.runesVault)
+	suite.setupParams(suite.btcVault, suite.runesVault, suite.sender)
+	suite.mintAssets(suite.sender)
 }
 
 func TestKeeperSuite(t *testing.T) {
 	suite.Run(t, new(KeeperTestSuite))
 }
 
-func (suite *KeeperTestSuite) setupParams(btcVault string, runesVault string) {
-	suite.app.BtcBridgeKeeper.SetParams(suite.ctx, types.Params{Vaults: []*types.Vault{
+func (suite *KeeperTestSuite) setupParams(btcVault string, runesVault string, nonBtcRelayer string) {
+	params := suite.app.BtcBridgeKeeper.GetParams(suite.ctx)
+
+	params.TrustedNonBtcRelayers = []string{nonBtcRelayer}
+	params.Vaults = []*types.Vault{
 		{
 			Address:   btcVault,
 			AssetType: types.AssetType_ASSET_TYPE_BTC,
@@ -70,21 +80,30 @@ func (suite *KeeperTestSuite) setupParams(btcVault string, runesVault string) {
 			Address:   runesVault,
 			AssetType: types.AssetType_ASSET_TYPE_RUNES,
 		},
-	}})
+	}
+	params.ProtocolFees.Collector = authtypes.NewModuleAddress(govtypes.ModuleName).String()
+
+	suite.app.BtcBridgeKeeper.SetParams(suite.ctx, params)
+}
+
+func (suite *KeeperTestSuite) mintAssets(addresses ...string) {
+	for _, addr := range addresses {
+		coins := sdk.NewCoins(sdk.NewInt64Coin(types.DefaultBtcVoucherDenom, InitCoinAmount))
+
+		suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, coins)
+		suite.app.BankKeeper.SendCoinsFromModuleToAccount(suite.ctx, types.ModuleName, sdk.MustAccAddressFromBech32(addr), coins)
+	}
 }
 
 func (suite *KeeperTestSuite) setupUTXOs(utxos []*types.UTXO) {
 	for _, utxo := range utxos {
-		suite.app.BtcBridgeKeeper.SetUTXO(suite.ctx, utxo)
-		suite.app.BtcBridgeKeeper.SetOwnerUTXO(suite.ctx, utxo)
-
-		for _, r := range utxo.Runes {
-			suite.app.BtcBridgeKeeper.SetOwnerRunesUTXO(suite.ctx, utxo, r.Id, r.Amount)
-		}
+		suite.app.BtcBridgeKeeper.SaveUTXO(suite.ctx, utxo)
 	}
 }
 
 func (suite *KeeperTestSuite) TestMintRunes() {
+	params := suite.app.BtcBridgeKeeper.GetParams(suite.ctx)
+
 	runeId := "840000:3"
 	runeAmount := 500000000
 	runeOutputIndex := 2
@@ -96,6 +115,7 @@ func (suite *KeeperTestSuite) TestMintRunes() {
 	tx.AddTxOut(wire.NewTxOut(0, runesScript))
 	tx.AddTxOut(wire.NewTxOut(types.RunesOutValue, suite.senderPkScript))
 	tx.AddTxOut(wire.NewTxOut(types.RunesOutValue, suite.runesVaultPkScript))
+	tx.AddTxOut(wire.NewTxOut(params.ProtocolFees.DepositFee, suite.btcVaultPkScript))
 
 	denom := fmt.Sprintf("%s/%s", types.RunesProtocolName, runeId)
 
@@ -110,9 +130,9 @@ func (suite *KeeperTestSuite) TestMintRunes() {
 	suite.Equal(uint64(runeAmount), balanceAfter.Amount.Uint64(), "%s balance after mint should be %d", denom, runeAmount)
 
 	utxos := suite.app.BtcBridgeKeeper.GetAllUTXOs(suite.ctx)
-	suite.Len(utxos, 1, "there should be 1 utxo(s)")
+	suite.Len(utxos, 2, "there should be 1 utxo(s)")
 
-	expectedUTXO := &types.UTXO{
+	expectedRunesUTXO := &types.UTXO{
 		Txid:         tx.TxHash().String(),
 		Vout:         uint64(runeOutputIndex),
 		Address:      suite.runesVault,
@@ -127,7 +147,17 @@ func (suite *KeeperTestSuite) TestMintRunes() {
 		},
 	}
 
-	suite.Equal(expectedUTXO, utxos[0], "utxos do not match")
+	expectedBtcUTXO := &types.UTXO{
+		Txid:         tx.TxHash().String(),
+		Vout:         3,
+		Address:      suite.btcVault,
+		Amount:       uint64(params.ProtocolFees.DepositFee),
+		PubKeyScript: suite.btcVaultPkScript,
+		IsLocked:     false,
+	}
+
+	suite.Equal(expectedRunesUTXO, utxos[0], "runes utxo does not match")
+	suite.Equal(expectedBtcUTXO, utxos[1], "btc utxo does not match")
 }
 
 func (suite *KeeperTestSuite) TestWithdrawRunes() {
@@ -182,12 +212,13 @@ func (suite *KeeperTestSuite) TestWithdrawRunes() {
 	req, err := suite.app.BtcBridgeKeeper.NewSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate))
 	suite.NoError(err)
 
-	suite.True(suite.app.BtcBridgeKeeper.IsUTXOLocked(suite.ctx, runesUTXOs[0].Txid, runesUTXOs[0].Vout), "runes utxo should be locked")
-	suite.True(suite.app.BtcBridgeKeeper.IsUTXOLocked(suite.ctx, paymentUTXOs[0].Txid, paymentUTXOs[0].Vout), "payment utxo should be locked")
+	suite.False(suite.app.BtcBridgeKeeper.HasUTXO(suite.ctx, runesUTXOs[0].Txid, runesUTXOs[0].Vout), "runes utxo should be spent")
+	suite.False(suite.app.BtcBridgeKeeper.HasUTXO(suite.ctx, paymentUTXOs[0].Txid, paymentUTXOs[0].Vout), "payment utxo should be spent")
 
-	runesUTXOs = suite.app.BtcBridgeKeeper.GetUnlockedUTXOsByAddr(suite.ctx, suite.runesVault)
-	suite.Len(runesUTXOs, 1, "there should be 1 unlocked runes utxo(s)")
+	runesUTXOs = suite.app.BtcBridgeKeeper.GetUTXOsByAddr(suite.ctx, suite.runesVault)
+	suite.Len(runesUTXOs, 1, "there should be 1 runes utxo(s)")
 
+	suite.True(runesUTXOs[0].IsLocked, "the rune utxo should be locked")
 	suite.Len(runesUTXOs[0].Runes, 1, "there should be 1 rune in the runes utxo")
 	suite.Equal(runeId, runesUTXOs[0].Runes[0].Id, "incorrect rune id")
 	suite.Equal(uint64(runeAmount-amount), types.RuneAmountFromString(runesUTXOs[0].Runes[0].Amount).Big().Uint64(), "incorrect rune amount")
