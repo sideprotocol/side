@@ -613,12 +613,11 @@ func New(
 
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
-	wasmOpts := GetWasmOpts(appOpts)
-	// Uncomment this for debugging contracts. In the future this could be made into a param passed by the tests
-	// wasmConfig.ContractDebugMode = true
 	if err != nil {
 		panic(fmt.Sprintf("error while reading wasm config: %s", err))
 	}
+
+	wasmOpts := GetWasmOpts(appOpts)
 
 	// The last arguments can contain custom message handlers, and custom query handlers,
 	// if we want to allow any custom callbacks
