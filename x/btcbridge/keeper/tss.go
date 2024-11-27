@@ -433,7 +433,7 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 		targetUtxoNum = maxUtxoNum
 	}
 
-	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
+	k.IterateUnlockedUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
 		utxos = append(utxos, utxo)
 
 		return len(utxos) >= int(targetUtxoNum)
@@ -483,7 +483,7 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 		targetUtxoNum = maxUtxoNum
 	}
 
-	k.IterateUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
+	k.IterateUnlockedUTXOsByAddr(ctx, sourceVault.Address, func(addr string, utxo *types.UTXO) (stop bool) {
 		runesUtxos = append(runesUtxos, utxo)
 		runeBalances = runeBalances.Merge(utxo.Runes)
 
@@ -608,7 +608,7 @@ func (k Keeper) SetVaultVersion(ctx sdk.Context, version uint64) {
 func (k Keeper) VaultTransferCompleted(ctx sdk.Context, vault string) bool {
 	completed := true
 
-	k.IterateUTXOsByAddr(ctx, vault, func(addr string, utxo *types.UTXO) (stop bool) {
+	k.IterateUnlockedUTXOsByAddr(ctx, vault, func(addr string, utxo *types.UTXO) (stop bool) {
 		completed = false
 		return true
 	})

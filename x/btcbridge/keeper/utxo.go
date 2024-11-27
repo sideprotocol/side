@@ -24,7 +24,7 @@ type UTXOViewKeeper interface {
 	GetTargetRunesUTXOs(ctx sdk.Context, addr string, runeId string, targetAmount uint128.Uint128, maxNum int) ([]*types.UTXO, []*types.RuneBalance)
 
 	IterateAllUTXOs(ctx sdk.Context, cb func(utxo *types.UTXO) (stop bool))
-	IterateUTXOsByAddr(ctx sdk.Context, addr string, cb func(addr string, utxo *types.UTXO) (stop bool))
+	IterateUnlockedUTXOsByAddr(ctx sdk.Context, addr string, cb func(addr string, utxo *types.UTXO) (stop bool))
 	IterateUTXOsByTxHash(ctx sdk.Context, hash string, cb func(utxo *types.UTXO) (stop bool))
 }
 
@@ -96,7 +96,7 @@ func (bvk *BaseUTXOViewKeeper) GetAllUTXOs(ctx sdk.Context) []*types.UTXO {
 func (bvk *BaseUTXOViewKeeper) GetUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO {
 	utxos := make([]*types.UTXO, 0)
 
-	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
+	bvk.IterateUTXOsByAddr(ctx, addr, func(utxo *types.UTXO) (stop bool) {
 		utxos = append(utxos, utxo)
 		return false
 	})
@@ -119,7 +119,7 @@ func (bvk *BaseUTXOViewKeeper) GetUTXOIteratorByAddr(ctx sdk.Context, addr strin
 func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO {
 	utxos := make([]*types.UTXO, 0)
 
-	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
+	bvk.IterateUnlockedUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
 		utxos = append(utxos, utxo)
 
 		return false
@@ -133,7 +133,7 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddr(ctx sdk.Context, addr stri
 func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddrAndThreshold(ctx sdk.Context, addr string, threshold int64, maxNum uint32) []*types.UTXO {
 	utxos := make([]*types.UTXO, 0)
 
-	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
+	bvk.IterateUnlockedUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
 		if utxo.Amount > uint64(threshold) {
 			return false
 		}
@@ -196,7 +196,7 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOCountAndBalancesByAddr(ctx sdk.Con
 	value := int64(0)
 	runeBalances := make(types.RuneBalances, 0)
 
-	bvk.IterateUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
+	bvk.IterateUnlockedUTXOsByAddr(ctx, addr, func(addr string, utxo *types.UTXO) (stop bool) {
 		count += 1
 		value += int64(utxo.Amount)
 		runeBalances = runeBalances.Merge(utxo.Runes)
@@ -223,7 +223,27 @@ func (bvk *BaseUTXOViewKeeper) IterateAllUTXOs(ctx sdk.Context, cb func(utxo *ty
 	}
 }
 
-func (bvk *BaseUTXOViewKeeper) IterateUTXOsByAddr(ctx sdk.Context, addr string, cb func(addr string, utxo *types.UTXO) (stop bool)) {
+func (bvk *BaseUTXOViewKeeper) IterateUTXOsByAddr(ctx sdk.Context, addr string, cb func(utxo *types.UTXO) (stop bool)) {
+	store := ctx.KVStore(bvk.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcUtxoKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var utxo types.UTXO
+		bvk.cdc.MustUnmarshal(iterator.Value(), &utxo)
+
+		if utxo.Address != addr {
+			continue
+		}
+
+		if cb(&utxo) {
+			break
+		}
+	}
+}
+
+func (bvk *BaseUTXOViewKeeper) IterateUnlockedUTXOsByAddr(ctx sdk.Context, addr string, cb func(addr string, utxo *types.UTXO) (stop bool)) {
 	store := ctx.KVStore(bvk.storeKey)
 
 	iterator := storetypes.KVStorePrefixIterator(store, append(types.BtcOwnerUtxoKeyPrefix, []byte(addr)...))
