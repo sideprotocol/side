@@ -217,7 +217,7 @@ func validateVaults(vaults []*Vault) error {
 		}
 
 		if vaultMap[v.Address] {
-			return ErrInvalidParams
+			return errorsmod.Wrapf(ErrInvalidParams, "duplicate vault")
 		}
 
 		vaultMap[v.Address] = true
@@ -235,7 +235,7 @@ func validateVaults(vaults []*Vault) error {
 		}
 
 		if v.AssetType == AssetType_ASSET_TYPE_UNSPECIFIED {
-			return ErrInvalidParams
+			return errorsmod.Wrapf(ErrInvalidParams, "invalid asset type")
 		}
 	}
 
@@ -244,7 +244,7 @@ func validateVaults(vaults []*Vault) error {
 
 func validateWithdrawParams(withdrawParams *WithdrawParams) error {
 	if withdrawParams.MaxUtxoNum == 0 || withdrawParams.BtcBatchWithdrawPeriod == 0 || withdrawParams.MaxBtcBatchWithdrawNum == 0 {
-		return ErrInvalidParams
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid withdrawal params")
 	}
 
 	return nil
@@ -253,17 +253,17 @@ func validateWithdrawParams(withdrawParams *WithdrawParams) error {
 // validateProtocolParams validates the given protocol limits and fees
 func validateProtocolParams(protocolLimits *ProtocolLimits, protocolFees *ProtocolFees) error {
 	if protocolLimits.BtcMinWithdraw > protocolLimits.BtcMaxWithdraw {
-		return ErrInvalidParams
+		return errorsmod.Wrapf(ErrInvalidParams, "minimum btc withdrawal amount must not be greater than maximum withdrawal amount")
 	}
 
 	if (protocolFees.DepositFee != 0 || protocolFees.WithdrawFee != 0) && len(protocolFees.Collector) == 0 {
-		return ErrInvalidParams
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid protocol fee params")
 	}
 
 	if len(protocolFees.Collector) != 0 {
 		_, err := sdk.AccAddressFromBech32(protocolFees.Collector)
 		if err != nil {
-			return ErrInvalidParams
+			return errorsmod.Wrapf(ErrInvalidParams, "invalid protocol fee collector")
 		}
 	}
 
@@ -273,11 +273,11 @@ func validateProtocolParams(protocolLimits *ProtocolLimits, protocolFees *Protoc
 // validateTSSParams validates the given TSS params
 func validateTSSParams(params *TSSParams) error {
 	if params.DkgTimeoutPeriod == 0 {
-		return ErrInvalidParams
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid dkg timeout period")
 	}
 
 	if params.ParticipantUpdateTransitionPeriod == 0 {
-		return ErrInvalidParams
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid participant update transition period")
 	}
 
 	return nil
