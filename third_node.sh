@@ -25,7 +25,7 @@ KEYRING="test"
 KEYALGO="segwit"
 LOGLEVEL="info"
 # Set dedicated home directory for the $BINARY instance
-HOMEDIR="$HOME/.side2"
+HOMEDIR="$HOME/.side3"
 
 # Path variables
 CONFIG=$HOMEDIR/config/config.toml
@@ -68,14 +68,14 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	$BINARY config keyring-backend $KEYRING --home "$HOMEDIR"
 	$BINARY config chain-id $CHAINID --home "$HOMEDIR"
 
-	sed -i.bak 's/127.0.0.1:26657/0.0.0.0:16657/g' "$CONFIG"
-	sed -i.bak 's/127.0.0.1:26658/0.0.0.0:16658/g' "$CONFIG"
-	sed -i.bak 's/0.0.0.0:26656/0.0.0.0:16656/g' "$CONFIG"
+	sed -i.bak 's/127.0.0.1:26657/0.0.0.0:36657/g' "$CONFIG"
+	sed -i.bak 's/127.0.0.1:26658/0.0.0.0:36658/g' "$CONFIG"
+	sed -i.bak 's/0.0.0.0:26656/0.0.0.0:36656/g' "$CONFIG"
 	sed -i.bak 's/persistent_peers = ""/persistent_peers = "dfd3e3c99414aa850f6e269cf4a674a66062cd49@127.0.0.1:26656"/g' "$CONFIG"
 	#sed -i 's/persistent_peers = "$PEERID"/g' "$CONFIG"
 
 	sed -i.bak 's/swagger = false/swagger = true/g' $APP_TOML
-	sed -i.bak 's/localhost:9090/localhost:7090/g' $APP_TOML
+	sed -i.bak 's/localhost:9090/localhost:8090/g' $APP_TOML
 
 	$BINARY keys add secp256k1_key --key-type segwit --home "$HOMEDIR"
 	$BINARY tx bank send dev1 $($BINARY keys show secp256k1_key -a --home "$HOMEDIR") 2000000000uside --chain-id $CHAINID --fees 200uside --yes
