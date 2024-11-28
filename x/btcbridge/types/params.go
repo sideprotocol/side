@@ -10,8 +10,10 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/txscript"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 )
 
 var (
@@ -68,7 +70,7 @@ func NewParams() Params {
 		ProtocolFees: ProtocolFees{
 			DepositFee:  8000,  // 0.00008 BTC
 			WithdrawFee: 12000, // 0.00012 BTC
-			Collector:   authtypes.NewModuleAddress(ModuleName).String(),
+			Collector:   authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		},
 		TssParams: TSSParams{
 			DkgTimeoutPeriod:                  DefaultDKGTimeoutPeriod,
@@ -94,6 +96,10 @@ func (p Params) Validate() error {
 	}
 
 	if err := validateOracles(p.TrustedOracles); err != nil {
+		return err
+	}
+
+	if err := validateFeeRateValidityPeriod(p.FeeRateValidityPeriod); err != nil {
 		return err
 	}
 
@@ -174,10 +180,6 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 
 // validateNonBtcRelayers validates the given relayers
 func validateNonBtcRelayers(relayers []string) error {
-	if len(relayers) == 0 {
-		return ErrInvalidRelayers
-	}
-
 	for _, relayer := range relayers {
 		_, err := sdk.AccAddressFromBech32(relayer)
 		if err != nil {
@@ -190,15 +192,19 @@ func validateNonBtcRelayers(relayers []string) error {
 
 // validateOracles validates the given oracles
 func validateOracles(oracles []string) error {
-	if len(oracles) == 0 {
-		return ErrInvalidOracles
-	}
-
 	for _, oracle := range oracles {
 		_, err := sdk.AccAddressFromBech32(oracle)
 		if err != nil {
 			return ErrInvalidOracles
 		}
+	}
+
+	return nil
+}
+
+func validateFeeRateValidityPeriod(feeRateValidityPeriod int64) error {
+	if feeRateValidityPeriod <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "fee rate validity period must be greater than 0")
 	}
 
 	return nil
