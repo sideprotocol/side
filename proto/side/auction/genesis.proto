@@ -1,0 +1,10 @@
+syntax = "proto3";
+package side.auction;
+
+import "gogoproto/gogo.proto";
+// import "side/btcbridge/params.proto";
+// import "side/btcbridge/btcbridge.proto";
+
+option go_package = "github.com/sideprotocol/side/x/auction/types";
+
+

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package side.dlc;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sideprotocol/side/x/dlc/types";
+
+message PriceInterval {
+    string price_pair = 1;
+    int32 interval = 2;
+}
+
+// Params defines the parameters for the module.
+message Params {
+    repeated PriceInterval price_interval = 1;
+}

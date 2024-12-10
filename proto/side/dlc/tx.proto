@@ -1,0 +1,35 @@
+syntax = "proto3";
+package side.dlc;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sideprotocol/side/x/dlc/types";
+
+// Msg defines the Msg service.
+service Msg {
+    option (cosmos.msg.v1.service) = true;
+
+    rpc SubmitAnnounceNonce (MsgSubmitAnnouncementNonce) returns (MsgSubmitAnnouncementNonceResponse);
+    rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
+}
+
+message MsgSubmitAnnouncementNonce {
+    option (cosmos.msg.v1.signer) = "sender";
+  
+    string sender = 1;
+    string announcement_id = 2;
+    string nonce = 3;
+    string signature = 4;
+}
+
+message MsgSubmitAnnouncementNonceResponse {}
+
+
+message MsgSubmitAttestation {
+    option (cosmos.msg.v1.signer) = "sender";
+    string sender = 1;
+    string announcement_id = 2;
+    string signature = 3;
+}
+
+message MsgSubmitAttestationResponse {}

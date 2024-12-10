@@ -1,0 +1,57 @@
+syntax = "proto3";
+package side.dlc;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "side/dlc/params.proto";
+import "side/dlc/dlc.proto";
+
+option go_package = "github.com/sideprotocol/side/x/dlc/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Parameters queries the parameters of the module.
+    rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
+      option (google.api.http).get = "/side/dlc/params";
+    }
+    rpc QueryAnnouncements(QueryAnnouncementRequest) returns (QueryAnnouncementResponse) {
+        option (google.api.http).get = "/side/dlc/announcements";     
+    }
+    rpc QueryPrices(QueryPriceRequest) returns (QueryPricesResponse) {
+        option (google.api.http).get = "/side/dlc/announcements";     
+    }
+
+}
+
+// QueryParamsRequest is request type for the QueryParams RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the QueryParams RPC method.
+message QueryParamsResponse {
+    Params params = 1;
+}
+
+// QueryAnnouncementRequest is request type for the Query/QueryAnnouncements RPC method.
+message QueryAnnouncementRequest {
+    string status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+  
+// QueryAnnouncementResponse is response type for the Query/QueryAnnouncements RPC method.
+message QueryAnnouncementResponse {
+    repeated DLCAnnouncement announcements = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+  
+// QueryAnnouncementRequest is request type for the Query/QueryAnnouncements RPC method.
+message QueryPriceRequest {
+    string symbol = 1;
+}
+  
+// QueryAnnouncementResponse is response type for the Query/QueryAnnouncements RPC method.
+message QueryPricesResponse {
+    uint32 price = 1;
+}
+ 

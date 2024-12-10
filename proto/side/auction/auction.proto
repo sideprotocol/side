@@ -1,0 +1,43 @@
+syntax = "proto3";
+package side.auction;
+
+import "gogoproto/gogo.proto";
+// import "side/btcbridge/params.proto";
+// import "side/btcbridge/btcbridge.proto";
+
+option go_package = "github.com/sideprotocol/side/x/auction/types";
+
+message Bid {
+    string auction_id = 1;
+    string bidder = 2;
+    int64 bid_price = 3;
+    Coin bid_amount = 4;
+    BidStatus status = 5;
+}
+
+message Auction {
+    string id = 1;
+    Coin deposited_asset = 2;
+    string borrower = 3;
+    int64 liquidated_price = 4;
+    int64 liquidated_time = 5;
+    int64 expected_value = 6;
+    int64 bidded_value = 7;
+    AuctionStatus status = 8;
+    string payment_tx_id = 9;
+}
+
+enum AssetType {
+    Bitcoin = 1;
+}
+
+enum AuctionStatus {
+    AuctionOpen = 1;
+    AuctionClose = 2;
+}
+
+enum BidStatus {
+    Bidding = 1;
+    Accepted = 2;
+    Rejected = 3;
+}
