@@ -2,9 +2,15 @@ syntax = "proto3";
 package side.auction;
 
 import "gogoproto/gogo.proto";
-// import "side/btcbridge/params.proto";
-// import "side/btcbridge/btcbridge.proto";
+import "side/auction/auction.proto";
+import "side/auction/params.proto";
 
 option go_package = "github.com/sideprotocol/side/x/auction/types";
 
+// GenesisState defines the auctioin module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
 
+    repeated Auction auctions = 2;
+    repeated Bid bids = 3;
+}

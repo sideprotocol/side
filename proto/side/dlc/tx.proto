@@ -2,6 +2,7 @@ syntax = "proto3";
 package side.dlc;
 
 import "gogoproto/gogo.proto";
+import "cosmos/msg/v1/msg.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
@@ -9,15 +10,15 @@ option go_package = "github.com/sideprotocol/side/x/dlc/types";
 service Msg {
     option (cosmos.msg.v1.service) = true;
 
-    rpc SubmitAnnounceNonce (MsgSubmitAnnouncementNonce) returns (MsgSubmitAnnouncementNonceResponse);
+    rpc SubmitAnnouncementNonce (MsgSubmitAnnouncementNonce) returns (MsgSubmitAnnouncementNonceResponse);
     rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
 }
 
 message MsgSubmitAnnouncementNonce {
     option (cosmos.msg.v1.signer) = "sender";
-  
+
     string sender = 1;
-    string announcement_id = 2;
+    uint64 announcement_id = 2;
     string nonce = 3;
     string signature = 4;
 }
@@ -27,8 +28,9 @@ message MsgSubmitAnnouncementNonceResponse {}
 
 message MsgSubmitAttestation {
     option (cosmos.msg.v1.signer) = "sender";
+
     string sender = 1;
-    string announcement_id = 2;
+    uint64 announcement_id = 2;
     string signature = 3;
 }
 

@@ -2,37 +2,33 @@ syntax = "proto3";
 package side.dlc;
 
 import "gogoproto/gogo.proto";
-// import "side/btcbridge/params.proto";
-// import "side/btcbridge/btcbridge.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
 enum AnnouncementStatus {
-    Announcement_Unspecified = 1;
-    Announcement_Pending = 2;
-    Announcement_Ready = 3;
+    Announcement_Unspecified = 0;
+    Announcement_Pending = 1;
+    Announcement_Ready = 2;
 }
 
 message DLCAnnouncement {
-    string id = 1;
+    uint64 id = 1;
     DLCEvent oracle_event = 2;
     string signature = 3;
     AnnouncementStatus status = 4;
 }
 
 message DLCAttestation {
-    string announcement_id = 1;
-    string time = 2;
+    uint64 announcement_id = 1;
+    google.protobuf.Timestamp time = 2 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     string outcome = 3;
     string signature = 4;
 }
 
 message DLCEvent {
-    uint32 maturity_epoch = 2;
-    string nonce = 3;
-    string descriptor = 4;
-    string pubkey = 5;
+    uint32 maturity_epoch = 1;
+    string nonce = 2;
+    string descriptor = 3;
+    string pubkey = 4;
 }
-
-
-

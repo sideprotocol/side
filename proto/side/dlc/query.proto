@@ -11,47 +11,47 @@ option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
 // Query defines the gRPC querier service.
 service Query {
-    // Parameters queries the parameters of the module.
-    rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
+    // Params queries the parameters of the module.
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
       option (google.api.http).get = "/side/dlc/params";
     }
-    rpc QueryAnnouncements(QueryAnnouncementRequest) returns (QueryAnnouncementResponse) {
-        option (google.api.http).get = "/side/dlc/announcements";     
+    // Announcements queries the announcements by the given status.
+    rpc Announcements(QueryAnnouncementsRequest) returns (QueryAnnouncementsResponse) {
+        option (google.api.http).get = "/side/dlc/announcements";
     }
-    rpc QueryPrices(QueryPriceRequest) returns (QueryPricesResponse) {
-        option (google.api.http).get = "/side/dlc/announcements";     
+    // Price queries the current price by the given symbol.
+    rpc Price(QueryPriceRequest) returns (QueryPriceResponse) {
+        option (google.api.http).get = "/side/dlc/price";
     }
-
 }
 
-// QueryParamsRequest is request type for the QueryParams RPC method.
+// QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {
 }
 
-// QueryParamsResponse is response type for the QueryParams RPC method.
+// QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
     Params params = 1;
 }
 
-// QueryAnnouncementRequest is request type for the Query/QueryAnnouncements RPC method.
-message QueryAnnouncementRequest {
+// QueryAnnouncementsRequest is request type for the Query/Announcements RPC method.
+message QueryAnnouncementsRequest {
     string status = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
-  
-// QueryAnnouncementResponse is response type for the Query/QueryAnnouncements RPC method.
-message QueryAnnouncementResponse {
+
+// QueryAnnouncementsResponse is response type for the Query/Announcements RPC method.
+message QueryAnnouncementsResponse {
     repeated DLCAnnouncement announcements = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
-  
-// QueryAnnouncementRequest is request type for the Query/QueryAnnouncements RPC method.
+
+// QueryPriceRequest is request type for the Query/Price RPC method.
 message QueryPriceRequest {
     string symbol = 1;
 }
-  
-// QueryAnnouncementResponse is response type for the Query/QueryAnnouncements RPC method.
-message QueryPricesResponse {
+
+// QueryPriceResponse is response type for the Query/Price RPC method.
+message QueryPriceResponse {
     uint32 price = 1;
 }
- 

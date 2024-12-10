@@ -2,42 +2,43 @@ syntax = "proto3";
 package side.auction;
 
 import "gogoproto/gogo.proto";
-// import "side/btcbridge/params.proto";
-// import "side/btcbridge/btcbridge.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sideprotocol/side/x/auction/types";
 
 message Bid {
-    string auction_id = 1;
-    string bidder = 2;
-    int64 bid_price = 3;
-    Coin bid_amount = 4;
-    BidStatus status = 5;
+    uint64 id = 1;
+    uint64 auction_id = 2;
+    string bidder = 3;
+    int64 bid_price = 4;
+    cosmos.base.v1beta1.Coin bid_amount = 5;
+    BidStatus status = 6;
 }
 
 message Auction {
-    string id = 1;
-    Coin deposited_asset = 2;
+    uint64 id = 1;
+    cosmos.base.v1beta1.Coin deposited_asset = 2;
     string borrower = 3;
     int64 liquidated_price = 4;
-    int64 liquidated_time = 5;
+    google.protobuf.Timestamp liquidated_time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     int64 expected_value = 6;
     int64 bidded_value = 7;
-    AuctionStatus status = 8;
-    string payment_tx_id = 9;
+    string payment_tx_id = 8;
+    AuctionStatus status = 9;
 }
 
 enum AssetType {
-    Bitcoin = 1;
+    Bitcoin = 0;
 }
 
 enum AuctionStatus {
-    AuctionOpen = 1;
-    AuctionClose = 2;
+    AuctionOpen = 0;
+    AuctionClose = 1;
 }
 
 enum BidStatus {
-    Bidding = 1;
-    Accepted = 2;
-    Rejected = 3;
+    Bidding = 0;
+    Accepted = 1;
+    Rejected = 2;
 }

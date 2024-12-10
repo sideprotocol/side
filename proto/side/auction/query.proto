@@ -1,0 +1,59 @@
+syntax = "proto3";
+package side.auction;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "side/auction/auction.proto";
+import "side/auction/params.proto";
+
+option go_package = "github.com/sideprotocol/side/x/auction/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Params queries the parameters of the module.
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+      option (google.api.http).get = "/side/auction/params";
+    }
+    // Auctions queries the auctions by the given status.
+    rpc Auctions(QueryAuctionsRequest) returns (QueryAuctionsResponse) {
+        option (google.api.http).get = "/side/auction/auctions";
+    }
+    // Bids queries the bids by the given status.
+    rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
+        option (google.api.http).get = "/side/auction/bids";
+    }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+    Params params = 1;
+}
+
+// QueryAuctionsRequest is request type for the Query/Auctions RPC method.
+message QueryAuctionsRequest {
+    string status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryAuctionsResponse is response type for the Query/Auctions RPC method.
+message QueryAuctionsResponse {
+    repeated Auction auctions = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBidsRequest is request type for the Query/Bids RPC method.
+message QueryBidsRequest {
+    string status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryBidsResponse is response type for the Query/Bids RPC method.
+message QueryBidsResponse {
+    repeated Bid bids = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
