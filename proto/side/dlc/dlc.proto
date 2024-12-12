@@ -29,6 +29,7 @@ message DLCAttestation {
 message DLCEvent {
     uint32 maturity_epoch = 1;
     string nonce = 2;
-    string descriptor = 3;
-    string pubkey = 4;
+    uint64 index = 3;
+    string descriptor = 4;
+    string pubkey = 5;
 }
