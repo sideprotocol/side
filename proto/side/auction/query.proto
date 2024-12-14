@@ -36,7 +36,7 @@ message QueryParamsResponse {
 
 // QueryAuctionsRequest is request type for the Query/Auctions RPC method.
 message QueryAuctionsRequest {
-    string status = 1;
+    AuctionStatus status = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
@@ -48,7 +48,7 @@ message QueryAuctionsResponse {
 
 // QueryBidsRequest is request type for the Query/Bids RPC method.
 message QueryBidsRequest {
-    string status = 1;
+    BidStatus status = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 

@@ -36,7 +36,7 @@ message QueryParamsResponse {
 
 // QueryAnnouncementsRequest is request type for the Query/Announcements RPC method.
 message QueryAnnouncementsRequest {
-    string status = 1;
+    AnnouncementStatus status = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
