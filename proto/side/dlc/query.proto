@@ -39,6 +39,7 @@ message QueryCountNoncesRequest{}
 // counts should use the same order as recommende oracles in Params
 message QueryCountNoncesResponse{
     repeated uint32 counts = 1;
+    repeated uint64 indexs = 2;
 }
 
 message QueryNoncesRequest{}

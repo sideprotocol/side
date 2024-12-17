@@ -13,9 +13,10 @@ enum AnnouncementStatus {
 }
 
 message DLCNonce {
-    string nonce = 1;
-    string oracle_pubkey = 2;
-    google.protobuf.Timestamp time = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    uint64 index = 1;
+    string nonce = 2;
+    string oracle_pubkey = 3;
+    google.protobuf.Timestamp time = 4 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 message DLCAnnouncement {
