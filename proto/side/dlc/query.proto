@@ -23,6 +23,16 @@ service Query {
     rpc Price(QueryPriceRequest) returns (QueryPriceResponse) {
         option (google.api.http).get = "/side/dlc/price";
     }
+
+    rpc Nonces(QueryNoncesRequest) returns (QueryNoncesResponse) {
+        option (google.api.http).get = "/side/dlc/nonces";
+    }
+}
+
+message QueryNoncesRequest{}
+message QueryNoncesResponse{
+    repeated DLCNonce nonces = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.

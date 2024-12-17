@@ -13,4 +13,5 @@ message PriceInterval {
 // Params defines the parameters for the module.
 message Params {
     repeated PriceInterval price_interval = 1;
+    repeated string recommended_oracles = 2;
 }

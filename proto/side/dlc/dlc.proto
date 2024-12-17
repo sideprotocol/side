@@ -12,9 +12,15 @@ enum AnnouncementStatus {
     Announcement_Ready = 2;
 }
 
+message DLCNonce {
+    string nonce = 1;
+    string oracle_pubkey = 2;
+    google.protobuf.Timestamp time = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}
+
 message DLCAnnouncement {
     uint64 id = 1;
-    DLCEvent oracle_event = 2;
+    DLCEvent oracle_event = 2 [(gogoproto.nullable) = false];
     string signature = 3;
     AnnouncementStatus status = 4;
 }

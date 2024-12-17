@@ -9,10 +9,19 @@ option go_package = "github.com/sideprotocol/side/x/dlc/types";
 // Msg defines the Msg service.
 service Msg {
     option (cosmos.msg.v1.service) = true;
-
+    rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
     rpc SubmitAnnouncementNonce (MsgSubmitAnnouncementNonce) returns (MsgSubmitAnnouncementNonceResponse);
     rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
 }
+
+message MsgSubmitNonce {
+    option (cosmos.msg.v1.signer) = "sender";
+    string sender = 1;
+    string nonce = 3;
+    string signature = 4;
+}
+
+message MsgSubmitNonceResponse {}
 
 message MsgSubmitAnnouncementNonce {
     option (cosmos.msg.v1.signer) = "sender";
