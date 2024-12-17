@@ -31,6 +31,17 @@ service Query {
     rpc CountNonces(QueryCountNoncesRequest) returns (QueryCountNoncesResponse) {
         option (google.api.http).get = "/side/dlc/nonces/count";
     }
+
+    rpc Oracles(QueryOraclesRequest) returns (QueryOraclesResponse) {
+        option (google.api.http).get = "/side/dlc/oracles";
+    }
+}
+
+message QueryOraclesRequest{
+    DLCOracleStatus status = 1;
+}
+message QueryOraclesResponse{
+    repeated DLCOracle oracles = 1;
 }
 
 message QueryCountNoncesRequest{}
@@ -38,8 +49,7 @@ message QueryCountNoncesRequest{}
 // QueryCountNoncesResponse is response type for the Query/CountNonces RPC method.
 // counts should use the same order as recommende oracles in Params
 message QueryCountNoncesResponse{
-    repeated uint32 counts = 1;
-    repeated uint64 indexs = 2;
+    repeated uint32 counts = 1; // qty of nonce in the cache queue
 }
 
 message QueryNoncesRequest{}

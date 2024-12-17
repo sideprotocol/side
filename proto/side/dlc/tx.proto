@@ -12,13 +12,26 @@ service Msg {
     rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
     rpc SubmitAnnouncementNonce (MsgSubmitAnnouncementNonce) returns (MsgSubmitAnnouncementNonceResponse);
     rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
+    // rpc CreateOracle() returns () // called through gov
+    // rpc DisableOracle() returns () // called through gov
+    rpc SubmitOraclePubkey(MsgSubmitOraclePubkey) returns (MsgSubmitOraclePubkeyResponse);
+
 }
+
+message MsgSubmitOraclePubkey {
+    option (cosmos.msg.v1.signer) = "sender";
+    string sender = 1;
+    string pubkey = 2;
+    string signature = 3;
+}
+
+message MsgSubmitOraclePubkeyResponse {}
 
 message MsgSubmitNonce {
     option (cosmos.msg.v1.signer) = "sender";
     string sender = 1;
-    string nonce = 3;
-    string signature = 4;
+    string nonce = 2;
+    string signature = 3;
 }
 
 message MsgSubmitNonceResponse {}

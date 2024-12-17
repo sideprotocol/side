@@ -12,6 +12,23 @@ enum AnnouncementStatus {
     Announcement_Ready = 2;
 }
 
+enum DLCOracleStatus {
+    Oracle_Status_Pending = 1;
+    Oracle_status_Enable = 2;
+    Oracle_status_Disable = 3;
+}
+
+message DLCOracle {
+    uint32 id = 1;
+    string desc = 2;
+    repeated string participants = 3;
+    uint32 threshold = 4;
+    string address = 5;
+    string pubkey = 6;
+    DLCOracleStatus status = 7;
+    uint64 nonce_index = 8;
+}
+
 message DLCNonce {
     uint64 index = 1;
     string nonce = 2;
