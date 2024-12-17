@@ -13,9 +13,9 @@ enum AnnouncementStatus {
 }
 
 enum DLCOracleStatus {
-    Oracle_Status_Pending = 1;
-    Oracle_status_Enable = 2;
-    Oracle_status_Disable = 3;
+    Oracle_Status_Pending = 0;
+    Oracle_status_Enable = 1;
+    Oracle_status_Disable = 2;
 }
 
 message DLCOracle {
