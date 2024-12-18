@@ -14,5 +14,4 @@ message PriceInterval {
 message Params {
     uint32 nonce_queue_size = 1;
     repeated PriceInterval price_interval = 2;
-    repeated string recommended_oracles = 3;
 }
