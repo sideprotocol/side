@@ -50,6 +50,11 @@ func (header *BlockHeader) ToWireHeader() *wire.BlockHeader {
 	}
 }
 
+// GetWork gets the work of the block header
+func (header *BlockHeader) GetWork() *big.Int {
+	return blockchain.CalcWork(BitsToTargetUint32(header.Bits))
+}
+
 func BitsToTarget(bits string) *big.Int {
 	n := new(big.Int)
 	n.SetString(bits, 16)
