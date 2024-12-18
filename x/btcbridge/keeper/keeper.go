@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"math/big"
 
 	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/btcutil"
@@ -135,11 +136,10 @@ func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHead
 				return types.ErrInvalidReorgDepth
 			}
 
-			// check if the new block header has more work than the old one
-			oldNode := k.GetBlockHeaderByHeight(ctx, header.Height)
-			worksOld := blockchain.CalcWork(types.BitsToTargetUint32(oldNode.Bits))
-			worksNew := blockchain.CalcWork(types.BitsToTargetUint32(header.Bits))
-			if sdk.GetConfig().GetBtcChainCfg().Net == wire.MainNet && worksNew.Cmp(worksOld) <= 0 || worksNew.Cmp(worksOld) < 0 {
+			// check if the new block header has more work than the work accumulated from the old block to the current tip
+			totalWorkOldToTip := k.CalcTotalWork(ctx, header.Height, best.Height)
+			workNew := header.GetWork()
+			if sdk.GetConfig().GetBtcChainCfg().Net == wire.MainNet && workNew.Cmp(totalWorkOldToTip) <= 0 || workNew.Cmp(totalWorkOldToTip) < 0 {
 				return types.ErrForkedBlockHeader
 			}
 
@@ -208,6 +208,18 @@ func (k Keeper) IterateBlockHeaders(ctx sdk.Context, process func(header types.B
 			break
 		}
 	}
+}
+
+// CalcTotalWork calculates the total work of the given range of block headers
+func (k Keeper) CalcTotalWork(ctx sdk.Context, startHeight uint64, endHeight uint64) *big.Int {
+	totalWork := new(big.Int)
+
+	for i := startHeight; i <= endHeight; i++ {
+		work := k.GetBlockHeaderByHeight(ctx, i).GetWork()
+		totalWork = new(big.Int).Add(totalWork, work)
+	}
+
+	return totalWork
 }
 
 // ValidateTransaction validates the given transaction
