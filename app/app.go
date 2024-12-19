@@ -136,6 +136,7 @@ import (
 	upgradev093 "github.com/sideprotocol/side/app/upgrades/v093"
 	upgradev094 "github.com/sideprotocol/side/app/upgrades/v094"
 	upgradev095 "github.com/sideprotocol/side/app/upgrades/v095"
+	upgradev096 "github.com/sideprotocol/side/app/upgrades/v096"
 )
 
 const (
@@ -1134,6 +1135,7 @@ func (app *App) SetUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev093.UpgradeName, upgradev093.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev094.UpgradeName, upgradev094.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev095.UpgradeName, upgradev095.CreateUpgradeHandler(app.ModuleManager, app.configurator, app.ParamsKeeper, app.ConsensusParamsKeeper))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev096.UpgradeName, upgradev096.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 }
 
 func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {
