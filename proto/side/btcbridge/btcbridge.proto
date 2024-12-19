@@ -169,6 +169,30 @@ message DKGRequest {
   DKGRequestStatus status = 8;
 }
 
+// DKG Request V1
+message DKGRequestV1 {
+  // the unique request id
+  uint64 id = 1;
+  // participant set
+  repeated DKGParticipant participants = 2;
+  // threshold required to perform DKG
+  uint32 threshold = 3;
+  // asset types of vaults to be generated
+  repeated AssetType vault_types = 4;
+   // indicates if disabling bridge deposit and withdrawal
+  bool disable_bridge = 5;
+  // indicates if transferring assets to the newly generated vaults when the DKG request is completed
+  bool enable_transfer = 6;
+  // target number of the UTXOs to be transferred each time
+  uint32 target_utxo_num = 7;
+  // fee rate for vault transfer
+  string fee_rate = 8;
+  // expiration time
+  google.protobuf.Timestamp expiration = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  // status
+  DKGRequestStatus status = 10;
+}
+
 // DKG Completion Request
 message DKGCompletionRequest {
   // request id
