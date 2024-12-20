@@ -20,9 +20,10 @@ service Msg {
 
 message MsgSubmitOraclePubkey {
     option (cosmos.msg.v1.signer) = "sender";
-    string sender = 1;
-    string pubkey = 2;
-    string signature = 3;
+    string oracle_id = 1;
+    string sender = 2;
+    string pubkey = 3;
+    string signature = 4;
 }
 
 message MsgSubmitOraclePubkeyResponse {}
