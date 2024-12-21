@@ -28,6 +28,20 @@ message DLCOracle {
     DLCOracleStatus status = 7;
     uint64 nonce_index = 8;
 }
+enum AgencyStatus {
+    Agency_Status_Pending = 0;
+    Agency_status_Enable = 1;
+    Agency_status_Disable = 2;
+}
+
+message Agency {
+    uint32 id = 1;
+    string desc = 2;
+    repeated string participants = 3;
+    uint32 threshold = 4;
+    string address = 5;
+    AgencyStatus status = 6;
+}
 
 message DLCNonce {
     uint64 index = 1;

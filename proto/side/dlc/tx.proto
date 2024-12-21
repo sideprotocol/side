@@ -15,8 +15,18 @@ service Msg {
     // rpc CreateOracle() returns () // called through gov
     // rpc DisableOracle() returns () // called through gov
     rpc SubmitOraclePubkey(MsgSubmitOraclePubkey) returns (MsgSubmitOraclePubkeyResponse);
-
+    rpc SubmitAgencyAddress(MsgSubmitAgencyAddress) returns (MsgSubmitAgencyAddressResponse);
 }
+
+message MsgSubmitAgencyAddress {
+    option (cosmos.msg.v1.signer) = "sender";
+    string id = 1;
+    string sender = 2;
+    string address = 3;
+    string signature = 4;
+}
+
+message MsgSubmitAgencyAddressResponse{}
 
 message MsgSubmitOraclePubkey {
     option (cosmos.msg.v1.signer) = "sender";

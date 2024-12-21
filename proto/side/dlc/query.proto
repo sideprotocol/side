@@ -35,6 +35,18 @@ service Query {
     rpc Oracles(QueryOraclesRequest) returns (QueryOraclesResponse) {
         option (google.api.http).get = "/side/dlc/oracles";
     }
+
+    rpc Agencies(QueryAgenciesRequest) returns (QueryAgenciesResponse) {
+        option (google.api.http).get = "/side/dlc/agencies";
+    }
+}
+
+message QueryAgenciesRequest {
+    DCAStatus status = 1;
+}
+
+message QueryAgenciesResponse {
+    repeated DCA agencies = 1;
 }
 
 message QueryOraclesRequest{
