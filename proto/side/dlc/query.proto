@@ -42,7 +42,7 @@ service Query {
 }
 
 message QueryAgenciesRequest {
-    DCAStatus status = 1;
+    AgencyStatus status = 1;
 }
 
 message QueryAgenciesResponse {
