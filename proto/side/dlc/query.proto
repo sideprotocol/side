@@ -16,9 +16,14 @@ service Query {
       option (google.api.http).get = "/side/dlc/params";
     }
     // Announcements queries the announcements by the given status.
-    rpc Announcements(QueryAnnouncementsRequest) returns (QueryAnnouncementsResponse) {
-        option (google.api.http).get = "/side/dlc/announcements";
+    rpc Events(QueryPriceEventRequest) returns (QueryPriceEventResponse) {
+        option (google.api.http).get = "/side/dlc/events";
     }
+
+    rpc Attestations(QueryAttestationRequest) returns (QueryAttestationResponse) {
+        option (google.api.http).get = "/side/dlc/attestations";
+    }
+
     // Price queries the current price by the given symbol.
     rpc Price(QueryPriceRequest) returns (QueryPriceResponse) {
         option (google.api.http).get = "/side/dlc/price";
@@ -41,6 +46,10 @@ service Query {
     }
 }
 
+message QueryAttestationRequest{} 
+message QueryAttestationResponse {
+    repeated DLCAttestation attestations = 1;
+}
 message QueryAgenciesRequest {
     AgencyStatus status = 1;
 }
@@ -80,14 +89,14 @@ message QueryParamsResponse {
 }
 
 // QueryAnnouncementsRequest is request type for the Query/Announcements RPC method.
-message QueryAnnouncementsRequest {
-    AnnouncementStatus status = 1;
+message QueryPriceEventRequest {
+    bool has_triggered = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 // QueryAnnouncementsResponse is response type for the Query/Announcements RPC method.
-message QueryAnnouncementsResponse {
-    repeated DLCAnnouncement announcements = 1;
+message QueryPriceEventResponse {
+    repeated DLCPriceEvent events = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

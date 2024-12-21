@@ -10,7 +10,7 @@ option go_package = "github.com/sideprotocol/side/x/dlc/types";
 service Msg {
     option (cosmos.msg.v1.service) = true;
     rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
-    rpc SubmitAnnouncementNonce (MsgSubmitAnnouncementNonce) returns (MsgSubmitAnnouncementNonceResponse);
+    // rpc SubmitAnnouncementNonce (MsgSubmitAnnouncementNonce) returns (MsgSubmitAnnouncementNonceResponse);
     rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
     // rpc CreateOracle() returns () // called through gov
     // rpc DisableOracle() returns () // called through gov
@@ -47,16 +47,16 @@ message MsgSubmitNonce {
 
 message MsgSubmitNonceResponse {}
 
-message MsgSubmitAnnouncementNonce {
-    option (cosmos.msg.v1.signer) = "sender";
+// message MsgSubmitAnnouncementNonce {
+//     option (cosmos.msg.v1.signer) = "sender";
 
-    string sender = 1;
-    uint64 announcement_id = 2;
-    string nonce = 3;
-    string signature = 4;
-}
+//     string sender = 1;
+//     uint64 announcement_id = 2;
+//     string nonce = 3;
+//     string signature = 4;
+// }
 
-message MsgSubmitAnnouncementNonceResponse {}
+// message MsgSubmitAnnouncementNonceResponse {}
 
 
 message MsgSubmitAttestation {
