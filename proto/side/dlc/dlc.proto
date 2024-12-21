@@ -6,12 +6,6 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
-enum AnnouncementStatus {
-    Announcement_Unspecified = 0;
-    Announcement_Pending = 1;
-    Announcement_Ready = 2;
-}
-
 enum DLCOracleStatus {
     Oracle_Status_Pending = 0;
     Oracle_status_Enable = 1;
@@ -50,23 +44,28 @@ message DLCNonce {
     google.protobuf.Timestamp time = 4 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
-message DLCAnnouncement {
+message DLCPriceEvent {
     uint64 id = 1;
-    DLCEvent oracle_event = 2 [(gogoproto.nullable) = false];
-    string signature = 3;
-    AnnouncementStatus status = 4;
+    uint64 trigger_price = 2;
+    string nonce = 3;
+    string pubkey = 4;
+    string description = 5;
+    bool has_triggered = 6;
+    google.protobuf.Timestamp publish_at = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 message DLCAttestation {
-    uint64 announcement_id = 1;
-    google.protobuf.Timestamp time = 2 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    string outcome = 3;
-    string signature = 4;
+    string id = 1;
+    uint64 event_id = 2;
+    google.protobuf.Timestamp time = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    string pubkey = 4;
+    string outcome = 5;
+    string signature = 6;
 }
 
-message DLCEvent {
-    uint32 maturity_epoch = 1;
-    string nonce = 2;
-    string descriptor = 3;
-    string pubkey = 4;
-}
+// message DLCEvent {
+//     uint32 maturity_epoch = 1;
+//     string nonce = 2;
+//     string descriptor = 3;
+//     string pubkey = 4;
+// }
