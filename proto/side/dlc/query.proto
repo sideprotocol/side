@@ -46,7 +46,7 @@ message QueryAgenciesRequest {
 }
 
 message QueryAgenciesResponse {
-    repeated DCA agencies = 1;
+    repeated Agency agencies = 1;
 }
 
 message QueryOraclesRequest{
