@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"math/big"
 
 	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/btcutil"
@@ -95,15 +96,22 @@ func (k Keeper) SetBlockHeader(ctx sdk.Context, header *types.BlockHeader) {
 	store.Set(types.BtcBlockHeaderHeightKey(header.Height), []byte(header.Hash))
 }
 
-func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHeader) error {
+func (k Keeper) SetBlockHeaders(ctx sdk.Context, headers []*types.BlockHeader) {
+	for _, h := range headers {
+		k.SetBlockHeader(ctx, h)
+	}
+}
+
+func (k Keeper) InsertBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHeader) error {
 	store := ctx.KVStore(k.storeKey)
 
-	// first check if some block header already exists
-	for _, header := range blockHeaders {
-		if store.Has(types.BtcBlockHeaderHashKey(header.Hash)) {
-			// return no error
-			return nil
-		}
+	startBlockHeader := blockHeaders[0]
+	newBestBlockHeader := blockHeaders[len(blockHeaders)-1]
+
+	// check if the starting block header already exists
+	if store.Has(types.BtcBlockHeaderHashKey(startBlockHeader.Hash)) {
+		// return no error
+		return nil
 	}
 
 	params := k.GetParams(ctx)
@@ -111,57 +119,49 @@ func (k Keeper) SetBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockHead
 	// get the best block header
 	best := k.GetBestBlockHeader(ctx)
 
-	for _, header := range blockHeaders {
-		// validate the block header
-		if err := header.Validate(); err != nil {
-			return err
+	if startBlockHeader.PreviousBlockHash == best.Hash {
+		if startBlockHeader.Height != best.Height+1 {
+			return errorsmod.Wrap(types.ErrInvalidBlockHeaders, "invalid block height")
+		}
+	} else {
+		// reorg detected
+		// check if the reorg depth exceeds the safe confirmations
+		if best.Height-startBlockHeader.Height+1 > uint64(params.Confirmations) {
+			return types.ErrInvalidReorgDepth
 		}
 
 		// check if the previous block exists
-		if !store.Has(types.BtcBlockHeaderHashKey(header.PreviousBlockHash)) {
-			return errorsmod.Wrap(types.ErrInvalidBlockHeader, "previous block does not exist")
+		if !store.Has(types.BtcBlockHeaderHashKey(startBlockHeader.PreviousBlockHash)) {
+			return errorsmod.Wrap(types.ErrInvalidBlockHeaders, "previous block does not exist")
 		}
 
 		// check the block height
-		prevBlock := k.GetBlockHeader(ctx, header.PreviousBlockHash)
-		if header.Height != prevBlock.Height+1 {
-			return errorsmod.Wrap(types.ErrInvalidBlockHeader, "incorrect block height")
+		prevBlock := k.GetBlockHeader(ctx, startBlockHeader.PreviousBlockHash)
+		if startBlockHeader.Height != prevBlock.Height+1 {
+			return errorsmod.Wrap(types.ErrInvalidBlockHeaders, "invalid block height")
 		}
 
-		// check whether it's next block header or not
-		if best.Hash != header.PreviousBlockHash {
-			// check if the reorg depth exceeds the safe confirmations
-			if best.Height-header.Height+1 > uint64(params.Confirmations) {
-				return types.ErrInvalidReorgDepth
-			}
-
-			// check if the new block header has more work than the old one
-			oldNode := k.GetBlockHeaderByHeight(ctx, header.Height)
-			worksOld := blockchain.CalcWork(types.BitsToTargetUint32(oldNode.Bits))
-			worksNew := blockchain.CalcWork(types.BitsToTargetUint32(header.Bits))
-			if sdk.GetConfig().GetBtcChainCfg().Net == wire.MainNet && worksNew.Cmp(worksOld) <= 0 || worksNew.Cmp(worksOld) < 0 {
-				return types.ErrForkedBlockHeader
-			}
-
-			// remove the block headers after the forked block header
-			// and consider the forked block header as the best block header
-			for i := header.Height; i <= best.Height; i++ {
-				ctx.Logger().Info("Removing block header: ", i)
-				thash := k.GetBlockHashByHeight(ctx, i)
-				store.Delete(types.BtcBlockHeaderHashKey(thash))
-				store.Delete(types.BtcBlockHeaderHeightKey(i))
-			}
+		// check if the new block headers has more work than the work accumulated from the forked block to the current tip
+		totalWorkOldToTip := k.CalcTotalWork(ctx, startBlockHeader.Height, best.Height)
+		totalWorkNew := types.BlockHeaders(blockHeaders).GetTotalWork()
+		if sdk.GetConfig().GetBtcChainCfg().Net == wire.MainNet && totalWorkNew.Cmp(totalWorkOldToTip) <= 0 || totalWorkNew.Cmp(totalWorkOldToTip) < 0 {
+			return errorsmod.Wrap(types.ErrInvalidBlockHeaders, "invalid forking block headers")
 		}
 
-		// set the block header
-		k.SetBlockHeader(ctx, header)
-
-		// update the best block header
-		best = header
+		// remove the block headers starting from the forked block height
+		for i := startBlockHeader.Height; i <= best.Height; i++ {
+			ctx.Logger().Info("Removing block header: ", i)
+			thash := k.GetBlockHashByHeight(ctx, i)
+			store.Delete(types.BtcBlockHeaderHashKey(thash))
+			store.Delete(types.BtcBlockHeaderHeightKey(i))
+		}
 	}
 
+	// set block headers
+	k.SetBlockHeaders(ctx, blockHeaders)
+
 	// set the best block header
-	k.SetBestBlockHeader(ctx, best)
+	k.SetBestBlockHeader(ctx, newBestBlockHeader)
 
 	return nil
 }
@@ -208,6 +208,18 @@ func (k Keeper) IterateBlockHeaders(ctx sdk.Context, process func(header types.B
 			break
 		}
 	}
+}
+
+// CalcTotalWork calculates the total work of the given range of block headers
+func (k Keeper) CalcTotalWork(ctx sdk.Context, startHeight uint64, endHeight uint64) *big.Int {
+	totalWork := new(big.Int)
+
+	for i := startHeight; i <= endHeight; i++ {
+		work := k.GetBlockHeaderByHeight(ctx, i).GetWork()
+		totalWork = new(big.Int).Add(totalWork, work)
+	}
+
+	return totalWork
 }
 
 // ValidateTransaction validates the given transaction

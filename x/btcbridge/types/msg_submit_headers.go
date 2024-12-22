@@ -23,8 +23,8 @@ func (msg *MsgSubmitBlockHeaders) ValidateBasic() error {
 		return errorsmod.Wrapf(err, "invalid sender address (%s)", err)
 	}
 
-	if len(msg.BlockHeaders) == 0 {
-		return errorsmod.Wrap(ErrInvalidBlockHeader, "block headers cannot be empty")
+	if err := BlockHeaders(msg.BlockHeaders).Validate(); err != nil {
+		return err
 	}
 
 	return nil

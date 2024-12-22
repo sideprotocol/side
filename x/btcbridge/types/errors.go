@@ -8,10 +8,9 @@ import (
 
 // x/btcbridge module sentinel errors
 var (
-	ErrInvalidBlockHeader = errorsmod.Register(ModuleName, 1100, "invalid block header")
-	ErrBlockHeaderExists  = errorsmod.Register(ModuleName, 1101, "block header already exists")
-	ErrInvalidReorgDepth  = errorsmod.Register(ModuleName, 1102, "invalid reorg depth")
-	ErrForkedBlockHeader  = errorsmod.Register(ModuleName, 1103, "Invalid forked block header")
+	ErrInvalidBlockHeader  = errorsmod.Register(ModuleName, 1100, "invalid block header")
+	ErrInvalidBlockHeaders = errorsmod.Register(ModuleName, 1101, "invalid block headers")
+	ErrInvalidReorgDepth   = errorsmod.Register(ModuleName, 1102, "invalid reorg depth")
 
 	ErrBlockNotFound             = errorsmod.Register(ModuleName, 2101, "block not found")
 	ErrTransactionNotIncluded    = errorsmod.Register(ModuleName, 2102, "transaction not included in block")
