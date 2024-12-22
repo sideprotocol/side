@@ -26,8 +26,8 @@ func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmi
 		return nil, err
 	}
 
-	// Set block headers
-	err := m.SetBlockHeaders(ctx, msg.BlockHeaders)
+	// insert block headers
+	err := m.InsertBlockHeaders(ctx, msg.BlockHeaders)
 	if err != nil {
 		return nil, err
 	}

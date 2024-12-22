@@ -50,6 +50,51 @@ func (header *BlockHeader) ToWireHeader() *wire.BlockHeader {
 	}
 }
 
+// GetWork gets the work of the block header
+func (header *BlockHeader) GetWork() *big.Int {
+	return blockchain.CalcWork(BitsToTargetUint32(header.Bits))
+}
+
+// BlockHeaders defines a set of block headers which form a chain
+type BlockHeaders []*BlockHeader
+
+// Validate validates if each block header is valid and if the block headers form a chain
+func (headers BlockHeaders) Validate() error {
+	if len(headers) == 0 {
+		return errorsmod.Wrap(ErrInvalidBlockHeaders, "block headers can not be empty")
+	}
+
+	var lastHeight uint64
+	var lastHash string
+
+	for i, h := range headers {
+		if err := h.Validate(); err != nil {
+			return err
+		}
+
+		if i > 0 && h.Height != lastHeight+1 && h.PreviousBlockHash != lastHash {
+			return errorsmod.Wrap(ErrInvalidBlockHeaders, "block headers can not form a chain")
+		}
+
+		lastHeight = h.Height
+		lastHash = h.Hash
+	}
+
+	return nil
+}
+
+// GetTotalWork gets the total work of the block headers
+func (headers BlockHeaders) GetTotalWork() *big.Int {
+	totalWork := new(big.Int)
+
+	for _, h := range headers {
+		work := h.GetWork()
+		totalWork = new(big.Int).Add(totalWork, work)
+	}
+
+	return totalWork
+}
+
 func BitsToTarget(bits string) *big.Int {
 	n := new(big.Int)
 	n.SetString(bits, 16)
