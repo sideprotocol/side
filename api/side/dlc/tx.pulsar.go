@@ -15,31 +15,31 @@ import (
 )
 
 var (
-	md_MsgSubmitAnnouncementNonce                 protoreflect.MessageDescriptor
-	fd_MsgSubmitAnnouncementNonce_sender          protoreflect.FieldDescriptor
-	fd_MsgSubmitAnnouncementNonce_announcement_id protoreflect.FieldDescriptor
-	fd_MsgSubmitAnnouncementNonce_nonce           protoreflect.FieldDescriptor
-	fd_MsgSubmitAnnouncementNonce_signature       protoreflect.FieldDescriptor
+	md_MsgSubmitAgencyAddress           protoreflect.MessageDescriptor
+	fd_MsgSubmitAgencyAddress_id        protoreflect.FieldDescriptor
+	fd_MsgSubmitAgencyAddress_sender    protoreflect.FieldDescriptor
+	fd_MsgSubmitAgencyAddress_address   protoreflect.FieldDescriptor
+	fd_MsgSubmitAgencyAddress_signature protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_dlc_tx_proto_init()
-	md_MsgSubmitAnnouncementNonce = File_side_dlc_tx_proto.Messages().ByName("MsgSubmitAnnouncementNonce")
-	fd_MsgSubmitAnnouncementNonce_sender = md_MsgSubmitAnnouncementNonce.Fields().ByName("sender")
-	fd_MsgSubmitAnnouncementNonce_announcement_id = md_MsgSubmitAnnouncementNonce.Fields().ByName("announcement_id")
-	fd_MsgSubmitAnnouncementNonce_nonce = md_MsgSubmitAnnouncementNonce.Fields().ByName("nonce")
-	fd_MsgSubmitAnnouncementNonce_signature = md_MsgSubmitAnnouncementNonce.Fields().ByName("signature")
+	md_MsgSubmitAgencyAddress = File_side_dlc_tx_proto.Messages().ByName("MsgSubmitAgencyAddress")
+	fd_MsgSubmitAgencyAddress_id = md_MsgSubmitAgencyAddress.Fields().ByName("id")
+	fd_MsgSubmitAgencyAddress_sender = md_MsgSubmitAgencyAddress.Fields().ByName("sender")
+	fd_MsgSubmitAgencyAddress_address = md_MsgSubmitAgencyAddress.Fields().ByName("address")
+	fd_MsgSubmitAgencyAddress_signature = md_MsgSubmitAgencyAddress.Fields().ByName("signature")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgSubmitAnnouncementNonce)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgSubmitAgencyAddress)(nil)
 
-type fastReflection_MsgSubmitAnnouncementNonce MsgSubmitAnnouncementNonce
+type fastReflection_MsgSubmitAgencyAddress MsgSubmitAgencyAddress
 
-func (x *MsgSubmitAnnouncementNonce) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgSubmitAnnouncementNonce)(x)
+func (x *MsgSubmitAgencyAddress) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitAgencyAddress)(x)
 }
 
-func (x *MsgSubmitAnnouncementNonce) slowProtoReflect() protoreflect.Message {
+func (x *MsgSubmitAgencyAddress) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_dlc_tx_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -51,43 +51,43 @@ func (x *MsgSubmitAnnouncementNonce) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgSubmitAnnouncementNonce_messageType fastReflection_MsgSubmitAnnouncementNonce_messageType
-var _ protoreflect.MessageType = fastReflection_MsgSubmitAnnouncementNonce_messageType{}
+var _fastReflection_MsgSubmitAgencyAddress_messageType fastReflection_MsgSubmitAgencyAddress_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitAgencyAddress_messageType{}
 
-type fastReflection_MsgSubmitAnnouncementNonce_messageType struct{}
+type fastReflection_MsgSubmitAgencyAddress_messageType struct{}
 
-func (x fastReflection_MsgSubmitAnnouncementNonce_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgSubmitAnnouncementNonce)(nil)
+func (x fastReflection_MsgSubmitAgencyAddress_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitAgencyAddress)(nil)
 }
-func (x fastReflection_MsgSubmitAnnouncementNonce_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitAnnouncementNonce)
+func (x fastReflection_MsgSubmitAgencyAddress_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitAgencyAddress)
 }
-func (x fastReflection_MsgSubmitAnnouncementNonce_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitAnnouncementNonce
+func (x fastReflection_MsgSubmitAgencyAddress_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitAgencyAddress
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitAnnouncementNonce
+func (x *fastReflection_MsgSubmitAgencyAddress) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitAgencyAddress
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Type() protoreflect.MessageType {
-	return _fastReflection_MsgSubmitAnnouncementNonce_messageType
+func (x *fastReflection_MsgSubmitAgencyAddress) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitAgencyAddress_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitAnnouncementNonce)
+func (x *fastReflection_MsgSubmitAgencyAddress) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitAgencyAddress)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Interface() protoreflect.ProtoMessage {
-	return (*MsgSubmitAnnouncementNonce)(x)
+func (x *fastReflection_MsgSubmitAgencyAddress) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitAgencyAddress)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -95,28 +95,28 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) Interface() protoreflect.Pro
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgSubmitAgencyAddress) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != "" {
+		value := protoreflect.ValueOfString(x.Id)
+		if !f(fd_MsgSubmitAgencyAddress_id, value) {
+			return
+		}
+	}
 	if x.Sender != "" {
 		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgSubmitAnnouncementNonce_sender, value) {
+		if !f(fd_MsgSubmitAgencyAddress_sender, value) {
 			return
 		}
 	}
-	if x.AnnouncementId != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.AnnouncementId)
-		if !f(fd_MsgSubmitAnnouncementNonce_announcement_id, value) {
-			return
-		}
-	}
-	if x.Nonce != "" {
-		value := protoreflect.ValueOfString(x.Nonce)
-		if !f(fd_MsgSubmitAnnouncementNonce_nonce, value) {
+	if x.Address != "" {
+		value := protoreflect.ValueOfString(x.Address)
+		if !f(fd_MsgSubmitAgencyAddress_address, value) {
 			return
 		}
 	}
 	if x.Signature != "" {
 		value := protoreflect.ValueOfString(x.Signature)
-		if !f(fd_MsgSubmitAnnouncementNonce_signature, value) {
+		if !f(fd_MsgSubmitAgencyAddress_signature, value) {
 			return
 		}
 	}
@@ -133,21 +133,21 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) Range(f func(protoreflect.Fi
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgSubmitAgencyAddress) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.dlc.MsgSubmitAnnouncementNonce.sender":
+	case "side.dlc.MsgSubmitAgencyAddress.id":
+		return x.Id != ""
+	case "side.dlc.MsgSubmitAgencyAddress.sender":
 		return x.Sender != ""
-	case "side.dlc.MsgSubmitAnnouncementNonce.announcement_id":
-		return x.AnnouncementId != uint64(0)
-	case "side.dlc.MsgSubmitAnnouncementNonce.nonce":
-		return x.Nonce != ""
-	case "side.dlc.MsgSubmitAnnouncementNonce.signature":
+	case "side.dlc.MsgSubmitAgencyAddress.address":
+		return x.Address != ""
+	case "side.dlc.MsgSubmitAgencyAddress.signature":
 		return x.Signature != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonce"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddress"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonce does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddress does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -157,21 +157,21 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) Has(fd protoreflect.FieldDes
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgSubmitAgencyAddress) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.dlc.MsgSubmitAnnouncementNonce.sender":
+	case "side.dlc.MsgSubmitAgencyAddress.id":
+		x.Id = ""
+	case "side.dlc.MsgSubmitAgencyAddress.sender":
 		x.Sender = ""
-	case "side.dlc.MsgSubmitAnnouncementNonce.announcement_id":
-		x.AnnouncementId = uint64(0)
-	case "side.dlc.MsgSubmitAnnouncementNonce.nonce":
-		x.Nonce = ""
-	case "side.dlc.MsgSubmitAnnouncementNonce.signature":
+	case "side.dlc.MsgSubmitAgencyAddress.address":
+		x.Address = ""
+	case "side.dlc.MsgSubmitAgencyAddress.signature":
 		x.Signature = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonce"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddress"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonce does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddress does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -181,25 +181,25 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) Clear(fd protoreflect.FieldD
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitAgencyAddress) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.dlc.MsgSubmitAnnouncementNonce.sender":
+	case "side.dlc.MsgSubmitAgencyAddress.id":
+		value := x.Id
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.MsgSubmitAgencyAddress.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
-	case "side.dlc.MsgSubmitAnnouncementNonce.announcement_id":
-		value := x.AnnouncementId
-		return protoreflect.ValueOfUint64(value)
-	case "side.dlc.MsgSubmitAnnouncementNonce.nonce":
-		value := x.Nonce
+	case "side.dlc.MsgSubmitAgencyAddress.address":
+		value := x.Address
 		return protoreflect.ValueOfString(value)
-	case "side.dlc.MsgSubmitAnnouncementNonce.signature":
+	case "side.dlc.MsgSubmitAgencyAddress.signature":
 		value := x.Signature
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonce"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddress"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonce does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddress does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -213,21 +213,21 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) Get(descriptor protoreflect.
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgSubmitAgencyAddress) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.dlc.MsgSubmitAnnouncementNonce.sender":
+	case "side.dlc.MsgSubmitAgencyAddress.id":
+		x.Id = value.Interface().(string)
+	case "side.dlc.MsgSubmitAgencyAddress.sender":
 		x.Sender = value.Interface().(string)
-	case "side.dlc.MsgSubmitAnnouncementNonce.announcement_id":
-		x.AnnouncementId = value.Uint()
-	case "side.dlc.MsgSubmitAnnouncementNonce.nonce":
-		x.Nonce = value.Interface().(string)
-	case "side.dlc.MsgSubmitAnnouncementNonce.signature":
+	case "side.dlc.MsgSubmitAgencyAddress.address":
+		x.Address = value.Interface().(string)
+	case "side.dlc.MsgSubmitAgencyAddress.signature":
 		x.Signature = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonce"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddress"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonce does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddress does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -241,52 +241,52 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) Set(fd protoreflect.FieldDes
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitAgencyAddress) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.dlc.MsgSubmitAnnouncementNonce.sender":
-		panic(fmt.Errorf("field sender of message side.dlc.MsgSubmitAnnouncementNonce is not mutable"))
-	case "side.dlc.MsgSubmitAnnouncementNonce.announcement_id":
-		panic(fmt.Errorf("field announcement_id of message side.dlc.MsgSubmitAnnouncementNonce is not mutable"))
-	case "side.dlc.MsgSubmitAnnouncementNonce.nonce":
-		panic(fmt.Errorf("field nonce of message side.dlc.MsgSubmitAnnouncementNonce is not mutable"))
-	case "side.dlc.MsgSubmitAnnouncementNonce.signature":
-		panic(fmt.Errorf("field signature of message side.dlc.MsgSubmitAnnouncementNonce is not mutable"))
+	case "side.dlc.MsgSubmitAgencyAddress.id":
+		panic(fmt.Errorf("field id of message side.dlc.MsgSubmitAgencyAddress is not mutable"))
+	case "side.dlc.MsgSubmitAgencyAddress.sender":
+		panic(fmt.Errorf("field sender of message side.dlc.MsgSubmitAgencyAddress is not mutable"))
+	case "side.dlc.MsgSubmitAgencyAddress.address":
+		panic(fmt.Errorf("field address of message side.dlc.MsgSubmitAgencyAddress is not mutable"))
+	case "side.dlc.MsgSubmitAgencyAddress.signature":
+		panic(fmt.Errorf("field signature of message side.dlc.MsgSubmitAgencyAddress is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonce"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddress"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonce does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddress does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitAgencyAddress) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.dlc.MsgSubmitAnnouncementNonce.sender":
+	case "side.dlc.MsgSubmitAgencyAddress.id":
 		return protoreflect.ValueOfString("")
-	case "side.dlc.MsgSubmitAnnouncementNonce.announcement_id":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "side.dlc.MsgSubmitAnnouncementNonce.nonce":
+	case "side.dlc.MsgSubmitAgencyAddress.sender":
 		return protoreflect.ValueOfString("")
-	case "side.dlc.MsgSubmitAnnouncementNonce.signature":
+	case "side.dlc.MsgSubmitAgencyAddress.address":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.MsgSubmitAgencyAddress.signature":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonce"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddress"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonce does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddress does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgSubmitAgencyAddress) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.dlc.MsgSubmitAnnouncementNonce", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.MsgSubmitAgencyAddress", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -294,7 +294,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) WhichOneof(d protoreflect.On
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgSubmitAgencyAddress) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -305,7 +305,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) GetUnknown() protoreflect.Ra
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgSubmitAgencyAddress) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -317,7 +317,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) SetUnknown(fields protorefle
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) IsValid() bool {
+func (x *fastReflection_MsgSubmitAgencyAddress) IsValid() bool {
 	return x != nil
 }
 
@@ -327,9 +327,9 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgSubmitAgencyAddress) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgSubmitAnnouncementNonce)
+		x := input.Message.Interface().(*MsgSubmitAgencyAddress)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -341,14 +341,15 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.M
 		var n int
 		var l int
 		_ = l
+		l = len(x.Id)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		l = len(x.Sender)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.AnnouncementId != 0 {
-			n += 1 + runtime.Sov(uint64(x.AnnouncementId))
-		}
-		l = len(x.Nonce)
+		l = len(x.Address)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -366,7 +367,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.M
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitAnnouncementNonce)
+		x := input.Message.Interface().(*MsgSubmitAgencyAddress)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -392,22 +393,24 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.M
 			i--
 			dAtA[i] = 0x22
 		}
-		if len(x.Nonce) > 0 {
-			i -= len(x.Nonce)
-			copy(dAtA[i:], x.Nonce)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Nonce)))
+		if len(x.Address) > 0 {
+			i -= len(x.Address)
+			copy(dAtA[i:], x.Address)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
 			i--
 			dAtA[i] = 0x1a
-		}
-		if x.AnnouncementId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.AnnouncementId))
-			i--
-			dAtA[i] = 0x10
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
 			copy(dAtA[i:], x.Sender)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Id) > 0 {
+			i -= len(x.Id)
+			copy(dAtA[i:], x.Id)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Id)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -422,7 +425,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.M
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitAnnouncementNonce)
+		x := input.Message.Interface().(*MsgSubmitAgencyAddress)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -454,13 +457,45 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.M
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitAnnouncementNonce: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitAgencyAddress: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitAnnouncementNonce: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitAgencyAddress: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Id = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 				}
@@ -492,28 +527,9 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.M
 				}
 				x.Sender = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AnnouncementId", wireType)
-				}
-				x.AnnouncementId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.AnnouncementId |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Nonce", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -541,7 +557,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.M
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Nonce = string(dAtA[iNdEx:postIndex])
+				x.Address = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
@@ -611,23 +627,23 @@ func (x *fastReflection_MsgSubmitAnnouncementNonce) ProtoMethods() *protoiface.M
 }
 
 var (
-	md_MsgSubmitAnnouncementNonceResponse protoreflect.MessageDescriptor
+	md_MsgSubmitAgencyAddressResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_side_dlc_tx_proto_init()
-	md_MsgSubmitAnnouncementNonceResponse = File_side_dlc_tx_proto.Messages().ByName("MsgSubmitAnnouncementNonceResponse")
+	md_MsgSubmitAgencyAddressResponse = File_side_dlc_tx_proto.Messages().ByName("MsgSubmitAgencyAddressResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgSubmitAnnouncementNonceResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgSubmitAgencyAddressResponse)(nil)
 
-type fastReflection_MsgSubmitAnnouncementNonceResponse MsgSubmitAnnouncementNonceResponse
+type fastReflection_MsgSubmitAgencyAddressResponse MsgSubmitAgencyAddressResponse
 
-func (x *MsgSubmitAnnouncementNonceResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgSubmitAnnouncementNonceResponse)(x)
+func (x *MsgSubmitAgencyAddressResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitAgencyAddressResponse)(x)
 }
 
-func (x *MsgSubmitAnnouncementNonceResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgSubmitAgencyAddressResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_dlc_tx_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -639,43 +655,43 @@ func (x *MsgSubmitAnnouncementNonceResponse) slowProtoReflect() protoreflect.Mes
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgSubmitAnnouncementNonceResponse_messageType fastReflection_MsgSubmitAnnouncementNonceResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgSubmitAnnouncementNonceResponse_messageType{}
+var _fastReflection_MsgSubmitAgencyAddressResponse_messageType fastReflection_MsgSubmitAgencyAddressResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitAgencyAddressResponse_messageType{}
 
-type fastReflection_MsgSubmitAnnouncementNonceResponse_messageType struct{}
+type fastReflection_MsgSubmitAgencyAddressResponse_messageType struct{}
 
-func (x fastReflection_MsgSubmitAnnouncementNonceResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgSubmitAnnouncementNonceResponse)(nil)
+func (x fastReflection_MsgSubmitAgencyAddressResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitAgencyAddressResponse)(nil)
 }
-func (x fastReflection_MsgSubmitAnnouncementNonceResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitAnnouncementNonceResponse)
+func (x fastReflection_MsgSubmitAgencyAddressResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitAgencyAddressResponse)
 }
-func (x fastReflection_MsgSubmitAnnouncementNonceResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitAnnouncementNonceResponse
+func (x fastReflection_MsgSubmitAgencyAddressResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitAgencyAddressResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitAnnouncementNonceResponse
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitAgencyAddressResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgSubmitAnnouncementNonceResponse_messageType
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitAgencyAddressResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitAnnouncementNonceResponse)
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitAgencyAddressResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgSubmitAnnouncementNonceResponse)(x)
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitAgencyAddressResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -683,7 +699,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Interface() protoref
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -697,13 +713,13 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Range(f func(protore
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonceResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddressResponse"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonceResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -713,13 +729,13 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Has(fd protoreflect.
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonceResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddressResponse"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonceResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -729,13 +745,13 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Clear(fd protoreflec
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonceResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddressResponse"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonceResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddressResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -749,13 +765,13 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Get(descriptor proto
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonceResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddressResponse"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonceResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -769,36 +785,36 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Set(fd protoreflect.
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonceResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddressResponse"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonceResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAnnouncementNonceResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitAgencyAddressResponse"))
 		}
-		panic(fmt.Errorf("message side.dlc.MsgSubmitAnnouncementNonceResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.dlc.MsgSubmitAgencyAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.dlc.MsgSubmitAnnouncementNonceResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.MsgSubmitAgencyAddressResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -806,7 +822,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) WhichOneof(d protore
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -817,7 +833,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) GetUnknown() protore
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -829,7 +845,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) SetUnknown(fields pr
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) IsValid() bool {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -839,9 +855,9 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgSubmitAgencyAddressResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgSubmitAnnouncementNonceResponse)
+		x := input.Message.Interface().(*MsgSubmitAgencyAddressResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -863,7 +879,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) ProtoMethods() *prot
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitAnnouncementNonceResponse)
+		x := input.Message.Interface().(*MsgSubmitAgencyAddressResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -893,7 +909,7 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) ProtoMethods() *prot
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitAnnouncementNonceResponse)
+		x := input.Message.Interface().(*MsgSubmitAgencyAddressResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -925,10 +941,1882 @@ func (x *fastReflection_MsgSubmitAnnouncementNonceResponse) ProtoMethods() *prot
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitAnnouncementNonceResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitAgencyAddressResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitAnnouncementNonceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitAgencyAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgSubmitOraclePubkey           protoreflect.MessageDescriptor
+	fd_MsgSubmitOraclePubkey_oracle_id protoreflect.FieldDescriptor
+	fd_MsgSubmitOraclePubkey_sender    protoreflect.FieldDescriptor
+	fd_MsgSubmitOraclePubkey_pubkey    protoreflect.FieldDescriptor
+	fd_MsgSubmitOraclePubkey_signature protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_dlc_tx_proto_init()
+	md_MsgSubmitOraclePubkey = File_side_dlc_tx_proto.Messages().ByName("MsgSubmitOraclePubkey")
+	fd_MsgSubmitOraclePubkey_oracle_id = md_MsgSubmitOraclePubkey.Fields().ByName("oracle_id")
+	fd_MsgSubmitOraclePubkey_sender = md_MsgSubmitOraclePubkey.Fields().ByName("sender")
+	fd_MsgSubmitOraclePubkey_pubkey = md_MsgSubmitOraclePubkey.Fields().ByName("pubkey")
+	fd_MsgSubmitOraclePubkey_signature = md_MsgSubmitOraclePubkey.Fields().ByName("signature")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgSubmitOraclePubkey)(nil)
+
+type fastReflection_MsgSubmitOraclePubkey MsgSubmitOraclePubkey
+
+func (x *MsgSubmitOraclePubkey) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitOraclePubkey)(x)
+}
+
+func (x *MsgSubmitOraclePubkey) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_dlc_tx_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgSubmitOraclePubkey_messageType fastReflection_MsgSubmitOraclePubkey_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitOraclePubkey_messageType{}
+
+type fastReflection_MsgSubmitOraclePubkey_messageType struct{}
+
+func (x fastReflection_MsgSubmitOraclePubkey_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitOraclePubkey)(nil)
+}
+func (x fastReflection_MsgSubmitOraclePubkey_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitOraclePubkey)
+}
+func (x fastReflection_MsgSubmitOraclePubkey_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitOraclePubkey
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgSubmitOraclePubkey) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitOraclePubkey
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgSubmitOraclePubkey) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitOraclePubkey_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgSubmitOraclePubkey) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitOraclePubkey)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgSubmitOraclePubkey) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitOraclePubkey)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgSubmitOraclePubkey) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.OracleId != "" {
+		value := protoreflect.ValueOfString(x.OracleId)
+		if !f(fd_MsgSubmitOraclePubkey_oracle_id, value) {
+			return
+		}
+	}
+	if x.Sender != "" {
+		value := protoreflect.ValueOfString(x.Sender)
+		if !f(fd_MsgSubmitOraclePubkey_sender, value) {
+			return
+		}
+	}
+	if x.Pubkey != "" {
+		value := protoreflect.ValueOfString(x.Pubkey)
+		if !f(fd_MsgSubmitOraclePubkey_pubkey, value) {
+			return
+		}
+	}
+	if x.Signature != "" {
+		value := protoreflect.ValueOfString(x.Signature)
+		if !f(fd_MsgSubmitOraclePubkey_signature, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgSubmitOraclePubkey) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitOraclePubkey.oracle_id":
+		return x.OracleId != ""
+	case "side.dlc.MsgSubmitOraclePubkey.sender":
+		return x.Sender != ""
+	case "side.dlc.MsgSubmitOraclePubkey.pubkey":
+		return x.Pubkey != ""
+	case "side.dlc.MsgSubmitOraclePubkey.signature":
+		return x.Signature != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkey"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkey does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitOraclePubkey) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitOraclePubkey.oracle_id":
+		x.OracleId = ""
+	case "side.dlc.MsgSubmitOraclePubkey.sender":
+		x.Sender = ""
+	case "side.dlc.MsgSubmitOraclePubkey.pubkey":
+		x.Pubkey = ""
+	case "side.dlc.MsgSubmitOraclePubkey.signature":
+		x.Signature = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkey"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkey does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgSubmitOraclePubkey) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.dlc.MsgSubmitOraclePubkey.oracle_id":
+		value := x.OracleId
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.MsgSubmitOraclePubkey.sender":
+		value := x.Sender
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.MsgSubmitOraclePubkey.pubkey":
+		value := x.Pubkey
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.MsgSubmitOraclePubkey.signature":
+		value := x.Signature
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkey"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkey does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitOraclePubkey) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitOraclePubkey.oracle_id":
+		x.OracleId = value.Interface().(string)
+	case "side.dlc.MsgSubmitOraclePubkey.sender":
+		x.Sender = value.Interface().(string)
+	case "side.dlc.MsgSubmitOraclePubkey.pubkey":
+		x.Pubkey = value.Interface().(string)
+	case "side.dlc.MsgSubmitOraclePubkey.signature":
+		x.Signature = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkey"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkey does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitOraclePubkey) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitOraclePubkey.oracle_id":
+		panic(fmt.Errorf("field oracle_id of message side.dlc.MsgSubmitOraclePubkey is not mutable"))
+	case "side.dlc.MsgSubmitOraclePubkey.sender":
+		panic(fmt.Errorf("field sender of message side.dlc.MsgSubmitOraclePubkey is not mutable"))
+	case "side.dlc.MsgSubmitOraclePubkey.pubkey":
+		panic(fmt.Errorf("field pubkey of message side.dlc.MsgSubmitOraclePubkey is not mutable"))
+	case "side.dlc.MsgSubmitOraclePubkey.signature":
+		panic(fmt.Errorf("field signature of message side.dlc.MsgSubmitOraclePubkey is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkey"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkey does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgSubmitOraclePubkey) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitOraclePubkey.oracle_id":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.MsgSubmitOraclePubkey.sender":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.MsgSubmitOraclePubkey.pubkey":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.MsgSubmitOraclePubkey.signature":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkey"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkey does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgSubmitOraclePubkey) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.MsgSubmitOraclePubkey", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgSubmitOraclePubkey) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitOraclePubkey) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgSubmitOraclePubkey) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgSubmitOraclePubkey) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgSubmitOraclePubkey)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.OracleId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Sender)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Pubkey)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Signature)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgSubmitOraclePubkey)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Signature) > 0 {
+			i -= len(x.Signature)
+			copy(dAtA[i:], x.Signature)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Signature)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.Pubkey) > 0 {
+			i -= len(x.Pubkey)
+			copy(dAtA[i:], x.Pubkey)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Pubkey)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Sender) > 0 {
+			i -= len(x.Sender)
+			copy(dAtA[i:], x.Sender)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.OracleId) > 0 {
+			i -= len(x.OracleId)
+			copy(dAtA[i:], x.OracleId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OracleId)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgSubmitOraclePubkey)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitOraclePubkey: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitOraclePubkey: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OracleId", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.OracleId = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pubkey", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Pubkey = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Signature", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Signature = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgSubmitOraclePubkeyResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_side_dlc_tx_proto_init()
+	md_MsgSubmitOraclePubkeyResponse = File_side_dlc_tx_proto.Messages().ByName("MsgSubmitOraclePubkeyResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgSubmitOraclePubkeyResponse)(nil)
+
+type fastReflection_MsgSubmitOraclePubkeyResponse MsgSubmitOraclePubkeyResponse
+
+func (x *MsgSubmitOraclePubkeyResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitOraclePubkeyResponse)(x)
+}
+
+func (x *MsgSubmitOraclePubkeyResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_dlc_tx_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgSubmitOraclePubkeyResponse_messageType fastReflection_MsgSubmitOraclePubkeyResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitOraclePubkeyResponse_messageType{}
+
+type fastReflection_MsgSubmitOraclePubkeyResponse_messageType struct{}
+
+func (x fastReflection_MsgSubmitOraclePubkeyResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitOraclePubkeyResponse)(nil)
+}
+func (x fastReflection_MsgSubmitOraclePubkeyResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitOraclePubkeyResponse)
+}
+func (x fastReflection_MsgSubmitOraclePubkeyResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitOraclePubkeyResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitOraclePubkeyResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitOraclePubkeyResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitOraclePubkeyResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitOraclePubkeyResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkeyResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkeyResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkeyResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkeyResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkeyResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkeyResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkeyResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkeyResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkeyResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkeyResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitOraclePubkeyResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitOraclePubkeyResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.MsgSubmitOraclePubkeyResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgSubmitOraclePubkeyResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgSubmitOraclePubkeyResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgSubmitOraclePubkeyResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgSubmitOraclePubkeyResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitOraclePubkeyResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitOraclePubkeyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgSubmitNonce           protoreflect.MessageDescriptor
+	fd_MsgSubmitNonce_sender    protoreflect.FieldDescriptor
+	fd_MsgSubmitNonce_nonce     protoreflect.FieldDescriptor
+	fd_MsgSubmitNonce_signature protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_dlc_tx_proto_init()
+	md_MsgSubmitNonce = File_side_dlc_tx_proto.Messages().ByName("MsgSubmitNonce")
+	fd_MsgSubmitNonce_sender = md_MsgSubmitNonce.Fields().ByName("sender")
+	fd_MsgSubmitNonce_nonce = md_MsgSubmitNonce.Fields().ByName("nonce")
+	fd_MsgSubmitNonce_signature = md_MsgSubmitNonce.Fields().ByName("signature")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgSubmitNonce)(nil)
+
+type fastReflection_MsgSubmitNonce MsgSubmitNonce
+
+func (x *MsgSubmitNonce) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitNonce)(x)
+}
+
+func (x *MsgSubmitNonce) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_dlc_tx_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgSubmitNonce_messageType fastReflection_MsgSubmitNonce_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitNonce_messageType{}
+
+type fastReflection_MsgSubmitNonce_messageType struct{}
+
+func (x fastReflection_MsgSubmitNonce_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitNonce)(nil)
+}
+func (x fastReflection_MsgSubmitNonce_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitNonce)
+}
+func (x fastReflection_MsgSubmitNonce_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitNonce
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgSubmitNonce) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitNonce
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgSubmitNonce) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitNonce_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgSubmitNonce) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitNonce)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgSubmitNonce) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitNonce)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgSubmitNonce) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Sender != "" {
+		value := protoreflect.ValueOfString(x.Sender)
+		if !f(fd_MsgSubmitNonce_sender, value) {
+			return
+		}
+	}
+	if x.Nonce != "" {
+		value := protoreflect.ValueOfString(x.Nonce)
+		if !f(fd_MsgSubmitNonce_nonce, value) {
+			return
+		}
+	}
+	if x.Signature != "" {
+		value := protoreflect.ValueOfString(x.Signature)
+		if !f(fd_MsgSubmitNonce_signature, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgSubmitNonce) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitNonce.sender":
+		return x.Sender != ""
+	case "side.dlc.MsgSubmitNonce.nonce":
+		return x.Nonce != ""
+	case "side.dlc.MsgSubmitNonce.signature":
+		return x.Signature != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonce"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonce does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitNonce) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitNonce.sender":
+		x.Sender = ""
+	case "side.dlc.MsgSubmitNonce.nonce":
+		x.Nonce = ""
+	case "side.dlc.MsgSubmitNonce.signature":
+		x.Signature = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonce"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonce does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgSubmitNonce) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.dlc.MsgSubmitNonce.sender":
+		value := x.Sender
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.MsgSubmitNonce.nonce":
+		value := x.Nonce
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.MsgSubmitNonce.signature":
+		value := x.Signature
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonce"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonce does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitNonce) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitNonce.sender":
+		x.Sender = value.Interface().(string)
+	case "side.dlc.MsgSubmitNonce.nonce":
+		x.Nonce = value.Interface().(string)
+	case "side.dlc.MsgSubmitNonce.signature":
+		x.Signature = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonce"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonce does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitNonce) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitNonce.sender":
+		panic(fmt.Errorf("field sender of message side.dlc.MsgSubmitNonce is not mutable"))
+	case "side.dlc.MsgSubmitNonce.nonce":
+		panic(fmt.Errorf("field nonce of message side.dlc.MsgSubmitNonce is not mutable"))
+	case "side.dlc.MsgSubmitNonce.signature":
+		panic(fmt.Errorf("field signature of message side.dlc.MsgSubmitNonce is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonce"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonce does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgSubmitNonce) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.MsgSubmitNonce.sender":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.MsgSubmitNonce.nonce":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.MsgSubmitNonce.signature":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonce"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonce does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgSubmitNonce) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.MsgSubmitNonce", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgSubmitNonce) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitNonce) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgSubmitNonce) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgSubmitNonce) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgSubmitNonce)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Sender)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Nonce)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Signature)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgSubmitNonce)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Signature) > 0 {
+			i -= len(x.Signature)
+			copy(dAtA[i:], x.Signature)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Signature)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Nonce) > 0 {
+			i -= len(x.Nonce)
+			copy(dAtA[i:], x.Nonce)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Nonce)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Sender) > 0 {
+			i -= len(x.Sender)
+			copy(dAtA[i:], x.Sender)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgSubmitNonce)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitNonce: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitNonce: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Nonce", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Nonce = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Signature", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Signature = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgSubmitNonceResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_side_dlc_tx_proto_init()
+	md_MsgSubmitNonceResponse = File_side_dlc_tx_proto.Messages().ByName("MsgSubmitNonceResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgSubmitNonceResponse)(nil)
+
+type fastReflection_MsgSubmitNonceResponse MsgSubmitNonceResponse
+
+func (x *MsgSubmitNonceResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitNonceResponse)(x)
+}
+
+func (x *MsgSubmitNonceResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_dlc_tx_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgSubmitNonceResponse_messageType fastReflection_MsgSubmitNonceResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitNonceResponse_messageType{}
+
+type fastReflection_MsgSubmitNonceResponse_messageType struct{}
+
+func (x fastReflection_MsgSubmitNonceResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitNonceResponse)(nil)
+}
+func (x fastReflection_MsgSubmitNonceResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitNonceResponse)
+}
+func (x fastReflection_MsgSubmitNonceResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitNonceResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgSubmitNonceResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitNonceResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgSubmitNonceResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitNonceResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgSubmitNonceResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitNonceResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgSubmitNonceResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitNonceResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgSubmitNonceResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgSubmitNonceResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonceResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonceResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitNonceResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonceResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonceResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgSubmitNonceResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonceResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonceResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitNonceResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonceResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonceResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitNonceResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonceResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonceResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgSubmitNonceResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.MsgSubmitNonceResponse"))
+		}
+		panic(fmt.Errorf("message side.dlc.MsgSubmitNonceResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgSubmitNonceResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.MsgSubmitNonceResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgSubmitNonceResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgSubmitNonceResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgSubmitNonceResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgSubmitNonceResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgSubmitNonceResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgSubmitNonceResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgSubmitNonceResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitNonceResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitNonceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -990,7 +2878,7 @@ func (x *MsgSubmitAttestation) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgSubmitAttestation) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_dlc_tx_proto_msgTypes[2]
+	mi := &file_side_dlc_tx_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1516,7 +3404,7 @@ func (x *MsgSubmitAttestationResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgSubmitAttestationResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_dlc_tx_proto_msgTypes[3]
+	mi := &file_side_dlc_tx_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1867,19 +3755,19 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type MsgSubmitAnnouncementNonce struct {
+type MsgSubmitAgencyAddress struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender         string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	AnnouncementId uint64 `protobuf:"varint,2,opt,name=announcement_id,json=announcementId,proto3" json:"announcement_id,omitempty"`
-	Nonce          string `protobuf:"bytes,3,opt,name=nonce,proto3" json:"nonce,omitempty"`
-	Signature      string `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
+	Id        string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Sender    string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
+	Address   string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+	Signature string `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
-func (x *MsgSubmitAnnouncementNonce) Reset() {
-	*x = MsgSubmitAnnouncementNonce{}
+func (x *MsgSubmitAgencyAddress) Reset() {
+	*x = MsgSubmitAgencyAddress{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_dlc_tx_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1887,53 +3775,53 @@ func (x *MsgSubmitAnnouncementNonce) Reset() {
 	}
 }
 
-func (x *MsgSubmitAnnouncementNonce) String() string {
+func (x *MsgSubmitAgencyAddress) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgSubmitAnnouncementNonce) ProtoMessage() {}
+func (*MsgSubmitAgencyAddress) ProtoMessage() {}
 
-// Deprecated: Use MsgSubmitAnnouncementNonce.ProtoReflect.Descriptor instead.
-func (*MsgSubmitAnnouncementNonce) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgSubmitAgencyAddress.ProtoReflect.Descriptor instead.
+func (*MsgSubmitAgencyAddress) Descriptor() ([]byte, []int) {
 	return file_side_dlc_tx_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MsgSubmitAnnouncementNonce) GetSender() string {
+func (x *MsgSubmitAgencyAddress) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *MsgSubmitAgencyAddress) GetSender() string {
 	if x != nil {
 		return x.Sender
 	}
 	return ""
 }
 
-func (x *MsgSubmitAnnouncementNonce) GetAnnouncementId() uint64 {
+func (x *MsgSubmitAgencyAddress) GetAddress() string {
 	if x != nil {
-		return x.AnnouncementId
-	}
-	return 0
-}
-
-func (x *MsgSubmitAnnouncementNonce) GetNonce() string {
-	if x != nil {
-		return x.Nonce
+		return x.Address
 	}
 	return ""
 }
 
-func (x *MsgSubmitAnnouncementNonce) GetSignature() string {
+func (x *MsgSubmitAgencyAddress) GetSignature() string {
 	if x != nil {
 		return x.Signature
 	}
 	return ""
 }
 
-type MsgSubmitAnnouncementNonceResponse struct {
+type MsgSubmitAgencyAddressResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgSubmitAnnouncementNonceResponse) Reset() {
-	*x = MsgSubmitAnnouncementNonceResponse{}
+func (x *MsgSubmitAgencyAddressResponse) Reset() {
+	*x = MsgSubmitAgencyAddressResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_dlc_tx_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1941,15 +3829,177 @@ func (x *MsgSubmitAnnouncementNonceResponse) Reset() {
 	}
 }
 
-func (x *MsgSubmitAnnouncementNonceResponse) String() string {
+func (x *MsgSubmitAgencyAddressResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgSubmitAnnouncementNonceResponse) ProtoMessage() {}
+func (*MsgSubmitAgencyAddressResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgSubmitAnnouncementNonceResponse.ProtoReflect.Descriptor instead.
-func (*MsgSubmitAnnouncementNonceResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgSubmitAgencyAddressResponse.ProtoReflect.Descriptor instead.
+func (*MsgSubmitAgencyAddressResponse) Descriptor() ([]byte, []int) {
 	return file_side_dlc_tx_proto_rawDescGZIP(), []int{1}
+}
+
+type MsgSubmitOraclePubkey struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	OracleId  string `protobuf:"bytes,1,opt,name=oracle_id,json=oracleId,proto3" json:"oracle_id,omitempty"`
+	Sender    string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
+	Pubkey    string `protobuf:"bytes,3,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	Signature string `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
+}
+
+func (x *MsgSubmitOraclePubkey) Reset() {
+	*x = MsgSubmitOraclePubkey{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_dlc_tx_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgSubmitOraclePubkey) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgSubmitOraclePubkey) ProtoMessage() {}
+
+// Deprecated: Use MsgSubmitOraclePubkey.ProtoReflect.Descriptor instead.
+func (*MsgSubmitOraclePubkey) Descriptor() ([]byte, []int) {
+	return file_side_dlc_tx_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *MsgSubmitOraclePubkey) GetOracleId() string {
+	if x != nil {
+		return x.OracleId
+	}
+	return ""
+}
+
+func (x *MsgSubmitOraclePubkey) GetSender() string {
+	if x != nil {
+		return x.Sender
+	}
+	return ""
+}
+
+func (x *MsgSubmitOraclePubkey) GetPubkey() string {
+	if x != nil {
+		return x.Pubkey
+	}
+	return ""
+}
+
+func (x *MsgSubmitOraclePubkey) GetSignature() string {
+	if x != nil {
+		return x.Signature
+	}
+	return ""
+}
+
+type MsgSubmitOraclePubkeyResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgSubmitOraclePubkeyResponse) Reset() {
+	*x = MsgSubmitOraclePubkeyResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_dlc_tx_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgSubmitOraclePubkeyResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgSubmitOraclePubkeyResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgSubmitOraclePubkeyResponse.ProtoReflect.Descriptor instead.
+func (*MsgSubmitOraclePubkeyResponse) Descriptor() ([]byte, []int) {
+	return file_side_dlc_tx_proto_rawDescGZIP(), []int{3}
+}
+
+type MsgSubmitNonce struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Nonce     string `protobuf:"bytes,2,opt,name=nonce,proto3" json:"nonce,omitempty"`
+	Signature string `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
+}
+
+func (x *MsgSubmitNonce) Reset() {
+	*x = MsgSubmitNonce{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_dlc_tx_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgSubmitNonce) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgSubmitNonce) ProtoMessage() {}
+
+// Deprecated: Use MsgSubmitNonce.ProtoReflect.Descriptor instead.
+func (*MsgSubmitNonce) Descriptor() ([]byte, []int) {
+	return file_side_dlc_tx_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *MsgSubmitNonce) GetSender() string {
+	if x != nil {
+		return x.Sender
+	}
+	return ""
+}
+
+func (x *MsgSubmitNonce) GetNonce() string {
+	if x != nil {
+		return x.Nonce
+	}
+	return ""
+}
+
+func (x *MsgSubmitNonce) GetSignature() string {
+	if x != nil {
+		return x.Signature
+	}
+	return ""
+}
+
+type MsgSubmitNonceResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgSubmitNonceResponse) Reset() {
+	*x = MsgSubmitNonceResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_dlc_tx_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgSubmitNonceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgSubmitNonceResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgSubmitNonceResponse.ProtoReflect.Descriptor instead.
+func (*MsgSubmitNonceResponse) Descriptor() ([]byte, []int) {
+	return file_side_dlc_tx_proto_rawDescGZIP(), []int{5}
 }
 
 type MsgSubmitAttestation struct {
@@ -1965,7 +4015,7 @@ type MsgSubmitAttestation struct {
 func (x *MsgSubmitAttestation) Reset() {
 	*x = MsgSubmitAttestation{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_dlc_tx_proto_msgTypes[2]
+		mi := &file_side_dlc_tx_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1979,7 +4029,7 @@ func (*MsgSubmitAttestation) ProtoMessage() {}
 
 // Deprecated: Use MsgSubmitAttestation.ProtoReflect.Descriptor instead.
 func (*MsgSubmitAttestation) Descriptor() ([]byte, []int) {
-	return file_side_dlc_tx_proto_rawDescGZIP(), []int{2}
+	return file_side_dlc_tx_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *MsgSubmitAttestation) GetSender() string {
@@ -2012,7 +4062,7 @@ type MsgSubmitAttestationResponse struct {
 func (x *MsgSubmitAttestationResponse) Reset() {
 	*x = MsgSubmitAttestationResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_dlc_tx_proto_msgTypes[3]
+		mi := &file_side_dlc_tx_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2026,7 +4076,7 @@ func (*MsgSubmitAttestationResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgSubmitAttestationResponse.ProtoReflect.Descriptor instead.
 func (*MsgSubmitAttestationResponse) Descriptor() ([]byte, []int) {
-	return file_side_dlc_tx_proto_rawDescGZIP(), []int{3}
+	return file_side_dlc_tx_proto_rawDescGZIP(), []int{7}
 }
 
 var File_side_dlc_tx_proto protoreflect.FileDescriptor
@@ -2036,51 +4086,79 @@ var file_side_dlc_tx_proto_rawDesc = []byte{
 	0x6f, 0x74, 0x6f, 0x12, 0x08, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x1a, 0x14, 0x67,
 	0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x6d, 0x73, 0x67, 0x2f,
-	0x76, 0x31, 0x2f, 0x6d, 0x73, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x9e, 0x01, 0x0a,
-	0x1a, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x6e, 0x6e, 0x6f, 0x75, 0x6e,
-	0x63, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73,
-	0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e,
-	0x64, 0x65, 0x72, 0x12, 0x27, 0x0a, 0x0f, 0x61, 0x6e, 0x6e, 0x6f, 0x75, 0x6e, 0x63, 0x65, 0x6d,
-	0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0e, 0x61, 0x6e,
-	0x6e, 0x6f, 0x75, 0x6e, 0x63, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05,
-	0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6e, 0x6f, 0x6e,
-	0x63, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18,
-	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65,
-	0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x24, 0x0a,
-	0x22, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x6e, 0x6e, 0x6f, 0x75, 0x6e,
-	0x63, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x82, 0x01, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69,
-	0x74, 0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06,
-	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65,
-	0x6e, 0x64, 0x65, 0x72, 0x12, 0x27, 0x0a, 0x0f, 0x61, 0x6e, 0x6e, 0x6f, 0x75, 0x6e, 0x63, 0x65,
-	0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0e, 0x61,
-	0x6e, 0x6e, 0x6f, 0x75, 0x6e, 0x63, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x1c, 0x0a,
-	0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x76, 0x31, 0x2f, 0x6d, 0x73, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x85, 0x01, 0x0a,
+	0x16, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x63, 0x79,
+	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12,
+	0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67,
+	0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65,
+	0x6e, 0x64, 0x65, 0x72, 0x22, 0x20, 0x0a, 0x1e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69,
+	0x74, 0x41, 0x67, 0x65, 0x6e, 0x63, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x8f, 0x01, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x53, 0x75,
+	0x62, 0x6d, 0x69, 0x74, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79,
+	0x12, 0x1b, 0x0a, 0x09, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x49, 0x64, 0x12, 0x16, 0x0a,
+	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73,
+	0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1c, 0x0a,
+	0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
-	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x1e, 0x0a, 0x1c, 0x4d, 0x73, 0x67, 0x53,
-	0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xd8, 0x01, 0x0a, 0x03, 0x4d, 0x73, 0x67,
-	0x12, 0x6d, 0x0a, 0x17, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x6e, 0x6e, 0x6f, 0x75, 0x6e,
-	0x63, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x24, 0x2e, 0x73, 0x69,
+	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x1f, 0x0a, 0x1d, 0x4d, 0x73, 0x67, 0x53,
+	0x75, 0x62, 0x6d, 0x69, 0x74, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x75, 0x62, 0x6b, 0x65,
+	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x69, 0x0a, 0x0e, 0x4d, 0x73, 0x67,
+	0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73,
+	0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e,
+	0x64, 0x65, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67,
+	0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65,
+	0x6e, 0x64, 0x65, 0x72, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69,
+	0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x82,
+	0x01, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x74, 0x74, 0x65,
+	0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12,
+	0x27, 0x0a, 0x0f, 0x61, 0x6e, 0x6e, 0x6f, 0x75, 0x6e, 0x63, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f,
+	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0e, 0x61, 0x6e, 0x6e, 0x6f, 0x75, 0x6e,
+	0x63, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e,
+	0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67,
+	0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e,
+	0x64, 0x65, 0x72, 0x22, 0x1e, 0x0a, 0x1c, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
+	0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x32, 0xf7, 0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x49, 0x0a, 0x0b, 0x53,
+	0x75, 0x62, 0x6d, 0x69, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x18, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4e,
+	0x6f, 0x6e, 0x63, 0x65, 0x1a, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e,
+	0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5b, 0x0a, 0x11, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
+	0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1e, 0x2e, 0x73, 0x69,
 	0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
-	0x41, 0x6e, 0x6e, 0x6f, 0x75, 0x6e, 0x63, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4e, 0x6f, 0x6e, 0x63,
-	0x65, 0x1a, 0x2c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x4d, 0x73, 0x67,
-	0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x6e, 0x6e, 0x6f, 0x75, 0x6e, 0x63, 0x65, 0x6d, 0x65,
-	0x6e, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x5b, 0x0a, 0x11, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e,
-	0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x26, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e,
-	0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7,
-	0xb0, 0x2a, 0x01, 0x42, 0x73, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x64, 0x6c, 0x63, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x19,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa,
-	0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64,
-	0x65, 0x5c, 0x44, 0x6c, 0x63, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63,
-	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53,
-	0x69, 0x64, 0x65, 0x3a, 0x3a, 0x44, 0x6c, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x26, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
+	0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x5e, 0x0a, 0x12, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4f, 0x72, 0x61,
+	0x63, 0x6c, 0x65, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4f, 0x72,
+	0x61, 0x63, 0x6c, 0x65, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x1a, 0x27, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4f,
+	0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x61, 0x0a, 0x13, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41, 0x67, 0x65,
+	0x6e, 0x63, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x41,
+	0x67, 0x65, 0x6e, 0x63, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x1a, 0x28, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69,
+	0x74, 0x41, 0x67, 0x65, 0x6e, 0x63, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x73, 0x0a,
+	0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x07, 0x54,
+	0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
+	0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65,
+	0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0xe2,
+	0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x44,
+	0x6c, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2095,20 +4173,28 @@ func file_side_dlc_tx_proto_rawDescGZIP() []byte {
 	return file_side_dlc_tx_proto_rawDescData
 }
 
-var file_side_dlc_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_side_dlc_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_side_dlc_tx_proto_goTypes = []interface{}{
-	(*MsgSubmitAnnouncementNonce)(nil),         // 0: side.dlc.MsgSubmitAnnouncementNonce
-	(*MsgSubmitAnnouncementNonceResponse)(nil), // 1: side.dlc.MsgSubmitAnnouncementNonceResponse
-	(*MsgSubmitAttestation)(nil),               // 2: side.dlc.MsgSubmitAttestation
-	(*MsgSubmitAttestationResponse)(nil),       // 3: side.dlc.MsgSubmitAttestationResponse
+	(*MsgSubmitAgencyAddress)(nil),         // 0: side.dlc.MsgSubmitAgencyAddress
+	(*MsgSubmitAgencyAddressResponse)(nil), // 1: side.dlc.MsgSubmitAgencyAddressResponse
+	(*MsgSubmitOraclePubkey)(nil),          // 2: side.dlc.MsgSubmitOraclePubkey
+	(*MsgSubmitOraclePubkeyResponse)(nil),  // 3: side.dlc.MsgSubmitOraclePubkeyResponse
+	(*MsgSubmitNonce)(nil),                 // 4: side.dlc.MsgSubmitNonce
+	(*MsgSubmitNonceResponse)(nil),         // 5: side.dlc.MsgSubmitNonceResponse
+	(*MsgSubmitAttestation)(nil),           // 6: side.dlc.MsgSubmitAttestation
+	(*MsgSubmitAttestationResponse)(nil),   // 7: side.dlc.MsgSubmitAttestationResponse
 }
 var file_side_dlc_tx_proto_depIdxs = []int32{
-	0, // 0: side.dlc.Msg.SubmitAnnouncementNonce:input_type -> side.dlc.MsgSubmitAnnouncementNonce
-	2, // 1: side.dlc.Msg.SubmitAttestation:input_type -> side.dlc.MsgSubmitAttestation
-	1, // 2: side.dlc.Msg.SubmitAnnouncementNonce:output_type -> side.dlc.MsgSubmitAnnouncementNonceResponse
-	3, // 3: side.dlc.Msg.SubmitAttestation:output_type -> side.dlc.MsgSubmitAttestationResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	4, // 0: side.dlc.Msg.SubmitNonce:input_type -> side.dlc.MsgSubmitNonce
+	6, // 1: side.dlc.Msg.SubmitAttestation:input_type -> side.dlc.MsgSubmitAttestation
+	2, // 2: side.dlc.Msg.SubmitOraclePubkey:input_type -> side.dlc.MsgSubmitOraclePubkey
+	0, // 3: side.dlc.Msg.SubmitAgencyAddress:input_type -> side.dlc.MsgSubmitAgencyAddress
+	5, // 4: side.dlc.Msg.SubmitNonce:output_type -> side.dlc.MsgSubmitNonceResponse
+	7, // 5: side.dlc.Msg.SubmitAttestation:output_type -> side.dlc.MsgSubmitAttestationResponse
+	3, // 6: side.dlc.Msg.SubmitOraclePubkey:output_type -> side.dlc.MsgSubmitOraclePubkeyResponse
+	1, // 7: side.dlc.Msg.SubmitAgencyAddress:output_type -> side.dlc.MsgSubmitAgencyAddressResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -2121,7 +4207,7 @@ func file_side_dlc_tx_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_side_dlc_tx_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgSubmitAnnouncementNonce); i {
+			switch v := v.(*MsgSubmitAgencyAddress); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2133,7 +4219,7 @@ func file_side_dlc_tx_proto_init() {
 			}
 		}
 		file_side_dlc_tx_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgSubmitAnnouncementNonceResponse); i {
+			switch v := v.(*MsgSubmitAgencyAddressResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2145,7 +4231,7 @@ func file_side_dlc_tx_proto_init() {
 			}
 		}
 		file_side_dlc_tx_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgSubmitAttestation); i {
+			switch v := v.(*MsgSubmitOraclePubkey); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2157,6 +4243,54 @@ func file_side_dlc_tx_proto_init() {
 			}
 		}
 		file_side_dlc_tx_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgSubmitOraclePubkeyResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_dlc_tx_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgSubmitNonce); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_dlc_tx_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgSubmitNonceResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_dlc_tx_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgSubmitAttestation); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_dlc_tx_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgSubmitAttestationResponse); i {
 			case 0:
 				return &v.state
@@ -2175,7 +4309,7 @@ func file_side_dlc_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_dlc_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

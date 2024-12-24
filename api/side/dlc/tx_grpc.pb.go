@@ -19,16 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_SubmitAnnouncementNonce_FullMethodName = "/side.dlc.Msg/SubmitAnnouncementNonce"
-	Msg_SubmitAttestation_FullMethodName       = "/side.dlc.Msg/SubmitAttestation"
+	Msg_SubmitNonce_FullMethodName         = "/side.dlc.Msg/SubmitNonce"
+	Msg_SubmitAttestation_FullMethodName   = "/side.dlc.Msg/SubmitAttestation"
+	Msg_SubmitOraclePubkey_FullMethodName  = "/side.dlc.Msg/SubmitOraclePubkey"
+	Msg_SubmitAgencyAddress_FullMethodName = "/side.dlc.Msg/SubmitAgencyAddress"
 )
 
 // MsgClient is the client API for Msg service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MsgClient interface {
-	SubmitAnnouncementNonce(ctx context.Context, in *MsgSubmitAnnouncementNonce, opts ...grpc.CallOption) (*MsgSubmitAnnouncementNonceResponse, error)
+	SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ...grpc.CallOption) (*MsgSubmitNonceResponse, error)
 	SubmitAttestation(ctx context.Context, in *MsgSubmitAttestation, opts ...grpc.CallOption) (*MsgSubmitAttestationResponse, error)
+	SubmitOraclePubkey(ctx context.Context, in *MsgSubmitOraclePubkey, opts ...grpc.CallOption) (*MsgSubmitOraclePubkeyResponse, error)
+	SubmitAgencyAddress(ctx context.Context, in *MsgSubmitAgencyAddress, opts ...grpc.CallOption) (*MsgSubmitAgencyAddressResponse, error)
 }
 
 type msgClient struct {
@@ -39,9 +43,9 @@ func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) SubmitAnnouncementNonce(ctx context.Context, in *MsgSubmitAnnouncementNonce, opts ...grpc.CallOption) (*MsgSubmitAnnouncementNonceResponse, error) {
-	out := new(MsgSubmitAnnouncementNonceResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitAnnouncementNonce_FullMethodName, in, out, opts...)
+func (c *msgClient) SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ...grpc.CallOption) (*MsgSubmitNonceResponse, error) {
+	out := new(MsgSubmitNonceResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitNonce_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,12 +61,32 @@ func (c *msgClient) SubmitAttestation(ctx context.Context, in *MsgSubmitAttestat
 	return out, nil
 }
 
+func (c *msgClient) SubmitOraclePubkey(ctx context.Context, in *MsgSubmitOraclePubkey, opts ...grpc.CallOption) (*MsgSubmitOraclePubkeyResponse, error) {
+	out := new(MsgSubmitOraclePubkeyResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitOraclePubkey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SubmitAgencyAddress(ctx context.Context, in *MsgSubmitAgencyAddress, opts ...grpc.CallOption) (*MsgSubmitAgencyAddressResponse, error) {
+	out := new(MsgSubmitAgencyAddressResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitAgencyAddress_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
 type MsgServer interface {
-	SubmitAnnouncementNonce(context.Context, *MsgSubmitAnnouncementNonce) (*MsgSubmitAnnouncementNonceResponse, error)
+	SubmitNonce(context.Context, *MsgSubmitNonce) (*MsgSubmitNonceResponse, error)
 	SubmitAttestation(context.Context, *MsgSubmitAttestation) (*MsgSubmitAttestationResponse, error)
+	SubmitOraclePubkey(context.Context, *MsgSubmitOraclePubkey) (*MsgSubmitOraclePubkeyResponse, error)
+	SubmitAgencyAddress(context.Context, *MsgSubmitAgencyAddress) (*MsgSubmitAgencyAddressResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -70,11 +94,17 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
-func (UnimplementedMsgServer) SubmitAnnouncementNonce(context.Context, *MsgSubmitAnnouncementNonce) (*MsgSubmitAnnouncementNonceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitAnnouncementNonce not implemented")
+func (UnimplementedMsgServer) SubmitNonce(context.Context, *MsgSubmitNonce) (*MsgSubmitNonceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitNonce not implemented")
 }
 func (UnimplementedMsgServer) SubmitAttestation(context.Context, *MsgSubmitAttestation) (*MsgSubmitAttestationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitAttestation not implemented")
+}
+func (UnimplementedMsgServer) SubmitOraclePubkey(context.Context, *MsgSubmitOraclePubkey) (*MsgSubmitOraclePubkeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitOraclePubkey not implemented")
+}
+func (UnimplementedMsgServer) SubmitAgencyAddress(context.Context, *MsgSubmitAgencyAddress) (*MsgSubmitAgencyAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitAgencyAddress not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -89,20 +119,20 @@ func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 	s.RegisterService(&Msg_ServiceDesc, srv)
 }
 
-func _Msg_SubmitAnnouncementNonce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitAnnouncementNonce)
+func _Msg_SubmitNonce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitNonce)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitAnnouncementNonce(ctx, in)
+		return srv.(MsgServer).SubmitNonce(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_SubmitAnnouncementNonce_FullMethodName,
+		FullMethod: Msg_SubmitNonce_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitAnnouncementNonce(ctx, req.(*MsgSubmitAnnouncementNonce))
+		return srv.(MsgServer).SubmitNonce(ctx, req.(*MsgSubmitNonce))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -125,6 +155,42 @@ func _Msg_SubmitAttestation_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SubmitOraclePubkey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitOraclePubkey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitOraclePubkey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SubmitOraclePubkey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitOraclePubkey(ctx, req.(*MsgSubmitOraclePubkey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SubmitAgencyAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitAgencyAddress)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitAgencyAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SubmitAgencyAddress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitAgencyAddress(ctx, req.(*MsgSubmitAgencyAddress))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -133,12 +199,20 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SubmitAnnouncementNonce",
-			Handler:    _Msg_SubmitAnnouncementNonce_Handler,
+			MethodName: "SubmitNonce",
+			Handler:    _Msg_SubmitNonce_Handler,
 		},
 		{
 			MethodName: "SubmitAttestation",
 			Handler:    _Msg_SubmitAttestation_Handler,
+		},
+		{
+			MethodName: "SubmitOraclePubkey",
+			Handler:    _Msg_SubmitOraclePubkey_Handler,
+		},
+		{
+			MethodName: "SubmitAgencyAddress",
+			Handler:    _Msg_SubmitAgencyAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

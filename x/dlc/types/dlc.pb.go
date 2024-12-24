@@ -27,53 +27,85 @@ var _ = time.Kitchen
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type AnnouncementStatus int32
+type DLCOracleStatus int32
 
 const (
-	AnnouncementStatus_Announcement_Unspecified AnnouncementStatus = 0
-	AnnouncementStatus_Announcement_Pending     AnnouncementStatus = 1
-	AnnouncementStatus_Announcement_Ready       AnnouncementStatus = 2
+	DLCOracleStatus_Oracle_Status_Pending DLCOracleStatus = 0
+	DLCOracleStatus_Oracle_status_Enable  DLCOracleStatus = 1
+	DLCOracleStatus_Oracle_status_Disable DLCOracleStatus = 2
 )
 
-var AnnouncementStatus_name = map[int32]string{
-	0: "Announcement_Unspecified",
-	1: "Announcement_Pending",
-	2: "Announcement_Ready",
+var DLCOracleStatus_name = map[int32]string{
+	0: "Oracle_Status_Pending",
+	1: "Oracle_status_Enable",
+	2: "Oracle_status_Disable",
 }
 
-var AnnouncementStatus_value = map[string]int32{
-	"Announcement_Unspecified": 0,
-	"Announcement_Pending":     1,
-	"Announcement_Ready":       2,
+var DLCOracleStatus_value = map[string]int32{
+	"Oracle_Status_Pending": 0,
+	"Oracle_status_Enable":  1,
+	"Oracle_status_Disable": 2,
 }
 
-func (x AnnouncementStatus) String() string {
-	return proto.EnumName(AnnouncementStatus_name, int32(x))
+func (x DLCOracleStatus) String() string {
+	return proto.EnumName(DLCOracleStatus_name, int32(x))
 }
 
-func (AnnouncementStatus) EnumDescriptor() ([]byte, []int) {
+func (DLCOracleStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_fdcd991e9f56ce38, []int{0}
 }
 
-type DLCAnnouncement struct {
-	Id          uint64             `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	OracleEvent *DLCEvent          `protobuf:"bytes,2,opt,name=oracle_event,json=oracleEvent,proto3" json:"oracle_event,omitempty"`
-	Signature   string             `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
-	Status      AnnouncementStatus `protobuf:"varint,4,opt,name=status,proto3,enum=side.dlc.AnnouncementStatus" json:"status,omitempty"`
+type AgencyStatus int32
+
+const (
+	AgencyStatus_Agency_Status_Pending AgencyStatus = 0
+	AgencyStatus_Agency_status_Enable  AgencyStatus = 1
+	AgencyStatus_Agency_status_Disable AgencyStatus = 2
+)
+
+var AgencyStatus_name = map[int32]string{
+	0: "Agency_Status_Pending",
+	1: "Agency_status_Enable",
+	2: "Agency_status_Disable",
 }
 
-func (m *DLCAnnouncement) Reset()         { *m = DLCAnnouncement{} }
-func (m *DLCAnnouncement) String() string { return proto.CompactTextString(m) }
-func (*DLCAnnouncement) ProtoMessage()    {}
-func (*DLCAnnouncement) Descriptor() ([]byte, []int) {
+var AgencyStatus_value = map[string]int32{
+	"Agency_Status_Pending": 0,
+	"Agency_status_Enable":  1,
+	"Agency_status_Disable": 2,
+}
+
+func (x AgencyStatus) String() string {
+	return proto.EnumName(AgencyStatus_name, int32(x))
+}
+
+func (AgencyStatus) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_fdcd991e9f56ce38, []int{1}
+}
+
+type DLCOracle struct {
+	Id           uint32          `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Desc         string          `protobuf:"bytes,2,opt,name=desc,proto3" json:"desc,omitempty"`
+	Participants []string        `protobuf:"bytes,3,rep,name=participants,proto3" json:"participants,omitempty"`
+	Threshold    uint32          `protobuf:"varint,4,opt,name=threshold,proto3" json:"threshold,omitempty"`
+	Address      string          `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
+	Pubkey       string          `protobuf:"bytes,6,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	Status       DLCOracleStatus `protobuf:"varint,7,opt,name=status,proto3,enum=side.dlc.DLCOracleStatus" json:"status,omitempty"`
+	NonceIndex   uint64          `protobuf:"varint,8,opt,name=nonce_index,json=nonceIndex,proto3" json:"nonce_index,omitempty"`
+}
+
+func (m *DLCOracle) Reset()         { *m = DLCOracle{} }
+func (m *DLCOracle) String() string { return proto.CompactTextString(m) }
+func (*DLCOracle) ProtoMessage()    {}
+func (*DLCOracle) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fdcd991e9f56ce38, []int{0}
 }
-func (m *DLCAnnouncement) XXX_Unmarshal(b []byte) error {
+func (m *DLCOracle) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *DLCAnnouncement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *DLCOracle) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_DLCAnnouncement.Marshal(b, m, deterministic)
+		return xxx_messageInfo_DLCOracle.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -83,58 +115,332 @@ func (m *DLCAnnouncement) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-func (m *DLCAnnouncement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DLCAnnouncement.Merge(m, src)
+func (m *DLCOracle) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DLCOracle.Merge(m, src)
 }
-func (m *DLCAnnouncement) XXX_Size() int {
+func (m *DLCOracle) XXX_Size() int {
 	return m.Size()
 }
-func (m *DLCAnnouncement) XXX_DiscardUnknown() {
-	xxx_messageInfo_DLCAnnouncement.DiscardUnknown(m)
+func (m *DLCOracle) XXX_DiscardUnknown() {
+	xxx_messageInfo_DLCOracle.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DLCAnnouncement proto.InternalMessageInfo
+var xxx_messageInfo_DLCOracle proto.InternalMessageInfo
 
-func (m *DLCAnnouncement) GetId() uint64 {
+func (m *DLCOracle) GetId() uint32 {
 	if m != nil {
 		return m.Id
 	}
 	return 0
 }
 
-func (m *DLCAnnouncement) GetOracleEvent() *DLCEvent {
+func (m *DLCOracle) GetDesc() string {
 	if m != nil {
-		return m.OracleEvent
-	}
-	return nil
-}
-
-func (m *DLCAnnouncement) GetSignature() string {
-	if m != nil {
-		return m.Signature
+		return m.Desc
 	}
 	return ""
 }
 
-func (m *DLCAnnouncement) GetStatus() AnnouncementStatus {
+func (m *DLCOracle) GetParticipants() []string {
+	if m != nil {
+		return m.Participants
+	}
+	return nil
+}
+
+func (m *DLCOracle) GetThreshold() uint32 {
+	if m != nil {
+		return m.Threshold
+	}
+	return 0
+}
+
+func (m *DLCOracle) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *DLCOracle) GetPubkey() string {
+	if m != nil {
+		return m.Pubkey
+	}
+	return ""
+}
+
+func (m *DLCOracle) GetStatus() DLCOracleStatus {
 	if m != nil {
 		return m.Status
 	}
-	return AnnouncementStatus_Announcement_Unspecified
+	return DLCOracleStatus_Oracle_Status_Pending
+}
+
+func (m *DLCOracle) GetNonceIndex() uint64 {
+	if m != nil {
+		return m.NonceIndex
+	}
+	return 0
+}
+
+type Agency struct {
+	Id           uint32       `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Desc         string       `protobuf:"bytes,2,opt,name=desc,proto3" json:"desc,omitempty"`
+	Participants []string     `protobuf:"bytes,3,rep,name=participants,proto3" json:"participants,omitempty"`
+	Threshold    uint32       `protobuf:"varint,4,opt,name=threshold,proto3" json:"threshold,omitempty"`
+	Address      string       `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
+	Status       AgencyStatus `protobuf:"varint,6,opt,name=status,proto3,enum=side.dlc.AgencyStatus" json:"status,omitempty"`
+}
+
+func (m *Agency) Reset()         { *m = Agency{} }
+func (m *Agency) String() string { return proto.CompactTextString(m) }
+func (*Agency) ProtoMessage()    {}
+func (*Agency) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fdcd991e9f56ce38, []int{1}
+}
+func (m *Agency) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Agency) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Agency.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Agency) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Agency.Merge(m, src)
+}
+func (m *Agency) XXX_Size() int {
+	return m.Size()
+}
+func (m *Agency) XXX_DiscardUnknown() {
+	xxx_messageInfo_Agency.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Agency proto.InternalMessageInfo
+
+func (m *Agency) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *Agency) GetDesc() string {
+	if m != nil {
+		return m.Desc
+	}
+	return ""
+}
+
+func (m *Agency) GetParticipants() []string {
+	if m != nil {
+		return m.Participants
+	}
+	return nil
+}
+
+func (m *Agency) GetThreshold() uint32 {
+	if m != nil {
+		return m.Threshold
+	}
+	return 0
+}
+
+func (m *Agency) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *Agency) GetStatus() AgencyStatus {
+	if m != nil {
+		return m.Status
+	}
+	return AgencyStatus_Agency_Status_Pending
+}
+
+type DLCNonce struct {
+	Index        uint64    `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"`
+	Nonce        string    `protobuf:"bytes,2,opt,name=nonce,proto3" json:"nonce,omitempty"`
+	OraclePubkey string    `protobuf:"bytes,3,opt,name=oracle_pubkey,json=oraclePubkey,proto3" json:"oracle_pubkey,omitempty"`
+	Time         time.Time `protobuf:"bytes,4,opt,name=time,proto3,stdtime" json:"time"`
+}
+
+func (m *DLCNonce) Reset()         { *m = DLCNonce{} }
+func (m *DLCNonce) String() string { return proto.CompactTextString(m) }
+func (*DLCNonce) ProtoMessage()    {}
+func (*DLCNonce) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fdcd991e9f56ce38, []int{2}
+}
+func (m *DLCNonce) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DLCNonce) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DLCNonce.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DLCNonce) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DLCNonce.Merge(m, src)
+}
+func (m *DLCNonce) XXX_Size() int {
+	return m.Size()
+}
+func (m *DLCNonce) XXX_DiscardUnknown() {
+	xxx_messageInfo_DLCNonce.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DLCNonce proto.InternalMessageInfo
+
+func (m *DLCNonce) GetIndex() uint64 {
+	if m != nil {
+		return m.Index
+	}
+	return 0
+}
+
+func (m *DLCNonce) GetNonce() string {
+	if m != nil {
+		return m.Nonce
+	}
+	return ""
+}
+
+func (m *DLCNonce) GetOraclePubkey() string {
+	if m != nil {
+		return m.OraclePubkey
+	}
+	return ""
+}
+
+func (m *DLCNonce) GetTime() time.Time {
+	if m != nil {
+		return m.Time
+	}
+	return time.Time{}
+}
+
+type DLCPriceEvent struct {
+	Id           uint64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	TriggerPrice uint64    `protobuf:"varint,2,opt,name=trigger_price,json=triggerPrice,proto3" json:"trigger_price,omitempty"`
+	Nonce        string    `protobuf:"bytes,3,opt,name=nonce,proto3" json:"nonce,omitempty"`
+	Pubkey       string    `protobuf:"bytes,4,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	Description  string    `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	HasTriggered bool      `protobuf:"varint,6,opt,name=has_triggered,json=hasTriggered,proto3" json:"has_triggered,omitempty"`
+	PublishAt    time.Time `protobuf:"bytes,7,opt,name=publish_at,json=publishAt,proto3,stdtime" json:"publish_at"`
+}
+
+func (m *DLCPriceEvent) Reset()         { *m = DLCPriceEvent{} }
+func (m *DLCPriceEvent) String() string { return proto.CompactTextString(m) }
+func (*DLCPriceEvent) ProtoMessage()    {}
+func (*DLCPriceEvent) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fdcd991e9f56ce38, []int{3}
+}
+func (m *DLCPriceEvent) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DLCPriceEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DLCPriceEvent.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DLCPriceEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DLCPriceEvent.Merge(m, src)
+}
+func (m *DLCPriceEvent) XXX_Size() int {
+	return m.Size()
+}
+func (m *DLCPriceEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_DLCPriceEvent.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DLCPriceEvent proto.InternalMessageInfo
+
+func (m *DLCPriceEvent) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *DLCPriceEvent) GetTriggerPrice() uint64 {
+	if m != nil {
+		return m.TriggerPrice
+	}
+	return 0
+}
+
+func (m *DLCPriceEvent) GetNonce() string {
+	if m != nil {
+		return m.Nonce
+	}
+	return ""
+}
+
+func (m *DLCPriceEvent) GetPubkey() string {
+	if m != nil {
+		return m.Pubkey
+	}
+	return ""
+}
+
+func (m *DLCPriceEvent) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *DLCPriceEvent) GetHasTriggered() bool {
+	if m != nil {
+		return m.HasTriggered
+	}
+	return false
+}
+
+func (m *DLCPriceEvent) GetPublishAt() time.Time {
+	if m != nil {
+		return m.PublishAt
+	}
+	return time.Time{}
 }
 
 type DLCAttestation struct {
-	AnnouncementId uint64    `protobuf:"varint,1,opt,name=announcement_id,json=announcementId,proto3" json:"announcement_id,omitempty"`
-	Time           time.Time `protobuf:"bytes,2,opt,name=time,proto3,stdtime" json:"time"`
-	Outcome        string    `protobuf:"bytes,3,opt,name=outcome,proto3" json:"outcome,omitempty"`
-	Signature      string    `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
+	Id        string    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	EventId   uint64    `protobuf:"varint,2,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	Time      time.Time `protobuf:"bytes,3,opt,name=time,proto3,stdtime" json:"time"`
+	Pubkey    string    `protobuf:"bytes,4,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	Outcome   string    `protobuf:"bytes,5,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	Signature string    `protobuf:"bytes,6,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
 func (m *DLCAttestation) Reset()         { *m = DLCAttestation{} }
 func (m *DLCAttestation) String() string { return proto.CompactTextString(m) }
 func (*DLCAttestation) ProtoMessage()    {}
 func (*DLCAttestation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fdcd991e9f56ce38, []int{1}
+	return fileDescriptor_fdcd991e9f56ce38, []int{4}
 }
 func (m *DLCAttestation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -163,9 +469,16 @@ func (m *DLCAttestation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DLCAttestation proto.InternalMessageInfo
 
-func (m *DLCAttestation) GetAnnouncementId() uint64 {
+func (m *DLCAttestation) GetId() string {
 	if m != nil {
-		return m.AnnouncementId
+		return m.Id
+	}
+	return ""
+}
+
+func (m *DLCAttestation) GetEventId() uint64 {
+	if m != nil {
+		return m.EventId
 	}
 	return 0
 }
@@ -175,6 +488,13 @@ func (m *DLCAttestation) GetTime() time.Time {
 		return m.Time
 	}
 	return time.Time{}
+}
+
+func (m *DLCAttestation) GetPubkey() string {
+	if m != nil {
+		return m.Pubkey
+	}
+	return ""
 }
 
 func (m *DLCAttestation) GetOutcome() string {
@@ -191,126 +511,65 @@ func (m *DLCAttestation) GetSignature() string {
 	return ""
 }
 
-type DLCEvent struct {
-	MaturityEpoch uint32 `protobuf:"varint,1,opt,name=maturity_epoch,json=maturityEpoch,proto3" json:"maturity_epoch,omitempty"`
-	Nonce         string `protobuf:"bytes,2,opt,name=nonce,proto3" json:"nonce,omitempty"`
-	Index         uint64 `protobuf:"varint,3,opt,name=index,proto3" json:"index,omitempty"`
-	Descriptor_   string `protobuf:"bytes,4,opt,name=descriptor,proto3" json:"descriptor,omitempty"`
-	Pubkey        string `protobuf:"bytes,5,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
-}
-
-func (m *DLCEvent) Reset()         { *m = DLCEvent{} }
-func (m *DLCEvent) String() string { return proto.CompactTextString(m) }
-func (*DLCEvent) ProtoMessage()    {}
-func (*DLCEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fdcd991e9f56ce38, []int{2}
-}
-func (m *DLCEvent) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *DLCEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DLCEvent.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *DLCEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DLCEvent.Merge(m, src)
-}
-func (m *DLCEvent) XXX_Size() int {
-	return m.Size()
-}
-func (m *DLCEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_DLCEvent.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DLCEvent proto.InternalMessageInfo
-
-func (m *DLCEvent) GetMaturityEpoch() uint32 {
-	if m != nil {
-		return m.MaturityEpoch
-	}
-	return 0
-}
-
-func (m *DLCEvent) GetNonce() string {
-	if m != nil {
-		return m.Nonce
-	}
-	return ""
-}
-
-func (m *DLCEvent) GetIndex() uint64 {
-	if m != nil {
-		return m.Index
-	}
-	return 0
-}
-
-func (m *DLCEvent) GetDescriptor_() string {
-	if m != nil {
-		return m.Descriptor_
-	}
-	return ""
-}
-
-func (m *DLCEvent) GetPubkey() string {
-	if m != nil {
-		return m.Pubkey
-	}
-	return ""
-}
-
 func init() {
-	proto.RegisterEnum("side.dlc.AnnouncementStatus", AnnouncementStatus_name, AnnouncementStatus_value)
-	proto.RegisterType((*DLCAnnouncement)(nil), "side.dlc.DLCAnnouncement")
+	proto.RegisterEnum("side.dlc.DLCOracleStatus", DLCOracleStatus_name, DLCOracleStatus_value)
+	proto.RegisterEnum("side.dlc.AgencyStatus", AgencyStatus_name, AgencyStatus_value)
+	proto.RegisterType((*DLCOracle)(nil), "side.dlc.DLCOracle")
+	proto.RegisterType((*Agency)(nil), "side.dlc.Agency")
+	proto.RegisterType((*DLCNonce)(nil), "side.dlc.DLCNonce")
+	proto.RegisterType((*DLCPriceEvent)(nil), "side.dlc.DLCPriceEvent")
 	proto.RegisterType((*DLCAttestation)(nil), "side.dlc.DLCAttestation")
-	proto.RegisterType((*DLCEvent)(nil), "side.dlc.DLCEvent")
 }
 
 func init() { proto.RegisterFile("side/dlc/dlc.proto", fileDescriptor_fdcd991e9f56ce38) }
 
 var fileDescriptor_fdcd991e9f56ce38 = []byte{
-	// 477 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x92, 0x41, 0x6f, 0xd3, 0x30,
-	0x14, 0xc7, 0xe3, 0x92, 0x95, 0xf6, 0x8d, 0x65, 0x95, 0x55, 0x4d, 0x51, 0x55, 0xa5, 0x55, 0x25,
-	0x44, 0xc4, 0x21, 0x91, 0x06, 0x48, 0x5c, 0xe9, 0xb6, 0x03, 0xd2, 0x0e, 0x28, 0xc0, 0x85, 0x4b,
-	0x94, 0xda, 0x5e, 0x66, 0x91, 0xd8, 0x51, 0xe2, 0xa0, 0xf5, 0x5b, 0xec, 0xc2, 0xa7, 0x80, 0x0f,
-	0xb2, 0xe3, 0x8e, 0x9c, 0x00, 0xb5, 0x5f, 0x04, 0xd9, 0x69, 0x58, 0x0a, 0x87, 0x4a, 0xfd, 0xff,
-	0xde, 0xb3, 0xdf, 0xff, 0xfd, 0x1d, 0xc0, 0x15, 0xa7, 0x2c, 0xa4, 0x19, 0xd1, 0xbf, 0xa0, 0x28,
-	0xa5, 0x92, 0x78, 0xa0, 0x59, 0x40, 0x33, 0x32, 0x19, 0xa7, 0x32, 0x95, 0x06, 0x86, 0xfa, 0x5f,
-	0x53, 0x9f, 0xcc, 0x52, 0x29, 0xd3, 0x8c, 0x85, 0x46, 0xad, 0xea, 0xab, 0x50, 0xf1, 0x9c, 0x55,
-	0x2a, 0xc9, 0x8b, 0xa6, 0x61, 0xf1, 0x1d, 0xc1, 0xf1, 0xf9, 0xe5, 0xd9, 0x1b, 0x21, 0x64, 0x2d,
-	0x08, 0xcb, 0x99, 0x50, 0xd8, 0x81, 0x1e, 0xa7, 0x2e, 0x9a, 0x23, 0xdf, 0x8e, 0x7a, 0x9c, 0xe2,
-	0x57, 0xf0, 0x44, 0x96, 0x09, 0xc9, 0x58, 0xcc, 0xbe, 0x30, 0xa1, 0xdc, 0xde, 0x1c, 0xf9, 0x87,
-	0xa7, 0x38, 0x68, 0x67, 0x07, 0xe7, 0x97, 0x67, 0x17, 0xba, 0x12, 0x1d, 0x36, 0x7d, 0x46, 0xe0,
-	0x29, 0x0c, 0x2b, 0x9e, 0x8a, 0x44, 0xd5, 0x25, 0x73, 0x1f, 0xcd, 0x91, 0x3f, 0x8c, 0x1e, 0x00,
-	0x7e, 0x09, 0xfd, 0x4a, 0x25, 0xaa, 0xae, 0x5c, 0x7b, 0x8e, 0x7c, 0xe7, 0x74, 0xfa, 0x70, 0x5d,
-	0xd7, 0xcc, 0x7b, 0xd3, 0x13, 0xed, 0x7a, 0x17, 0xdf, 0x10, 0x38, 0xda, 0xae, 0x52, 0x7a, 0x0b,
-	0xc5, 0xa5, 0xc0, 0xcf, 0xe0, 0x38, 0xe9, 0x1c, 0x88, 0xff, 0x5a, 0x77, 0xba, 0xf8, 0x2d, 0xc5,
-	0xaf, 0xc1, 0xd6, 0xdb, 0xef, 0xec, 0x4f, 0x82, 0x26, 0x9a, 0xa0, 0x8d, 0x26, 0xf8, 0xd0, 0x46,
-	0xb3, 0x1c, 0xdc, 0xfd, 0x9c, 0x59, 0xb7, 0xbf, 0x66, 0x28, 0x32, 0x27, 0xb0, 0x0b, 0x8f, 0x65,
-	0xad, 0x88, 0xcc, 0xdb, 0x3d, 0x5a, 0xb9, 0xbf, 0xa3, 0xfd, 0xcf, 0x8e, 0x8b, 0xaf, 0x08, 0x06,
-	0x6d, 0x36, 0xf8, 0x29, 0x38, 0xb9, 0xc6, 0x5c, 0xad, 0x63, 0x56, 0x48, 0x72, 0x6d, 0x6c, 0x1e,
-	0x45, 0x47, 0x2d, 0xbd, 0xd0, 0x10, 0x8f, 0xe1, 0x40, 0x48, 0x41, 0x1a, 0x9b, 0xc3, 0xa8, 0x11,
-	0x9a, 0x72, 0x41, 0xd9, 0x8d, 0x99, 0x6f, 0x47, 0x8d, 0xc0, 0x1e, 0x00, 0x65, 0x15, 0x29, 0x79,
-	0xa1, 0x64, 0xb9, 0x1b, 0xdf, 0x21, 0xf8, 0x04, 0xfa, 0x45, 0xbd, 0xfa, 0xcc, 0xd6, 0xee, 0x81,
-	0xa9, 0xed, 0xd4, 0x73, 0x0a, 0xf8, 0xff, 0x8c, 0xf1, 0x14, 0xdc, 0x2e, 0x8d, 0x3f, 0x8a, 0xaa,
-	0x60, 0x84, 0x5f, 0x71, 0x46, 0x47, 0x16, 0x76, 0x61, 0xbc, 0x57, 0x7d, 0xc7, 0x04, 0xe5, 0x22,
-	0x1d, 0x21, 0x7c, 0xb2, 0x7f, 0x5b, 0x1c, 0xb1, 0x84, 0xae, 0x47, 0xbd, 0xe5, 0xf2, 0x6e, 0xe3,
-	0xa1, 0xfb, 0x8d, 0x87, 0x7e, 0x6f, 0x3c, 0x74, 0xbb, 0xf5, 0xac, 0xfb, 0xad, 0x67, 0xfd, 0xd8,
-	0x7a, 0xd6, 0x27, 0x3f, 0xe5, 0xea, 0xba, 0x5e, 0x05, 0x44, 0xe6, 0xa1, 0x7e, 0x75, 0xf3, 0x04,
-	0x44, 0x66, 0x46, 0x84, 0x37, 0xe6, 0x1b, 0x57, 0xeb, 0x82, 0x55, 0xab, 0xbe, 0x29, 0xbd, 0xf8,
-	0x13, 0x00, 0x00, 0xff, 0xff, 0xc9, 0xfa, 0x2d, 0x62, 0xfc, 0x02, 0x00, 0x00,
+	// 662 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x54, 0x3d, 0x4f, 0x1b, 0x4b,
+	0x14, 0xf5, 0xd8, 0xc6, 0x1f, 0x17, 0x9b, 0x87, 0x46, 0x3c, 0xb4, 0xa0, 0x27, 0xdb, 0x32, 0x8d,
+	0x45, 0xb1, 0xd6, 0xe3, 0x35, 0xaf, 0x05, 0x9b, 0x02, 0xc9, 0x4a, 0xd0, 0x86, 0x2a, 0x45, 0x56,
+	0xeb, 0x9d, 0xc9, 0x7a, 0x94, 0xf5, 0xce, 0x6a, 0x67, 0x36, 0x82, 0x7f, 0x41, 0x93, 0xff, 0x92,
+	0x3f, 0x10, 0x89, 0x92, 0x32, 0x55, 0x12, 0xc1, 0x8f, 0x48, 0x17, 0x45, 0x73, 0x77, 0xfc, 0x15,
+	0x11, 0x29, 0xa9, 0x52, 0x20, 0xed, 0x39, 0xf7, 0xce, 0x9d, 0x7b, 0x0e, 0x67, 0x0c, 0x54, 0x09,
+	0xc6, 0x87, 0x2c, 0x0e, 0xcd, 0x9f, 0x9b, 0x66, 0x52, 0x4b, 0xda, 0x30, 0x9c, 0xcb, 0xe2, 0xf0,
+	0x70, 0x2f, 0x92, 0x91, 0x44, 0x72, 0x68, 0xbe, 0x8a, 0xfa, 0x61, 0x37, 0x92, 0x32, 0x8a, 0xf9,
+	0x10, 0xd1, 0x34, 0x7f, 0x3d, 0xd4, 0x62, 0xce, 0x95, 0x0e, 0xe6, 0x69, 0xd1, 0xd0, 0xff, 0x4a,
+	0xa0, 0x39, 0x9e, 0x8c, 0x9e, 0x67, 0x41, 0x18, 0x73, 0xba, 0x03, 0x65, 0xc1, 0x1c, 0xd2, 0x23,
+	0x83, 0xb6, 0x57, 0x16, 0x8c, 0x52, 0xa8, 0x32, 0xae, 0x42, 0xa7, 0xdc, 0x23, 0x83, 0xa6, 0x87,
+	0xdf, 0xb4, 0x0f, 0xad, 0x34, 0xc8, 0xb4, 0x08, 0x45, 0x1a, 0x24, 0x5a, 0x39, 0x95, 0x5e, 0x65,
+	0xd0, 0xf4, 0x36, 0x38, 0xfa, 0x0f, 0x34, 0xf5, 0x2c, 0xe3, 0x6a, 0x26, 0x63, 0xe6, 0x54, 0x71,
+	0xdc, 0x8a, 0xa0, 0x0e, 0xd4, 0x03, 0xc6, 0x32, 0xae, 0x94, 0xb3, 0x85, 0x83, 0x17, 0x90, 0xee,
+	0x43, 0x2d, 0xcd, 0xa7, 0x6f, 0xf8, 0x8d, 0x53, 0xc3, 0x82, 0x45, 0xf4, 0x5f, 0xa8, 0x29, 0x1d,
+	0xe8, 0x5c, 0x39, 0xf5, 0x1e, 0x19, 0xec, 0x9c, 0x1c, 0xb8, 0x0b, 0xdd, 0xee, 0x72, 0xf9, 0x17,
+	0xd8, 0xe0, 0xd9, 0x46, 0xda, 0x85, 0xed, 0x44, 0x26, 0x21, 0xf7, 0x45, 0xc2, 0xf8, 0xb5, 0xd3,
+	0xe8, 0x91, 0x41, 0xd5, 0x03, 0xa4, 0x2e, 0x0c, 0xd3, 0x7f, 0x4f, 0xa0, 0x76, 0x1a, 0xf1, 0x24,
+	0xbc, 0xf9, 0xe3, 0xb2, 0xdd, 0xa5, 0xbc, 0x1a, 0xca, 0xdb, 0x5f, 0xc9, 0x2b, 0x36, 0xdc, 0xd4,
+	0xd6, 0x7f, 0x47, 0xa0, 0x31, 0x9e, 0x8c, 0x9e, 0x19, 0x31, 0x74, 0x0f, 0xb6, 0x0a, 0x89, 0x04,
+	0x25, 0x16, 0xc0, 0xb0, 0xa8, 0xd5, 0x6a, 0x28, 0x00, 0x3d, 0x82, 0xb6, 0x44, 0xb3, 0x7c, 0x6b,
+	0x73, 0x05, 0xab, 0xad, 0x82, 0xbc, 0x2c, 0xcc, 0xfe, 0x1f, 0xaa, 0x26, 0x25, 0x28, 0x60, 0xfb,
+	0xe4, 0xd0, 0x2d, 0x22, 0xe4, 0x2e, 0x22, 0xe4, 0x5e, 0x2d, 0x22, 0x74, 0xd6, 0xb8, 0xfb, 0xd4,
+	0x2d, 0xdd, 0x7e, 0xee, 0x12, 0x0f, 0x4f, 0xf4, 0xbf, 0x11, 0x68, 0x8f, 0x27, 0xa3, 0xcb, 0x4c,
+	0x84, 0xfc, 0xfc, 0x2d, 0x4f, 0xf4, 0x9a, 0xb3, 0x55, 0x74, 0xf6, 0x08, 0xda, 0x3a, 0x13, 0x51,
+	0xc4, 0x33, 0x3f, 0x35, 0x5d, 0xb8, 0x5e, 0xd5, 0x6b, 0x59, 0x12, 0x4f, 0xae, 0x76, 0xaf, 0xac,
+	0xef, 0xbe, 0xca, 0x46, 0x75, 0x23, 0x1b, 0x3d, 0xd8, 0x36, 0xff, 0xa0, 0x4c, 0xa4, 0x5a, 0xc8,
+	0xc4, 0x5a, 0xbb, 0x4e, 0x99, 0x4b, 0x67, 0x81, 0xf2, 0xed, 0x1d, 0x9c, 0xa1, 0xcb, 0x0d, 0xaf,
+	0x35, 0x0b, 0xd4, 0xd5, 0x82, 0xa3, 0x23, 0x80, 0x34, 0x9f, 0xc6, 0x42, 0xcd, 0xfc, 0x40, 0x63,
+	0xcc, 0x7e, 0x55, 0x7b, 0xd3, 0x9e, 0x3b, 0xd5, 0xfd, 0x0f, 0x04, 0x76, 0xc6, 0x93, 0xd1, 0xa9,
+	0xd6, 0xa6, 0x0b, 0x2f, 0x5f, 0x39, 0xd0, 0x44, 0x07, 0x0e, 0xa0, 0xc1, 0x8d, 0x35, 0xbe, 0x60,
+	0x56, 0x7c, 0x1d, 0xf1, 0x05, 0x5b, 0x1a, 0x5f, 0xf9, 0x5d, 0xe3, 0x7f, 0xea, 0x8d, 0x03, 0x75,
+	0x99, 0xeb, 0x50, 0xce, 0xf9, 0x22, 0x72, 0x16, 0x9a, 0xa8, 0x2a, 0x11, 0x25, 0x81, 0xce, 0x33,
+	0x6e, 0x1f, 0xdb, 0x8a, 0x38, 0x0e, 0xe0, 0xaf, 0x1f, 0xde, 0x15, 0x3d, 0x80, 0xbf, 0x0b, 0xec,
+	0x17, 0x84, 0x7f, 0xc9, 0x13, 0x26, 0x92, 0x68, 0xb7, 0x44, 0x1d, 0xd8, 0xb3, 0xa5, 0x22, 0x9f,
+	0xfe, 0x79, 0x12, 0x4c, 0x63, 0xbe, 0x4b, 0xd6, 0x0e, 0xd9, 0xca, 0x58, 0x28, 0x2c, 0x95, 0x8f,
+	0x5f, 0x41, 0x6b, 0x3d, 0xdb, 0xa6, 0xb5, 0xc0, 0x4f, 0xce, 0xb7, 0xa5, 0x27, 0xe6, 0x6f, 0x56,
+	0x96, 0xf3, 0xcf, 0xce, 0xee, 0x1e, 0x3a, 0xe4, 0xfe, 0xa1, 0x43, 0xbe, 0x3c, 0x74, 0xc8, 0xed,
+	0x63, 0xa7, 0x74, 0xff, 0xd8, 0x29, 0x7d, 0x7c, 0xec, 0x94, 0x5e, 0x0e, 0x22, 0xa1, 0x67, 0xf9,
+	0xd4, 0x0d, 0xe5, 0x7c, 0x68, 0xde, 0x19, 0xfa, 0x1b, 0xca, 0x18, 0xc1, 0xf0, 0x1a, 0x7f, 0x61,
+	0xf5, 0x4d, 0xca, 0xd5, 0xb4, 0x86, 0xa5, 0xff, 0xbe, 0x07, 0x00, 0x00, 0xff, 0xff, 0xd1, 0x45,
+	0xb8, 0x5b, 0x7a, 0x05, 0x00, 0x00,
 }
 
-func (m *DLCAnnouncement) Marshal() (dAtA []byte, err error) {
+func (m *DLCOracle) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -320,12 +579,85 @@ func (m *DLCAnnouncement) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DLCAnnouncement) MarshalTo(dAtA []byte) (int, error) {
+func (m *DLCOracle) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *DLCAnnouncement) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *DLCOracle) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.NonceIndex != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.NonceIndex))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.Status != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.Status))
+		i--
+		dAtA[i] = 0x38
+	}
+	if len(m.Pubkey) > 0 {
+		i -= len(m.Pubkey)
+		copy(dAtA[i:], m.Pubkey)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Pubkey)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Threshold != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.Threshold))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.Participants) > 0 {
+		for iNdEx := len(m.Participants) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Participants[iNdEx])
+			copy(dAtA[i:], m.Participants[iNdEx])
+			i = encodeVarintDlc(dAtA, i, uint64(len(m.Participants[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Desc) > 0 {
+		i -= len(m.Desc)
+		copy(dAtA[i:], m.Desc)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Desc)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Agency) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Agency) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Agency) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -333,26 +665,157 @@ func (m *DLCAnnouncement) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.Status != 0 {
 		i = encodeVarintDlc(dAtA, i, uint64(m.Status))
 		i--
+		dAtA[i] = 0x30
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Threshold != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.Threshold))
+		i--
 		dAtA[i] = 0x20
 	}
-	if len(m.Signature) > 0 {
-		i -= len(m.Signature)
-		copy(dAtA[i:], m.Signature)
-		i = encodeVarintDlc(dAtA, i, uint64(len(m.Signature)))
+	if len(m.Participants) > 0 {
+		for iNdEx := len(m.Participants) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Participants[iNdEx])
+			copy(dAtA[i:], m.Participants[iNdEx])
+			i = encodeVarintDlc(dAtA, i, uint64(len(m.Participants[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Desc) > 0 {
+		i -= len(m.Desc)
+		copy(dAtA[i:], m.Desc)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Desc)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DLCNonce) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DLCNonce) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DLCNonce) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	n1, err1 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Time, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Time):])
+	if err1 != nil {
+		return 0, err1
+	}
+	i -= n1
+	i = encodeVarintDlc(dAtA, i, uint64(n1))
+	i--
+	dAtA[i] = 0x22
+	if len(m.OraclePubkey) > 0 {
+		i -= len(m.OraclePubkey)
+		copy(dAtA[i:], m.OraclePubkey)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.OraclePubkey)))
 		i--
 		dAtA[i] = 0x1a
 	}
-	if m.OracleEvent != nil {
-		{
-			size, err := m.OracleEvent.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDlc(dAtA, i, uint64(size))
-		}
+	if len(m.Nonce) > 0 {
+		i -= len(m.Nonce)
+		copy(dAtA[i:], m.Nonce)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Nonce)))
 		i--
 		dAtA[i] = 0x12
+	}
+	if m.Index != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.Index))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DLCPriceEvent) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DLCPriceEvent) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DLCPriceEvent) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.PublishAt, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.PublishAt):])
+	if err2 != nil {
+		return 0, err2
+	}
+	i -= n2
+	i = encodeVarintDlc(dAtA, i, uint64(n2))
+	i--
+	dAtA[i] = 0x3a
+	if m.HasTriggered {
+		i--
+		if m.HasTriggered {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x30
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Pubkey) > 0 {
+		i -= len(m.Pubkey)
+		copy(dAtA[i:], m.Pubkey)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Pubkey)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Nonce) > 0 {
+		i -= len(m.Nonce)
+		copy(dAtA[i:], m.Nonce)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Nonce)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.TriggerPrice != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.TriggerPrice))
+		i--
+		dAtA[i] = 0x10
 	}
 	if m.Id != 0 {
 		i = encodeVarintDlc(dAtA, i, uint64(m.Id))
@@ -387,81 +850,41 @@ func (m *DLCAttestation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.Signature)
 		i = encodeVarintDlc(dAtA, i, uint64(len(m.Signature)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x32
 	}
 	if len(m.Outcome) > 0 {
 		i -= len(m.Outcome)
 		copy(dAtA[i:], m.Outcome)
 		i = encodeVarintDlc(dAtA, i, uint64(len(m.Outcome)))
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x2a
 	}
-	n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Time, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Time):])
-	if err2 != nil {
-		return 0, err2
-	}
-	i -= n2
-	i = encodeVarintDlc(dAtA, i, uint64(n2))
-	i--
-	dAtA[i] = 0x12
-	if m.AnnouncementId != 0 {
-		i = encodeVarintDlc(dAtA, i, uint64(m.AnnouncementId))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DLCEvent) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DLCEvent) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DLCEvent) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
 	if len(m.Pubkey) > 0 {
 		i -= len(m.Pubkey)
 		copy(dAtA[i:], m.Pubkey)
 		i = encodeVarintDlc(dAtA, i, uint64(len(m.Pubkey)))
 		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.Descriptor_) > 0 {
-		i -= len(m.Descriptor_)
-		copy(dAtA[i:], m.Descriptor_)
-		i = encodeVarintDlc(dAtA, i, uint64(len(m.Descriptor_)))
-		i--
 		dAtA[i] = 0x22
 	}
-	if m.Index != 0 {
-		i = encodeVarintDlc(dAtA, i, uint64(m.Index))
-		i--
-		dAtA[i] = 0x18
+	n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Time, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Time):])
+	if err3 != nil {
+		return 0, err3
 	}
-	if len(m.Nonce) > 0 {
-		i -= len(m.Nonce)
-		copy(dAtA[i:], m.Nonce)
-		i = encodeVarintDlc(dAtA, i, uint64(len(m.Nonce)))
+	i -= n3
+	i = encodeVarintDlc(dAtA, i, uint64(n3))
+	i--
+	dAtA[i] = 0x1a
+	if m.EventId != 0 {
+		i = encodeVarintDlc(dAtA, i, uint64(m.EventId))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
-	if m.MaturityEpoch != 0 {
-		i = encodeVarintDlc(dAtA, i, uint64(m.MaturityEpoch))
+	if len(m.Id) > 0 {
+		i -= len(m.Id)
+		copy(dAtA[i:], m.Id)
+		i = encodeVarintDlc(dAtA, i, uint64(len(m.Id)))
 		i--
-		dAtA[i] = 0x8
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -477,7 +900,7 @@ func encodeVarintDlc(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *DLCAnnouncement) Size() (n int) {
+func (m *DLCOracle) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -486,11 +909,59 @@ func (m *DLCAnnouncement) Size() (n int) {
 	if m.Id != 0 {
 		n += 1 + sovDlc(uint64(m.Id))
 	}
-	if m.OracleEvent != nil {
-		l = m.OracleEvent.Size()
+	l = len(m.Desc)
+	if l > 0 {
 		n += 1 + l + sovDlc(uint64(l))
 	}
-	l = len(m.Signature)
+	if len(m.Participants) > 0 {
+		for _, s := range m.Participants {
+			l = len(s)
+			n += 1 + l + sovDlc(uint64(l))
+		}
+	}
+	if m.Threshold != 0 {
+		n += 1 + sovDlc(uint64(m.Threshold))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	l = len(m.Pubkey)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	if m.Status != 0 {
+		n += 1 + sovDlc(uint64(m.Status))
+	}
+	if m.NonceIndex != 0 {
+		n += 1 + sovDlc(uint64(m.NonceIndex))
+	}
+	return n
+}
+
+func (m *Agency) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovDlc(uint64(m.Id))
+	}
+	l = len(m.Desc)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	if len(m.Participants) > 0 {
+		for _, s := range m.Participants {
+			l = len(s)
+			n += 1 + l + sovDlc(uint64(l))
+		}
+	}
+	if m.Threshold != 0 {
+		n += 1 + sovDlc(uint64(m.Threshold))
+	}
+	l = len(m.Address)
 	if l > 0 {
 		n += 1 + l + sovDlc(uint64(l))
 	}
@@ -500,49 +971,84 @@ func (m *DLCAnnouncement) Size() (n int) {
 	return n
 }
 
+func (m *DLCNonce) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Index != 0 {
+		n += 1 + sovDlc(uint64(m.Index))
+	}
+	l = len(m.Nonce)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	l = len(m.OraclePubkey)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Time)
+	n += 1 + l + sovDlc(uint64(l))
+	return n
+}
+
+func (m *DLCPriceEvent) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovDlc(uint64(m.Id))
+	}
+	if m.TriggerPrice != 0 {
+		n += 1 + sovDlc(uint64(m.TriggerPrice))
+	}
+	l = len(m.Nonce)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	l = len(m.Pubkey)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	if m.HasTriggered {
+		n += 2
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.PublishAt)
+	n += 1 + l + sovDlc(uint64(l))
+	return n
+}
+
 func (m *DLCAttestation) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.AnnouncementId != 0 {
-		n += 1 + sovDlc(uint64(m.AnnouncementId))
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
+	if m.EventId != 0 {
+		n += 1 + sovDlc(uint64(m.EventId))
 	}
 	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Time)
 	n += 1 + l + sovDlc(uint64(l))
+	l = len(m.Pubkey)
+	if l > 0 {
+		n += 1 + l + sovDlc(uint64(l))
+	}
 	l = len(m.Outcome)
 	if l > 0 {
 		n += 1 + l + sovDlc(uint64(l))
 	}
 	l = len(m.Signature)
-	if l > 0 {
-		n += 1 + l + sovDlc(uint64(l))
-	}
-	return n
-}
-
-func (m *DLCEvent) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MaturityEpoch != 0 {
-		n += 1 + sovDlc(uint64(m.MaturityEpoch))
-	}
-	l = len(m.Nonce)
-	if l > 0 {
-		n += 1 + l + sovDlc(uint64(l))
-	}
-	if m.Index != 0 {
-		n += 1 + sovDlc(uint64(m.Index))
-	}
-	l = len(m.Descriptor_)
-	if l > 0 {
-		n += 1 + l + sovDlc(uint64(l))
-	}
-	l = len(m.Pubkey)
 	if l > 0 {
 		n += 1 + l + sovDlc(uint64(l))
 	}
@@ -555,7 +1061,7 @@ func sovDlc(x uint64) (n int) {
 func sozDlc(x uint64) (n int) {
 	return sovDlc(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *DLCAnnouncement) Unmarshal(dAtA []byte) error {
+func (m *DLCOracle) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -578,10 +1084,10 @@ func (m *DLCAnnouncement) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: DLCAnnouncement: wiretype end group for non-group")
+			return fmt.Errorf("proto: DLCOracle: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DLCAnnouncement: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DLCOracle: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -598,50 +1104,14 @@ func (m *DLCAnnouncement) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Id |= uint64(b&0x7F) << shift
+				m.Id |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OracleEvent", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDlc
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDlc
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDlc
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.OracleEvent == nil {
-				m.OracleEvent = &DLCEvent{}
-			}
-			if err := m.OracleEvent.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signature", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Desc", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -669,9 +1139,124 @@ func (m *DLCAnnouncement) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Signature = string(dAtA[iNdEx:postIndex])
+			m.Desc = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Participants", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Participants = append(m.Participants, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+			}
+			m.Threshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Threshold |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pubkey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Pubkey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
@@ -685,11 +1270,636 @@ func (m *DLCAnnouncement) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= AnnouncementStatus(b&0x7F) << shift
+				m.Status |= DLCOracleStatus(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NonceIndex", wireType)
+			}
+			m.NonceIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.NonceIndex |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipDlc(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Agency) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowDlc
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Agency: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Agency: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Desc", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Desc = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Participants", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Participants = append(m.Participants, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+			}
+			m.Threshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Threshold |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= AgencyStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipDlc(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DLCNonce) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowDlc
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DLCNonce: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DLCNonce: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+			}
+			m.Index = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Index |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nonce", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Nonce = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OraclePubkey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OraclePubkey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Time", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.Time, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipDlc(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DLCPriceEvent) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowDlc
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DLCPriceEvent: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DLCPriceEvent: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TriggerPrice", wireType)
+			}
+			m.TriggerPrice = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TriggerPrice |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nonce", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Nonce = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pubkey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Pubkey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HasTriggered", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.HasTriggered = bool(v != 0)
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublishAt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.PublishAt, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipDlc(dAtA[iNdEx:])
@@ -741,10 +1951,10 @@ func (m *DLCAttestation) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnnouncementId", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			m.AnnouncementId = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowDlc
@@ -754,12 +1964,44 @@ func (m *DLCAttestation) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AnnouncementId |= uint64(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EventId", wireType)
+			}
+			m.EventId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.EventId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Time", wireType)
 			}
@@ -792,7 +2034,39 @@ func (m *DLCAttestation) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pubkey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDlc
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDlc
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDlc
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Pubkey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Outcome", wireType)
 			}
@@ -824,7 +2098,7 @@ func (m *DLCAttestation) Unmarshal(dAtA []byte) error {
 			}
 			m.Outcome = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 4:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Signature", wireType)
 			}
@@ -855,190 +2129,6 @@ func (m *DLCAttestation) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Signature = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDlc(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDlc
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DLCEvent) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDlc
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DLCEvent: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DLCEvent: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaturityEpoch", wireType)
-			}
-			m.MaturityEpoch = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDlc
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaturityEpoch |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Nonce", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDlc
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDlc
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDlc
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Nonce = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
-			}
-			m.Index = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDlc
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Index |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Descriptor_", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDlc
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDlc
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDlc
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Descriptor_ = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pubkey", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDlc
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDlc
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDlc
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Pubkey = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

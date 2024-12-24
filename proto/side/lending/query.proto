@@ -4,6 +4,7 @@ package side.lending;
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "side/lending/params.proto";
 import "side/lending/lending.proto";
 
@@ -15,22 +16,23 @@ service Query {
     rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
       option (google.api.http).get = "/side/lending/params";
     }
-    rpc QueryCollateralAddress(QueryCollateralAddressRequest) returns (QueryCollateralAddressResponse) {
+    rpc CollateralAddress(QueryCollateralAddressRequest) returns (QueryCollateralAddressResponse) {
         option (google.api.http).get = "/side/lending/collateral/address";
 
     }
-    rpc QueryLiquidationEvent(QueryLiquidationEventRequest) returns (QueryLiquidationEventResponse) {
-        option (google.api.http).get = "/side/lending/liquidation/price";
 
+    rpc LiquidationEvent(QueryLiquidationEventRequest) returns (QueryLiquidationEventResponse) {
+        option (google.api.http).get = "/side/lending/liquidation/price";
     }
 
-    rpc QueryLoanCET() returns ();
-    
+    rpc LoanCET(QueryLoanCETRequest) returns (QueryLoanCETResponse) {
+        option (google.api.http).get = "/side/lending/loan/cet";
+    }
 }
 
 message QueryLiquidationEventRequest{
-    Coin borrow_amount = 1;
-    Coin collateral_acmount =2;
+    cosmos.base.v1beta1.Coin borrow_amount = 1;
+    cosmos.base.v1beta1.Coin collateral_acmount =2;
 }
 
 message QueryLiquidationEventResponse {
@@ -45,7 +47,8 @@ message QueryCollateralAddressRequest{
     string hash_of_loan_secret = 2;
     uint64 maturity_time = 3;
     uint64 final_timeout =4;
-} 
+}
+
 message QueryCollateralAddressResponse{
     string address = 1;
 }
@@ -59,3 +62,10 @@ message QueryParamsResponse {
     Params params = 1;
 }
 
+// QueryLoanCETRequest is request type for the Query/LoanCET RPC method.
+message QueryLoanCETRequest {
+}
+
+// QueryLoanCETResponse is response type for the Query/LoanCET RPC method.
+message QueryLoanCETResponse {
+}

@@ -3,12 +3,14 @@ package side.lending;
 
 import "gogoproto/gogo.proto";
 import "cosmos/msg/v1/msg.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sideprotocol/side/x/lending/types";
 
 // Msg defines the Msg service.
 service Msg {
     option (cosmos.msg.v1.service) = true;
+
     rpc AddLiquidity(MsgAddLiquidity) returns (MsgAddLiquidityResponse);
     rpc RemoveLiquidity(MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
     rpc RequestVaultAddress(MsgRequestVaultAddress) returns (MsgRequestVaultAddressResponse);
@@ -21,7 +23,7 @@ message MsgRepay{
     option (cosmos.msg.v1.signer) = "borrower";
 
     string borrower = 1;
-    Coin amount = 2;
+    cosmos.base.v1beta1.Coin amount = 2;
     string adaptor_point = 3;
 }
 
@@ -29,11 +31,12 @@ message MsgRepayResponse{}
 
 message MsgCreateLoan {
     option (cosmos.msg.v1.signer) = "borrower";
+
     string borrower = 1;
     string vault_address = 2; // id
     uint32 period = 3;
     string pool_id = 4;
-    Coin borrow_amount = 5;
+    cosmos.base.v1beta1.Coin borrow_amount = 5;
     string event_id = 6;
     string cets = 7;
     string loan_secret = 8;
@@ -46,21 +49,22 @@ message MsgAddLiquidity {
 
     string pool_id = 1;
     string lender = 2;
-    Coin amount = 3;
+    cosmos.base.v1beta1.Coin amount = 3;
 }
+
 message MsgAddLiquidityResponse {
-    Coin shares = 1;
+    cosmos.base.v1beta1.Coin shares = 1;
 }
 
 message MsgRemoveLiquidity {
     option (cosmos.msg.v1.signer) = "lender";
 
     string lender = 1;
-    Coin shares = 2;
+    cosmos.base.v1beta1.Coin shares = 2;
 }
 
 message MsgRemoveLiquidityResponse {
-    Coin amount = 1;
+    cosmos.base.v1beta1.Coin amount = 1;
 }
 
 message MsgRequestVaultAddress {
@@ -107,6 +111,3 @@ message MsgSubmitFundingTxResponse {
 // }
 
 // message MsgCreateLoanResposne {}
-
-
-

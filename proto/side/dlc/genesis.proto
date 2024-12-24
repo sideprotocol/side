@@ -13,5 +13,4 @@ message GenesisState {
 
     repeated DLCPriceEvent announcements = 2;
     repeated DLCAttestation attestations = 3; 
-    repeated LendingPool pools = 4;
 }

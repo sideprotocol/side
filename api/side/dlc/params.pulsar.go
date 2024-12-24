@@ -481,66 +481,573 @@ func (x *fastReflection_PriceInterval) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_Params_1_list)(nil)
+var (
+	md_InterestRate        protoreflect.MessageDescriptor
+	fd_InterestRate_period protoreflect.FieldDescriptor
+	fd_InterestRate_rate   protoreflect.FieldDescriptor
+)
 
-type _Params_1_list struct {
+func init() {
+	file_side_dlc_params_proto_init()
+	md_InterestRate = File_side_dlc_params_proto.Messages().ByName("InterestRate")
+	fd_InterestRate_period = md_InterestRate.Fields().ByName("period")
+	fd_InterestRate_rate = md_InterestRate.Fields().ByName("rate")
+}
+
+var _ protoreflect.Message = (*fastReflection_InterestRate)(nil)
+
+type fastReflection_InterestRate InterestRate
+
+func (x *InterestRate) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_InterestRate)(x)
+}
+
+func (x *InterestRate) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_dlc_params_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_InterestRate_messageType fastReflection_InterestRate_messageType
+var _ protoreflect.MessageType = fastReflection_InterestRate_messageType{}
+
+type fastReflection_InterestRate_messageType struct{}
+
+func (x fastReflection_InterestRate_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_InterestRate)(nil)
+}
+func (x fastReflection_InterestRate_messageType) New() protoreflect.Message {
+	return new(fastReflection_InterestRate)
+}
+func (x fastReflection_InterestRate_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_InterestRate
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_InterestRate) Descriptor() protoreflect.MessageDescriptor {
+	return md_InterestRate
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_InterestRate) Type() protoreflect.MessageType {
+	return _fastReflection_InterestRate_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_InterestRate) New() protoreflect.Message {
+	return new(fastReflection_InterestRate)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_InterestRate) Interface() protoreflect.ProtoMessage {
+	return (*InterestRate)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_InterestRate) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Period != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.Period)
+		if !f(fd_InterestRate_period, value) {
+			return
+		}
+	}
+	if x.Rate != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.Rate)
+		if !f(fd_InterestRate_rate, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_InterestRate) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.dlc.InterestRate.period":
+		return x.Period != uint32(0)
+	case "side.dlc.InterestRate.rate":
+		return x.Rate != uint32(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.InterestRate"))
+		}
+		panic(fmt.Errorf("message side.dlc.InterestRate does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_InterestRate) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.dlc.InterestRate.period":
+		x.Period = uint32(0)
+	case "side.dlc.InterestRate.rate":
+		x.Rate = uint32(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.InterestRate"))
+		}
+		panic(fmt.Errorf("message side.dlc.InterestRate does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_InterestRate) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.dlc.InterestRate.period":
+		value := x.Period
+		return protoreflect.ValueOfUint32(value)
+	case "side.dlc.InterestRate.rate":
+		value := x.Rate
+		return protoreflect.ValueOfUint32(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.InterestRate"))
+		}
+		panic(fmt.Errorf("message side.dlc.InterestRate does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_InterestRate) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.dlc.InterestRate.period":
+		x.Period = uint32(value.Uint())
+	case "side.dlc.InterestRate.rate":
+		x.Rate = uint32(value.Uint())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.InterestRate"))
+		}
+		panic(fmt.Errorf("message side.dlc.InterestRate does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_InterestRate) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.InterestRate.period":
+		panic(fmt.Errorf("field period of message side.dlc.InterestRate is not mutable"))
+	case "side.dlc.InterestRate.rate":
+		panic(fmt.Errorf("field rate of message side.dlc.InterestRate is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.InterestRate"))
+		}
+		panic(fmt.Errorf("message side.dlc.InterestRate does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_InterestRate) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.InterestRate.period":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.dlc.InterestRate.rate":
+		return protoreflect.ValueOfUint32(uint32(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.InterestRate"))
+		}
+		panic(fmt.Errorf("message side.dlc.InterestRate does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_InterestRate) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.InterestRate", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_InterestRate) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_InterestRate) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_InterestRate) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_InterestRate) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*InterestRate)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Period != 0 {
+			n += 1 + runtime.Sov(uint64(x.Period))
+		}
+		if x.Rate != 0 {
+			n += 1 + runtime.Sov(uint64(x.Rate))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*InterestRate)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Rate != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Rate))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.Period != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Period))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*InterestRate)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: InterestRate: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: InterestRate: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
+				}
+				x.Period = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Period |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Rate", wireType)
+				}
+				x.Rate = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Rate |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_Params_2_list)(nil)
+
+type _Params_2_list struct {
 	list *[]*PriceInterval
 }
 
-func (x *_Params_1_list) Len() int {
+func (x *_Params_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_Params_1_list) Get(i int) protoreflect.Value {
+func (x *_Params_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_Params_1_list) Set(i int, value protoreflect.Value) {
+func (x *_Params_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*PriceInterval)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_Params_1_list) Append(value protoreflect.Value) {
+func (x *_Params_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*PriceInterval)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_Params_1_list) AppendMutable() protoreflect.Value {
+func (x *_Params_2_list) AppendMutable() protoreflect.Value {
 	v := new(PriceInterval)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_Params_1_list) Truncate(n int) {
+func (x *_Params_2_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_Params_1_list) NewElement() protoreflect.Value {
+func (x *_Params_2_list) NewElement() protoreflect.Value {
 	v := new(PriceInterval)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_Params_1_list) IsValid() bool {
+func (x *_Params_2_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_Params_3_list)(nil)
+
+type _Params_3_list struct {
+	list *[]*InterestRate
+}
+
+func (x *_Params_3_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_Params_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_Params_3_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*InterestRate)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_Params_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*InterestRate)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_Params_3_list) AppendMutable() protoreflect.Value {
+	v := new(InterestRate)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_Params_3_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_Params_3_list) NewElement() protoreflect.Value {
+	v := new(InterestRate)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_Params_3_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_Params                protoreflect.MessageDescriptor
-	fd_Params_price_interval protoreflect.FieldDescriptor
+	md_Params                  protoreflect.MessageDescriptor
+	fd_Params_nonce_queue_size protoreflect.FieldDescriptor
+	fd_Params_price_interval   protoreflect.FieldDescriptor
+	fd_Params_interest_rate    protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_dlc_params_proto_init()
 	md_Params = File_side_dlc_params_proto.Messages().ByName("Params")
+	fd_Params_nonce_queue_size = md_Params.Fields().ByName("nonce_queue_size")
 	fd_Params_price_interval = md_Params.Fields().ByName("price_interval")
+	fd_Params_interest_rate = md_Params.Fields().ByName("interest_rate")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -552,7 +1059,7 @@ func (x *Params) ProtoReflect() protoreflect.Message {
 }
 
 func (x *Params) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_dlc_params_proto_msgTypes[1]
+	mi := &file_side_dlc_params_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -608,9 +1115,21 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.NonceQueueSize != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.NonceQueueSize)
+		if !f(fd_Params_nonce_queue_size, value) {
+			return
+		}
+	}
 	if len(x.PriceInterval) != 0 {
-		value := protoreflect.ValueOfList(&_Params_1_list{list: &x.PriceInterval})
+		value := protoreflect.ValueOfList(&_Params_2_list{list: &x.PriceInterval})
 		if !f(fd_Params_price_interval, value) {
+			return
+		}
+	}
+	if len(x.InterestRate) != 0 {
+		value := protoreflect.ValueOfList(&_Params_3_list{list: &x.InterestRate})
+		if !f(fd_Params_interest_rate, value) {
 			return
 		}
 	}
@@ -629,8 +1148,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "side.dlc.Params.nonce_queue_size":
+		return x.NonceQueueSize != uint32(0)
 	case "side.dlc.Params.price_interval":
 		return len(x.PriceInterval) != 0
+	case "side.dlc.Params.interest_rate":
+		return len(x.InterestRate) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -647,8 +1170,12 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "side.dlc.Params.nonce_queue_size":
+		x.NonceQueueSize = uint32(0)
 	case "side.dlc.Params.price_interval":
 		x.PriceInterval = nil
+	case "side.dlc.Params.interest_rate":
+		x.InterestRate = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -665,11 +1192,20 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "side.dlc.Params.nonce_queue_size":
+		value := x.NonceQueueSize
+		return protoreflect.ValueOfUint32(value)
 	case "side.dlc.Params.price_interval":
 		if len(x.PriceInterval) == 0 {
-			return protoreflect.ValueOfList(&_Params_1_list{})
+			return protoreflect.ValueOfList(&_Params_2_list{})
 		}
-		listValue := &_Params_1_list{list: &x.PriceInterval}
+		listValue := &_Params_2_list{list: &x.PriceInterval}
+		return protoreflect.ValueOfList(listValue)
+	case "side.dlc.Params.interest_rate":
+		if len(x.InterestRate) == 0 {
+			return protoreflect.ValueOfList(&_Params_3_list{})
+		}
+		listValue := &_Params_3_list{list: &x.InterestRate}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -691,10 +1227,16 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "side.dlc.Params.nonce_queue_size":
+		x.NonceQueueSize = uint32(value.Uint())
 	case "side.dlc.Params.price_interval":
 		lv := value.List()
-		clv := lv.(*_Params_1_list)
+		clv := lv.(*_Params_2_list)
 		x.PriceInterval = *clv.list
+	case "side.dlc.Params.interest_rate":
+		lv := value.List()
+		clv := lv.(*_Params_3_list)
+		x.InterestRate = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -719,8 +1261,16 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		if x.PriceInterval == nil {
 			x.PriceInterval = []*PriceInterval{}
 		}
-		value := &_Params_1_list{list: &x.PriceInterval}
+		value := &_Params_2_list{list: &x.PriceInterval}
 		return protoreflect.ValueOfList(value)
+	case "side.dlc.Params.interest_rate":
+		if x.InterestRate == nil {
+			x.InterestRate = []*InterestRate{}
+		}
+		value := &_Params_3_list{list: &x.InterestRate}
+		return protoreflect.ValueOfList(value)
+	case "side.dlc.Params.nonce_queue_size":
+		panic(fmt.Errorf("field nonce_queue_size of message side.dlc.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -734,9 +1284,14 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "side.dlc.Params.nonce_queue_size":
+		return protoreflect.ValueOfUint32(uint32(0))
 	case "side.dlc.Params.price_interval":
 		list := []*PriceInterval{}
-		return protoreflect.ValueOfList(&_Params_1_list{list: &list})
+		return protoreflect.ValueOfList(&_Params_2_list{list: &list})
+	case "side.dlc.Params.interest_rate":
+		list := []*InterestRate{}
+		return protoreflect.ValueOfList(&_Params_3_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -806,8 +1361,17 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		if x.NonceQueueSize != 0 {
+			n += 1 + runtime.Sov(uint64(x.NonceQueueSize))
+		}
 		if len(x.PriceInterval) > 0 {
 			for _, e := range x.PriceInterval {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.InterestRate) > 0 {
+			for _, e := range x.InterestRate {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
@@ -841,6 +1405,22 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if len(x.InterestRate) > 0 {
+			for iNdEx := len(x.InterestRate) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.InterestRate[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x1a
+			}
+		}
 		if len(x.PriceInterval) > 0 {
 			for iNdEx := len(x.PriceInterval) - 1; iNdEx >= 0; iNdEx-- {
 				encoded, err := options.Marshal(x.PriceInterval[iNdEx])
@@ -854,8 +1434,13 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], encoded)
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 				i--
-				dAtA[i] = 0xa
+				dAtA[i] = 0x12
 			}
+		}
+		if x.NonceQueueSize != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.NonceQueueSize))
+			i--
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -907,6 +1492,25 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NonceQueueSize", wireType)
+				}
+				x.NonceQueueSize = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.NonceQueueSize |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PriceInterval", wireType)
 				}
@@ -937,6 +1541,40 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.PriceInterval = append(x.PriceInterval, &PriceInterval{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PriceInterval[len(x.PriceInterval)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field InterestRate", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.InterestRate = append(x.InterestRate, &InterestRate{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.InterestRate[len(x.InterestRate)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -1031,19 +1669,64 @@ func (x *PriceInterval) GetInterval() int32 {
 	return 0
 }
 
+type InterestRate struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Period uint32 `protobuf:"varint,1,opt,name=period,proto3" json:"period,omitempty"`
+	Rate   uint32 `protobuf:"varint,2,opt,name=rate,proto3" json:"rate,omitempty"`
+}
+
+func (x *InterestRate) Reset() {
+	*x = InterestRate{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_dlc_params_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *InterestRate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InterestRate) ProtoMessage() {}
+
+// Deprecated: Use InterestRate.ProtoReflect.Descriptor instead.
+func (*InterestRate) Descriptor() ([]byte, []int) {
+	return file_side_dlc_params_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *InterestRate) GetPeriod() uint32 {
+	if x != nil {
+		return x.Period
+	}
+	return 0
+}
+
+func (x *InterestRate) GetRate() uint32 {
+	if x != nil {
+		return x.Rate
+	}
+	return 0
+}
+
 // Params defines the parameters for the module.
 type Params struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PriceInterval []*PriceInterval `protobuf:"bytes,1,rep,name=price_interval,json=priceInterval,proto3" json:"price_interval,omitempty"`
+	NonceQueueSize uint32           `protobuf:"varint,1,opt,name=nonce_queue_size,json=nonceQueueSize,proto3" json:"nonce_queue_size,omitempty"`
+	PriceInterval  []*PriceInterval `protobuf:"bytes,2,rep,name=price_interval,json=priceInterval,proto3" json:"price_interval,omitempty"`
+	InterestRate   []*InterestRate  `protobuf:"bytes,3,rep,name=interest_rate,json=interestRate,proto3" json:"interest_rate,omitempty"`
 }
 
 func (x *Params) Reset() {
 	*x = Params{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_dlc_params_proto_msgTypes[1]
+		mi := &file_side_dlc_params_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1057,12 +1740,26 @@ func (*Params) ProtoMessage() {}
 
 // Deprecated: Use Params.ProtoReflect.Descriptor instead.
 func (*Params) Descriptor() ([]byte, []int) {
-	return file_side_dlc_params_proto_rawDescGZIP(), []int{1}
+	return file_side_dlc_params_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Params) GetNonceQueueSize() uint32 {
+	if x != nil {
+		return x.NonceQueueSize
+	}
+	return 0
 }
 
 func (x *Params) GetPriceInterval() []*PriceInterval {
 	if x != nil {
 		return x.PriceInterval
+	}
+	return nil
+}
+
+func (x *Params) GetInterestRate() []*InterestRate {
+	if x != nil {
+		return x.InterestRate
 	}
 	return nil
 }
@@ -1078,19 +1775,30 @@ var file_side_dlc_params_proto_rawDesc = []byte{
 	0x65, 0x5f, 0x70, 0x61, 0x69, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x72,
 	0x69, 0x63, 0x65, 0x50, 0x61, 0x69, 0x72, 0x12, 0x1a, 0x0a, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72,
 	0x76, 0x61, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72,
-	0x76, 0x61, 0x6c, 0x22, 0x48, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3e, 0x0a,
-	0x0e, 0x70, 0x72, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63,
-	0x2e, 0x50, 0x72, 0x69, 0x63, 0x65, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x52, 0x0d,
-	0x70, 0x72, 0x69, 0x63, 0x65, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x42, 0x77, 0x0a,
-	0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x0b, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x19, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73,
-	0x69, 0x64, 0x65, 0x2f, 0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x08,
-	0x53, 0x69, 0x64, 0x65, 0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c,
-	0x44, 0x6c, 0x63, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64,
-	0x65, 0x3a, 0x3a, 0x44, 0x6c, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x76, 0x61, 0x6c, 0x22, 0x3a, 0x0a, 0x0c, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52,
+	0x61, 0x74, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x06, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x72,
+	0x61, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x72, 0x61, 0x74, 0x65, 0x22,
+	0xaf, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x28, 0x0a, 0x10, 0x6e, 0x6f,
+	0x6e, 0x63, 0x65, 0x5f, 0x71, 0x75, 0x65, 0x75, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x0e, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x51, 0x75, 0x65, 0x75, 0x65,
+	0x53, 0x69, 0x7a, 0x65, 0x12, 0x3e, 0x0a, 0x0e, 0x70, 0x72, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x6e,
+	0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x50, 0x72, 0x69, 0x63, 0x65, 0x49, 0x6e, 0x74,
+	0x65, 0x72, 0x76, 0x61, 0x6c, 0x52, 0x0d, 0x70, 0x72, 0x69, 0x63, 0x65, 0x49, 0x6e, 0x74, 0x65,
+	0x72, 0x76, 0x61, 0x6c, 0x12, 0x3b, 0x0a, 0x0d, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74,
+	0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52,
+	0x61, 0x74, 0x65, 0x52, 0x0c, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52, 0x61, 0x74,
+	0x65, 0x42, 0x77, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c,
+	0x63, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
+	0x5a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
+	0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53, 0x44,
+	0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02, 0x08, 0x53,
+	0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44,
+	0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
+	0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x44, 0x6c, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -1105,18 +1813,20 @@ func file_side_dlc_params_proto_rawDescGZIP() []byte {
 	return file_side_dlc_params_proto_rawDescData
 }
 
-var file_side_dlc_params_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_side_dlc_params_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_side_dlc_params_proto_goTypes = []interface{}{
 	(*PriceInterval)(nil), // 0: side.dlc.PriceInterval
-	(*Params)(nil),        // 1: side.dlc.Params
+	(*InterestRate)(nil),  // 1: side.dlc.InterestRate
+	(*Params)(nil),        // 2: side.dlc.Params
 }
 var file_side_dlc_params_proto_depIdxs = []int32{
 	0, // 0: side.dlc.Params.price_interval:type_name -> side.dlc.PriceInterval
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	1, // 1: side.dlc.Params.interest_rate:type_name -> side.dlc.InterestRate
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_side_dlc_params_proto_init() }
@@ -1138,6 +1848,18 @@ func file_side_dlc_params_proto_init() {
 			}
 		}
 		file_side_dlc_params_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*InterestRate); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_dlc_params_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Params); i {
 			case 0:
 				return &v.state
@@ -1156,7 +1878,7 @@ func file_side_dlc_params_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_dlc_params_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

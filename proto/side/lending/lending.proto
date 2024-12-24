@@ -3,6 +3,7 @@ package side.lending;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sideprotocol/side/x/lending/types";
 // Status options for a lending pool
@@ -13,17 +14,17 @@ enum PoolStatus {
 
 message LendingPool {
     string id = 1;
-    Coin supply = 2;
+    cosmos.base.v1beta1.Coin supply = 2;
     uint64 total_shares = 3; 
     uint64 borrowed_amount = 4;
     PoolStatus status =5;
 }
 
 enum VaultStatus {
-    Initial = 1;
-    Funded = 2;
-    Lending = 3;
-    Close = 4;
+    Initial = 0;
+    Funded = 1;
+    Lending = 2;
+    Close = 3;
 }
 
 message Vault {
@@ -39,36 +40,35 @@ message Vault {
 }
 
 message Collateral {
-    string tx = 2; 
-    string vault_address = 3;
-    Coin amount = 4;
-    string borrower = 5;
-    google.protobuf.Timestamp create_at = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    string tx = 1; 
+    string vault_address = 2;
+    cosmos.base.v1beta1.Coin amount = 3;
+    string borrower = 4;
+    google.protobuf.Timestamp create_at = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 enum LoanStatus {
-    Created = 1;
-    DCA_Signed = 2;
-    Repay_Initail = 3;
-    Repay_Confirmed = 4;
-    Liquidated = 5;
-    Closed = 6;
+    Created = 0;
+    DCA_Signed = 1;
+    Repay_Initail = 2;
+    Repay_Confirmed = 3;
+    Liquidated = 4;
+    Closed = 5;
 }
 
 message Loan {
     string vault_address = 1; // id
     string borrower = 2;
-    Coin borrow_amount = 4;
-    coin fees = 5;
-    uint32 period = 6;
-    uint32 interest_rate = 7;
-    string event_id = 9;
-    uint64 current_price = 10;
-    google.protobuf.Timestamp create_at = 11 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    string attestation_id = 12;
-    LoanStatus status = 13;
-    string cets = 14;
-    string loan_secret = 15;
-    string repay_adaptor_point = 16;
-    
+    cosmos.base.v1beta1.Coin borrow_amount = 3;
+    cosmos.base.v1beta1.Coin fees = 4;
+    uint32 period = 5;
+    uint32 interest_rate = 6;
+    string event_id = 7;
+    uint64 current_price = 8;
+    string attestation_id = 9;
+    string cets = 10;
+    string loan_secret = 11;
+    string repay_adaptor_point = 12;
+    google.protobuf.Timestamp create_at = 13 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 14;
 }
