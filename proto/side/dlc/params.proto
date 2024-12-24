@@ -10,8 +10,14 @@ message PriceInterval {
     int32 interval = 2;
 }
 
+message InterestRate {
+    uint32 period = 1;
+    uint32 rate = 2;
+}
+
 // Params defines the parameters for the module.
 message Params {
     uint32 nonce_queue_size = 1;
     repeated PriceInterval price_interval = 2;
+    repeated InterestRate interest_rate = 3;
 }

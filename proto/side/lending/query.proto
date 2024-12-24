@@ -1,0 +1,61 @@
+syntax = "proto3";
+package side.lending;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "side/lending/params.proto";
+import "side/lending/lending.proto";
+
+option go_package = "github.com/sideprotocol/side/x/lending/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Params queries the parameters of the module.
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+      option (google.api.http).get = "/side/lending/params";
+    }
+    rpc QueryCollateralAddress(QueryCollateralAddressRequest) returns (QueryCollateralAddressResponse) {
+        option (google.api.http).get = "/side/lending/collateral/address";
+
+    }
+    rpc QueryLiquidationEvent(QueryLiquidationEventRequest) returns (QueryLiquidationEventResponse) {
+        option (google.api.http).get = "/side/lending/liquidation/price";
+
+    }
+
+    rpc QueryLoanCET() returns ();
+    
+}
+
+message QueryLiquidationEventRequest{
+    Coin borrow_amount = 1;
+    Coin collateral_acmount =2;
+}
+
+message QueryLiquidationEventResponse {
+    string event_id = 1;
+    string oracle_pubkey = 2;
+    string nonce = 3;
+    string price = 4;
+}
+
+message QueryCollateralAddressRequest{
+    string borrower_pubkey = 1;
+    string hash_of_loan_secret = 2;
+    uint64 maturity_time = 3;
+    uint64 final_timeout =4;
+} 
+message QueryCollateralAddressResponse{
+    string address = 1;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+    Params params = 1;
+}
+

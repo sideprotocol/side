@@ -10,10 +10,7 @@ option go_package = "github.com/sideprotocol/side/x/dlc/types";
 service Msg {
     option (cosmos.msg.v1.service) = true;
     rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
-    // rpc SubmitAnnouncementNonce (MsgSubmitAnnouncementNonce) returns (MsgSubmitAnnouncementNonceResponse);
     rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
-    // rpc CreateOracle() returns () // called through gov
-    // rpc DisableOracle() returns () // called through gov
     rpc SubmitOraclePubkey(MsgSubmitOraclePubkey) returns (MsgSubmitOraclePubkeyResponse);
     rpc SubmitAgencyAddress(MsgSubmitAgencyAddress) returns (MsgSubmitAgencyAddressResponse);
 }

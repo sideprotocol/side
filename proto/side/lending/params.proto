@@ -1,0 +1,19 @@
+syntax = "proto3";
+package side.lending;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sideprotocol/side/x/lending/types";
+
+message InterestRate {
+    uint32 period = 1;
+    uint32 rate = 2;
+}
+
+// Params defines the parameters for the module.
+message Params {
+    uint32 base_fee = 1;
+    uint32 fee_rate = 2;
+    string fee_recipient = 3;
+    repeated InterestRate interest_rate = 4;
+}

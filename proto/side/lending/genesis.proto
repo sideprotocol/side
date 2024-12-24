@@ -1,11 +1,11 @@
 syntax = "proto3";
-package side.dlc;
+package side.lending;
 
 import "gogoproto/gogo.proto";
-import "side/dlc/params.proto";
-import "side/dlc/dlc.proto";
+import "side/lending/params.proto";
+import "side/lending/lending.proto";
 
-option go_package = "github.com/sideprotocol/side/x/dlc/types";
+option go_package = "github.com/sideprotocol/side/x/lending/types";
 
 // GenesisState defines the dlc module's genesis state.
 message GenesisState {
@@ -13,5 +13,4 @@ message GenesisState {
 
     repeated DLCPriceEvent announcements = 2;
     repeated DLCAttestation attestations = 3; 
-    repeated LendingPool pools = 4;
 }
