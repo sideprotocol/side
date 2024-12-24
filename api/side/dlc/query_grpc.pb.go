@@ -48,9 +48,9 @@ type QueryClient interface {
 	Attestations(ctx context.Context, in *QueryAttestationsRequest, opts ...grpc.CallOption) (*QueryAttestationsResponse, error)
 	// Price queries the current price by the given symbol.
 	Price(ctx context.Context, in *QueryPriceRequest, opts ...grpc.CallOption) (*QueryPriceResponse, error)
-	// Nonce queries the nonce by the given index
+	// Nonce queries the nonce by the given oracle id and index
 	Nonce(ctx context.Context, in *QueryNonceRequest, opts ...grpc.CallOption) (*QueryNonceResponse, error)
-	// Nonces queries all nonces.
+	// Nonces queries all nonces of the given oracle
 	Nonces(ctx context.Context, in *QueryNoncesRequest, opts ...grpc.CallOption) (*QueryNoncesResponse, error)
 	// CountNonces queries the total count of nonces.
 	CountNonces(ctx context.Context, in *QueryCountNoncesRequest, opts ...grpc.CallOption) (*QueryCountNoncesResponse, error)
@@ -183,9 +183,9 @@ type QueryServer interface {
 	Attestations(context.Context, *QueryAttestationsRequest) (*QueryAttestationsResponse, error)
 	// Price queries the current price by the given symbol.
 	Price(context.Context, *QueryPriceRequest) (*QueryPriceResponse, error)
-	// Nonce queries the nonce by the given index
+	// Nonce queries the nonce by the given oracle id and index
 	Nonce(context.Context, *QueryNonceRequest) (*QueryNonceResponse, error)
-	// Nonces queries all nonces.
+	// Nonces queries all nonces of the given oracle
 	Nonces(context.Context, *QueryNoncesRequest) (*QueryNoncesResponse, error)
 	// CountNonces queries the total count of nonces.
 	CountNonces(context.Context, *QueryCountNoncesRequest) (*QueryCountNoncesResponse, error)

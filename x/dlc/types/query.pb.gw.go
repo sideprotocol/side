@@ -278,6 +278,17 @@ func request_Query_Nonce_0(ctx context.Context, marshaler runtime.Marshaler, cli
 		_   = err
 	)
 
+	val, ok = pathParams["oracle_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "oracle_id")
+	}
+
+	protoReq.OracleId, err = runtime.Uint64(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "oracle_id", err)
+	}
+
 	val, ok = pathParams["index"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "index")
@@ -305,6 +316,17 @@ func local_request_Query_Nonce_0(ctx context.Context, marshaler runtime.Marshale
 		_   = err
 	)
 
+	val, ok = pathParams["oracle_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "oracle_id")
+	}
+
+	protoReq.OracleId, err = runtime.Uint64(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "oracle_id", err)
+	}
+
 	val, ok = pathParams["index"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "index")
@@ -322,12 +344,30 @@ func local_request_Query_Nonce_0(ctx context.Context, marshaler runtime.Marshale
 }
 
 var (
-	filter_Query_Nonces_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Query_Nonces_0 = &utilities.DoubleArray{Encoding: map[string]int{"oracle_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
 func request_Query_Nonces_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq QueryNoncesRequest
 	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["oracle_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "oracle_id")
+	}
+
+	protoReq.OracleId, err = runtime.Uint64(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "oracle_id", err)
+	}
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
@@ -344,6 +384,24 @@ func request_Query_Nonces_0(ctx context.Context, marshaler runtime.Marshaler, cl
 func local_request_Query_Nonces_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq QueryNoncesRequest
 	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["oracle_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "oracle_id")
+	}
+
+	protoReq.OracleId, err = runtime.Uint64(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "oracle_id", err)
+	}
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
@@ -983,9 +1041,9 @@ var (
 
 	pattern_Query_Price_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"side", "dlc", "price"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Nonce_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"side", "dlc", "nonces", "index"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Nonce_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"side", "dlc", "nonces", "oracle_id", "index"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Nonces_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"side", "dlc", "nonces"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Nonces_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"side", "dlc", "nonces", "oracle_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_CountNonces_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"side", "dlc", "nonces", "count"}, "", runtime.AssumeColonVerbOpt(false)))
 

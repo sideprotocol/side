@@ -41,14 +41,14 @@ service Query {
         option (google.api.http).get = "/side/dlc/price";
     }
 
-    // Nonce queries the nonce by the given index
+    // Nonce queries the nonce by the given oracle id and index
     rpc Nonce(QueryNonceRequest) returns (QueryNonceResponse) {
-        option (google.api.http).get = "/side/dlc/nonces/{index}";
+        option (google.api.http).get = "/side/dlc/nonces/{oracle_id}/{index}";
     }
 
-    // Nonces queries all nonces.
+    // Nonces queries all nonces of the given oracle
     rpc Nonces(QueryNoncesRequest) returns (QueryNoncesResponse) {
-        option (google.api.http).get = "/side/dlc/nonces";
+        option (google.api.http).get = "/side/dlc/nonces/{oracle_id}";
     }
 
     // CountNonces queries the total count of nonces.
@@ -113,7 +113,8 @@ message QueryCountNoncesResponse{
 }
 
 message QueryNonceRequest {
-    uint64 index = 1;
+    uint64 oracle_id = 1;
+    uint64 index = 2;
 }
 
 message QueryNonceResponse{
@@ -121,7 +122,8 @@ message QueryNonceResponse{
 }
 
 message QueryNoncesRequest {
-    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+    uint64 oracle_id = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 message QueryNoncesResponse{
@@ -141,7 +143,7 @@ message QueryEventResponse {
 
 // QueryEventsRequest is request type for the Query/Events RPC method.
 message QueryEventsRequest {
-    bool has_triggered = 1;
+    bool triggered = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
@@ -167,5 +169,5 @@ message QueryParamsRequest {
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
-    Params params = 1;
+    Params params = 1 [(gogoproto.nullable) = false];
 }
