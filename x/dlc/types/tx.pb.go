@@ -29,25 +29,25 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type MsgSubmitAgencyAddress struct {
-	Id        string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Sender    string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
-	Address   string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+type MsgSubmitAgencyPubKey struct {
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Id        uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	PubKey    string `protobuf:"bytes,3,opt,name=pub_key,json=pubKey,proto3" json:"pub_key,omitempty"`
 	Signature string `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
-func (m *MsgSubmitAgencyAddress) Reset()         { *m = MsgSubmitAgencyAddress{} }
-func (m *MsgSubmitAgencyAddress) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitAgencyAddress) ProtoMessage()    {}
-func (*MsgSubmitAgencyAddress) Descriptor() ([]byte, []int) {
+func (m *MsgSubmitAgencyPubKey) Reset()         { *m = MsgSubmitAgencyPubKey{} }
+func (m *MsgSubmitAgencyPubKey) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitAgencyPubKey) ProtoMessage()    {}
+func (*MsgSubmitAgencyPubKey) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a140082caa5fa150, []int{0}
 }
-func (m *MsgSubmitAgencyAddress) XXX_Unmarshal(b []byte) error {
+func (m *MsgSubmitAgencyPubKey) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSubmitAgencyAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgSubmitAgencyPubKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSubmitAgencyAddress.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgSubmitAgencyPubKey.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -57,61 +57,61 @@ func (m *MsgSubmitAgencyAddress) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *MsgSubmitAgencyAddress) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitAgencyAddress.Merge(m, src)
+func (m *MsgSubmitAgencyPubKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitAgencyPubKey.Merge(m, src)
 }
-func (m *MsgSubmitAgencyAddress) XXX_Size() int {
+func (m *MsgSubmitAgencyPubKey) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSubmitAgencyAddress) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitAgencyAddress.DiscardUnknown(m)
+func (m *MsgSubmitAgencyPubKey) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitAgencyPubKey.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSubmitAgencyAddress proto.InternalMessageInfo
+var xxx_messageInfo_MsgSubmitAgencyPubKey proto.InternalMessageInfo
 
-func (m *MsgSubmitAgencyAddress) GetId() string {
+func (m *MsgSubmitAgencyPubKey) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgSubmitAgencyPubKey) GetId() uint64 {
 	if m != nil {
 		return m.Id
 	}
-	return ""
+	return 0
 }
 
-func (m *MsgSubmitAgencyAddress) GetSender() string {
+func (m *MsgSubmitAgencyPubKey) GetPubKey() string {
 	if m != nil {
-		return m.Sender
+		return m.PubKey
 	}
 	return ""
 }
 
-func (m *MsgSubmitAgencyAddress) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
-
-func (m *MsgSubmitAgencyAddress) GetSignature() string {
+func (m *MsgSubmitAgencyPubKey) GetSignature() string {
 	if m != nil {
 		return m.Signature
 	}
 	return ""
 }
 
-type MsgSubmitAgencyAddressResponse struct {
+type MsgSubmitAgencyPubKeyResponse struct {
 }
 
-func (m *MsgSubmitAgencyAddressResponse) Reset()         { *m = MsgSubmitAgencyAddressResponse{} }
-func (m *MsgSubmitAgencyAddressResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitAgencyAddressResponse) ProtoMessage()    {}
-func (*MsgSubmitAgencyAddressResponse) Descriptor() ([]byte, []int) {
+func (m *MsgSubmitAgencyPubKeyResponse) Reset()         { *m = MsgSubmitAgencyPubKeyResponse{} }
+func (m *MsgSubmitAgencyPubKeyResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitAgencyPubKeyResponse) ProtoMessage()    {}
+func (*MsgSubmitAgencyPubKeyResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a140082caa5fa150, []int{1}
 }
-func (m *MsgSubmitAgencyAddressResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgSubmitAgencyPubKeyResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSubmitAgencyAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgSubmitAgencyPubKeyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSubmitAgencyAddressResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgSubmitAgencyPubKeyResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -121,37 +121,37 @@ func (m *MsgSubmitAgencyAddressResponse) XXX_Marshal(b []byte, deterministic boo
 		return b[:n], nil
 	}
 }
-func (m *MsgSubmitAgencyAddressResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitAgencyAddressResponse.Merge(m, src)
+func (m *MsgSubmitAgencyPubKeyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitAgencyPubKeyResponse.Merge(m, src)
 }
-func (m *MsgSubmitAgencyAddressResponse) XXX_Size() int {
+func (m *MsgSubmitAgencyPubKeyResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSubmitAgencyAddressResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitAgencyAddressResponse.DiscardUnknown(m)
+func (m *MsgSubmitAgencyPubKeyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitAgencyPubKeyResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSubmitAgencyAddressResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgSubmitAgencyPubKeyResponse proto.InternalMessageInfo
 
-type MsgSubmitOraclePubkey struct {
-	OracleId  string `protobuf:"bytes,1,opt,name=oracle_id,json=oracleId,proto3" json:"oracle_id,omitempty"`
-	Sender    string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
-	Pubkey    string `protobuf:"bytes,3,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+type MsgSubmitOraclePubKey struct {
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	OracleId  uint64 `protobuf:"varint,2,opt,name=oracle_id,json=oracleId,proto3" json:"oracle_id,omitempty"`
+	PubKey    string `protobuf:"bytes,3,opt,name=pub_key,json=pubKey,proto3" json:"pub_key,omitempty"`
 	Signature string `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
-func (m *MsgSubmitOraclePubkey) Reset()         { *m = MsgSubmitOraclePubkey{} }
-func (m *MsgSubmitOraclePubkey) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitOraclePubkey) ProtoMessage()    {}
-func (*MsgSubmitOraclePubkey) Descriptor() ([]byte, []int) {
+func (m *MsgSubmitOraclePubKey) Reset()         { *m = MsgSubmitOraclePubKey{} }
+func (m *MsgSubmitOraclePubKey) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitOraclePubKey) ProtoMessage()    {}
+func (*MsgSubmitOraclePubKey) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a140082caa5fa150, []int{2}
 }
-func (m *MsgSubmitOraclePubkey) XXX_Unmarshal(b []byte) error {
+func (m *MsgSubmitOraclePubKey) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSubmitOraclePubkey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgSubmitOraclePubKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSubmitOraclePubkey.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgSubmitOraclePubKey.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -161,61 +161,61 @@ func (m *MsgSubmitOraclePubkey) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *MsgSubmitOraclePubkey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitOraclePubkey.Merge(m, src)
+func (m *MsgSubmitOraclePubKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitOraclePubKey.Merge(m, src)
 }
-func (m *MsgSubmitOraclePubkey) XXX_Size() int {
+func (m *MsgSubmitOraclePubKey) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSubmitOraclePubkey) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitOraclePubkey.DiscardUnknown(m)
+func (m *MsgSubmitOraclePubKey) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitOraclePubKey.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSubmitOraclePubkey proto.InternalMessageInfo
+var xxx_messageInfo_MsgSubmitOraclePubKey proto.InternalMessageInfo
 
-func (m *MsgSubmitOraclePubkey) GetOracleId() string {
-	if m != nil {
-		return m.OracleId
-	}
-	return ""
-}
-
-func (m *MsgSubmitOraclePubkey) GetSender() string {
+func (m *MsgSubmitOraclePubKey) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgSubmitOraclePubkey) GetPubkey() string {
+func (m *MsgSubmitOraclePubKey) GetOracleId() uint64 {
 	if m != nil {
-		return m.Pubkey
+		return m.OracleId
+	}
+	return 0
+}
+
+func (m *MsgSubmitOraclePubKey) GetPubKey() string {
+	if m != nil {
+		return m.PubKey
 	}
 	return ""
 }
 
-func (m *MsgSubmitOraclePubkey) GetSignature() string {
+func (m *MsgSubmitOraclePubKey) GetSignature() string {
 	if m != nil {
 		return m.Signature
 	}
 	return ""
 }
 
-type MsgSubmitOraclePubkeyResponse struct {
+type MsgSubmitOraclePubKeyResponse struct {
 }
 
-func (m *MsgSubmitOraclePubkeyResponse) Reset()         { *m = MsgSubmitOraclePubkeyResponse{} }
-func (m *MsgSubmitOraclePubkeyResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitOraclePubkeyResponse) ProtoMessage()    {}
-func (*MsgSubmitOraclePubkeyResponse) Descriptor() ([]byte, []int) {
+func (m *MsgSubmitOraclePubKeyResponse) Reset()         { *m = MsgSubmitOraclePubKeyResponse{} }
+func (m *MsgSubmitOraclePubKeyResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitOraclePubKeyResponse) ProtoMessage()    {}
+func (*MsgSubmitOraclePubKeyResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a140082caa5fa150, []int{3}
 }
-func (m *MsgSubmitOraclePubkeyResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgSubmitOraclePubKeyResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSubmitOraclePubkeyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgSubmitOraclePubKeyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSubmitOraclePubkeyResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgSubmitOraclePubKeyResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -225,17 +225,17 @@ func (m *MsgSubmitOraclePubkeyResponse) XXX_Marshal(b []byte, deterministic bool
 		return b[:n], nil
 	}
 }
-func (m *MsgSubmitOraclePubkeyResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitOraclePubkeyResponse.Merge(m, src)
+func (m *MsgSubmitOraclePubKeyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitOraclePubKeyResponse.Merge(m, src)
 }
-func (m *MsgSubmitOraclePubkeyResponse) XXX_Size() int {
+func (m *MsgSubmitOraclePubKeyResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSubmitOraclePubkeyResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitOraclePubkeyResponse.DiscardUnknown(m)
+func (m *MsgSubmitOraclePubKeyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitOraclePubKeyResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSubmitOraclePubkeyResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgSubmitOraclePubKeyResponse proto.InternalMessageInfo
 
 type MsgSubmitNonce struct {
 	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
@@ -334,9 +334,9 @@ func (m *MsgSubmitNonceResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgSubmitNonceResponse proto.InternalMessageInfo
 
 type MsgSubmitAttestation struct {
-	Sender         string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	AnnouncementId uint64 `protobuf:"varint,2,opt,name=announcement_id,json=announcementId,proto3" json:"announcement_id,omitempty"`
-	Signature      string `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	EventId   uint64 `protobuf:"varint,2,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	Signature string `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
 func (m *MsgSubmitAttestation) Reset()         { *m = MsgSubmitAttestation{} }
@@ -379,9 +379,9 @@ func (m *MsgSubmitAttestation) GetSender() string {
 	return ""
 }
 
-func (m *MsgSubmitAttestation) GetAnnouncementId() uint64 {
+func (m *MsgSubmitAttestation) GetEventId() uint64 {
 	if m != nil {
-		return m.AnnouncementId
+		return m.EventId
 	}
 	return 0
 }
@@ -429,52 +429,359 @@ func (m *MsgSubmitAttestationResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubmitAttestationResponse proto.InternalMessageInfo
 
+type MsgCreateOracle struct {
+	// authority is the address that controls the module (defaults to x/gov unless overwritten).
+	Authority    string   `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
+	Participants []string `protobuf:"bytes,2,rep,name=participants,proto3" json:"participants,omitempty"`
+	Threshold    uint32   `protobuf:"varint,3,opt,name=threshold,proto3" json:"threshold,omitempty"`
+}
+
+func (m *MsgCreateOracle) Reset()         { *m = MsgCreateOracle{} }
+func (m *MsgCreateOracle) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateOracle) ProtoMessage()    {}
+func (*MsgCreateOracle) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a140082caa5fa150, []int{8}
+}
+func (m *MsgCreateOracle) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateOracle) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateOracle.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateOracle) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateOracle.Merge(m, src)
+}
+func (m *MsgCreateOracle) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateOracle) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateOracle.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateOracle proto.InternalMessageInfo
+
+func (m *MsgCreateOracle) GetAuthority() string {
+	if m != nil {
+		return m.Authority
+	}
+	return ""
+}
+
+func (m *MsgCreateOracle) GetParticipants() []string {
+	if m != nil {
+		return m.Participants
+	}
+	return nil
+}
+
+func (m *MsgCreateOracle) GetThreshold() uint32 {
+	if m != nil {
+		return m.Threshold
+	}
+	return 0
+}
+
+type MsgCreateOracleResponse struct {
+}
+
+func (m *MsgCreateOracleResponse) Reset()         { *m = MsgCreateOracleResponse{} }
+func (m *MsgCreateOracleResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateOracleResponse) ProtoMessage()    {}
+func (*MsgCreateOracleResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a140082caa5fa150, []int{9}
+}
+func (m *MsgCreateOracleResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateOracleResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateOracleResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateOracleResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateOracleResponse.Merge(m, src)
+}
+func (m *MsgCreateOracleResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateOracleResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateOracleResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateOracleResponse proto.InternalMessageInfo
+
+type MsgCreateAgency struct {
+	// authority is the address that controls the module (defaults to x/gov unless overwritten).
+	Authority    string   `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
+	Participants []string `protobuf:"bytes,2,rep,name=participants,proto3" json:"participants,omitempty"`
+	Threshold    uint32   `protobuf:"varint,3,opt,name=threshold,proto3" json:"threshold,omitempty"`
+}
+
+func (m *MsgCreateAgency) Reset()         { *m = MsgCreateAgency{} }
+func (m *MsgCreateAgency) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateAgency) ProtoMessage()    {}
+func (*MsgCreateAgency) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a140082caa5fa150, []int{10}
+}
+func (m *MsgCreateAgency) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateAgency) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateAgency.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateAgency) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateAgency.Merge(m, src)
+}
+func (m *MsgCreateAgency) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateAgency) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateAgency.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateAgency proto.InternalMessageInfo
+
+func (m *MsgCreateAgency) GetAuthority() string {
+	if m != nil {
+		return m.Authority
+	}
+	return ""
+}
+
+func (m *MsgCreateAgency) GetParticipants() []string {
+	if m != nil {
+		return m.Participants
+	}
+	return nil
+}
+
+func (m *MsgCreateAgency) GetThreshold() uint32 {
+	if m != nil {
+		return m.Threshold
+	}
+	return 0
+}
+
+type MsgCreateAgencyResponse struct {
+}
+
+func (m *MsgCreateAgencyResponse) Reset()         { *m = MsgCreateAgencyResponse{} }
+func (m *MsgCreateAgencyResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateAgencyResponse) ProtoMessage()    {}
+func (*MsgCreateAgencyResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a140082caa5fa150, []int{11}
+}
+func (m *MsgCreateAgencyResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateAgencyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateAgencyResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateAgencyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateAgencyResponse.Merge(m, src)
+}
+func (m *MsgCreateAgencyResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateAgencyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateAgencyResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateAgencyResponse proto.InternalMessageInfo
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+type MsgUpdateParams struct {
+	// authority is the address that controls the module (defaults to x/gov unless overwritten).
+	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
+	// params defines the x/dlc parameters to be updated.
+	//
+	// NOTE: All parameters must be supplied.
+	Params Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
+}
+
+func (m *MsgUpdateParams) Reset()         { *m = MsgUpdateParams{} }
+func (m *MsgUpdateParams) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateParams) ProtoMessage()    {}
+func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a140082caa5fa150, []int{12}
+}
+func (m *MsgUpdateParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateParams.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateParams.Merge(m, src)
+}
+func (m *MsgUpdateParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateParams proto.InternalMessageInfo
+
+func (m *MsgUpdateParams) GetAuthority() string {
+	if m != nil {
+		return m.Authority
+	}
+	return ""
+}
+
+func (m *MsgUpdateParams) GetParams() Params {
+	if m != nil {
+		return m.Params
+	}
+	return Params{}
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+type MsgUpdateParamsResponse struct {
+}
+
+func (m *MsgUpdateParamsResponse) Reset()         { *m = MsgUpdateParamsResponse{} }
+func (m *MsgUpdateParamsResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateParamsResponse) ProtoMessage()    {}
+func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a140082caa5fa150, []int{13}
+}
+func (m *MsgUpdateParamsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateParamsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateParamsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateParamsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateParamsResponse.Merge(m, src)
+}
+func (m *MsgUpdateParamsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateParamsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
+
 func init() {
-	proto.RegisterType((*MsgSubmitAgencyAddress)(nil), "side.dlc.MsgSubmitAgencyAddress")
-	proto.RegisterType((*MsgSubmitAgencyAddressResponse)(nil), "side.dlc.MsgSubmitAgencyAddressResponse")
-	proto.RegisterType((*MsgSubmitOraclePubkey)(nil), "side.dlc.MsgSubmitOraclePubkey")
-	proto.RegisterType((*MsgSubmitOraclePubkeyResponse)(nil), "side.dlc.MsgSubmitOraclePubkeyResponse")
+	proto.RegisterType((*MsgSubmitAgencyPubKey)(nil), "side.dlc.MsgSubmitAgencyPubKey")
+	proto.RegisterType((*MsgSubmitAgencyPubKeyResponse)(nil), "side.dlc.MsgSubmitAgencyPubKeyResponse")
+	proto.RegisterType((*MsgSubmitOraclePubKey)(nil), "side.dlc.MsgSubmitOraclePubKey")
+	proto.RegisterType((*MsgSubmitOraclePubKeyResponse)(nil), "side.dlc.MsgSubmitOraclePubKeyResponse")
 	proto.RegisterType((*MsgSubmitNonce)(nil), "side.dlc.MsgSubmitNonce")
 	proto.RegisterType((*MsgSubmitNonceResponse)(nil), "side.dlc.MsgSubmitNonceResponse")
 	proto.RegisterType((*MsgSubmitAttestation)(nil), "side.dlc.MsgSubmitAttestation")
 	proto.RegisterType((*MsgSubmitAttestationResponse)(nil), "side.dlc.MsgSubmitAttestationResponse")
+	proto.RegisterType((*MsgCreateOracle)(nil), "side.dlc.MsgCreateOracle")
+	proto.RegisterType((*MsgCreateOracleResponse)(nil), "side.dlc.MsgCreateOracleResponse")
+	proto.RegisterType((*MsgCreateAgency)(nil), "side.dlc.MsgCreateAgency")
+	proto.RegisterType((*MsgCreateAgencyResponse)(nil), "side.dlc.MsgCreateAgencyResponse")
+	proto.RegisterType((*MsgUpdateParams)(nil), "side.dlc.MsgUpdateParams")
+	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "side.dlc.MsgUpdateParamsResponse")
 }
 
 func init() { proto.RegisterFile("side/dlc/tx.proto", fileDescriptor_a140082caa5fa150) }
 
 var fileDescriptor_a140082caa5fa150 = []byte{
-	// 482 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0xcf, 0x6f, 0xd3, 0x30,
-	0x14, 0xc7, 0xeb, 0x76, 0x2b, 0xeb, 0x9b, 0x54, 0x34, 0x53, 0x4a, 0x14, 0x86, 0x57, 0xf5, 0xc0,
-	0xaa, 0x1d, 0x12, 0x01, 0x37, 0x6e, 0xdb, 0xad, 0x87, 0x01, 0x2a, 0x37, 0x90, 0x40, 0xa9, 0x6d,
-	0x85, 0x88, 0xc6, 0xae, 0x62, 0x07, 0xad, 0x37, 0x34, 0x89, 0x33, 0xfc, 0x29, 0xfb, 0x33, 0x38,
-	0xee, 0xc8, 0x11, 0xb5, 0x87, 0xfd, 0x09, 0x5c, 0x51, 0x9c, 0x1f, 0x4b, 0x35, 0x77, 0xd3, 0x4e,
-	0xc9, 0x7b, 0xdf, 0xef, 0x7b, 0xfe, 0xf8, 0xc5, 0x31, 0xec, 0xa9, 0x88, 0x71, 0x9f, 0xcd, 0xa8,
-	0xaf, 0xcf, 0xbc, 0x79, 0x22, 0xb5, 0xc4, 0x3b, 0x59, 0xca, 0x63, 0x33, 0xea, 0xf6, 0x42, 0x19,
-	0x4a, 0x93, 0xf4, 0xb3, 0xb7, 0x5c, 0x77, 0x9f, 0x50, 0xa9, 0x62, 0xa9, 0xfc, 0x58, 0x85, 0xfe,
-	0xb7, 0x17, 0xd9, 0x23, 0x17, 0x86, 0x3f, 0x10, 0xf4, 0x4f, 0x55, 0xf8, 0x3e, 0x9d, 0xc6, 0x91,
-	0x3e, 0x0e, 0xb9, 0xa0, 0x8b, 0x63, 0xc6, 0x12, 0xae, 0x14, 0xee, 0x42, 0x33, 0x62, 0x0e, 0x1a,
-	0xa0, 0x51, 0x67, 0xd2, 0x8c, 0x18, 0xee, 0x43, 0x5b, 0x71, 0xc1, 0x78, 0xe2, 0x34, 0x4d, 0xae,
-	0x88, 0xb0, 0x03, 0x0f, 0x82, 0xbc, 0xc4, 0x69, 0x19, 0xa1, 0x0c, 0xf1, 0x3e, 0x74, 0x54, 0x14,
-	0x8a, 0x40, 0xa7, 0x09, 0x77, 0xb6, 0x8c, 0x76, 0x9d, 0x78, 0xbd, 0x7b, 0x7e, 0x75, 0x71, 0x54,
-	0x34, 0x19, 0x0e, 0x80, 0xd8, 0x31, 0x26, 0x5c, 0xcd, 0xa5, 0x50, 0x7c, 0xf8, 0x13, 0xc1, 0xe3,
-	0xca, 0xf2, 0x36, 0x09, 0xe8, 0x8c, 0xbf, 0x4b, 0xa7, 0x5f, 0xf9, 0x02, 0x3f, 0x85, 0x8e, 0x34,
-	0xf1, 0xe7, 0x8a, 0x77, 0x27, 0x4f, 0x8c, 0x37, 0x53, 0xf7, 0xa1, 0x3d, 0x37, 0xe5, 0x05, 0x74,
-	0x11, 0xdd, 0x87, 0xf9, 0x00, 0x9e, 0x59, 0x81, 0x2a, 0xe4, 0x08, 0xba, 0x95, 0xe1, 0x8d, 0x14,
-	0x94, 0xd7, 0x68, 0xd0, 0x1a, 0x4d, 0x0f, 0xb6, 0x45, 0x66, 0x28, 0x20, 0xf3, 0x60, 0x9d, 0xa5,
-	0x75, 0x2b, 0x8b, 0x53, 0xfb, 0x8c, 0x66, 0xa9, 0x0a, 0xe2, 0x1c, 0x41, 0xef, 0x7a, 0xb4, 0x5a,
-	0x73, 0xa5, 0x03, 0x1d, 0x49, 0xb1, 0x91, 0xe5, 0x10, 0x1e, 0x06, 0x42, 0xc8, 0x54, 0x50, 0x1e,
-	0x73, 0xa1, 0xb3, 0xa1, 0x66, 0x54, 0x5b, 0x93, 0x6e, 0x3d, 0x3d, 0x66, 0xf7, 0xc1, 0x23, 0xb0,
-	0x6f, 0x63, 0x28, 0x21, 0x5f, 0xfe, 0x6b, 0x42, 0xeb, 0x54, 0x85, 0x78, 0x0c, 0xbb, 0xf5, 0x71,
-	0x39, 0x5e, 0x79, 0xae, 0xbd, 0xf5, 0xdd, 0xb9, 0x83, 0x4d, 0x4a, 0xd9, 0x12, 0x7f, 0x84, 0xbd,
-	0x9b, 0x7b, 0x26, 0x96, 0xb2, 0x9a, 0xee, 0x3e, 0xbf, 0x5d, 0xaf, 0x9a, 0x7f, 0x02, 0x6c, 0x39,
-	0x88, 0x07, 0x96, 0xea, 0xba, 0xc1, 0x3d, 0xbc, 0xc3, 0x50, 0xf5, 0x0f, 0xe0, 0x91, 0xed, 0x97,
-	0xb4, 0xed, 0x7a, 0xcd, 0xe1, 0x8e, 0xee, 0x72, 0x94, 0x4b, 0xb8, 0xdb, 0xdf, 0xaf, 0x2e, 0x8e,
-	0xd0, 0xc9, 0xc9, 0xef, 0x25, 0x41, 0x97, 0x4b, 0x82, 0xfe, 0x2e, 0x09, 0xfa, 0xb5, 0x22, 0x8d,
-	0xcb, 0x15, 0x69, 0xfc, 0x59, 0x91, 0xc6, 0x87, 0x51, 0x18, 0xe9, 0x2f, 0xe9, 0xd4, 0xa3, 0x32,
-	0xf6, 0xb3, 0xa6, 0xe6, 0xc2, 0xa0, 0x72, 0x66, 0x02, 0xff, 0x2c, 0xbf, 0x80, 0x16, 0x73, 0xae,
-	0xa6, 0x6d, 0x23, 0xbd, 0xfa, 0x1f, 0x00, 0x00, 0xff, 0xff, 0x93, 0xea, 0xc0, 0x71, 0x99, 0x04,
-	0x00, 0x00,
+	// 629 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x95, 0xcb, 0x6e, 0xd3, 0x40,
+	0x14, 0x86, 0xe3, 0x24, 0xbd, 0xe4, 0xb4, 0x14, 0x6a, 0xf5, 0xe2, 0x98, 0xe2, 0x84, 0x2c, 0x20,
+	0xea, 0xc2, 0x16, 0x65, 0xd7, 0x1d, 0x61, 0x15, 0x41, 0xa0, 0x32, 0x62, 0x03, 0x12, 0x95, 0x63,
+	0x8f, 0x1c, 0x8b, 0xc4, 0x63, 0x79, 0xc6, 0x55, 0xb3, 0xe3, 0xf2, 0x02, 0x7d, 0x94, 0x3e, 0x46,
+	0x97, 0x5d, 0xb2, 0xaa, 0x50, 0xb2, 0xe8, 0x6b, 0x20, 0xcf, 0x38, 0xbe, 0x34, 0x93, 0x46, 0x48,
+	0x48, 0xac, 0x92, 0x39, 0xff, 0x99, 0x7f, 0x3e, 0x8d, 0xff, 0x99, 0x81, 0x6d, 0xe2, 0x39, 0xc8,
+	0x70, 0x86, 0xb6, 0x41, 0xcf, 0xf5, 0x20, 0xc4, 0x14, 0xcb, 0xeb, 0x71, 0x49, 0x77, 0x86, 0xb6,
+	0xba, 0xe3, 0x62, 0x17, 0xb3, 0xa2, 0x11, 0xff, 0xe3, 0xba, 0xba, 0x6f, 0x63, 0x32, 0xc2, 0xc4,
+	0x18, 0x11, 0xd7, 0x38, 0x7b, 0x11, 0xff, 0x24, 0xc2, 0x6e, 0xea, 0x15, 0x58, 0xa1, 0x35, 0x22,
+	0xbc, 0xdc, 0xfa, 0x29, 0xc1, 0x6e, 0x8f, 0xb8, 0x1f, 0xa2, 0xfe, 0xc8, 0xa3, 0xaf, 0x5c, 0xe4,
+	0xdb, 0xe3, 0x93, 0xa8, 0xff, 0x06, 0x8d, 0xe5, 0x3d, 0x58, 0x25, 0xc8, 0x77, 0x50, 0xa8, 0x48,
+	0x4d, 0xa9, 0x5d, 0x33, 0x93, 0x91, 0xbc, 0x05, 0x65, 0xcf, 0x51, 0xca, 0x4d, 0xa9, 0x5d, 0x35,
+	0xcb, 0x9e, 0x23, 0xef, 0xc3, 0x5a, 0x10, 0xf5, 0x4f, 0xbf, 0xa2, 0xb1, 0x52, 0xe1, 0x8d, 0x01,
+	0x37, 0x38, 0x80, 0x1a, 0xf1, 0x5c, 0xdf, 0xa2, 0x51, 0x88, 0x94, 0x2a, 0x93, 0xb2, 0xc2, 0xf1,
+	0xc6, 0x8f, 0xdb, 0xcb, 0xc3, 0xc4, 0xb3, 0xd5, 0x80, 0x27, 0x42, 0x08, 0x13, 0x91, 0x00, 0xfb,
+	0x04, 0xb5, 0x2e, 0xf2, 0x98, 0xef, 0x43, 0xcb, 0x1e, 0xa2, 0x25, 0x98, 0x8f, 0xa1, 0x86, 0x59,
+	0xdf, 0x69, 0x4a, 0xbb, 0xce, 0x0b, 0xdd, 0x7f, 0xcf, 0x9c, 0x27, 0x4a, 0x99, 0x3d, 0xd8, 0x4a,
+	0x1b, 0xde, 0x61, 0xdf, 0x46, 0x0b, 0x59, 0x77, 0x60, 0xc5, 0x8f, 0x1b, 0x18, 0x67, 0xcd, 0xe4,
+	0x83, 0x22, 0x4b, 0xe5, 0x5e, 0x16, 0x05, 0xf6, 0x8a, 0x4b, 0xa5, 0x10, 0x14, 0x76, 0xb2, 0x9d,
+	0xa5, 0x14, 0x11, 0x6a, 0x51, 0x0f, 0xfb, 0x0b, 0x51, 0xea, 0xb0, 0x8e, 0xce, 0x90, 0x4f, 0xb3,
+	0x5d, 0x5b, 0x63, 0xe3, 0xae, 0xf3, 0x37, 0x3c, 0x1a, 0x1c, 0x88, 0x56, 0x4d, 0xa9, 0xbe, 0x4b,
+	0xf0, 0xb0, 0x47, 0xdc, 0xd7, 0x21, 0xb2, 0x28, 0xe2, 0x9b, 0x17, 0xdb, 0x5b, 0x11, 0x1d, 0xe0,
+	0xd0, 0xa3, 0xe3, 0x04, 0x2a, 0x2b, 0xc8, 0x2d, 0xd8, 0x0c, 0xac, 0x90, 0x7a, 0xb6, 0x17, 0x58,
+	0x3e, 0x25, 0x4a, 0xb9, 0x59, 0x69, 0xd7, 0xcc, 0x42, 0x2d, 0x76, 0xa0, 0x83, 0x10, 0x91, 0x01,
+	0x1e, 0x3a, 0x0c, 0xf0, 0x81, 0x99, 0x15, 0x8e, 0xb7, 0x62, 0xc0, 0xcc, 0xb1, 0x55, 0x87, 0xfd,
+	0x3b, 0x08, 0x62, 0x3c, 0x9e, 0xc7, 0xff, 0x8a, 0xc7, 0x11, 0x52, 0x3c, 0xcc, 0xe8, 0x3e, 0x06,
+	0x8e, 0x45, 0xd1, 0x09, 0x3b, 0xcc, 0x4b, 0xe8, 0x74, 0x58, 0xe5, 0x87, 0x9e, 0x7d, 0xd2, 0x8d,
+	0xa3, 0x47, 0xfa, 0xec, 0x16, 0xd1, 0xf9, 0xfc, 0x4e, 0xf5, 0xea, 0xa6, 0x51, 0x32, 0x93, 0xae,
+	0x05, 0x2c, 0xf9, 0x05, 0x67, 0x2c, 0x47, 0x37, 0x55, 0xa8, 0xf4, 0x88, 0x2b, 0x77, 0x61, 0x23,
+	0x9f, 0x74, 0x25, 0x5b, 0xa1, 0x18, 0x4c, 0xb5, 0xb9, 0x48, 0x99, 0x59, 0xca, 0x9f, 0x61, 0x7b,
+	0x3e, 0xaf, 0x9a, 0x60, 0x5a, 0x4e, 0x57, 0x9f, 0xdd, 0xaf, 0xa7, 0xe6, 0x5f, 0x40, 0x16, 0x5c,
+	0x22, 0x0d, 0xc1, 0xec, 0x7c, 0x83, 0xfa, 0x7c, 0x49, 0xc3, 0xbc, 0x7f, 0xe1, 0x2e, 0x15, 0xf9,
+	0xe7, 0x1b, 0x84, 0xfe, 0xa2, 0x8b, 0x50, 0x7e, 0x0b, 0x9b, 0x85, 0x53, 0x53, 0x2f, 0x4c, 0xcc,
+	0x4b, 0xea, 0xd3, 0x85, 0xd2, 0xbc, 0x5b, 0x12, 0x72, 0x91, 0x1b, 0x97, 0x84, 0x6e, 0xc5, 0x5c,
+	0xc6, 0x6e, 0x85, 0x50, 0x16, 0xdd, 0xf2, 0xd2, 0x1d, 0x37, 0x51, 0xb2, 0xd4, 0x95, 0x6f, 0xb7,
+	0x97, 0x87, 0x52, 0xa7, 0x73, 0x35, 0xd1, 0xa4, 0xeb, 0x89, 0x26, 0xfd, 0x9e, 0x68, 0xd2, 0xc5,
+	0x54, 0x2b, 0x5d, 0x4f, 0xb5, 0xd2, 0xaf, 0xa9, 0x56, 0xfa, 0xd4, 0x76, 0x3d, 0x3a, 0x88, 0xfa,
+	0xba, 0x8d, 0x47, 0x46, 0xec, 0xc6, 0x1e, 0x34, 0x1b, 0x0f, 0xd9, 0xc0, 0x38, 0xe7, 0xef, 0xe6,
+	0x38, 0x40, 0xa4, 0xbf, 0xca, 0xa4, 0x97, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0xea, 0x21, 0xcc,
+	0x3a, 0x50, 0x07, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -491,8 +798,15 @@ const _ = grpc.SupportPackageIsVersion4
 type MsgClient interface {
 	SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ...grpc.CallOption) (*MsgSubmitNonceResponse, error)
 	SubmitAttestation(ctx context.Context, in *MsgSubmitAttestation, opts ...grpc.CallOption) (*MsgSubmitAttestationResponse, error)
-	SubmitOraclePubkey(ctx context.Context, in *MsgSubmitOraclePubkey, opts ...grpc.CallOption) (*MsgSubmitOraclePubkeyResponse, error)
-	SubmitAgencyAddress(ctx context.Context, in *MsgSubmitAgencyAddress, opts ...grpc.CallOption) (*MsgSubmitAgencyAddressResponse, error)
+	SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOraclePubKey, opts ...grpc.CallOption) (*MsgSubmitOraclePubKeyResponse, error)
+	SubmitAgencyPubKey(ctx context.Context, in *MsgSubmitAgencyPubKey, opts ...grpc.CallOption) (*MsgSubmitAgencyPubKeyResponse, error)
+	CreateOracle(ctx context.Context, in *MsgCreateOracle, opts ...grpc.CallOption) (*MsgCreateOracleResponse, error)
+	CreateAgency(ctx context.Context, in *MsgCreateAgency, opts ...grpc.CallOption) (*MsgCreateAgencyResponse, error)
+	// UpdateParams defines a governance operation for updating the x/dlc module
+	// parameters. The authority defaults to the x/gov module account.
+	//
+	// Since: cosmos-sdk 0.47
+	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 }
 
 type msgClient struct {
@@ -521,18 +835,45 @@ func (c *msgClient) SubmitAttestation(ctx context.Context, in *MsgSubmitAttestat
 	return out, nil
 }
 
-func (c *msgClient) SubmitOraclePubkey(ctx context.Context, in *MsgSubmitOraclePubkey, opts ...grpc.CallOption) (*MsgSubmitOraclePubkeyResponse, error) {
-	out := new(MsgSubmitOraclePubkeyResponse)
-	err := c.cc.Invoke(ctx, "/side.dlc.Msg/SubmitOraclePubkey", in, out, opts...)
+func (c *msgClient) SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOraclePubKey, opts ...grpc.CallOption) (*MsgSubmitOraclePubKeyResponse, error) {
+	out := new(MsgSubmitOraclePubKeyResponse)
+	err := c.cc.Invoke(ctx, "/side.dlc.Msg/SubmitOraclePubKey", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) SubmitAgencyAddress(ctx context.Context, in *MsgSubmitAgencyAddress, opts ...grpc.CallOption) (*MsgSubmitAgencyAddressResponse, error) {
-	out := new(MsgSubmitAgencyAddressResponse)
-	err := c.cc.Invoke(ctx, "/side.dlc.Msg/SubmitAgencyAddress", in, out, opts...)
+func (c *msgClient) SubmitAgencyPubKey(ctx context.Context, in *MsgSubmitAgencyPubKey, opts ...grpc.CallOption) (*MsgSubmitAgencyPubKeyResponse, error) {
+	out := new(MsgSubmitAgencyPubKeyResponse)
+	err := c.cc.Invoke(ctx, "/side.dlc.Msg/SubmitAgencyPubKey", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CreateOracle(ctx context.Context, in *MsgCreateOracle, opts ...grpc.CallOption) (*MsgCreateOracleResponse, error) {
+	out := new(MsgCreateOracleResponse)
+	err := c.cc.Invoke(ctx, "/side.dlc.Msg/CreateOracle", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CreateAgency(ctx context.Context, in *MsgCreateAgency, opts ...grpc.CallOption) (*MsgCreateAgencyResponse, error) {
+	out := new(MsgCreateAgencyResponse)
+	err := c.cc.Invoke(ctx, "/side.dlc.Msg/CreateAgency", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
+	out := new(MsgUpdateParamsResponse)
+	err := c.cc.Invoke(ctx, "/side.dlc.Msg/UpdateParams", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -543,8 +884,15 @@ func (c *msgClient) SubmitAgencyAddress(ctx context.Context, in *MsgSubmitAgency
 type MsgServer interface {
 	SubmitNonce(context.Context, *MsgSubmitNonce) (*MsgSubmitNonceResponse, error)
 	SubmitAttestation(context.Context, *MsgSubmitAttestation) (*MsgSubmitAttestationResponse, error)
-	SubmitOraclePubkey(context.Context, *MsgSubmitOraclePubkey) (*MsgSubmitOraclePubkeyResponse, error)
-	SubmitAgencyAddress(context.Context, *MsgSubmitAgencyAddress) (*MsgSubmitAgencyAddressResponse, error)
+	SubmitOraclePubKey(context.Context, *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error)
+	SubmitAgencyPubKey(context.Context, *MsgSubmitAgencyPubKey) (*MsgSubmitAgencyPubKeyResponse, error)
+	CreateOracle(context.Context, *MsgCreateOracle) (*MsgCreateOracleResponse, error)
+	CreateAgency(context.Context, *MsgCreateAgency) (*MsgCreateAgencyResponse, error)
+	// UpdateParams defines a governance operation for updating the x/dlc module
+	// parameters. The authority defaults to the x/gov module account.
+	//
+	// Since: cosmos-sdk 0.47
+	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -557,11 +905,20 @@ func (*UnimplementedMsgServer) SubmitNonce(ctx context.Context, req *MsgSubmitNo
 func (*UnimplementedMsgServer) SubmitAttestation(ctx context.Context, req *MsgSubmitAttestation) (*MsgSubmitAttestationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitAttestation not implemented")
 }
-func (*UnimplementedMsgServer) SubmitOraclePubkey(ctx context.Context, req *MsgSubmitOraclePubkey) (*MsgSubmitOraclePubkeyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitOraclePubkey not implemented")
+func (*UnimplementedMsgServer) SubmitOraclePubKey(ctx context.Context, req *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitOraclePubKey not implemented")
 }
-func (*UnimplementedMsgServer) SubmitAgencyAddress(ctx context.Context, req *MsgSubmitAgencyAddress) (*MsgSubmitAgencyAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitAgencyAddress not implemented")
+func (*UnimplementedMsgServer) SubmitAgencyPubKey(ctx context.Context, req *MsgSubmitAgencyPubKey) (*MsgSubmitAgencyPubKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitAgencyPubKey not implemented")
+}
+func (*UnimplementedMsgServer) CreateOracle(ctx context.Context, req *MsgCreateOracle) (*MsgCreateOracleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOracle not implemented")
+}
+func (*UnimplementedMsgServer) CreateAgency(ctx context.Context, req *MsgCreateAgency) (*MsgCreateAgencyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAgency not implemented")
+}
+func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -604,38 +961,92 @@ func _Msg_SubmitAttestation_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitOraclePubkey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitOraclePubkey)
+func _Msg_SubmitOraclePubKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitOraclePubKey)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitOraclePubkey(ctx, in)
+		return srv.(MsgServer).SubmitOraclePubKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.dlc.Msg/SubmitOraclePubkey",
+		FullMethod: "/side.dlc.Msg/SubmitOraclePubKey",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitOraclePubkey(ctx, req.(*MsgSubmitOraclePubkey))
+		return srv.(MsgServer).SubmitOraclePubKey(ctx, req.(*MsgSubmitOraclePubKey))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitAgencyAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitAgencyAddress)
+func _Msg_SubmitAgencyPubKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitAgencyPubKey)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitAgencyAddress(ctx, in)
+		return srv.(MsgServer).SubmitAgencyPubKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.dlc.Msg/SubmitAgencyAddress",
+		FullMethod: "/side.dlc.Msg/SubmitAgencyPubKey",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitAgencyAddress(ctx, req.(*MsgSubmitAgencyAddress))
+		return srv.(MsgServer).SubmitAgencyPubKey(ctx, req.(*MsgSubmitAgencyPubKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CreateOracle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateOracle)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateOracle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.dlc.Msg/CreateOracle",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateOracle(ctx, req.(*MsgCreateOracle))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CreateAgency_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateAgency)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateAgency(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.dlc.Msg/CreateAgency",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateAgency(ctx, req.(*MsgCreateAgency))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateParams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.dlc.Msg/UpdateParams",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateParams(ctx, req.(*MsgUpdateParams))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -654,19 +1065,31 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitAttestation_Handler,
 		},
 		{
-			MethodName: "SubmitOraclePubkey",
-			Handler:    _Msg_SubmitOraclePubkey_Handler,
+			MethodName: "SubmitOraclePubKey",
+			Handler:    _Msg_SubmitOraclePubKey_Handler,
 		},
 		{
-			MethodName: "SubmitAgencyAddress",
-			Handler:    _Msg_SubmitAgencyAddress_Handler,
+			MethodName: "SubmitAgencyPubKey",
+			Handler:    _Msg_SubmitAgencyPubKey_Handler,
+		},
+		{
+			MethodName: "CreateOracle",
+			Handler:    _Msg_CreateOracle_Handler,
+		},
+		{
+			MethodName: "CreateAgency",
+			Handler:    _Msg_CreateAgency_Handler,
+		},
+		{
+			MethodName: "UpdateParams",
+			Handler:    _Msg_UpdateParams_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "side/dlc/tx.proto",
 }
 
-func (m *MsgSubmitAgencyAddress) Marshal() (dAtA []byte, err error) {
+func (m *MsgSubmitAgencyPubKey) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -676,12 +1099,12 @@ func (m *MsgSubmitAgencyAddress) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSubmitAgencyAddress) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgSubmitAgencyPubKey) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSubmitAgencyAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgSubmitAgencyPubKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -693,31 +1116,29 @@ func (m *MsgSubmitAgencyAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 		i--
 		dAtA[i] = 0x22
 	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Address)))
+	if len(m.PubKey) > 0 {
+		i -= len(m.PubKey)
+		copy(dAtA[i:], m.PubKey)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.PubKey)))
 		i--
 		dAtA[i] = 0x1a
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
 	}
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Id)))
-		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSubmitAgencyAddressResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgSubmitAgencyPubKeyResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -727,12 +1148,12 @@ func (m *MsgSubmitAgencyAddressResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSubmitAgencyAddressResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgSubmitAgencyPubKeyResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSubmitAgencyAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgSubmitAgencyPubKeyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -740,7 +1161,7 @@ func (m *MsgSubmitAgencyAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSubmitOraclePubkey) Marshal() (dAtA []byte, err error) {
+func (m *MsgSubmitOraclePubKey) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -750,12 +1171,12 @@ func (m *MsgSubmitOraclePubkey) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSubmitOraclePubkey) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgSubmitOraclePubKey) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSubmitOraclePubkey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgSubmitOraclePubKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -767,31 +1188,29 @@ func (m *MsgSubmitOraclePubkey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if len(m.Pubkey) > 0 {
-		i -= len(m.Pubkey)
-		copy(dAtA[i:], m.Pubkey)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Pubkey)))
+	if len(m.PubKey) > 0 {
+		i -= len(m.PubKey)
+		copy(dAtA[i:], m.PubKey)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.PubKey)))
 		i--
 		dAtA[i] = 0x1a
+	}
+	if m.OracleId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.OracleId))
+		i--
+		dAtA[i] = 0x10
 	}
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.OracleId) > 0 {
-		i -= len(m.OracleId)
-		copy(dAtA[i:], m.OracleId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.OracleId)))
-		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSubmitOraclePubkeyResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgSubmitOraclePubKeyResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -801,12 +1220,12 @@ func (m *MsgSubmitOraclePubkeyResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSubmitOraclePubkeyResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgSubmitOraclePubKeyResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSubmitOraclePubkeyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgSubmitOraclePubKeyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -908,8 +1327,8 @@ func (m *MsgSubmitAttestation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
-	if m.AnnouncementId != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.AnnouncementId))
+	if m.EventId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.EventId))
 		i--
 		dAtA[i] = 0x10
 	}
@@ -946,6 +1365,203 @@ func (m *MsgSubmitAttestationResponse) MarshalToSizedBuffer(dAtA []byte) (int, e
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgCreateOracle) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateOracle) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateOracle) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Threshold != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Threshold))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Participants) > 0 {
+		for iNdEx := len(m.Participants) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Participants[iNdEx])
+			copy(dAtA[i:], m.Participants[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Participants[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Authority) > 0 {
+		i -= len(m.Authority)
+		copy(dAtA[i:], m.Authority)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Authority)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCreateOracleResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateOracleResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateOracleResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCreateAgency) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateAgency) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateAgency) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Threshold != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Threshold))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Participants) > 0 {
+		for iNdEx := len(m.Participants) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Participants[iNdEx])
+			copy(dAtA[i:], m.Participants[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Participants[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Authority) > 0 {
+		i -= len(m.Authority)
+		copy(dAtA[i:], m.Authority)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Authority)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCreateAgencyResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateAgencyResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateAgencyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateParams) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateParams) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	if len(m.Authority) > 0 {
+		i -= len(m.Authority)
+		copy(dAtA[i:], m.Authority)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Authority)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateParamsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateParamsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -957,21 +1573,20 @@ func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgSubmitAgencyAddress) Size() (n int) {
+func (m *MsgSubmitAgencyPubKey) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Address)
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
+	l = len(m.PubKey)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -982,7 +1597,7 @@ func (m *MsgSubmitAgencyAddress) Size() (n int) {
 	return n
 }
 
-func (m *MsgSubmitAgencyAddressResponse) Size() (n int) {
+func (m *MsgSubmitAgencyPubKeyResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -991,21 +1606,20 @@ func (m *MsgSubmitAgencyAddressResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgSubmitOraclePubkey) Size() (n int) {
+func (m *MsgSubmitOraclePubKey) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.OracleId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Pubkey)
+	if m.OracleId != 0 {
+		n += 1 + sovTx(uint64(m.OracleId))
+	}
+	l = len(m.PubKey)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1016,7 +1630,7 @@ func (m *MsgSubmitOraclePubkey) Size() (n int) {
 	return n
 }
 
-func (m *MsgSubmitOraclePubkeyResponse) Size() (n int) {
+func (m *MsgSubmitOraclePubKeyResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1065,8 +1679,8 @@ func (m *MsgSubmitAttestation) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	if m.AnnouncementId != 0 {
-		n += 1 + sovTx(uint64(m.AnnouncementId))
+	if m.EventId != 0 {
+		n += 1 + sovTx(uint64(m.EventId))
 	}
 	l = len(m.Signature)
 	if l > 0 {
@@ -1084,13 +1698,99 @@ func (m *MsgSubmitAttestationResponse) Size() (n int) {
 	return n
 }
 
+func (m *MsgCreateOracle) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Authority)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.Participants) > 0 {
+		for _, s := range m.Participants {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.Threshold != 0 {
+		n += 1 + sovTx(uint64(m.Threshold))
+	}
+	return n
+}
+
+func (m *MsgCreateOracleResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgCreateAgency) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Authority)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.Participants) > 0 {
+		for _, s := range m.Participants {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.Threshold != 0 {
+		n += 1 + sovTx(uint64(m.Threshold))
+	}
+	return n
+}
+
+func (m *MsgCreateAgencyResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgUpdateParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Authority)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = m.Params.Size()
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgUpdateParamsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func sovTx(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTx(x uint64) (n int) {
 	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgSubmitAgencyAddress) Unmarshal(dAtA []byte) error {
+func (m *MsgSubmitAgencyPubKey) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1113,17 +1813,49 @@ func (m *MsgSubmitAgencyAddress) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitAgencyAddress: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgSubmitAgencyPubKey: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitAgencyAddress: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgSubmitAgencyPubKey: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			var stringLen uint64
+			m.Id = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1133,59 +1865,14 @@ func (m *MsgSubmitAgencyAddress) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Id |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PubKey", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1213,7 +1900,7 @@ func (m *MsgSubmitAgencyAddress) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Address = string(dAtA[iNdEx:postIndex])
+			m.PubKey = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
@@ -1268,7 +1955,7 @@ func (m *MsgSubmitAgencyAddress) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgSubmitAgencyAddressResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgSubmitAgencyPubKeyResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1291,10 +1978,10 @@ func (m *MsgSubmitAgencyAddressResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitAgencyAddressResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgSubmitAgencyPubKeyResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitAgencyAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgSubmitAgencyPubKeyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1318,7 +2005,7 @@ func (m *MsgSubmitAgencyAddressResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgSubmitOraclePubkey) Unmarshal(dAtA []byte) error {
+func (m *MsgSubmitOraclePubKey) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1341,46 +2028,14 @@ func (m *MsgSubmitOraclePubkey) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitOraclePubkey: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgSubmitOraclePubKey: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitOraclePubkey: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgSubmitOraclePubKey: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OracleId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OracleId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
 			var stringLen uint64
@@ -1411,9 +2066,28 @@ func (m *MsgSubmitOraclePubkey) Unmarshal(dAtA []byte) error {
 			}
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OracleId", wireType)
+			}
+			m.OracleId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OracleId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pubkey", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PubKey", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1441,7 +2115,7 @@ func (m *MsgSubmitOraclePubkey) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Pubkey = string(dAtA[iNdEx:postIndex])
+			m.PubKey = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
@@ -1496,7 +2170,7 @@ func (m *MsgSubmitOraclePubkey) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgSubmitOraclePubkeyResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgSubmitOraclePubKeyResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1519,10 +2193,10 @@ func (m *MsgSubmitOraclePubkeyResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitOraclePubkeyResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgSubmitOraclePubKeyResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitOraclePubkeyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgSubmitOraclePubKeyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1805,9 +2479,9 @@ func (m *MsgSubmitAttestation) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnnouncementId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field EventId", wireType)
 			}
-			m.AnnouncementId = 0
+			m.EventId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1817,7 +2491,7 @@ func (m *MsgSubmitAttestation) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AnnouncementId |= uint64(b&0x7F) << shift
+				m.EventId |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1902,6 +2576,537 @@ func (m *MsgSubmitAttestationResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgSubmitAttestationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCreateOracle) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateOracle: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateOracle: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Authority = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Participants", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Participants = append(m.Participants, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+			}
+			m.Threshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Threshold |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCreateOracleResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateOracleResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateOracleResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCreateAgency) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateAgency: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateAgency: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Authority = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Participants", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Participants = append(m.Participants, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+			}
+			m.Threshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Threshold |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCreateAgencyResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateAgencyResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateAgencyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateParams) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateParams: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateParams: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Authority = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateParamsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
