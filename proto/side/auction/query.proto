@@ -15,9 +15,17 @@ service Query {
     rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
       option (google.api.http).get = "/side/auction/params";
     }
+    // Auction queries the specified auction by id.
+    rpc Auction(QueryAuctionRequest) returns (QueryAuctionResponse) {
+        option (google.api.http).get = "/side/auction/auction/{id}";
+    }
     // Auctions queries the auctions by the given status.
     rpc Auctions(QueryAuctionsRequest) returns (QueryAuctionsResponse) {
         option (google.api.http).get = "/side/auction/auctions";
+    }
+    // Bid queries the specified bid by id.
+    rpc Bid(QueryBidRequest) returns (QueryBidResponse) {
+        option (google.api.http).get = "/side/auction/bid/{id}";
     }
     // Bids queries the bids by the given status.
     rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
@@ -31,7 +39,17 @@ message QueryParamsRequest {
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
-    Params params = 1;
+    Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAuctionRequest is request type for the Query/Auction RPC method.
+message QueryAuctionRequest {
+    uint64 id = 1;
+}
+
+// QueryAuctionResponse is response type for the Query/Auction RPC method.
+message QueryAuctionResponse {
+    Auction auction = 1;
 }
 
 // QueryAuctionsRequest is request type for the Query/Auctions RPC method.
@@ -44,6 +62,16 @@ message QueryAuctionsRequest {
 message QueryAuctionsResponse {
     repeated Auction auctions = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBidRequest is request type for the Query/Bid RPC method.
+message QueryBidRequest {
+    uint64 id = 1;
+}
+
+// QueryBidResponse is response type for the Query/Bid RPC method.
+message QueryBidResponse {
+    Bid bid = 1;
 }
 
 // QueryBidsRequest is request type for the Query/Bids RPC method.

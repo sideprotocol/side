@@ -4,6 +4,7 @@ package side.auction;
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
+import "side/auction/params.proto";
 
 option go_package = "github.com/sideprotocol/side/x/auction/types";
 
@@ -13,6 +14,15 @@ service Msg {
 
     // Make bid for the specified auction.
     rpc Bid(MsgBid) returns (MsgBidResponse);
+
+    // Cancel the specified bid.
+    rpc CancelBid(MsgCancelBid) returns (MsgCancelBidResponse);
+
+    // UpdateParams defines a governance operation for updating the x/btcbridge module
+    // parameters. The authority defaults to the x/gov module account.
+    //
+    // Since: cosmos-sdk 0.47
+    rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
 // MsgBid defines the Msg/Bid request type.
@@ -22,8 +32,42 @@ message MsgBid {
     string sender = 1;
     uint64 auction_id = 2;
     int64 price = 3;
-    cosmos.base.v1beta1.Coin amount = 4;
+    cosmos.base.v1beta1.Coin amount = 4 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
 }
 
 // MsgBidResponse defines the Msg/Bid response type.
 message MsgBidResponse {}
+
+// MsgCancelBid defines the Msg/CancelBid request type.
+message MsgCancelBid {
+    option (cosmos.msg.v1.signer) = "sender";
+
+    string sender = 1;
+    uint64 id = 2;
+}
+
+// MsgCancelBidResponse defines the Msg/CancelBid response type.
+message MsgCancelBidResponse {}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+
+  // params defines the x/btcbridge parameters to be updated.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsResponse {}

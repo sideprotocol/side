@@ -12,13 +12,19 @@ message Bid {
     uint64 auction_id = 2;
     string bidder = 3;
     int64 bid_price = 4;
-    cosmos.base.v1beta1.Coin bid_amount = 5;
+    cosmos.base.v1beta1.Coin bid_amount = 5 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
     BidStatus status = 6;
 }
 
 message Auction {
     uint64 id = 1;
-    cosmos.base.v1beta1.Coin deposited_asset = 2;
+    cosmos.base.v1beta1.Coin deposited_asset = 2 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
     string borrower = 3;
     int64 liquidated_price = 4;
     google.protobuf.Timestamp liquidated_time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
@@ -41,4 +47,5 @@ enum BidStatus {
     Bidding = 0;
     Accepted = 1;
     Rejected = 2;
+    Cancelled = 3;
 }

@@ -20,7 +20,9 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Query_Params_FullMethodName   = "/side.auction.Query/Params"
+	Query_Auction_FullMethodName  = "/side.auction.Query/Auction"
 	Query_Auctions_FullMethodName = "/side.auction.Query/Auctions"
+	Query_Bid_FullMethodName      = "/side.auction.Query/Bid"
 	Query_Bids_FullMethodName     = "/side.auction.Query/Bids"
 )
 
@@ -30,8 +32,12 @@ const (
 type QueryClient interface {
 	// Params queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// Auction queries the specified auction by id.
+	Auction(ctx context.Context, in *QueryAuctionRequest, opts ...grpc.CallOption) (*QueryAuctionResponse, error)
 	// Auctions queries the auctions by the given status.
 	Auctions(ctx context.Context, in *QueryAuctionsRequest, opts ...grpc.CallOption) (*QueryAuctionsResponse, error)
+	// Bid queries the specified bid by id.
+	Bid(ctx context.Context, in *QueryBidRequest, opts ...grpc.CallOption) (*QueryBidResponse, error)
 	// Bids queries the bids by the given status.
 	Bids(ctx context.Context, in *QueryBidsRequest, opts ...grpc.CallOption) (*QueryBidsResponse, error)
 }
@@ -53,9 +59,27 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) Auction(ctx context.Context, in *QueryAuctionRequest, opts ...grpc.CallOption) (*QueryAuctionResponse, error) {
+	out := new(QueryAuctionResponse)
+	err := c.cc.Invoke(ctx, Query_Auction_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) Auctions(ctx context.Context, in *QueryAuctionsRequest, opts ...grpc.CallOption) (*QueryAuctionsResponse, error) {
 	out := new(QueryAuctionsResponse)
 	err := c.cc.Invoke(ctx, Query_Auctions_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Bid(ctx context.Context, in *QueryBidRequest, opts ...grpc.CallOption) (*QueryBidResponse, error) {
+	out := new(QueryBidResponse)
+	err := c.cc.Invoke(ctx, Query_Bid_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +101,12 @@ func (c *queryClient) Bids(ctx context.Context, in *QueryBidsRequest, opts ...gr
 type QueryServer interface {
 	// Params queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// Auction queries the specified auction by id.
+	Auction(context.Context, *QueryAuctionRequest) (*QueryAuctionResponse, error)
 	// Auctions queries the auctions by the given status.
 	Auctions(context.Context, *QueryAuctionsRequest) (*QueryAuctionsResponse, error)
+	// Bid queries the specified bid by id.
+	Bid(context.Context, *QueryBidRequest) (*QueryBidResponse, error)
 	// Bids queries the bids by the given status.
 	Bids(context.Context, *QueryBidsRequest) (*QueryBidsResponse, error)
 	mustEmbedUnimplementedQueryServer()
@@ -91,8 +119,14 @@ type UnimplementedQueryServer struct {
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
+func (UnimplementedQueryServer) Auction(context.Context, *QueryAuctionRequest) (*QueryAuctionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Auction not implemented")
+}
 func (UnimplementedQueryServer) Auctions(context.Context, *QueryAuctionsRequest) (*QueryAuctionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Auctions not implemented")
+}
+func (UnimplementedQueryServer) Bid(context.Context, *QueryBidRequest) (*QueryBidResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Bid not implemented")
 }
 func (UnimplementedQueryServer) Bids(context.Context, *QueryBidsRequest) (*QueryBidsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Bids not implemented")
@@ -128,6 +162,24 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Auction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAuctionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Auction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Auction_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Auction(ctx, req.(*QueryAuctionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_Auctions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryAuctionsRequest)
 	if err := dec(in); err != nil {
@@ -142,6 +194,24 @@ func _Query_Auctions_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Auctions(ctx, req.(*QueryAuctionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Bid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBidRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Bid(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Bid_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Bid(ctx, req.(*QueryBidRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -176,8 +246,16 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
+			MethodName: "Auction",
+			Handler:    _Query_Auction_Handler,
+		},
+		{
 			MethodName: "Auctions",
 			Handler:    _Query_Auctions_Handler,
+		},
+		{
+			MethodName: "Bid",
+			Handler:    _Query_Bid_Handler,
 		},
 		{
 			MethodName: "Bids",
