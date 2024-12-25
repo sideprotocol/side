@@ -75,70 +75,17 @@ func (m *PriceInterval) GetInterval() int32 {
 	return 0
 }
 
-type InterestRate struct {
-	Period uint32 `protobuf:"varint,1,opt,name=period,proto3" json:"period,omitempty"`
-	Rate   uint32 `protobuf:"varint,2,opt,name=rate,proto3" json:"rate,omitempty"`
-}
-
-func (m *InterestRate) Reset()         { *m = InterestRate{} }
-func (m *InterestRate) String() string { return proto.CompactTextString(m) }
-func (*InterestRate) ProtoMessage()    {}
-func (*InterestRate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4fa2afb94673ab86, []int{1}
-}
-func (m *InterestRate) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *InterestRate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InterestRate.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *InterestRate) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InterestRate.Merge(m, src)
-}
-func (m *InterestRate) XXX_Size() int {
-	return m.Size()
-}
-func (m *InterestRate) XXX_DiscardUnknown() {
-	xxx_messageInfo_InterestRate.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_InterestRate proto.InternalMessageInfo
-
-func (m *InterestRate) GetPeriod() uint32 {
-	if m != nil {
-		return m.Period
-	}
-	return 0
-}
-
-func (m *InterestRate) GetRate() uint32 {
-	if m != nil {
-		return m.Rate
-	}
-	return 0
-}
-
 // Params defines the parameters for the module.
 type Params struct {
-	NonceQueueSize uint32           `protobuf:"varint,1,opt,name=nonce_queue_size,json=nonceQueueSize,proto3" json:"nonce_queue_size,omitempty"`
-	PriceInterval  []*PriceInterval `protobuf:"bytes,2,rep,name=price_interval,json=priceInterval,proto3" json:"price_interval,omitempty"`
-	InterestRate   []*InterestRate  `protobuf:"bytes,3,rep,name=interest_rate,json=interestRate,proto3" json:"interest_rate,omitempty"`
+	NonceQueueSize uint32          `protobuf:"varint,1,opt,name=nonce_queue_size,json=nonceQueueSize,proto3" json:"nonce_queue_size,omitempty"`
+	PriceIntervals []PriceInterval `protobuf:"bytes,2,rep,name=price_intervals,json=priceIntervals,proto3" json:"price_intervals"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
 func (m *Params) String() string { return proto.CompactTextString(m) }
 func (*Params) ProtoMessage()    {}
 func (*Params) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4fa2afb94673ab86, []int{2}
+	return fileDescriptor_4fa2afb94673ab86, []int{1}
 }
 func (m *Params) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -174,50 +121,39 @@ func (m *Params) GetNonceQueueSize() uint32 {
 	return 0
 }
 
-func (m *Params) GetPriceInterval() []*PriceInterval {
+func (m *Params) GetPriceIntervals() []PriceInterval {
 	if m != nil {
-		return m.PriceInterval
-	}
-	return nil
-}
-
-func (m *Params) GetInterestRate() []*InterestRate {
-	if m != nil {
-		return m.InterestRate
+		return m.PriceIntervals
 	}
 	return nil
 }
 
 func init() {
 	proto.RegisterType((*PriceInterval)(nil), "side.dlc.PriceInterval")
-	proto.RegisterType((*InterestRate)(nil), "side.dlc.InterestRate")
 	proto.RegisterType((*Params)(nil), "side.dlc.Params")
 }
 
 func init() { proto.RegisterFile("side/dlc/params.proto", fileDescriptor_4fa2afb94673ab86) }
 
 var fileDescriptor_4fa2afb94673ab86 = []byte{
-	// 314 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x91, 0xc1, 0x4e, 0xf2, 0x40,
-	0x14, 0x85, 0x99, 0x9f, 0x5f, 0x02, 0x57, 0x4a, 0xcc, 0x44, 0x91, 0x90, 0xd8, 0x10, 0x56, 0x5d,
-	0xb5, 0x89, 0xee, 0x34, 0x71, 0xc1, 0x4e, 0x57, 0x38, 0xee, 0xdc, 0x34, 0xc3, 0xf4, 0x06, 0x27,
-	0x29, 0xcc, 0x38, 0x1d, 0x8c, 0xf2, 0x14, 0xbe, 0x89, 0xaf, 0xe1, 0x92, 0xa5, 0x4b, 0x03, 0x2f,
-	0x62, 0x7a, 0xa9, 0x0a, 0xbb, 0x7b, 0xbe, 0xdb, 0x7b, 0x72, 0x4e, 0x07, 0x4e, 0x0a, 0x9d, 0x61,
-	0x92, 0xe5, 0x2a, 0xb1, 0xd2, 0xc9, 0x59, 0x11, 0x5b, 0x67, 0xbc, 0xe1, 0xcd, 0x12, 0xc7, 0x59,
-	0xae, 0xfa, 0xc7, 0x53, 0x33, 0x35, 0x04, 0x93, 0x72, 0xda, 0xee, 0x87, 0xb7, 0x10, 0x8c, 0x9d,
-	0x56, 0x78, 0x33, 0xf7, 0xe8, 0x9e, 0x65, 0xce, 0xcf, 0x00, 0x6c, 0x09, 0x52, 0x2b, 0xb5, 0xeb,
-	0xb1, 0x01, 0x8b, 0x5a, 0xa2, 0x45, 0x64, 0x2c, 0xb5, 0xe3, 0x7d, 0x68, 0xea, 0xea, 0xd3, 0xde,
-	0xbf, 0x01, 0x8b, 0x0e, 0xc4, 0xaf, 0x1e, 0x5e, 0x42, 0x9b, 0x6c, 0xb0, 0xf0, 0x42, 0x7a, 0xe4,
-	0x5d, 0x68, 0x58, 0x74, 0xda, 0x64, 0x64, 0x13, 0x88, 0x4a, 0x71, 0x0e, 0xff, 0x9d, 0xf4, 0x48,
-	0xf7, 0x81, 0xa0, 0x79, 0xf8, 0xce, 0xa0, 0x31, 0xa6, 0xe0, 0x3c, 0x82, 0xa3, 0xb9, 0x99, 0x2b,
-	0x4c, 0x9f, 0x16, 0xb8, 0xc0, 0xb4, 0xd0, 0x4b, 0xac, 0x0c, 0x3a, 0xc4, 0xef, 0x4a, 0x7c, 0xaf,
-	0x97, 0xc8, 0xaf, 0xa1, 0xb3, 0xcd, 0xba, 0x13, 0xa9, 0x1e, 0x1d, 0x9e, 0x9f, 0xc6, 0x3f, 0xad,
-	0xe3, 0xbd, 0x72, 0x22, 0xb0, 0x7b, 0x5d, 0xaf, 0x20, 0xd0, 0x55, 0xe0, 0x94, 0x12, 0xd5, 0xe9,
-	0xbc, 0xfb, 0x77, 0xbe, 0xdb, 0x47, 0xb4, 0xf5, 0x8e, 0x1a, 0x8d, 0x3e, 0xd6, 0x21, 0x5b, 0xad,
-	0x43, 0xf6, 0xb5, 0x0e, 0xd9, 0xdb, 0x26, 0xac, 0xad, 0x36, 0x61, 0xed, 0x73, 0x13, 0xd6, 0x1e,
-	0xa2, 0xa9, 0xf6, 0x8f, 0x8b, 0x49, 0xac, 0xcc, 0x2c, 0x29, 0x9d, 0xe8, 0x4f, 0x2b, 0x93, 0x93,
-	0x48, 0x5e, 0xe8, 0x91, 0xfc, 0xab, 0xc5, 0x62, 0xd2, 0xa0, 0xd5, 0xc5, 0x77, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x35, 0x9c, 0x80, 0xf7, 0xbd, 0x01, 0x00, 0x00,
+	// 267 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2d, 0xce, 0x4c, 0x49,
+	0xd5, 0x4f, 0xc9, 0x49, 0xd6, 0x2f, 0x48, 0x2c, 0x4a, 0xcc, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f,
+	0xc9, 0x17, 0xe2, 0x00, 0x09, 0xeb, 0xa5, 0xe4, 0x24, 0x4b, 0x89, 0xa4, 0xe7, 0xa7, 0xe7, 0x83,
+	0x05, 0xf5, 0x41, 0x2c, 0x88, 0xbc, 0x92, 0x17, 0x17, 0x6f, 0x40, 0x51, 0x66, 0x72, 0xaa, 0x67,
+	0x5e, 0x49, 0x6a, 0x51, 0x59, 0x62, 0x8e, 0x90, 0x2c, 0x17, 0x57, 0x01, 0x48, 0x20, 0xbe, 0x20,
+	0x31, 0xb3, 0x48, 0x82, 0x51, 0x81, 0x51, 0x83, 0x33, 0x88, 0x13, 0x2c, 0x12, 0x90, 0x98, 0x59,
+	0x24, 0x24, 0xc5, 0xc5, 0x91, 0x09, 0x55, 0x2a, 0xc1, 0xa4, 0xc0, 0xa8, 0xc1, 0x1a, 0x04, 0xe7,
+	0x2b, 0x55, 0x71, 0xb1, 0x05, 0x80, 0xed, 0x16, 0xd2, 0xe0, 0x12, 0xc8, 0xcb, 0xcf, 0x4b, 0x4e,
+	0x8d, 0x2f, 0x2c, 0x4d, 0x2d, 0x4d, 0x8d, 0x2f, 0xce, 0xac, 0x4a, 0x05, 0x1b, 0xc5, 0x1b, 0xc4,
+	0x07, 0x16, 0x0f, 0x04, 0x09, 0x07, 0x67, 0x56, 0xa5, 0x0a, 0xb9, 0x71, 0xf1, 0x43, 0xac, 0x83,
+	0x99, 0x52, 0x2c, 0xc1, 0xa4, 0xc0, 0xac, 0xc1, 0x6d, 0x24, 0xae, 0x07, 0x73, 0xb9, 0x1e, 0x8a,
+	0x03, 0x9d, 0x58, 0x4e, 0xdc, 0x93, 0x67, 0x08, 0xe2, 0x2b, 0x40, 0x16, 0x2c, 0x76, 0x72, 0x3a,
+	0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63,
+	0xb8, 0xf0, 0x58, 0x8e, 0xe1, 0xc6, 0x63, 0x39, 0x86, 0x28, 0x8d, 0xf4, 0xcc, 0x92, 0x8c, 0xd2,
+	0x24, 0xbd, 0xe4, 0xfc, 0x5c, 0x7d, 0x90, 0x91, 0x60, 0x7f, 0x27, 0xe7, 0xe7, 0x80, 0x39, 0xfa,
+	0x15, 0xe0, 0x20, 0x2b, 0xa9, 0x2c, 0x48, 0x2d, 0x4e, 0x62, 0x03, 0x4b, 0x19, 0x03, 0x02, 0x00,
+	0x00, 0xff, 0xff, 0x7e, 0xb5, 0x49, 0x3d, 0x4b, 0x01, 0x00, 0x00,
 }
 
 func (m *PriceInterval) Marshal() (dAtA []byte, err error) {
@@ -255,39 +191,6 @@ func (m *PriceInterval) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *InterestRate) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *InterestRate) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *InterestRate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Rate != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.Rate))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Period != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.Period))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *Params) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -308,24 +211,10 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.InterestRate) > 0 {
-		for iNdEx := len(m.InterestRate) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.PriceIntervals) > 0 {
+		for iNdEx := len(m.PriceIntervals) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.InterestRate[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintParams(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.PriceInterval) > 0 {
-		for iNdEx := len(m.PriceInterval) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.PriceInterval[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.PriceIntervals[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -371,21 +260,6 @@ func (m *PriceInterval) Size() (n int) {
 	return n
 }
 
-func (m *InterestRate) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Period != 0 {
-		n += 1 + sovParams(uint64(m.Period))
-	}
-	if m.Rate != 0 {
-		n += 1 + sovParams(uint64(m.Rate))
-	}
-	return n
-}
-
 func (m *Params) Size() (n int) {
 	if m == nil {
 		return 0
@@ -395,14 +269,8 @@ func (m *Params) Size() (n int) {
 	if m.NonceQueueSize != 0 {
 		n += 1 + sovParams(uint64(m.NonceQueueSize))
 	}
-	if len(m.PriceInterval) > 0 {
-		for _, e := range m.PriceInterval {
-			l = e.Size()
-			n += 1 + l + sovParams(uint64(l))
-		}
-	}
-	if len(m.InterestRate) > 0 {
-		for _, e := range m.InterestRate {
+	if len(m.PriceIntervals) > 0 {
+		for _, e := range m.PriceIntervals {
 			l = e.Size()
 			n += 1 + l + sovParams(uint64(l))
 		}
@@ -517,94 +385,6 @@ func (m *PriceInterval) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *InterestRate) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InterestRate: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InterestRate: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
-			}
-			m.Period = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Period |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rate", wireType)
-			}
-			m.Rate = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Rate |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *Params) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -655,7 +435,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PriceInterval", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PriceIntervals", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -682,42 +462,8 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PriceInterval = append(m.PriceInterval, &PriceInterval{})
-			if err := m.PriceInterval[len(m.PriceInterval)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InterestRate", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.InterestRate = append(m.InterestRate, &InterestRate{})
-			if err := m.InterestRate[len(m.InterestRate)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.PriceIntervals = append(m.PriceIntervals, PriceInterval{})
+			if err := m.PriceIntervals[len(m.PriceIntervals)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

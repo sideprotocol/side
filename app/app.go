@@ -130,6 +130,9 @@ import (
 	btcbridgekeeper "github.com/sideprotocol/side/x/btcbridge/keeper"
 	btcbridgemodule "github.com/sideprotocol/side/x/btcbridge/module"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
+	dlckeeper "github.com/sideprotocol/side/x/dlc/keeper"
+	dlcmodule "github.com/sideprotocol/side/x/dlc/module"
+	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -186,6 +189,7 @@ var (
 		wasm.AppModuleBasic{},
 		btcbridgemodule.AppModuleBasic{},
 		auctionmodule.AppModuleBasic{},
+		dlcmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -203,6 +207,7 @@ var (
 		wasmtypes.ModuleName:           {authtypes.Burner},
 		btcbridgetypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 		auctiontypes.ModuleName:        nil,
+		dlctypes.ModuleName:            nil,
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -270,6 +275,7 @@ type App struct {
 
 	BtcBridgeKeeper btcbridgekeeper.Keeper
 	AuctionKeeper   auctionkeeper.Keeper
+	DLCKeeper       dlckeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -334,6 +340,7 @@ func New(
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey,
 		btcbridgetypes.StoreKey, auctiontypes.StoreKey,
+		dlctypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 
@@ -618,6 +625,15 @@ func New(
 	)
 	auctionModule := auctionmodule.NewAppModule(appCodec, app.AuctionKeeper)
 
+	app.DLCKeeper = dlckeeper.NewKeeper(
+		appCodec,
+		keys[dlctypes.StoreKey],
+		keys[dlctypes.MemStoreKey],
+		app.StakingKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+	dlcModule := dlcmodule.NewAppModule(appCodec, app.DLCKeeper)
+
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
 	if err != nil {
@@ -722,6 +738,7 @@ func New(
 
 		btcbridgeModule,
 		auctionModule,
+		dlcModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -778,6 +795,7 @@ func New(
 		wasmtypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		auctiontypes.ModuleName,
+		dlctypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -807,6 +825,7 @@ func New(
 		wasmtypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		auctiontypes.ModuleName,
+		dlctypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -841,6 +860,7 @@ func New(
 		wasmtypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		auctiontypes.ModuleName,
+		dlctypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
@@ -1108,6 +1128,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(btcbridgetypes.ModuleName)
 	paramsKeeper.Subspace(auctiontypes.ModuleName)
+	paramsKeeper.Subspace(dlctypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

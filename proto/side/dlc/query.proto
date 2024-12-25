@@ -15,12 +15,24 @@ service Query {
     rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
       option (google.api.http).get = "/side/dlc/params";
     }
-    // Announcements queries the announcements by the given status.
-    rpc Events(QueryPriceEventRequest) returns (QueryPriceEventResponse) {
+
+    // Event queries the event by the given id.
+    rpc Event(QueryEventRequest) returns (QueryEventResponse) {
+        option (google.api.http).get = "/side/dlc/events/{id}";
+    }
+
+    // Events queries events by the given status.
+    rpc Events(QueryEventsRequest) returns (QueryEventsResponse) {
         option (google.api.http).get = "/side/dlc/events";
     }
 
-    rpc Attestations(QueryAttestationRequest) returns (QueryAttestationResponse) {
+    // Attestation queries the attestation by the given id.
+    rpc Attestation(QueryAttestationRequest) returns (QueryAttestationResponse) {
+        option (google.api.http).get = "/side/dlc/attestations/{id}";
+    }
+
+    // Attestations queries all attestations.
+    rpc Attestations(QueryAttestationsRequest) returns (QueryAttestationsResponse) {
         option (google.api.http).get = "/side/dlc/attestations";
     }
 
@@ -29,73 +41,114 @@ service Query {
         option (google.api.http).get = "/side/dlc/price";
     }
 
-    rpc Nonces(QueryNoncesRequest) returns (QueryNoncesResponse) {
-        option (google.api.http).get = "/side/dlc/nonces";
+    // Nonce queries the nonce by the given oracle id and index
+    rpc Nonce(QueryNonceRequest) returns (QueryNonceResponse) {
+        option (google.api.http).get = "/side/dlc/nonces/{oracle_id}/{index}";
     }
 
+    // Nonces queries all nonces of the given oracle
+    rpc Nonces(QueryNoncesRequest) returns (QueryNoncesResponse) {
+        option (google.api.http).get = "/side/dlc/nonces/{oracle_id}";
+    }
+
+    // CountNonces queries the total count of nonces.
     rpc CountNonces(QueryCountNoncesRequest) returns (QueryCountNoncesResponse) {
         option (google.api.http).get = "/side/dlc/nonces/count";
     }
 
+    // Oracles query oracles by the given status.
     rpc Oracles(QueryOraclesRequest) returns (QueryOraclesResponse) {
         option (google.api.http).get = "/side/dlc/oracles";
     }
 
+    // Agencies query agencies by the given status.
     rpc Agencies(QueryAgenciesRequest) returns (QueryAgenciesResponse) {
         option (google.api.http).get = "/side/dlc/agencies";
     }
 }
 
-message QueryAttestationRequest{} 
-message QueryAttestationResponse {
-    repeated DLCAttestation attestations = 1;
+message QueryAttestationRequest {
+    uint64 id = 1;
 }
+
+message QueryAttestationResponse {
+    DLCAttestation attestation = 1;
+}
+
+message QueryAttestationsRequest {
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAttestationsResponse {
+    repeated DLCAttestation attestations = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
 message QueryAgenciesRequest {
     AgencyStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 message QueryAgenciesResponse {
     repeated Agency agencies = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryOraclesRequest{
     DLCOracleStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
+
 message QueryOraclesResponse{
     repeated DLCOracle oracles = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryCountNoncesRequest{}
+message QueryCountNoncesRequest {}
 
 // QueryCountNoncesResponse is response type for the Query/CountNonces RPC method.
-// counts should use the same order as recommende oracles in Params
+// counts should use the same order as recommended oracles in Params
 message QueryCountNoncesResponse{
     repeated uint32 counts = 1; // qty of nonce in the cache queue
 }
 
-message QueryNoncesRequest{}
+message QueryNonceRequest {
+    uint64 oracle_id = 1;
+    uint64 index = 2;
+}
+
+message QueryNonceResponse{
+    DLCNonce nonce = 1;
+}
+
+message QueryNoncesRequest {
+    uint64 oracle_id = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
 message QueryNoncesResponse{
     repeated DLCNonce nonces = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryEventRequest is request type for the Query/Event RPC method.
+message QueryEventRequest {
+    uint64 id = 1;
+}
+
+// QueryEventResponse is response type for the Query/Event RPC method.
+message QueryEventResponse {
+    DLCPriceEvent event = 1;
+}
+
+// QueryEventsRequest is request type for the Query/Events RPC method.
+message QueryEventsRequest {
+    bool triggered = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryParamsRequest is request type for the Query/Params RPC method.
-message QueryParamsRequest {
-}
-
-// QueryParamsResponse is response type for the Query/Params RPC method.
-message QueryParamsResponse {
-    Params params = 1;
-}
-
-// QueryAnnouncementsRequest is request type for the Query/Announcements RPC method.
-message QueryPriceEventRequest {
-    bool has_triggered = 1;
-    cosmos.base.query.v1beta1.PageRequest pagination = 2;
-}
-
-// QueryAnnouncementsResponse is response type for the Query/Announcements RPC method.
-message QueryPriceEventResponse {
+// QueryEventsResponse is response type for the Query/Events RPC method.
+message QueryEventsResponse {
     repeated DLCPriceEvent events = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
@@ -107,5 +160,14 @@ message QueryPriceRequest {
 
 // QueryPriceResponse is response type for the Query/Price RPC method.
 message QueryPriceResponse {
-    uint32 price = 1;
+    uint64 price = 1;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+    Params params = 1 [(gogoproto.nullable) = false];
 }

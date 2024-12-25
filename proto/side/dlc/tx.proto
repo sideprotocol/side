@@ -3,40 +3,53 @@ package side.dlc;
 
 import "gogoproto/gogo.proto";
 import "cosmos/msg/v1/msg.proto";
+import "side/dlc/params.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
 // Msg defines the Msg service.
 service Msg {
     option (cosmos.msg.v1.service) = true;
+
     rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
     rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
-    rpc SubmitOraclePubkey(MsgSubmitOraclePubkey) returns (MsgSubmitOraclePubkeyResponse);
-    rpc SubmitAgencyAddress(MsgSubmitAgencyAddress) returns (MsgSubmitAgencyAddressResponse);
+    rpc SubmitOraclePubKey(MsgSubmitOraclePubKey) returns (MsgSubmitOraclePubKeyResponse);
+    rpc SubmitAgencyPubKey(MsgSubmitAgencyPubKey) returns (MsgSubmitAgencyPubKeyResponse);
+    rpc CreateOracle(MsgCreateOracle) returns (MsgCreateOracleResponse);
+    rpc CreateAgency(MsgCreateAgency) returns (MsgCreateAgencyResponse);
+
+    // UpdateParams defines a governance operation for updating the x/dlc module
+    // parameters. The authority defaults to the x/gov module account.
+    //
+    // Since: cosmos-sdk 0.47
+    rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
-message MsgSubmitAgencyAddress {
+message MsgSubmitAgencyPubKey {
     option (cosmos.msg.v1.signer) = "sender";
-    string id = 1;
-    string sender = 2;
-    string address = 3;
+
+    string sender = 1;
+    uint64 id = 2;
+    string pub_key = 3;
     string signature = 4;
 }
 
-message MsgSubmitAgencyAddressResponse{}
+message MsgSubmitAgencyPubKeyResponse {}
 
-message MsgSubmitOraclePubkey {
+message MsgSubmitOraclePubKey {
     option (cosmos.msg.v1.signer) = "sender";
-    string oracle_id = 1;
-    string sender = 2;
-    string pubkey = 3;
+
+    string sender = 1;
+    uint64 oracle_id = 2;
+    string pub_key = 3;
     string signature = 4;
 }
 
-message MsgSubmitOraclePubkeyResponse {}
+message MsgSubmitOraclePubKeyResponse {}
 
 message MsgSubmitNonce {
     option (cosmos.msg.v1.signer) = "sender";
+
     string sender = 1;
     string nonce = 2;
     string signature = 3;
@@ -44,24 +57,54 @@ message MsgSubmitNonce {
 
 message MsgSubmitNonceResponse {}
 
-// message MsgSubmitAnnouncementNonce {
-//     option (cosmos.msg.v1.signer) = "sender";
-
-//     string sender = 1;
-//     uint64 announcement_id = 2;
-//     string nonce = 3;
-//     string signature = 4;
-// }
-
-// message MsgSubmitAnnouncementNonceResponse {}
-
-
 message MsgSubmitAttestation {
     option (cosmos.msg.v1.signer) = "sender";
 
     string sender = 1;
-    uint64 announcement_id = 2;
+    uint64 event_id = 2;
     string signature = 3;
 }
 
 message MsgSubmitAttestationResponse {}
+
+message MsgCreateOracle {
+    option (cosmos.msg.v1.signer) = "authority";
+
+    // authority is the address that controls the module (defaults to x/gov unless overwritten).
+    string authority = 1;
+    repeated string participants = 2;
+    uint32 threshold = 3;
+}
+
+message MsgCreateOracleResponse {}
+
+message MsgCreateAgency {
+    option (cosmos.msg.v1.signer) = "authority";
+
+    // authority is the address that controls the module (defaults to x/gov unless overwritten).
+    string authority = 1;
+    repeated string participants = 2;
+    uint32 threshold = 3;
+}
+
+message MsgCreateAgencyResponse {}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+
+  // params defines the x/dlc parameters to be updated.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsResponse {}

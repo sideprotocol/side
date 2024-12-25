@@ -13,14 +13,13 @@ enum DLCOracleStatus {
 }
 
 message DLCOracle {
-    uint32 id = 1;
+    uint64 id = 1;
     string desc = 2;
     repeated string participants = 3;
     uint32 threshold = 4;
-    string address = 5;
-    string pubkey = 6;
+    string pubkey = 5;
+    uint64 nonce_index = 6;
     DLCOracleStatus status = 7;
-    uint64 nonce_index = 8;
 }
 
 enum AgencyStatus {
@@ -30,11 +29,11 @@ enum AgencyStatus {
 }
 
 message Agency {
-    uint32 id = 1;
+    uint64 id = 1;
     string desc = 2;
     repeated string participants = 3;
     uint32 threshold = 4;
-    string address = 5;
+    string pubkey = 5;
     AgencyStatus status = 6;
 }
 
@@ -56,17 +55,10 @@ message DLCPriceEvent {
 }
 
 message DLCAttestation {
-    string id = 1;
+    uint64 id = 1;
     uint64 event_id = 2;
     google.protobuf.Timestamp time = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     string pubkey = 4;
     string outcome = 5;
     string signature = 6;
 }
-
-// message DLCEvent {
-//     uint32 maturity_epoch = 1;
-//     string nonce = 2;
-//     string descriptor = 3;
-//     string pubkey = 4;
-// }
