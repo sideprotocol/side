@@ -13,9 +13,9 @@ service Msg {
 
     rpc AddLiquidity(MsgAddLiquidity) returns (MsgAddLiquidityResponse);
     rpc RemoveLiquidity(MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
-    rpc RequestVaultAddress(MsgRequestVaultAddress) returns (MsgRequestVaultAddressResponse);
-    rpc SubmitFundingTx(MsgSubmitFundingTx) returns (MsgSubmitFundingTxResponse);
-    rpc CreateLoan(MsgCreateLoan) returns (MsgCreateLoanResponse);
+    rpc Apply(MsgApply) returns (MsgApplyResponse);
+    rpc Fund(MsgFund) returns (MsgFundResponse);
+    rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
 }
 
@@ -29,20 +29,13 @@ message MsgRepay{
 
 message MsgRepayResponse{}
 
-message MsgCreateLoan {
+message MsgRedeem {
     option (cosmos.msg.v1.signer) = "borrower";
-
     string borrower = 1;
-    string vault_address = 2; // id
-    uint32 period = 3;
-    string pool_id = 4;
-    cosmos.base.v1beta1.Coin borrow_amount = 5;
-    string event_id = 6;
-    string cets = 7;
     string loan_secret = 8;
 }
 
-message MsgCreateLoanResponse{}
+message MsgRedeemResponse{}
 
 message MsgAddLiquidity {
     option (cosmos.msg.v1.signer) = "lender";
@@ -67,7 +60,7 @@ message MsgRemoveLiquidityResponse {
     cosmos.base.v1beta1.Coin amount = 1;
 }
 
-message MsgRequestVaultAddress {
+message MsgApply {
     option (cosmos.msg.v1.signer) = "borrower";
 
     string borrower = 1;
@@ -75,23 +68,27 @@ message MsgRequestVaultAddress {
     string hash_of_loan_secret = 3;
     uint64 maturity_time = 4;
     uint64 final_timeout =5;
+    
+    string pool_id = 6;
+    cosmos.base.v1beta1.Coin borrow_amount = 7;
+    string event_id = 8;
+    string cets = 9;
 }
 
-message MsgRequestVaultAddressResponse {
+message MsgApplyResponse {
     string vault_address = 1;  
 }
 
-message MsgSubmitFundingTx {
+message MsgFund {
     option (cosmos.msg.v1.signer) = "relayer";
     
     string relayer = 1;
-    string borrower = 2; // Remove? can be parsed from tx?
-    string funding_tx =3;
-    string height = 4;
-    string poof = 5;
+    string funding_tx =2;
+    uint64 height = 3;
+    string poof = 4;
 }
 
-message MsgSubmitFundingTxResponse {
+message MsgFundResponse {
 
 }
 
