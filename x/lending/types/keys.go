@@ -16,4 +16,10 @@ const (
 
 var (
 	ParamsStoreKey = []byte{0x1}
+
+	PoolStorePrefix = []byte{0x2}
 )
+
+func PoolStoreKey(pool_id string) []byte {
+	return append(PoolStorePrefix, []byte(pool_id)...)
+}
