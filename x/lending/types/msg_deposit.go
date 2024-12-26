@@ -4,21 +4,21 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgFund{}
+var _ sdk.Msg = &MsgDeposit{}
 
-func NewMsgSubmitFundingTx(relayer string, fundingTx string, height uint64, proof string) *MsgFund {
-	return &MsgFund{
+func NewMsgDeposit(relayer string, depositTx string, height uint64, proof string) *MsgDeposit {
+	return &MsgDeposit{
 		Relayer:   relayer,
-		FundingTx: fundingTx,
+		DepositTx: depositTx,
 		Height:    height,
 		Poof:      proof,
 	}
 }
 
 // ValidateBasic performs basic MsgAddLiquidity message validation.
-func (m *MsgFund) ValidateBasic() error {
-	if len(m.FundingTx) == 0 {
-		return ErrEmptyFundTx
+func (m *MsgDeposit) ValidateBasic() error {
+	if len(m.DepositTx) == 0 {
+		return ErrEmptyDepositTx
 	}
 
 	if len(m.Poof) == 0 {

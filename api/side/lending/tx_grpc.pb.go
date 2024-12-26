@@ -23,7 +23,7 @@ const (
 	Msg_AddLiquidity_FullMethodName    = "/side.lending.Msg/AddLiquidity"
 	Msg_RemoveLiquidity_FullMethodName = "/side.lending.Msg/RemoveLiquidity"
 	Msg_Apply_FullMethodName           = "/side.lending.Msg/Apply"
-	Msg_Fund_FullMethodName            = "/side.lending.Msg/Fund"
+	Msg_Deposit_FullMethodName         = "/side.lending.Msg/Deposit"
 	Msg_Redeem_FullMethodName          = "/side.lending.Msg/Redeem"
 	Msg_Repay_FullMethodName           = "/side.lending.Msg/Repay"
 )
@@ -36,7 +36,7 @@ type MsgClient interface {
 	AddLiquidity(ctx context.Context, in *MsgAddLiquidity, opts ...grpc.CallOption) (*MsgAddLiquidityResponse, error)
 	RemoveLiquidity(ctx context.Context, in *MsgRemoveLiquidity, opts ...grpc.CallOption) (*MsgRemoveLiquidityResponse, error)
 	Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error)
-	Fund(ctx context.Context, in *MsgFund, opts ...grpc.CallOption) (*MsgFundResponse, error)
+	Deposit(ctx context.Context, in *MsgDeposit, opts ...grpc.CallOption) (*MsgDepositResponse, error)
 	Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
 }
@@ -85,9 +85,9 @@ func (c *msgClient) Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOp
 	return out, nil
 }
 
-func (c *msgClient) Fund(ctx context.Context, in *MsgFund, opts ...grpc.CallOption) (*MsgFundResponse, error) {
-	out := new(MsgFundResponse)
-	err := c.cc.Invoke(ctx, Msg_Fund_FullMethodName, in, out, opts...)
+func (c *msgClient) Deposit(ctx context.Context, in *MsgDeposit, opts ...grpc.CallOption) (*MsgDepositResponse, error) {
+	out := new(MsgDepositResponse)
+	err := c.cc.Invoke(ctx, Msg_Deposit_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ type MsgServer interface {
 	AddLiquidity(context.Context, *MsgAddLiquidity) (*MsgAddLiquidityResponse, error)
 	RemoveLiquidity(context.Context, *MsgRemoveLiquidity) (*MsgRemoveLiquidityResponse, error)
 	Apply(context.Context, *MsgApply) (*MsgApplyResponse, error)
-	Fund(context.Context, *MsgFund) (*MsgFundResponse, error)
+	Deposit(context.Context, *MsgDeposit) (*MsgDepositResponse, error)
 	Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
 	mustEmbedUnimplementedMsgServer()
@@ -142,8 +142,8 @@ func (UnimplementedMsgServer) RemoveLiquidity(context.Context, *MsgRemoveLiquidi
 func (UnimplementedMsgServer) Apply(context.Context, *MsgApply) (*MsgApplyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Apply not implemented")
 }
-func (UnimplementedMsgServer) Fund(context.Context, *MsgFund) (*MsgFundResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Fund not implemented")
+func (UnimplementedMsgServer) Deposit(context.Context, *MsgDeposit) (*MsgDepositResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Deposit not implemented")
 }
 func (UnimplementedMsgServer) Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Redeem not implemented")
@@ -236,20 +236,20 @@ func _Msg_Apply_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_Fund_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgFund)
+func _Msg_Deposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeposit)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).Fund(ctx, in)
+		return srv.(MsgServer).Deposit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_Fund_FullMethodName,
+		FullMethod: Msg_Deposit_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Fund(ctx, req.(*MsgFund))
+		return srv.(MsgServer).Deposit(ctx, req.(*MsgDeposit))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -314,8 +314,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_Apply_Handler,
 		},
 		{
-			MethodName: "Fund",
-			Handler:    _Msg_Fund_Handler,
+			MethodName: "Deposit",
+			Handler:    _Msg_Deposit_Handler,
 		},
 		{
 			MethodName: "Redeem",

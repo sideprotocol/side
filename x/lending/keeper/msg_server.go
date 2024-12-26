@@ -26,7 +26,7 @@ func (m msgServer) Redeem(ctx context.Context, msg *types.MsgRedeem) (*types.Msg
 }
 
 // SubmitFundingTx implements types.MsgServer.
-func (m msgServer) Fund(ctx context.Context, msg *types.MsgFund) (*types.MsgFundResponse, error) {
+func (m msgServer) Deposit(ctx context.Context, msg *types.MsgDeposit) (*types.MsgDepositResponse, error) {
 	panic("unimplemented")
 }
 

@@ -19,8 +19,8 @@ var (
 	ErrInvalidFinalTimeout = errorsmod.Register(ModuleName, 3003, "final time great than maturity time")
 	ErrInvalidLoanSecret   = errorsmod.Register(ModuleName, 3003, "invalid loan secret")
 
-	ErrEmptyFundTx = errorsmod.Register(ModuleName, 4001, "invalid fund tx")
-	ErrEmptyPoof   = errorsmod.Register(ModuleName, 4002, "invalid proof")
+	ErrEmptyDepositTx = errorsmod.Register(ModuleName, 4001, "invalid deposit tx")
+	ErrEmptyPoof      = errorsmod.Register(ModuleName, 4002, "invalid proof")
 
 	ErrEmptyLoanSecret = errorsmod.Register(ModuleName, 5001, "invalid loan secret")
 

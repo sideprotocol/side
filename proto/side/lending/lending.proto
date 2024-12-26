@@ -20,33 +20,6 @@ message LendingPool {
     PoolStatus status =5;
 }
 
-enum VaultStatus {
-    Initial = 0;
-    Funded = 1;
-    Lending = 2;
-    Close = 3;
-}
-
-message Vault {
-    string vault_address = 1; // id
-    string borrower = 2;
-    string agency = 3;
-    string hash_loan_secret = 4;
-    uint64 maturity_time = 5;
-    string final_timeout = 6; // use absolute time or ralative time?
-    repeated Collateral collaterals = 7;
-    uint64 total_collateral_amount = 8;
-    VaultStatus status = 9;
-}
-
-message Collateral {
-    string tx = 1; 
-    string vault_address = 2;
-    cosmos.base.v1beta1.Coin amount = 3;
-    string borrower = 4;
-    google.protobuf.Timestamp create_at = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-}
-
 enum LoanStatus {
     Created = 0;
     DCA_Signed = 1;
@@ -59,16 +32,23 @@ enum LoanStatus {
 message Loan {
     string vault_address = 1; // id
     string borrower = 2;
-    cosmos.base.v1beta1.Coin borrow_amount = 3;
-    cosmos.base.v1beta1.Coin fees = 4;
-    uint32 period = 5;
-    uint32 interest_rate = 6;
-    string event_id = 7;
-    uint64 current_price = 8;
-    string attestation_id = 9;
-    string cets = 10;
-    string loan_secret = 11;
-    string repay_adaptor_point = 12;
-    google.protobuf.Timestamp create_at = 13 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 14;
+    string agency = 3;
+    string hash_loan_secret = 4;
+    uint64 maturity_time = 5;
+    string final_timeout = 6; // use absolute time or ralative time?
+    repeated string collateral_tx_ids = 7;
+    uint64 collateral_amount = 8;
+    cosmos.base.v1beta1.Coin borrow_amount = 9;
+    cosmos.base.v1beta1.Coin fees = 10;
+
+    uint32 period = 11;
+    uint32 interest_rate = 12;
+    string event_id = 13;
+    uint64 current_price = 14;
+    string attestation_id = 15;
+    string cets = 16;
+    string loan_secret = 17;
+    string repay_adaptor_point = 18;
+    google.protobuf.Timestamp create_at = 19 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 20;
 }
