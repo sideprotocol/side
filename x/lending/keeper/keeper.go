@@ -62,6 +62,11 @@ func (k Keeper) SetPool(ctx sdk.Context, pool types.LendingPool) {
 	store.Set(types.PoolStoreKey(pool.Id), bz)
 }
 
+func (k Keeper) HasPool(ctx sdk.Context, pool_id string) bool {
+	store := ctx.KVStore(k.storeKey)
+	return store.Has(types.PoolStoreKey(pool_id))
+}
+
 func (k Keeper) GetPool(ctx sdk.Context, pool_id string) types.LendingPool {
 	store := ctx.KVStore(k.storeKey)
 	var pool types.LendingPool

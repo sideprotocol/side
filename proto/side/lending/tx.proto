@@ -22,9 +22,11 @@ service Msg {
 
 message MsgCreatePool {
     option (cosmos.msg.v1.signer) = "creator";
-
+    
     string creator = 1;
-    string lending_denom = 2;
+    string pool_id = 2;
+    string lending_asset = 3;
+
 }
 
 message MsgCreatePoolResponse{}

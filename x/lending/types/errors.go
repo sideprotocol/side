@@ -12,7 +12,9 @@ var (
 	ErrInvalidParams = errorsmod.Register(ModuleName, 1101, "invalid params")
 
 	ErrInvalidLiquidation = errorsmod.Register(ModuleName, 2100, "invalid liquidation")
-	ErrEmptyPoolId        = errorsmod.Register(ModuleName, 2200, "pool id should not be empty")
+	ErrEmptyPoolId        = errorsmod.Register(ModuleName, 2200, "invalid pool id")
+	ErrNotAuthorized      = errorsmod.Register(ModuleName, 2201, "not authorized")
+	ErrDuplicatedPoolId   = errorsmod.Register(ModuleName, 2202, "duplicated pool id")
 
 	ErrEmptyBorrowerPubkey = errorsmod.Register(ModuleName, 3001, "invalid pubkey of borrower")
 	ErrInvalidMaturityTime = errorsmod.Register(ModuleName, 3002, "maturity time great than 0")

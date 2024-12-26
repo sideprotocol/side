@@ -15,9 +15,9 @@ enum PoolStatus {
 message LendingPool {
     string id = 1;
     cosmos.base.v1beta1.Coin supply = 2;
-    uint64 total_shares = 3; 
-    uint64 borrowed_amount = 4;
-    PoolStatus status =5;
+    uint64 total_shares = 4; 
+    uint64 borrowed_amount = 5;
+    PoolStatus status = 6;
 }
 
 enum LoanStatus {
@@ -51,4 +51,5 @@ message Loan {
     string repay_adaptor_point = 18;
     google.protobuf.Timestamp create_at = 19 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     LoanStatus status = 20;
+    string pool_id = 21;
 }

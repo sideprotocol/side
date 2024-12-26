@@ -6,20 +6,23 @@ import (
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, denom string) *MsgCreatePool {
+func NewMsgCreatePool(poolId string, creator string, lendingAsset string) *MsgCreatePool {
 	return &MsgCreatePool{
+		PoolId:       poolId,
 		Creator:      creator,
-		LendingDenom: denom,
+		LendingAsset: lendingAsset,
 	}
 }
 
-// ValidateBasic performs basic MsgAddLiquidity message validation.
+// ValidateBasic performs basic MsgCreatePool message validation.
 func (m *MsgCreatePool) ValidateBasic() error {
+	if len(m.PoolId) < 2 {
+		return ErrEmptyPoolId
+	}
 	if len(m.Creator) == 0 {
 		return ErrEmptySender
 	}
-
-	if len(m.LendingDenom) == 0 {
+	if len(m.LendingAsset) == 0 {
 		return ErrInvalidLengthParams
 	}
 
