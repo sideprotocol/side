@@ -11,6 +11,7 @@ option go_package = "github.com/sideprotocol/side/x/lending/types";
 service Msg {
     option (cosmos.msg.v1.service) = true;
 
+    rpc CreatePool(MsgCreatePool) returns (MsgCreatePoolResponse);
     rpc AddLiquidity(MsgAddLiquidity) returns (MsgAddLiquidityResponse);
     rpc RemoveLiquidity(MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
     rpc Apply(MsgApply) returns (MsgApplyResponse);
@@ -18,6 +19,15 @@ service Msg {
     rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
 }
+
+message MsgCreatePool {
+    option (cosmos.msg.v1.signer) = "creator";
+
+    string creator = 1;
+    string lending_denom = 2;
+}
+
+message MsgCreatePoolResponse{}
 
 message MsgRepay{
     option (cosmos.msg.v1.signer) = "borrower";

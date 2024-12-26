@@ -8,7 +8,9 @@ option go_package = "github.com/sideprotocol/side/x/lending/types";
 
 // Params defines the parameters for the module.
 message Params {
+
     uint32 lending_rate = 1;
     uint32 protocol_rate = 2;
     string fee_recipient = 3;
+    repeated string pool_creators = 4;
 }
