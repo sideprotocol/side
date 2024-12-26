@@ -13,11 +13,58 @@ import (
 	sync "sync"
 )
 
+var _ protoreflect.List = (*_Params_4_list)(nil)
+
+type _Params_4_list struct {
+	list *[]string
+}
+
+func (x *_Params_4_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_Params_4_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_Params_4_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_Params_4_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_Params_4_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field PoolCreators as it is not of Message kind"))
+}
+
+func (x *_Params_4_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_Params_4_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_Params_4_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
 	md_Params               protoreflect.MessageDescriptor
 	fd_Params_lending_rate  protoreflect.FieldDescriptor
 	fd_Params_protocol_rate protoreflect.FieldDescriptor
 	fd_Params_fee_recipient protoreflect.FieldDescriptor
+	fd_Params_pool_creators protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -26,6 +73,7 @@ func init() {
 	fd_Params_lending_rate = md_Params.Fields().ByName("lending_rate")
 	fd_Params_protocol_rate = md_Params.Fields().ByName("protocol_rate")
 	fd_Params_fee_recipient = md_Params.Fields().ByName("fee_recipient")
+	fd_Params_pool_creators = md_Params.Fields().ByName("pool_creators")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -111,6 +159,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
+	if len(x.PoolCreators) != 0 {
+		value := protoreflect.ValueOfList(&_Params_4_list{list: &x.PoolCreators})
+		if !f(fd_Params_pool_creators, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -132,6 +186,8 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ProtocolRate != uint32(0)
 	case "side.lending.Params.fee_recipient":
 		return x.FeeRecipient != ""
+	case "side.lending.Params.pool_creators":
+		return len(x.PoolCreators) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -154,6 +210,8 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.ProtocolRate = uint32(0)
 	case "side.lending.Params.fee_recipient":
 		x.FeeRecipient = ""
+	case "side.lending.Params.pool_creators":
+		x.PoolCreators = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -179,6 +237,12 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "side.lending.Params.fee_recipient":
 		value := x.FeeRecipient
 		return protoreflect.ValueOfString(value)
+	case "side.lending.Params.pool_creators":
+		if len(x.PoolCreators) == 0 {
+			return protoreflect.ValueOfList(&_Params_4_list{})
+		}
+		listValue := &_Params_4_list{list: &x.PoolCreators}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -205,6 +269,10 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.ProtocolRate = uint32(value.Uint())
 	case "side.lending.Params.fee_recipient":
 		x.FeeRecipient = value.Interface().(string)
+	case "side.lending.Params.pool_creators":
+		lv := value.List()
+		clv := lv.(*_Params_4_list)
+		x.PoolCreators = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -225,6 +293,12 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "side.lending.Params.pool_creators":
+		if x.PoolCreators == nil {
+			x.PoolCreators = []string{}
+		}
+		value := &_Params_4_list{list: &x.PoolCreators}
+		return protoreflect.ValueOfList(value)
 	case "side.lending.Params.lending_rate":
 		panic(fmt.Errorf("field lending_rate of message side.lending.Params is not mutable"))
 	case "side.lending.Params.protocol_rate":
@@ -250,6 +324,9 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "side.lending.Params.fee_recipient":
 		return protoreflect.ValueOfString("")
+	case "side.lending.Params.pool_creators":
+		list := []string{}
+		return protoreflect.ValueOfList(&_Params_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -329,6 +406,12 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if len(x.PoolCreators) > 0 {
+			for _, s := range x.PoolCreators {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -357,6 +440,15 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.PoolCreators) > 0 {
+			for iNdEx := len(x.PoolCreators) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.PoolCreators[iNdEx])
+				copy(dAtA[i:], x.PoolCreators[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PoolCreators[iNdEx])))
+				i--
+				dAtA[i] = 0x22
+			}
 		}
 		if len(x.FeeRecipient) > 0 {
 			i -= len(x.FeeRecipient)
@@ -494,6 +586,38 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.FeeRecipient = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolCreators", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.PoolCreators = append(x.PoolCreators, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -548,9 +672,10 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LendingRate  uint32 `protobuf:"varint,1,opt,name=lending_rate,json=lendingRate,proto3" json:"lending_rate,omitempty"`
-	ProtocolRate uint32 `protobuf:"varint,2,opt,name=protocol_rate,json=protocolRate,proto3" json:"protocol_rate,omitempty"`
-	FeeRecipient string `protobuf:"bytes,3,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
+	LendingRate  uint32   `protobuf:"varint,1,opt,name=lending_rate,json=lendingRate,proto3" json:"lending_rate,omitempty"`
+	ProtocolRate uint32   `protobuf:"varint,2,opt,name=protocol_rate,json=protocolRate,proto3" json:"protocol_rate,omitempty"`
+	FeeRecipient string   `protobuf:"bytes,3,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
+	PoolCreators []string `protobuf:"bytes,4,rep,name=pool_creators,json=poolCreators,proto3" json:"pool_creators,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -594,6 +719,13 @@ func (x *Params) GetFeeRecipient() string {
 	return ""
 }
 
+func (x *Params) GetPoolCreators() []string {
+	if x != nil {
+		return x.PoolCreators
+	}
+	return nil
+}
+
 var File_side_lending_params_proto protoreflect.FileDescriptor
 
 var file_side_lending_params_proto_rawDesc = []byte{
@@ -601,23 +733,26 @@ var file_side_lending_params_proto_rawDesc = []byte{
 	0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0c, 0x73, 0x69, 0x64,
 	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
-	0x75, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x6c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52,
-	0x0b, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x61, 0x74, 0x65, 0x12, 0x23, 0x0a, 0x0d,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x0d, 0x52, 0x0c, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x52, 0x61, 0x74,
-	0x65, 0x12, 0x23, 0x0a, 0x0d, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x65, 0x63, 0x69, 0x70, 0x69, 0x65,
-	0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x66, 0x65, 0x65, 0x52, 0x65, 0x63,
-	0x69, 0x70, 0x69, 0x65, 0x6e, 0x74, 0x42, 0x8f, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x0b, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64,
-	0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa,
-	0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02,
-	0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18,
-	0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a,
-	0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x9a, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x0b, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x61, 0x74, 0x65, 0x12, 0x23, 0x0a,
+	0x0d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x52, 0x61,
+	0x74, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x65, 0x63, 0x69, 0x70, 0x69,
+	0x65, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x66, 0x65, 0x65, 0x52, 0x65,
+	0x63, 0x69, 0x70, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x23, 0x0a, 0x0d, 0x70, 0x6f, 0x6f, 0x6c, 0x5f,
+	0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0c,
+	0x70, 0x6f, 0x6f, 0x6c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x42, 0x8f, 0x01, 0x0a,
+	0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
+	0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
+	0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2,
+	0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
+	0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
