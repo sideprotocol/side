@@ -4,10 +4,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgRequestVaultAddress{}
+var _ sdk.Msg = &MsgApply{}
 
-func NewMsgRequestVaultAddress(borrower string, borrowerPubkey string, hashLoanSecret string, maturityTime uint64, finalTimeout uint64) *MsgRequestVaultAddress {
-	return &MsgRequestVaultAddress{
+func NewMsgRequestVaultAddress(borrower string, borrowerPubkey string, hashLoanSecret string, maturityTime uint64, finalTimeout uint64) *MsgApply {
+	return &MsgApply{
 		Borrower:         borrower,
 		BorrowerPubkey:   borrowerPubkey,
 		HashOfLoanSecret: hashLoanSecret,
@@ -17,7 +17,7 @@ func NewMsgRequestVaultAddress(borrower string, borrowerPubkey string, hashLoanS
 }
 
 // ValidateBasic performs basic MsgAddLiquidity message validation.
-func (m *MsgRequestVaultAddress) ValidateBasic() error {
+func (m *MsgApply) ValidateBasic() error {
 	if m.MaturityTime <= 0 {
 		return ErrInvalidMaturityTime
 	}

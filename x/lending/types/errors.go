@@ -18,4 +18,12 @@ var (
 	ErrInvalidMaturityTime = errorsmod.Register(ModuleName, 3002, "maturity time great than 0")
 	ErrInvalidFinalTimeout = errorsmod.Register(ModuleName, 3003, "final time great than maturity time")
 	ErrInvalidLoanSecret   = errorsmod.Register(ModuleName, 3003, "invalid loan secret")
+
+	ErrEmptyFundTx = errorsmod.Register(ModuleName, 4001, "invalid fund tx")
+	ErrEmptyPoof   = errorsmod.Register(ModuleName, 4002, "invalid proof")
+
+	ErrEmptyLoanSecret = errorsmod.Register(ModuleName, 5001, "invalid loan secret")
+
+	ErrEmptyAdaptorPoint = errorsmod.Register(ModuleName, 6001, "invalid adaptor point")
+	ErrInvalidRepayment  = errorsmod.Register(ModuleName, 6002, "invalid repayment")
 )

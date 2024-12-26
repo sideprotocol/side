@@ -15,13 +15,13 @@ func (m msgServer) AddLiquidity(context.Context, *types.MsgAddLiquidity) (*types
 	panic("unimplemented")
 }
 
-// CreateLoan implements types.MsgServer.
-func (m msgServer) CreateLoan(context.Context, *types.MsgCreateLoan) (*types.MsgCreateLoanResponse, error) {
+// RemoveLiquidity implements types.MsgServer.
+func (m msgServer) RemoveLiquidity(context.Context, *types.MsgRemoveLiquidity) (*types.MsgRemoveLiquidityResponse, error) {
 	panic("unimplemented")
 }
 
-// RemoveLiquidity implements types.MsgServer.
-func (m msgServer) RemoveLiquidity(context.Context, *types.MsgRemoveLiquidity) (*types.MsgRemoveLiquidityResponse, error) {
+// CreateLoan implements types.MsgServer.
+func (m msgServer) Apply(context.Context, *types.MsgApply) (*types.MsgApplyResponse, error) {
 	panic("unimplemented")
 }
 
@@ -31,12 +31,12 @@ func (m msgServer) Repay(context.Context, *types.MsgRepay) (*types.MsgRepayRespo
 }
 
 // RequestVaultAddress implements types.MsgServer.
-func (m msgServer) RequestVaultAddress(context.Context, *types.MsgRequestVaultAddress) (*types.MsgRequestVaultAddressResponse, error) {
+func (m msgServer) Redeem(context.Context, *types.MsgRedeem) (*types.MsgRedeemResponse, error) {
 	panic("unimplemented")
 }
 
 // SubmitFundingTx implements types.MsgServer.
-func (m msgServer) SubmitFundingTx(context.Context, *types.MsgSubmitFundingTx) (*types.MsgSubmitFundingTxResponse, error) {
+func (m msgServer) Fund(context.Context, *types.MsgFund) (*types.MsgFundResponse, error) {
 	panic("unimplemented")
 }
 
