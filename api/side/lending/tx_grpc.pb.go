@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_AddLiquidity_FullMethodName        = "/side.lending.Msg/AddLiquidity"
-	Msg_RemoveLiquidity_FullMethodName     = "/side.lending.Msg/RemoveLiquidity"
-	Msg_RequestVaultAddress_FullMethodName = "/side.lending.Msg/RequestVaultAddress"
-	Msg_SubmitFundingTx_FullMethodName     = "/side.lending.Msg/SubmitFundingTx"
-	Msg_CreateLoan_FullMethodName          = "/side.lending.Msg/CreateLoan"
-	Msg_Repay_FullMethodName               = "/side.lending.Msg/Repay"
+	Msg_AddLiquidity_FullMethodName    = "/side.lending.Msg/AddLiquidity"
+	Msg_RemoveLiquidity_FullMethodName = "/side.lending.Msg/RemoveLiquidity"
+	Msg_Apply_FullMethodName           = "/side.lending.Msg/Apply"
+	Msg_Fund_FullMethodName            = "/side.lending.Msg/Fund"
+	Msg_Redeem_FullMethodName          = "/side.lending.Msg/Redeem"
+	Msg_Repay_FullMethodName           = "/side.lending.Msg/Repay"
 )
 
 // MsgClient is the client API for Msg service.
@@ -33,9 +33,9 @@ const (
 type MsgClient interface {
 	AddLiquidity(ctx context.Context, in *MsgAddLiquidity, opts ...grpc.CallOption) (*MsgAddLiquidityResponse, error)
 	RemoveLiquidity(ctx context.Context, in *MsgRemoveLiquidity, opts ...grpc.CallOption) (*MsgRemoveLiquidityResponse, error)
-	RequestVaultAddress(ctx context.Context, in *MsgRequestVaultAddress, opts ...grpc.CallOption) (*MsgRequestVaultAddressResponse, error)
-	SubmitFundingTx(ctx context.Context, in *MsgSubmitFundingTx, opts ...grpc.CallOption) (*MsgSubmitFundingTxResponse, error)
-	CreateLoan(ctx context.Context, in *MsgCreateLoan, opts ...grpc.CallOption) (*MsgCreateLoanResponse, error)
+	Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error)
+	Fund(ctx context.Context, in *MsgFund, opts ...grpc.CallOption) (*MsgFundResponse, error)
+	Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
 }
 
@@ -65,27 +65,27 @@ func (c *msgClient) RemoveLiquidity(ctx context.Context, in *MsgRemoveLiquidity,
 	return out, nil
 }
 
-func (c *msgClient) RequestVaultAddress(ctx context.Context, in *MsgRequestVaultAddress, opts ...grpc.CallOption) (*MsgRequestVaultAddressResponse, error) {
-	out := new(MsgRequestVaultAddressResponse)
-	err := c.cc.Invoke(ctx, Msg_RequestVaultAddress_FullMethodName, in, out, opts...)
+func (c *msgClient) Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error) {
+	out := new(MsgApplyResponse)
+	err := c.cc.Invoke(ctx, Msg_Apply_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) SubmitFundingTx(ctx context.Context, in *MsgSubmitFundingTx, opts ...grpc.CallOption) (*MsgSubmitFundingTxResponse, error) {
-	out := new(MsgSubmitFundingTxResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitFundingTx_FullMethodName, in, out, opts...)
+func (c *msgClient) Fund(ctx context.Context, in *MsgFund, opts ...grpc.CallOption) (*MsgFundResponse, error) {
+	out := new(MsgFundResponse)
+	err := c.cc.Invoke(ctx, Msg_Fund_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) CreateLoan(ctx context.Context, in *MsgCreateLoan, opts ...grpc.CallOption) (*MsgCreateLoanResponse, error) {
-	out := new(MsgCreateLoanResponse)
-	err := c.cc.Invoke(ctx, Msg_CreateLoan_FullMethodName, in, out, opts...)
+func (c *msgClient) Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error) {
+	out := new(MsgRedeemResponse)
+	err := c.cc.Invoke(ctx, Msg_Redeem_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,9 +107,9 @@ func (c *msgClient) Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOp
 type MsgServer interface {
 	AddLiquidity(context.Context, *MsgAddLiquidity) (*MsgAddLiquidityResponse, error)
 	RemoveLiquidity(context.Context, *MsgRemoveLiquidity) (*MsgRemoveLiquidityResponse, error)
-	RequestVaultAddress(context.Context, *MsgRequestVaultAddress) (*MsgRequestVaultAddressResponse, error)
-	SubmitFundingTx(context.Context, *MsgSubmitFundingTx) (*MsgSubmitFundingTxResponse, error)
-	CreateLoan(context.Context, *MsgCreateLoan) (*MsgCreateLoanResponse, error)
+	Apply(context.Context, *MsgApply) (*MsgApplyResponse, error)
+	Fund(context.Context, *MsgFund) (*MsgFundResponse, error)
+	Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
@@ -124,14 +124,14 @@ func (UnimplementedMsgServer) AddLiquidity(context.Context, *MsgAddLiquidity) (*
 func (UnimplementedMsgServer) RemoveLiquidity(context.Context, *MsgRemoveLiquidity) (*MsgRemoveLiquidityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveLiquidity not implemented")
 }
-func (UnimplementedMsgServer) RequestVaultAddress(context.Context, *MsgRequestVaultAddress) (*MsgRequestVaultAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RequestVaultAddress not implemented")
+func (UnimplementedMsgServer) Apply(context.Context, *MsgApply) (*MsgApplyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Apply not implemented")
 }
-func (UnimplementedMsgServer) SubmitFundingTx(context.Context, *MsgSubmitFundingTx) (*MsgSubmitFundingTxResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitFundingTx not implemented")
+func (UnimplementedMsgServer) Fund(context.Context, *MsgFund) (*MsgFundResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Fund not implemented")
 }
-func (UnimplementedMsgServer) CreateLoan(context.Context, *MsgCreateLoan) (*MsgCreateLoanResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateLoan not implemented")
+func (UnimplementedMsgServer) Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Redeem not implemented")
 }
 func (UnimplementedMsgServer) Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Repay not implemented")
@@ -185,56 +185,56 @@ func _Msg_RemoveLiquidity_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_RequestVaultAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRequestVaultAddress)
+func _Msg_Apply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgApply)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RequestVaultAddress(ctx, in)
+		return srv.(MsgServer).Apply(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_RequestVaultAddress_FullMethodName,
+		FullMethod: Msg_Apply_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RequestVaultAddress(ctx, req.(*MsgRequestVaultAddress))
+		return srv.(MsgServer).Apply(ctx, req.(*MsgApply))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitFundingTx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitFundingTx)
+func _Msg_Fund_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgFund)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitFundingTx(ctx, in)
+		return srv.(MsgServer).Fund(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_SubmitFundingTx_FullMethodName,
+		FullMethod: Msg_Fund_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitFundingTx(ctx, req.(*MsgSubmitFundingTx))
+		return srv.(MsgServer).Fund(ctx, req.(*MsgFund))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_CreateLoan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCreateLoan)
+func _Msg_Redeem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRedeem)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).CreateLoan(ctx, in)
+		return srv.(MsgServer).Redeem(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_CreateLoan_FullMethodName,
+		FullMethod: Msg_Redeem_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).CreateLoan(ctx, req.(*MsgCreateLoan))
+		return srv.(MsgServer).Redeem(ctx, req.(*MsgRedeem))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -273,16 +273,16 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_RemoveLiquidity_Handler,
 		},
 		{
-			MethodName: "RequestVaultAddress",
-			Handler:    _Msg_RequestVaultAddress_Handler,
+			MethodName: "Apply",
+			Handler:    _Msg_Apply_Handler,
 		},
 		{
-			MethodName: "SubmitFundingTx",
-			Handler:    _Msg_SubmitFundingTx_Handler,
+			MethodName: "Fund",
+			Handler:    _Msg_Fund_Handler,
 		},
 		{
-			MethodName: "CreateLoan",
-			Handler:    _Msg_CreateLoan_Handler,
+			MethodName: "Redeem",
+			Handler:    _Msg_Redeem_Handler,
 		},
 		{
 			MethodName: "Repay",

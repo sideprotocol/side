@@ -935,39 +935,27 @@ func (x *fastReflection_MsgRepayResponse) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgCreateLoan               protoreflect.MessageDescriptor
-	fd_MsgCreateLoan_borrower      protoreflect.FieldDescriptor
-	fd_MsgCreateLoan_vault_address protoreflect.FieldDescriptor
-	fd_MsgCreateLoan_period        protoreflect.FieldDescriptor
-	fd_MsgCreateLoan_pool_id       protoreflect.FieldDescriptor
-	fd_MsgCreateLoan_borrow_amount protoreflect.FieldDescriptor
-	fd_MsgCreateLoan_event_id      protoreflect.FieldDescriptor
-	fd_MsgCreateLoan_cets          protoreflect.FieldDescriptor
-	fd_MsgCreateLoan_loan_secret   protoreflect.FieldDescriptor
+	md_MsgRedeem             protoreflect.MessageDescriptor
+	fd_MsgRedeem_borrower    protoreflect.FieldDescriptor
+	fd_MsgRedeem_loan_secret protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgCreateLoan = File_side_lending_tx_proto.Messages().ByName("MsgCreateLoan")
-	fd_MsgCreateLoan_borrower = md_MsgCreateLoan.Fields().ByName("borrower")
-	fd_MsgCreateLoan_vault_address = md_MsgCreateLoan.Fields().ByName("vault_address")
-	fd_MsgCreateLoan_period = md_MsgCreateLoan.Fields().ByName("period")
-	fd_MsgCreateLoan_pool_id = md_MsgCreateLoan.Fields().ByName("pool_id")
-	fd_MsgCreateLoan_borrow_amount = md_MsgCreateLoan.Fields().ByName("borrow_amount")
-	fd_MsgCreateLoan_event_id = md_MsgCreateLoan.Fields().ByName("event_id")
-	fd_MsgCreateLoan_cets = md_MsgCreateLoan.Fields().ByName("cets")
-	fd_MsgCreateLoan_loan_secret = md_MsgCreateLoan.Fields().ByName("loan_secret")
+	md_MsgRedeem = File_side_lending_tx_proto.Messages().ByName("MsgRedeem")
+	fd_MsgRedeem_borrower = md_MsgRedeem.Fields().ByName("borrower")
+	fd_MsgRedeem_loan_secret = md_MsgRedeem.Fields().ByName("loan_secret")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgCreateLoan)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgRedeem)(nil)
 
-type fastReflection_MsgCreateLoan MsgCreateLoan
+type fastReflection_MsgRedeem MsgRedeem
 
-func (x *MsgCreateLoan) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCreateLoan)(x)
+func (x *MsgRedeem) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRedeem)(x)
 }
 
-func (x *MsgCreateLoan) slowProtoReflect() protoreflect.Message {
+func (x *MsgRedeem) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -979,43 +967,43 @@ func (x *MsgCreateLoan) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgCreateLoan_messageType fastReflection_MsgCreateLoan_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCreateLoan_messageType{}
+var _fastReflection_MsgRedeem_messageType fastReflection_MsgRedeem_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRedeem_messageType{}
 
-type fastReflection_MsgCreateLoan_messageType struct{}
+type fastReflection_MsgRedeem_messageType struct{}
 
-func (x fastReflection_MsgCreateLoan_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCreateLoan)(nil)
+func (x fastReflection_MsgRedeem_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRedeem)(nil)
 }
-func (x fastReflection_MsgCreateLoan_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCreateLoan)
+func (x fastReflection_MsgRedeem_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRedeem)
 }
-func (x fastReflection_MsgCreateLoan_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCreateLoan
+func (x fastReflection_MsgRedeem_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRedeem
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgCreateLoan) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCreateLoan
+func (x *fastReflection_MsgRedeem) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRedeem
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCreateLoan) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCreateLoan_messageType
+func (x *fastReflection_MsgRedeem) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRedeem_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCreateLoan) New() protoreflect.Message {
-	return new(fastReflection_MsgCreateLoan)
+func (x *fastReflection_MsgRedeem) New() protoreflect.Message {
+	return new(fastReflection_MsgRedeem)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCreateLoan) Interface() protoreflect.ProtoMessage {
-	return (*MsgCreateLoan)(x)
+func (x *fastReflection_MsgRedeem) Interface() protoreflect.ProtoMessage {
+	return (*MsgRedeem)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1023,52 +1011,16 @@ func (x *fastReflection_MsgCreateLoan) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgCreateLoan) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgRedeem) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Borrower != "" {
 		value := protoreflect.ValueOfString(x.Borrower)
-		if !f(fd_MsgCreateLoan_borrower, value) {
-			return
-		}
-	}
-	if x.VaultAddress != "" {
-		value := protoreflect.ValueOfString(x.VaultAddress)
-		if !f(fd_MsgCreateLoan_vault_address, value) {
-			return
-		}
-	}
-	if x.Period != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.Period)
-		if !f(fd_MsgCreateLoan_period, value) {
-			return
-		}
-	}
-	if x.PoolId != "" {
-		value := protoreflect.ValueOfString(x.PoolId)
-		if !f(fd_MsgCreateLoan_pool_id, value) {
-			return
-		}
-	}
-	if x.BorrowAmount != nil {
-		value := protoreflect.ValueOfMessage(x.BorrowAmount.ProtoReflect())
-		if !f(fd_MsgCreateLoan_borrow_amount, value) {
-			return
-		}
-	}
-	if x.EventId != "" {
-		value := protoreflect.ValueOfString(x.EventId)
-		if !f(fd_MsgCreateLoan_event_id, value) {
-			return
-		}
-	}
-	if x.Cets != "" {
-		value := protoreflect.ValueOfString(x.Cets)
-		if !f(fd_MsgCreateLoan_cets, value) {
+		if !f(fd_MsgRedeem_borrower, value) {
 			return
 		}
 	}
 	if x.LoanSecret != "" {
 		value := protoreflect.ValueOfString(x.LoanSecret)
-		if !f(fd_MsgCreateLoan_loan_secret, value) {
+		if !f(fd_MsgRedeem_loan_secret, value) {
 			return
 		}
 	}
@@ -1085,29 +1037,17 @@ func (x *fastReflection_MsgCreateLoan) Range(f func(protoreflect.FieldDescriptor
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCreateLoan) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgRedeem) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.MsgCreateLoan.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		return x.Borrower != ""
-	case "side.lending.MsgCreateLoan.vault_address":
-		return x.VaultAddress != ""
-	case "side.lending.MsgCreateLoan.period":
-		return x.Period != uint32(0)
-	case "side.lending.MsgCreateLoan.pool_id":
-		return x.PoolId != ""
-	case "side.lending.MsgCreateLoan.borrow_amount":
-		return x.BorrowAmount != nil
-	case "side.lending.MsgCreateLoan.event_id":
-		return x.EventId != ""
-	case "side.lending.MsgCreateLoan.cets":
-		return x.Cets != ""
-	case "side.lending.MsgCreateLoan.loan_secret":
+	case "side.lending.MsgRedeem.loan_secret":
 		return x.LoanSecret != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoan"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoan does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1117,29 +1057,17 @@ func (x *fastReflection_MsgCreateLoan) Has(fd protoreflect.FieldDescriptor) bool
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreateLoan) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgRedeem) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.MsgCreateLoan.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		x.Borrower = ""
-	case "side.lending.MsgCreateLoan.vault_address":
-		x.VaultAddress = ""
-	case "side.lending.MsgCreateLoan.period":
-		x.Period = uint32(0)
-	case "side.lending.MsgCreateLoan.pool_id":
-		x.PoolId = ""
-	case "side.lending.MsgCreateLoan.borrow_amount":
-		x.BorrowAmount = nil
-	case "side.lending.MsgCreateLoan.event_id":
-		x.EventId = ""
-	case "side.lending.MsgCreateLoan.cets":
-		x.Cets = ""
-	case "side.lending.MsgCreateLoan.loan_secret":
+	case "side.lending.MsgRedeem.loan_secret":
 		x.LoanSecret = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoan"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoan does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1149,37 +1077,19 @@ func (x *fastReflection_MsgCreateLoan) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCreateLoan) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeem) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.MsgCreateLoan.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		value := x.Borrower
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgCreateLoan.vault_address":
-		value := x.VaultAddress
-		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgCreateLoan.period":
-		value := x.Period
-		return protoreflect.ValueOfUint32(value)
-	case "side.lending.MsgCreateLoan.pool_id":
-		value := x.PoolId
-		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgCreateLoan.borrow_amount":
-		value := x.BorrowAmount
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.lending.MsgCreateLoan.event_id":
-		value := x.EventId
-		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgCreateLoan.cets":
-		value := x.Cets
-		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgCreateLoan.loan_secret":
+	case "side.lending.MsgRedeem.loan_secret":
 		value := x.LoanSecret
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoan"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoan does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1193,29 +1103,17 @@ func (x *fastReflection_MsgCreateLoan) Get(descriptor protoreflect.FieldDescript
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreateLoan) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgRedeem) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.MsgCreateLoan.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		x.Borrower = value.Interface().(string)
-	case "side.lending.MsgCreateLoan.vault_address":
-		x.VaultAddress = value.Interface().(string)
-	case "side.lending.MsgCreateLoan.period":
-		x.Period = uint32(value.Uint())
-	case "side.lending.MsgCreateLoan.pool_id":
-		x.PoolId = value.Interface().(string)
-	case "side.lending.MsgCreateLoan.borrow_amount":
-		x.BorrowAmount = value.Message().Interface().(*v1beta1.Coin)
-	case "side.lending.MsgCreateLoan.event_id":
-		x.EventId = value.Interface().(string)
-	case "side.lending.MsgCreateLoan.cets":
-		x.Cets = value.Interface().(string)
-	case "side.lending.MsgCreateLoan.loan_secret":
+	case "side.lending.MsgRedeem.loan_secret":
 		x.LoanSecret = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoan"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoan does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1229,72 +1127,44 @@ func (x *fastReflection_MsgCreateLoan) Set(fd protoreflect.FieldDescriptor, valu
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreateLoan) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeem) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgCreateLoan.borrow_amount":
-		if x.BorrowAmount == nil {
-			x.BorrowAmount = new(v1beta1.Coin)
-		}
-		return protoreflect.ValueOfMessage(x.BorrowAmount.ProtoReflect())
-	case "side.lending.MsgCreateLoan.borrower":
-		panic(fmt.Errorf("field borrower of message side.lending.MsgCreateLoan is not mutable"))
-	case "side.lending.MsgCreateLoan.vault_address":
-		panic(fmt.Errorf("field vault_address of message side.lending.MsgCreateLoan is not mutable"))
-	case "side.lending.MsgCreateLoan.period":
-		panic(fmt.Errorf("field period of message side.lending.MsgCreateLoan is not mutable"))
-	case "side.lending.MsgCreateLoan.pool_id":
-		panic(fmt.Errorf("field pool_id of message side.lending.MsgCreateLoan is not mutable"))
-	case "side.lending.MsgCreateLoan.event_id":
-		panic(fmt.Errorf("field event_id of message side.lending.MsgCreateLoan is not mutable"))
-	case "side.lending.MsgCreateLoan.cets":
-		panic(fmt.Errorf("field cets of message side.lending.MsgCreateLoan is not mutable"))
-	case "side.lending.MsgCreateLoan.loan_secret":
-		panic(fmt.Errorf("field loan_secret of message side.lending.MsgCreateLoan is not mutable"))
+	case "side.lending.MsgRedeem.borrower":
+		panic(fmt.Errorf("field borrower of message side.lending.MsgRedeem is not mutable"))
+	case "side.lending.MsgRedeem.loan_secret":
+		panic(fmt.Errorf("field loan_secret of message side.lending.MsgRedeem is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoan"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoan does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCreateLoan) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeem) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgCreateLoan.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgCreateLoan.vault_address":
-		return protoreflect.ValueOfString("")
-	case "side.lending.MsgCreateLoan.period":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "side.lending.MsgCreateLoan.pool_id":
-		return protoreflect.ValueOfString("")
-	case "side.lending.MsgCreateLoan.borrow_amount":
-		m := new(v1beta1.Coin)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.lending.MsgCreateLoan.event_id":
-		return protoreflect.ValueOfString("")
-	case "side.lending.MsgCreateLoan.cets":
-		return protoreflect.ValueOfString("")
-	case "side.lending.MsgCreateLoan.loan_secret":
+	case "side.lending.MsgRedeem.loan_secret":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoan"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoan does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCreateLoan) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgRedeem) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgCreateLoan", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgRedeem", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1302,7 +1172,7 @@ func (x *fastReflection_MsgCreateLoan) WhichOneof(d protoreflect.OneofDescriptor
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCreateLoan) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgRedeem) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1313,7 +1183,7 @@ func (x *fastReflection_MsgCreateLoan) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreateLoan) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgRedeem) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1325,7 +1195,7 @@ func (x *fastReflection_MsgCreateLoan) SetUnknown(fields protoreflect.RawFields)
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCreateLoan) IsValid() bool {
+func (x *fastReflection_MsgRedeem) IsValid() bool {
 	return x != nil
 }
 
@@ -1335,9 +1205,9 @@ func (x *fastReflection_MsgCreateLoan) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCreateLoan) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgRedeem) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCreateLoan)
+		x := input.Message.Interface().(*MsgRedeem)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1350,29 +1220,6 @@ func (x *fastReflection_MsgCreateLoan) ProtoMethods() *protoiface.Methods {
 		var l int
 		_ = l
 		l = len(x.Borrower)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.VaultAddress)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Period != 0 {
-			n += 1 + runtime.Sov(uint64(x.Period))
-		}
-		l = len(x.PoolId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.BorrowAmount != nil {
-			l = options.Size(x.BorrowAmount)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.EventId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.Cets)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -1390,7 +1237,7 @@ func (x *fastReflection_MsgCreateLoan) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCreateLoan)
+		x := input.Message.Interface().(*MsgRedeem)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1416,53 +1263,6 @@ func (x *fastReflection_MsgCreateLoan) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x42
 		}
-		if len(x.Cets) > 0 {
-			i -= len(x.Cets)
-			copy(dAtA[i:], x.Cets)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Cets)))
-			i--
-			dAtA[i] = 0x3a
-		}
-		if len(x.EventId) > 0 {
-			i -= len(x.EventId)
-			copy(dAtA[i:], x.EventId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.EventId)))
-			i--
-			dAtA[i] = 0x32
-		}
-		if x.BorrowAmount != nil {
-			encoded, err := options.Marshal(x.BorrowAmount)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x2a
-		}
-		if len(x.PoolId) > 0 {
-			i -= len(x.PoolId)
-			copy(dAtA[i:], x.PoolId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PoolId)))
-			i--
-			dAtA[i] = 0x22
-		}
-		if x.Period != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Period))
-			i--
-			dAtA[i] = 0x18
-		}
-		if len(x.VaultAddress) > 0 {
-			i -= len(x.VaultAddress)
-			copy(dAtA[i:], x.VaultAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.VaultAddress)))
-			i--
-			dAtA[i] = 0x12
-		}
 		if len(x.Borrower) > 0 {
 			i -= len(x.Borrower)
 			copy(dAtA[i:], x.Borrower)
@@ -1481,7 +1281,7 @@ func (x *fastReflection_MsgCreateLoan) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCreateLoan)
+		x := input.Message.Interface().(*MsgRedeem)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1513,10 +1313,10 @@ func (x *fastReflection_MsgCreateLoan) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateLoan: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRedeem: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateLoan: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRedeem: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1550,189 +1350,6 @@ func (x *fastReflection_MsgCreateLoan) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.Borrower = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VaultAddress", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.VaultAddress = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 3:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
-				}
-				x.Period = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Period |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 4:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.PoolId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 5:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BorrowAmount", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.BorrowAmount == nil {
-					x.BorrowAmount = &v1beta1.Coin{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.BorrowAmount); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 6:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EventId", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.EventId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 7:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Cets", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Cets = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 8:
 				if wireType != 2 {
@@ -1802,23 +1419,23 @@ func (x *fastReflection_MsgCreateLoan) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgCreateLoanResponse protoreflect.MessageDescriptor
+	md_MsgRedeemResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgCreateLoanResponse = File_side_lending_tx_proto.Messages().ByName("MsgCreateLoanResponse")
+	md_MsgRedeemResponse = File_side_lending_tx_proto.Messages().ByName("MsgRedeemResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgCreateLoanResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgRedeemResponse)(nil)
 
-type fastReflection_MsgCreateLoanResponse MsgCreateLoanResponse
+type fastReflection_MsgRedeemResponse MsgRedeemResponse
 
-func (x *MsgCreateLoanResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCreateLoanResponse)(x)
+func (x *MsgRedeemResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRedeemResponse)(x)
 }
 
-func (x *MsgCreateLoanResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgRedeemResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1830,43 +1447,43 @@ func (x *MsgCreateLoanResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgCreateLoanResponse_messageType fastReflection_MsgCreateLoanResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCreateLoanResponse_messageType{}
+var _fastReflection_MsgRedeemResponse_messageType fastReflection_MsgRedeemResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRedeemResponse_messageType{}
 
-type fastReflection_MsgCreateLoanResponse_messageType struct{}
+type fastReflection_MsgRedeemResponse_messageType struct{}
 
-func (x fastReflection_MsgCreateLoanResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCreateLoanResponse)(nil)
+func (x fastReflection_MsgRedeemResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRedeemResponse)(nil)
 }
-func (x fastReflection_MsgCreateLoanResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCreateLoanResponse)
+func (x fastReflection_MsgRedeemResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRedeemResponse)
 }
-func (x fastReflection_MsgCreateLoanResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCreateLoanResponse
+func (x fastReflection_MsgRedeemResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRedeemResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgCreateLoanResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCreateLoanResponse
+func (x *fastReflection_MsgRedeemResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRedeemResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCreateLoanResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCreateLoanResponse_messageType
+func (x *fastReflection_MsgRedeemResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRedeemResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCreateLoanResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgCreateLoanResponse)
+func (x *fastReflection_MsgRedeemResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgRedeemResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCreateLoanResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgCreateLoanResponse)(x)
+func (x *fastReflection_MsgRedeemResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgRedeemResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1874,7 +1491,7 @@ func (x *fastReflection_MsgCreateLoanResponse) Interface() protoreflect.ProtoMes
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgCreateLoanResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgRedeemResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -1888,13 +1505,13 @@ func (x *fastReflection_MsgCreateLoanResponse) Range(f func(protoreflect.FieldDe
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCreateLoanResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgRedeemResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoanResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoanResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1904,13 +1521,13 @@ func (x *fastReflection_MsgCreateLoanResponse) Has(fd protoreflect.FieldDescript
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreateLoanResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgRedeemResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoanResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoanResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1920,13 +1537,13 @@ func (x *fastReflection_MsgCreateLoanResponse) Clear(fd protoreflect.FieldDescri
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCreateLoanResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeemResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoanResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoanResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1940,13 +1557,13 @@ func (x *fastReflection_MsgCreateLoanResponse) Get(descriptor protoreflect.Field
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreateLoanResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgRedeemResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoanResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoanResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1960,36 +1577,36 @@ func (x *fastReflection_MsgCreateLoanResponse) Set(fd protoreflect.FieldDescript
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreateLoanResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeemResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoanResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoanResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCreateLoanResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeemResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCreateLoanResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCreateLoanResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCreateLoanResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgRedeemResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgCreateLoanResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgRedeemResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1997,7 +1614,7 @@ func (x *fastReflection_MsgCreateLoanResponse) WhichOneof(d protoreflect.OneofDe
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCreateLoanResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgRedeemResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2008,7 +1625,7 @@ func (x *fastReflection_MsgCreateLoanResponse) GetUnknown() protoreflect.RawFiel
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreateLoanResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgRedeemResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2020,7 +1637,7 @@ func (x *fastReflection_MsgCreateLoanResponse) SetUnknown(fields protoreflect.Ra
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCreateLoanResponse) IsValid() bool {
+func (x *fastReflection_MsgRedeemResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -2030,9 +1647,9 @@ func (x *fastReflection_MsgCreateLoanResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCreateLoanResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgRedeemResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCreateLoanResponse)
+		x := input.Message.Interface().(*MsgRedeemResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2054,7 +1671,7 @@ func (x *fastReflection_MsgCreateLoanResponse) ProtoMethods() *protoiface.Method
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCreateLoanResponse)
+		x := input.Message.Interface().(*MsgRedeemResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2084,7 +1701,7 @@ func (x *fastReflection_MsgCreateLoanResponse) ProtoMethods() *protoiface.Method
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCreateLoanResponse)
+		x := input.Message.Interface().(*MsgRedeemResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2116,10 +1733,10 @@ func (x *fastReflection_MsgCreateLoanResponse) ProtoMethods() *protoiface.Method
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateLoanResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRedeemResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateLoanResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRedeemResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -4090,33 +3707,41 @@ func (x *fastReflection_MsgRemoveLiquidityResponse) ProtoMethods() *protoiface.M
 }
 
 var (
-	md_MsgRequestVaultAddress                     protoreflect.MessageDescriptor
-	fd_MsgRequestVaultAddress_borrower            protoreflect.FieldDescriptor
-	fd_MsgRequestVaultAddress_borrower_pubkey     protoreflect.FieldDescriptor
-	fd_MsgRequestVaultAddress_hash_of_loan_secret protoreflect.FieldDescriptor
-	fd_MsgRequestVaultAddress_maturity_time       protoreflect.FieldDescriptor
-	fd_MsgRequestVaultAddress_final_timeout       protoreflect.FieldDescriptor
+	md_MsgApply                     protoreflect.MessageDescriptor
+	fd_MsgApply_borrower            protoreflect.FieldDescriptor
+	fd_MsgApply_borrower_pubkey     protoreflect.FieldDescriptor
+	fd_MsgApply_hash_of_loan_secret protoreflect.FieldDescriptor
+	fd_MsgApply_maturity_time       protoreflect.FieldDescriptor
+	fd_MsgApply_final_timeout       protoreflect.FieldDescriptor
+	fd_MsgApply_pool_id             protoreflect.FieldDescriptor
+	fd_MsgApply_borrow_amount       protoreflect.FieldDescriptor
+	fd_MsgApply_event_id            protoreflect.FieldDescriptor
+	fd_MsgApply_cets                protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgRequestVaultAddress = File_side_lending_tx_proto.Messages().ByName("MsgRequestVaultAddress")
-	fd_MsgRequestVaultAddress_borrower = md_MsgRequestVaultAddress.Fields().ByName("borrower")
-	fd_MsgRequestVaultAddress_borrower_pubkey = md_MsgRequestVaultAddress.Fields().ByName("borrower_pubkey")
-	fd_MsgRequestVaultAddress_hash_of_loan_secret = md_MsgRequestVaultAddress.Fields().ByName("hash_of_loan_secret")
-	fd_MsgRequestVaultAddress_maturity_time = md_MsgRequestVaultAddress.Fields().ByName("maturity_time")
-	fd_MsgRequestVaultAddress_final_timeout = md_MsgRequestVaultAddress.Fields().ByName("final_timeout")
+	md_MsgApply = File_side_lending_tx_proto.Messages().ByName("MsgApply")
+	fd_MsgApply_borrower = md_MsgApply.Fields().ByName("borrower")
+	fd_MsgApply_borrower_pubkey = md_MsgApply.Fields().ByName("borrower_pubkey")
+	fd_MsgApply_hash_of_loan_secret = md_MsgApply.Fields().ByName("hash_of_loan_secret")
+	fd_MsgApply_maturity_time = md_MsgApply.Fields().ByName("maturity_time")
+	fd_MsgApply_final_timeout = md_MsgApply.Fields().ByName("final_timeout")
+	fd_MsgApply_pool_id = md_MsgApply.Fields().ByName("pool_id")
+	fd_MsgApply_borrow_amount = md_MsgApply.Fields().ByName("borrow_amount")
+	fd_MsgApply_event_id = md_MsgApply.Fields().ByName("event_id")
+	fd_MsgApply_cets = md_MsgApply.Fields().ByName("cets")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgRequestVaultAddress)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgApply)(nil)
 
-type fastReflection_MsgRequestVaultAddress MsgRequestVaultAddress
+type fastReflection_MsgApply MsgApply
 
-func (x *MsgRequestVaultAddress) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgRequestVaultAddress)(x)
+func (x *MsgApply) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgApply)(x)
 }
 
-func (x *MsgRequestVaultAddress) slowProtoReflect() protoreflect.Message {
+func (x *MsgApply) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4128,43 +3753,43 @@ func (x *MsgRequestVaultAddress) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgRequestVaultAddress_messageType fastReflection_MsgRequestVaultAddress_messageType
-var _ protoreflect.MessageType = fastReflection_MsgRequestVaultAddress_messageType{}
+var _fastReflection_MsgApply_messageType fastReflection_MsgApply_messageType
+var _ protoreflect.MessageType = fastReflection_MsgApply_messageType{}
 
-type fastReflection_MsgRequestVaultAddress_messageType struct{}
+type fastReflection_MsgApply_messageType struct{}
 
-func (x fastReflection_MsgRequestVaultAddress_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgRequestVaultAddress)(nil)
+func (x fastReflection_MsgApply_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgApply)(nil)
 }
-func (x fastReflection_MsgRequestVaultAddress_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgRequestVaultAddress)
+func (x fastReflection_MsgApply_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgApply)
 }
-func (x fastReflection_MsgRequestVaultAddress_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgRequestVaultAddress
+func (x fastReflection_MsgApply_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgApply
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgRequestVaultAddress) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgRequestVaultAddress
+func (x *fastReflection_MsgApply) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgApply
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgRequestVaultAddress) Type() protoreflect.MessageType {
-	return _fastReflection_MsgRequestVaultAddress_messageType
+func (x *fastReflection_MsgApply) Type() protoreflect.MessageType {
+	return _fastReflection_MsgApply_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgRequestVaultAddress) New() protoreflect.Message {
-	return new(fastReflection_MsgRequestVaultAddress)
+func (x *fastReflection_MsgApply) New() protoreflect.Message {
+	return new(fastReflection_MsgApply)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgRequestVaultAddress) Interface() protoreflect.ProtoMessage {
-	return (*MsgRequestVaultAddress)(x)
+func (x *fastReflection_MsgApply) Interface() protoreflect.ProtoMessage {
+	return (*MsgApply)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -4172,34 +3797,58 @@ func (x *fastReflection_MsgRequestVaultAddress) Interface() protoreflect.ProtoMe
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgRequestVaultAddress) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgApply) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Borrower != "" {
 		value := protoreflect.ValueOfString(x.Borrower)
-		if !f(fd_MsgRequestVaultAddress_borrower, value) {
+		if !f(fd_MsgApply_borrower, value) {
 			return
 		}
 	}
 	if x.BorrowerPubkey != "" {
 		value := protoreflect.ValueOfString(x.BorrowerPubkey)
-		if !f(fd_MsgRequestVaultAddress_borrower_pubkey, value) {
+		if !f(fd_MsgApply_borrower_pubkey, value) {
 			return
 		}
 	}
 	if x.HashOfLoanSecret != "" {
 		value := protoreflect.ValueOfString(x.HashOfLoanSecret)
-		if !f(fd_MsgRequestVaultAddress_hash_of_loan_secret, value) {
+		if !f(fd_MsgApply_hash_of_loan_secret, value) {
 			return
 		}
 	}
 	if x.MaturityTime != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.MaturityTime)
-		if !f(fd_MsgRequestVaultAddress_maturity_time, value) {
+		if !f(fd_MsgApply_maturity_time, value) {
 			return
 		}
 	}
 	if x.FinalTimeout != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.FinalTimeout)
-		if !f(fd_MsgRequestVaultAddress_final_timeout, value) {
+		if !f(fd_MsgApply_final_timeout, value) {
+			return
+		}
+	}
+	if x.PoolId != "" {
+		value := protoreflect.ValueOfString(x.PoolId)
+		if !f(fd_MsgApply_pool_id, value) {
+			return
+		}
+	}
+	if x.BorrowAmount != nil {
+		value := protoreflect.ValueOfMessage(x.BorrowAmount.ProtoReflect())
+		if !f(fd_MsgApply_borrow_amount, value) {
+			return
+		}
+	}
+	if x.EventId != "" {
+		value := protoreflect.ValueOfString(x.EventId)
+		if !f(fd_MsgApply_event_id, value) {
+			return
+		}
+	}
+	if x.Cets != "" {
+		value := protoreflect.ValueOfString(x.Cets)
+		if !f(fd_MsgApply_cets, value) {
 			return
 		}
 	}
@@ -4216,23 +3865,31 @@ func (x *fastReflection_MsgRequestVaultAddress) Range(f func(protoreflect.FieldD
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgRequestVaultAddress) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgApply) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddress.borrower":
+	case "side.lending.MsgApply.borrower":
 		return x.Borrower != ""
-	case "side.lending.MsgRequestVaultAddress.borrower_pubkey":
+	case "side.lending.MsgApply.borrower_pubkey":
 		return x.BorrowerPubkey != ""
-	case "side.lending.MsgRequestVaultAddress.hash_of_loan_secret":
+	case "side.lending.MsgApply.hash_of_loan_secret":
 		return x.HashOfLoanSecret != ""
-	case "side.lending.MsgRequestVaultAddress.maturity_time":
+	case "side.lending.MsgApply.maturity_time":
 		return x.MaturityTime != uint64(0)
-	case "side.lending.MsgRequestVaultAddress.final_timeout":
+	case "side.lending.MsgApply.final_timeout":
 		return x.FinalTimeout != uint64(0)
+	case "side.lending.MsgApply.pool_id":
+		return x.PoolId != ""
+	case "side.lending.MsgApply.borrow_amount":
+		return x.BorrowAmount != nil
+	case "side.lending.MsgApply.event_id":
+		return x.EventId != ""
+	case "side.lending.MsgApply.cets":
+		return x.Cets != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddress"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddress does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApply does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4242,23 +3899,31 @@ func (x *fastReflection_MsgRequestVaultAddress) Has(fd protoreflect.FieldDescrip
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRequestVaultAddress) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgApply) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddress.borrower":
+	case "side.lending.MsgApply.borrower":
 		x.Borrower = ""
-	case "side.lending.MsgRequestVaultAddress.borrower_pubkey":
+	case "side.lending.MsgApply.borrower_pubkey":
 		x.BorrowerPubkey = ""
-	case "side.lending.MsgRequestVaultAddress.hash_of_loan_secret":
+	case "side.lending.MsgApply.hash_of_loan_secret":
 		x.HashOfLoanSecret = ""
-	case "side.lending.MsgRequestVaultAddress.maturity_time":
+	case "side.lending.MsgApply.maturity_time":
 		x.MaturityTime = uint64(0)
-	case "side.lending.MsgRequestVaultAddress.final_timeout":
+	case "side.lending.MsgApply.final_timeout":
 		x.FinalTimeout = uint64(0)
+	case "side.lending.MsgApply.pool_id":
+		x.PoolId = ""
+	case "side.lending.MsgApply.borrow_amount":
+		x.BorrowAmount = nil
+	case "side.lending.MsgApply.event_id":
+		x.EventId = ""
+	case "side.lending.MsgApply.cets":
+		x.Cets = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddress"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddress does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApply does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4268,28 +3933,40 @@ func (x *fastReflection_MsgRequestVaultAddress) Clear(fd protoreflect.FieldDescr
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgRequestVaultAddress) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgApply) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.MsgRequestVaultAddress.borrower":
+	case "side.lending.MsgApply.borrower":
 		value := x.Borrower
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgRequestVaultAddress.borrower_pubkey":
+	case "side.lending.MsgApply.borrower_pubkey":
 		value := x.BorrowerPubkey
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgRequestVaultAddress.hash_of_loan_secret":
+	case "side.lending.MsgApply.hash_of_loan_secret":
 		value := x.HashOfLoanSecret
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgRequestVaultAddress.maturity_time":
+	case "side.lending.MsgApply.maturity_time":
 		value := x.MaturityTime
 		return protoreflect.ValueOfUint64(value)
-	case "side.lending.MsgRequestVaultAddress.final_timeout":
+	case "side.lending.MsgApply.final_timeout":
 		value := x.FinalTimeout
 		return protoreflect.ValueOfUint64(value)
+	case "side.lending.MsgApply.pool_id":
+		value := x.PoolId
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgApply.borrow_amount":
+		value := x.BorrowAmount
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.lending.MsgApply.event_id":
+		value := x.EventId
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgApply.cets":
+		value := x.Cets
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddress"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddress does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApply does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -4303,23 +3980,31 @@ func (x *fastReflection_MsgRequestVaultAddress) Get(descriptor protoreflect.Fiel
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRequestVaultAddress) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgApply) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddress.borrower":
+	case "side.lending.MsgApply.borrower":
 		x.Borrower = value.Interface().(string)
-	case "side.lending.MsgRequestVaultAddress.borrower_pubkey":
+	case "side.lending.MsgApply.borrower_pubkey":
 		x.BorrowerPubkey = value.Interface().(string)
-	case "side.lending.MsgRequestVaultAddress.hash_of_loan_secret":
+	case "side.lending.MsgApply.hash_of_loan_secret":
 		x.HashOfLoanSecret = value.Interface().(string)
-	case "side.lending.MsgRequestVaultAddress.maturity_time":
+	case "side.lending.MsgApply.maturity_time":
 		x.MaturityTime = value.Uint()
-	case "side.lending.MsgRequestVaultAddress.final_timeout":
+	case "side.lending.MsgApply.final_timeout":
 		x.FinalTimeout = value.Uint()
+	case "side.lending.MsgApply.pool_id":
+		x.PoolId = value.Interface().(string)
+	case "side.lending.MsgApply.borrow_amount":
+		x.BorrowAmount = value.Message().Interface().(*v1beta1.Coin)
+	case "side.lending.MsgApply.event_id":
+		x.EventId = value.Interface().(string)
+	case "side.lending.MsgApply.cets":
+		x.Cets = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddress"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddress does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApply does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4333,56 +4018,76 @@ func (x *fastReflection_MsgRequestVaultAddress) Set(fd protoreflect.FieldDescrip
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRequestVaultAddress) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgApply) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddress.borrower":
-		panic(fmt.Errorf("field borrower of message side.lending.MsgRequestVaultAddress is not mutable"))
-	case "side.lending.MsgRequestVaultAddress.borrower_pubkey":
-		panic(fmt.Errorf("field borrower_pubkey of message side.lending.MsgRequestVaultAddress is not mutable"))
-	case "side.lending.MsgRequestVaultAddress.hash_of_loan_secret":
-		panic(fmt.Errorf("field hash_of_loan_secret of message side.lending.MsgRequestVaultAddress is not mutable"))
-	case "side.lending.MsgRequestVaultAddress.maturity_time":
-		panic(fmt.Errorf("field maturity_time of message side.lending.MsgRequestVaultAddress is not mutable"))
-	case "side.lending.MsgRequestVaultAddress.final_timeout":
-		panic(fmt.Errorf("field final_timeout of message side.lending.MsgRequestVaultAddress is not mutable"))
+	case "side.lending.MsgApply.borrow_amount":
+		if x.BorrowAmount == nil {
+			x.BorrowAmount = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.BorrowAmount.ProtoReflect())
+	case "side.lending.MsgApply.borrower":
+		panic(fmt.Errorf("field borrower of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.borrower_pubkey":
+		panic(fmt.Errorf("field borrower_pubkey of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.hash_of_loan_secret":
+		panic(fmt.Errorf("field hash_of_loan_secret of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.maturity_time":
+		panic(fmt.Errorf("field maturity_time of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.final_timeout":
+		panic(fmt.Errorf("field final_timeout of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.pool_id":
+		panic(fmt.Errorf("field pool_id of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.event_id":
+		panic(fmt.Errorf("field event_id of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.cets":
+		panic(fmt.Errorf("field cets of message side.lending.MsgApply is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddress"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddress does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApply does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgRequestVaultAddress) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgApply) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddress.borrower":
+	case "side.lending.MsgApply.borrower":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgRequestVaultAddress.borrower_pubkey":
+	case "side.lending.MsgApply.borrower_pubkey":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgRequestVaultAddress.hash_of_loan_secret":
+	case "side.lending.MsgApply.hash_of_loan_secret":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgRequestVaultAddress.maturity_time":
+	case "side.lending.MsgApply.maturity_time":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "side.lending.MsgRequestVaultAddress.final_timeout":
+	case "side.lending.MsgApply.final_timeout":
 		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.lending.MsgApply.pool_id":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgApply.borrow_amount":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.lending.MsgApply.event_id":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgApply.cets":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddress"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddress does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApply does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgRequestVaultAddress) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgApply) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgRequestVaultAddress", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgApply", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -4390,7 +4095,7 @@ func (x *fastReflection_MsgRequestVaultAddress) WhichOneof(d protoreflect.OneofD
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgRequestVaultAddress) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgApply) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -4401,7 +4106,7 @@ func (x *fastReflection_MsgRequestVaultAddress) GetUnknown() protoreflect.RawFie
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRequestVaultAddress) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgApply) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -4413,7 +4118,7 @@ func (x *fastReflection_MsgRequestVaultAddress) SetUnknown(fields protoreflect.R
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgRequestVaultAddress) IsValid() bool {
+func (x *fastReflection_MsgApply) IsValid() bool {
 	return x != nil
 }
 
@@ -4423,9 +4128,9 @@ func (x *fastReflection_MsgRequestVaultAddress) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgRequestVaultAddress) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgRequestVaultAddress)
+		x := input.Message.Interface().(*MsgApply)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4455,6 +4160,22 @@ func (x *fastReflection_MsgRequestVaultAddress) ProtoMethods() *protoiface.Metho
 		if x.FinalTimeout != 0 {
 			n += 1 + runtime.Sov(uint64(x.FinalTimeout))
 		}
+		l = len(x.PoolId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.BorrowAmount != nil {
+			l = options.Size(x.BorrowAmount)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.EventId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Cets)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -4465,7 +4186,7 @@ func (x *fastReflection_MsgRequestVaultAddress) ProtoMethods() *protoiface.Metho
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgRequestVaultAddress)
+		x := input.Message.Interface().(*MsgApply)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4483,6 +4204,41 @@ func (x *fastReflection_MsgRequestVaultAddress) ProtoMethods() *protoiface.Metho
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Cets) > 0 {
+			i -= len(x.Cets)
+			copy(dAtA[i:], x.Cets)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Cets)))
+			i--
+			dAtA[i] = 0x4a
+		}
+		if len(x.EventId) > 0 {
+			i -= len(x.EventId)
+			copy(dAtA[i:], x.EventId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.EventId)))
+			i--
+			dAtA[i] = 0x42
+		}
+		if x.BorrowAmount != nil {
+			encoded, err := options.Marshal(x.BorrowAmount)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x3a
+		}
+		if len(x.PoolId) > 0 {
+			i -= len(x.PoolId)
+			copy(dAtA[i:], x.PoolId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PoolId)))
+			i--
+			dAtA[i] = 0x32
 		}
 		if x.FinalTimeout != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.FinalTimeout))
@@ -4526,7 +4282,7 @@ func (x *fastReflection_MsgRequestVaultAddress) ProtoMethods() *protoiface.Metho
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgRequestVaultAddress)
+		x := input.Message.Interface().(*MsgApply)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4558,10 +4314,10 @@ func (x *fastReflection_MsgRequestVaultAddress) ProtoMethods() *protoiface.Metho
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRequestVaultAddress: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgApply: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRequestVaultAddress: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgApply: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -4698,6 +4454,138 @@ func (x *fastReflection_MsgRequestVaultAddress) ProtoMethods() *protoiface.Metho
 						break
 					}
 				}
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.PoolId = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BorrowAmount", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.BorrowAmount == nil {
+					x.BorrowAmount = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.BorrowAmount); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 8:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EventId", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.EventId = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 9:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Cets", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Cets = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -4734,25 +4622,25 @@ func (x *fastReflection_MsgRequestVaultAddress) ProtoMethods() *protoiface.Metho
 }
 
 var (
-	md_MsgRequestVaultAddressResponse               protoreflect.MessageDescriptor
-	fd_MsgRequestVaultAddressResponse_vault_address protoreflect.FieldDescriptor
+	md_MsgApplyResponse               protoreflect.MessageDescriptor
+	fd_MsgApplyResponse_vault_address protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgRequestVaultAddressResponse = File_side_lending_tx_proto.Messages().ByName("MsgRequestVaultAddressResponse")
-	fd_MsgRequestVaultAddressResponse_vault_address = md_MsgRequestVaultAddressResponse.Fields().ByName("vault_address")
+	md_MsgApplyResponse = File_side_lending_tx_proto.Messages().ByName("MsgApplyResponse")
+	fd_MsgApplyResponse_vault_address = md_MsgApplyResponse.Fields().ByName("vault_address")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgRequestVaultAddressResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgApplyResponse)(nil)
 
-type fastReflection_MsgRequestVaultAddressResponse MsgRequestVaultAddressResponse
+type fastReflection_MsgApplyResponse MsgApplyResponse
 
-func (x *MsgRequestVaultAddressResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgRequestVaultAddressResponse)(x)
+func (x *MsgApplyResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgApplyResponse)(x)
 }
 
-func (x *MsgRequestVaultAddressResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgApplyResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4764,43 +4652,43 @@ func (x *MsgRequestVaultAddressResponse) slowProtoReflect() protoreflect.Message
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgRequestVaultAddressResponse_messageType fastReflection_MsgRequestVaultAddressResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgRequestVaultAddressResponse_messageType{}
+var _fastReflection_MsgApplyResponse_messageType fastReflection_MsgApplyResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgApplyResponse_messageType{}
 
-type fastReflection_MsgRequestVaultAddressResponse_messageType struct{}
+type fastReflection_MsgApplyResponse_messageType struct{}
 
-func (x fastReflection_MsgRequestVaultAddressResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgRequestVaultAddressResponse)(nil)
+func (x fastReflection_MsgApplyResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgApplyResponse)(nil)
 }
-func (x fastReflection_MsgRequestVaultAddressResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgRequestVaultAddressResponse)
+func (x fastReflection_MsgApplyResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgApplyResponse)
 }
-func (x fastReflection_MsgRequestVaultAddressResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgRequestVaultAddressResponse
+func (x fastReflection_MsgApplyResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgApplyResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgRequestVaultAddressResponse
+func (x *fastReflection_MsgApplyResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgApplyResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgRequestVaultAddressResponse_messageType
+func (x *fastReflection_MsgApplyResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgApplyResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgRequestVaultAddressResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgRequestVaultAddressResponse)
+func (x *fastReflection_MsgApplyResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgApplyResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgRequestVaultAddressResponse)(x)
+func (x *fastReflection_MsgApplyResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgApplyResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -4808,10 +4696,10 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) Interface() protoreflect
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgApplyResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.VaultAddress != "" {
 		value := protoreflect.ValueOfString(x.VaultAddress)
-		if !f(fd_MsgRequestVaultAddressResponse_vault_address, value) {
+		if !f(fd_MsgApplyResponse_vault_address, value) {
 			return
 		}
 	}
@@ -4828,15 +4716,15 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) Range(f func(protoreflec
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgApplyResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddressResponse.vault_address":
+	case "side.lending.MsgApplyResponse.vault_address":
 		return x.VaultAddress != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApplyResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApplyResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4846,15 +4734,15 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) Has(fd protoreflect.Fiel
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgApplyResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddressResponse.vault_address":
+	case "side.lending.MsgApplyResponse.vault_address":
 		x.VaultAddress = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApplyResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApplyResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4864,16 +4752,16 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) Clear(fd protoreflect.Fi
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgApplyResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.MsgRequestVaultAddressResponse.vault_address":
+	case "side.lending.MsgApplyResponse.vault_address":
 		value := x.VaultAddress
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApplyResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddressResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApplyResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -4887,15 +4775,15 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) Get(descriptor protorefl
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgApplyResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddressResponse.vault_address":
+	case "side.lending.MsgApplyResponse.vault_address":
 		x.VaultAddress = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApplyResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApplyResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4909,40 +4797,40 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) Set(fd protoreflect.Fiel
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRequestVaultAddressResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgApplyResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddressResponse.vault_address":
-		panic(fmt.Errorf("field vault_address of message side.lending.MsgRequestVaultAddressResponse is not mutable"))
+	case "side.lending.MsgApplyResponse.vault_address":
+		panic(fmt.Errorf("field vault_address of message side.lending.MsgApplyResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApplyResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApplyResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgRequestVaultAddressResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgApplyResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgRequestVaultAddressResponse.vault_address":
+	case "side.lending.MsgApplyResponse.vault_address":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRequestVaultAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApplyResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgRequestVaultAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgApplyResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgRequestVaultAddressResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgApplyResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgRequestVaultAddressResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgApplyResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -4950,7 +4838,7 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) WhichOneof(d protoreflec
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgRequestVaultAddressResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgApplyResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -4961,7 +4849,7 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) GetUnknown() protoreflec
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRequestVaultAddressResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgApplyResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -4973,7 +4861,7 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) SetUnknown(fields protor
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgRequestVaultAddressResponse) IsValid() bool {
+func (x *fastReflection_MsgApplyResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -4983,9 +4871,9 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgRequestVaultAddressResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgApplyResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgRequestVaultAddressResponse)
+		x := input.Message.Interface().(*MsgApplyResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5011,7 +4899,7 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) ProtoMethods() *protoifa
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgRequestVaultAddressResponse)
+		x := input.Message.Interface().(*MsgApplyResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5048,7 +4936,7 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) ProtoMethods() *protoifa
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgRequestVaultAddressResponse)
+		x := input.Message.Interface().(*MsgApplyResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5080,10 +4968,10 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) ProtoMethods() *protoifa
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRequestVaultAddressResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgApplyResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRequestVaultAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgApplyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -5154,33 +5042,31 @@ func (x *fastReflection_MsgRequestVaultAddressResponse) ProtoMethods() *protoifa
 }
 
 var (
-	md_MsgSubmitFundingTx            protoreflect.MessageDescriptor
-	fd_MsgSubmitFundingTx_relayer    protoreflect.FieldDescriptor
-	fd_MsgSubmitFundingTx_borrower   protoreflect.FieldDescriptor
-	fd_MsgSubmitFundingTx_funding_tx protoreflect.FieldDescriptor
-	fd_MsgSubmitFundingTx_height     protoreflect.FieldDescriptor
-	fd_MsgSubmitFundingTx_poof       protoreflect.FieldDescriptor
+	md_MsgFund            protoreflect.MessageDescriptor
+	fd_MsgFund_relayer    protoreflect.FieldDescriptor
+	fd_MsgFund_funding_tx protoreflect.FieldDescriptor
+	fd_MsgFund_height     protoreflect.FieldDescriptor
+	fd_MsgFund_poof       protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgSubmitFundingTx = File_side_lending_tx_proto.Messages().ByName("MsgSubmitFundingTx")
-	fd_MsgSubmitFundingTx_relayer = md_MsgSubmitFundingTx.Fields().ByName("relayer")
-	fd_MsgSubmitFundingTx_borrower = md_MsgSubmitFundingTx.Fields().ByName("borrower")
-	fd_MsgSubmitFundingTx_funding_tx = md_MsgSubmitFundingTx.Fields().ByName("funding_tx")
-	fd_MsgSubmitFundingTx_height = md_MsgSubmitFundingTx.Fields().ByName("height")
-	fd_MsgSubmitFundingTx_poof = md_MsgSubmitFundingTx.Fields().ByName("poof")
+	md_MsgFund = File_side_lending_tx_proto.Messages().ByName("MsgFund")
+	fd_MsgFund_relayer = md_MsgFund.Fields().ByName("relayer")
+	fd_MsgFund_funding_tx = md_MsgFund.Fields().ByName("funding_tx")
+	fd_MsgFund_height = md_MsgFund.Fields().ByName("height")
+	fd_MsgFund_poof = md_MsgFund.Fields().ByName("poof")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgSubmitFundingTx)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgFund)(nil)
 
-type fastReflection_MsgSubmitFundingTx MsgSubmitFundingTx
+type fastReflection_MsgFund MsgFund
 
-func (x *MsgSubmitFundingTx) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgSubmitFundingTx)(x)
+func (x *MsgFund) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgFund)(x)
 }
 
-func (x *MsgSubmitFundingTx) slowProtoReflect() protoreflect.Message {
+func (x *MsgFund) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5192,43 +5078,43 @@ func (x *MsgSubmitFundingTx) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgSubmitFundingTx_messageType fastReflection_MsgSubmitFundingTx_messageType
-var _ protoreflect.MessageType = fastReflection_MsgSubmitFundingTx_messageType{}
+var _fastReflection_MsgFund_messageType fastReflection_MsgFund_messageType
+var _ protoreflect.MessageType = fastReflection_MsgFund_messageType{}
 
-type fastReflection_MsgSubmitFundingTx_messageType struct{}
+type fastReflection_MsgFund_messageType struct{}
 
-func (x fastReflection_MsgSubmitFundingTx_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgSubmitFundingTx)(nil)
+func (x fastReflection_MsgFund_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgFund)(nil)
 }
-func (x fastReflection_MsgSubmitFundingTx_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitFundingTx)
+func (x fastReflection_MsgFund_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgFund)
 }
-func (x fastReflection_MsgSubmitFundingTx_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitFundingTx
+func (x fastReflection_MsgFund_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgFund
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgSubmitFundingTx) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitFundingTx
+func (x *fastReflection_MsgFund) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgFund
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgSubmitFundingTx) Type() protoreflect.MessageType {
-	return _fastReflection_MsgSubmitFundingTx_messageType
+func (x *fastReflection_MsgFund) Type() protoreflect.MessageType {
+	return _fastReflection_MsgFund_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgSubmitFundingTx) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitFundingTx)
+func (x *fastReflection_MsgFund) New() protoreflect.Message {
+	return new(fastReflection_MsgFund)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgSubmitFundingTx) Interface() protoreflect.ProtoMessage {
-	return (*MsgSubmitFundingTx)(x)
+func (x *fastReflection_MsgFund) Interface() protoreflect.ProtoMessage {
+	return (*MsgFund)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5236,34 +5122,28 @@ func (x *fastReflection_MsgSubmitFundingTx) Interface() protoreflect.ProtoMessag
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgSubmitFundingTx) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgFund) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Relayer != "" {
 		value := protoreflect.ValueOfString(x.Relayer)
-		if !f(fd_MsgSubmitFundingTx_relayer, value) {
-			return
-		}
-	}
-	if x.Borrower != "" {
-		value := protoreflect.ValueOfString(x.Borrower)
-		if !f(fd_MsgSubmitFundingTx_borrower, value) {
+		if !f(fd_MsgFund_relayer, value) {
 			return
 		}
 	}
 	if x.FundingTx != "" {
 		value := protoreflect.ValueOfString(x.FundingTx)
-		if !f(fd_MsgSubmitFundingTx_funding_tx, value) {
+		if !f(fd_MsgFund_funding_tx, value) {
 			return
 		}
 	}
-	if x.Height != "" {
-		value := protoreflect.ValueOfString(x.Height)
-		if !f(fd_MsgSubmitFundingTx_height, value) {
+	if x.Height != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Height)
+		if !f(fd_MsgFund_height, value) {
 			return
 		}
 	}
 	if x.Poof != "" {
 		value := protoreflect.ValueOfString(x.Poof)
-		if !f(fd_MsgSubmitFundingTx_poof, value) {
+		if !f(fd_MsgFund_poof, value) {
 			return
 		}
 	}
@@ -5280,23 +5160,21 @@ func (x *fastReflection_MsgSubmitFundingTx) Range(f func(protoreflect.FieldDescr
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgSubmitFundingTx) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgFund) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitFundingTx.relayer":
+	case "side.lending.MsgFund.relayer":
 		return x.Relayer != ""
-	case "side.lending.MsgSubmitFundingTx.borrower":
-		return x.Borrower != ""
-	case "side.lending.MsgSubmitFundingTx.funding_tx":
+	case "side.lending.MsgFund.funding_tx":
 		return x.FundingTx != ""
-	case "side.lending.MsgSubmitFundingTx.height":
-		return x.Height != ""
-	case "side.lending.MsgSubmitFundingTx.poof":
+	case "side.lending.MsgFund.height":
+		return x.Height != uint64(0)
+	case "side.lending.MsgFund.poof":
 		return x.Poof != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTx"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFund"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTx does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFund does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5306,23 +5184,21 @@ func (x *fastReflection_MsgSubmitFundingTx) Has(fd protoreflect.FieldDescriptor)
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitFundingTx) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgFund) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitFundingTx.relayer":
+	case "side.lending.MsgFund.relayer":
 		x.Relayer = ""
-	case "side.lending.MsgSubmitFundingTx.borrower":
-		x.Borrower = ""
-	case "side.lending.MsgSubmitFundingTx.funding_tx":
+	case "side.lending.MsgFund.funding_tx":
 		x.FundingTx = ""
-	case "side.lending.MsgSubmitFundingTx.height":
-		x.Height = ""
-	case "side.lending.MsgSubmitFundingTx.poof":
+	case "side.lending.MsgFund.height":
+		x.Height = uint64(0)
+	case "side.lending.MsgFund.poof":
 		x.Poof = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTx"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFund"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTx does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFund does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5332,28 +5208,25 @@ func (x *fastReflection_MsgSubmitFundingTx) Clear(fd protoreflect.FieldDescripto
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgSubmitFundingTx) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgFund) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.MsgSubmitFundingTx.relayer":
+	case "side.lending.MsgFund.relayer":
 		value := x.Relayer
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgSubmitFundingTx.borrower":
-		value := x.Borrower
-		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgSubmitFundingTx.funding_tx":
+	case "side.lending.MsgFund.funding_tx":
 		value := x.FundingTx
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgSubmitFundingTx.height":
+	case "side.lending.MsgFund.height":
 		value := x.Height
-		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgSubmitFundingTx.poof":
+		return protoreflect.ValueOfUint64(value)
+	case "side.lending.MsgFund.poof":
 		value := x.Poof
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTx"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFund"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTx does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFund does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5367,23 +5240,21 @@ func (x *fastReflection_MsgSubmitFundingTx) Get(descriptor protoreflect.FieldDes
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitFundingTx) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgFund) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitFundingTx.relayer":
+	case "side.lending.MsgFund.relayer":
 		x.Relayer = value.Interface().(string)
-	case "side.lending.MsgSubmitFundingTx.borrower":
-		x.Borrower = value.Interface().(string)
-	case "side.lending.MsgSubmitFundingTx.funding_tx":
+	case "side.lending.MsgFund.funding_tx":
 		x.FundingTx = value.Interface().(string)
-	case "side.lending.MsgSubmitFundingTx.height":
-		x.Height = value.Interface().(string)
-	case "side.lending.MsgSubmitFundingTx.poof":
+	case "side.lending.MsgFund.height":
+		x.Height = value.Uint()
+	case "side.lending.MsgFund.poof":
 		x.Poof = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTx"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFund"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTx does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFund does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5397,56 +5268,52 @@ func (x *fastReflection_MsgSubmitFundingTx) Set(fd protoreflect.FieldDescriptor,
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitFundingTx) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgFund) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitFundingTx.relayer":
-		panic(fmt.Errorf("field relayer of message side.lending.MsgSubmitFundingTx is not mutable"))
-	case "side.lending.MsgSubmitFundingTx.borrower":
-		panic(fmt.Errorf("field borrower of message side.lending.MsgSubmitFundingTx is not mutable"))
-	case "side.lending.MsgSubmitFundingTx.funding_tx":
-		panic(fmt.Errorf("field funding_tx of message side.lending.MsgSubmitFundingTx is not mutable"))
-	case "side.lending.MsgSubmitFundingTx.height":
-		panic(fmt.Errorf("field height of message side.lending.MsgSubmitFundingTx is not mutable"))
-	case "side.lending.MsgSubmitFundingTx.poof":
-		panic(fmt.Errorf("field poof of message side.lending.MsgSubmitFundingTx is not mutable"))
+	case "side.lending.MsgFund.relayer":
+		panic(fmt.Errorf("field relayer of message side.lending.MsgFund is not mutable"))
+	case "side.lending.MsgFund.funding_tx":
+		panic(fmt.Errorf("field funding_tx of message side.lending.MsgFund is not mutable"))
+	case "side.lending.MsgFund.height":
+		panic(fmt.Errorf("field height of message side.lending.MsgFund is not mutable"))
+	case "side.lending.MsgFund.poof":
+		panic(fmt.Errorf("field poof of message side.lending.MsgFund is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTx"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFund"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTx does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFund does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgSubmitFundingTx) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgFund) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitFundingTx.relayer":
+	case "side.lending.MsgFund.relayer":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgSubmitFundingTx.borrower":
+	case "side.lending.MsgFund.funding_tx":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgSubmitFundingTx.funding_tx":
-		return protoreflect.ValueOfString("")
-	case "side.lending.MsgSubmitFundingTx.height":
-		return protoreflect.ValueOfString("")
-	case "side.lending.MsgSubmitFundingTx.poof":
+	case "side.lending.MsgFund.height":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.lending.MsgFund.poof":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTx"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFund"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTx does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFund does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgSubmitFundingTx) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgFund) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgSubmitFundingTx", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgFund", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -5454,7 +5321,7 @@ func (x *fastReflection_MsgSubmitFundingTx) WhichOneof(d protoreflect.OneofDescr
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgSubmitFundingTx) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgFund) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -5465,7 +5332,7 @@ func (x *fastReflection_MsgSubmitFundingTx) GetUnknown() protoreflect.RawFields 
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitFundingTx) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgFund) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -5477,7 +5344,7 @@ func (x *fastReflection_MsgSubmitFundingTx) SetUnknown(fields protoreflect.RawFi
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgSubmitFundingTx) IsValid() bool {
+func (x *fastReflection_MsgFund) IsValid() bool {
 	return x != nil
 }
 
@@ -5487,9 +5354,9 @@ func (x *fastReflection_MsgSubmitFundingTx) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgFund) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgSubmitFundingTx)
+		x := input.Message.Interface().(*MsgFund)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5505,17 +5372,12 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Borrower)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
 		l = len(x.FundingTx)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Height)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.Height != 0 {
+			n += 1 + runtime.Sov(uint64(x.Height))
 		}
 		l = len(x.Poof)
 		if l > 0 {
@@ -5531,7 +5393,7 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitFundingTx)
+		x := input.Message.Interface().(*MsgFund)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5555,26 +5417,17 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], x.Poof)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Poof)))
 			i--
-			dAtA[i] = 0x2a
-		}
-		if len(x.Height) > 0 {
-			i -= len(x.Height)
-			copy(dAtA[i:], x.Height)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Height)))
-			i--
 			dAtA[i] = 0x22
+		}
+		if x.Height != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Height))
+			i--
+			dAtA[i] = 0x18
 		}
 		if len(x.FundingTx) > 0 {
 			i -= len(x.FundingTx)
 			copy(dAtA[i:], x.FundingTx)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FundingTx)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if len(x.Borrower) > 0 {
-			i -= len(x.Borrower)
-			copy(dAtA[i:], x.Borrower)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Borrower)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -5596,7 +5449,7 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitFundingTx)
+		x := input.Message.Interface().(*MsgFund)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5628,10 +5481,10 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitFundingTx: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgFund: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitFundingTx: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgFund: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -5668,38 +5521,6 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Borrower", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Borrower = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FundingTx", wireType)
 				}
 				var stringLen uint64
@@ -5730,11 +5551,11 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 				}
 				x.FundingTx = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 4:
-				if wireType != 2 {
+			case 3:
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
 				}
-				var stringLen uint64
+				x.Height = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -5744,25 +5565,12 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.Height |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Height = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 5:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Poof", wireType)
 				}
@@ -5830,23 +5638,23 @@ func (x *fastReflection_MsgSubmitFundingTx) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgSubmitFundingTxResponse protoreflect.MessageDescriptor
+	md_MsgFundResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgSubmitFundingTxResponse = File_side_lending_tx_proto.Messages().ByName("MsgSubmitFundingTxResponse")
+	md_MsgFundResponse = File_side_lending_tx_proto.Messages().ByName("MsgFundResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgSubmitFundingTxResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgFundResponse)(nil)
 
-type fastReflection_MsgSubmitFundingTxResponse MsgSubmitFundingTxResponse
+type fastReflection_MsgFundResponse MsgFundResponse
 
-func (x *MsgSubmitFundingTxResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgSubmitFundingTxResponse)(x)
+func (x *MsgFundResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgFundResponse)(x)
 }
 
-func (x *MsgSubmitFundingTxResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgFundResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5858,43 +5666,43 @@ func (x *MsgSubmitFundingTxResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgSubmitFundingTxResponse_messageType fastReflection_MsgSubmitFundingTxResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgSubmitFundingTxResponse_messageType{}
+var _fastReflection_MsgFundResponse_messageType fastReflection_MsgFundResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgFundResponse_messageType{}
 
-type fastReflection_MsgSubmitFundingTxResponse_messageType struct{}
+type fastReflection_MsgFundResponse_messageType struct{}
 
-func (x fastReflection_MsgSubmitFundingTxResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgSubmitFundingTxResponse)(nil)
+func (x fastReflection_MsgFundResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgFundResponse)(nil)
 }
-func (x fastReflection_MsgSubmitFundingTxResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitFundingTxResponse)
+func (x fastReflection_MsgFundResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgFundResponse)
 }
-func (x fastReflection_MsgSubmitFundingTxResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitFundingTxResponse
+func (x fastReflection_MsgFundResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgFundResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitFundingTxResponse
+func (x *fastReflection_MsgFundResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgFundResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgSubmitFundingTxResponse_messageType
+func (x *fastReflection_MsgFundResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgFundResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgSubmitFundingTxResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitFundingTxResponse)
+func (x *fastReflection_MsgFundResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgFundResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgSubmitFundingTxResponse)(x)
+func (x *fastReflection_MsgFundResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgFundResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5902,7 +5710,7 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) Interface() protoreflect.Pro
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgFundResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -5916,13 +5724,13 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) Range(f func(protoreflect.Fi
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgFundResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTxResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFundResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTxResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFundResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5932,13 +5740,13 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) Has(fd protoreflect.FieldDes
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgFundResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTxResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFundResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTxResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFundResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5948,13 +5756,13 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) Clear(fd protoreflect.FieldD
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgFundResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTxResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFundResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTxResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFundResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5968,13 +5776,13 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) Get(descriptor protoreflect.
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgFundResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTxResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFundResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTxResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFundResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5988,36 +5796,36 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) Set(fd protoreflect.FieldDes
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitFundingTxResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgFundResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTxResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFundResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTxResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFundResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgSubmitFundingTxResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgFundResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitFundingTxResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgFundResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitFundingTxResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgFundResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgSubmitFundingTxResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgFundResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgSubmitFundingTxResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgFundResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6025,7 +5833,7 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) WhichOneof(d protoreflect.On
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgSubmitFundingTxResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgFundResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6036,7 +5844,7 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) GetUnknown() protoreflect.Ra
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitFundingTxResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgFundResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6048,7 +5856,7 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) SetUnknown(fields protorefle
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgSubmitFundingTxResponse) IsValid() bool {
+func (x *fastReflection_MsgFundResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -6058,9 +5866,9 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgSubmitFundingTxResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgFundResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgSubmitFundingTxResponse)
+		x := input.Message.Interface().(*MsgFundResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6082,7 +5890,7 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) ProtoMethods() *protoiface.M
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitFundingTxResponse)
+		x := input.Message.Interface().(*MsgFundResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6112,7 +5920,7 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) ProtoMethods() *protoiface.M
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitFundingTxResponse)
+		x := input.Message.Interface().(*MsgFundResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6144,10 +5952,10 @@ func (x *fastReflection_MsgSubmitFundingTxResponse) ProtoMethods() *protoiface.M
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitFundingTxResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgFundResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitFundingTxResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgFundResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -6275,23 +6083,17 @@ func (*MsgRepayResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{1}
 }
 
-type MsgCreateLoan struct {
+type MsgRedeem struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Borrower     string        `protobuf:"bytes,1,opt,name=borrower,proto3" json:"borrower,omitempty"`
-	VaultAddress string        `protobuf:"bytes,2,opt,name=vault_address,json=vaultAddress,proto3" json:"vault_address,omitempty"` // id
-	Period       uint32        `protobuf:"varint,3,opt,name=period,proto3" json:"period,omitempty"`
-	PoolId       string        `protobuf:"bytes,4,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	BorrowAmount *v1beta1.Coin `protobuf:"bytes,5,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
-	EventId      string        `protobuf:"bytes,6,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
-	Cets         string        `protobuf:"bytes,7,opt,name=cets,proto3" json:"cets,omitempty"`
-	LoanSecret   string        `protobuf:"bytes,8,opt,name=loan_secret,json=loanSecret,proto3" json:"loan_secret,omitempty"`
+	Borrower   string `protobuf:"bytes,1,opt,name=borrower,proto3" json:"borrower,omitempty"`
+	LoanSecret string `protobuf:"bytes,8,opt,name=loan_secret,json=loanSecret,proto3" json:"loan_secret,omitempty"`
 }
 
-func (x *MsgCreateLoan) Reset() {
-	*x = MsgCreateLoan{}
+func (x *MsgRedeem) Reset() {
+	*x = MsgRedeem{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6299,81 +6101,39 @@ func (x *MsgCreateLoan) Reset() {
 	}
 }
 
-func (x *MsgCreateLoan) String() string {
+func (x *MsgRedeem) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgCreateLoan) ProtoMessage() {}
+func (*MsgRedeem) ProtoMessage() {}
 
-// Deprecated: Use MsgCreateLoan.ProtoReflect.Descriptor instead.
-func (*MsgCreateLoan) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgRedeem.ProtoReflect.Descriptor instead.
+func (*MsgRedeem) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MsgCreateLoan) GetBorrower() string {
+func (x *MsgRedeem) GetBorrower() string {
 	if x != nil {
 		return x.Borrower
 	}
 	return ""
 }
 
-func (x *MsgCreateLoan) GetVaultAddress() string {
-	if x != nil {
-		return x.VaultAddress
-	}
-	return ""
-}
-
-func (x *MsgCreateLoan) GetPeriod() uint32 {
-	if x != nil {
-		return x.Period
-	}
-	return 0
-}
-
-func (x *MsgCreateLoan) GetPoolId() string {
-	if x != nil {
-		return x.PoolId
-	}
-	return ""
-}
-
-func (x *MsgCreateLoan) GetBorrowAmount() *v1beta1.Coin {
-	if x != nil {
-		return x.BorrowAmount
-	}
-	return nil
-}
-
-func (x *MsgCreateLoan) GetEventId() string {
-	if x != nil {
-		return x.EventId
-	}
-	return ""
-}
-
-func (x *MsgCreateLoan) GetCets() string {
-	if x != nil {
-		return x.Cets
-	}
-	return ""
-}
-
-func (x *MsgCreateLoan) GetLoanSecret() string {
+func (x *MsgRedeem) GetLoanSecret() string {
 	if x != nil {
 		return x.LoanSecret
 	}
 	return ""
 }
 
-type MsgCreateLoanResponse struct {
+type MsgRedeemResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgCreateLoanResponse) Reset() {
-	*x = MsgCreateLoanResponse{}
+func (x *MsgRedeemResponse) Reset() {
+	*x = MsgRedeemResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6381,14 +6141,14 @@ func (x *MsgCreateLoanResponse) Reset() {
 	}
 }
 
-func (x *MsgCreateLoanResponse) String() string {
+func (x *MsgRedeemResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgCreateLoanResponse) ProtoMessage() {}
+func (*MsgRedeemResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgCreateLoanResponse.ProtoReflect.Descriptor instead.
-func (*MsgCreateLoanResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgRedeemResponse.ProtoReflect.Descriptor instead.
+func (*MsgRedeemResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{3}
 }
 
@@ -6556,20 +6316,24 @@ func (x *MsgRemoveLiquidityResponse) GetAmount() *v1beta1.Coin {
 	return nil
 }
 
-type MsgRequestVaultAddress struct {
+type MsgApply struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Borrower         string `protobuf:"bytes,1,opt,name=borrower,proto3" json:"borrower,omitempty"`
-	BorrowerPubkey   string `protobuf:"bytes,2,opt,name=borrower_pubkey,json=borrowerPubkey,proto3" json:"borrower_pubkey,omitempty"`
-	HashOfLoanSecret string `protobuf:"bytes,3,opt,name=hash_of_loan_secret,json=hashOfLoanSecret,proto3" json:"hash_of_loan_secret,omitempty"`
-	MaturityTime     uint64 `protobuf:"varint,4,opt,name=maturity_time,json=maturityTime,proto3" json:"maturity_time,omitempty"`
-	FinalTimeout     uint64 `protobuf:"varint,5,opt,name=final_timeout,json=finalTimeout,proto3" json:"final_timeout,omitempty"`
+	Borrower         string        `protobuf:"bytes,1,opt,name=borrower,proto3" json:"borrower,omitempty"`
+	BorrowerPubkey   string        `protobuf:"bytes,2,opt,name=borrower_pubkey,json=borrowerPubkey,proto3" json:"borrower_pubkey,omitempty"`
+	HashOfLoanSecret string        `protobuf:"bytes,3,opt,name=hash_of_loan_secret,json=hashOfLoanSecret,proto3" json:"hash_of_loan_secret,omitempty"`
+	MaturityTime     uint64        `protobuf:"varint,4,opt,name=maturity_time,json=maturityTime,proto3" json:"maturity_time,omitempty"`
+	FinalTimeout     uint64        `protobuf:"varint,5,opt,name=final_timeout,json=finalTimeout,proto3" json:"final_timeout,omitempty"`
+	PoolId           string        `protobuf:"bytes,6,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	BorrowAmount     *v1beta1.Coin `protobuf:"bytes,7,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
+	EventId          string        `protobuf:"bytes,8,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	Cets             string        `protobuf:"bytes,9,opt,name=cets,proto3" json:"cets,omitempty"`
 }
 
-func (x *MsgRequestVaultAddress) Reset() {
-	*x = MsgRequestVaultAddress{}
+func (x *MsgApply) Reset() {
+	*x = MsgApply{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6577,53 +6341,81 @@ func (x *MsgRequestVaultAddress) Reset() {
 	}
 }
 
-func (x *MsgRequestVaultAddress) String() string {
+func (x *MsgApply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgRequestVaultAddress) ProtoMessage() {}
+func (*MsgApply) ProtoMessage() {}
 
-// Deprecated: Use MsgRequestVaultAddress.ProtoReflect.Descriptor instead.
-func (*MsgRequestVaultAddress) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgApply.ProtoReflect.Descriptor instead.
+func (*MsgApply) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *MsgRequestVaultAddress) GetBorrower() string {
+func (x *MsgApply) GetBorrower() string {
 	if x != nil {
 		return x.Borrower
 	}
 	return ""
 }
 
-func (x *MsgRequestVaultAddress) GetBorrowerPubkey() string {
+func (x *MsgApply) GetBorrowerPubkey() string {
 	if x != nil {
 		return x.BorrowerPubkey
 	}
 	return ""
 }
 
-func (x *MsgRequestVaultAddress) GetHashOfLoanSecret() string {
+func (x *MsgApply) GetHashOfLoanSecret() string {
 	if x != nil {
 		return x.HashOfLoanSecret
 	}
 	return ""
 }
 
-func (x *MsgRequestVaultAddress) GetMaturityTime() uint64 {
+func (x *MsgApply) GetMaturityTime() uint64 {
 	if x != nil {
 		return x.MaturityTime
 	}
 	return 0
 }
 
-func (x *MsgRequestVaultAddress) GetFinalTimeout() uint64 {
+func (x *MsgApply) GetFinalTimeout() uint64 {
 	if x != nil {
 		return x.FinalTimeout
 	}
 	return 0
 }
 
-type MsgRequestVaultAddressResponse struct {
+func (x *MsgApply) GetPoolId() string {
+	if x != nil {
+		return x.PoolId
+	}
+	return ""
+}
+
+func (x *MsgApply) GetBorrowAmount() *v1beta1.Coin {
+	if x != nil {
+		return x.BorrowAmount
+	}
+	return nil
+}
+
+func (x *MsgApply) GetEventId() string {
+	if x != nil {
+		return x.EventId
+	}
+	return ""
+}
+
+func (x *MsgApply) GetCets() string {
+	if x != nil {
+		return x.Cets
+	}
+	return ""
+}
+
+type MsgApplyResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -6631,8 +6423,8 @@ type MsgRequestVaultAddressResponse struct {
 	VaultAddress string `protobuf:"bytes,1,opt,name=vault_address,json=vaultAddress,proto3" json:"vault_address,omitempty"`
 }
 
-func (x *MsgRequestVaultAddressResponse) Reset() {
-	*x = MsgRequestVaultAddressResponse{}
+func (x *MsgApplyResponse) Reset() {
+	*x = MsgApplyResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6640,38 +6432,37 @@ func (x *MsgRequestVaultAddressResponse) Reset() {
 	}
 }
 
-func (x *MsgRequestVaultAddressResponse) String() string {
+func (x *MsgApplyResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgRequestVaultAddressResponse) ProtoMessage() {}
+func (*MsgApplyResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgRequestVaultAddressResponse.ProtoReflect.Descriptor instead.
-func (*MsgRequestVaultAddressResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgApplyResponse.ProtoReflect.Descriptor instead.
+func (*MsgApplyResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *MsgRequestVaultAddressResponse) GetVaultAddress() string {
+func (x *MsgApplyResponse) GetVaultAddress() string {
 	if x != nil {
 		return x.VaultAddress
 	}
 	return ""
 }
 
-type MsgSubmitFundingTx struct {
+type MsgFund struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	Relayer   string `protobuf:"bytes,1,opt,name=relayer,proto3" json:"relayer,omitempty"`
-	Borrower  string `protobuf:"bytes,2,opt,name=borrower,proto3" json:"borrower,omitempty"` // Remove? can be parsed from tx?
-	FundingTx string `protobuf:"bytes,3,opt,name=funding_tx,json=fundingTx,proto3" json:"funding_tx,omitempty"`
-	Height    string `protobuf:"bytes,4,opt,name=height,proto3" json:"height,omitempty"`
-	Poof      string `protobuf:"bytes,5,opt,name=poof,proto3" json:"poof,omitempty"`
+	FundingTx string `protobuf:"bytes,2,opt,name=funding_tx,json=fundingTx,proto3" json:"funding_tx,omitempty"`
+	Height    uint64 `protobuf:"varint,3,opt,name=height,proto3" json:"height,omitempty"`
+	Poof      string `protobuf:"bytes,4,opt,name=poof,proto3" json:"poof,omitempty"`
 }
 
-func (x *MsgSubmitFundingTx) Reset() {
-	*x = MsgSubmitFundingTx{}
+func (x *MsgFund) Reset() {
+	*x = MsgFund{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6679,60 +6470,53 @@ func (x *MsgSubmitFundingTx) Reset() {
 	}
 }
 
-func (x *MsgSubmitFundingTx) String() string {
+func (x *MsgFund) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgSubmitFundingTx) ProtoMessage() {}
+func (*MsgFund) ProtoMessage() {}
 
-// Deprecated: Use MsgSubmitFundingTx.ProtoReflect.Descriptor instead.
-func (*MsgSubmitFundingTx) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgFund.ProtoReflect.Descriptor instead.
+func (*MsgFund) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *MsgSubmitFundingTx) GetRelayer() string {
+func (x *MsgFund) GetRelayer() string {
 	if x != nil {
 		return x.Relayer
 	}
 	return ""
 }
 
-func (x *MsgSubmitFundingTx) GetBorrower() string {
-	if x != nil {
-		return x.Borrower
-	}
-	return ""
-}
-
-func (x *MsgSubmitFundingTx) GetFundingTx() string {
+func (x *MsgFund) GetFundingTx() string {
 	if x != nil {
 		return x.FundingTx
 	}
 	return ""
 }
 
-func (x *MsgSubmitFundingTx) GetHeight() string {
+func (x *MsgFund) GetHeight() uint64 {
 	if x != nil {
 		return x.Height
 	}
-	return ""
+	return 0
 }
 
-func (x *MsgSubmitFundingTx) GetPoof() string {
+func (x *MsgFund) GetPoof() string {
 	if x != nil {
 		return x.Poof
 	}
 	return ""
 }
 
-type MsgSubmitFundingTxResponse struct {
+type MsgFundResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgSubmitFundingTxResponse) Reset() {
-	*x = MsgSubmitFundingTxResponse{}
+func (x *MsgFundResponse) Reset() {
+	*x = MsgFundResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6740,14 +6524,14 @@ func (x *MsgSubmitFundingTxResponse) Reset() {
 	}
 }
 
-func (x *MsgSubmitFundingTxResponse) String() string {
+func (x *MsgFundResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgSubmitFundingTxResponse) ProtoMessage() {}
+func (*MsgFundResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgSubmitFundingTxResponse.ProtoReflect.Descriptor instead.
-func (*MsgSubmitFundingTxResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgFundResponse.ProtoReflect.Descriptor instead.
+func (*MsgFundResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{11}
 }
 
@@ -6771,126 +6555,112 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72,
 	0x50, 0x6f, 0x69, 0x6e, 0x74, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72,
 	0x6f, 0x77, 0x65, 0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xa0, 0x02, 0x0a, 0x0d, 0x4d, 0x73, 0x67,
-	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x61, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f,
-	0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f,
-	0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x23, 0x0a, 0x0d, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f,
-	0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x76,
-	0x61, 0x75, 0x6c, 0x74, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x70,
-	0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x70, 0x65, 0x72,
-	0x69, 0x6f, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x04,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x57, 0x0a, 0x09, 0x4d, 0x73, 0x67, 0x52,
+	0x65, 0x64, 0x65, 0x65, 0x6d, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
+	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
+	0x72, 0x12, 0x1f, 0x0a, 0x0b, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74,
+	0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6c, 0x6f, 0x61, 0x6e, 0x53, 0x65, 0x63, 0x72,
+	0x65, 0x74, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
+	0x72, 0x22, 0x13, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x82, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x41, 0x64,
+	0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f,
+	0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x6f,
+	0x6c, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x31, 0x0a, 0x06, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x0b,
+	0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x4c, 0x0a, 0x17, 0x4d,
+	0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x31, 0x0a, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69,
+	0x6e, 0x52, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x22, 0x6c, 0x0a, 0x12, 0x4d, 0x73, 0x67,
+	0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12,
+	0x16, 0x0a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x31, 0x0a, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65,
+	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f,
+	0x69, 0x6e, 0x52, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a,
+	0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x4f, 0x0a, 0x1a, 0x4d, 0x73, 0x67, 0x52, 0x65,
+	0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x31, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
+	0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e,
+	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xdf, 0x02, 0x0a, 0x08, 0x4d, 0x73, 0x67,
+	0x41, 0x70, 0x70, 0x6c, 0x79, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
+	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
+	0x72, 0x12, 0x27, 0x0a, 0x0f, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x70, 0x75,
+	0x62, 0x6b, 0x65, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x62, 0x6f, 0x72, 0x72,
+	0x6f, 0x77, 0x65, 0x72, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x2d, 0x0a, 0x13, 0x68, 0x61,
+	0x73, 0x68, 0x5f, 0x6f, 0x66, 0x5f, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65,
+	0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x68, 0x61, 0x73, 0x68, 0x4f, 0x66, 0x4c,
+	0x6f, 0x61, 0x6e, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x23, 0x0a, 0x0d, 0x6d, 0x61, 0x74,
+	0x75, 0x72, 0x69, 0x74, 0x79, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x0c, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x23,
+	0x0a, 0x0d, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x54, 0x69, 0x6d, 0x65,
+	0x6f, 0x75, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x06,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x3e, 0x0a, 0x0d,
-	0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x05, 0x20,
+	0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x07, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
 	0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52, 0x0c,
 	0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x19, 0x0a, 0x08,
-	0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
 	0x65, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x65, 0x74, 0x73, 0x18,
-	0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x65, 0x74, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x6c,
-	0x6f, 0x61, 0x6e, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x0a, 0x6c, 0x6f, 0x61, 0x6e, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x3a, 0x0d, 0x82, 0xe7,
-	0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x17, 0x0a, 0x15, 0x4d,
-	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x61, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x82, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49,
-	0x64, 0x12, 0x16, 0x0a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x31, 0x0a, 0x06, 0x61, 0x6d, 0x6f,
-	0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
-	0x43, 0x6f, 0x69, 0x6e, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x0b, 0x82, 0xe7,
-	0xb0, 0x2a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x4c, 0x0a, 0x17, 0x4d, 0x73, 0x67,
-	0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x31, 0x0a, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61,
-	0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52,
-	0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x22, 0x6c, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x52, 0x65,
-	0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x16, 0x0a,
-	0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c,
-	0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x31, 0x0a, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
-	0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e,
-	0x52, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x6c,
-	0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x4f, 0x0a, 0x1a, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f,
-	0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x31, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
-	0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52, 0x06,
-	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xe5, 0x01, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x56, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x27, 0x0a,
-	0x0f, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72,
-	0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x2d, 0x0a, 0x13, 0x68, 0x61, 0x73, 0x68, 0x5f, 0x6f,
-	0x66, 0x5f, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x10, 0x68, 0x61, 0x73, 0x68, 0x4f, 0x66, 0x4c, 0x6f, 0x61, 0x6e, 0x53,
-	0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x23, 0x0a, 0x0d, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74,
-	0x79, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x6d, 0x61,
-	0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x66, 0x69,
-	0x6e, 0x61, 0x6c, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28,
-	0x04, 0x52, 0x0c, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x3a,
-	0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x45,
-	0x0a, 0x1e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x56, 0x61, 0x75, 0x6c,
-	0x74, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x23, 0x0a, 0x0d, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0xa3, 0x01, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62,
-	0x6d, 0x69, 0x74, 0x46, 0x75, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x54, 0x78, 0x12, 0x18, 0x0a, 0x07,
-	0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x72,
-	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
-	0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
-	0x65, 0x72, 0x12, 0x1d, 0x0a, 0x0a, 0x66, 0x75, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x74, 0x78,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x66, 0x75, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x54,
-	0x78, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x6f, 0x6f,
-	0x66, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x6f, 0x6f, 0x66, 0x3a, 0x0c, 0x82,
-	0xe7, 0xb0, 0x2a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x22, 0x1c, 0x0a, 0x1a, 0x4d,
-	0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x46, 0x75, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x54,
-	0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x9c, 0x04, 0x0a, 0x03, 0x4d, 0x73,
-	0x67, 0x12, 0x54, 0x0a, 0x0c, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
-	0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x52, 0x65, 0x6d, 0x6f, 0x76,
-	0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d,
-	0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x28, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52,
-	0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x69, 0x0a, 0x13, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x56, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x24, 0x2e,
+	0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x65, 0x74, 0x73, 0x3a, 0x0d, 0x82, 0xe7, 0xb0,
+	0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x37, 0x0a, 0x10, 0x4d, 0x73,
+	0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x23,
+	0x0a, 0x0d, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x22, 0x7c, 0x0a, 0x07, 0x4d, 0x73, 0x67, 0x46, 0x75, 0x6e, 0x64, 0x12, 0x18,
+	0x0a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x1d, 0x0a, 0x0a, 0x66, 0x75, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x5f, 0x74, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x66, 0x75,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x54, 0x78, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68,
+	0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12,
+	0x12, 0x0a, 0x04, 0x70, 0x6f, 0x6f, 0x66, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70,
+	0x6f, 0x6f, 0x66, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65,
+	0x72, 0x22, 0x11, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x46, 0x75, 0x6e, 0x64, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x32, 0xc5, 0x03, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x54, 0x0a, 0x0c,
+	0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x1d, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41,
+	0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x25, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64,
+	0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x28, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65,
+	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x3f, 0x0a, 0x05, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70,
+	0x6c, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x3c, 0x0a, 0x04, 0x46, 0x75, 0x6e, 0x64, 0x12, 0x15, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x46, 0x75, 0x6e,
+	0x64, 0x1a, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x2e, 0x4d, 0x73, 0x67, 0x46, 0x75, 0x6e, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x42, 0x0a, 0x06, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12, 0x17, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64,
+	0x65, 0x65, 0x6d, 0x1a, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x52, 0x65, 0x70, 0x61, 0x79, 0x12, 0x16, 0x2e,
 	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x56, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x1a, 0x2c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x56, 0x61, 0x75,
-	0x6c, 0x74, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x46, 0x75, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x54, 0x78, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x46, 0x75, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x54, 0x78, 0x1a, 0x28, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x46,
-	0x75, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x54, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x4e, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x61, 0x6e, 0x12, 0x1b,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
-	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x61, 0x6e, 0x1a, 0x23, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72,
-	0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x61, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x3f, 0x0a, 0x05, 0x52, 0x65, 0x70, 0x61, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61,
-	0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x8b, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x07, 0x54,
-	0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
-	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c,
-	0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53,
-	0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69,
-	0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
-	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x52, 0x65, 0x70, 0x61, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x8b, 0x01, 0x0a,
+	0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73,
+	0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c,
+	0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2,
+	0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47,
+	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64,
+	0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -6907,38 +6677,38 @@ func file_side_lending_tx_proto_rawDescGZIP() []byte {
 
 var file_side_lending_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_side_lending_tx_proto_goTypes = []interface{}{
-	(*MsgRepay)(nil),                       // 0: side.lending.MsgRepay
-	(*MsgRepayResponse)(nil),               // 1: side.lending.MsgRepayResponse
-	(*MsgCreateLoan)(nil),                  // 2: side.lending.MsgCreateLoan
-	(*MsgCreateLoanResponse)(nil),          // 3: side.lending.MsgCreateLoanResponse
-	(*MsgAddLiquidity)(nil),                // 4: side.lending.MsgAddLiquidity
-	(*MsgAddLiquidityResponse)(nil),        // 5: side.lending.MsgAddLiquidityResponse
-	(*MsgRemoveLiquidity)(nil),             // 6: side.lending.MsgRemoveLiquidity
-	(*MsgRemoveLiquidityResponse)(nil),     // 7: side.lending.MsgRemoveLiquidityResponse
-	(*MsgRequestVaultAddress)(nil),         // 8: side.lending.MsgRequestVaultAddress
-	(*MsgRequestVaultAddressResponse)(nil), // 9: side.lending.MsgRequestVaultAddressResponse
-	(*MsgSubmitFundingTx)(nil),             // 10: side.lending.MsgSubmitFundingTx
-	(*MsgSubmitFundingTxResponse)(nil),     // 11: side.lending.MsgSubmitFundingTxResponse
-	(*v1beta1.Coin)(nil),                   // 12: cosmos.base.v1beta1.Coin
+	(*MsgRepay)(nil),                   // 0: side.lending.MsgRepay
+	(*MsgRepayResponse)(nil),           // 1: side.lending.MsgRepayResponse
+	(*MsgRedeem)(nil),                  // 2: side.lending.MsgRedeem
+	(*MsgRedeemResponse)(nil),          // 3: side.lending.MsgRedeemResponse
+	(*MsgAddLiquidity)(nil),            // 4: side.lending.MsgAddLiquidity
+	(*MsgAddLiquidityResponse)(nil),    // 5: side.lending.MsgAddLiquidityResponse
+	(*MsgRemoveLiquidity)(nil),         // 6: side.lending.MsgRemoveLiquidity
+	(*MsgRemoveLiquidityResponse)(nil), // 7: side.lending.MsgRemoveLiquidityResponse
+	(*MsgApply)(nil),                   // 8: side.lending.MsgApply
+	(*MsgApplyResponse)(nil),           // 9: side.lending.MsgApplyResponse
+	(*MsgFund)(nil),                    // 10: side.lending.MsgFund
+	(*MsgFundResponse)(nil),            // 11: side.lending.MsgFundResponse
+	(*v1beta1.Coin)(nil),               // 12: cosmos.base.v1beta1.Coin
 }
 var file_side_lending_tx_proto_depIdxs = []int32{
 	12, // 0: side.lending.MsgRepay.amount:type_name -> cosmos.base.v1beta1.Coin
-	12, // 1: side.lending.MsgCreateLoan.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
-	12, // 2: side.lending.MsgAddLiquidity.amount:type_name -> cosmos.base.v1beta1.Coin
-	12, // 3: side.lending.MsgAddLiquidityResponse.shares:type_name -> cosmos.base.v1beta1.Coin
-	12, // 4: side.lending.MsgRemoveLiquidity.shares:type_name -> cosmos.base.v1beta1.Coin
-	12, // 5: side.lending.MsgRemoveLiquidityResponse.amount:type_name -> cosmos.base.v1beta1.Coin
+	12, // 1: side.lending.MsgAddLiquidity.amount:type_name -> cosmos.base.v1beta1.Coin
+	12, // 2: side.lending.MsgAddLiquidityResponse.shares:type_name -> cosmos.base.v1beta1.Coin
+	12, // 3: side.lending.MsgRemoveLiquidity.shares:type_name -> cosmos.base.v1beta1.Coin
+	12, // 4: side.lending.MsgRemoveLiquidityResponse.amount:type_name -> cosmos.base.v1beta1.Coin
+	12, // 5: side.lending.MsgApply.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
 	4,  // 6: side.lending.Msg.AddLiquidity:input_type -> side.lending.MsgAddLiquidity
 	6,  // 7: side.lending.Msg.RemoveLiquidity:input_type -> side.lending.MsgRemoveLiquidity
-	8,  // 8: side.lending.Msg.RequestVaultAddress:input_type -> side.lending.MsgRequestVaultAddress
-	10, // 9: side.lending.Msg.SubmitFundingTx:input_type -> side.lending.MsgSubmitFundingTx
-	2,  // 10: side.lending.Msg.CreateLoan:input_type -> side.lending.MsgCreateLoan
+	8,  // 8: side.lending.Msg.Apply:input_type -> side.lending.MsgApply
+	10, // 9: side.lending.Msg.Fund:input_type -> side.lending.MsgFund
+	2,  // 10: side.lending.Msg.Redeem:input_type -> side.lending.MsgRedeem
 	0,  // 11: side.lending.Msg.Repay:input_type -> side.lending.MsgRepay
 	5,  // 12: side.lending.Msg.AddLiquidity:output_type -> side.lending.MsgAddLiquidityResponse
 	7,  // 13: side.lending.Msg.RemoveLiquidity:output_type -> side.lending.MsgRemoveLiquidityResponse
-	9,  // 14: side.lending.Msg.RequestVaultAddress:output_type -> side.lending.MsgRequestVaultAddressResponse
-	11, // 15: side.lending.Msg.SubmitFundingTx:output_type -> side.lending.MsgSubmitFundingTxResponse
-	3,  // 16: side.lending.Msg.CreateLoan:output_type -> side.lending.MsgCreateLoanResponse
+	9,  // 14: side.lending.Msg.Apply:output_type -> side.lending.MsgApplyResponse
+	11, // 15: side.lending.Msg.Fund:output_type -> side.lending.MsgFundResponse
+	3,  // 16: side.lending.Msg.Redeem:output_type -> side.lending.MsgRedeemResponse
 	1,  // 17: side.lending.Msg.Repay:output_type -> side.lending.MsgRepayResponse
 	12, // [12:18] is the sub-list for method output_type
 	6,  // [6:12] is the sub-list for method input_type
@@ -6978,7 +6748,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCreateLoan); i {
+			switch v := v.(*MsgRedeem); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -6990,7 +6760,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCreateLoanResponse); i {
+			switch v := v.(*MsgRedeemResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7050,7 +6820,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgRequestVaultAddress); i {
+			switch v := v.(*MsgApply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7062,7 +6832,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgRequestVaultAddressResponse); i {
+			switch v := v.(*MsgApplyResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7074,7 +6844,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgSubmitFundingTx); i {
+			switch v := v.(*MsgFund); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7086,7 +6856,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgSubmitFundingTxResponse); i {
+			switch v := v.(*MsgFundResponse); i {
 			case 0:
 				return &v.state
 			case 1:
