@@ -12,7 +12,7 @@ import (
 
 var _ sdk.Msg = &MsgSubmitOraclePubKey{}
 
-func NewMsgSubmitOraclePubkey(
+func NewMsgSubmitOraclePubKey(
 	sender string,
 	oracleId uint64,
 	pubKey string,
