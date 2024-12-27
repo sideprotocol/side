@@ -16,6 +16,7 @@ var (
 	ErrNotAuthorized      = errorsmod.Register(ModuleName, 2201, "not authorized")
 	ErrDuplicatedPoolId   = errorsmod.Register(ModuleName, 2202, "duplicated pool id")
 	ErrPootNotExists      = errorsmod.Register(ModuleName, 2203, "pool not exists")
+	ErrInactivePool       = errorsmod.Register(ModuleName, 2203, "inactive pool")
 
 	ErrEmptyBorrowerPubkey = errorsmod.Register(ModuleName, 3001, "invalid pubkey of borrower")
 	ErrInvalidMaturityTime = errorsmod.Register(ModuleName, 3002, "maturity time great than 0")
