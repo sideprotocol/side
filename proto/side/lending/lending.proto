@@ -15,9 +15,15 @@ enum PoolStatus {
 message LendingPool {
     string id = 1;
     cosmos.base.v1beta1.Coin supply = 2;
-    uint64 total_shares = 4; 
-    uint64 borrowed_amount = 5;
-    PoolStatus status = 6;
+    string total_shares = 3 [
+        (gogoproto.customtype) = "cosmossdk.io/math.Int",
+        (gogoproto.nullable) = false
+      ];
+    string borrowed_amount = 4 [
+        (gogoproto.customtype) = "cosmossdk.io/math.Int",
+        (gogoproto.nullable) = false
+      ];
+    PoolStatus status = 5;
 }
 
 enum LoanStatus {

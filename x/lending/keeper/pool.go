@@ -36,8 +36,8 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	pool := types.LendingPool{
 		Id:             msg.PoolId,
 		Supply:         &supply,
-		TotalShares:    0,
-		BorrowedAmount: 0,
+		TotalShares:    math.NewInt(0),
+		BorrowedAmount: math.NewInt(0),
 		Status:         types.PoolStatus_INACTIVE,
 	}
 
@@ -52,15 +52,60 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidity) (*types.MsgAddLiquidityResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	lender, err2 := sdk.AccAddressFromBech32(msg.Lender)
+	if err2 != nil {
+		return nil, err2
+	}
+
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
+	if !m.HasPool(ctx, msg.PoolId) {
+		return nil, types.ErrPootNotExists
+	}
+
+	pool := m.GetPool(ctx, msg.PoolId)
+
+	if msg.Amount.Denom != pool.Supply.Denom {
+		return nil, types.ErrInvalidAmount
+	}
+
+	var outAmount math.Int
+	if pool.Supply.Amount.Equal(math.NewInt(0)) {
+		// active pool on first deposit
+		pool.Status = types.PoolStatus_ACTIVE
+		outAmount = msg.Amount.Amount
+	} else {
+		outAmount = msg.Amount.Amount.Mul(pool.TotalShares).Quo(pool.Supply.Amount)
+	}
+	pool.TotalShares = pool.TotalShares.Add(outAmount)
+	pool.Supply.Add(*msg.Amount)
+
+	received_shares := sdk.NewCoin(pool.Id, outAmount)
+
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, lender, types.ModuleName, sdk.NewCoins(*msg.Amount)); err != nil {
+		return nil, err
+	}
+
+	if err := m.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(received_shares)); err != nil {
+		return nil, err
+	}
+
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, lender, sdk.NewCoins(received_shares)); err != nil {
+		return nil, err
+	}
+
+	m.SetPool(ctx, pool)
+
 	// Emit Events
-	m.EmitEvent(ctx, msg.Lender) // sdk.NewAttribute("blockhash", msg.Blockhash),
-	// sdk.NewAttribute("txid", txHash.String()),
-	// sdk.NewAttribute("recipient", recipient.EncodeAddress()),
-	return &types.MsgAddLiquidityResponse{}, nil
+	m.EmitEvent(ctx, msg.Lender,
+		sdk.NewAttribute("deposit", msg.Amount.String()),
+		sdk.NewAttribute("received_share", received_shares.String()),
+	)
+	return &types.MsgAddLiquidityResponse{
+		Shares: &received_shares,
+	}, nil
 
 }
 
