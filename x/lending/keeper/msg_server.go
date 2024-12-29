@@ -71,7 +71,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		if e != nil {
 			return nil, e
 		}
-		if address == vault {
+		if address.EncodeAddress() == vault {
 			collateralAmount.Add(math.NewInt(o.Value))
 		}
 	}
@@ -80,6 +80,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	decimal := math.NewInt(1)
 
 	// verify LTV (Loan-to-Value Ratio)
+	// collateral value * min_ltv > borrow amount
 	if collateralAmount.Mul(currentPrice).Quo(decimal).Mul(params.MinInitialLtvPercent).Quo(types.Percent).LT(msg.BorrowAmount.Amount) {
 		return nil, types.ErrInsufficientCollateral
 	}
@@ -112,6 +113,19 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	}
 
 	m.SetLoan(ctx, loan)
+
+	m.EmitEvent(ctx, msg.Borrower,
+		sdk.NewAttribute("vault", loan.VaultAddress),
+		sdk.NewAttribute("borrower", loan.Borrower),
+		sdk.NewAttribute("agency", loan.Agency),
+		sdk.NewAttribute("loan_secret_hash", loan.HashLoanSecret),
+		sdk.NewAttribute("muturity_time", string(loan.MaturityTime)),
+		sdk.NewAttribute("final_timeout", string(loan.FinalTimeout)),
+		sdk.NewAttribute("borrow_amount", loan.BorrowAmount.String()),
+		sdk.NewAttribute("collateral", loan.CollateralAmount.String()),
+		sdk.NewAttribute("pool_id", loan.PoolId),
+		sdk.NewAttribute("event_id", loan.EventId),
+	)
 
 	return &types.MsgApplyResponse{}, nil
 

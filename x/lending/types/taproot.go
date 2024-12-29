@@ -10,9 +10,9 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 )
 
-func GetTaprootAddress(script []byte) (string, error) {
+func GetTaprootAddress(script []byte) (*btcutil.AddressTaproot, error) {
 	conf := sdk.GetConfig().GetBtcChainCfg()
-	btcutil.NewAddressTaproot(script, conf)
+	return btcutil.NewAddressTaproot(script, conf)
 }
 
 // Branch 1: multisig signature script
