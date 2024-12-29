@@ -33,7 +33,8 @@ var (
 	ErrEmptyPoof          = errorsmod.Register(ModuleName, 4002, "invalid proof")
 	ErrDepositTxNotExists = errorsmod.Register(ModuleName, 4002, "deposit not exists")
 
-	ErrEmptyLoanSecret = errorsmod.Register(ModuleName, 5001, "invalid loan secret")
+	ErrEmptyLoanSecret    = errorsmod.Register(ModuleName, 5001, "invalid loan secret")
+	ErrMismatchLoanSecret = errorsmod.Register(ModuleName, 5001, "mismatch loan secret")
 
 	ErrEmptyAdaptorPoint = errorsmod.Register(ModuleName, 6001, "invalid adaptor point")
 	ErrInvalidRepayment  = errorsmod.Register(ModuleName, 6002, "invalid repayment")

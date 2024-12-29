@@ -164,12 +164,42 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	loan.Status = types.LoanStatus_Approve
 	m.SetLoan(ctx, loan)
 
+	m.EmitEvent(ctx, msg.Relayer,
+		sdk.NewAttribute("vault", loan.VaultAddress),
+		sdk.NewAttribute("deposit_tx", msg.DepositTxId),
+		sdk.NewAttribute("proof", msg.Poof),
+		sdk.NewAttribute("height", string(msg.Height)),
+	)
+
 	return &types.MsgApproveResponse{}, nil
 }
 
 // Redeem implements types.MsgServer.
-func (m msgServer) Redeem(ctx context.Context, msg *types.MsgRedeem) (*types.MsgRedeemResponse, error) {
-	panic("unimplemented")
+func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.MsgRedeemResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanNotExists
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+
+	if types.HashLoanSecret(msg.LoanSecret) != loan.HashLoanSecret {
+		return nil, types.ErrMismatchLoanSecret
+	}
+
+	m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.AccAddress(loan.Borrower), *loan.BorrowAmount)
+
+	loan.Status = types.LoanStatus_Disburse
+
+	m.SetLoan(ctx, loan)
+
+	m.EmitEvent(ctx, msg.Borrower,
+		sdk.NewAttribute("vault", loan.VaultAddress),
+		sdk.NewAttribute("loan_secret", msg.LoanSecret),
+	)
+
+	return &types.MsgRedeemResponse{}, nil
 }
 
 // Repay implements types.MsgServer.

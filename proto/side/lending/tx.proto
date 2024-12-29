@@ -35,8 +35,9 @@ message MsgRepay{
     option (cosmos.msg.v1.signer) = "borrower";
 
     string borrower = 1;
-    cosmos.base.v1beta1.Coin amount = 2;
-    string adaptor_point = 3;
+    string loan_id = 2;
+    cosmos.base.v1beta1.Coin amount = 3;
+    string adaptor_point = 4;
 }
 
 message MsgRepayResponse{}
@@ -44,7 +45,8 @@ message MsgRepayResponse{}
 message MsgRedeem {
     option (cosmos.msg.v1.signer) = "borrower";
     string borrower = 1;
-    string loan_secret = 8;
+    string loan_id = 2;
+    string loan_secret = 3;
 }
 
 message MsgRedeemResponse{}

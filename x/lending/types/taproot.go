@@ -10,6 +10,11 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 )
 
+func HashLoanSecret(secret string) string {
+	// Todo later
+	return secret
+}
+
 func GetTaprootAddress(script []byte) (*btcutil.AddressTaproot, error) {
 	conf := sdk.GetConfig().GetBtcChainCfg()
 	return btcutil.NewAddressTaproot(script, conf)
