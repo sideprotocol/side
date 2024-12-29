@@ -6,13 +6,13 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgRequestVaultAddress(borrower string, borrowerPubkey string, hashLoanSecret string, maturityTime uint64, finalTimeout uint64) *MsgApply {
+func NewMsgRequestVaultAddress(borrower string, borrowerPubkey string, hashLoanSecret string, maturityTime int64, finalTimeout int64) *MsgApply {
 	return &MsgApply{
-		Borrower:         borrower,
-		BorrowerPubkey:   borrowerPubkey,
-		HashOfLoanSecret: hashLoanSecret,
-		MaturityTime:     maturityTime,
-		FinalTimeout:     finalTimeout,
+		Borrower:       borrower,
+		BorrowerPubkey: borrowerPubkey,
+		LoanSecretHash: hashLoanSecret,
+		MaturityTime:   maturityTime,
+		FinalTimeout:   finalTimeout,
 	}
 }
 
@@ -30,7 +30,7 @@ func (m *MsgApply) ValidateBasic() error {
 		return ErrEmptySender
 	}
 
-	if len(m.HashOfLoanSecret) == 0 {
+	if len(m.LoanSecretHash) == 0 {
 		return ErrInvalidLoanSecret
 	}
 

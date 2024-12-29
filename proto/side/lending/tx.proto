@@ -77,14 +77,15 @@ message MsgApply {
 
     string borrower = 1;
     string borrower_pubkey = 2;
-    string hash_of_loan_secret = 3;
-    uint64 maturity_time = 4;
-    uint64 final_timeout =5;
+    string loan_secret_hash = 3;
+    int64 maturity_time = 4;
+    int64 final_timeout =5;
     
     string pool_id = 6;
     cosmos.base.v1beta1.Coin borrow_amount = 7;
     string event_id = 8;
     string cets = 9;
+    string deposit_tx = 10;
 }
 
 message MsgApplyResponse {
@@ -95,7 +96,7 @@ message MsgDeposit {
     option (cosmos.msg.v1.signer) = "relayer";
     
     string relayer = 1;
-    string deposit_tx =2;
+    string deposit_tx_id =2;
     uint64 height = 3;
     string poof = 4;
 }
@@ -103,20 +104,3 @@ message MsgDeposit {
 message MsgDepositResponse {
 
 }
-
-// message MsgCreateLoan {
-//     option (cosmos.msg.v1.signer) = "borrower";
-
-//     string borrower = 1;
-//     string funding_tx =2;
-//     Coin collateral_amount = 3;
-//     Coin borrow_amount = 4;
-//     Coin fees = 5;
-//     uint32 period = 6;
-//     uint32 interest_rate = 7;
-//     string vault_address = 8;
-//     string event_id = 9;
-//     string cet = 10;
-// }
-
-// message MsgCreateLoanResposne {}

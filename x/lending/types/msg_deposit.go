@@ -6,18 +6,18 @@ import (
 
 var _ sdk.Msg = &MsgDeposit{}
 
-func NewMsgDeposit(relayer string, depositTx string, height uint64, proof string) *MsgDeposit {
+func NewMsgDeposit(relayer string, DepositTxId string, height uint64, proof string) *MsgDeposit {
 	return &MsgDeposit{
-		Relayer:   relayer,
-		DepositTx: depositTx,
-		Height:    height,
-		Poof:      proof,
+		Relayer:     relayer,
+		DepositTxId: DepositTxId,
+		Height:      height,
+		Poof:        proof,
 	}
 }
 
 // ValidateBasic performs basic MsgAddLiquidity message validation.
 func (m *MsgDeposit) ValidateBasic() error {
-	if len(m.DepositTx) == 0 {
+	if len(m.DepositTxId) == 0 {
 		return ErrEmptyDepositTx
 	}
 

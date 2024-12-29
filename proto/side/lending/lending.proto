@@ -27,12 +27,20 @@ message LendingPool {
 }
 
 enum LoanStatus {
-    Created = 0;
-    DCA_Signed = 1;
-    Repay_Initail = 2;
-    Repay_Confirmed = 3;
-    Liquidated = 4;
-    Closed = 5;
+    // Loan Application
+    Apply = 0;
+    // Loan Approval
+    Approve = 1;
+    // Loan Disbursement
+    Disburse = 2;
+    // Loan Repayment
+    Repay = 3;
+    // Loan Default/Delinquency
+    Default = 4;
+    // Loan Liquidation
+    Liquidate = 5;
+    // Loan Closure
+    Close = 6;
 }
 
 message Loan {
@@ -40,22 +48,31 @@ message Loan {
     string borrower = 2;
     string agency = 3;
     string hash_loan_secret = 4;
-    uint64 maturity_time = 5;
-    string final_timeout = 6; // use absolute time or ralative time?
-    repeated string collateral_tx_ids = 7;
-    uint64 collateral_amount = 8;
-    cosmos.base.v1beta1.Coin borrow_amount = 9;
-    cosmos.base.v1beta1.Coin fees = 10;
+    int64 maturity_time = 5;
+    int64 final_timeout = 6; 
+    
+    cosmos.base.v1beta1.Coin borrow_amount = 7;
+    cosmos.base.v1beta1.Coin fees = 8;
 
-    uint32 period = 11;
-    uint32 interest_rate = 12;
-    string event_id = 13;
-    uint64 current_price = 14;
-    string attestation_id = 15;
-    string cets = 16;
-    string loan_secret = 17;
-    string repay_adaptor_point = 18;
-    google.protobuf.Timestamp create_at = 19 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 20;
-    string pool_id = 21;
+    string term = 9 [
+        (gogoproto.customtype) = "cosmossdk.io/math.Int",
+        (gogoproto.nullable) = false
+      ];
+    string interest_rate = 10 [
+        (gogoproto.customtype) = "cosmossdk.io/math.Int",
+        (gogoproto.nullable) = false
+      ];
+    string event_id = 11;
+    string attestation_id = 12;
+    string deposit_tx = 13;
+    string collateral_amount = 14 [
+        (gogoproto.customtype) = "cosmossdk.io/math.Int",
+        (gogoproto.nullable) = false
+      ];
+    string cets = 15;
+    string loan_secret = 16;
+    string repay_adaptor_point = 17;
+    google.protobuf.Timestamp create_at = 18 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 19;
+    string pool_id = 20;
 }

@@ -75,7 +75,7 @@ func (k Keeper) GetPool(ctx sdk.Context, pool_id string) types.LendingPool {
 	return pool
 }
 
-// GetAllBlockHeaders returns all block headers
+// GetAllPools returns all block headers
 func (k Keeper) GetAllPools(ctx sdk.Context) []*types.LendingPool {
 	var pools []*types.LendingPool
 	k.IteratePools(ctx, func(pool types.LendingPool) (stop bool) {
@@ -85,7 +85,7 @@ func (k Keeper) GetAllPools(ctx sdk.Context) []*types.LendingPool {
 	return pools
 }
 
-// IterateBlockHeaders iterates through all block headers
+// IteratePools iterates through all block headers
 func (k Keeper) IteratePools(ctx sdk.Context, process func(header types.LendingPool) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 	iterator := storetypes.KVStorePrefixIterator(store, types.PoolStorePrefix)
@@ -97,4 +97,47 @@ func (k Keeper) IteratePools(ctx sdk.Context, process func(header types.LendingP
 			break
 		}
 	}
+}
+
+func (k Keeper) SetLoan(ctx sdk.Context, loan types.Loan) {
+	store := ctx.KVStore(k.storeKey)
+	bz := k.cdc.MustMarshal(&loan)
+	store.Set(types.LoanStoreKey(loan.VaultAddress), bz)
+}
+
+func (k Keeper) HasLoan(ctx sdk.Context, vault string) bool {
+	store := ctx.KVStore(k.storeKey)
+	return store.Has(types.LoanStoreKey(vault))
+}
+
+func (k Keeper) GetLoan(ctx sdk.Context, vault string) types.Loan {
+	store := ctx.KVStore(k.storeKey)
+	var loan types.Loan
+	bz := store.Get(types.LoanStoreKey(vault))
+	k.cdc.MustUnmarshal(bz, &loan)
+	return loan
+}
+
+// IterateLoans iterates through all block headers
+func (k Keeper) IterateLoans(ctx sdk.Context, process func(header types.Loan) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.LoanStorePrefix)
+	defer iterator.Close()
+	for ; iterator.Valid(); iterator.Next() {
+		var header types.Loan
+		k.cdc.MustUnmarshal(iterator.Value(), &header)
+		if process(header) {
+			break
+		}
+	}
+}
+
+// GetAllLoans returns all block headers
+func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
+	var loans []*types.Loan
+	k.IterateLoans(ctx, func(loan types.Loan) (stop bool) {
+		loans = append(loans, &loan)
+		return false
+	})
+	return loans
 }

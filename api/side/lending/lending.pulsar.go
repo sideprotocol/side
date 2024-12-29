@@ -690,52 +690,6 @@ func (x *fastReflection_LendingPool) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_Loan_7_list)(nil)
-
-type _Loan_7_list struct {
-	list *[]string
-}
-
-func (x *_Loan_7_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_Loan_7_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfString((*x.list)[i])
-}
-
-func (x *_Loan_7_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_Loan_7_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_Loan_7_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message Loan at list field CollateralTxIds as it is not of Message kind"))
-}
-
-func (x *_Loan_7_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_Loan_7_list) NewElement() protoreflect.Value {
-	v := ""
-	return protoreflect.ValueOfString(v)
-}
-
-func (x *_Loan_7_list) IsValid() bool {
-	return x.list != nil
-}
-
 var (
 	md_Loan                     protoreflect.MessageDescriptor
 	fd_Loan_vault_address       protoreflect.FieldDescriptor
@@ -744,15 +698,14 @@ var (
 	fd_Loan_hash_loan_secret    protoreflect.FieldDescriptor
 	fd_Loan_maturity_time       protoreflect.FieldDescriptor
 	fd_Loan_final_timeout       protoreflect.FieldDescriptor
-	fd_Loan_collateral_tx_ids   protoreflect.FieldDescriptor
-	fd_Loan_collateral_amount   protoreflect.FieldDescriptor
 	fd_Loan_borrow_amount       protoreflect.FieldDescriptor
 	fd_Loan_fees                protoreflect.FieldDescriptor
-	fd_Loan_period              protoreflect.FieldDescriptor
+	fd_Loan_term                protoreflect.FieldDescriptor
 	fd_Loan_interest_rate       protoreflect.FieldDescriptor
 	fd_Loan_event_id            protoreflect.FieldDescriptor
-	fd_Loan_current_price       protoreflect.FieldDescriptor
 	fd_Loan_attestation_id      protoreflect.FieldDescriptor
+	fd_Loan_deposit_tx          protoreflect.FieldDescriptor
+	fd_Loan_collateral_amount   protoreflect.FieldDescriptor
 	fd_Loan_cets                protoreflect.FieldDescriptor
 	fd_Loan_loan_secret         protoreflect.FieldDescriptor
 	fd_Loan_repay_adaptor_point protoreflect.FieldDescriptor
@@ -770,15 +723,14 @@ func init() {
 	fd_Loan_hash_loan_secret = md_Loan.Fields().ByName("hash_loan_secret")
 	fd_Loan_maturity_time = md_Loan.Fields().ByName("maturity_time")
 	fd_Loan_final_timeout = md_Loan.Fields().ByName("final_timeout")
-	fd_Loan_collateral_tx_ids = md_Loan.Fields().ByName("collateral_tx_ids")
-	fd_Loan_collateral_amount = md_Loan.Fields().ByName("collateral_amount")
 	fd_Loan_borrow_amount = md_Loan.Fields().ByName("borrow_amount")
 	fd_Loan_fees = md_Loan.Fields().ByName("fees")
-	fd_Loan_period = md_Loan.Fields().ByName("period")
+	fd_Loan_term = md_Loan.Fields().ByName("term")
 	fd_Loan_interest_rate = md_Loan.Fields().ByName("interest_rate")
 	fd_Loan_event_id = md_Loan.Fields().ByName("event_id")
-	fd_Loan_current_price = md_Loan.Fields().ByName("current_price")
 	fd_Loan_attestation_id = md_Loan.Fields().ByName("attestation_id")
+	fd_Loan_deposit_tx = md_Loan.Fields().ByName("deposit_tx")
+	fd_Loan_collateral_amount = md_Loan.Fields().ByName("collateral_amount")
 	fd_Loan_cets = md_Loan.Fields().ByName("cets")
 	fd_Loan_loan_secret = md_Loan.Fields().ByName("loan_secret")
 	fd_Loan_repay_adaptor_point = md_Loan.Fields().ByName("repay_adaptor_point")
@@ -876,27 +828,15 @@ func (x *fastReflection_Loan) Range(f func(protoreflect.FieldDescriptor, protore
 			return
 		}
 	}
-	if x.MaturityTime != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.MaturityTime)
+	if x.MaturityTime != int64(0) {
+		value := protoreflect.ValueOfInt64(x.MaturityTime)
 		if !f(fd_Loan_maturity_time, value) {
 			return
 		}
 	}
-	if x.FinalTimeout != "" {
-		value := protoreflect.ValueOfString(x.FinalTimeout)
+	if x.FinalTimeout != int64(0) {
+		value := protoreflect.ValueOfInt64(x.FinalTimeout)
 		if !f(fd_Loan_final_timeout, value) {
-			return
-		}
-	}
-	if len(x.CollateralTxIds) != 0 {
-		value := protoreflect.ValueOfList(&_Loan_7_list{list: &x.CollateralTxIds})
-		if !f(fd_Loan_collateral_tx_ids, value) {
-			return
-		}
-	}
-	if x.CollateralAmount != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.CollateralAmount)
-		if !f(fd_Loan_collateral_amount, value) {
 			return
 		}
 	}
@@ -912,14 +852,14 @@ func (x *fastReflection_Loan) Range(f func(protoreflect.FieldDescriptor, protore
 			return
 		}
 	}
-	if x.Period != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.Period)
-		if !f(fd_Loan_period, value) {
+	if x.Term != "" {
+		value := protoreflect.ValueOfString(x.Term)
+		if !f(fd_Loan_term, value) {
 			return
 		}
 	}
-	if x.InterestRate != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.InterestRate)
+	if x.InterestRate != "" {
+		value := protoreflect.ValueOfString(x.InterestRate)
 		if !f(fd_Loan_interest_rate, value) {
 			return
 		}
@@ -930,15 +870,21 @@ func (x *fastReflection_Loan) Range(f func(protoreflect.FieldDescriptor, protore
 			return
 		}
 	}
-	if x.CurrentPrice != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.CurrentPrice)
-		if !f(fd_Loan_current_price, value) {
-			return
-		}
-	}
 	if x.AttestationId != "" {
 		value := protoreflect.ValueOfString(x.AttestationId)
 		if !f(fd_Loan_attestation_id, value) {
+			return
+		}
+	}
+	if x.DepositTx != "" {
+		value := protoreflect.ValueOfString(x.DepositTx)
+		if !f(fd_Loan_deposit_tx, value) {
+			return
+		}
+	}
+	if x.CollateralAmount != "" {
+		value := protoreflect.ValueOfString(x.CollateralAmount)
+		if !f(fd_Loan_collateral_amount, value) {
 			return
 		}
 	}
@@ -1002,27 +948,25 @@ func (x *fastReflection_Loan) Has(fd protoreflect.FieldDescriptor) bool {
 	case "side.lending.Loan.hash_loan_secret":
 		return x.HashLoanSecret != ""
 	case "side.lending.Loan.maturity_time":
-		return x.MaturityTime != uint64(0)
+		return x.MaturityTime != int64(0)
 	case "side.lending.Loan.final_timeout":
-		return x.FinalTimeout != ""
-	case "side.lending.Loan.collateral_tx_ids":
-		return len(x.CollateralTxIds) != 0
-	case "side.lending.Loan.collateral_amount":
-		return x.CollateralAmount != uint64(0)
+		return x.FinalTimeout != int64(0)
 	case "side.lending.Loan.borrow_amount":
 		return x.BorrowAmount != nil
 	case "side.lending.Loan.fees":
 		return x.Fees != nil
-	case "side.lending.Loan.period":
-		return x.Period != uint32(0)
+	case "side.lending.Loan.term":
+		return x.Term != ""
 	case "side.lending.Loan.interest_rate":
-		return x.InterestRate != uint32(0)
+		return x.InterestRate != ""
 	case "side.lending.Loan.event_id":
 		return x.EventId != ""
-	case "side.lending.Loan.current_price":
-		return x.CurrentPrice != uint64(0)
 	case "side.lending.Loan.attestation_id":
 		return x.AttestationId != ""
+	case "side.lending.Loan.deposit_tx":
+		return x.DepositTx != ""
+	case "side.lending.Loan.collateral_amount":
+		return x.CollateralAmount != ""
 	case "side.lending.Loan.cets":
 		return x.Cets != ""
 	case "side.lending.Loan.loan_secret":
@@ -1060,27 +1004,25 @@ func (x *fastReflection_Loan) Clear(fd protoreflect.FieldDescriptor) {
 	case "side.lending.Loan.hash_loan_secret":
 		x.HashLoanSecret = ""
 	case "side.lending.Loan.maturity_time":
-		x.MaturityTime = uint64(0)
+		x.MaturityTime = int64(0)
 	case "side.lending.Loan.final_timeout":
-		x.FinalTimeout = ""
-	case "side.lending.Loan.collateral_tx_ids":
-		x.CollateralTxIds = nil
-	case "side.lending.Loan.collateral_amount":
-		x.CollateralAmount = uint64(0)
+		x.FinalTimeout = int64(0)
 	case "side.lending.Loan.borrow_amount":
 		x.BorrowAmount = nil
 	case "side.lending.Loan.fees":
 		x.Fees = nil
-	case "side.lending.Loan.period":
-		x.Period = uint32(0)
+	case "side.lending.Loan.term":
+		x.Term = ""
 	case "side.lending.Loan.interest_rate":
-		x.InterestRate = uint32(0)
+		x.InterestRate = ""
 	case "side.lending.Loan.event_id":
 		x.EventId = ""
-	case "side.lending.Loan.current_price":
-		x.CurrentPrice = uint64(0)
 	case "side.lending.Loan.attestation_id":
 		x.AttestationId = ""
+	case "side.lending.Loan.deposit_tx":
+		x.DepositTx = ""
+	case "side.lending.Loan.collateral_amount":
+		x.CollateralAmount = ""
 	case "side.lending.Loan.cets":
 		x.Cets = ""
 	case "side.lending.Loan.loan_secret":
@@ -1123,39 +1065,33 @@ func (x *fastReflection_Loan) Get(descriptor protoreflect.FieldDescriptor) proto
 		return protoreflect.ValueOfString(value)
 	case "side.lending.Loan.maturity_time":
 		value := x.MaturityTime
-		return protoreflect.ValueOfUint64(value)
+		return protoreflect.ValueOfInt64(value)
 	case "side.lending.Loan.final_timeout":
 		value := x.FinalTimeout
-		return protoreflect.ValueOfString(value)
-	case "side.lending.Loan.collateral_tx_ids":
-		if len(x.CollateralTxIds) == 0 {
-			return protoreflect.ValueOfList(&_Loan_7_list{})
-		}
-		listValue := &_Loan_7_list{list: &x.CollateralTxIds}
-		return protoreflect.ValueOfList(listValue)
-	case "side.lending.Loan.collateral_amount":
-		value := x.CollateralAmount
-		return protoreflect.ValueOfUint64(value)
+		return protoreflect.ValueOfInt64(value)
 	case "side.lending.Loan.borrow_amount":
 		value := x.BorrowAmount
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "side.lending.Loan.fees":
 		value := x.Fees
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.lending.Loan.period":
-		value := x.Period
-		return protoreflect.ValueOfUint32(value)
+	case "side.lending.Loan.term":
+		value := x.Term
+		return protoreflect.ValueOfString(value)
 	case "side.lending.Loan.interest_rate":
 		value := x.InterestRate
-		return protoreflect.ValueOfUint32(value)
+		return protoreflect.ValueOfString(value)
 	case "side.lending.Loan.event_id":
 		value := x.EventId
 		return protoreflect.ValueOfString(value)
-	case "side.lending.Loan.current_price":
-		value := x.CurrentPrice
-		return protoreflect.ValueOfUint64(value)
 	case "side.lending.Loan.attestation_id":
 		value := x.AttestationId
+		return protoreflect.ValueOfString(value)
+	case "side.lending.Loan.deposit_tx":
+		value := x.DepositTx
+		return protoreflect.ValueOfString(value)
+	case "side.lending.Loan.collateral_amount":
+		value := x.CollateralAmount
 		return protoreflect.ValueOfString(value)
 	case "side.lending.Loan.cets":
 		value := x.Cets
@@ -1204,29 +1140,25 @@ func (x *fastReflection_Loan) Set(fd protoreflect.FieldDescriptor, value protore
 	case "side.lending.Loan.hash_loan_secret":
 		x.HashLoanSecret = value.Interface().(string)
 	case "side.lending.Loan.maturity_time":
-		x.MaturityTime = value.Uint()
+		x.MaturityTime = value.Int()
 	case "side.lending.Loan.final_timeout":
-		x.FinalTimeout = value.Interface().(string)
-	case "side.lending.Loan.collateral_tx_ids":
-		lv := value.List()
-		clv := lv.(*_Loan_7_list)
-		x.CollateralTxIds = *clv.list
-	case "side.lending.Loan.collateral_amount":
-		x.CollateralAmount = value.Uint()
+		x.FinalTimeout = value.Int()
 	case "side.lending.Loan.borrow_amount":
 		x.BorrowAmount = value.Message().Interface().(*v1beta1.Coin)
 	case "side.lending.Loan.fees":
 		x.Fees = value.Message().Interface().(*v1beta1.Coin)
-	case "side.lending.Loan.period":
-		x.Period = uint32(value.Uint())
+	case "side.lending.Loan.term":
+		x.Term = value.Interface().(string)
 	case "side.lending.Loan.interest_rate":
-		x.InterestRate = uint32(value.Uint())
+		x.InterestRate = value.Interface().(string)
 	case "side.lending.Loan.event_id":
 		x.EventId = value.Interface().(string)
-	case "side.lending.Loan.current_price":
-		x.CurrentPrice = value.Uint()
 	case "side.lending.Loan.attestation_id":
 		x.AttestationId = value.Interface().(string)
+	case "side.lending.Loan.deposit_tx":
+		x.DepositTx = value.Interface().(string)
+	case "side.lending.Loan.collateral_amount":
+		x.CollateralAmount = value.Interface().(string)
 	case "side.lending.Loan.cets":
 		x.Cets = value.Interface().(string)
 	case "side.lending.Loan.loan_secret":
@@ -1259,12 +1191,6 @@ func (x *fastReflection_Loan) Set(fd protoreflect.FieldDescriptor, value protore
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Loan) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.Loan.collateral_tx_ids":
-		if x.CollateralTxIds == nil {
-			x.CollateralTxIds = []string{}
-		}
-		value := &_Loan_7_list{list: &x.CollateralTxIds}
-		return protoreflect.ValueOfList(value)
 	case "side.lending.Loan.borrow_amount":
 		if x.BorrowAmount == nil {
 			x.BorrowAmount = new(v1beta1.Coin)
@@ -1292,18 +1218,18 @@ func (x *fastReflection_Loan) Mutable(fd protoreflect.FieldDescriptor) protorefl
 		panic(fmt.Errorf("field maturity_time of message side.lending.Loan is not mutable"))
 	case "side.lending.Loan.final_timeout":
 		panic(fmt.Errorf("field final_timeout of message side.lending.Loan is not mutable"))
-	case "side.lending.Loan.collateral_amount":
-		panic(fmt.Errorf("field collateral_amount of message side.lending.Loan is not mutable"))
-	case "side.lending.Loan.period":
-		panic(fmt.Errorf("field period of message side.lending.Loan is not mutable"))
+	case "side.lending.Loan.term":
+		panic(fmt.Errorf("field term of message side.lending.Loan is not mutable"))
 	case "side.lending.Loan.interest_rate":
 		panic(fmt.Errorf("field interest_rate of message side.lending.Loan is not mutable"))
 	case "side.lending.Loan.event_id":
 		panic(fmt.Errorf("field event_id of message side.lending.Loan is not mutable"))
-	case "side.lending.Loan.current_price":
-		panic(fmt.Errorf("field current_price of message side.lending.Loan is not mutable"))
 	case "side.lending.Loan.attestation_id":
 		panic(fmt.Errorf("field attestation_id of message side.lending.Loan is not mutable"))
+	case "side.lending.Loan.deposit_tx":
+		panic(fmt.Errorf("field deposit_tx of message side.lending.Loan is not mutable"))
+	case "side.lending.Loan.collateral_amount":
+		panic(fmt.Errorf("field collateral_amount of message side.lending.Loan is not mutable"))
 	case "side.lending.Loan.cets":
 		panic(fmt.Errorf("field cets of message side.lending.Loan is not mutable"))
 	case "side.lending.Loan.loan_secret":
@@ -1336,29 +1262,26 @@ func (x *fastReflection_Loan) NewField(fd protoreflect.FieldDescriptor) protoref
 	case "side.lending.Loan.hash_loan_secret":
 		return protoreflect.ValueOfString("")
 	case "side.lending.Loan.maturity_time":
-		return protoreflect.ValueOfUint64(uint64(0))
+		return protoreflect.ValueOfInt64(int64(0))
 	case "side.lending.Loan.final_timeout":
-		return protoreflect.ValueOfString("")
-	case "side.lending.Loan.collateral_tx_ids":
-		list := []string{}
-		return protoreflect.ValueOfList(&_Loan_7_list{list: &list})
-	case "side.lending.Loan.collateral_amount":
-		return protoreflect.ValueOfUint64(uint64(0))
+		return protoreflect.ValueOfInt64(int64(0))
 	case "side.lending.Loan.borrow_amount":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.lending.Loan.fees":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.lending.Loan.period":
-		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.lending.Loan.term":
+		return protoreflect.ValueOfString("")
 	case "side.lending.Loan.interest_rate":
-		return protoreflect.ValueOfUint32(uint32(0))
+		return protoreflect.ValueOfString("")
 	case "side.lending.Loan.event_id":
 		return protoreflect.ValueOfString("")
-	case "side.lending.Loan.current_price":
-		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.lending.Loan.attestation_id":
+		return protoreflect.ValueOfString("")
+	case "side.lending.Loan.deposit_tx":
+		return protoreflect.ValueOfString("")
+	case "side.lending.Loan.collateral_amount":
 		return protoreflect.ValueOfString("")
 	case "side.lending.Loan.cets":
 		return protoreflect.ValueOfString("")
@@ -1461,18 +1384,8 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 		if x.MaturityTime != 0 {
 			n += 1 + runtime.Sov(uint64(x.MaturityTime))
 		}
-		l = len(x.FinalTimeout)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if len(x.CollateralTxIds) > 0 {
-			for _, s := range x.CollateralTxIds {
-				l = len(s)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.CollateralAmount != 0 {
-			n += 1 + runtime.Sov(uint64(x.CollateralAmount))
+		if x.FinalTimeout != 0 {
+			n += 1 + runtime.Sov(uint64(x.FinalTimeout))
 		}
 		if x.BorrowAmount != nil {
 			l = options.Size(x.BorrowAmount)
@@ -1482,26 +1395,33 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Fees)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Period != 0 {
-			n += 1 + runtime.Sov(uint64(x.Period))
+		l = len(x.Term)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.InterestRate != 0 {
-			n += 1 + runtime.Sov(uint64(x.InterestRate))
+		l = len(x.InterestRate)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		l = len(x.EventId)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.CurrentPrice != 0 {
-			n += 1 + runtime.Sov(uint64(x.CurrentPrice))
-		}
 		l = len(x.AttestationId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.DepositTx)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.CollateralAmount)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		l = len(x.Cets)
 		if l > 0 {
-			n += 2 + l + runtime.Sov(uint64(l))
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		l = len(x.LoanSecret)
 		if l > 0 {
@@ -1558,14 +1478,14 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0xaa
+			dAtA[i] = 0xa2
 		}
 		if x.Status != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0xa0
+			dAtA[i] = 0x98
 		}
 		if x.CreateAt != nil {
 			encoded, err := options.Marshal(x.CreateAt)
@@ -1581,7 +1501,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0x9a
+			dAtA[i] = 0x92
 		}
 		if len(x.RepayAdaptorPoint) > 0 {
 			i -= len(x.RepayAdaptorPoint)
@@ -1590,7 +1510,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0x92
+			dAtA[i] = 0x8a
 		}
 		if len(x.LoanSecret) > 0 {
 			i -= len(x.LoanSecret)
@@ -1599,45 +1519,56 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0x8a
+			dAtA[i] = 0x82
 		}
 		if len(x.Cets) > 0 {
 			i -= len(x.Cets)
 			copy(dAtA[i:], x.Cets)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Cets)))
 			i--
-			dAtA[i] = 0x1
+			dAtA[i] = 0x7a
+		}
+		if len(x.CollateralAmount) > 0 {
+			i -= len(x.CollateralAmount)
+			copy(dAtA[i:], x.CollateralAmount)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.CollateralAmount)))
 			i--
-			dAtA[i] = 0x82
+			dAtA[i] = 0x72
+		}
+		if len(x.DepositTx) > 0 {
+			i -= len(x.DepositTx)
+			copy(dAtA[i:], x.DepositTx)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DepositTx)))
+			i--
+			dAtA[i] = 0x6a
 		}
 		if len(x.AttestationId) > 0 {
 			i -= len(x.AttestationId)
 			copy(dAtA[i:], x.AttestationId)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AttestationId)))
 			i--
-			dAtA[i] = 0x7a
-		}
-		if x.CurrentPrice != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.CurrentPrice))
-			i--
-			dAtA[i] = 0x70
+			dAtA[i] = 0x62
 		}
 		if len(x.EventId) > 0 {
 			i -= len(x.EventId)
 			copy(dAtA[i:], x.EventId)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.EventId)))
 			i--
-			dAtA[i] = 0x6a
+			dAtA[i] = 0x5a
 		}
-		if x.InterestRate != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.InterestRate))
+		if len(x.InterestRate) > 0 {
+			i -= len(x.InterestRate)
+			copy(dAtA[i:], x.InterestRate)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.InterestRate)))
 			i--
-			dAtA[i] = 0x60
+			dAtA[i] = 0x52
 		}
-		if x.Period != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Period))
+		if len(x.Term) > 0 {
+			i -= len(x.Term)
+			copy(dAtA[i:], x.Term)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Term)))
 			i--
-			dAtA[i] = 0x58
+			dAtA[i] = 0x4a
 		}
 		if x.Fees != nil {
 			encoded, err := options.Marshal(x.Fees)
@@ -1651,7 +1582,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x52
+			dAtA[i] = 0x42
 		}
 		if x.BorrowAmount != nil {
 			encoded, err := options.Marshal(x.BorrowAmount)
@@ -1665,28 +1596,12 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x4a
+			dAtA[i] = 0x3a
 		}
-		if x.CollateralAmount != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.CollateralAmount))
+		if x.FinalTimeout != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.FinalTimeout))
 			i--
-			dAtA[i] = 0x40
-		}
-		if len(x.CollateralTxIds) > 0 {
-			for iNdEx := len(x.CollateralTxIds) - 1; iNdEx >= 0; iNdEx-- {
-				i -= len(x.CollateralTxIds[iNdEx])
-				copy(dAtA[i:], x.CollateralTxIds[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.CollateralTxIds[iNdEx])))
-				i--
-				dAtA[i] = 0x3a
-			}
-		}
-		if len(x.FinalTimeout) > 0 {
-			i -= len(x.FinalTimeout)
-			copy(dAtA[i:], x.FinalTimeout)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FinalTimeout)))
-			i--
-			dAtA[i] = 0x32
+			dAtA[i] = 0x30
 		}
 		if x.MaturityTime != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.MaturityTime))
@@ -1912,16 +1827,16 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.MaturityTime |= uint64(b&0x7F) << shift
+					x.MaturityTime |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
 			case 6:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FinalTimeout", wireType)
 				}
-				var stringLen uint64
+				x.FinalTimeout = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1931,76 +1846,12 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.FinalTimeout |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.FinalTimeout = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 7:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CollateralTxIds", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.CollateralTxIds = append(x.CollateralTxIds, string(dAtA[iNdEx:postIndex]))
-				iNdEx = postIndex
-			case 8:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CollateralAmount", wireType)
-				}
-				x.CollateralAmount = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.CollateralAmount |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 9:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BorrowAmount", wireType)
 				}
@@ -2036,7 +1887,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 10:
+			case 8:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Fees", wireType)
 				}
@@ -2072,11 +1923,11 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 11:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
+			case 9:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Term", wireType)
 				}
-				x.Period = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2086,16 +1937,29 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Period |= uint32(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-			case 12:
-				if wireType != 0 {
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Term = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 10:
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field InterestRate", wireType)
 				}
-				x.InterestRate = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2105,12 +1969,25 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.InterestRate |= uint32(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-			case 13:
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.InterestRate = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 11:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EventId", wireType)
 				}
@@ -2142,26 +2019,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				}
 				x.EventId = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 14:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CurrentPrice", wireType)
-				}
-				x.CurrentPrice = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.CurrentPrice |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 15:
+			case 12:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AttestationId", wireType)
 				}
@@ -2193,7 +2051,71 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				}
 				x.AttestationId = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 16:
+			case 13:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositTx", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DepositTx = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 14:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CollateralAmount", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.CollateralAmount = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 15:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Cets", wireType)
 				}
@@ -2225,7 +2147,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				}
 				x.Cets = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 17:
+			case 16:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LoanSecret", wireType)
 				}
@@ -2257,7 +2179,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				}
 				x.LoanSecret = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 18:
+			case 17:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RepayAdaptorPoint", wireType)
 				}
@@ -2289,7 +2211,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				}
 				x.RepayAdaptorPoint = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 19:
+			case 18:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CreateAt", wireType)
 				}
@@ -2325,7 +2247,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 20:
+			case 19:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 				}
@@ -2344,7 +2266,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 21:
+			case 20:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
 				}
@@ -2474,31 +2396,41 @@ func (PoolStatus) EnumDescriptor() ([]byte, []int) {
 type LoanStatus int32
 
 const (
-	LoanStatus_Created         LoanStatus = 0
-	LoanStatus_DCA_Signed      LoanStatus = 1
-	LoanStatus_Repay_Initail   LoanStatus = 2
-	LoanStatus_Repay_Confirmed LoanStatus = 3
-	LoanStatus_Liquidated      LoanStatus = 4
-	LoanStatus_Closed          LoanStatus = 5
+	// Loan Application
+	LoanStatus_Apply LoanStatus = 0
+	// Loan Approval
+	LoanStatus_Approve LoanStatus = 1
+	// Loan Disbursement
+	LoanStatus_Disburse LoanStatus = 2
+	// Loan Repayment
+	LoanStatus_Repay LoanStatus = 3
+	// Loan Default/Delinquency
+	LoanStatus_Default LoanStatus = 4
+	// Loan Liquidation
+	LoanStatus_Liquidate LoanStatus = 5
+	// Loan Closure
+	LoanStatus_Close LoanStatus = 6
 )
 
 // Enum value maps for LoanStatus.
 var (
 	LoanStatus_name = map[int32]string{
-		0: "Created",
-		1: "DCA_Signed",
-		2: "Repay_Initail",
-		3: "Repay_Confirmed",
-		4: "Liquidated",
-		5: "Closed",
+		0: "Apply",
+		1: "Approve",
+		2: "Disburse",
+		3: "Repay",
+		4: "Default",
+		5: "Liquidate",
+		6: "Close",
 	}
 	LoanStatus_value = map[string]int32{
-		"Created":         0,
-		"DCA_Signed":      1,
-		"Repay_Initail":   2,
-		"Repay_Confirmed": 3,
-		"Liquidated":      4,
-		"Closed":          5,
+		"Apply":     0,
+		"Approve":   1,
+		"Disburse":  2,
+		"Repay":     3,
+		"Default":   4,
+		"Liquidate": 5,
+		"Close":     6,
 	}
 )
 
@@ -2605,23 +2537,22 @@ type Loan struct {
 	Borrower          string                 `protobuf:"bytes,2,opt,name=borrower,proto3" json:"borrower,omitempty"`
 	Agency            string                 `protobuf:"bytes,3,opt,name=agency,proto3" json:"agency,omitempty"`
 	HashLoanSecret    string                 `protobuf:"bytes,4,opt,name=hash_loan_secret,json=hashLoanSecret,proto3" json:"hash_loan_secret,omitempty"`
-	MaturityTime      uint64                 `protobuf:"varint,5,opt,name=maturity_time,json=maturityTime,proto3" json:"maturity_time,omitempty"`
-	FinalTimeout      string                 `protobuf:"bytes,6,opt,name=final_timeout,json=finalTimeout,proto3" json:"final_timeout,omitempty"` // use absolute time or ralative time?
-	CollateralTxIds   []string               `protobuf:"bytes,7,rep,name=collateral_tx_ids,json=collateralTxIds,proto3" json:"collateral_tx_ids,omitempty"`
-	CollateralAmount  uint64                 `protobuf:"varint,8,opt,name=collateral_amount,json=collateralAmount,proto3" json:"collateral_amount,omitempty"`
-	BorrowAmount      *v1beta1.Coin          `protobuf:"bytes,9,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
-	Fees              *v1beta1.Coin          `protobuf:"bytes,10,opt,name=fees,proto3" json:"fees,omitempty"`
-	Period            uint32                 `protobuf:"varint,11,opt,name=period,proto3" json:"period,omitempty"`
-	InterestRate      uint32                 `protobuf:"varint,12,opt,name=interest_rate,json=interestRate,proto3" json:"interest_rate,omitempty"`
-	EventId           string                 `protobuf:"bytes,13,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
-	CurrentPrice      uint64                 `protobuf:"varint,14,opt,name=current_price,json=currentPrice,proto3" json:"current_price,omitempty"`
-	AttestationId     string                 `protobuf:"bytes,15,opt,name=attestation_id,json=attestationId,proto3" json:"attestation_id,omitempty"`
-	Cets              string                 `protobuf:"bytes,16,opt,name=cets,proto3" json:"cets,omitempty"`
-	LoanSecret        string                 `protobuf:"bytes,17,opt,name=loan_secret,json=loanSecret,proto3" json:"loan_secret,omitempty"`
-	RepayAdaptorPoint string                 `protobuf:"bytes,18,opt,name=repay_adaptor_point,json=repayAdaptorPoint,proto3" json:"repay_adaptor_point,omitempty"`
-	CreateAt          *timestamppb.Timestamp `protobuf:"bytes,19,opt,name=create_at,json=createAt,proto3" json:"create_at,omitempty"`
-	Status            LoanStatus             `protobuf:"varint,20,opt,name=status,proto3,enum=side.lending.LoanStatus" json:"status,omitempty"`
-	PoolId            string                 `protobuf:"bytes,21,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	MaturityTime      int64                  `protobuf:"varint,5,opt,name=maturity_time,json=maturityTime,proto3" json:"maturity_time,omitempty"`
+	FinalTimeout      int64                  `protobuf:"varint,6,opt,name=final_timeout,json=finalTimeout,proto3" json:"final_timeout,omitempty"`
+	BorrowAmount      *v1beta1.Coin          `protobuf:"bytes,7,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
+	Fees              *v1beta1.Coin          `protobuf:"bytes,8,opt,name=fees,proto3" json:"fees,omitempty"`
+	Term              string                 `protobuf:"bytes,9,opt,name=term,proto3" json:"term,omitempty"`
+	InterestRate      string                 `protobuf:"bytes,10,opt,name=interest_rate,json=interestRate,proto3" json:"interest_rate,omitempty"`
+	EventId           string                 `protobuf:"bytes,11,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	AttestationId     string                 `protobuf:"bytes,12,opt,name=attestation_id,json=attestationId,proto3" json:"attestation_id,omitempty"`
+	DepositTx         string                 `protobuf:"bytes,13,opt,name=deposit_tx,json=depositTx,proto3" json:"deposit_tx,omitempty"`
+	CollateralAmount  string                 `protobuf:"bytes,14,opt,name=collateral_amount,json=collateralAmount,proto3" json:"collateral_amount,omitempty"`
+	Cets              string                 `protobuf:"bytes,15,opt,name=cets,proto3" json:"cets,omitempty"`
+	LoanSecret        string                 `protobuf:"bytes,16,opt,name=loan_secret,json=loanSecret,proto3" json:"loan_secret,omitempty"`
+	RepayAdaptorPoint string                 `protobuf:"bytes,17,opt,name=repay_adaptor_point,json=repayAdaptorPoint,proto3" json:"repay_adaptor_point,omitempty"`
+	CreateAt          *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=create_at,json=createAt,proto3" json:"create_at,omitempty"`
+	Status            LoanStatus             `protobuf:"varint,19,opt,name=status,proto3,enum=side.lending.LoanStatus" json:"status,omitempty"`
+	PoolId            string                 `protobuf:"bytes,20,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 }
 
 func (x *Loan) Reset() {
@@ -2672,30 +2603,16 @@ func (x *Loan) GetHashLoanSecret() string {
 	return ""
 }
 
-func (x *Loan) GetMaturityTime() uint64 {
+func (x *Loan) GetMaturityTime() int64 {
 	if x != nil {
 		return x.MaturityTime
 	}
 	return 0
 }
 
-func (x *Loan) GetFinalTimeout() string {
+func (x *Loan) GetFinalTimeout() int64 {
 	if x != nil {
 		return x.FinalTimeout
-	}
-	return ""
-}
-
-func (x *Loan) GetCollateralTxIds() []string {
-	if x != nil {
-		return x.CollateralTxIds
-	}
-	return nil
-}
-
-func (x *Loan) GetCollateralAmount() uint64 {
-	if x != nil {
-		return x.CollateralAmount
 	}
 	return 0
 }
@@ -2714,18 +2631,18 @@ func (x *Loan) GetFees() *v1beta1.Coin {
 	return nil
 }
 
-func (x *Loan) GetPeriod() uint32 {
+func (x *Loan) GetTerm() string {
 	if x != nil {
-		return x.Period
+		return x.Term
 	}
-	return 0
+	return ""
 }
 
-func (x *Loan) GetInterestRate() uint32 {
+func (x *Loan) GetInterestRate() string {
 	if x != nil {
 		return x.InterestRate
 	}
-	return 0
+	return ""
 }
 
 func (x *Loan) GetEventId() string {
@@ -2735,16 +2652,23 @@ func (x *Loan) GetEventId() string {
 	return ""
 }
 
-func (x *Loan) GetCurrentPrice() uint64 {
-	if x != nil {
-		return x.CurrentPrice
-	}
-	return 0
-}
-
 func (x *Loan) GetAttestationId() string {
 	if x != nil {
 		return x.AttestationId
+	}
+	return ""
+}
+
+func (x *Loan) GetDepositTx() string {
+	if x != nil {
+		return x.DepositTx
+	}
+	return ""
+}
+
+func (x *Loan) GetCollateralAmount() string {
+	if x != nil {
+		return x.CollateralAmount
 	}
 	return ""
 }
@@ -2781,7 +2705,7 @@ func (x *Loan) GetStatus() LoanStatus {
 	if x != nil {
 		return x.Status
 	}
-	return LoanStatus_Created
+	return LoanStatus_Apply
 }
 
 func (x *Loan) GetPoolId() string {
@@ -2819,7 +2743,7 @@ var file_side_lending_lending_proto_rawDesc = []byte{
 	0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18,
 	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x6f,
 	0x6f, 0x6c, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
-	0x22, 0xb2, 0x06, 0x0a, 0x04, 0x4c, 0x6f, 0x61, 0x6e, 0x12, 0x23, 0x0a, 0x0d, 0x76, 0x61, 0x75,
+	0x22, 0xd9, 0x06, 0x0a, 0x04, 0x4c, 0x6f, 0x61, 0x6e, 0x12, 0x23, 0x0a, 0x0d, 0x76, 0x61, 0x75,
 	0x6c, 0x74, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x0c, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x1a,
 	0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
@@ -2829,67 +2753,69 @@ var file_side_lending_lending_proto_rawDesc = []byte{
 	0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x68, 0x61,
 	0x73, 0x68, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x23, 0x0a, 0x0d,
 	0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x0c, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x54, 0x69, 0x6d,
+	0x01, 0x28, 0x03, 0x52, 0x0c, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x54, 0x69, 0x6d,
 	0x65, 0x12, 0x23, 0x0a, 0x0d, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f,
-	0x75, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x54,
-	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x12, 0x2a, 0x0a, 0x11, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74,
-	0x65, 0x72, 0x61, 0x6c, 0x5f, 0x74, 0x78, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28,
-	0x09, 0x52, 0x0f, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x54, 0x78, 0x49,
-	0x64, 0x73, 0x12, 0x2b, 0x0a, 0x11, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c,
-	0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x04, 0x52, 0x10, 0x63,
-	0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12,
-	0x3e, 0x0a, 0x0d, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
-	0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69,
-	0x6e, 0x52, 0x0c, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12,
-	0x2d, 0x0a, 0x04, 0x66, 0x65, 0x65, 0x73, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e,
+	0x75, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0c, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x54,
+	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x12, 0x3e, 0x0a, 0x0d, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65,
-	0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52, 0x04, 0x66, 0x65, 0x65, 0x73, 0x12, 0x16,
-	0x0a, 0x06, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06,
-	0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x23, 0x0a, 0x0d, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65,
-	0x73, 0x74, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x69,
-	0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52, 0x61, 0x74, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x65,
-	0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x65,
-	0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x23, 0x0a, 0x0d, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e,
-	0x74, 0x5f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x0e, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x63,
-	0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x25, 0x0a, 0x0e, 0x61,
-	0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x0f, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0d, 0x61, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x65, 0x74, 0x73, 0x18, 0x10, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x04, 0x63, 0x65, 0x74, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x73,
-	0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x11, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6c, 0x6f, 0x61,
-	0x6e, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x2e, 0x0a, 0x13, 0x72, 0x65, 0x70, 0x61, 0x79,
-	0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x12,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x11, 0x72, 0x65, 0x70, 0x61, 0x79, 0x41, 0x64, 0x61, 0x70, 0x74,
-	0x6f, 0x72, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x41, 0x0a, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x5f, 0x61, 0x74, 0x18, 0x13, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
-	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d,
-	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01,
-	0x52, 0x08, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x74, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x18, 0x14, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x17, 0x0a, 0x07,
-	0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x15, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70,
-	0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x2a, 0x26, 0x0a, 0x0a, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x12, 0x0a, 0x0a, 0x06, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x00, 0x12,
-	0x0c, 0x0a, 0x08, 0x49, 0x4e, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x01, 0x2a, 0x6d, 0x0a,
-	0x0a, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0b, 0x0a, 0x07, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x10, 0x00, 0x12, 0x0e, 0x0a, 0x0a, 0x44, 0x43, 0x41, 0x5f,
-	0x53, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x10, 0x01, 0x12, 0x11, 0x0a, 0x0d, 0x52, 0x65, 0x70, 0x61,
-	0x79, 0x5f, 0x49, 0x6e, 0x69, 0x74, 0x61, 0x69, 0x6c, 0x10, 0x02, 0x12, 0x13, 0x0a, 0x0f, 0x52,
-	0x65, 0x70, 0x61, 0x79, 0x5f, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x65, 0x64, 0x10, 0x03,
-	0x12, 0x0e, 0x0a, 0x0a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x65, 0x64, 0x10, 0x04,
-	0x12, 0x0a, 0x0a, 0x06, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x64, 0x10, 0x05, 0x42, 0x90, 0x01, 0x0a,
-	0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x42, 0x0c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52, 0x0c, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x2d, 0x0a, 0x04, 0x66, 0x65, 0x65, 0x73, 0x18, 0x08,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61,
+	0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52,
+	0x04, 0x66, 0x65, 0x65, 0x73, 0x12, 0x31, 0x0a, 0x04, 0x74, 0x65, 0x72, 0x6d, 0x18, 0x09, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49,
+	0x6e, 0x74, 0x52, 0x04, 0x74, 0x65, 0x72, 0x6d, 0x12, 0x42, 0x0a, 0x0d, 0x69, 0x6e, 0x74, 0x65,
+	0x72, 0x65, 0x73, 0x74, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
+	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x0c,
+	0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52, 0x61, 0x74, 0x65, 0x12, 0x19, 0x0a, 0x08,
+	0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x65, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x25, 0x0a, 0x0e, 0x61, 0x74, 0x74, 0x65, 0x73,
+	0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0d, 0x61, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x1d,
+	0x0a, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78, 0x18, 0x0d, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x78, 0x12, 0x4a, 0x0a,
+	0x11, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x5f, 0x61, 0x6d, 0x6f, 0x75,
+	0x6e, 0x74, 0x18, 0x0e, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde,
+	0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d,
+	0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x10, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65,
+	0x72, 0x61, 0x6c, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x65, 0x74,
+	0x73, 0x18, 0x0f, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x65, 0x74, 0x73, 0x12, 0x1f, 0x0a,
+	0x0b, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x10, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0a, 0x6c, 0x6f, 0x61, 0x6e, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x2e,
+	0x0a, 0x13, 0x72, 0x65, 0x70, 0x61, 0x79, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f,
+	0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x11, 0x20, 0x01, 0x28, 0x09, 0x52, 0x11, 0x72, 0x65, 0x70,
+	0x61, 0x79, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x41,
+	0x0a, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x5f, 0x61, 0x74, 0x18, 0x12, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8,
+	0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x08, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41,
+	0x74, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x13, 0x20, 0x01, 0x28,
+	0x0e, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x2e, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x14,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x2a, 0x26, 0x0a, 0x0a,
+	0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0a, 0x0a, 0x06, 0x41, 0x43,
+	0x54, 0x49, 0x56, 0x45, 0x10, 0x00, 0x12, 0x0c, 0x0a, 0x08, 0x49, 0x4e, 0x41, 0x43, 0x54, 0x49,
+	0x56, 0x45, 0x10, 0x01, 0x2a, 0x64, 0x0a, 0x0a, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x12, 0x09, 0x0a, 0x05, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x10, 0x00, 0x12, 0x0b, 0x0a,
+	0x07, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x10, 0x01, 0x12, 0x0c, 0x0a, 0x08, 0x44, 0x69,
+	0x73, 0x62, 0x75, 0x72, 0x73, 0x65, 0x10, 0x02, 0x12, 0x09, 0x0a, 0x05, 0x52, 0x65, 0x70, 0x61,
+	0x79, 0x10, 0x03, 0x12, 0x0b, 0x0a, 0x07, 0x44, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x10, 0x04,
+	0x12, 0x0d, 0x0a, 0x09, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x65, 0x10, 0x05, 0x12,
+	0x09, 0x0a, 0x05, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x10, 0x06, 0x42, 0x90, 0x01, 0x0a, 0x10, 0x63,
+	0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42,
+	0x0c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02,
+	0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d,
+	0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

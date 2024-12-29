@@ -18,8 +18,13 @@ var (
 	ParamsStoreKey = []byte{0x1}
 
 	PoolStorePrefix = []byte{0x2}
+	LoanStorePrefix = []byte{0x3}
 )
 
 func PoolStoreKey(pool_id string) []byte {
 	return append(PoolStorePrefix, []byte(pool_id)...)
+}
+
+func LoanStoreKey(vault string) []byte {
+	return append(LoanStorePrefix, []byte(vault)...)
 }
