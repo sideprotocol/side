@@ -141,3 +141,22 @@ func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 	})
 	return loans
 }
+
+func (k Keeper) SetDepositLog(ctx sdk.Context, deposit types.DepositLog) {
+	store := ctx.KVStore(k.storeKey)
+	bz := k.cdc.MustMarshal(&deposit)
+	store.Set(types.DepositLogKey(deposit.VaultAddress), bz)
+}
+
+func (k Keeper) HasDepositLog(ctx sdk.Context, txid string) bool {
+	store := ctx.KVStore(k.storeKey)
+	return store.Has(types.DepositLogKey(txid))
+}
+
+func (k Keeper) GetDepositLog(ctx sdk.Context, txid string) types.DepositLog {
+	store := ctx.KVStore(k.storeKey)
+	var deposit types.DepositLog
+	bz := store.Get(types.DepositLogKey(txid))
+	k.cdc.MustUnmarshal(bz, &deposit)
+	return deposit
+}

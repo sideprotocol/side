@@ -27,9 +27,11 @@ var (
 	ErrInvalidFunding         = errorsmod.Register(ModuleName, 3006, "invalid funding")
 	ErrInvalidCET             = errorsmod.Register(ModuleName, 3007, "invalid cet")
 	ErrInsufficientCollateral = errorsmod.Register(ModuleName, 3008, "insufficient collateral")
+	ErrLoanNotExists          = errorsmod.Register(ModuleName, 3009, "loan not exists")
 
-	ErrEmptyDepositTx = errorsmod.Register(ModuleName, 4001, "invalid deposit tx")
-	ErrEmptyPoof      = errorsmod.Register(ModuleName, 4002, "invalid proof")
+	ErrEmptyDepositTx     = errorsmod.Register(ModuleName, 4001, "invalid deposit tx")
+	ErrEmptyPoof          = errorsmod.Register(ModuleName, 4002, "invalid proof")
+	ErrDepositTxNotExists = errorsmod.Register(ModuleName, 4002, "deposit not exists")
 
 	ErrEmptyLoanSecret = errorsmod.Register(ModuleName, 5001, "invalid loan secret")
 

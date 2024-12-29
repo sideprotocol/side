@@ -23,8 +23,9 @@ var (
 	Permille       = math.NewInt(1000)
 	ParamsStoreKey = []byte{0x1}
 
-	PoolStorePrefix = []byte{0x2}
-	LoanStorePrefix = []byte{0x3}
+	PoolStorePrefix  = []byte{0x2}
+	LoanStorePrefix  = []byte{0x3}
+	DepositLogPrefix = []byte{0x4}
 )
 
 func PoolStoreKey(pool_id string) []byte {
@@ -33,4 +34,8 @@ func PoolStoreKey(pool_id string) []byte {
 
 func LoanStoreKey(vault string) []byte {
 	return append(LoanStorePrefix, []byte(vault)...)
+}
+
+func DepositLogKey(txid string) []byte {
+	return append(DepositLogPrefix, []byte(txid)...)
 }

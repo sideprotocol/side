@@ -15,7 +15,7 @@ service Msg {
     rpc AddLiquidity(MsgAddLiquidity) returns (MsgAddLiquidityResponse);
     rpc RemoveLiquidity(MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
     rpc Apply(MsgApply) returns (MsgApplyResponse);
-    rpc Deposit(MsgDeposit) returns (MsgDepositResponse);
+    rpc Approve(MsgApprove) returns (MsgApproveResponse);
     rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
 }
@@ -92,7 +92,7 @@ message MsgApplyResponse {
     string vault_address = 1;  
 }
 
-message MsgDeposit {
+message MsgApprove {
     option (cosmos.msg.v1.signer) = "relayer";
     
     string relayer = 1;
@@ -101,6 +101,6 @@ message MsgDeposit {
     string poof = 4;
 }
 
-message MsgDepositResponse {
+message MsgApproveResponse {
 
 }

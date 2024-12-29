@@ -4,10 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
+	"fmt"
 
 	"cosmossdk.io/math"
 	"github.com/btcsuite/btcd/btcutil/psbt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	dlc "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -49,6 +52,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	if err != nil {
 		return nil, types.ErrInvalidFunding
 	}
+	depositTxid := fundTx.UnsignedTx.TxHash().String()
 
 	cetBytes, err := base64.StdEncoding.DecodeString(msg.Cets)
 	if err != nil {
@@ -106,7 +110,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Fees:             fees,
 		EventId:          msg.EventId,
 		Cets:             msg.Cets,
-		DepositTx:        msg.DepositTx,
+		DepositTxs:       []string{depositTxid},
 		CreateAt:         ctx.BlockTime(),
 		PoolId:           msg.PoolId,
 		Status:           types.LoanStatus_Apply,
@@ -114,13 +118,21 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	m.SetLoan(ctx, loan)
 
+	depositLog := types.DepositLog{
+		Txid:         depositTxid,
+		VaultAddress: vault,
+		DepositTx:    msg.DepositTx,
+	}
+
+	m.SetDepositLog(ctx, depositLog)
+
 	m.EmitEvent(ctx, msg.Borrower,
 		sdk.NewAttribute("vault", loan.VaultAddress),
 		sdk.NewAttribute("borrower", loan.Borrower),
 		sdk.NewAttribute("agency", loan.Agency),
 		sdk.NewAttribute("loan_secret_hash", loan.HashLoanSecret),
-		sdk.NewAttribute("muturity_time", string(loan.MaturityTime)),
-		sdk.NewAttribute("final_timeout", string(loan.FinalTimeout)),
+		sdk.NewAttribute("muturity_time", fmt.Sprint(loan.MaturityTime)),
+		sdk.NewAttribute("final_timeout", fmt.Sprint(loan.FinalTimeout)),
 		sdk.NewAttribute("borrow_amount", loan.BorrowAmount.String()),
 		sdk.NewAttribute("collateral", loan.CollateralAmount.String()),
 		sdk.NewAttribute("pool_id", loan.PoolId),
@@ -131,18 +143,37 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 }
 
-// Repay implements types.MsgServer.
-func (m msgServer) Repay(ctx context.Context, msg *types.MsgRepay) (*types.MsgRepayResponse, error) {
-	panic("unimplemented")
+// Approve implements types.MsgServer.
+func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types.MsgApproveResponse, error) {
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasDepositLog(ctx, msg.DepositTxId) {
+		return nil, types.ErrDepositTxNotExists
+	}
+
+	// verify merkle proof
+	// verify(msg.Height, msg.DepositTxId, msg.Poof)
+
+	log := m.GetDepositLog(ctx, msg.DepositTxId)
+	if !m.HasLoan(ctx, log.VaultAddress) {
+		return nil, types.ErrLoanNotExists
+	}
+	loan := m.GetLoan(ctx, log.VaultAddress)
+
+	loan.Status = types.LoanStatus_Approve
+	m.SetLoan(ctx, loan)
+
+	return &types.MsgApproveResponse{}, nil
 }
 
-// RequestVaultAddress implements types.MsgServer.
+// Redeem implements types.MsgServer.
 func (m msgServer) Redeem(ctx context.Context, msg *types.MsgRedeem) (*types.MsgRedeemResponse, error) {
 	panic("unimplemented")
 }
 
-// SubmitFundingTx implements types.MsgServer.
-func (m msgServer) Deposit(ctx context.Context, msg *types.MsgDeposit) (*types.MsgDepositResponse, error) {
+// Repay implements types.MsgServer.
+func (m msgServer) Repay(ctx context.Context, msg *types.MsgRepay) (*types.MsgRepayResponse, error) {
 	panic("unimplemented")
 }
 

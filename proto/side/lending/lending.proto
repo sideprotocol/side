@@ -43,6 +43,12 @@ enum LoanStatus {
     Close = 6;
 }
 
+message DepositLog {
+    string txid = 2;
+    string vault_address = 1;
+    string deposit_tx = 3;
+} 
+
 message Loan {
     string vault_address = 1; // id
     string borrower = 2;
@@ -67,7 +73,7 @@ message Loan {
       ];
     string event_id = 11;
     string attestation_id = 12;
-    string deposit_tx = 13;
+    repeated string deposit_txs = 13;
     string collateral_amount = 14 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
