@@ -145,14 +145,14 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.SupplyRatePermille != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.SupplyRatePermille)
+	if x.SupplyRatePermille != int64(0) {
+		value := protoreflect.ValueOfInt64(x.SupplyRatePermille)
 		if !f(fd_Params_supply_rate_permille, value) {
 			return
 		}
 	}
-	if x.BorrowRatePermille != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.BorrowRatePermille)
+	if x.BorrowRatePermille != int64(0) {
+		value := protoreflect.ValueOfInt64(x.BorrowRatePermille)
 		if !f(fd_Params_borrow_rate_permille, value) {
 			return
 		}
@@ -169,14 +169,14 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.MaxLtvPercent != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.MaxLtvPercent)
+	if x.MaxLtvPercent != int64(0) {
+		value := protoreflect.ValueOfInt64(x.MaxLtvPercent)
 		if !f(fd_Params_max_ltv_percent, value) {
 			return
 		}
 	}
-	if x.LiquidationThresholdPercent != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.LiquidationThresholdPercent)
+	if x.LiquidationThresholdPercent != int64(0) {
+		value := protoreflect.ValueOfInt64(x.LiquidationThresholdPercent)
 		if !f(fd_Params_liquidation_threshold_percent, value) {
 			return
 		}
@@ -197,17 +197,17 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "side.lending.Params.supply_rate_permille":
-		return x.SupplyRatePermille != uint32(0)
+		return x.SupplyRatePermille != int64(0)
 	case "side.lending.Params.borrow_rate_permille":
-		return x.BorrowRatePermille != uint32(0)
+		return x.BorrowRatePermille != int64(0)
 	case "side.lending.Params.fee_recipient":
 		return x.FeeRecipient != ""
 	case "side.lending.Params.pool_creators":
 		return len(x.PoolCreators) != 0
 	case "side.lending.Params.max_ltv_percent":
-		return x.MaxLtvPercent != uint32(0)
+		return x.MaxLtvPercent != int64(0)
 	case "side.lending.Params.liquidation_threshold_percent":
-		return x.LiquidationThresholdPercent != uint32(0)
+		return x.LiquidationThresholdPercent != int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -225,17 +225,17 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "side.lending.Params.supply_rate_permille":
-		x.SupplyRatePermille = uint32(0)
+		x.SupplyRatePermille = int64(0)
 	case "side.lending.Params.borrow_rate_permille":
-		x.BorrowRatePermille = uint32(0)
+		x.BorrowRatePermille = int64(0)
 	case "side.lending.Params.fee_recipient":
 		x.FeeRecipient = ""
 	case "side.lending.Params.pool_creators":
 		x.PoolCreators = nil
 	case "side.lending.Params.max_ltv_percent":
-		x.MaxLtvPercent = uint32(0)
+		x.MaxLtvPercent = int64(0)
 	case "side.lending.Params.liquidation_threshold_percent":
-		x.LiquidationThresholdPercent = uint32(0)
+		x.LiquidationThresholdPercent = int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -254,10 +254,10 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	switch descriptor.FullName() {
 	case "side.lending.Params.supply_rate_permille":
 		value := x.SupplyRatePermille
-		return protoreflect.ValueOfUint32(value)
+		return protoreflect.ValueOfInt64(value)
 	case "side.lending.Params.borrow_rate_permille":
 		value := x.BorrowRatePermille
-		return protoreflect.ValueOfUint32(value)
+		return protoreflect.ValueOfInt64(value)
 	case "side.lending.Params.fee_recipient":
 		value := x.FeeRecipient
 		return protoreflect.ValueOfString(value)
@@ -269,10 +269,10 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 		return protoreflect.ValueOfList(listValue)
 	case "side.lending.Params.max_ltv_percent":
 		value := x.MaxLtvPercent
-		return protoreflect.ValueOfUint32(value)
+		return protoreflect.ValueOfInt64(value)
 	case "side.lending.Params.liquidation_threshold_percent":
 		value := x.LiquidationThresholdPercent
-		return protoreflect.ValueOfUint32(value)
+		return protoreflect.ValueOfInt64(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -294,9 +294,9 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "side.lending.Params.supply_rate_permille":
-		x.SupplyRatePermille = uint32(value.Uint())
+		x.SupplyRatePermille = value.Int()
 	case "side.lending.Params.borrow_rate_permille":
-		x.BorrowRatePermille = uint32(value.Uint())
+		x.BorrowRatePermille = value.Int()
 	case "side.lending.Params.fee_recipient":
 		x.FeeRecipient = value.Interface().(string)
 	case "side.lending.Params.pool_creators":
@@ -304,9 +304,9 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		clv := lv.(*_Params_4_list)
 		x.PoolCreators = *clv.list
 	case "side.lending.Params.max_ltv_percent":
-		x.MaxLtvPercent = uint32(value.Uint())
+		x.MaxLtvPercent = value.Int()
 	case "side.lending.Params.liquidation_threshold_percent":
-		x.LiquidationThresholdPercent = uint32(value.Uint())
+		x.LiquidationThresholdPercent = value.Int()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -357,18 +357,18 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "side.lending.Params.supply_rate_permille":
-		return protoreflect.ValueOfUint32(uint32(0))
+		return protoreflect.ValueOfInt64(int64(0))
 	case "side.lending.Params.borrow_rate_permille":
-		return protoreflect.ValueOfUint32(uint32(0))
+		return protoreflect.ValueOfInt64(int64(0))
 	case "side.lending.Params.fee_recipient":
 		return protoreflect.ValueOfString("")
 	case "side.lending.Params.pool_creators":
 		list := []string{}
 		return protoreflect.ValueOfList(&_Params_4_list{list: &list})
 	case "side.lending.Params.max_ltv_percent":
-		return protoreflect.ValueOfUint32(uint32(0))
+		return protoreflect.ValueOfInt64(int64(0))
 	case "side.lending.Params.liquidation_threshold_percent":
-		return protoreflect.ValueOfUint32(uint32(0))
+		return protoreflect.ValueOfInt64(int64(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -588,7 +588,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.SupplyRatePermille |= uint32(b&0x7F) << shift
+					x.SupplyRatePermille |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -607,7 +607,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.BorrowRatePermille |= uint32(b&0x7F) << shift
+					x.BorrowRatePermille |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -690,7 +690,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.MaxLtvPercent |= uint32(b&0x7F) << shift
+					x.MaxLtvPercent |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -709,7 +709,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.LiquidationThresholdPercent |= uint32(b&0x7F) << shift
+					x.LiquidationThresholdPercent |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -768,12 +768,12 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SupplyRatePermille          uint32   `protobuf:"varint,1,opt,name=supply_rate_permille,json=supplyRatePermille,proto3" json:"supply_rate_permille,omitempty"`
-	BorrowRatePermille          uint32   `protobuf:"varint,2,opt,name=borrow_rate_permille,json=borrowRatePermille,proto3" json:"borrow_rate_permille,omitempty"`
+	SupplyRatePermille          int64    `protobuf:"varint,1,opt,name=supply_rate_permille,json=supplyRatePermille,proto3" json:"supply_rate_permille,omitempty"`
+	BorrowRatePermille          int64    `protobuf:"varint,2,opt,name=borrow_rate_permille,json=borrowRatePermille,proto3" json:"borrow_rate_permille,omitempty"`
 	FeeRecipient                string   `protobuf:"bytes,3,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
 	PoolCreators                []string `protobuf:"bytes,4,rep,name=pool_creators,json=poolCreators,proto3" json:"pool_creators,omitempty"`
-	MaxLtvPercent               uint32   `protobuf:"varint,5,opt,name=max_ltv_percent,json=maxLtvPercent,proto3" json:"max_ltv_percent,omitempty"`
-	LiquidationThresholdPercent uint32   `protobuf:"varint,6,opt,name=liquidation_threshold_percent,json=liquidationThresholdPercent,proto3" json:"liquidation_threshold_percent,omitempty"`
+	MaxLtvPercent               int64    `protobuf:"varint,5,opt,name=max_ltv_percent,json=maxLtvPercent,proto3" json:"max_ltv_percent,omitempty"`
+	LiquidationThresholdPercent int64    `protobuf:"varint,6,opt,name=liquidation_threshold_percent,json=liquidationThresholdPercent,proto3" json:"liquidation_threshold_percent,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -796,14 +796,14 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_side_lending_params_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Params) GetSupplyRatePermille() uint32 {
+func (x *Params) GetSupplyRatePermille() int64 {
 	if x != nil {
 		return x.SupplyRatePermille
 	}
 	return 0
 }
 
-func (x *Params) GetBorrowRatePermille() uint32 {
+func (x *Params) GetBorrowRatePermille() int64 {
 	if x != nil {
 		return x.BorrowRatePermille
 	}
@@ -824,14 +824,14 @@ func (x *Params) GetPoolCreators() []string {
 	return nil
 }
 
-func (x *Params) GetMaxLtvPercent() uint32 {
+func (x *Params) GetMaxLtvPercent() int64 {
 	if x != nil {
 		return x.MaxLtvPercent
 	}
 	return 0
 }
 
-func (x *Params) GetLiquidationThresholdPercent() uint32 {
+func (x *Params) GetLiquidationThresholdPercent() int64 {
 	if x != nil {
 		return x.LiquidationThresholdPercent
 	}
@@ -847,10 +847,10 @@ var file_side_lending_params_proto_rawDesc = []byte{
 	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
 	0xa2, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x30, 0x0a, 0x14, 0x73, 0x75,
 	0x70, 0x70, 0x6c, 0x79, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x6c,
-	0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x12, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x79,
+	0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x12, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x79,
 	0x52, 0x61, 0x74, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x6c, 0x6c, 0x65, 0x12, 0x30, 0x0a, 0x14,
 	0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x5f, 0x70, 0x65, 0x72, 0x6d,
-	0x69, 0x6c, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x12, 0x62, 0x6f, 0x72, 0x72,
+	0x69, 0x6c, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x12, 0x62, 0x6f, 0x72, 0x72,
 	0x6f, 0x77, 0x52, 0x61, 0x74, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x6c, 0x6c, 0x65, 0x12, 0x23,
 	0x0a, 0x0d, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x65, 0x63, 0x69, 0x70, 0x69, 0x65, 0x6e, 0x74, 0x18,
 	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x66, 0x65, 0x65, 0x52, 0x65, 0x63, 0x69, 0x70, 0x69,
@@ -858,10 +858,10 @@ var file_side_lending_params_proto_rawDesc = []byte{
 	0x74, 0x6f, 0x72, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0c, 0x70, 0x6f, 0x6f, 0x6c,
 	0x43, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x26, 0x0a, 0x0f, 0x6d, 0x61, 0x78, 0x5f,
 	0x6c, 0x74, 0x76, 0x5f, 0x70, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28,
-	0x0d, 0x52, 0x0d, 0x6d, 0x61, 0x78, 0x4c, 0x74, 0x76, 0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74,
+	0x03, 0x52, 0x0d, 0x6d, 0x61, 0x78, 0x4c, 0x74, 0x76, 0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74,
 	0x12, 0x42, 0x0a, 0x1d, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
 	0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x5f, 0x70, 0x65, 0x72, 0x63, 0x65, 0x6e,
-	0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1b, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x1b, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
 	0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x50, 0x65, 0x72,
 	0x63, 0x65, 0x6e, 0x74, 0x42, 0x8f, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64,
 	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d,

@@ -25,12 +25,12 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	SupplyRatePermille          uint32   `protobuf:"varint,1,opt,name=supply_rate_permille,json=supplyRatePermille,proto3" json:"supply_rate_permille,omitempty"`
-	BorrowRatePermille          uint32   `protobuf:"varint,2,opt,name=borrow_rate_permille,json=borrowRatePermille,proto3" json:"borrow_rate_permille,omitempty"`
+	SupplyRatePermille          int64    `protobuf:"varint,1,opt,name=supply_rate_permille,json=supplyRatePermille,proto3" json:"supply_rate_permille,omitempty"`
+	BorrowRatePermille          int64    `protobuf:"varint,2,opt,name=borrow_rate_permille,json=borrowRatePermille,proto3" json:"borrow_rate_permille,omitempty"`
 	FeeRecipient                string   `protobuf:"bytes,3,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
 	PoolCreators                []string `protobuf:"bytes,4,rep,name=pool_creators,json=poolCreators,proto3" json:"pool_creators,omitempty"`
-	MaxLtvPercent               uint32   `protobuf:"varint,5,opt,name=max_ltv_percent,json=maxLtvPercent,proto3" json:"max_ltv_percent,omitempty"`
-	LiquidationThresholdPercent uint32   `protobuf:"varint,6,opt,name=liquidation_threshold_percent,json=liquidationThresholdPercent,proto3" json:"liquidation_threshold_percent,omitempty"`
+	MaxLtvPercent               int64    `protobuf:"varint,5,opt,name=max_ltv_percent,json=maxLtvPercent,proto3" json:"max_ltv_percent,omitempty"`
+	LiquidationThresholdPercent int64    `protobuf:"varint,6,opt,name=liquidation_threshold_percent,json=liquidationThresholdPercent,proto3" json:"liquidation_threshold_percent,omitempty"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -66,14 +66,14 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetSupplyRatePermille() uint32 {
+func (m *Params) GetSupplyRatePermille() int64 {
 	if m != nil {
 		return m.SupplyRatePermille
 	}
 	return 0
 }
 
-func (m *Params) GetBorrowRatePermille() uint32 {
+func (m *Params) GetBorrowRatePermille() int64 {
 	if m != nil {
 		return m.BorrowRatePermille
 	}
@@ -94,14 +94,14 @@ func (m *Params) GetPoolCreators() []string {
 	return nil
 }
 
-func (m *Params) GetMaxLtvPercent() uint32 {
+func (m *Params) GetMaxLtvPercent() int64 {
 	if m != nil {
 		return m.MaxLtvPercent
 	}
 	return 0
 }
 
-func (m *Params) GetLiquidationThresholdPercent() uint32 {
+func (m *Params) GetLiquidationThresholdPercent() int64 {
 	if m != nil {
 		return m.LiquidationThresholdPercent
 	}
@@ -124,7 +124,7 @@ var fileDescriptor_984b58804a7a7724 = []byte{
 	0x05, 0x65, 0x26, 0xcb, 0x3c, 0xd6, 0xc2, 0x88, 0xc2, 0x8e, 0xb4, 0x41, 0x87, 0x51, 0xc7, 0xa3,
 	0x51, 0x8d, 0xce, 0x7b, 0x39, 0xe6, 0x18, 0x40, 0xec, 0xbf, 0xaa, 0xce, 0xd5, 0x47, 0x93, 0xb6,
 	0x27, 0x41, 0x8a, 0xee, 0x68, 0xcf, 0x2e, 0xb4, 0x56, 0x6b, 0x6e, 0x84, 0x03, 0xae, 0xc1, 0x14,
-	0x52, 0x29, 0xe8, 0x93, 0x01, 0x19, 0x76, 0x93, 0xa8, 0x62, 0x89, 0x70, 0x30, 0xa9, 0x89, 0x37,
+	0x52, 0x29, 0xe8, 0x93, 0x01, 0x19, 0xb6, 0x92, 0xa8, 0x62, 0x89, 0x70, 0x30, 0xa9, 0x89, 0x37,
 	0xa6, 0x68, 0x0c, 0xbe, 0xfd, 0x33, 0x9a, 0x95, 0x51, 0xb1, 0x3f, 0xc6, 0x35, 0xed, 0xce, 0x00,
 	0xb8, 0x81, 0x54, 0x6a, 0x09, 0xa5, 0xeb, 0xb7, 0x06, 0x64, 0x78, 0x92, 0x74, 0x66, 0x00, 0xc9,
 	0x3e, 0xf3, 0x25, 0x8d, 0xa8, 0x78, 0x6a, 0x40, 0x38, 0x34, 0xb6, 0x7f, 0x34, 0x68, 0xf9, 0x92,
@@ -135,7 +135,7 @@ var fileDescriptor_984b58804a7a7724 = []byte{
 	0xdf, 0x5b, 0x46, 0xde, 0x77, 0xac, 0xb1, 0xd9, 0xb1, 0xc6, 0xd7, 0x8e, 0x35, 0x5e, 0x6e, 0x73,
 	0xe9, 0xe6, 0x8b, 0xe9, 0x28, 0xc5, 0x22, 0xf6, 0xd7, 0x0e, 0x47, 0x4d, 0x51, 0x85, 0x9f, 0x78,
 	0x75, 0x78, 0x17, 0xb7, 0xd6, 0x60, 0xa7, 0xed, 0x80, 0xef, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff,
-	0x83, 0xe3, 0x71, 0x4d, 0xb4, 0x01, 0x00, 0x00,
+	0x75, 0xdc, 0x4d, 0xe4, 0xb4, 0x01, 0x00, 0x00,
 }
 
 func (m *Params) Marshal() (dAtA []byte, err error) {
@@ -288,7 +288,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SupplyRatePermille |= uint32(b&0x7F) << shift
+				m.SupplyRatePermille |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -307,7 +307,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BorrowRatePermille |= uint32(b&0x7F) << shift
+				m.BorrowRatePermille |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -390,7 +390,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MaxLtvPercent |= uint32(b&0x7F) << shift
+				m.MaxLtvPercent |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -409,7 +409,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LiquidationThresholdPercent |= uint32(b&0x7F) << shift
+				m.LiquidationThresholdPercent |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
