@@ -1,5 +1,9 @@
 package types
 
+import (
+	"cosmossdk.io/math"
+)
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "lending"
@@ -15,6 +19,8 @@ const (
 )
 
 var (
+	Percent        = math.NewInt(100)
+	Permille       = math.NewInt(1000)
 	ParamsStoreKey = []byte{0x1}
 
 	PoolStorePrefix = []byte{0x2}

@@ -10,6 +10,11 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 )
 
+func GetTaprootAddress(script []byte) (string, error) {
+	conf := sdk.GetConfig().GetBtcChainCfg()
+	btcutil.NewAddressTaproot(script, conf)
+}
+
 // Branch 1: multisig signature script
 func createMultisigScript(pubKeys []string) ([]byte, error) {
 	builder := txscript.NewScriptBuilder()

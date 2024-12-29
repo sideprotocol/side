@@ -52,13 +52,16 @@ message Loan {
     int64 final_timeout = 6; 
     
     cosmos.base.v1beta1.Coin borrow_amount = 7;
-    cosmos.base.v1beta1.Coin fees = 8;
-
-    string term = 9 [
+    string fees = 8[
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
-    string interest_rate = 10 [
+    string interests = 10[
+        (gogoproto.customtype) = "cosmossdk.io/math.Int",
+        (gogoproto.nullable) = false
+      ];
+
+    string term = 9 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];

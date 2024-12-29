@@ -65,17 +65,44 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	params := m.GetParams(ctx)
 
+	collateralAmount := math.NewInt(0)
+	for _, o := range fundTx.UnsignedTx.TxOut {
+		address, e := types.GetTaprootAddress(o.PkScript)
+		if e != nil {
+			return nil, e
+		}
+		if address == vault {
+			collateralAmount.Add(math.NewInt(o.Value))
+		}
+	}
+
+	currentPrice := math.NewInt(1) // read it from price oracle later
+	decimal := math.NewInt(1)
+
+	// verify LTV (Loan-to-Value Ratio)
+	if collateralAmount.Mul(currentPrice).Quo(decimal).Mul(params.MinInitialLtvPercent).Quo(types.Percent).LT(msg.BorrowAmount.Amount) {
+		return nil, types.ErrInsufficientCollateral
+	}
+
+	// verify liquidation events. TODO improve price interval
+	if collateralAmount.Mul(event.TriggerPrice).Quo(event.PriceDecimal).Mul(params.LiquidationThresholdPercent.Quo(types.Percent)).LT(msg.BorrowAmount.Amount) {
+		return nil, types.ErrInvalidPriceEvent
+	}
+
+	interests := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille).Quo(types.Permille)
+	fees := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille.Sub(params.SupplyRatePermille)).Quo(types.Permille)
+
 	loan := types.Loan{
-		VaultAddress:   vault,
-		Borrower:       msg.Borrower,
-		Agency:         event.Pubkey,
-		HashLoanSecret: msg.LoanSecretHash,
-		MaturityTime:   msg.MaturityTime,
-		FinalTimeout:   msg.FinalTimeout,
-		BorrowAmount:   msg.BorrowAmount,
-		// Fees:             sdk.NewCoin("xx", math.NewInt(0)),
-		CollateralAmount: math.NewInt(0),
-		InterestRate:     math.NewInt(int64(params.LendingRate)),
+		VaultAddress:     vault,
+		Borrower:         msg.Borrower,
+		Agency:           event.Pubkey,
+		HashLoanSecret:   msg.LoanSecretHash,
+		MaturityTime:     msg.MaturityTime,
+		FinalTimeout:     msg.FinalTimeout,
+		BorrowAmount:     msg.BorrowAmount,
+		CollateralAmount: collateralAmount,
+		Interests:        interests,
+		Fees:             fees,
 		EventId:          msg.EventId,
 		Cets:             msg.Cets,
 		DepositTx:        msg.DepositTx,
