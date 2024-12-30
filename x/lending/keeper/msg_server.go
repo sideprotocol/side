@@ -306,6 +306,11 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 	loan.Status = types.LoanStatus_Close
 	m.SetLoan(ctx, loan)
 
+	m.EmitEvent(ctx, msg.Relayer,
+		sdk.NewAttribute("loan_id", loan.VaultAddress),
+		sdk.NewAttribute("payment_secret", secret),
+	)
+
 	return &types.MsgCloseResponse{}, nil
 }
 
