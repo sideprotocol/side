@@ -160,3 +160,22 @@ func (k Keeper) GetDepositLog(ctx sdk.Context, txid string) types.DepositLog {
 	k.cdc.MustUnmarshal(bz, &deposit)
 	return deposit
 }
+
+func (k Keeper) SetRepayment(ctx sdk.Context, repayment types.Repayment) {
+	store := ctx.KVStore(k.storeKey)
+	bz := k.cdc.MustMarshal(&repayment)
+	store.Set(types.RepaymentKey(repayment.LoanId), bz)
+}
+
+func (k Keeper) HasRepayment(ctx sdk.Context, loanId string) bool {
+	store := ctx.KVStore(k.storeKey)
+	return store.Has(types.RepaymentKey(loanId))
+}
+
+func (k Keeper) GetRepayment(ctx sdk.Context, loanId string) types.Repayment {
+	store := ctx.KVStore(k.storeKey)
+	var data types.Repayment
+	bz := store.Get(types.RepaymentKey(loanId))
+	k.cdc.MustUnmarshal(bz, &data)
+	return data
+}

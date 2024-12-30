@@ -10,6 +10,7 @@ var (
 	ErrEmptySender   = errorsmod.Register(ModuleName, 1000, "invalid tx sender")
 	ErrInvalidAmount = errorsmod.Register(ModuleName, 1100, "invalid amount")
 	ErrInvalidParams = errorsmod.Register(ModuleName, 1101, "invalid params")
+	ErrInvalidSender = errorsmod.Register(ModuleName, 1002, "invalid tx sender")
 
 	ErrInvalidLiquidation = errorsmod.Register(ModuleName, 2100, "invalid liquidation")
 	ErrEmptyPoolId        = errorsmod.Register(ModuleName, 2200, "invalid pool id")

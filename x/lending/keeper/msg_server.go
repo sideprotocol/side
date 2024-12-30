@@ -178,6 +178,11 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.MsgRedeemResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	borrower, err := sdk.AccAddressFromBech32(msg.Borrower)
+	if err != nil {
+		return nil, types.ErrInvalidSender
+	}
+
 	if !m.HasLoan(ctx, msg.LoanId) {
 		return nil, types.ErrLoanNotExists
 	}
@@ -188,7 +193,7 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		return nil, types.ErrMismatchLoanSecret
 	}
 
-	m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.AccAddress(loan.Borrower), *loan.BorrowAmount)
+	m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, *loan.BorrowAmount)
 
 	loan.Status = types.LoanStatus_Disburse
 
@@ -203,8 +208,61 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 }
 
 // Repay implements types.MsgServer.
-func (m msgServer) Repay(ctx context.Context, msg *types.MsgRepay) (*types.MsgRepayResponse, error) {
-	panic("unimplemented")
+func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.MsgRepayResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	borrower, err := sdk.AccAddressFromBech32(msg.Borrower)
+	if err != nil {
+		return nil, types.ErrInvalidSender
+	}
+
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanNotExists
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+
+	amount := loan.BorrowAmount.Amount.Add(loan.Interests).Add(loan.Fees)
+
+	// send repayment to escrow account
+	if e := m.bankKeeper.SendCoinsFromAccountToModule(ctx, borrower, types.RepaymentEscrowAccount, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); e != nil {
+		return nil, e
+	}
+
+	loan.Status = types.LoanStatus_Repay
+	m.SetLoan(ctx, loan)
+
+	dls := []string{}
+	for _, txid := range loan.DepositTxs {
+		dl := m.GetDepositLog(ctx, txid)
+		dls = append(dls, dl.DepositTx)
+	}
+
+	claimTx, err := types.CreateRepaymentTransaction(dls)
+	if err != nil {
+		return nil, err
+	}
+	tx, err := claimTx.B64Encode()
+	if err != nil {
+		return nil, err
+	}
+	repayment := types.Repayment{
+		LoanId:            msg.LoanId,
+		Txid:              claimTx.UnsignedTx.TxHash().String(),
+		Tx:                tx,
+		RepayAdaptorPoint: msg.AdaptorPoint,
+		CreateAt:          ctx.BlockTime(),
+	}
+
+	m.SetRepayment(ctx, repayment)
+
+	m.EmitEvent(ctx, msg.Borrower,
+		sdk.NewAttribute("loan_id", loan.VaultAddress),
+		sdk.NewAttribute("adaptor_point", msg.AdaptorPoint),
+		sdk.NewAttribute("txid", loan.BorrowAmount.String()),
+	)
+
+	return &types.MsgRepayResponse{}, nil
 }
 
 // NewMsgServerImpl returns an implementation of the MsgServer interface

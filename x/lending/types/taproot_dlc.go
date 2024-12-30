@@ -31,3 +31,8 @@ func VerifyCET(depositTx *psbt.Packet, cet *psbt.Packet) error {
 
 	return nil
 }
+
+func CreateRepaymentTransaction(depositTx []string) (*psbt.Packet, error) {
+
+	return nil, nil
+}

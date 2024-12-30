@@ -43,12 +43,6 @@ enum LoanStatus {
     Close = 6;
 }
 
-message DepositLog {
-    string txid = 2;
-    string vault_address = 1;
-    string deposit_tx = 3;
-} 
-
 message Loan {
     string vault_address = 1; // id
     string borrower = 2;
@@ -78,10 +72,27 @@ message Loan {
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
-    string cets = 15;
-    string loan_secret = 16;
-    string repay_adaptor_point = 17;
+    string loan_secret = 15;
+    google.protobuf.Timestamp create_at = 16 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 17;
+    string pool_id = 18;
+}
+
+message CET {
+    string loan_id = 1;
+    string cets = 2;
+}
+
+message DepositLog {
+    string txid = 2;
+    string vault_address = 1;
+    string deposit_tx = 3;
+} 
+
+message Repayment {
+    string loan_id = 1;
+    string txid = 2;
+    string tx = 3;
+    string repay_adaptor_point = 4;
     google.protobuf.Timestamp create_at = 18 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 19;
-    string pool_id = 20;
 }
