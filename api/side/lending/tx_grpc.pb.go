@@ -26,6 +26,7 @@ const (
 	Msg_Approve_FullMethodName         = "/side.lending.Msg/Approve"
 	Msg_Redeem_FullMethodName          = "/side.lending.Msg/Redeem"
 	Msg_Repay_FullMethodName           = "/side.lending.Msg/Repay"
+	Msg_Close_FullMethodName           = "/side.lending.Msg/Close"
 )
 
 // MsgClient is the client API for Msg service.
@@ -39,6 +40,7 @@ type MsgClient interface {
 	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
 	Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
+	Close(ctx context.Context, in *MsgClose, opts ...grpc.CallOption) (*MsgCloseResponse, error)
 }
 
 type msgClient struct {
@@ -112,6 +114,15 @@ func (c *msgClient) Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOp
 	return out, nil
 }
 
+func (c *msgClient) Close(ctx context.Context, in *MsgClose, opts ...grpc.CallOption) (*MsgCloseResponse, error) {
+	out := new(MsgCloseResponse)
+	err := c.cc.Invoke(ctx, Msg_Close_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -123,6 +134,7 @@ type MsgServer interface {
 	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
 	Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
+	Close(context.Context, *MsgClose) (*MsgCloseResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -150,6 +162,9 @@ func (UnimplementedMsgServer) Redeem(context.Context, *MsgRedeem) (*MsgRedeemRes
 }
 func (UnimplementedMsgServer) Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Repay not implemented")
+}
+func (UnimplementedMsgServer) Close(context.Context, *MsgClose) (*MsgCloseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Close not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -290,6 +305,24 @@ func _Msg_Repay_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_Close_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgClose)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).Close(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_Close_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).Close(ctx, req.(*MsgClose))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -324,6 +357,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Repay",
 			Handler:    _Msg_Repay_Handler,
+		},
+		{
+			MethodName: "Close",
+			Handler:    _Msg_Close_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

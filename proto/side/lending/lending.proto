@@ -94,5 +94,6 @@ message Repayment {
     string txid = 2;
     string tx = 3;
     string repay_adaptor_point = 4;
-    google.protobuf.Timestamp create_at = 18 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    string borrower_signature = 5;
+    google.protobuf.Timestamp create_at = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }

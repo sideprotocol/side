@@ -37,6 +37,8 @@ var (
 	ErrEmptyLoanSecret    = errorsmod.Register(ModuleName, 5001, "invalid loan secret")
 	ErrMismatchLoanSecret = errorsmod.Register(ModuleName, 5001, "mismatch loan secret")
 
-	ErrEmptyAdaptorPoint = errorsmod.Register(ModuleName, 6001, "invalid adaptor point")
-	ErrInvalidRepayment  = errorsmod.Register(ModuleName, 6002, "invalid repayment")
+	ErrEmptyAdaptorPoint      = errorsmod.Register(ModuleName, 6001, "invalid adaptor point")
+	ErrInvalidRepayment       = errorsmod.Register(ModuleName, 6002, "invalid repayment")
+	ErrInvalidRepaymentTx     = errorsmod.Register(ModuleName, 6003, "invalid repayment tx")
+	ErrInvalidRepaymentSecret = errorsmod.Register(ModuleName, 6003, "invalid repayment secret")
 )

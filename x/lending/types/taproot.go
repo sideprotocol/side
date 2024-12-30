@@ -15,6 +15,10 @@ func HashLoanSecret(secret string) string {
 	return secret
 }
 
+func AdaptorPoint(secret string) string {
+	return secret
+}
+
 func GetTaprootAddress(script []byte) (*btcutil.AddressTaproot, error) {
 	conf := sdk.GetConfig().GetBtcChainCfg()
 	return btcutil.NewAddressTaproot(script, conf)

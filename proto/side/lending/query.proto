@@ -28,6 +28,10 @@ service Query {
     rpc LoanCET(QueryLoanCETRequest) returns (QueryLoanCETResponse) {
         option (google.api.http).get = "/side/lending/loan/cet";
     }
+
+    rpc UnsignedPaymentTx(QueryRepaymentTxRequest) returns (QueryRepaymentTxResponse) {
+        option (google.api.http).get = "/side/lending/loan/repayment/unsigned_tx";
+    }
 }
 
 message QueryLiquidationEventRequest{
@@ -68,4 +72,12 @@ message QueryLoanCETRequest {
 
 // QueryLoanCETResponse is response type for the Query/LoanCET RPC method.
 message QueryLoanCETResponse {
+}
+
+message QueryRepaymentTxRequest {
+    string loan_id = 1;
+}
+
+message QueryRepaymentTxResponse {
+    string claim_tx = 1;
 }

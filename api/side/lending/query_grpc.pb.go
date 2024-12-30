@@ -23,6 +23,7 @@ const (
 	Query_CollateralAddress_FullMethodName = "/side.lending.Query/CollateralAddress"
 	Query_LiquidationEvent_FullMethodName  = "/side.lending.Query/LiquidationEvent"
 	Query_LoanCET_FullMethodName           = "/side.lending.Query/LoanCET"
+	Query_UnsignedPaymentTx_FullMethodName = "/side.lending.Query/UnsignedPaymentTx"
 )
 
 // QueryClient is the client API for Query service.
@@ -34,6 +35,7 @@ type QueryClient interface {
 	CollateralAddress(ctx context.Context, in *QueryCollateralAddressRequest, opts ...grpc.CallOption) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(ctx context.Context, in *QueryLiquidationEventRequest, opts ...grpc.CallOption) (*QueryLiquidationEventResponse, error)
 	LoanCET(ctx context.Context, in *QueryLoanCETRequest, opts ...grpc.CallOption) (*QueryLoanCETResponse, error)
+	UnsignedPaymentTx(ctx context.Context, in *QueryRepaymentTxRequest, opts ...grpc.CallOption) (*QueryRepaymentTxResponse, error)
 }
 
 type queryClient struct {
@@ -80,6 +82,15 @@ func (c *queryClient) LoanCET(ctx context.Context, in *QueryLoanCETRequest, opts
 	return out, nil
 }
 
+func (c *queryClient) UnsignedPaymentTx(ctx context.Context, in *QueryRepaymentTxRequest, opts ...grpc.CallOption) (*QueryRepaymentTxResponse, error) {
+	out := new(QueryRepaymentTxResponse)
+	err := c.cc.Invoke(ctx, Query_UnsignedPaymentTx_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -89,6 +100,7 @@ type QueryServer interface {
 	CollateralAddress(context.Context, *QueryCollateralAddressRequest) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(context.Context, *QueryLiquidationEventRequest) (*QueryLiquidationEventResponse, error)
 	LoanCET(context.Context, *QueryLoanCETRequest) (*QueryLoanCETResponse, error)
+	UnsignedPaymentTx(context.Context, *QueryRepaymentTxRequest) (*QueryRepaymentTxResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -107,6 +119,9 @@ func (UnimplementedQueryServer) LiquidationEvent(context.Context, *QueryLiquidat
 }
 func (UnimplementedQueryServer) LoanCET(context.Context, *QueryLoanCETRequest) (*QueryLoanCETResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoanCET not implemented")
+}
+func (UnimplementedQueryServer) UnsignedPaymentTx(context.Context, *QueryRepaymentTxRequest) (*QueryRepaymentTxResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnsignedPaymentTx not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -193,6 +208,24 @@ func _Query_LoanCET_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_UnsignedPaymentTx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRepaymentTxRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).UnsignedPaymentTx(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_UnsignedPaymentTx_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).UnsignedPaymentTx(ctx, req.(*QueryRepaymentTxRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -215,6 +248,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoanCET",
 			Handler:    _Query_LoanCET_Handler,
+		},
+		{
+			MethodName: "UnsignedPaymentTx",
+			Handler:    _Query_UnsignedPaymentTx_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

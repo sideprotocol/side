@@ -27,3 +27,8 @@ func (k Keeper) LoanCET(context.Context, *types.QueryLoanCETRequest) (*types.Que
 func (k Keeper) Params(context.Context, *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	panic("unimplemented")
 }
+
+// UnsignedPaymentTx implements types.QueryServer.
+func (k Keeper) UnsignedPaymentTx(context.Context, *types.QueryRepaymentTxRequest) (*types.QueryRepaymentTxResponse, error) {
+	panic("unimplemented")
+}

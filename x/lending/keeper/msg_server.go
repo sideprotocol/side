@@ -246,11 +246,21 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	if err != nil {
 		return nil, err
 	}
+
+	// verify claimTx is msg.claimTx later
+	if claimTx.UnsignedTx.TxHash().String() != msg.ClaimTxId {
+		return nil, types.ErrInvalidRepayment
+	}
+
+	// verify signature
+	// msg.AdaptorSignature,
+
 	repayment := types.Repayment{
 		LoanId:            msg.LoanId,
 		Txid:              claimTx.UnsignedTx.TxHash().String(),
 		Tx:                tx,
 		RepayAdaptorPoint: msg.AdaptorPoint,
+		BorrowerSignature: msg.AdaptorSignature,
 		CreateAt:          ctx.BlockTime(),
 	}
 
@@ -263,6 +273,40 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	)
 
 	return &types.MsgRepayResponse{}, nil
+}
+
+// Close implements types.MsgServer.
+func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.MsgCloseResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanNotExists
+	}
+
+	if !m.HasRepayment(ctx, msg.LoanId) {
+		return nil, types.ErrInvalidRepayment
+	}
+
+	repay := m.GetRepayment(ctx, msg.LoanId)
+
+	// extract secret from signature
+	secret := msg.Signature + repay.RepayAdaptorPoint // fix it later.
+
+	if types.AdaptorPoint(secret) != repay.RepayAdaptorPoint {
+		return nil, types.ErrInvalidRepaymentSecret
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+
+	amount := loan.BorrowAmount.Amount.Add(loan.Interests).Add(loan.Fees)
+	if err := m.bankKeeper.SendCoinsFromModuleToModule(ctx, types.RepaymentEscrowAccount, types.ModuleName, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
+		return nil, err
+	}
+
+	loan.Status = types.LoanStatus_Close
+	m.SetLoan(ctx, loan)
+
+	return &types.MsgCloseResponse{}, nil
 }
 
 // NewMsgServerImpl returns an implementation of the MsgServer interface

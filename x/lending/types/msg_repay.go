@@ -1,17 +1,18 @@
 package types
 
 import (
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var _ sdk.Msg = &MsgRepay{}
 
-func NewMsgRepay(borrower string, amount sdk.Coin, adaptorPoint string) *MsgRepay {
+func NewMsgRepay(borrower string, loanId string, adaptorPoint string, txid string, signature string) *MsgRepay {
 	return &MsgRepay{
-		Borrower:     borrower,
-		Amount:       &amount,
-		AdaptorPoint: adaptorPoint,
+		Borrower:         borrower,
+		AdaptorPoint:     adaptorPoint,
+		LoanId:           loanId,
+		ClaimTxId:        txid,
+		AdaptorSignature: signature,
 	}
 }
 
@@ -25,8 +26,16 @@ func (m *MsgRepay) ValidateBasic() error {
 		return ErrEmptyAdaptorPoint
 	}
 
-	if m.Amount.Amount.LTE(math.NewInt(0)) {
+	if len(m.LoanId) == 0 {
 		return ErrInvalidRepayment
+	}
+
+	if len(m.ClaimTxId) == 0 {
+		return ErrInvalidRepaymentTx
+	}
+
+	if len(m.AdaptorSignature) == 0 {
+		return ErrInvalidRepaymentTx
 	}
 
 	return nil
