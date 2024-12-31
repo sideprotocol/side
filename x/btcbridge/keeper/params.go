@@ -86,23 +86,3 @@ func (k Keeper) GetMaxUtxoNum(ctx sdk.Context) int {
 
 	return int(params.WithdrawParams.MaxUtxoNum)
 }
-
-// EnableBridge enables the bridge deposit and withdrawal
-func (k Keeper) EnableBridge(ctx sdk.Context) {
-	params := k.GetParams(ctx)
-
-	params.DepositEnabled = true
-	params.WithdrawEnabled = true
-
-	k.SetParams(ctx, params)
-}
-
-// DisableBridge disables the bridge deposit and withdrawal
-func (k Keeper) DisableBridge(ctx sdk.Context) {
-	params := k.GetParams(ctx)
-
-	params.DepositEnabled = false
-	params.WithdrawEnabled = false
-
-	k.SetParams(ctx, params)
-}
