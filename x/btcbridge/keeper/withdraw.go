@@ -161,61 +161,6 @@ func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount string
 		Sequence: k.IncreaseWithdrawRequestSequence(ctx),
 	}
 }
-
-// NewSigningRequest creates a new withdrawal request
-func (k Keeper) NewSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64) (*types.SigningRequest, error) {
-	p := k.GetParams(ctx)
-	btcVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_BTC)
-
-	switch types.AssetTypeFromDenom(amount.Denom, p) {
-	case types.AssetType_ASSET_TYPE_BTC:
-		return k.NewBtcSigningRequest(ctx, sender, amount, feeRate, btcVault.Address)
-
-	case types.AssetType_ASSET_TYPE_RUNES:
-		runesVault := types.SelectVaultByAssetType(p.Vaults, types.AssetType_ASSET_TYPE_RUNES)
-		return k.NewRunesSigningRequest(ctx, sender, amount, feeRate, runesVault.Address, btcVault.Address)
-
-	default:
-		return nil, types.ErrAssetNotSupported
-	}
-}
-
-// NewBtcSigningRequest creates the signing request for btc withdrawal
-func (k Keeper) NewBtcSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string) (*types.SigningRequest, error) {
-	utxoIterator := k.GetUTXOIteratorByAddr(ctx, vault)
-
-	psbt, selectedUTXOs, changeUTXO, err := types.BuildPsbt(utxoIterator, sender, amount.Amount.Int64(), feeRate, vault, k.GetMaxUtxoNum(ctx))
-	if err != nil {
-		return nil, err
-	}
-
-	psbtB64, err := psbt.B64Encode()
-	if err != nil {
-		return nil, types.ErrFailToSerializePsbt
-	}
-
-	txHash := psbt.UnsignedTx.TxHash().String()
-
-	// spend the selected utxos
-	_ = k.SpendUTXOs(ctx, selectedUTXOs)
-
-	// lock the change utxo
-	k.lockChangeUTXOs(ctx, txHash, changeUTXO)
-
-	signingRequest := &types.SigningRequest{
-		Address:      sender,
-		Sequence:     k.IncrementSigningRequestSequence(ctx),
-		Txid:         txHash,
-		Psbt:         psbtB64,
-		CreationTime: ctx.BlockTime(),
-		Status:       types.SigningStatus_SIGNING_STATUS_PENDING,
-	}
-
-	k.SetSigningRequest(ctx, signingRequest)
-
-	return signingRequest, nil
-}
-
 // NewRunesSigningRequest creates the signing request for runes withdrawal
 func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, btcVault string) (*types.SigningRequest, error) {
 	var runeId types.RuneId
