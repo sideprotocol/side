@@ -36,5 +36,6 @@ type BankKeeper interface {
 
 // StakingKeeper defines the expected staking keeper used to retrieve validator (noalias)
 type StakingKeeper interface {
+	GetValidator(ctx context.Context, addr sdk.ValAddress) (stakingtypes.Validator, error)
 	GetValidatorByConsAddr(ctx context.Context, consAddr sdk.ConsAddress) (stakingtypes.Validator, error)
 }

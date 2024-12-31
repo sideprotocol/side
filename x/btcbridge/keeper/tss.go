@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"bytes"
+	"encoding/base64"
 	"time"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -169,11 +170,21 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 // InitiateDKG initiates the DKG request by the specified params
 func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
 	for _, p := range participants {
-		consAddress, _ := sdk.ConsAddressFromHex(p.ConsensusAddress)
+		valAddr, _ := sdk.ValAddressFromBech32(p.OperatorAddress)
 
-		validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
+		validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
 		if err != nil {
 			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "non validator")
+		}
+
+		pubKey, err := validator.ConsPubKey()
+		if err != nil {
+			return nil, err
+		}
+
+		pubKeyBytes, _ := base64.StdEncoding.DecodeString(p.ConsensusPubkey)
+		if !bytes.Equal(pubKeyBytes, pubKey.Bytes()) {
+			errorsmod.Wrap(types.ErrInvalidDKGParams, "incorrect consensus public key")
 		}
 
 		if validator.Status != stakingtypes.Bonded {
