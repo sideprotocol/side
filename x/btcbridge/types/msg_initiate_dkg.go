@@ -18,6 +18,8 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		return ErrInvalidDKGParams
 	}
 
+	participants := make(map[string]bool)
+
 	for _, p := range m.Participants {
 		if len(p.Moniker) > stakingtypes.MaxMonikerLength {
 			return ErrInvalidDKGParams
@@ -30,6 +32,12 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		if _, err := sdk.ConsAddressFromHex(p.ConsensusAddress); err != nil {
 			return errorsmod.Wrap(err, "invalid consensus address")
 		}
+
+		if participants[p.ConsensusAddress] {
+			return errorsmod.Wrap(ErrInvalidDKGParams, "duplicate participant")
+		}
+
+		participants[p.ConsensusAddress] = true
 	}
 
 	if len(m.VaultTypes) == 0 {
