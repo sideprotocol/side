@@ -109,11 +109,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Interests:        interests,
 		Fees:             fees,
 		EventId:          msg.EventId,
-		Cets:             msg.Cets,
-		DepositTxs:       []string{depositTxid},
-		CreateAt:         ctx.BlockTime(),
-		PoolId:           msg.PoolId,
-		Status:           types.LoanStatus_Apply,
+		// Cets:             msg.Cets,
+		DepositTxs: []string{depositTxid},
+		CreateAt:   ctx.BlockTime(),
+		PoolId:     msg.PoolId,
+		Status:     types.LoanStatus_Apply,
 	}
 
 	m.SetLoan(ctx, loan)
@@ -168,7 +168,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		sdk.NewAttribute("vault", loan.VaultAddress),
 		sdk.NewAttribute("deposit_tx", msg.DepositTxId),
 		sdk.NewAttribute("proof", msg.Poof),
-		sdk.NewAttribute("height", string(msg.Height)),
+		sdk.NewAttribute("height", fmt.Sprint(msg.Height)),
 	)
 
 	return &types.MsgApproveResponse{}, nil
@@ -193,9 +193,10 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		return nil, types.ErrMismatchLoanSecret
 	}
 
-	m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, *loan.BorrowAmount)
+	m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, sdk.NewCoins(*loan.BorrowAmount))
 
 	loan.Status = types.LoanStatus_Disburse
+	loan.LoanSecret = msg.LoanSecret
 
 	m.SetLoan(ctx, loan)
 
@@ -247,20 +248,11 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		return nil, err
 	}
 
-	// verify claimTx is msg.claimTx later
-	if claimTx.UnsignedTx.TxHash().String() != msg.ClaimTxId {
-		return nil, types.ErrInvalidRepayment
-	}
-
-	// verify signature
-	// msg.AdaptorSignature,
-
 	repayment := types.Repayment{
 		LoanId:            msg.LoanId,
 		Txid:              claimTx.UnsignedTx.TxHash().String(),
 		Tx:                tx,
 		RepayAdaptorPoint: msg.AdaptorPoint,
-		BorrowerSignature: msg.AdaptorSignature,
 		CreateAt:          ctx.BlockTime(),
 	}
 
