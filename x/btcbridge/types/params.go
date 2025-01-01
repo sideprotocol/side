@@ -50,6 +50,7 @@ func NewParams() Params {
 		BtcVoucherDenom:         DefaultBtcVoucherDenom,
 		DepositEnabled:          true,
 		WithdrawEnabled:         true,
+		TrustedBtcRelayers:      []string{},
 		TrustedNonBtcRelayers:   []string{},
 		TrustedOracles:          []string{},
 		FeeRateValidityPeriod:   DefaultFeeRateValidityPeriod,
@@ -84,6 +85,10 @@ func DefaultParams() Params {
 // Validate validates the set of params
 func (p Params) Validate() error {
 	if err := sdk.ValidateDenom(p.BtcVoucherDenom); err != nil {
+		return err
+	}
+
+	if err := validateBtcRelayers(p.TrustedBtcRelayers); err != nil {
 		return err
 	}
 
@@ -174,7 +179,19 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 	return nil
 }
 
-// validateNonBtcRelayers validates the given relayers
+// validateBtcRelayers validates the given btc relayers
+func validateBtcRelayers(relayers []string) error {
+	for _, relayer := range relayers {
+		_, err := sdk.AccAddressFromBech32(relayer)
+		if err != nil {
+			return ErrInvalidRelayers
+		}
+	}
+
+	return nil
+}
+
+// validateNonBtcRelayers validates the given non btc relayers
 func validateNonBtcRelayers(relayers []string) error {
 	for _, relayer := range relayers {
 		_, err := sdk.AccAddressFromBech32(relayer)
@@ -198,6 +215,7 @@ func validateOracles(oracles []string) error {
 	return nil
 }
 
+// validateFeeRateValidityPeriod validates the given fee rate validity period
 func validateFeeRateValidityPeriod(feeRateValidityPeriod int64) error {
 	if feeRateValidityPeriod <= 0 {
 		return errorsmod.Wrapf(ErrInvalidParams, "fee rate validity period must be greater than 0")
@@ -242,6 +260,7 @@ func validateVaults(vaults []*Vault) error {
 	return nil
 }
 
+// validateWithdrawParams validates the given withdrawal params
 func validateWithdrawParams(withdrawParams *WithdrawParams) error {
 	if withdrawParams.MaxUtxoNum == 0 || withdrawParams.BtcBatchWithdrawPeriod == 0 || withdrawParams.MaxBtcBatchWithdrawNum == 0 {
 		return errorsmod.Wrapf(ErrInvalidParams, "invalid withdrawal params")

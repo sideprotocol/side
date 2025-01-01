@@ -26,6 +26,10 @@ func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmi
 		return nil, err
 	}
 
+	if !m.IsTrustedBtcRelayer(ctx, msg.Sender) {
+		return nil, types.ErrUntrustedBtcRelayer
+	}
+
 	// insert block headers
 	err := m.InsertBlockHeaders(ctx, msg.BlockHeaders)
 	if err != nil {
@@ -64,7 +68,7 @@ func (m msgServer) UpdateTrustedOracles(goCtx context.Context, msg *types.MsgUpd
 	}
 
 	if !m.IsTrustedOracle(ctx, msg.Sender) {
-		return nil, types.ErruntrustedOracle
+		return nil, types.ErrUntrustedOracle
 	}
 
 	// update oracles
@@ -138,7 +142,7 @@ func (m msgServer) SubmitFeeRate(goCtx context.Context, msg *types.MsgSubmitFeeR
 	}
 
 	if !m.IsTrustedOracle(ctx, msg.Sender) {
-		return nil, types.ErruntrustedOracle
+		return nil, types.ErrUntrustedOracle
 	}
 
 	m.SetFeeRate(ctx, msg.FeeRate)
