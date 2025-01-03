@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/base64"
+	"slices"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -43,22 +44,8 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		participants[p.ConsensusPubkey] = true
 	}
 
-	if len(m.VaultTypes) == 0 {
-		return errorsmod.Wrap(ErrInvalidDKGParams, "vault types can not be empty")
-	}
-
-	vaultTypes := make(map[AssetType]bool)
-
-	for _, t := range m.VaultTypes {
-		if t == AssetType_ASSET_TYPE_UNSPECIFIED {
-			return errorsmod.Wrap(ErrInvalidDKGParams, "invalid vault type")
-		}
-
-		if vaultTypes[t] {
-			return errorsmod.Wrap(ErrInvalidDKGParams, "duplicate vault type")
-		}
-
-		vaultTypes[t] = true
+	if !slices.Equal(m.VaultTypes, SupportedAssetTypes()) {
+		return errorsmod.Wrap(ErrInvalidDKGParams, "incorrect vault types")
 	}
 
 	if m.EnableTransfer {

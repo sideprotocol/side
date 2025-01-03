@@ -17,3 +17,8 @@ func AssetTypeFromDenom(denom string, p Params) AssetType {
 
 	return AssetType_ASSET_TYPE_UNSPECIFIED
 }
+
+// SupportedAssetTypes returns the currently supported asset types
+func SupportedAssetTypes() []AssetType {
+	return []AssetType{AssetType_ASSET_TYPE_BTC, AssetType_ASSET_TYPE_RUNES}
+}
