@@ -2,8 +2,10 @@ package keeper
 
 import (
 	"encoding/hex"
+	"fmt"
 
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -33,7 +35,24 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, nonce string, oracle
 		Time:         ctx.BlockTime(),
 	}
 
+	pair := "BTC-USD"
+	currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
+	priceInterval := k.GetPriceInterval(ctx, pair)
+
+	dlcEvent := &types.DLCPriceEvent{
+		Id:           k.IncrementEventId(ctx),
+		TriggerPrice: sdkmath.NewInt(currentEventPrice + int64(priceInterval)),
+		Nonce:        nonce,
+		Pubkey:       oraclePubKey,
+		HasTriggered: false,
+		PublishAt:    ctx.BlockTime(),
+	}
+	dlcEvent.PriceDecimal = dlcEvent.TriggerPrice
+	dlcEvent.Description = fmt.Sprintf("Liquidation event at price %s", dlcEvent.PriceDecimal)
+
 	k.SetNonce(ctx, dlcNonce, oracle.Id)
+	k.SetEvent(ctx, dlcEvent)
+	k.SetCurrentEventPrice(ctx, pair, dlcEvent.TriggerPrice)
 
 	return nil
 }

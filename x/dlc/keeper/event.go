@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -29,6 +30,25 @@ func (k Keeper) IncrementEventId(ctx sdk.Context) uint64 {
 	return id
 }
 
+// GetCurrentEventPrice gets the current event price
+func (k Keeper) GetCurrentEventPrice(ctx sdk.Context, pair string) int64 {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.CurrentEventPriceKey(pair))
+	if bz == nil {
+		return 0
+	}
+
+	return int64(sdk.BigEndianToUint64(bz))
+}
+
+// SetCurrentEventPrice sets the current event price for the given pair
+func (k Keeper) SetCurrentEventPrice(ctx sdk.Context, pair string, price sdkmath.Int) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.CurrentEventPriceKey(pair), sdk.Uint64ToBigEndian(price.Uint64()))
+}
+
 // HasEvent returns true if the given event exists, false otherwise
 func (k Keeper) HasEvent(ctx sdk.Context, id uint64) bool {
 	store := ctx.KVStore(k.storeKey)
@@ -47,9 +67,33 @@ func (k Keeper) GetEvent(ctx sdk.Context, id uint64) *types.DLCPriceEvent {
 	return &event
 }
 
+// GetEventByPrice gets the event by the given price
+func (k Keeper) GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *types.DLCPriceEvent {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.EventByPriceKey(price))
+	if bz == nil {
+		return nil
+	}
+
+	return k.GetEvent(ctx, sdk.BigEndianToUint64(bz))
+}
+
 // SetEvent sets the given event
 func (k Keeper) SetEvent(ctx sdk.Context, event *types.DLCPriceEvent) {
 	store := ctx.KVStore(k.storeKey)
+
+	bz := k.cdc.MustMarshal(event)
+	store.Set(types.EventKey(event.Id), bz)
+
+	store.Set(types.EventByPriceKey(event.TriggerPrice), sdk.Uint64ToBigEndian(event.Id))
+}
+
+// TriggerEvent sets the given event to triggered
+func (k Keeper) TriggerEvent(ctx sdk.Context, event *types.DLCPriceEvent) {
+	store := ctx.KVStore(k.storeKey)
+
+	event.HasTriggered = true
 
 	bz := k.cdc.MustMarshal(event)
 	store.Set(types.EventKey(event.Id), bz)

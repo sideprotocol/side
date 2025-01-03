@@ -1,6 +1,7 @@
 package types
 
 import (
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -25,13 +26,17 @@ var (
 	EventIdKey       = []byte{0x04} // key for event id
 	AttestationIdKey = []byte{0x05} // key for attestation id
 
-	OracleKeyPrefix         = []byte{0x10} // prefix for each key to an oracle
-	OracleByPubKeyKeyPrefix = []byte{0x11} // prefix for each key to an oracle by public key
-	AgencyKeyPrefix         = []byte{0x12} // prefix for each key to an agency
-	NonceIndexKeyPrefix     = []byte{0x13} // key prefix for the nonce index
-	NonceKeyPrefix          = []byte{0x14} // prefix for each key to a nonce
-	EventKeyPrefix          = []byte{0x15} // prefix for each key to an event
-	AttestationKeyPrefix    = []byte{0x16} // prefix for each key to an attestation
+	OracleKeyPrefix              = []byte{0x10} // prefix for each key to an oracle
+	OracleByPubKeyKeyPrefix      = []byte{0x11} // prefix for each key to an oracle by public key
+	PendingOraclePubKeyKeyPrefix = []byte{0x12} // key prefix for the pending oracle public key
+	AgencyKeyPrefix              = []byte{0x13} // prefix for each key to an agency
+	PendingAgencyPubKeyKeyPrefix = []byte{0x14} // key prefix for the pending agency public key
+	NonceIndexKeyPrefix          = []byte{0x15} // key prefix for the nonce index
+	NonceKeyPrefix               = []byte{0x16} // prefix for each key to a nonce
+	EventKeyPrefix               = []byte{0x17} // prefix for each key to an event
+	EventByPriceKeyPrefix        = []byte{0x18} // prefix for each key to an event by triggering price
+	CurrentEventPriceKeyPrefix   = []byte{0x19} // key prefix for the current event price
+	AttestationKeyPrefix         = []byte{0x20} // prefix for each key to an attestation
 
 	PriceKeyPrefix = []byte{0x20} // key prefix for the price
 )
@@ -44,8 +49,22 @@ func OracleByPubKeyKey(pubKey []byte) []byte {
 	return append(OracleByPubKeyKeyPrefix, pubKey...)
 }
 
+func PendingOraclePubKeyKey(id uint64, sender string, pubKey []byte) []byte {
+	key := append(PendingOraclePubKeyKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+	key = append(key, []byte(sender)...)
+
+	return append(key, pubKey...)
+}
+
 func AgencyKey(id uint64) []byte {
 	return append(AgencyKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+}
+
+func PendingAgencyPubKeyKey(id uint64, sender string, pubKey []byte) []byte {
+	key := append(PendingAgencyPubKeyKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+	key = append(key, []byte(sender)...)
+
+	return append(key, pubKey...)
 }
 
 func NonceIndexKey(oracleId uint64) []byte {
@@ -58,6 +77,14 @@ func NonceKey(oracleId uint64, index uint64) []byte {
 
 func EventKey(id uint64) []byte {
 	return append(EventKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+}
+
+func EventByPriceKey(price sdkmath.Int) []byte {
+	return append(EventByPriceKeyPrefix, price.BigInt().Bytes()...)
+}
+
+func CurrentEventPriceKey(pair string) []byte {
+	return append(CurrentEventPriceKeyPrefix, []byte(pair)...)
 }
 
 func AttestationKey(id uint64) []byte {

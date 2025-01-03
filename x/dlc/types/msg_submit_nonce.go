@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/hex"
 
+	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 
 	errorsmod "cosmossdk.io/errors"
@@ -36,6 +37,15 @@ func (m *MsgSubmitNonce) ValidateBasic() error {
 
 	if _, err := schnorr.ParsePubKey(nonceBytes); err != nil {
 		return ErrInvalidNonce
+	}
+
+	oraclePk, err := hex.DecodeString(m.OraclePubkey)
+	if err != nil {
+		return ErrInvalidPubKey
+	}
+
+	if _, err := btcec.ParsePubKey(oraclePk); err != nil {
+		return ErrInvalidPubKey
 	}
 
 	sigBytes, err := hex.DecodeString(m.Signature)

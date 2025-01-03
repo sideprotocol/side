@@ -10,6 +10,13 @@ import (
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handlePendingOracles(ctx, k)
 	handlePendingAgencies(ctx, k)
+
+	handleEvents(ctx, k)
+}
+
+// handleEvents handles the events
+func handleEvents(ctx sdk.Context, k keeper.Keeper) {
+	
 }
 
 // handlePendingOracles handles the pending oracles

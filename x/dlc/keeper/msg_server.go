@@ -22,7 +22,7 @@ func (m msgServer) SubmitNonce(goCtx context.Context, msg *types.MsgSubmitNonce)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.HandleNonce(ctx, msg.Sender, msg.Nonce, "", msg.Signature); err != nil {
+	if err := m.Keeper.HandleNonce(ctx, msg.Sender, msg.Nonce, msg.OraclePubkey, msg.Signature); err != nil {
 		return nil, err
 	}
 

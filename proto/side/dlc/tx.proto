@@ -52,7 +52,8 @@ message MsgSubmitNonce {
 
     string sender = 1;
     string nonce = 2;
-    string signature = 3;
+    string oracle_pubkey = 3;
+    string signature = 4;
 }
 
 message MsgSubmitNonceResponse {}
