@@ -9,22 +9,30 @@ import (
 	secp256k1 "github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/txscript"
-	"github.com/sideprotocol/side/bitcoin"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+
+	"github.com/sideprotocol/side/bitcoin"
 )
 
 var (
-	// default confirmation number for bitcoin network
-	DefaultConfirmations = int32(6)
+
+	// default confirmation depth for bitcoin deposit transactions
+	DefaultDepositConfirmationDepth = int32(6)
+
+	// default confirmation depth for bitcoin withdrawal transactions
+	DefaultWithdrawConfirmationDepth = int32(6)
+
+	// default allowed maximum depth for bitcoin block reorganization
+	DefaultMaxReorgDepth = int32(6)
 
 	// default BTC voucher denom
 	DefaultBtcVoucherDenom = "sat"
 
-	// default period of validity for the fee rate provided by oracle
+	// default period of validity for the fee rate provided by fee provider
 	DefaultFeeRateValidityPeriod = int64(100) // 100 blocks
 
 	// default maximum number of utxos used to build the signing request
@@ -46,15 +54,17 @@ var (
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		Confirmations:           DefaultConfirmations,
-		MaxAcceptableBlockDepth: 100,
-		BtcVoucherDenom:         DefaultBtcVoucherDenom,
-		DepositEnabled:          true,
-		WithdrawEnabled:         true,
-		TrustedNonBtcRelayers:   []string{},
-		TrustedOracles:          []string{},
-		FeeRateValidityPeriod:   DefaultFeeRateValidityPeriod,
-		Vaults:                  []*Vault{},
+		DepositConfirmationDepth:  DefaultDepositConfirmationDepth,
+		WithdrawConfirmationDepth: DefaultWithdrawConfirmationDepth,
+		MaxReorgDepth:             DefaultMaxReorgDepth,
+		MaxAcceptableBlockDepth:   100,
+		BtcVoucherDenom:           DefaultBtcVoucherDenom,
+		DepositEnabled:            true,
+		WithdrawEnabled:           true,
+		TrustedNonBtcRelayers:     []string{},
+		TrustedFeeProviders:       []string{},
+		FeeRateValidityPeriod:     DefaultFeeRateValidityPeriod,
+		Vaults:                    []*Vault{},
 		WithdrawParams: WithdrawParams{
 			MaxUtxoNum:             DefaultMaxUtxoNum,
 			BtcBatchWithdrawPeriod: DefaultBtcBatchWithdrawPeriod,
@@ -84,6 +94,10 @@ func DefaultParams() Params {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
+	if err := validateConfirmationAndReorgParams(p.DepositConfirmationDepth, p.WithdrawConfirmationDepth, p.MaxReorgDepth); err != nil {
+		return err
+	}
+
 	if err := sdk.ValidateDenom(p.BtcVoucherDenom); err != nil {
 		return err
 	}
@@ -92,7 +106,7 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if err := validateOracles(p.TrustedOracles); err != nil {
+	if err := validateFeeProviders(p.TrustedFeeProviders); err != nil {
 		return err
 	}
 
@@ -175,6 +189,19 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 	return nil
 }
 
+// validateConfirmationAndReorgParams validates the given confirmation and reorg params
+func validateConfirmationAndReorgParams(depositConfirmationDepth int32, withdrawConfirmationDepth int32, maxReorgDepth int32) error {
+	if depositConfirmationDepth <= 0 || withdrawConfirmationDepth <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "confirmation depth must be greater than 0")
+	}
+
+	if maxReorgDepth <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "max reorg depth must be greater than 0")
+	}
+
+	return nil
+}
+
 // validateNonBtcRelayers validates the given non btc relayers
 func validateNonBtcRelayers(relayers []string) error {
 	for _, relayer := range relayers {
@@ -187,12 +214,12 @@ func validateNonBtcRelayers(relayers []string) error {
 	return nil
 }
 
-// validateOracles validates the given oracles
-func validateOracles(oracles []string) error {
-	for _, oracle := range oracles {
-		_, err := sdk.AccAddressFromBech32(oracle)
+// validateFeeProviders validates the given fee providers
+func validateFeeProviders(providers []string) error {
+	for _, provider := range providers {
+		_, err := sdk.AccAddressFromBech32(provider)
 		if err != nil {
-			return ErrInvalidOracles
+			return ErrInvalidFeeProviders
 		}
 	}
 

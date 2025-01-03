@@ -69,6 +69,7 @@ func (k Keeper) handleBtcConsolidation(ctx sdk.Context, vaultVersion uint64, tar
 	signingReq := &types.SigningRequest{
 		Address:      k.authority,
 		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Type:         types.AssetType_ASSET_TYPE_BTC,
 		Txid:         txHash,
 		Psbt:         psbtB64,
 		CreationTime: ctx.BlockTime(),
@@ -136,6 +137,7 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 	signingReq := &types.SigningRequest{
 		Address:      k.authority,
 		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Type:         types.AssetType_ASSET_TYPE_RUNES,
 		Txid:         txHash,
 		Psbt:         psbtB64,
 		CreationTime: ctx.BlockTime(),

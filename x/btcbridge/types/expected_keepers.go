@@ -50,3 +50,12 @@ type OracleKeeper interface {
 	GetBlockHeader(ctx sdk.Context, hash string) *oracletypes.BlockHeader
 	GetBlockHeaderByHeight(ctx sdk.Context, height int32) *oracletypes.BlockHeader
 }
+
+// IncentiveKeeper defines the expected incentive keeper
+type IncentiveKeeper interface {
+	DepositIncentiveEnabled(ctx sdk.Context) bool
+	WithdrawIncentiveEnabled(ctx sdk.Context) bool
+
+	DistributeDepositReward(ctx sdk.Context, addr string) error
+	DistributeWithdrawReward(ctx sdk.Context, addr string) error
+}

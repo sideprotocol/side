@@ -19,6 +19,12 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		k.SaveUTXO(ctx, utxo)
 	}
 
+	// set dkg request
+	if genState.DkgRequest != nil {
+		k.SetDKGRequest(ctx, genState.DkgRequest)
+		k.SetDKGRequestID(ctx, genState.DkgRequest.Id)
+	}
+
 	// sort vaults and set the latest vault version
 	if len(genState.Params.Vaults) > 0 {
 		vaults := genState.Params.Vaults

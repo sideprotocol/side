@@ -6,6 +6,21 @@ import (
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
+// DepositConfirmationDepth gets the confirmation depth for deposit transactions
+func (k Keeper) DepositConfirmationDepth(ctx sdk.Context) int32 {
+	return k.GetParams(ctx).DepositConfirmationDepth
+}
+
+// WithdrawConfirmationDepth gets the confirmation depth for withdrawal transactions
+func (k Keeper) WithdrawConfirmationDepth(ctx sdk.Context) int32 {
+	return k.GetParams(ctx).WithdrawConfirmationDepth
+}
+
+// MaxReorgDepth gets the allowed maximum reorg depth
+func (k Keeper) MaxReorgDepth(ctx sdk.Context) int32 {
+	return k.GetParams(ctx).MaxReorgDepth
+}
+
 // DepositEnabled returns true if deposit enabled, false otherwise
 func (k Keeper) DepositEnabled(ctx sdk.Context) bool {
 	return k.GetParams(ctx).DepositEnabled
@@ -47,10 +62,10 @@ func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
 	return false
 }
 
-// IsTrustedOracle returns true if the given address is a trusted oracle, false otherwise
-func (k Keeper) IsTrustedOracle(ctx sdk.Context, addr string) bool {
-	for _, oracle := range k.GetParams(ctx).TrustedOracles {
-		if oracle == addr {
+// IsTrustedFeeProvider returns true if the given address is a trusted fee provider, false otherwise
+func (k Keeper) IsTrustedFeeProvider(ctx sdk.Context, addr string) bool {
+	for _, provider := range k.GetParams(ctx).TrustedFeeProviders {
+		if provider == addr {
 			return true
 		}
 	}

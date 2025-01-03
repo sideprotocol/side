@@ -104,12 +104,15 @@ import (
 	icahostkeeper "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/host/keeper"
 	icahosttypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
+	ibcfee "github.com/cosmos/ibc-go/v8/modules/apps/29-fee"
 	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
 	ibcfeetypes "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/types"
 	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
+	ibcclienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
+	ibcconnectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
 	ibcporttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
@@ -145,6 +148,10 @@ import (
 	oraclekeeper "github.com/sideprotocol/side/x/oracle/keeper"
 	oraclemodule "github.com/sideprotocol/side/x/oracle/module"
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
+
+	incentivekeeper "github.com/sideprotocol/side/x/incentive/keeper"
+	incentivemodule "github.com/sideprotocol/side/x/incentive/module"
+	incentivetypes "github.com/sideprotocol/side/x/incentive/types"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	btccodec "github.com/sideprotocol/side/crypto/codec"
@@ -207,6 +214,7 @@ var (
 		dlcmodule.AppModuleBasic{},
 		lendingmodule.AppModuleBasic{},
 		oraclemodule.AppModuleBasic{},
+		incentivemodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -224,12 +232,12 @@ var (
 		wasmtypes.ModuleName:                {authtypes.Burner},
 		tsstypes.ModuleName:                 nil,
 		btcbridgetypes.ModuleName:           {authtypes.Minter, authtypes.Burner},
+		incentivetypes.ModuleName:           nil,
 		liquidationtypes.ModuleName:         nil,
 		dlctypes.ModuleName:                 nil,
 		lendingtypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
 		lendingtypes.RepaymentEscrowAccount: nil,
 		oracletypes.ModuleName:              nil,
-
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -301,6 +309,7 @@ type App struct {
 	DLCKeeper         dlckeeper.Keeper
 	LendingKeeper     lendingkeeper.Keeper
 	OracleKeeper      oraclekeeper.Keeper
+	IncentiveKeeper   incentivekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -372,6 +381,8 @@ func New(
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey, tsstypes.StoreKey,
 		btcbridgetypes.StoreKey, liquidationtypes.StoreKey,
 		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
+		ibcfeetypes.StoreKey, wasmtypes.StoreKey,
+		btcbridgetypes.StoreKey, incentivetypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 
@@ -558,6 +569,7 @@ func New(
 		app.IBCKeeper.ChannelKeeper,
 		app.IBCKeeper.PortKeeper, app.AccountKeeper, app.BankKeeper,
 	)
+	ibcFeeModule := ibcfee.NewAppModule(app.IBCFeeKeeper)
 
 	// Create Transfer Keepers
 	app.TransferKeeper = ibctransferkeeper.NewKeeper(
@@ -652,6 +664,14 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
+	app.IncentiveKeeper = incentivekeeper.NewKeeper(
+		appCodec,
+		keys[incentivetypes.StoreKey],
+		keys[incentivetypes.MemStoreKey],
+		app.BankKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+
 	app.BtcBridgeKeeper = *btcbridgekeeper.NewKeeper(
 		appCodec,
 		keys[btcbridgetypes.StoreKey],
@@ -659,6 +679,7 @@ func New(
 		app.BankKeeper,
 		app.StakingKeeper,
 		app.OracleKeeper,
+		app.IncentiveKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
@@ -802,11 +823,14 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
+		ibcFeeModule,
 		icaModule,
+		ibctm.AppModule{},
 		wasmModule,
 
 		tssmodule.NewAppModule(appCodec, *app.TSSKeeper),
 		btcbridgemodule.NewAppModule(appCodec, app.BtcBridgeKeeper),
+		incentivemodule.NewAppModule(appCodec, app.IncentiveKeeper),
 		liquidationmodule.NewAppModule(appCodec, *app.LiquidationKeeper),
 		dlcmodule.NewAppModule(appCodec, app.DLCKeeper),
 		lendingmodule.NewAppModule(appCodec, app.LendingKeeper),
@@ -871,6 +895,7 @@ func New(
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
+		incentivetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -904,6 +929,7 @@ func New(
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
+		incentivetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -942,6 +968,7 @@ func New(
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
+		incentivetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
@@ -1169,7 +1196,7 @@ func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig
 	nodeservice.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
 
 	// Register grpc-gateway routes for all modules.
-	ModuleBasics.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
+	app.BasicModuleManager.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
 
 	if err := server.RegisterSwaggerAPI(apiSvr.ClientCtx, apiSvr.Router, apiConfig.Swagger); err != nil {
 		panic(err)
@@ -1212,6 +1239,9 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(slashingtypes.ModuleName)
 	paramsKeeper.Subspace(govtypes.ModuleName).WithKeyTable(govv1.ParamKeyTable()) //nolint:staticcheck
 	paramsKeeper.Subspace(crisistypes.ModuleName)
+
+	keyTable := ibcclienttypes.ParamKeyTable()
+	keyTable.RegisterParamSet(&ibcconnectiontypes.Params{})
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibcexported.ModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
@@ -1222,6 +1252,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(dlctypes.ModuleName)
 	paramsKeeper.Subspace(lendingtypes.ModuleName)
 	paramsKeeper.Subspace(oracletypes.ModuleName)
+	paramsKeeper.Subspace(incentivetypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
@@ -1241,6 +1272,7 @@ func BlockedAddresses() map[string]bool {
 
 	// allow the following addresses to receive funds
 	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
+	delete(modAccAddrs, authtypes.NewModuleAddress(incentivetypes.ModuleName).String())
 
 	return modAccAddrs
 }

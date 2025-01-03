@@ -209,6 +209,7 @@ func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sd
 	signingRequest := &types.SigningRequest{
 		Address:      sender,
 		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Type:         types.AssetType_ASSET_TYPE_RUNES,
 		Txid:         txHash,
 		Psbt:         psbtB64,
 		CreationTime: ctx.BlockTime(),
@@ -245,6 +246,7 @@ func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawReq
 	signingRequest := &types.SigningRequest{
 		Address:      authtypes.NewModuleAddress(types.ModuleName).String(),
 		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Type:         types.AssetType_ASSET_TYPE_BTC,
 		Txid:         txHash,
 		Psbt:         psbtB64,
 		CreationTime: ctx.BlockTime(),
@@ -595,7 +597,7 @@ func (k Keeper) FilterSigningRequestsByAddr(ctx sdk.Context, req *types.QuerySig
 
 // ProcessBitcoinWithdrawTransaction handles the withdrawal transaction
 func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.MsgSubmitWithdrawTransaction) (*chainhash.Hash, error) {
-	tx, _, err := k.ValidateTransaction(ctx, msg.TxBytes, "", msg.Blockhash, msg.Proof)
+	tx, _, err := k.ValidateTransaction(ctx, msg.TxBytes, "", msg.Blockhash, msg.Proof, k.WithdrawConfirmationDepth(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -616,6 +618,13 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 
 	// unlock the change utxos
 	k.unlockChangeUTXOs(ctx, txHash.String())
+
+	// hook
+	if signingRequest.Type == types.AssetType_ASSET_TYPE_BTC {
+		if err := k.AfterWithdraw(ctx, txHash.String()); err != nil {
+			return nil, err
+		}
+	}
 
 	return txHash, nil
 }

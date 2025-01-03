@@ -26,9 +26,10 @@ type (
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
 
-		bankKeeper    types.BankKeeper
-		stakingKeeper types.StakingKeeper
-		oracleKeeper  types.OracleKeeper
+		bankKeeper      types.BankKeeper
+		stakingKeeper   types.StakingKeeper
+		oracleKeeper    types.OracleKeeper
+		incentiveKeeper types.IncentiveKeeper
 
 		authority string
 	}
@@ -41,17 +42,19 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
 	oracleKeeper types.OracleKeeper,
+	incentiveKeeper types.IncentiveKeeper,
 	authority string,
 ) *Keeper {
 	return &Keeper{
-		cdc:            cdc,
-		storeKey:       storeKey,
-		memKey:         memKey,
-		bankKeeper:     bankKeeper,
-		stakingKeeper:  stakingKeeper,
-		oracleKeeper:   oracleKeeper,
-		BaseUTXOKeeper: *NewBaseUTXOKeeper(cdc, storeKey),
-		authority:      authority,
+		cdc:             cdc,
+		storeKey:        storeKey,
+		memKey:          memKey,
+		bankKeeper:      bankKeeper,
+		stakingKeeper:   stakingKeeper,
+		oracleKeeper:    oracleKeeper,
+		incentiveKeeper: incentiveKeeper,
+		BaseUTXOKeeper:  *NewBaseUTXOKeeper(cdc, storeKey),
+		authority:       authority,
 	}
 }
 
@@ -75,9 +78,7 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 }
 
 // ValidateTransaction validates the given transaction
-func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes string, blockHash string, proof []string) (*btcutil.Tx, *btcutil.Tx, error) {
-	params := k.GetParams(ctx)
-
+func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes string, blockHash string, proof []string, confirmationDepth int32) (*btcutil.Tx, *btcutil.Tx, error) {
 	if !k.oracleKeeper.HasBlockHeader(ctx, blockHash) {
 		return nil, nil, types.ErrBlockNotFound
 	}
@@ -86,9 +87,10 @@ func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes
 	bestHeader := k.oracleKeeper.GetBestBlockHeader(ctx)
 
 	// Check if the block is confirmed
-	if bestHeader.Height-header.Height+1 < params.Confirmations {
+	if bestHeader.Height-header.Height+1 < confirmationDepth {
 		return nil, nil, types.ErrNotConfirmed
 	}
+
 	// Check if the block is within the acceptable depth
 	// if best.Height-header.Height > param.MaxAcceptableBlockDepth {
 	//  return types.ErrExceedMaxAcceptanceDepth

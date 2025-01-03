@@ -81,7 +81,7 @@ type DLCKeeper interface {
 
 // BtcBridgeKeeper defines the expected BtcBridge keeper interface
 type BtcBridgeKeeper interface {
-	ValidateTransaction(ctx sdk.Context, tx string, prevTx string, blockHash string, proof []string) (*btcutil.Tx, *btcutil.Tx, error)
+	ValidateTransaction(ctx sdk.Context, tx string, prevTx string, blockHash string, proof []string, confirmationDepth int32) (*btcutil.Tx, *btcutil.Tx, error)
 	GetFeeRate(ctx sdk.Context) *btcbridgetypes.FeeRate
 }
 

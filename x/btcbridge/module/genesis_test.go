@@ -11,7 +11,7 @@ import (
 	"github.com/btcsuite/btcd/wire"
 	keepertest "github.com/sideprotocol/side/testutil/keeper"
 	"github.com/sideprotocol/side/testutil/nullify"
-	"github.com/sideprotocol/side/x/btcbridge/module"
+	btcbridge "github.com/sideprotocol/side/x/btcbridge/module"
 	"github.com/sideprotocol/side/x/btcbridge/types"
 	"github.com/stretchr/testify/require"
 )
@@ -20,14 +20,10 @@ func TestGenesis(t *testing.T) {
 	mnemonic := "sunny bamboo garlic fold reopen exile letter addict forest vessel square lunar shell number deliver cruise calm artist fire just kangaroo suit wheel extend"
 	println(mnemonic)
 
-	genesisState := types.GenesisState{
-		Params: types.DefaultParams(),
-
-		// this line is used by starport scaffolding # genesis/test/state
-	}
+	genesisState := types.DefaultGenesis()
 
 	k, ctx := keepertest.BtcBridgeKeeper(t)
-	btcbridge.InitGenesis(ctx, *k, genesisState)
+	btcbridge.InitGenesis(ctx, *k, *genesisState)
 	got := btcbridge.ExportGenesis(ctx, *k)
 	require.NotNil(t, got)
 

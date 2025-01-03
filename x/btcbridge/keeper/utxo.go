@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"bytes"
+
 	"lukechampine.com/uint128"
 
 	storetypes "cosmossdk.io/store/types"
@@ -106,14 +108,14 @@ func (bvk *BaseUTXOViewKeeper) GetUTXOsByAddr(ctx sdk.Context, addr string) []*t
 
 func (bvk *BaseUTXOViewKeeper) GetUTXOIteratorByAddr(ctx sdk.Context, addr string) types.UTXOIterator {
 	store := ctx.KVStore(bvk.storeKey)
+
+	// get utxo with the minimum amount
+	minUTXO := bvk.GetMinimumUTXOInAmount(ctx, addr)
+
+	// iterator in descending order by amount
 	iterator := storetypes.KVStoreReversePrefixIterator(store, append(types.BtcOwnerUtxoByAmountKeyPrefix, []byte(addr)...))
 
-	return &UTXOIterator{
-		ctx:      ctx,
-		keeper:   bvk,
-		iterator: iterator,
-		address:  addr,
-	}
+	return NewUTXOIterator(ctx, bvk, addr, iterator, minUTXO)
 }
 
 func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddr(ctx sdk.Context, addr string) []*types.UTXO {
@@ -144,6 +146,26 @@ func (bvk *BaseUTXOViewKeeper) GetUnlockedUTXOsByAddrAndThreshold(ctx sdk.Contex
 	})
 
 	return utxos
+}
+
+// GetMinimumUTXOInAmount gets the utxo with the minimum amount
+func (bvk *BaseUTXOViewKeeper) GetMinimumUTXOInAmount(ctx sdk.Context, addr string) *types.UTXO {
+	store := ctx.KVStore(bvk.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, append(types.BtcOwnerUtxoByAmountKeyPrefix, []byte(addr)...))
+	defer iterator.Close()
+
+	if iterator.Valid() {
+		key := iterator.Key()
+		prefixLen := 1 + len(addr) + 8
+
+		hash := key[prefixLen : prefixLen+64]
+		vout := key[prefixLen+64:]
+
+		return bvk.GetUTXO(ctx, string(hash), sdk.BigEndianToUint64(vout))
+	}
+
+	return nil
 }
 
 // GetTargetRunesUTXOs gets the unlocked runes utxos targeted by the given params
@@ -471,12 +493,39 @@ type UTXOIterator struct {
 	ctx    sdk.Context
 	keeper UTXOViewKeeper
 
-	iterator storetypes.Iterator
 	address  string
+	iterator storetypes.Iterator
+
+	minUTXO    *types.UTXO
+	minUTXOKey []byte
+
+	currentKey []byte
+}
+
+func NewUTXOIterator(ctx sdk.Context, keeper UTXOViewKeeper, addr string, iterator storetypes.Iterator, minUTXO *types.UTXO) *UTXOIterator {
+	utxoIterator := &UTXOIterator{
+		ctx:      ctx,
+		keeper:   keeper,
+		address:  addr,
+		iterator: iterator,
+		minUTXO:  minUTXO,
+	}
+
+	if minUTXO != nil {
+		utxoIterator.minUTXOKey = types.BtcOwnerUtxoByAmountKey(addr, minUTXO.Amount, minUTXO.Txid, minUTXO.Vout)
+	}
+
+	return utxoIterator
 }
 
 func (i *UTXOIterator) Valid() bool {
-	return i.iterator.Valid()
+	if !i.iterator.Valid() {
+		return false
+	}
+
+	i.currentKey = i.iterator.Key()
+
+	return !bytes.Equal(i.currentKey, i.minUTXOKey)
 }
 
 func (i *UTXOIterator) Next() {
@@ -488,11 +537,15 @@ func (i *UTXOIterator) Close() error {
 }
 
 func (i *UTXOIterator) GetUTXO() *types.UTXO {
-	key := i.iterator.Key()
+	key := i.currentKey
 	prefixLen := 1 + len(i.address) + 8
 
 	hash := key[prefixLen : prefixLen+64]
 	vout := key[prefixLen+64:]
 
 	return i.keeper.GetUTXO(i.ctx, string(hash), sdk.BigEndianToUint64(vout))
+}
+
+func (i *UTXOIterator) GetMinimumUTXO() *types.UTXO {
+	return i.minUTXO
 }

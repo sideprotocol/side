@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"reflect"
+	"strings"
 
 	"github.com/cometbft/cometbft/crypto"
 	"github.com/cometbft/cometbft/crypto/tmhash"
@@ -25,7 +26,7 @@ func MustGetConsensusAddr(consPubKey string) string {
 // ParticipantExists returns true if the given address is a participant, false otherwise
 func ParticipantExists(participants []*DKGParticipant, consAddress string) bool {
 	for _, p := range participants {
-		if MustGetConsensusAddr(p.ConsensusPubkey) == consAddress {
+		if MustGetConsensusAddr(p.ConsensusPubkey) == strings.ToLower(consAddress) {
 			return true
 		}
 	}

@@ -285,6 +285,7 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 			signingReq := &types.SigningRequest{
 				Address:      k.authority,
 				Sequence:     k.IncrementSigningRequestSequence(ctx),
+				Type:         assetType,
 				Txid:         p.UnsignedTx.TxHash().String(),
 				Psbt:         psbts[i],
 				CreationTime: ctx.BlockTime(),
@@ -475,6 +476,7 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 	signingReq := &types.SigningRequest{
 		Address:      k.authority,
 		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Type:         types.AssetType_ASSET_TYPE_BTC,
 		Txid:         txHash,
 		Psbt:         psbtB64,
 		CreationTime: ctx.BlockTime(),
@@ -539,6 +541,7 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 	signingReq := &types.SigningRequest{
 		Address:      k.authority,
 		Sequence:     k.IncrementSigningRequestSequence(ctx),
+		Type:         types.AssetType_ASSET_TYPE_RUNES,
 		Txid:         txHash,
 		Psbt:         psbtB64,
 		CreationTime: ctx.BlockTime(),
