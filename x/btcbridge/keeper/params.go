@@ -38,7 +38,7 @@ func (k Keeper) BtcDenom(ctx sdk.Context) string {
 
 // IsTrustedBtcRelayer returns true if the given address is a trusted btc relayer, false otherwise
 func (k Keeper) IsTrustedBtcRelayer(ctx sdk.Context, addr string) bool {
-	trustedBtcRelayers := k.GetParams(ctx).TrustedNonBtcRelayers
+	trustedBtcRelayers := k.GetParams(ctx).TrustedBtcRelayers
 	if len(trustedBtcRelayers) == 0 {
 		return true
 	}
