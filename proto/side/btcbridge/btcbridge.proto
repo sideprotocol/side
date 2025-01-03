@@ -123,8 +123,8 @@ message DKGParticipant {
   string moniker = 1;
   // the operator address of the corresponding validator
   string operator_address = 2;
-  // the consensus address of the corresponding validator
-  string consensus_address = 3;
+  // the consensus public key of the corresponding validator
+  string consensus_pubkey = 3;
 }
 
 enum DKGRequestStatus {

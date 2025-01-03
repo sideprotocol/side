@@ -36,6 +36,22 @@ func (k Keeper) BtcDenom(ctx sdk.Context) string {
 	return k.GetParams(ctx).BtcVoucherDenom
 }
 
+// IsTrustedBtcRelayer returns true if the given address is a trusted btc relayer, false otherwise
+func (k Keeper) IsTrustedBtcRelayer(ctx sdk.Context, addr string) bool {
+	trustedBtcRelayers := k.GetParams(ctx).TrustedNonBtcRelayers
+	if len(trustedBtcRelayers) == 0 {
+		return true
+	}
+
+	for _, relayer := range trustedBtcRelayers {
+		if relayer == addr {
+			return true
+		}
+	}
+
+	return false
+}
+
 // IsTrustedNonBtcRelayer returns true if the given address is a trusted non-btc relayer, false otherwise
 func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
 	for _, relayer := range k.GetParams(ctx).TrustedNonBtcRelayers {
@@ -85,24 +101,4 @@ func (k Keeper) GetMaxUtxoNum(ctx sdk.Context) int {
 	params := k.GetParams(ctx)
 
 	return int(params.WithdrawParams.MaxUtxoNum)
-}
-
-// EnableBridge enables the bridge deposit and withdrawal
-func (k Keeper) EnableBridge(ctx sdk.Context) {
-	params := k.GetParams(ctx)
-
-	params.DepositEnabled = true
-	params.WithdrawEnabled = true
-
-	k.SetParams(ctx, params)
-}
-
-// DisableBridge disables the bridge deposit and withdrawal
-func (k Keeper) DisableBridge(ctx sdk.Context) {
-	params := k.GetParams(ctx)
-
-	params.DepositEnabled = false
-	params.WithdrawEnabled = false
-
-	k.SetParams(ctx, params)
 }

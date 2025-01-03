@@ -1,7 +1,10 @@
 package types
 
 import (
+	"encoding/base64"
+
 	errorsmod "cosmossdk.io/errors"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
@@ -18,6 +21,8 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		return ErrInvalidDKGParams
 	}
 
+	participants := make(map[string]bool)
+
 	for _, p := range m.Participants {
 		if len(p.Moniker) > stakingtypes.MaxMonikerLength {
 			return ErrInvalidDKGParams
@@ -27,9 +32,15 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 			return errorsmod.Wrap(err, "invalid operator address")
 		}
 
-		if _, err := sdk.ConsAddressFromHex(p.ConsensusAddress); err != nil {
-			return errorsmod.Wrap(err, "invalid consensus address")
+		if pubKey, err := base64.StdEncoding.DecodeString(p.ConsensusPubkey); err != nil || len(pubKey) != ed25519.PubKeySize {
+			return errorsmod.Wrap(err, "invalid consensus public key")
 		}
+
+		if participants[p.ConsensusPubkey] {
+			return errorsmod.Wrap(ErrInvalidDKGParams, "duplicate participant")
+		}
+
+		participants[p.ConsensusPubkey] = true
 	}
 
 	if len(m.VaultTypes) == 0 {

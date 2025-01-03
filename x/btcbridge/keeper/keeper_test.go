@@ -188,13 +188,13 @@ func (suite *KeeperTestSuite) TestWithdrawRunes() {
 	denom := fmt.Sprintf("%s/%s", types.RunesProtocolName, runeId)
 	coin := sdk.NewInt64Coin(denom, int64(amount))
 
-	_, err := suite.app.BtcBridgeKeeper.NewSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate))
+	_, err := suite.app.BtcBridgeKeeper.NewRunesSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate), suite.runesVault, suite.btcVault)
 	suite.ErrorIs(err, types.ErrInsufficientUTXOs, "should fail due to insufficient runes utxos")
 
 	amount = 100000000
 	coin = sdk.NewInt64Coin(denom, int64(amount))
 
-	_, err = suite.app.BtcBridgeKeeper.NewSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate))
+	_, err = suite.app.BtcBridgeKeeper.NewRunesSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate), suite.runesVault, suite.btcVault)
 	suite.ErrorIs(err, types.ErrInsufficientUTXOs, "should fail due to insufficient payment utxos")
 
 	paymentUTXOs := []*types.UTXO{
@@ -209,7 +209,7 @@ func (suite *KeeperTestSuite) TestWithdrawRunes() {
 	}
 	suite.setupUTXOs(paymentUTXOs)
 
-	req, err := suite.app.BtcBridgeKeeper.NewSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate))
+	req, err := suite.app.BtcBridgeKeeper.NewRunesSigningRequest(suite.ctx, suite.sender, coin, int64(feeRate), suite.runesVault, suite.btcVault)
 	suite.NoError(err)
 
 	suite.False(suite.app.BtcBridgeKeeper.HasUTXO(suite.ctx, runesUTXOs[0].Txid, runesUTXOs[0].Vout), "runes utxo should be spent")

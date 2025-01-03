@@ -20,6 +20,7 @@ MAX_GAS=10000000000
 # btcbridge params
 BTC_VAULT=() # ("<address>" "<pk>" "<asset type>")
 RUNES_VAULT=()
+TRUSTED_BTC_RELAYER=""
 TRUSTED_NON_BTC_RELAYER=""
 TRUSTED_ORACLE=""
 PROTOCOL_FEE_COLLECTOR=""
@@ -96,7 +97,6 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg denom "${DENOMS[0]}" '.app_state["crisis"]["constant_fee"]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	jq --arg gas "$BLOCK_GAS" '.app_state["feemarket"]["block_gas"]=$gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	# Set gas limit in genesis
 	jq --arg max_gas "$MAX_GAS" '.consensus_params["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 
@@ -118,6 +118,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		jq --arg runes_vault "${RUNES_VAULT[0]}" '.app_state["btcbridge"]["params"]["vaults"][1]["address"]=$runes_vault' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 		jq --arg runes_vault_pk "${RUNES_VAULT[1]}" '.app_state["btcbridge"]["params"]["vaults"][1]["pub_key"]=$runes_vault_pk' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 		jq --arg runes_vault_asset_type "${RUNES_VAULT[2]}" '.app_state["btcbridge"]["params"]["vaults"][1]["asset_type"]=$runes_vault_asset_type' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+    fi
+
+	# set trusted btc relayer
+	if [ -n "$TRUSTED_BTC_RELAYER" ]; then
+	    jq --arg relayer "$TRUSTED_BTC_RELAYER" '.app_state["btcbridge"]["params"]["trusted_btc_relayers"][0]=$relayer' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
     fi
 
     # set trusted non btc relayer

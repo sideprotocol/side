@@ -8,10 +8,9 @@ import (
 
 // x/btcbridge module sentinel errors
 var (
-	ErrInvalidBlockHeader = errorsmod.Register(ModuleName, 1100, "invalid block header")
-	ErrBlockHeaderExists  = errorsmod.Register(ModuleName, 1101, "block header already exists")
-	ErrInvalidReorgDepth  = errorsmod.Register(ModuleName, 1102, "invalid reorg depth")
-	ErrForkedBlockHeader  = errorsmod.Register(ModuleName, 1103, "Invalid forked block header")
+	ErrInvalidBlockHeader  = errorsmod.Register(ModuleName, 1100, "invalid block header")
+	ErrInvalidBlockHeaders = errorsmod.Register(ModuleName, 1101, "invalid block headers")
+	ErrInvalidReorgDepth   = errorsmod.Register(ModuleName, 1102, "invalid reorg depth")
 
 	ErrBlockNotFound             = errorsmod.Register(ModuleName, 2101, "block not found")
 	ErrTransactionNotIncluded    = errorsmod.Register(ModuleName, 2102, "transaction not included in block")
@@ -23,8 +22,9 @@ var (
 	ErrInvalidDepositTransaction = errorsmod.Register(ModuleName, 2108, "invalid deposit transaction")
 	ErrInvalidDepositAmount      = errorsmod.Register(ModuleName, 2109, "invalid deposit amount")
 	ErrDepositNotEnabled         = errorsmod.Register(ModuleName, 2110, "deposit not enabled")
-	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2111, "untrusted non btc relayer")
-	ErruntrustedOracle           = errorsmod.Register(ModuleName, 2112, "untrusted oracle")
+	ErrUntrustedBtcRelayer       = errorsmod.Register(ModuleName, 2111, "untrusted btc relayer")
+	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2112, "untrusted non btc relayer")
+	ErrUntrustedOracle           = errorsmod.Register(ModuleName, 2113, "untrusted oracle")
 
 	ErrInvalidWithdrawAmount        = errorsmod.Register(ModuleName, 3100, "invalid withdrawal amount")
 	ErrInvalidBtcAddress            = errorsmod.Register(ModuleName, 3101, "invalid btc address")
