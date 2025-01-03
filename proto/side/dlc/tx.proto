@@ -29,9 +29,10 @@ message MsgSubmitAgencyPubKey {
     option (cosmos.msg.v1.signer) = "sender";
 
     string sender = 1;
-    uint64 id = 2;
-    string pub_key = 3;
-    string signature = 4;
+    string pub_key = 2;
+    uint64 agency_id = 3;
+    string agency_pubkey = 4;
+    string signature = 5;
 }
 
 message MsgSubmitAgencyPubKeyResponse {}
@@ -40,9 +41,10 @@ message MsgSubmitOraclePubKey {
     option (cosmos.msg.v1.signer) = "sender";
 
     string sender = 1;
-    uint64 oracle_id = 2;
-    string pub_key = 3;
-    string signature = 4;
+    string pub_key = 2;
+    uint64 oracle_id = 3;
+    string oracle_pubkey = 4;
+    string signature = 5;
 }
 
 message MsgSubmitOraclePubKeyResponse {}

@@ -14,15 +14,17 @@ var _ sdk.Msg = &MsgSubmitAgencyPubKey{}
 
 func NewMsgSubmitAgencyPubKey(
 	sender string,
-	id uint64,
 	pubKey string,
+	agencyId uint64,
+	agencyPubKey string,
 	signature string,
 ) *MsgSubmitAgencyPubKey {
 	return &MsgSubmitAgencyPubKey{
-		Sender:    sender,
-		Id:        id,
-		PubKey:    pubKey,
-		Signature: signature,
+		Sender:       sender,
+		PubKey:       pubKey,
+		AgencyId:     agencyId,
+		AgencyPubkey: agencyPubKey,
+		Signature:    signature,
 	}
 }
 
@@ -32,12 +34,21 @@ func (m *MsgSubmitAgencyPubKey) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	pkBytes, err := hex.DecodeString(m.PubKey)
+	pubKey, err := hex.DecodeString(m.PubKey)
 	if err != nil {
 		return ErrInvalidPubKey
 	}
 
-	if _, err := btcec.ParsePubKey(pkBytes); err != nil {
+	if len(pubKey) != ed25519.PubKeySize {
+		return ErrInvalidPubKey
+	}
+
+	agencyPubKey, err := hex.DecodeString(m.AgencyPubkey)
+	if err != nil {
+		return ErrInvalidPubKey
+	}
+
+	if _, err := btcec.ParsePubKey(agencyPubKey); err != nil {
 		return ErrInvalidPubKey
 	}
 

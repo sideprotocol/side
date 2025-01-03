@@ -14,15 +14,17 @@ var _ sdk.Msg = &MsgSubmitOraclePubKey{}
 
 func NewMsgSubmitOraclePubKey(
 	sender string,
-	oracleId uint64,
 	pubKey string,
+	oracleId uint64,
+	oraclePubKey string,
 	signature string,
 ) *MsgSubmitOraclePubKey {
 	return &MsgSubmitOraclePubKey{
-		Sender:    sender,
-		OracleId:  oracleId,
-		PubKey:    pubKey,
-		Signature: signature,
+		Sender:       sender,
+		PubKey:       pubKey,
+		OracleId:     oracleId,
+		OraclePubkey: oraclePubKey,
+		Signature:    signature,
 	}
 }
 
@@ -32,12 +34,21 @@ func (m *MsgSubmitOraclePubKey) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	pkBytes, err := hex.DecodeString(m.PubKey)
+	pubKey, err := hex.DecodeString(m.PubKey)
 	if err != nil {
 		return ErrInvalidPubKey
 	}
 
-	if _, err := btcec.ParsePubKey(pkBytes); err != nil {
+	if len(pubKey) != ed25519.PubKeySize {
+		return ErrInvalidPubKey
+	}
+
+	oraclePubKey, err := hex.DecodeString(m.OraclePubkey)
+	if err != nil {
+		return ErrInvalidPubKey
+	}
+
+	if _, err := btcec.ParsePubKey(oraclePubKey); err != nil {
 		return ErrInvalidPubKey
 	}
 

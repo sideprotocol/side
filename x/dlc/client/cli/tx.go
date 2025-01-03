@@ -41,25 +41,26 @@ func GetTxCmd() *cobra.Command {
 
 func CmdSubmitOraclePubKey() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-oracle-pubkey [oracle id] [pubkey] [signature]",
+		Use:   "submit-oracle-pubkey [pub key] [oracle id] [oracle pub key] [signature]",
 		Short: "Submit the oracle public key",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			oracleId, err := strconv.ParseUint(args[0], 10, 64)
+			oracleId, err := strconv.ParseUint(args[1], 10, 64)
 			if err != nil {
 				return err
 			}
 
 			msg := types.NewMsgSubmitOraclePubKey(
 				clientCtx.GetFromAddress().String(),
+				args[0],
 				oracleId,
-				args[1],
 				args[2],
+				args[3],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {
@@ -77,25 +78,26 @@ func CmdSubmitOraclePubKey() *cobra.Command {
 
 func CmdSubmitAgencyPubKey() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-agency-pubkey [agency id] [pubkey] [signature]",
+		Use:   "submit-agency-pubkey [pub key] [agency id] [agency pub key] [signature]",
 		Short: "Submit the agency public key",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			agencyId, err := strconv.ParseUint(args[0], 10, 64)
+			agencyId, err := strconv.ParseUint(args[1], 10, 64)
 			if err != nil {
 				return err
 			}
 
 			msg := types.NewMsgSubmitAgencyPubKey(
 				clientCtx.GetFromAddress().String(),
+				args[0],
 				agencyId,
-				args[1],
 				args[2],
+				args[3],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

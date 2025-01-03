@@ -1,6 +1,9 @@
 package keeper
 
 import (
+	"encoding/hex"
+
+	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -13,6 +16,7 @@ func (k Keeper) CreateOracle(ctx sdk.Context, participants []string, threshold u
 		Id:           k.IncrementOracleId(ctx),
 		Participants: participants,
 		Threshold:    threshold,
+		Time:         ctx.BlockTime(),
 		Status:       types.DLCOracleStatus_Oracle_Status_Pending,
 	}
 
@@ -22,8 +26,39 @@ func (k Keeper) CreateOracle(ctx sdk.Context, participants []string, threshold u
 }
 
 // SubmitOraclePubKey performs the oracle public key submission
-func (k Keeper) SubmitOraclePubKey(ctx sdk.Context, sender string, pubKey string, signature string) error {
-	// TODO
+func (k Keeper) SubmitOraclePubKey(ctx sdk.Context, sender string, pubKey string, oracleId uint64, oraclePubKey string, signature string) error {
+	oracle := k.GetOracle(ctx, oracleId)
+	if oracle == nil {
+		return types.ErrOracleDoesNotExist
+	}
+
+	if !types.ParticipantExists(oracle.Participants, pubKey) {
+		return types.ErrUnauthorizedParticipant
+	}
+
+	pubKeyBytes, _ := hex.DecodeString(pubKey)
+
+	if k.HasPendingOraclePubKey(ctx, oracleId, pubKeyBytes) {
+		return types.ErrPendingOraclePubKeyExists
+	}
+
+	if oracle.Status != types.DLCOracleStatus_Oracle_Status_Pending {
+		return types.ErrInvalidOracleStatus
+	}
+
+	if !ctx.BlockTime().Before(oracle.Time.Add(k.GetDKGTimeoutPeriod(ctx))) {
+		return errorsmod.Wrap(types.ErrDKGTimedOut, "oracle dkg timed out")
+	}
+
+	oraclePubKeyBytes, _ := hex.DecodeString(oraclePubKey)
+	sigBytes, _ := hex.DecodeString(signature)
+	sigMsg := types.GetSigMsg(oracleId, oraclePubKeyBytes)
+
+	if !types.VerifySignature(sigBytes, pubKeyBytes, sigMsg) {
+		return errorsmod.Wrap(types.ErrInvalidSignature, "signature verification failed")
+	}
+
+	k.SetPendingOraclePubKey(ctx, oracleId, pubKeyBytes, oraclePubKeyBytes)
 
 	return nil
 }
@@ -88,6 +123,20 @@ func (k Keeper) SetOracle(ctx sdk.Context, oracle *types.DLCOracle) {
 	store.Set(types.OracleKey(oracle.Id), bz)
 }
 
+// HasPendingOraclePubKey returns true if the given pending oracle pubkey exists, false otherwise
+func (k Keeper) HasPendingOraclePubKey(ctx sdk.Context, oracleId uint64, pubKey []byte) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.PendingOraclePubKeyKey(oracleId, pubKey))
+}
+
+// SetPendingOraclePubKey sets the pending oracle public key
+func (k Keeper) SetPendingOraclePubKey(ctx sdk.Context, oracleId uint64, pubKey []byte, oraclePubKey []byte) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.PendingOraclePubKeyKey(oracleId, pubKey), oraclePubKey)
+}
+
 // GetOracles gets oracles by the given status
 func (k Keeper) GetOracles(ctx sdk.Context, status types.DLCOracleStatus) []*types.DLCOracle {
 	oracles := make([]*types.DLCOracle, 0)
@@ -103,6 +152,19 @@ func (k Keeper) GetOracles(ctx sdk.Context, status types.DLCOracleStatus) []*typ
 	return oracles
 }
 
+// GetPendingOraclePubKeys gets pending oracle pub keys by the given oracle id
+func (k Keeper) GetPendingOraclePubKeys(ctx sdk.Context, oracleId uint64) [][]byte {
+	pubKeys := make([][]byte, 0)
+
+	k.IteratePendingOraclePubKeys(ctx, oracleId, func(pubKey []byte) (stop bool) {
+		pubKeys = append(pubKeys, pubKey)
+
+		return false
+	})
+
+	return pubKeys
+}
+
 // IterateOracles iterates through all oracles
 func (k Keeper) IterateOracles(ctx sdk.Context, cb func(oracle *types.DLCOracle) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
@@ -115,6 +177,20 @@ func (k Keeper) IterateOracles(ctx sdk.Context, cb func(oracle *types.DLCOracle)
 		k.cdc.MustUnmarshal(iterator.Value(), &oracle)
 
 		if cb(&oracle) {
+			break
+		}
+	}
+}
+
+// IteratePendingOraclePubKeys iterates through all pending oracle pub keys by the given oracle id
+func (k Keeper) IteratePendingOraclePubKeys(ctx sdk.Context, oracleId uint64, cb func(pubKey []byte) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, append(types.PendingOraclePubKeyKeyPrefix, sdk.Uint64ToBigEndian(oracleId)...))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		if cb(iterator.Value()) {
 			break
 		}
 	}

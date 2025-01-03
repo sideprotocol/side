@@ -6,15 +6,15 @@ import (
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 )
 
-// SHA256 returns the SHA256 hash of the given data
-func SHA256(data []byte) []byte {
+// Sha256 returns the SHA256 hash of the given data
+func Sha256(data []byte) []byte {
 	hash := sha256.Sum256(data)
 
 	return hash[:]
 }
 
-// VerifySignature verifies the provided signature against the given hash and public key
-func VerifySignature(sig []byte, sigHash []byte, pubKeyBytes []byte) bool {
+// VerifySchnorrSignature verifies the provided schnorr signature against the given hash and public key
+func VerifySchnorrSignature(sig []byte, sigHash []byte, pubKeyBytes []byte) bool {
 	signature, err := schnorr.ParseSignature(sig)
 	if err != nil {
 		return false

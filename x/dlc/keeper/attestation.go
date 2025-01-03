@@ -23,9 +23,9 @@ func (k Keeper) HandleAttestation(ctx sdk.Context, sender string, eventId uint64
 
 	pubKeyBytes, _ := hex.DecodeString(event.Pubkey)
 	sigBytes, _ := hex.DecodeString(signature)
-	msg := types.SHA256(sdk.Uint64ToBigEndian(event.TriggerPrice.Uint64()))
+	msg := types.Sha256(sdk.Uint64ToBigEndian(event.TriggerPrice.Uint64()))
 
-	if !types.VerifySignature(sigBytes, msg, pubKeyBytes) {
+	if !types.VerifySchnorrSignature(sigBytes, msg, pubKeyBytes) {
 		return errorsmod.Wrap(types.ErrInvalidSignature, "failed to verify the signature")
 	}
 

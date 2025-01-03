@@ -49,22 +49,22 @@ func OracleByPubKeyKey(pubKey []byte) []byte {
 	return append(OracleByPubKeyKeyPrefix, pubKey...)
 }
 
-func PendingOraclePubKeyKey(id uint64, sender string, pubKey []byte) []byte {
-	key := append(PendingOraclePubKeyKeyPrefix, sdk.Uint64ToBigEndian(id)...)
-	key = append(key, []byte(sender)...)
+func PendingOraclePubKeyKey(oracleId uint64, pubKey []byte) []byte {
+	key := append(PendingOraclePubKeyKeyPrefix, sdk.Uint64ToBigEndian(oracleId)...)
+	key = append(key, pubKey...)
 
-	return append(key, pubKey...)
+	return key
 }
 
 func AgencyKey(id uint64) []byte {
 	return append(AgencyKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
-func PendingAgencyPubKeyKey(id uint64, sender string, pubKey []byte) []byte {
-	key := append(PendingAgencyPubKeyKeyPrefix, sdk.Uint64ToBigEndian(id)...)
-	key = append(key, []byte(sender)...)
+func PendingAgencyPubKeyKey(agencyId uint64, pubKey []byte) []byte {
+	key := append(PendingAgencyPubKeyKeyPrefix, sdk.Uint64ToBigEndian(agencyId)...)
+	key = append(key, pubKey...)
 
-	return append(key, pubKey...)
+	return key
 }
 
 func NonceIndexKey(oracleId uint64) []byte {

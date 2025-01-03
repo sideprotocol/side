@@ -52,7 +52,7 @@ func (m msgServer) SubmitOraclePubKey(goCtx context.Context, msg *types.MsgSubmi
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.SubmitOraclePubKey(ctx, msg.Sender, msg.PubKey, msg.Signature); err != nil {
+	if err := m.Keeper.SubmitOraclePubKey(ctx, msg.Sender, msg.PubKey, msg.OracleId, msg.OraclePubkey, msg.Signature); err != nil {
 		return nil, err
 	}
 
@@ -67,7 +67,7 @@ func (m msgServer) SubmitAgencyPubKey(goCtx context.Context, msg *types.MsgSubmi
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.SubmitAgencyPubKey(ctx, msg.Sender, msg.PubKey, msg.Signature); err != nil {
+	if err := m.Keeper.SubmitAgencyPubKey(ctx, msg.Sender, msg.PubKey, msg.AgencyId, msg.AgencyPubkey, msg.Signature); err != nil {
 		return nil, err
 	}
 

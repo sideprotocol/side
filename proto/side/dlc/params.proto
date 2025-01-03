@@ -2,6 +2,7 @@ syntax = "proto3";
 package side.dlc;
 
 import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
@@ -14,4 +15,5 @@ message PriceInterval {
 message Params {
     uint32 nonce_queue_size = 1;
     repeated PriceInterval price_intervals = 2 [(gogoproto.nullable) = false];
+    google.protobuf.Duration dkg_timeout_period = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }

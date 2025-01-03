@@ -2,6 +2,7 @@ package types
 
 import (
 	"strings"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -16,6 +17,9 @@ var (
 
 	// default price interval for btc-usd
 	DefaultPriceIntervalForBTCUSD = int32(100)
+
+	// default DKG timeout period
+	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
 )
 
 // NewParams creates a new Params instance
@@ -28,6 +32,7 @@ func NewParams() Params {
 				Interval:  int32(DefaultPriceIntervalForBTCUSD),
 			},
 		},
+		DkgTimeoutPeriod: DefaultDKGTimeoutPeriod,
 	}
 }
 
@@ -46,6 +51,10 @@ func (p Params) Validate() error {
 		if err := validatePriceInterval(pi); err != nil {
 			return err
 		}
+	}
+
+	if err := validateDKGTimeoutPeriod(p.DkgTimeoutPeriod); err != nil {
+		return err
 	}
 
 	return nil
@@ -75,6 +84,15 @@ func validatePricePair(pair string) error {
 		if err := sdk.ValidateDenom(denom); err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+// validateDKGTimeoutPeriod validates the given DKG timeout period
+func validateDKGTimeoutPeriod(timeoutPeriod time.Duration) error {
+	if timeoutPeriod == 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid dkg timeout period")
 	}
 
 	return nil

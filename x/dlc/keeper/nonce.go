@@ -22,7 +22,7 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, nonce string, oracle
 	nonceBytes, _ := hex.DecodeString(nonce)
 	sigBytes, _ := hex.DecodeString(signature)
 
-	if !types.VerifySignature(sigBytes, types.SHA256(nonceBytes), oraclePKBytes) {
+	if !types.VerifySchnorrSignature(sigBytes, types.Sha256(nonceBytes), oraclePKBytes) {
 		return errorsmod.Wrap(types.ErrInvalidSignature, "failed to verify the signature")
 	}
 
