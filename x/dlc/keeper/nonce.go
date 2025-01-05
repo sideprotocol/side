@@ -9,6 +9,8 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sideprotocol/side/crypto/hash"
+	"github.com/sideprotocol/side/crypto/schnorr"
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
@@ -22,7 +24,7 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, nonce string, oracle
 	nonceBytes, _ := hex.DecodeString(nonce)
 	sigBytes, _ := hex.DecodeString(signature)
 
-	if !types.VerifySchnorrSignature(sigBytes, types.Sha256(nonceBytes), oraclePKBytes) {
+	if !schnorr.Verify(sigBytes, hash.Sha256(nonceBytes), oraclePKBytes) {
 		return errorsmod.Wrap(types.ErrInvalidSignature, "failed to verify the signature")
 	}
 

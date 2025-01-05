@@ -5,6 +5,8 @@ import (
 	"crypto/ed25519"
 	"encoding/binary"
 	"slices"
+
+	"github.com/sideprotocol/side/crypto/hash"
 )
 
 // ParticipantExists returns true if the given public key is a participant, false otherwise
@@ -36,7 +38,7 @@ func GetSigMsg(id uint64, pubKey []byte) []byte {
 
 	rawMsg = append(rawMsg, pubKey...)
 
-	return Sha256(rawMsg)
+	return hash.Sha256(rawMsg)
 }
 
 // VerifySignature verifies the given signature

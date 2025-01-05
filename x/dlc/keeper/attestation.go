@@ -7,6 +7,8 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sideprotocol/side/crypto/hash"
+	"github.com/sideprotocol/side/crypto/schnorr"
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
@@ -23,9 +25,9 @@ func (k Keeper) HandleAttestation(ctx sdk.Context, sender string, eventId uint64
 
 	pubKeyBytes, _ := hex.DecodeString(event.Pubkey)
 	sigBytes, _ := hex.DecodeString(signature)
-	msg := types.Sha256(sdk.Uint64ToBigEndian(event.TriggerPrice.Uint64()))
+	msg := hash.Sha256(sdk.Uint64ToBigEndian(event.TriggerPrice.Uint64()))
 
-	if !types.VerifySchnorrSignature(sigBytes, msg, pubKeyBytes) {
+	if !schnorr.Verify(sigBytes, msg, pubKeyBytes) {
 		return errorsmod.Wrap(types.ErrInvalidSignature, "failed to verify the signature")
 	}
 
