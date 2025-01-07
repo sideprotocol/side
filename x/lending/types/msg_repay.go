@@ -6,13 +6,11 @@ import (
 
 var _ sdk.Msg = &MsgRepay{}
 
-func NewMsgRepay(borrower string, loanId string, adaptorPoint string, txid string, signature string) *MsgRepay {
+func NewMsgRepay(borrower string, loanId string, adaptorPoint string) *MsgRepay {
 	return &MsgRepay{
-		Borrower:         borrower,
-		AdaptorPoint:     adaptorPoint,
-		LoanId:           loanId,
-		ClaimTxId:        txid,
-		AdaptorSignature: signature,
+		Borrower:     borrower,
+		AdaptorPoint: adaptorPoint,
+		LoanId:       loanId,
 	}
 }
 
@@ -28,14 +26,6 @@ func (m *MsgRepay) ValidateBasic() error {
 
 	if len(m.LoanId) == 0 {
 		return ErrInvalidRepayment
-	}
-
-	if len(m.ClaimTxId) == 0 {
-		return ErrInvalidRepaymentTx
-	}
-
-	if len(m.AdaptorSignature) == 0 {
-		return ErrInvalidRepaymentTx
 	}
 
 	return nil

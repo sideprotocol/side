@@ -38,8 +38,6 @@ message MsgRepay{
     string borrower = 1;
     string loan_id = 2;
     string adaptor_point = 3;
-    // string claim_tx_id = 4;
-    // string adaptor_signature = 5;
 }
 
 message MsgRepayResponse{}
