@@ -68,10 +68,12 @@ message QueryParamsResponse {
 
 // QueryLoanCETRequest is request type for the Query/LoanCET RPC method.
 message QueryLoanCETRequest {
+    string loan_id = 1;
 }
 
 // QueryLoanCETResponse is response type for the Query/LoanCET RPC method.
 message QueryLoanCETResponse {
+    CET cet = 1 [(gogoproto.customname) = "CET"];
 }
 
 message QueryRepaymentTxRequest {

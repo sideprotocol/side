@@ -26,6 +26,7 @@ var (
 	LoanStorePrefix  = []byte{0x3}
 	DepositLogPrefix = []byte{0x4}
 	RepaymentPrefix  = []byte{0x5}
+	LoanCETKeyPrefix = []byte{0x06}
 )
 
 func PoolStoreKey(pool_id string) []byte {
@@ -38,6 +39,10 @@ func LoanStoreKey(vault string) []byte {
 
 func DepositLogKey(txid string) []byte {
 	return append(DepositLogPrefix, []byte(txid)...)
+}
+
+func LoanCETKey(loanId string) []byte {
+	return append(LoanCETKeyPrefix, []byte(loanId)...)
 }
 
 func RepaymentKey(loanId string) []byte {
