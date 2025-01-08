@@ -14,8 +14,6 @@ type Keeper struct {
 	storeKey storetypes.StoreKey
 	memKey   storetypes.StoreKey
 
-	stakingKeeper types.StakingKeeper
-
 	authority string
 }
 
@@ -23,15 +21,13 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey,
 	memKey storetypes.StoreKey,
-	stakingKeeper types.StakingKeeper,
 	authority string,
 ) Keeper {
 	return Keeper{
-		cdc:           cdc,
-		storeKey:      storeKey,
-		memKey:        memKey,
-		stakingKeeper: stakingKeeper,
-		authority:     authority,
+		cdc:       cdc,
+		storeKey:  storeKey,
+		memKey:    memKey,
+		authority: authority,
 	}
 }
 

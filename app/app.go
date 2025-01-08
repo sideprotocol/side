@@ -630,7 +630,6 @@ func New(
 		appCodec,
 		keys[dlctypes.StoreKey],
 		keys[dlctypes.MemStoreKey],
-		app.StakingKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	dlcModule := dlcmodule.NewAppModule(appCodec, app.DLCKeeper)
