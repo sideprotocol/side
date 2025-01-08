@@ -14,7 +14,8 @@ type Keeper struct {
 	storeKey storetypes.StoreKey
 	memKey   storetypes.StoreKey
 
-	bankKeeper types.BankKeeper
+	bankKeeper   types.BankKeeper
+	oracleKeeper types.OracleKeeper
 
 	authority string
 }
@@ -24,14 +25,16 @@ func NewKeeper(
 	storeKey,
 	memKey storetypes.StoreKey,
 	bankKeeper types.BankKeeper,
+	oracleKeeper types.OracleKeeper,
 	authority string,
 ) Keeper {
 	return Keeper{
-		cdc:        cdc,
-		storeKey:   storeKey,
-		memKey:     memKey,
-		bankKeeper: bankKeeper,
-		authority:  authority,
+		cdc:          cdc,
+		storeKey:     storeKey,
+		memKey:       memKey,
+		bankKeeper:   bankKeeper,
+		oracleKeeper: oracleKeeper,
+		authority:    authority,
 	}
 }
 
@@ -48,8 +51,18 @@ func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 
 func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	store := ctx.KVStore(k.storeKey)
+
 	var params types.Params
 	bz := store.Get(types.ParamsKey)
 	k.cdc.MustUnmarshal(bz, &params)
+
 	return params
+}
+
+func (k Keeper) BankKeeper() types.BankKeeper {
+	return k.bankKeeper
+}
+
+func (k Keeper) OracleKeeper() types.OracleKeeper {
+	return k.oracleKeeper
 }

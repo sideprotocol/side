@@ -106,6 +106,20 @@ func (k Keeper) SetBid(ctx sdk.Context, bid *types.Bid) {
 	store.Set(types.BidKey(bid.Id), bz)
 }
 
+func (k Keeper) SetEscrowAsset(ctx sdk.Context, auctionId uint64, bidId uint64, asset sdk.Coin) {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := k.cdc.MustMarshal(&asset)
+	store.Set(types.EscrowAssetKey(auctionId, bidId), bz)
+}
+
+// RemoveEscrowAsset deletes the given escrow asset
+func (k Keeper) RemoveEscrowAsset(ctx sdk.Context, auctionId uint64, bidId uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Delete(types.EscrowAssetKey(auctionId, bidId))
+}
+
 // GetAllBids gets all bids
 func (k Keeper) GetAllBids(ctx sdk.Context) []*types.Bid {
 	bids := make([]*types.Bid, 0)
@@ -145,6 +159,27 @@ func (k Keeper) IterateBids(ctx sdk.Context, cb func(req *types.Bid) (stop bool)
 		k.cdc.MustUnmarshal(iterator.Value(), &bid)
 
 		if cb(&bid) {
+			break
+		}
+	}
+}
+
+// IterateEscrowAssets iterates through all escrow assets for the given auction
+func (k Keeper) IterateEscrowAssets(ctx sdk.Context, auctionId uint64, cb func(auctoinId uint64, bidId uint64, asset sdk.Coin) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	keyPrefix := append(types.EscrowAssetKeyPrefix, sdk.Uint64ToBigEndian(auctionId)...)
+
+	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		bidId := sdk.BigEndianToUint64(iterator.Key()[len(keyPrefix):])
+
+		var asset sdk.Coin
+		k.cdc.MustUnmarshal(iterator.Value(), &asset)
+
+		if cb(auctionId, bidId, asset) {
 			break
 		}
 	}

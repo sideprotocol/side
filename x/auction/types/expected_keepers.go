@@ -3,6 +3,7 @@ package types
 import (
 	"context"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
@@ -24,4 +25,9 @@ type BankKeeper interface {
 
 	HasSupply(ctx context.Context, denom string) bool
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
+}
+
+// OracleKeeper defines the expected oracle keeper interface
+type OracleKeeper interface {
+	GetPrice(ctx sdk.Context, pair string) (sdkmath.Int, error)
 }

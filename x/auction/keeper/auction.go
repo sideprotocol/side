@@ -1,6 +1,9 @@
 package keeper
 
 import (
+	"fmt"
+
+	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -53,6 +56,34 @@ func (k Keeper) SetAuction(ctx sdk.Context, auction *types.Auction) {
 
 	bz := k.cdc.MustMarshal(auction)
 	store.Set(types.AuctionKey(auction.Id), bz)
+}
+
+// CreateAuction creates a new auction
+func (k Keeper) CreateAuction(ctx sdk.Context, auction *types.Auction) {
+	// set the id
+	auction.Id = k.IncrementAuctionId(ctx)
+
+	k.SetAuction(ctx, auction)
+}
+
+// GetCurrentPrice gets the current price of the given auction
+func (k Keeper) GetCurrentPrice(ctx sdk.Context, auctionId uint64) (sdkmath.Int, error) {
+	if !k.HasAuction(ctx, auctionId) {
+		return sdkmath.Int{}, types.ErrAuctionDoesNotExist
+	}
+
+	auction := k.GetAuction(ctx, auctionId)
+
+	price, err := k.oracleKeeper.GetPrice(ctx, fmt.Sprintf("%s-%s", auction.DepositedAsset.Denom, "uusdc"))
+	if err != nil {
+		return sdkmath.Int{}, err
+	}
+
+	params := k.GetParams(ctx)
+
+	discount := uint32(ctx.BlockTime().Sub(auction.LiquidatedTime) / params.PriceDropPeriod)
+
+	return price.Mul(sdkmath.NewInt(int64(100 - params.InitialDiscount - discount))).Quo(sdkmath.NewInt(100)), nil
 }
 
 // GetAllAuctions gets all auctions

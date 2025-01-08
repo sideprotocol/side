@@ -46,6 +46,7 @@ func AuctionKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		storeKey,
 		memStoreKey,
 		app.BankKeeper,
+		nil,
 		authority,
 	)
 

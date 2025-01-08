@@ -621,6 +621,7 @@ func New(
 		keys[auctiontypes.StoreKey],
 		keys[auctiontypes.MemStoreKey],
 		app.BankKeeper,
+		nil,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	auctionModule := auctionmodule.NewAppModule(appCodec, app.AuctionKeeper)
