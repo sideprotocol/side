@@ -3,6 +3,7 @@ package types
 import (
 	"github.com/btcsuite/btcd/chaincfg"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -72,6 +73,7 @@ func DefaultGenesis() *GenesisState {
 		BestBlockHeader: DefaultBestBlockHeader(),
 		BlockHeaders:    []*BlockHeader{},
 		Utxos:           []*UTXO{},
+		DkgRequest:      nil,
 	}
 }
 
@@ -81,8 +83,18 @@ func (gs GenesisState) Validate() error {
 	// this line is used by starport scaffolding # genesis/types/validate
 
 	// validate the best block header
+	if gs.BestBlockHeader == nil {
+		return errorsmod.Wrap(ErrInvalidBlockHeader, "best block header can not be empty")
+	}
 	if err := gs.BestBlockHeader.Validate(); err != nil {
 		return err
+	}
+
+	// validate block headers
+	if len(gs.BlockHeaders) != 0 {
+		if err := BlockHeaders(gs.BlockHeaders).Validate(); err != nil {
+			return err
+		}
 	}
 
 	// validate params

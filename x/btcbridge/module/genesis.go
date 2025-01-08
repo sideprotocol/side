@@ -23,9 +23,15 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		k.SetBlockHeader(ctx, header)
 	}
 
-	// import utxos
+	// set utxos
 	for _, utxo := range genState.Utxos {
 		k.SaveUTXO(ctx, utxo)
+	}
+
+	// set dkg request
+	if genState.DkgRequest != nil {
+		k.SetDKGRequest(ctx, genState.DkgRequest)
+		k.SetDKGRequestID(ctx, genState.DkgRequest.Id)
 	}
 
 	// sort vaults and set the latest vault version

@@ -121,6 +121,7 @@ var (
 	fd_GenesisState_best_block_header protoreflect.FieldDescriptor
 	fd_GenesisState_block_headers     protoreflect.FieldDescriptor
 	fd_GenesisState_utxos             protoreflect.FieldDescriptor
+	fd_GenesisState_dkg_request       protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -130,6 +131,7 @@ func init() {
 	fd_GenesisState_best_block_header = md_GenesisState.Fields().ByName("best_block_header")
 	fd_GenesisState_block_headers = md_GenesisState.Fields().ByName("block_headers")
 	fd_GenesisState_utxos = md_GenesisState.Fields().ByName("utxos")
+	fd_GenesisState_dkg_request = md_GenesisState.Fields().ByName("dkg_request")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -221,6 +223,12 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
+	if x.DkgRequest != nil {
+		value := protoreflect.ValueOfMessage(x.DkgRequest.ProtoReflect())
+		if !f(fd_GenesisState_dkg_request, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -244,6 +252,8 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 		return len(x.BlockHeaders) != 0
 	case "side.btcbridge.GenesisState.utxos":
 		return len(x.Utxos) != 0
+	case "side.btcbridge.GenesisState.dkg_request":
+		return x.DkgRequest != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.GenesisState"))
@@ -268,6 +278,8 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 		x.BlockHeaders = nil
 	case "side.btcbridge.GenesisState.utxos":
 		x.Utxos = nil
+	case "side.btcbridge.GenesisState.dkg_request":
+		x.DkgRequest = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.GenesisState"))
@@ -302,6 +314,9 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 		}
 		listValue := &_GenesisState_4_list{list: &x.Utxos}
 		return protoreflect.ValueOfList(listValue)
+	case "side.btcbridge.GenesisState.dkg_request":
+		value := x.DkgRequest
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.GenesisState"))
@@ -334,6 +349,8 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 		lv := value.List()
 		clv := lv.(*_GenesisState_4_list)
 		x.Utxos = *clv.list
+	case "side.btcbridge.GenesisState.dkg_request":
+		x.DkgRequest = value.Message().Interface().(*DKGRequest)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.GenesisState"))
@@ -376,6 +393,11 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		}
 		value := &_GenesisState_4_list{list: &x.Utxos}
 		return protoreflect.ValueOfList(value)
+	case "side.btcbridge.GenesisState.dkg_request":
+		if x.DkgRequest == nil {
+			x.DkgRequest = new(DKGRequest)
+		}
+		return protoreflect.ValueOfMessage(x.DkgRequest.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.GenesisState"))
@@ -401,6 +423,9 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "side.btcbridge.GenesisState.utxos":
 		list := []*UTXO{}
 		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
+	case "side.btcbridge.GenesisState.dkg_request":
+		m := new(DKGRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.GenesisState"))
@@ -490,6 +515,10 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		if x.DkgRequest != nil {
+			l = options.Size(x.DkgRequest)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -518,6 +547,20 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.DkgRequest != nil {
+			encoded, err := options.Marshal(x.DkgRequest)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x2a
 		}
 		if len(x.Utxos) > 0 {
 			for iNdEx := len(x.Utxos) - 1; iNdEx >= 0; iNdEx-- {
@@ -768,6 +811,42 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DkgRequest", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.DkgRequest == nil {
+					x.DkgRequest = &DKGRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DkgRequest); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -827,6 +906,7 @@ type GenesisState struct {
 	BestBlockHeader *BlockHeader   `protobuf:"bytes,2,opt,name=best_block_header,json=bestBlockHeader,proto3" json:"best_block_header,omitempty"`
 	BlockHeaders    []*BlockHeader `protobuf:"bytes,3,rep,name=block_headers,json=blockHeaders,proto3" json:"block_headers,omitempty"`
 	Utxos           []*UTXO        `protobuf:"bytes,4,rep,name=utxos,proto3" json:"utxos,omitempty"`
+	DkgRequest      *DKGRequest    `protobuf:"bytes,5,opt,name=dkg_request,json=dkgRequest,proto3" json:"dkg_request,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -877,6 +957,13 @@ func (x *GenesisState) GetUtxos() []*UTXO {
 	return nil
 }
 
+func (x *GenesisState) GetDkgRequest() *DKGRequest {
+	if x != nil {
+		return x.DkgRequest
+	}
+	return nil
+}
+
 var File_side_btcbridge_genesis_proto protoreflect.FileDescriptor
 
 var file_side_btcbridge_genesis_proto_rawDesc = []byte{
@@ -888,7 +975,7 @@ var file_side_btcbridge_genesis_proto_rawDesc = []byte{
 	0x69, 0x64, 0x67, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x1a, 0x1e, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
 	0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0xfb, 0x01, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61,
+	0x6f, 0x22, 0xb8, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61,
 	0x74, 0x65, 0x12, 0x34, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
 	0x64, 0x67, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00,
@@ -903,18 +990,22 @@ var file_side_btcbridge_genesis_proto_rawDesc = []byte{
 	0x65, 0x61, 0x64, 0x65, 0x72, 0x52, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64,
 	0x65, 0x72, 0x73, 0x12, 0x2a, 0x0a, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x18, 0x04, 0x20, 0x03,
 	0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
-	0x64, 0x67, 0x65, 0x2e, 0x55, 0x54, 0x58, 0x4f, 0x52, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x42,
-	0x9c, 0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50,
-	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
-	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02, 0x0e,
-	0x53, 0x69, 0x64, 0x65, 0x2e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xca, 0x02,
-	0x0e, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xe2,
-	0x02, 0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f, 0x53,
-	0x69, 0x64, 0x65, 0x3a, 0x3a, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x64, 0x67, 0x65, 0x2e, 0x55, 0x54, 0x58, 0x4f, 0x52, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x12,
+	0x3b, 0x0a, 0x0b, 0x64, 0x6b, 0x67, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
+	0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x52, 0x0a, 0x64, 0x6b, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42, 0x9c, 0x01, 0x0a,
+	0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
+	0x64, 0x67, 0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74,
+	0x6f, 0x50, 0x01, 0x5a, 0x1f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72,
+	0x69, 0x64, 0x67, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02, 0x0e, 0x53, 0x69, 0x64,
+	0x65, 0x2e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xca, 0x02, 0x0e, 0x53, 0x69,
+	0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xe2, 0x02, 0x1a, 0x53,
+	0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f, 0x53, 0x69, 0x64, 0x65,
+	0x3a, 0x3a, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -935,17 +1026,19 @@ var file_side_btcbridge_genesis_proto_goTypes = []interface{}{
 	(*Params)(nil),       // 1: side.btcbridge.Params
 	(*BlockHeader)(nil),  // 2: side.btcbridge.BlockHeader
 	(*UTXO)(nil),         // 3: side.btcbridge.UTXO
+	(*DKGRequest)(nil),   // 4: side.btcbridge.DKGRequest
 }
 var file_side_btcbridge_genesis_proto_depIdxs = []int32{
 	1, // 0: side.btcbridge.GenesisState.params:type_name -> side.btcbridge.Params
 	2, // 1: side.btcbridge.GenesisState.best_block_header:type_name -> side.btcbridge.BlockHeader
 	2, // 2: side.btcbridge.GenesisState.block_headers:type_name -> side.btcbridge.BlockHeader
 	3, // 3: side.btcbridge.GenesisState.utxos:type_name -> side.btcbridge.UTXO
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 4: side.btcbridge.GenesisState.dkg_request:type_name -> side.btcbridge.DKGRequest
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_side_btcbridge_genesis_proto_init() }
