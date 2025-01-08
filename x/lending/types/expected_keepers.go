@@ -6,7 +6,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
@@ -32,9 +31,4 @@ type BankKeeper interface {
 
 	HasSupply(ctx context.Context, denom string) bool
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
-}
-
-// StakingKeeper defines the expected staking keeper used to retrieve validator (noalias)
-type StakingKeeper interface {
-	GetValidatorByConsAddr(ctx context.Context, consAddr sdk.ConsAddress) (stakingtypes.Validator, error)
 }

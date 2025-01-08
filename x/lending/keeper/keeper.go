@@ -25,10 +25,9 @@ func NewKeeper(
 	storeKey,
 	memKey storetypes.StoreKey,
 	bankKeeper types.BankKeeper,
-	stakingKeeper types.StakingKeeper,
 	authority string,
-) *Keeper {
-	return &Keeper{
+) Keeper {
+	return Keeper{
 		cdc:        cdc,
 		storeKey:   storeKey,
 		memKey:     memKey,
