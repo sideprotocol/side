@@ -14,16 +14,30 @@ type Signature struct {
 }
 
 // NewSignature creates a new Signature from bytes
-// Assume that the given byte slice is valid
+// Assume that the given signature is valid
 func NewSignature(sigBytes []byte) *Signature {
 	var r btcec.FieldVal
-	_ = r.SetByteSlice(sigBytes[0:32])
+	r.SetByteSlice(sigBytes[0:32])
 
 	var s btcec.ModNScalar
-	_ = s.SetByteSlice(sigBytes[32:])
+	s.SetByteSlice(sigBytes[32:])
 
 	return &Signature{
 		r,
 		s,
 	}
+}
+
+// NegatePoint negates the given point
+func NegatePoint(point *btcec.JacobianPoint) *btcec.JacobianPoint {
+	result := *point
+	result.Y.Negate(1).Normalize()
+
+	return &result
+}
+
+// SerializeScalar serializes the given scalar
+func SerializeScalar(scalar *btcec.ModNScalar) []byte {
+	bz := scalar.Bytes()
+	return bz[:]
 }
