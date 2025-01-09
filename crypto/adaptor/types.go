@@ -7,7 +7,7 @@ import (
 // scalarSize is the size of an encoded big endian scalar
 const scalarSize = 32
 
-// Signature is same with schnorr.Signature
+// Signature represents the signature
 type Signature struct {
 	r btcec.FieldVal
 	s btcec.ModNScalar
@@ -28,16 +28,40 @@ func NewSignature(sigBytes []byte) *Signature {
 	}
 }
 
-// NegatePoint negates the given point
-func NegatePoint(point *btcec.JacobianPoint) *btcec.JacobianPoint {
-	result := *point
-	result.Y.Negate(1).Normalize()
+// Serialize serializes the signature
+func (s *Signature) Serialize() []byte {
+	sig := make([]byte, 64)
 
-	return &result
+	rBytes := *s.r.Bytes()
+	sBytes := s.s.Bytes()
+
+	copy(sig[0:32], rBytes[:])
+	copy(sig[32:64], sBytes[:])
+
+	return sig
 }
 
 // SerializeScalar serializes the given scalar
 func SerializeScalar(scalar *btcec.ModNScalar) []byte {
 	bz := scalar.Bytes()
 	return bz[:]
+}
+
+// SecretToPubKey gets the serialized public key of the given secret on the secp256k1 curve
+func SecretToPubKey(secretBytes []byte) []byte {
+	var secret btcec.ModNScalar
+	secret.SetByteSlice(secretBytes)
+
+	var result btcec.JacobianPoint
+	btcec.ScalarBaseMultNonConst(&secret, &result)
+
+	return btcec.JacobianToByteSlice(result)
+}
+
+// NegatePoint negates the given point
+func NegatePoint(point *btcec.JacobianPoint) *btcec.JacobianPoint {
+	result := *point
+	result.Y.Negate(1).Normalize()
+
+	return &result
 }
