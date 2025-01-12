@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -82,9 +83,20 @@ func (m msgServer) CreateOracle(goCtx context.Context, msg *types.MsgCreateOracl
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.CreateOracle(ctx, msg.Participants, msg.Threshold); err != nil {
+	oracle, err := m.Keeper.CreateOracle(ctx, msg.Participants, msg.Threshold)
+	if err != nil {
 		return nil, err
 	}
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCreateOracle,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", oracle.Id)),
+			sdk.NewAttribute(types.AttributeKeyParticipants, fmt.Sprintf("%s", oracle.Participants)),
+			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
+			sdk.NewAttribute(types.AttributeKeyExpirationTime, oracle.Time.Add(m.GetDKGTimeoutPeriod(ctx)).String()),
+		),
+	)
 
 	return &types.MsgCreateOracleResponse{}, nil
 }
@@ -97,9 +109,20 @@ func (m msgServer) CreateAgency(goCtx context.Context, msg *types.MsgCreateAgenc
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.CreateAgency(ctx, msg.Participants, msg.Threshold); err != nil {
+	agency, err := m.Keeper.CreateAgency(ctx, msg.Participants, msg.Threshold)
+	if err != nil {
 		return nil, err
 	}
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCreateAgency,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", agency.Id)),
+			sdk.NewAttribute(types.AttributeKeyParticipants, fmt.Sprintf("%s", agency.Participants)),
+			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", agency.Threshold)),
+			sdk.NewAttribute(types.AttributeKeyExpirationTime, agency.Time.Add(m.GetDKGTimeoutPeriod(ctx)).String()),
+		),
+	)
 
 	return &types.MsgCreateAgencyResponse{}, nil
 }

@@ -11,8 +11,8 @@ import (
 )
 
 // CreateAgency initiates the agency creation request
-func (k Keeper) CreateAgency(ctx sdk.Context, participants []string, threshold uint32) error {
-	agency := types.Agency{
+func (k Keeper) CreateAgency(ctx sdk.Context, participants []string, threshold uint32) (*types.Agency, error) {
+	agency := &types.Agency{
 		Id:           k.IncrementAgencyId(ctx),
 		Participants: participants,
 		Threshold:    threshold,
@@ -20,9 +20,9 @@ func (k Keeper) CreateAgency(ctx sdk.Context, participants []string, threshold u
 		Status:       types.AgencyStatus_Agency_Status_Pending,
 	}
 
-	k.SetAgency(ctx, &agency)
+	k.SetAgency(ctx, agency)
 
-	return nil
+	return agency, nil
 }
 
 // SubmitAgencyPubKey performs the agency public key submission

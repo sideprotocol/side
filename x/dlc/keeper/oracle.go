@@ -11,8 +11,8 @@ import (
 )
 
 // CreateOracle initiates the oracle creation request
-func (k Keeper) CreateOracle(ctx sdk.Context, participants []string, threshold uint32) error {
-	oracle := types.DLCOracle{
+func (k Keeper) CreateOracle(ctx sdk.Context, participants []string, threshold uint32) (*types.DLCOracle, error) {
+	oracle := &types.DLCOracle{
 		Id:           k.IncrementOracleId(ctx),
 		Participants: participants,
 		Threshold:    threshold,
@@ -20,9 +20,9 @@ func (k Keeper) CreateOracle(ctx sdk.Context, participants []string, threshold u
 		Status:       types.DLCOracleStatus_Oracle_Status_Pending,
 	}
 
-	k.SetOracle(ctx, &oracle)
+	k.SetOracle(ctx, oracle)
 
-	return nil
+	return oracle, nil
 }
 
 // SubmitOraclePubKey performs the oracle public key submission
