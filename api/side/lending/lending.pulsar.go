@@ -906,14 +906,14 @@ func (x *fastReflection_Loan) Range(f func(protoreflect.FieldDescriptor, protore
 			return
 		}
 	}
-	if x.EventId != "" {
-		value := protoreflect.ValueOfString(x.EventId)
+	if x.EventId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.EventId)
 		if !f(fd_Loan_event_id, value) {
 			return
 		}
 	}
-	if x.AttestationId != "" {
-		value := protoreflect.ValueOfString(x.AttestationId)
+	if x.AttestationId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.AttestationId)
 		if !f(fd_Loan_attestation_id, value) {
 			return
 		}
@@ -990,9 +990,9 @@ func (x *fastReflection_Loan) Has(fd protoreflect.FieldDescriptor) bool {
 	case "side.lending.Loan.term":
 		return x.Term != ""
 	case "side.lending.Loan.event_id":
-		return x.EventId != ""
+		return x.EventId != uint64(0)
 	case "side.lending.Loan.attestation_id":
-		return x.AttestationId != ""
+		return x.AttestationId != uint64(0)
 	case "side.lending.Loan.deposit_txs":
 		return len(x.DepositTxs) != 0
 	case "side.lending.Loan.collateral_amount":
@@ -1042,9 +1042,9 @@ func (x *fastReflection_Loan) Clear(fd protoreflect.FieldDescriptor) {
 	case "side.lending.Loan.term":
 		x.Term = ""
 	case "side.lending.Loan.event_id":
-		x.EventId = ""
+		x.EventId = uint64(0)
 	case "side.lending.Loan.attestation_id":
-		x.AttestationId = ""
+		x.AttestationId = uint64(0)
 	case "side.lending.Loan.deposit_txs":
 		x.DepositTxs = nil
 	case "side.lending.Loan.collateral_amount":
@@ -1105,10 +1105,10 @@ func (x *fastReflection_Loan) Get(descriptor protoreflect.FieldDescriptor) proto
 		return protoreflect.ValueOfString(value)
 	case "side.lending.Loan.event_id":
 		value := x.EventId
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfUint64(value)
 	case "side.lending.Loan.attestation_id":
 		value := x.AttestationId
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfUint64(value)
 	case "side.lending.Loan.deposit_txs":
 		if len(x.DepositTxs) == 0 {
 			return protoreflect.ValueOfList(&_Loan_13_list{})
@@ -1171,9 +1171,9 @@ func (x *fastReflection_Loan) Set(fd protoreflect.FieldDescriptor, value protore
 	case "side.lending.Loan.term":
 		x.Term = value.Interface().(string)
 	case "side.lending.Loan.event_id":
-		x.EventId = value.Interface().(string)
+		x.EventId = value.Uint()
 	case "side.lending.Loan.attestation_id":
-		x.AttestationId = value.Interface().(string)
+		x.AttestationId = value.Uint()
 	case "side.lending.Loan.deposit_txs":
 		lv := value.List()
 		clv := lv.(*_Loan_13_list)
@@ -1289,9 +1289,9 @@ func (x *fastReflection_Loan) NewField(fd protoreflect.FieldDescriptor) protoref
 	case "side.lending.Loan.term":
 		return protoreflect.ValueOfString("")
 	case "side.lending.Loan.event_id":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.lending.Loan.attestation_id":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.lending.Loan.deposit_txs":
 		list := []string{}
 		return protoreflect.ValueOfList(&_Loan_13_list{list: &list})
@@ -1413,13 +1413,11 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.EventId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.EventId != 0 {
+			n += 1 + runtime.Sov(uint64(x.EventId))
 		}
-		l = len(x.AttestationId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.AttestationId != 0 {
+			n += 1 + runtime.Sov(uint64(x.AttestationId))
 		}
 		if len(x.DepositTxs) > 0 {
 			for _, s := range x.DepositTxs {
@@ -1530,19 +1528,15 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0x6a
 			}
 		}
-		if len(x.AttestationId) > 0 {
-			i -= len(x.AttestationId)
-			copy(dAtA[i:], x.AttestationId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AttestationId)))
+		if x.AttestationId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.AttestationId))
 			i--
-			dAtA[i] = 0x62
+			dAtA[i] = 0x60
 		}
-		if len(x.EventId) > 0 {
-			i -= len(x.EventId)
-			copy(dAtA[i:], x.EventId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.EventId)))
+		if x.EventId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.EventId))
 			i--
-			dAtA[i] = 0x5a
+			dAtA[i] = 0x58
 		}
 		if len(x.Interests) > 0 {
 			i -= len(x.Interests)
@@ -1965,10 +1959,10 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				x.Term = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 11:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EventId", wireType)
 				}
-				var stringLen uint64
+				x.EventId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1978,29 +1972,16 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.EventId |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.EventId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 12:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AttestationId", wireType)
 				}
-				var stringLen uint64
+				x.AttestationId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2010,24 +1991,11 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.AttestationId |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AttestationId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 13:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositTxs", wireType)
@@ -4243,8 +4211,8 @@ type Loan struct {
 	Fees             string                 `protobuf:"bytes,8,opt,name=fees,proto3" json:"fees,omitempty"`
 	Interests        string                 `protobuf:"bytes,10,opt,name=interests,proto3" json:"interests,omitempty"`
 	Term             string                 `protobuf:"bytes,9,opt,name=term,proto3" json:"term,omitempty"`
-	EventId          string                 `protobuf:"bytes,11,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
-	AttestationId    string                 `protobuf:"bytes,12,opt,name=attestation_id,json=attestationId,proto3" json:"attestation_id,omitempty"`
+	EventId          uint64                 `protobuf:"varint,11,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	AttestationId    uint64                 `protobuf:"varint,12,opt,name=attestation_id,json=attestationId,proto3" json:"attestation_id,omitempty"`
 	DepositTxs       []string               `protobuf:"bytes,13,rep,name=deposit_txs,json=depositTxs,proto3" json:"deposit_txs,omitempty"`
 	CollateralAmount string                 `protobuf:"bytes,14,opt,name=collateral_amount,json=collateralAmount,proto3" json:"collateral_amount,omitempty"`
 	LoanSecret       string                 `protobuf:"bytes,15,opt,name=loan_secret,json=loanSecret,proto3" json:"loan_secret,omitempty"`
@@ -4343,18 +4311,18 @@ func (x *Loan) GetTerm() string {
 	return ""
 }
 
-func (x *Loan) GetEventId() string {
+func (x *Loan) GetEventId() uint64 {
 	if x != nil {
 		return x.EventId
 	}
-	return ""
+	return 0
 }
 
-func (x *Loan) GetAttestationId() string {
+func (x *Loan) GetAttestationId() uint64 {
 	if x != nil {
 		return x.AttestationId
 	}
-	return ""
+	return 0
 }
 
 func (x *Loan) GetDepositTxs() []string {
@@ -4624,9 +4592,9 @@ var file_side_lending_lending_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f,
 	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e,
 	0x49, 0x6e, 0x74, 0x52, 0x04, 0x74, 0x65, 0x72, 0x6d, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76, 0x65,
-	0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x65, 0x76, 0x65,
+	0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x65, 0x76, 0x65,
 	0x6e, 0x74, 0x49, 0x64, 0x12, 0x25, 0x0a, 0x0e, 0x61, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x61, 0x74,
 	0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x64,
 	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78, 0x73, 0x18, 0x0d, 0x20, 0x03, 0x28, 0x09,
 	0x52, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x78, 0x73, 0x12, 0x4a, 0x0a, 0x11,

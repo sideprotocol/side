@@ -4795,8 +4795,8 @@ func (x *fastReflection_MsgApply) Range(f func(protoreflect.FieldDescriptor, pro
 			return
 		}
 	}
-	if x.EventId != "" {
-		value := protoreflect.ValueOfString(x.EventId)
+	if x.EventId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.EventId)
 		if !f(fd_MsgApply_event_id, value) {
 			return
 		}
@@ -4843,7 +4843,7 @@ func (x *fastReflection_MsgApply) Has(fd protoreflect.FieldDescriptor) bool {
 	case "side.lending.MsgApply.borrow_amount":
 		return x.BorrowAmount != nil
 	case "side.lending.MsgApply.event_id":
-		return x.EventId != ""
+		return x.EventId != uint64(0)
 	case "side.lending.MsgApply.cets":
 		return x.Cets != ""
 	case "side.lending.MsgApply.deposit_tx":
@@ -4879,7 +4879,7 @@ func (x *fastReflection_MsgApply) Clear(fd protoreflect.FieldDescriptor) {
 	case "side.lending.MsgApply.borrow_amount":
 		x.BorrowAmount = nil
 	case "side.lending.MsgApply.event_id":
-		x.EventId = ""
+		x.EventId = uint64(0)
 	case "side.lending.MsgApply.cets":
 		x.Cets = ""
 	case "side.lending.MsgApply.deposit_tx":
@@ -4923,7 +4923,7 @@ func (x *fastReflection_MsgApply) Get(descriptor protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "side.lending.MsgApply.event_id":
 		value := x.EventId
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfUint64(value)
 	case "side.lending.MsgApply.cets":
 		value := x.Cets
 		return protoreflect.ValueOfString(value)
@@ -4965,7 +4965,7 @@ func (x *fastReflection_MsgApply) Set(fd protoreflect.FieldDescriptor, value pro
 	case "side.lending.MsgApply.borrow_amount":
 		x.BorrowAmount = value.Message().Interface().(*v1beta1.Coin)
 	case "side.lending.MsgApply.event_id":
-		x.EventId = value.Interface().(string)
+		x.EventId = value.Uint()
 	case "side.lending.MsgApply.cets":
 		x.Cets = value.Interface().(string)
 	case "side.lending.MsgApply.deposit_tx":
@@ -5042,7 +5042,7 @@ func (x *fastReflection_MsgApply) NewField(fd protoreflect.FieldDescriptor) prot
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.lending.MsgApply.event_id":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.lending.MsgApply.cets":
 		return protoreflect.ValueOfString("")
 	case "side.lending.MsgApply.deposit_tx":
@@ -5142,9 +5142,8 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.BorrowAmount)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.EventId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.EventId != 0 {
+			n += 1 + runtime.Sov(uint64(x.EventId))
 		}
 		l = len(x.Cets)
 		if l > 0 {
@@ -5197,12 +5196,10 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x4a
 		}
-		if len(x.EventId) > 0 {
-			i -= len(x.EventId)
-			copy(dAtA[i:], x.EventId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.EventId)))
+		if x.EventId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.EventId))
 			i--
-			dAtA[i] = 0x42
+			dAtA[i] = 0x40
 		}
 		if x.BorrowAmount != nil {
 			encoded, err := options.Marshal(x.BorrowAmount)
@@ -5508,10 +5505,10 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 				}
 				iNdEx = postIndex
 			case 8:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EventId", wireType)
 				}
-				var stringLen uint64
+				x.EventId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -5521,24 +5518,11 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.EventId |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.EventId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 9:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Cets", wireType)
@@ -8334,7 +8318,7 @@ type MsgApply struct {
 	FinalTimeout   int64         `protobuf:"varint,5,opt,name=final_timeout,json=finalTimeout,proto3" json:"final_timeout,omitempty"`
 	PoolId         string        `protobuf:"bytes,6,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 	BorrowAmount   *v1beta1.Coin `protobuf:"bytes,7,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
-	EventId        string        `protobuf:"bytes,8,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	EventId        uint64        `protobuf:"varint,8,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
 	Cets           string        `protobuf:"bytes,9,opt,name=cets,proto3" json:"cets,omitempty"`
 	DepositTx      string        `protobuf:"bytes,10,opt,name=deposit_tx,json=depositTx,proto3" json:"deposit_tx,omitempty"`
 }
@@ -8408,11 +8392,11 @@ func (x *MsgApply) GetBorrowAmount() *v1beta1.Coin {
 	return nil
 }
 
-func (x *MsgApply) GetEventId() string {
+func (x *MsgApply) GetEventId() uint64 {
 	if x != nil {
 		return x.EventId
 	}
-	return ""
+	return 0
 }
 
 func (x *MsgApply) GetCets() string {
@@ -8706,7 +8690,7 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
 	0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52, 0x0c, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41,
 	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69,
-	0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64,
+	0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64,
 	0x12, 0x12, 0x0a, 0x04, 0x63, 0x65, 0x74, 0x73, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
 	0x63, 0x65, 0x74, 0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f,
 	0x74, 0x78, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69,

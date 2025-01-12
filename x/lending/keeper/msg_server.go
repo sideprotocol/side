@@ -136,7 +136,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		sdk.NewAttribute("borrow_amount", loan.BorrowAmount.String()),
 		sdk.NewAttribute("collateral", loan.CollateralAmount.String()),
 		sdk.NewAttribute("pool_id", loan.PoolId),
-		sdk.NewAttribute("event_id", loan.EventId),
+		sdk.NewAttribute("event_id", fmt.Sprintf("%d", loan.EventId)),
 	)
 
 	return &types.MsgApplyResponse{}, nil
@@ -258,10 +258,12 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 
 	m.SetRepayment(ctx, repayment)
 
-	m.EmitEvent(ctx, msg.Borrower,
-		sdk.NewAttribute("loan_id", loan.VaultAddress),
-		sdk.NewAttribute("adaptor_point", msg.AdaptorPoint),
-		sdk.NewAttribute("txid", loan.BorrowAmount.String()),
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeRepay,
+			sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, msg.AdaptorPoint),
+		),
 	)
 
 	return &types.MsgRepayResponse{}, nil

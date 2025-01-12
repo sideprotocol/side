@@ -14,7 +14,10 @@ type (
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
 
-		bankKeeper types.BankKeeper
+		bankKeeper    types.BankKeeper
+		oracleKeeper  types.OracleKeeper
+		auctionKeeper types.AuctionKeeper
+		dlcKeeper     types.DLCKeeper
 
 		authority string
 	}
@@ -25,14 +28,20 @@ func NewKeeper(
 	storeKey,
 	memKey storetypes.StoreKey,
 	bankKeeper types.BankKeeper,
+	oracleKeeper types.OracleKeeper,
+	auctionKeeper types.AuctionKeeper,
+	dlckeeper types.DLCKeeper,
 	authority string,
 ) Keeper {
 	return Keeper{
-		cdc:        cdc,
-		storeKey:   storeKey,
-		memKey:     memKey,
-		bankKeeper: bankKeeper,
-		authority:  authority,
+		cdc:           cdc,
+		storeKey:      storeKey,
+		memKey:        memKey,
+		bankKeeper:    bankKeeper,
+		oracleKeeper:  oracleKeeper,
+		auctionKeeper: auctionKeeper,
+		dlcKeeper:     dlckeeper,
+		authority:     authority,
 	}
 }
 
@@ -53,6 +62,18 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	bz := store.Get(types.ParamsStoreKey)
 	k.cdc.MustUnmarshal(bz, &params)
 	return params
+}
+
+func (k Keeper) OracleKeeper() types.OracleKeeper {
+	return k.oracleKeeper
+}
+
+func (k Keeper) AuctionKeeper() types.AuctionKeeper {
+	return k.auctionKeeper
+}
+
+func (k Keeper) DLCKeeper() types.DLCKeeper {
+	return k.dlcKeeper
 }
 
 func (k Keeper) SetPool(ctx sdk.Context, pool types.LendingPool) {
@@ -129,6 +150,21 @@ func (k Keeper) IterateLoans(ctx sdk.Context, process func(header types.Loan) (s
 			break
 		}
 	}
+}
+
+// GetLoans gets loans by the given status
+func (k Keeper) GetLoans(ctx sdk.Context, status types.LoanStatus) []*types.Loan {
+	var loans []*types.Loan
+
+	k.IterateLoans(ctx, func(loan types.Loan) (stop bool) {
+		if loan.Status == status {
+			loans = append(loans, &loan)
+		}
+
+		return false
+	})
+
+	return loans
 }
 
 // GetAllLoans returns all block headers

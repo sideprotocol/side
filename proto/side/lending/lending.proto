@@ -65,8 +65,8 @@ message Loan {
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
-    string event_id = 11;
-    string attestation_id = 12;
+    uint64 event_id = 11;
+    uint64 attestation_id = 12;
     repeated string deposit_txs = 13;
     string collateral_amount = 14 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",

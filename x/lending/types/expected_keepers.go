@@ -3,9 +3,13 @@ package types
 import (
 	"context"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
+
+	auctiontypes "github.com/sideprotocol/side/x/auction/types"
+	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
@@ -31,4 +35,19 @@ type BankKeeper interface {
 
 	HasSupply(ctx context.Context, denom string) bool
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
+}
+
+// OracleKeeper defines the expected oracle keeper interface
+type OracleKeeper interface {
+	GetPrice(ctx sdk.Context, pair string) (sdkmath.Int, error)
+}
+
+// AuctionKeeper defines the expected auction keeper interface
+type AuctionKeeper interface {
+	CreateAuction(ctx context.Context, auction *auctiontypes.Auction)
+}
+
+// DLCKeeper defines the expected DLC keeper interface
+type DLCKeeper interface {
+	GetEvent(ctx context.Context, id uint64) *dlctypes.DLCPriceEvent
 }
