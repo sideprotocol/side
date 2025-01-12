@@ -645,6 +645,9 @@ func New(
 		keys[lendingtypes.StoreKey],
 		keys[lendingtypes.MemStoreKey],
 		app.BankKeeper,
+		nil,
+		app.AuctionKeeper,
+		app.DLCKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	lendingModule := lendingmodule.NewAppModule(appCodec, app.LendingKeeper)

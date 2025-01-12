@@ -44,10 +44,10 @@ type OracleKeeper interface {
 
 // AuctionKeeper defines the expected auction keeper interface
 type AuctionKeeper interface {
-	CreateAuction(ctx context.Context, auction *auctiontypes.Auction)
+	CreateAuction(ctx sdk.Context, auction *auctiontypes.Auction)
 }
 
 // DLCKeeper defines the expected DLC keeper interface
 type DLCKeeper interface {
-	GetEvent(ctx context.Context, id uint64) *dlctypes.DLCPriceEvent
+	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCPriceEvent
 }
