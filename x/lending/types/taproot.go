@@ -27,16 +27,24 @@ func GetTaprootAddress(script []byte) (*btcutil.AddressTaproot, error) {
 // Branch 1: multisig signature script
 func createMultisigScript(pubKeys []string) ([]byte, error) {
 	builder := txscript.NewScriptBuilder()
-	builder.AddInt64(int64(len(pubKeys))) // Threshold: 2 signatures required
-	for _, pubKeyHex := range pubKeys {
+	for i, pubKeyHex := range pubKeys {
 		pubKey, err := hex.DecodeString(pubKeyHex)
 		if err != nil {
 			return nil, err
 		}
+
 		builder.AddData(pubKey)
+
+		if i == 0 {
+			builder.AddOp(txscript.OP_CHECKSIG)
+		} else {
+			builder.AddOp(txscript.OP_CHECKSIGADD)
+		}
 	}
-	builder.AddInt64(int64(len(pubKeys))) // Total keys
-	builder.AddOp(txscript.OP_CHECKMULTISIG)
+
+	builder.AddInt64(int64(len(pubKeys)))
+	builder.AddOp(txscript.OP_NUMEQUAL)
+
 	return builder.Script()
 }
 
