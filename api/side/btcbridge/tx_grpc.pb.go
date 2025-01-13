@@ -24,7 +24,7 @@ const (
 	Msg_SubmitWithdrawTransaction_FullMethodName   = "/side.btcbridge.Msg/SubmitWithdrawTransaction"
 	Msg_SubmitFeeRate_FullMethodName               = "/side.btcbridge.Msg/SubmitFeeRate"
 	Msg_UpdateTrustedNonBtcRelayers_FullMethodName = "/side.btcbridge.Msg/UpdateTrustedNonBtcRelayers"
-	Msg_UpdateTrustedOracles_FullMethodName        = "/side.btcbridge.Msg/UpdateTrustedOracles"
+	Msg_UpdateTrustedFeeProviders_FullMethodName   = "/side.btcbridge.Msg/UpdateTrustedFeeProviders"
 	Msg_WithdrawToBitcoin_FullMethodName           = "/side.btcbridge.Msg/WithdrawToBitcoin"
 	Msg_SubmitSignatures_FullMethodName            = "/side.btcbridge.Msg/SubmitSignatures"
 	Msg_ConsolidateVaults_FullMethodName           = "/side.btcbridge.Msg/ConsolidateVaults"
@@ -48,8 +48,8 @@ type MsgClient interface {
 	SubmitFeeRate(ctx context.Context, in *MsgSubmitFeeRate, opts ...grpc.CallOption) (*MsgSubmitFeeRateResponse, error)
 	// UpdateTrustedNonBtcRelayers updates the trusted non-btc asset relayers.
 	UpdateTrustedNonBtcRelayers(ctx context.Context, in *MsgUpdateTrustedNonBtcRelayers, opts ...grpc.CallOption) (*MsgUpdateTrustedNonBtcRelayersResponse, error)
-	// UpdateTrustedOracles updates the trusted oracles.
-	UpdateTrustedOracles(ctx context.Context, in *MsgUpdateTrustedOracles, opts ...grpc.CallOption) (*MsgUpdateTrustedOraclesResponse, error)
+	// UpdateTrustedFeeProviders updates the trusted fee providers.
+	UpdateTrustedFeeProviders(ctx context.Context, in *MsgUpdateTrustedFeeProviders, opts ...grpc.CallOption) (*MsgUpdateTrustedFeeProvidersResponse, error)
 	// WithdrawToBitcoin withdraws the asset to bitcoin.
 	WithdrawToBitcoin(ctx context.Context, in *MsgWithdrawToBitcoin, opts ...grpc.CallOption) (*MsgWithdrawToBitcoinResponse, error)
 	// SubmitSignatures submits the signatures of the signing request to the side chain.
@@ -122,9 +122,9 @@ func (c *msgClient) UpdateTrustedNonBtcRelayers(ctx context.Context, in *MsgUpda
 	return out, nil
 }
 
-func (c *msgClient) UpdateTrustedOracles(ctx context.Context, in *MsgUpdateTrustedOracles, opts ...grpc.CallOption) (*MsgUpdateTrustedOraclesResponse, error) {
-	out := new(MsgUpdateTrustedOraclesResponse)
-	err := c.cc.Invoke(ctx, Msg_UpdateTrustedOracles_FullMethodName, in, out, opts...)
+func (c *msgClient) UpdateTrustedFeeProviders(ctx context.Context, in *MsgUpdateTrustedFeeProviders, opts ...grpc.CallOption) (*MsgUpdateTrustedFeeProvidersResponse, error) {
+	out := new(MsgUpdateTrustedFeeProvidersResponse)
+	err := c.cc.Invoke(ctx, Msg_UpdateTrustedFeeProviders_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -208,8 +208,8 @@ type MsgServer interface {
 	SubmitFeeRate(context.Context, *MsgSubmitFeeRate) (*MsgSubmitFeeRateResponse, error)
 	// UpdateTrustedNonBtcRelayers updates the trusted non-btc asset relayers.
 	UpdateTrustedNonBtcRelayers(context.Context, *MsgUpdateTrustedNonBtcRelayers) (*MsgUpdateTrustedNonBtcRelayersResponse, error)
-	// UpdateTrustedOracles updates the trusted oracles.
-	UpdateTrustedOracles(context.Context, *MsgUpdateTrustedOracles) (*MsgUpdateTrustedOraclesResponse, error)
+	// UpdateTrustedFeeProviders updates the trusted fee providers.
+	UpdateTrustedFeeProviders(context.Context, *MsgUpdateTrustedFeeProviders) (*MsgUpdateTrustedFeeProvidersResponse, error)
 	// WithdrawToBitcoin withdraws the asset to bitcoin.
 	WithdrawToBitcoin(context.Context, *MsgWithdrawToBitcoin) (*MsgWithdrawToBitcoinResponse, error)
 	// SubmitSignatures submits the signatures of the signing request to the side chain.
@@ -249,8 +249,8 @@ func (UnimplementedMsgServer) SubmitFeeRate(context.Context, *MsgSubmitFeeRate) 
 func (UnimplementedMsgServer) UpdateTrustedNonBtcRelayers(context.Context, *MsgUpdateTrustedNonBtcRelayers) (*MsgUpdateTrustedNonBtcRelayersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTrustedNonBtcRelayers not implemented")
 }
-func (UnimplementedMsgServer) UpdateTrustedOracles(context.Context, *MsgUpdateTrustedOracles) (*MsgUpdateTrustedOraclesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTrustedOracles not implemented")
+func (UnimplementedMsgServer) UpdateTrustedFeeProviders(context.Context, *MsgUpdateTrustedFeeProviders) (*MsgUpdateTrustedFeeProvidersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTrustedFeeProviders not implemented")
 }
 func (UnimplementedMsgServer) WithdrawToBitcoin(context.Context, *MsgWithdrawToBitcoin) (*MsgWithdrawToBitcoinResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WithdrawToBitcoin not implemented")
@@ -376,20 +376,20 @@ func _Msg_UpdateTrustedNonBtcRelayers_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_UpdateTrustedOracles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdateTrustedOracles)
+func _Msg_UpdateTrustedFeeProviders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateTrustedFeeProviders)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).UpdateTrustedOracles(ctx, in)
+		return srv.(MsgServer).UpdateTrustedFeeProviders(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_UpdateTrustedOracles_FullMethodName,
+		FullMethod: Msg_UpdateTrustedFeeProviders_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdateTrustedOracles(ctx, req.(*MsgUpdateTrustedOracles))
+		return srv.(MsgServer).UpdateTrustedFeeProviders(ctx, req.(*MsgUpdateTrustedFeeProviders))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -548,8 +548,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_UpdateTrustedNonBtcRelayers_Handler,
 		},
 		{
-			MethodName: "UpdateTrustedOracles",
-			Handler:    _Msg_UpdateTrustedOracles_Handler,
+			MethodName: "UpdateTrustedFeeProviders",
+			Handler:    _Msg_UpdateTrustedFeeProviders_Handler,
 		},
 		{
 			MethodName: "WithdrawToBitcoin",

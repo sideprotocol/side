@@ -63,10 +63,10 @@ func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
 	return false
 }
 
-// IsTrustedOracle returns true if the given address is a trusted oracle, false otherwise
-func (k Keeper) IsTrustedOracle(ctx sdk.Context, addr string) bool {
-	for _, oracle := range k.GetParams(ctx).TrustedOracles {
-		if oracle == addr {
+// IsTrustedFeeProvider returns true if the given address is a trusted fee provider, false otherwise
+func (k Keeper) IsTrustedFeeProvider(ctx sdk.Context, addr string) bool {
+	for _, provider := range k.GetParams(ctx).TrustedFeeProviders {
+		if provider == addr {
 			return true
 		}
 	}

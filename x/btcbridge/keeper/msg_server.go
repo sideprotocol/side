@@ -59,24 +59,24 @@ func (m msgServer) UpdateTrustedNonBtcRelayers(goCtx context.Context, msg *types
 	return &types.MsgUpdateTrustedNonBtcRelayersResponse{}, nil
 }
 
-// UpdateTrustedOracles implements types.MsgServer.
-func (m msgServer) UpdateTrustedOracles(goCtx context.Context, msg *types.MsgUpdateTrustedOracles) (*types.MsgUpdateTrustedOraclesResponse, error) {
+// UpdateTrustedFeeProviders implements types.MsgServer.
+func (m msgServer) UpdateTrustedFeeProviders(goCtx context.Context, msg *types.MsgUpdateTrustedFeeProviders) (*types.MsgUpdateTrustedFeeProvidersResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
-	if !m.IsTrustedOracle(ctx, msg.Sender) {
-		return nil, types.ErrUntrustedOracle
+	if !m.IsTrustedFeeProvider(ctx, msg.Sender) {
+		return nil, types.ErrUntrustedFeeProvider
 	}
 
-	// update oracles
+	// update fee providers
 	params := m.GetParams(ctx)
-	params.TrustedOracles = msg.Oracles
+	params.TrustedFeeProviders = msg.FeeProviders
 	m.SetParams(ctx, params)
 
-	return &types.MsgUpdateTrustedOraclesResponse{}, nil
+	return &types.MsgUpdateTrustedFeeProvidersResponse{}, nil
 }
 
 // SubmitDepositTransaction implements types.MsgServer.
@@ -141,8 +141,8 @@ func (m msgServer) SubmitFeeRate(goCtx context.Context, msg *types.MsgSubmitFeeR
 		return nil, err
 	}
 
-	if !m.IsTrustedOracle(ctx, msg.Sender) {
-		return nil, types.ErrUntrustedOracle
+	if !m.IsTrustedFeeProvider(ctx, msg.Sender) {
+		return nil, types.ErrUntrustedFeeProvider
 	}
 
 	m.SetFeeRate(ctx, msg.FeeRate)

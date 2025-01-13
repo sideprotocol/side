@@ -40,8 +40,8 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdSubmitBlocks())
 	cmd.AddCommand(CmdSubmitFeeRate())
-	cmd.AddCommand(CmdUpdateTrustedNonBtcRelayers())
-	cmd.AddCommand(CmdUpdateTrustedOracles())
+	cmd.AddCommand(CmdUpdateNonBtcRelayers())
+	cmd.AddCommand(CmdUpdateFeeProviders())
 	cmd.AddCommand(CmdWithdrawToBitcoin())
 	cmd.AddCommand(CmdSubmitSignatures())
 	cmd.AddCommand(CmdCompleteDKG())
@@ -116,9 +116,9 @@ func CmdSubmitFeeRate() *cobra.Command {
 	return cmd
 }
 
-func CmdUpdateTrustedNonBtcRelayers() *cobra.Command {
+func CmdUpdateNonBtcRelayers() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-trusted-relayers [relayers]",
+		Use:   "update-non-btc-relayers [relayers]",
 		Short: "Update trusted non-btc asset relayers",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
@@ -145,10 +145,10 @@ func CmdUpdateTrustedNonBtcRelayers() *cobra.Command {
 	return cmd
 }
 
-func CmdUpdateTrustedOracles() *cobra.Command {
+func CmdUpdateFeeProviders() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-trusted-oracles [oracles]",
-		Short: "Update trusted oracles",
+		Use:   "update-fee-providers [fee providers]",
+		Short: "Update trusted fee providers",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -156,7 +156,7 @@ func CmdUpdateTrustedOracles() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateTrustedOracles(
+			msg := types.NewMsgUpdateTrustedFeeProviders(
 				clientCtx.GetFromAddress().String(),
 				strings.Split(args[0], listSeparator),
 			)

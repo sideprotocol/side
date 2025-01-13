@@ -23,8 +23,8 @@ message Params {
   repeated string trusted_btc_relayers = 6;
   // Trusted relayers for non-btc asset deposit
   repeated string trusted_non_btc_relayers = 7;
-  // Trusted oracles for providing offchain data, e.g. bitcoin fee rate
-  repeated string trusted_oracles = 8;
+  // Trusted fee providers to submit bitcoin fee rate
+  repeated string trusted_fee_providers = 8;
   // Period of validity for the fee rate
   int64 fee_rate_validity_period = 9;
   // Asset vaults

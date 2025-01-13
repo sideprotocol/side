@@ -23,7 +23,7 @@ var (
 	// default BTC voucher denom
 	DefaultBtcVoucherDenom = "sat"
 
-	// default period of validity for the fee rate provided by oracle
+	// default period of validity for the fee rate provided by fee provider
 	DefaultFeeRateValidityPeriod = int64(100) // 100 blocks
 
 	// default maximum number of utxos used to build the signing request
@@ -52,7 +52,7 @@ func NewParams() Params {
 		WithdrawEnabled:         true,
 		TrustedBtcRelayers:      []string{},
 		TrustedNonBtcRelayers:   []string{},
-		TrustedOracles:          []string{},
+		TrustedFeeProviders:     []string{},
 		FeeRateValidityPeriod:   DefaultFeeRateValidityPeriod,
 		Vaults:                  []*Vault{},
 		WithdrawParams: WithdrawParams{
@@ -96,7 +96,7 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if err := validateOracles(p.TrustedOracles); err != nil {
+	if err := validateFeeProviders(p.TrustedFeeProviders); err != nil {
 		return err
 	}
 
@@ -203,12 +203,12 @@ func validateNonBtcRelayers(relayers []string) error {
 	return nil
 }
 
-// validateOracles validates the given oracles
-func validateOracles(oracles []string) error {
-	for _, oracle := range oracles {
-		_, err := sdk.AccAddressFromBech32(oracle)
+// validateFeeProviders validates the given fee providers
+func validateFeeProviders(providers []string) error {
+	for _, provider := range providers {
+		_, err := sdk.AccAddressFromBech32(provider)
 		if err != nil {
-			return ErrInvalidOracles
+			return ErrInvalidFeeProviders
 		}
 	}
 
