@@ -4,7 +4,7 @@ KEYS=("validator" "test")
 CHAINID="devnet"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
-DENOM_STR="uside,sat,uusdc,uusdt"
+DENOM_STR="uside,sat,uusdc"
 INITIAL_ACCOUNT_STR=""
 set -f
 IFS=,

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 KEYS=("validator" "test")
-CHAINID="sidechain-testnet-4"
+CHAINID="testnet"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
-DENOM_STR="uside,uusdc,uusdt"
+DENOM_STR="uside,uusdc"
 INITIAL_ACCOUNT_STR=""
 set -f
 IFS=,

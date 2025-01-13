@@ -1,10 +1,10 @@
 #!/bin/bash
 
 KEYS=("dev0" "dev1")
-CHAINID="sidechain-testnet-4"
+CHAINID="testnet"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
-DENOM_STR="uside,uusdt,uusdc"
+DENOM_STR="uside,uusdc"
 
 set -f
 IFS=,
