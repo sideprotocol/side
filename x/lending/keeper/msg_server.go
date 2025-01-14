@@ -13,7 +13,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/crypto/adaptor"
-	dlc "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
@@ -31,7 +30,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	// 	return nil, errb
 	// }
 
-	event := dlc.DLCPriceEvent{} // need to integrate with dlc module
+	if !m.dlcKeeper.HasEvent(ctx, msg.EventId) {
+		return nil, types.ErrInvalidPriceEvent
+	}
+
+	event := m.dlcKeeper.GetEvent(ctx, msg.EventId)
 	if event.HasTriggered {
 		return nil, types.ErrInvalidPriceEvent
 	}
