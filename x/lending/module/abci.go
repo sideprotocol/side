@@ -17,10 +17,26 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 
 // handleLoans handles loans
 func handleLoans(ctx sdk.Context, k keeper.Keeper) {
-	// get all valid loans
+	// get all active loans
 	loans := k.GetLoans(ctx, types.LoanStatus_Disburse)
 
 	for _, loan := range loans {
+		// check if the loan has defaulted
+		if ctx.BlockTime().Unix() >= loan.MaturityTime {
+			loan.Status = types.LoanStatus_Default
+			k.SetLoan(ctx, *loan)
+
+			// emit event
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeDefault,
+					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+				),
+			)
+
+			continue
+		}
+
 		liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, k.GetParams(ctx).LiquidationThresholdPercent)
 
 		price, err := k.OracleKeeper().GetPrice(ctx, fmt.Sprintf("BTC-%s", loan.BorrowAmount.Denom))
@@ -29,7 +45,7 @@ func handleLoans(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		// liquidated
+		// check if the loan is to be liquidated
 		if price.LTE(liquidationPrice) {
 			loan.Status = types.LoanStatus_Liquidate
 			k.SetLoan(ctx, *loan)
