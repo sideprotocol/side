@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 
 	"cosmossdk.io/math"
@@ -11,6 +12,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sideprotocol/side/crypto/adaptor"
 	dlc "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -273,6 +275,51 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	)
 
 	return &types.MsgRepayResponse{}, nil
+}
+
+// SubmitRepaymentAdaptorSignature implements types.MsgServer.
+func (m msgServer) SubmitRepaymentAdaptorSignature(goCtx context.Context, msg *types.MsgSubmitRepaymentAdaptorSignature) (*types.MsgSubmitRepaymentAdaptorSignatureResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanNotExists
+	}
+
+	if !m.HasRepayment(ctx, msg.LoanId) {
+		return nil, types.ErrInvalidRepayment
+	}
+
+	repayment := m.GetRepayment(ctx, msg.LoanId)
+	if len(repayment.DcaAdaptorSignature) != 0 {
+		return nil, types.ErrRepaymentAdaptorSigAlreadyExists
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+
+	adaptorSigBytes, _ := hex.DecodeString(msg.AdaptorSignature)
+	adaptorPointBytes, _ := hex.DecodeString(repayment.RepayAdaptorPoint)
+	pubKeyBytes, _ := hex.DecodeString(loan.Agency)
+
+	// TODO: calculate sig hash
+	sigHash := []byte{}
+
+	if !adaptor.Verify(adaptorSigBytes, sigHash, pubKeyBytes, adaptorPointBytes) {
+		return nil, types.ErrInvalidAdaptorSignature
+	}
+
+	repayment.DcaAdaptorSignature = msg.AdaptorSignature
+	m.SetRepayment(ctx, repayment)
+
+	m.EmitEvent(ctx, msg.Relayer,
+		sdk.NewAttribute("loan_id", msg.LoanId),
+		sdk.NewAttribute("adaptor_signature", msg.AdaptorSignature),
+	)
+
+	return &types.MsgSubmitRepaymentAdaptorSignatureResponse{}, nil
 }
 
 // Close implements types.MsgServer.

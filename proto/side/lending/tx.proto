@@ -18,6 +18,7 @@ service Msg {
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
     rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
+    rpc SubmitRepaymentAdaptorSignature(MsgSubmitRepaymentAdaptorSignature) returns (MsgSubmitRepaymentAdaptorSignatureResponse);
     rpc Close(MsgClose) returns (MsgCloseResponse);
 }
 
@@ -104,6 +105,18 @@ message MsgApprove {
 }
 
 message MsgApproveResponse {
+
+}
+
+message MsgSubmitRepaymentAdaptorSignature {
+    option (cosmos.msg.v1.signer) = "relayer";
+    
+    string relayer = 1;
+    string loan_id = 2;
+    string adaptor_signature = 3;
+}
+
+message MsgSubmitRepaymentAdaptorSignatureResponse {
 
 }
 
