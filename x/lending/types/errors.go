@@ -43,6 +43,9 @@ var (
 	ErrInvalidRepaymentTx               = errorsmod.Register(ModuleName, 6003, "invalid repayment tx")
 	ErrInvalidRepaymentSecret           = errorsmod.Register(ModuleName, 6004, "invalid repayment secret")
 	ErrRepaymentAdaptorSigAlreadyExists = errorsmod.Register(ModuleName, 6005, "repayment adaptor signature already exists")
-	ErrInvalidAdaptorSignature          = errorsmod.Register(ModuleName, 6006, "invalid adaptor signature")
-	ErrEmptyLoanId                      = errorsmod.Register(ModuleName, 6007, "empty loan id")
+	ErrRepaymentAdaptorSigDoesNotExist  = errorsmod.Register(ModuleName, 6006, "repayment adaptor signature does not exist")
+	ErrInvalidAdaptorSignature          = errorsmod.Register(ModuleName, 6007, "invalid adaptor signature")
+	ErrEmptyLoanId                      = errorsmod.Register(ModuleName, 6008, "empty loan id")
+
+	ErrInvalidSignature = errorsmod.Register(ModuleName, 7001, "invalid signature")
 )

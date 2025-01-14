@@ -26,11 +26,8 @@ func HashLoanSecret(secret string) string {
 }
 
 // AdaptorPoint gets the corresponding adaptor point from the given secret
-// Assume that the secret is a valid hex string
-func AdaptorPoint(secret string) string {
-	secretBytes, _ := hex.DecodeString(secret)
-
-	return hex.EncodeToString(adaptor.SecretToPubKey(secretBytes))
+func AdaptorPoint(secret []byte) string {
+	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
 }
 
 func GetTaprootAddress(script []byte) (*btcutil.AddressTaproot, error) {

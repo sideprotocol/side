@@ -334,12 +334,21 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 		return nil, types.ErrInvalidRepayment
 	}
 
-	repay := m.GetRepayment(ctx, msg.LoanId)
+	repayment := m.GetRepayment(ctx, msg.LoanId)
+	if len(repayment.DcaAdaptorSignature) == 0 {
+		return nil, types.ErrRepaymentAdaptorSigDoesNotExist
+	}
+
+	sigBytes, _ := hex.DecodeString(msg.Signature)
+	adaptorSigBytes, _ := hex.DecodeString(repayment.DcaAdaptorSignature)
 
 	// extract secret from signature
-	secret := msg.Signature + repay.RepayAdaptorPoint // fix it later.
+	secret := adaptor.Extract(sigBytes, adaptorSigBytes)
+	if len(secret) == 0 {
+		return nil, types.ErrInvalidSignature
+	}
 
-	if types.AdaptorPoint(secret) != repay.RepayAdaptorPoint {
+	if types.AdaptorPoint(secret) != repayment.RepayAdaptorPoint {
 		return nil, types.ErrInvalidRepaymentSecret
 	}
 
@@ -355,7 +364,7 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 
 	m.EmitEvent(ctx, msg.Relayer,
 		sdk.NewAttribute("loan_id", loan.VaultAddress),
-		sdk.NewAttribute("payment_secret", secret),
+		sdk.NewAttribute("payment_secret", hex.EncodeToString(secret)),
 	)
 
 	return &types.MsgCloseResponse{}, nil
