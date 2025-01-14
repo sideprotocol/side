@@ -52,6 +52,7 @@ type AuctionKeeper interface {
 // DLCKeeper defines the expected DLC keeper interface
 type DLCKeeper interface {
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCPriceEvent
+	TriggerEvent(ctx sdk.Context, id uint64)
 }
 
 // BtcBridgeKeeper defines the expected BtcBridge keeper interface

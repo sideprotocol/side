@@ -59,18 +59,8 @@ func handleLoans(ctx sdk.Context, k keeper.Keeper) {
 			}
 			k.AuctionKeeper().CreateAuction(ctx, auction)
 
-			dlcEvent := k.DLCKeeper().GetEvent(ctx, loan.EventId)
-
-			// emit event
-			ctx.EventManager().EmitEvent(
-				sdk.NewEvent(
-					types.EventTypeLiquidate,
-					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-					sdk.NewAttribute(types.AttributeKeyEventPubKey, dlcEvent.Pubkey),
-					sdk.NewAttribute(types.AttributeKeyEventNonce, dlcEvent.Nonce),
-					sdk.NewAttribute(types.AttributeKeyEventPrice, liquidationPrice.String()),
-				),
-			)
+			// trigger price event
+			k.DLCKeeper().TriggerEvent(ctx, loan.EventId)
 		}
 	}
 }

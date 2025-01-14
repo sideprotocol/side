@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -89,14 +91,22 @@ func (k Keeper) SetEvent(ctx sdk.Context, event *types.DLCPriceEvent) {
 	store.Set(types.EventByPriceKey(event.TriggerPrice), sdk.Uint64ToBigEndian(event.Id))
 }
 
-// TriggerEvent sets the given event to triggered
-func (k Keeper) TriggerEvent(ctx sdk.Context, event *types.DLCPriceEvent) {
-	store := ctx.KVStore(k.storeKey)
-
+// TriggerEvent triggers the given event
+func (k Keeper) TriggerEvent(ctx sdk.Context, id uint64) {
+	event := k.GetEvent(ctx, id)
 	event.HasTriggered = true
 
-	bz := k.cdc.MustMarshal(event)
-	store.Set(types.EventKey(event.Id), bz)
+	k.SetEvent(ctx, event)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeTriggerEvent,
+			sdk.NewAttribute(types.AttributeKeyEventId, fmt.Sprintf("%d", id)),
+			sdk.NewAttribute(types.AttributeKeyPubKey, event.Pubkey),
+			sdk.NewAttribute(types.AttributeKeyNonce, event.Nonce),
+			sdk.NewAttribute(types.AttributeKeyPrice, event.TriggerPrice.String()),
+		),
+	)
 }
 
 // GetAllEvents gets all events
