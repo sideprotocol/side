@@ -648,6 +648,7 @@ func New(
 		nil,
 		app.AuctionKeeper,
 		app.DLCKeeper,
+		app.BtcBridgeKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	lendingModule := lendingmodule.NewAppModule(appCodec, app.LendingKeeper)
