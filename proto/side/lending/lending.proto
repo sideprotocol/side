@@ -78,9 +78,13 @@ message Loan {
     string pool_id = 18;
 }
 
-message CET {
+message CETs {
     string loan_id = 1;
-    string cets = 2;
+    string liquidate = 2;
+    string force_repay = 3;
+    string refund = 4;
+    string liquidation_borrower_adaptor_signature = 5;
+    string liquidation_borrower_signature = 6;
 }
 
 message DepositLog {

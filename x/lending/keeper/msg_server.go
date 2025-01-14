@@ -56,16 +56,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	}
 	depositTxid := fundTx.UnsignedTx.TxHash().String()
 
-	cetBytes, err := base64.StdEncoding.DecodeString(msg.Cets)
-	if err != nil {
-		return nil, types.ErrInvalidCET
-	}
-	cet, err := psbt.NewFromRawBytes(bytes.NewReader(cetBytes), true)
-	if err != nil {
-		return nil, types.ErrInvalidCET
-	}
-
-	if e := types.VerifyCET(fundTx, cet); e != nil {
+	if e := types.VerifyCETs(fundTx, msg.Cets); e != nil {
 		return nil, e
 	}
 
@@ -111,11 +102,10 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Interests:        interests,
 		Fees:             fees,
 		EventId:          msg.EventId,
-		// Cets:             msg.Cets,
-		DepositTxs: []string{depositTxid},
-		CreateAt:   ctx.BlockTime(),
-		PoolId:     msg.PoolId,
-		Status:     types.LoanStatus_Apply,
+		DepositTxs:       []string{depositTxid},
+		CreateAt:         ctx.BlockTime(),
+		PoolId:           msg.PoolId,
+		Status:           types.LoanStatus_Apply,
 	}
 
 	m.SetLoan(ctx, loan)
@@ -127,6 +117,9 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	}
 
 	m.SetDepositLog(ctx, depositLog)
+
+	// set CETs
+	m.SetCETs(ctx, loan.VaultAddress, msg.Cets)
 
 	m.EmitEvent(ctx, msg.Borrower,
 		sdk.NewAttribute("vault", loan.VaultAddress),

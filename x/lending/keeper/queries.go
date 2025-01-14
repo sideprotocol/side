@@ -18,8 +18,8 @@ func (k Keeper) LiquidationEvent(context.Context, *types.QueryLiquidationEventRe
 	panic("unimplemented")
 }
 
-// LoanCET implements types.QueryServer.
-func (k Keeper) LoanCET(context.Context, *types.QueryLoanCETRequest) (*types.QueryLoanCETResponse, error) {
+// LoanCETs implements types.QueryServer.
+func (k Keeper) LoanCETs(context.Context, *types.QueryLoanCETsRequest) (*types.QueryLoanCETsResponse, error) {
 	panic("unimplemented")
 }
 

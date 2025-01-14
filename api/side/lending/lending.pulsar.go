@@ -2215,27 +2215,35 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_CET         protoreflect.MessageDescriptor
-	fd_CET_loan_id protoreflect.FieldDescriptor
-	fd_CET_cets    protoreflect.FieldDescriptor
+	md_CETs                                        protoreflect.MessageDescriptor
+	fd_CETs_loan_id                                protoreflect.FieldDescriptor
+	fd_CETs_liquidate                              protoreflect.FieldDescriptor
+	fd_CETs_force_repay                            protoreflect.FieldDescriptor
+	fd_CETs_refund                                 protoreflect.FieldDescriptor
+	fd_CETs_liquidation_borrower_adaptor_signature protoreflect.FieldDescriptor
+	fd_CETs_liquidation_borrower_signature         protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_lending_proto_init()
-	md_CET = File_side_lending_lending_proto.Messages().ByName("CET")
-	fd_CET_loan_id = md_CET.Fields().ByName("loan_id")
-	fd_CET_cets = md_CET.Fields().ByName("cets")
+	md_CETs = File_side_lending_lending_proto.Messages().ByName("CETs")
+	fd_CETs_loan_id = md_CETs.Fields().ByName("loan_id")
+	fd_CETs_liquidate = md_CETs.Fields().ByName("liquidate")
+	fd_CETs_force_repay = md_CETs.Fields().ByName("force_repay")
+	fd_CETs_refund = md_CETs.Fields().ByName("refund")
+	fd_CETs_liquidation_borrower_adaptor_signature = md_CETs.Fields().ByName("liquidation_borrower_adaptor_signature")
+	fd_CETs_liquidation_borrower_signature = md_CETs.Fields().ByName("liquidation_borrower_signature")
 }
 
-var _ protoreflect.Message = (*fastReflection_CET)(nil)
+var _ protoreflect.Message = (*fastReflection_CETs)(nil)
 
-type fastReflection_CET CET
+type fastReflection_CETs CETs
 
-func (x *CET) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_CET)(x)
+func (x *CETs) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_CETs)(x)
 }
 
-func (x *CET) slowProtoReflect() protoreflect.Message {
+func (x *CETs) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_lending_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2247,43 +2255,43 @@ func (x *CET) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_CET_messageType fastReflection_CET_messageType
-var _ protoreflect.MessageType = fastReflection_CET_messageType{}
+var _fastReflection_CETs_messageType fastReflection_CETs_messageType
+var _ protoreflect.MessageType = fastReflection_CETs_messageType{}
 
-type fastReflection_CET_messageType struct{}
+type fastReflection_CETs_messageType struct{}
 
-func (x fastReflection_CET_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_CET)(nil)
+func (x fastReflection_CETs_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_CETs)(nil)
 }
-func (x fastReflection_CET_messageType) New() protoreflect.Message {
-	return new(fastReflection_CET)
+func (x fastReflection_CETs_messageType) New() protoreflect.Message {
+	return new(fastReflection_CETs)
 }
-func (x fastReflection_CET_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_CET
+func (x fastReflection_CETs_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_CETs
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_CET) Descriptor() protoreflect.MessageDescriptor {
-	return md_CET
+func (x *fastReflection_CETs) Descriptor() protoreflect.MessageDescriptor {
+	return md_CETs
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_CET) Type() protoreflect.MessageType {
-	return _fastReflection_CET_messageType
+func (x *fastReflection_CETs) Type() protoreflect.MessageType {
+	return _fastReflection_CETs_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_CET) New() protoreflect.Message {
-	return new(fastReflection_CET)
+func (x *fastReflection_CETs) New() protoreflect.Message {
+	return new(fastReflection_CETs)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_CET) Interface() protoreflect.ProtoMessage {
-	return (*CET)(x)
+func (x *fastReflection_CETs) Interface() protoreflect.ProtoMessage {
+	return (*CETs)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2291,16 +2299,40 @@ func (x *fastReflection_CET) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_CET) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_CETs) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.LoanId != "" {
 		value := protoreflect.ValueOfString(x.LoanId)
-		if !f(fd_CET_loan_id, value) {
+		if !f(fd_CETs_loan_id, value) {
 			return
 		}
 	}
-	if x.Cets != "" {
-		value := protoreflect.ValueOfString(x.Cets)
-		if !f(fd_CET_cets, value) {
+	if x.Liquidate != "" {
+		value := protoreflect.ValueOfString(x.Liquidate)
+		if !f(fd_CETs_liquidate, value) {
+			return
+		}
+	}
+	if x.ForceRepay != "" {
+		value := protoreflect.ValueOfString(x.ForceRepay)
+		if !f(fd_CETs_force_repay, value) {
+			return
+		}
+	}
+	if x.Refund != "" {
+		value := protoreflect.ValueOfString(x.Refund)
+		if !f(fd_CETs_refund, value) {
+			return
+		}
+	}
+	if x.LiquidationBorrowerAdaptorSignature != "" {
+		value := protoreflect.ValueOfString(x.LiquidationBorrowerAdaptorSignature)
+		if !f(fd_CETs_liquidation_borrower_adaptor_signature, value) {
+			return
+		}
+	}
+	if x.LiquidationBorrowerSignature != "" {
+		value := protoreflect.ValueOfString(x.LiquidationBorrowerSignature)
+		if !f(fd_CETs_liquidation_borrower_signature, value) {
 			return
 		}
 	}
@@ -2317,17 +2349,25 @@ func (x *fastReflection_CET) Range(f func(protoreflect.FieldDescriptor, protoref
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_CET) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_CETs) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.CET.loan_id":
+	case "side.lending.CETs.loan_id":
 		return x.LoanId != ""
-	case "side.lending.CET.cets":
-		return x.Cets != ""
+	case "side.lending.CETs.liquidate":
+		return x.Liquidate != ""
+	case "side.lending.CETs.force_repay":
+		return x.ForceRepay != ""
+	case "side.lending.CETs.refund":
+		return x.Refund != ""
+	case "side.lending.CETs.liquidation_borrower_adaptor_signature":
+		return x.LiquidationBorrowerAdaptorSignature != ""
+	case "side.lending.CETs.liquidation_borrower_signature":
+		return x.LiquidationBorrowerSignature != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CET"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CETs"))
 		}
-		panic(fmt.Errorf("message side.lending.CET does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.CETs does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2337,17 +2377,25 @@ func (x *fastReflection_CET) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_CET) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_CETs) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.CET.loan_id":
+	case "side.lending.CETs.loan_id":
 		x.LoanId = ""
-	case "side.lending.CET.cets":
-		x.Cets = ""
+	case "side.lending.CETs.liquidate":
+		x.Liquidate = ""
+	case "side.lending.CETs.force_repay":
+		x.ForceRepay = ""
+	case "side.lending.CETs.refund":
+		x.Refund = ""
+	case "side.lending.CETs.liquidation_borrower_adaptor_signature":
+		x.LiquidationBorrowerAdaptorSignature = ""
+	case "side.lending.CETs.liquidation_borrower_signature":
+		x.LiquidationBorrowerSignature = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CET"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CETs"))
 		}
-		panic(fmt.Errorf("message side.lending.CET does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.CETs does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2357,19 +2405,31 @@ func (x *fastReflection_CET) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_CET) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_CETs) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.CET.loan_id":
+	case "side.lending.CETs.loan_id":
 		value := x.LoanId
 		return protoreflect.ValueOfString(value)
-	case "side.lending.CET.cets":
-		value := x.Cets
+	case "side.lending.CETs.liquidate":
+		value := x.Liquidate
+		return protoreflect.ValueOfString(value)
+	case "side.lending.CETs.force_repay":
+		value := x.ForceRepay
+		return protoreflect.ValueOfString(value)
+	case "side.lending.CETs.refund":
+		value := x.Refund
+		return protoreflect.ValueOfString(value)
+	case "side.lending.CETs.liquidation_borrower_adaptor_signature":
+		value := x.LiquidationBorrowerAdaptorSignature
+		return protoreflect.ValueOfString(value)
+	case "side.lending.CETs.liquidation_borrower_signature":
+		value := x.LiquidationBorrowerSignature
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CET"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CETs"))
 		}
-		panic(fmt.Errorf("message side.lending.CET does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.CETs does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2383,17 +2443,25 @@ func (x *fastReflection_CET) Get(descriptor protoreflect.FieldDescriptor) protor
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_CET) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_CETs) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.CET.loan_id":
+	case "side.lending.CETs.loan_id":
 		x.LoanId = value.Interface().(string)
-	case "side.lending.CET.cets":
-		x.Cets = value.Interface().(string)
+	case "side.lending.CETs.liquidate":
+		x.Liquidate = value.Interface().(string)
+	case "side.lending.CETs.force_repay":
+		x.ForceRepay = value.Interface().(string)
+	case "side.lending.CETs.refund":
+		x.Refund = value.Interface().(string)
+	case "side.lending.CETs.liquidation_borrower_adaptor_signature":
+		x.LiquidationBorrowerAdaptorSignature = value.Interface().(string)
+	case "side.lending.CETs.liquidation_borrower_signature":
+		x.LiquidationBorrowerSignature = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CET"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CETs"))
 		}
-		panic(fmt.Errorf("message side.lending.CET does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.CETs does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2407,44 +2475,60 @@ func (x *fastReflection_CET) Set(fd protoreflect.FieldDescriptor, value protoref
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_CET) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_CETs) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.CET.loan_id":
-		panic(fmt.Errorf("field loan_id of message side.lending.CET is not mutable"))
-	case "side.lending.CET.cets":
-		panic(fmt.Errorf("field cets of message side.lending.CET is not mutable"))
+	case "side.lending.CETs.loan_id":
+		panic(fmt.Errorf("field loan_id of message side.lending.CETs is not mutable"))
+	case "side.lending.CETs.liquidate":
+		panic(fmt.Errorf("field liquidate of message side.lending.CETs is not mutable"))
+	case "side.lending.CETs.force_repay":
+		panic(fmt.Errorf("field force_repay of message side.lending.CETs is not mutable"))
+	case "side.lending.CETs.refund":
+		panic(fmt.Errorf("field refund of message side.lending.CETs is not mutable"))
+	case "side.lending.CETs.liquidation_borrower_adaptor_signature":
+		panic(fmt.Errorf("field liquidation_borrower_adaptor_signature of message side.lending.CETs is not mutable"))
+	case "side.lending.CETs.liquidation_borrower_signature":
+		panic(fmt.Errorf("field liquidation_borrower_signature of message side.lending.CETs is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CET"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CETs"))
 		}
-		panic(fmt.Errorf("message side.lending.CET does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.CETs does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_CET) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_CETs) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.CET.loan_id":
+	case "side.lending.CETs.loan_id":
 		return protoreflect.ValueOfString("")
-	case "side.lending.CET.cets":
+	case "side.lending.CETs.liquidate":
+		return protoreflect.ValueOfString("")
+	case "side.lending.CETs.force_repay":
+		return protoreflect.ValueOfString("")
+	case "side.lending.CETs.refund":
+		return protoreflect.ValueOfString("")
+	case "side.lending.CETs.liquidation_borrower_adaptor_signature":
+		return protoreflect.ValueOfString("")
+	case "side.lending.CETs.liquidation_borrower_signature":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CET"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.CETs"))
 		}
-		panic(fmt.Errorf("message side.lending.CET does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.CETs does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_CET) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_CETs) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.CET", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.CETs", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2452,7 +2536,7 @@ func (x *fastReflection_CET) WhichOneof(d protoreflect.OneofDescriptor) protoref
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_CET) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_CETs) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2463,7 +2547,7 @@ func (x *fastReflection_CET) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_CET) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_CETs) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2475,7 +2559,7 @@ func (x *fastReflection_CET) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_CET) IsValid() bool {
+func (x *fastReflection_CETs) IsValid() bool {
 	return x != nil
 }
 
@@ -2485,9 +2569,9 @@ func (x *fastReflection_CET) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_CET) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_CETs) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*CET)
+		x := input.Message.Interface().(*CETs)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2503,7 +2587,23 @@ func (x *fastReflection_CET) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Cets)
+		l = len(x.Liquidate)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ForceRepay)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Refund)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.LiquidationBorrowerAdaptorSignature)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.LiquidationBorrowerSignature)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -2517,7 +2617,7 @@ func (x *fastReflection_CET) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*CET)
+		x := input.Message.Interface().(*CETs)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2536,10 +2636,38 @@ func (x *fastReflection_CET) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Cets) > 0 {
-			i -= len(x.Cets)
-			copy(dAtA[i:], x.Cets)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Cets)))
+		if len(x.LiquidationBorrowerSignature) > 0 {
+			i -= len(x.LiquidationBorrowerSignature)
+			copy(dAtA[i:], x.LiquidationBorrowerSignature)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidationBorrowerSignature)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if len(x.LiquidationBorrowerAdaptorSignature) > 0 {
+			i -= len(x.LiquidationBorrowerAdaptorSignature)
+			copy(dAtA[i:], x.LiquidationBorrowerAdaptorSignature)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidationBorrowerAdaptorSignature)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.Refund) > 0 {
+			i -= len(x.Refund)
+			copy(dAtA[i:], x.Refund)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Refund)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.ForceRepay) > 0 {
+			i -= len(x.ForceRepay)
+			copy(dAtA[i:], x.ForceRepay)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ForceRepay)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Liquidate) > 0 {
+			i -= len(x.Liquidate)
+			copy(dAtA[i:], x.Liquidate)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Liquidate)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -2561,7 +2689,7 @@ func (x *fastReflection_CET) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*CET)
+		x := input.Message.Interface().(*CETs)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2593,10 +2721,10 @@ func (x *fastReflection_CET) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: CET: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: CETs: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: CET: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: CETs: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2633,7 +2761,7 @@ func (x *fastReflection_CET) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Cets", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Liquidate", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -2661,7 +2789,135 @@ func (x *fastReflection_CET) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Cets = string(dAtA[iNdEx:postIndex])
+				x.Liquidate = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ForceRepay", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ForceRepay = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Refund", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Refund = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationBorrowerAdaptorSignature", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.LiquidationBorrowerAdaptorSignature = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationBorrowerSignature", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.LiquidationBorrowerSignature = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -4431,17 +4687,21 @@ func (x *Loan) GetPoolId() string {
 	return ""
 }
 
-type CET struct {
+type CETs struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LoanId string `protobuf:"bytes,1,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
-	Cets   string `protobuf:"bytes,2,opt,name=cets,proto3" json:"cets,omitempty"`
+	LoanId                              string `protobuf:"bytes,1,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
+	Liquidate                           string `protobuf:"bytes,2,opt,name=liquidate,proto3" json:"liquidate,omitempty"`
+	ForceRepay                          string `protobuf:"bytes,3,opt,name=force_repay,json=forceRepay,proto3" json:"force_repay,omitempty"`
+	Refund                              string `protobuf:"bytes,4,opt,name=refund,proto3" json:"refund,omitempty"`
+	LiquidationBorrowerAdaptorSignature string `protobuf:"bytes,5,opt,name=liquidation_borrower_adaptor_signature,json=liquidationBorrowerAdaptorSignature,proto3" json:"liquidation_borrower_adaptor_signature,omitempty"`
+	LiquidationBorrowerSignature        string `protobuf:"bytes,6,opt,name=liquidation_borrower_signature,json=liquidationBorrowerSignature,proto3" json:"liquidation_borrower_signature,omitempty"`
 }
 
-func (x *CET) Reset() {
-	*x = CET{}
+func (x *CETs) Reset() {
+	*x = CETs{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_lending_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4449,27 +4709,55 @@ func (x *CET) Reset() {
 	}
 }
 
-func (x *CET) String() string {
+func (x *CETs) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CET) ProtoMessage() {}
+func (*CETs) ProtoMessage() {}
 
-// Deprecated: Use CET.ProtoReflect.Descriptor instead.
-func (*CET) Descriptor() ([]byte, []int) {
+// Deprecated: Use CETs.ProtoReflect.Descriptor instead.
+func (*CETs) Descriptor() ([]byte, []int) {
 	return file_side_lending_lending_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CET) GetLoanId() string {
+func (x *CETs) GetLoanId() string {
 	if x != nil {
 		return x.LoanId
 	}
 	return ""
 }
 
-func (x *CET) GetCets() string {
+func (x *CETs) GetLiquidate() string {
 	if x != nil {
-		return x.Cets
+		return x.Liquidate
+	}
+	return ""
+}
+
+func (x *CETs) GetForceRepay() string {
+	if x != nil {
+		return x.ForceRepay
+	}
+	return ""
+}
+
+func (x *CETs) GetRefund() string {
+	if x != nil {
+		return x.Refund
+	}
+	return ""
+}
+
+func (x *CETs) GetLiquidationBorrowerAdaptorSignature() string {
+	if x != nil {
+		return x.LiquidationBorrowerAdaptorSignature
+	}
+	return ""
+}
+
+func (x *CETs) GetLiquidationBorrowerSignature() string {
+	if x != nil {
+		return x.LiquidationBorrowerSignature
 	}
 	return ""
 }
@@ -4685,10 +4973,24 @@ var file_side_lending_lending_proto_rawDesc = []byte{
 	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4c, 0x6f, 0x61, 0x6e,
 	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x17,
 	0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x12, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x22, 0x32, 0x0a, 0x03, 0x43, 0x45, 0x54, 0x12, 0x17,
-	0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x65, 0x74, 0x73, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x65, 0x74, 0x73, 0x22, 0x64, 0x0a, 0x0a, 0x44,
+	0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x22, 0x91, 0x02, 0x0a, 0x04, 0x43, 0x45, 0x54, 0x73,
+	0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x69, 0x71,
+	0x75, 0x69, 0x64, 0x61, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x66, 0x6f, 0x72, 0x63, 0x65,
+	0x5f, 0x72, 0x65, 0x70, 0x61, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x66, 0x6f,
+	0x72, 0x63, 0x65, 0x52, 0x65, 0x70, 0x61, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x66, 0x75,
+	0x6e, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x66, 0x75, 0x6e, 0x64,
+	0x12, 0x53, 0x0a, 0x26, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
+	0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72,
+	0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x23, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x6f, 0x72,
+	0x72, 0x6f, 0x77, 0x65, 0x72, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e,
+	0x61, 0x74, 0x75, 0x72, 0x65, 0x12, 0x44, 0x0a, 0x1e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x73, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x1c, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x65, 0x72, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x22, 0x64, 0x0a, 0x0a, 0x44,
 	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x4c, 0x6f, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x78, 0x69,
 	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x12, 0x23, 0x0a,
 	0x0d, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01,
@@ -4753,7 +5055,7 @@ var file_side_lending_lending_proto_goTypes = []interface{}{
 	(LoanStatus)(0),               // 1: side.lending.LoanStatus
 	(*LendingPool)(nil),           // 2: side.lending.LendingPool
 	(*Loan)(nil),                  // 3: side.lending.Loan
-	(*CET)(nil),                   // 4: side.lending.CET
+	(*CETs)(nil),                  // 4: side.lending.CETs
 	(*DepositLog)(nil),            // 5: side.lending.DepositLog
 	(*Repayment)(nil),             // 6: side.lending.Repayment
 	(*v1beta1.Coin)(nil),          // 7: cosmos.base.v1beta1.Coin
@@ -4804,7 +5106,7 @@ func file_side_lending_lending_proto_init() {
 			}
 		}
 		file_side_lending_lending_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CET); i {
+			switch v := v.(*CETs); i {
 			case 0:
 				return &v.state
 			case 1:
