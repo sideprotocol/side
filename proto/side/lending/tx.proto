@@ -99,8 +99,8 @@ message MsgApprove {
     
     string relayer = 1;
     string deposit_tx_id =2;
-    uint64 height = 3;
-    string poof = 4;
+    string block_hash = 3;
+    repeated string proof = 4;
 }
 
 message MsgApproveResponse {

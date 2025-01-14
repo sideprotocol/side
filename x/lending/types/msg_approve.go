@@ -6,12 +6,12 @@ import (
 
 var _ sdk.Msg = &MsgApprove{}
 
-func NewMsgDeposit(relayer string, DepositTxId string, height uint64, proof string) *MsgApprove {
+func NewMsgDeposit(relayer string, depositTxId string, blockHash string, proof []string) *MsgApprove {
 	return &MsgApprove{
 		Relayer:     relayer,
-		DepositTxId: DepositTxId,
-		Height:      height,
-		Poof:        proof,
+		DepositTxId: depositTxId,
+		BlockHash:   blockHash,
+		Proof:       proof,
 	}
 }
 
@@ -21,8 +21,8 @@ func (m *MsgApprove) ValidateBasic() error {
 		return ErrEmptyDepositTx
 	}
 
-	if len(m.Poof) == 0 {
-		return ErrEmptyPoof
+	if len(m.Proof) == 0 {
+		return ErrInvalidProof
 	}
 
 	return nil

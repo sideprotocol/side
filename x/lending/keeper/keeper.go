@@ -14,10 +14,11 @@ type (
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
 
-		bankKeeper    types.BankKeeper
-		oracleKeeper  types.OracleKeeper
-		auctionKeeper types.AuctionKeeper
-		dlcKeeper     types.DLCKeeper
+		bankKeeper      types.BankKeeper
+		oracleKeeper    types.OracleKeeper
+		auctionKeeper   types.AuctionKeeper
+		dlcKeeper       types.DLCKeeper
+		btcbridgeKeeper types.BtcBridgeKeeper
 
 		authority string
 	}
@@ -30,18 +31,20 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	oracleKeeper types.OracleKeeper,
 	auctionKeeper types.AuctionKeeper,
-	dlckeeper types.DLCKeeper,
+	dlcKeeper types.DLCKeeper,
+	btcbridgeKeeper types.BtcBridgeKeeper,
 	authority string,
 ) Keeper {
 	return Keeper{
-		cdc:           cdc,
-		storeKey:      storeKey,
-		memKey:        memKey,
-		bankKeeper:    bankKeeper,
-		oracleKeeper:  oracleKeeper,
-		auctionKeeper: auctionKeeper,
-		dlcKeeper:     dlckeeper,
-		authority:     authority,
+		cdc:             cdc,
+		storeKey:        storeKey,
+		memKey:          memKey,
+		bankKeeper:      bankKeeper,
+		oracleKeeper:    oracleKeeper,
+		auctionKeeper:   auctionKeeper,
+		dlcKeeper:       dlcKeeper,
+		btcbridgeKeeper: btcbridgeKeeper,
+		authority:       authority,
 	}
 }
 
@@ -74,6 +77,10 @@ func (k Keeper) AuctionKeeper() types.AuctionKeeper {
 
 func (k Keeper) DLCKeeper() types.DLCKeeper {
 	return k.dlcKeeper
+}
+
+func (k Keeper) BtcBridgeKeeper() types.BtcBridgeKeeper {
+	return k.btcbridgeKeeper
 }
 
 func (k Keeper) SetPool(ctx sdk.Context, pool types.LendingPool) {

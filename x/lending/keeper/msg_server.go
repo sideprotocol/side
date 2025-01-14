@@ -152,13 +152,15 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, types.ErrDepositTxNotExists
 	}
 
-	// verify merkle proof
-	// verify(msg.Height, msg.DepositTxId, msg.Poof)
-
 	log := m.GetDepositLog(ctx, msg.DepositTxId)
 	if !m.HasLoan(ctx, log.VaultAddress) {
 		return nil, types.ErrLoanNotExists
 	}
+
+	if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, log.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
+		return nil, types.ErrInvalidProof
+	}
+
 	loan := m.GetLoan(ctx, log.VaultAddress)
 
 	loan.Status = types.LoanStatus_Approve
@@ -167,8 +169,8 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	m.EmitEvent(ctx, msg.Relayer,
 		sdk.NewAttribute("vault", loan.VaultAddress),
 		sdk.NewAttribute("deposit_tx", msg.DepositTxId),
-		sdk.NewAttribute("proof", msg.Poof),
-		sdk.NewAttribute("height", fmt.Sprint(msg.Height)),
+		sdk.NewAttribute("proof", fmt.Sprintf("%s", msg.Proof)),
+		sdk.NewAttribute("block_hash", msg.BlockHash),
 	)
 
 	return &types.MsgApproveResponse{}, nil

@@ -4,11 +4,13 @@ import (
 	"context"
 
 	sdkmath "cosmossdk.io/math"
+	"github.com/btcsuite/btcd/btcutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	auctiontypes "github.com/sideprotocol/side/x/auction/types"
+	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 )
 
@@ -50,4 +52,10 @@ type AuctionKeeper interface {
 // DLCKeeper defines the expected DLC keeper interface
 type DLCKeeper interface {
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCPriceEvent
+}
+
+// BtcBridgeKeeper defines the expected BtcBridge keeper interface
+type BtcBridgeKeeper interface {
+	ValidateTransaction(ctx sdk.Context, tx string, prevTx string, blockHash string, proof []string) (*btcutil.Tx, *btcutil.Tx, error)
+	GetFeeRate(ctx sdk.Context) *btcbridgetypes.FeeRate
 }
