@@ -80,10 +80,8 @@ func createHashTimeLockScript(pubkey string, hashlock string, locktime int64) ([
 	builder.AddOp(txscript.OP_SHA256)              // Add hash lock
 	builder.AddData(hashBytes)                     // Push hash
 	builder.AddOp(txscript.OP_EQUALVERIFY)         // Verify hash preimage
-	builder.AddOp(txscript.OP_DUP)                 // Duplicate public key for signature verification
-	builder.AddOp(txscript.OP_HASH160)             // Hash public key
-	builder.AddData(pubKeyBytes)                   // Replace with actual hash160 of receiver's pubkey
-	builder.AddOp(txscript.OP_EQUALVERIFY)         // Verify public key hash builder.AddOp(txscript.OP_CHECKSIG) // Verify signature
+	builder.AddData(pubKeyBytes)                   // Push pubkey
+	builder.AddOp(txscript.OP_CHECKSIG)            // Verify signature
 	return builder.Script()
 }
 
