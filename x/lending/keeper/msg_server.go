@@ -191,6 +191,10 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 
 	loan := m.GetLoan(ctx, msg.LoanId)
 
+	if msg.Borrower != loan.Borrower {
+		return nil, types.ErrMismatchedBorrower
+	}
+
 	if types.HashLoanSecret(msg.LoanSecret) != loan.HashLoanSecret {
 		return nil, types.ErrMismatchLoanSecret
 	}
