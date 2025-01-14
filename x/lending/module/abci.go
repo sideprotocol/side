@@ -1,10 +1,12 @@
 package lending
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sideprotocol/side/crypto/adaptor"
 	auctiontypes "github.com/sideprotocol/side/x/auction/types"
 	"github.com/sideprotocol/side/x/lending/keeper"
 	"github.com/sideprotocol/side/x/lending/types"
@@ -12,11 +14,12 @@ import (
 
 // EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
-	handleLoans(ctx, k)
+	handleActiveLoans(ctx, k)
+	handleLiquidatedLoans(ctx, k)
 }
 
-// handleLoans handles loans
-func handleLoans(ctx sdk.Context, k keeper.Keeper) {
+// handleActiveLoans handles active loans
+func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 	// get all active loans
 	loans := k.GetLoans(ctx, types.LoanStatus_Disburse)
 
@@ -62,5 +65,30 @@ func handleLoans(ctx sdk.Context, k keeper.Keeper) {
 			// trigger price event
 			k.DLCKeeper().TriggerEvent(ctx, loan.EventId)
 		}
+	}
+}
+
+// handleLiquidatedLoans handles liquidated loans
+func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
+	// get all liquidated loans
+	loans := k.GetLoans(ctx, types.LoanStatus_Liquidate)
+
+	for _, loan := range loans {
+		// check if the event attestation has been submitted
+		attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.EventId)
+		if attestation == nil {
+			continue
+		}
+
+		adaptorSecret, _ := hex.DecodeString(attestation.Signature)
+
+		// TODO: get borrower adaptor signature from CET
+		adaptorSignature := []byte{}
+
+		// decrypt the adaptor signature
+		adaptedSig := adaptor.Adapt(adaptorSignature, adaptorSecret)
+
+		// TODO: set CET
+		_ = adaptedSig
 	}
 }

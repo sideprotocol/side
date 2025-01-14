@@ -22,6 +22,9 @@ func (k Keeper) HandleAttestation(ctx sdk.Context, sender string, eventId uint64
 	}
 
 	event := k.GetEvent(ctx, eventId)
+	if !event.HasTriggered {
+		return types.ErrEventNotTriggered
+	}
 
 	pubKeyBytes, _ := hex.DecodeString(event.Pubkey)
 	sigBytes, _ := hex.DecodeString(signature)
@@ -84,6 +87,20 @@ func (k Keeper) SetAttestation(ctx sdk.Context, attestation *types.DLCAttestatio
 
 	bz := k.cdc.MustMarshal(attestation)
 	store.Set(types.AttestationKey(attestation.Id), bz)
+
+	store.Set(types.AttestationByEventKey(attestation.EventId), sdk.Uint64ToBigEndian(attestation.Id))
+}
+
+// GetAttestationByEvent gets the attestation by the given event
+func (k Keeper) GetAttestationByEvent(ctx sdk.Context, eventId uint64) *types.DLCAttestation {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.AttestationByEventKey(eventId))
+	if bz == nil {
+		return nil
+	}
+
+	return k.GetAttestation(ctx, sdk.BigEndianToUint64(bz))
 }
 
 // GetAttestations gets attestations

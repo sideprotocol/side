@@ -52,6 +52,8 @@ type AuctionKeeper interface {
 // DLCKeeper defines the expected DLC keeper interface
 type DLCKeeper interface {
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCPriceEvent
+	GetAttestationByEvent(ctx sdk.Context, eventId uint64) *dlctypes.DLCAttestation
+
 	TriggerEvent(ctx sdk.Context, id uint64)
 }
 
