@@ -3,8 +3,9 @@ package types
 import (
 	"context"
 
-	sdkmath "cosmossdk.io/math"
 	"github.com/btcsuite/btcd/btcutil"
+
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -52,7 +53,9 @@ type AuctionKeeper interface {
 // DLCKeeper defines the expected DLC keeper interface
 type DLCKeeper interface {
 	HasEvent(ctx sdk.Context, id uint64) bool
+
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCPriceEvent
+	GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *dlctypes.DLCPriceEvent
 	GetAttestationByEvent(ctx sdk.Context, eventId uint64) *dlctypes.DLCAttestation
 
 	TriggerEvent(ctx sdk.Context, id uint64)
