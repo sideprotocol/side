@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgRemoveLiquidity{}
 
-func NewMsgRemoveLiquidity(poolId string, lender string, amount sdk.Coin) *MsgRemoveLiquidity {
+func NewMsgRemoveLiquidity(lender string, amount sdk.Coin) *MsgRemoveLiquidity {
 	return &MsgRemoveLiquidity{
 		Lender: lender,
 		Shares: &amount,

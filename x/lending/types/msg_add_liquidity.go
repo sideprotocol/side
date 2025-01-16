@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgAddLiquidity{}
 
-func NewMsgAddLiquidity(poolId string, lender string, amount sdk.Coin) *MsgAddLiquidity {
+func NewMsgAddLiquidity(lender string, poolId string, amount sdk.Coin) *MsgAddLiquidity {
 	return &MsgAddLiquidity{
 		PoolId: poolId,
 		Lender: lender,

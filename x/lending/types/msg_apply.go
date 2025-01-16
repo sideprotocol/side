@@ -6,7 +6,7 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgRequestVaultAddress(borrower string, borrowerPubkey string, hashLoanSecret string, maturityTime int64, finalTimeout int64) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, hashLoanSecret string, maturityTime int64, finalTimeout int64) *MsgApply {
 	return &MsgApply{
 		Borrower:       borrower,
 		BorrowerPubkey: borrowerPubkey,

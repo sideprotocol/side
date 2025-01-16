@@ -6,9 +6,10 @@ import (
 
 var _ sdk.Msg = &MsgRedeem{}
 
-func NewMsgRedeem(borrower string, loanSecret string) *MsgRedeem {
+func NewMsgRedeem(borrower string, loanId string, loanSecret string) *MsgRedeem {
 	return &MsgRedeem{
 		Borrower:   borrower,
+		LoanId:     loanId,
 		LoanSecret: loanSecret,
 	}
 }

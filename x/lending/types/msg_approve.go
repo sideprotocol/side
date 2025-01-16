@@ -6,7 +6,7 @@ import (
 
 var _ sdk.Msg = &MsgApprove{}
 
-func NewMsgDeposit(relayer string, depositTxId string, blockHash string, proof []string) *MsgApprove {
+func NewMsgApprove(relayer string, depositTxId string, blockHash string, proof []string) *MsgApprove {
 	return &MsgApprove{
 		Relayer:     relayer,
 		DepositTxId: depositTxId,

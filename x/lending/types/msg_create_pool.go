@@ -6,10 +6,10 @@ import (
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(poolId string, creator string, lendingAsset string) *MsgCreatePool {
+func NewMsgCreatePool(creator string, poolId string, lendingAsset string) *MsgCreatePool {
 	return &MsgCreatePool{
-		PoolId:       poolId,
 		Creator:      creator,
+		PoolId:       poolId,
 		LendingAsset: lendingAsset,
 	}
 }
