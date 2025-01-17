@@ -28,8 +28,9 @@ type (
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
 
-		bankKeeper    types.BankKeeper
-		stakingKeeper types.StakingKeeper
+		bankKeeper      types.BankKeeper
+		stakingKeeper   types.StakingKeeper
+		incentiveKeeper types.IncentiveKeeper
 
 		authority string
 	}
@@ -41,16 +42,18 @@ func NewKeeper(
 	memKey storetypes.StoreKey,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
+	incentiveKeeper types.IncentiveKeeper,
 	authority string,
 ) *Keeper {
 	return &Keeper{
-		cdc:            cdc,
-		storeKey:       storeKey,
-		memKey:         memKey,
-		bankKeeper:     bankKeeper,
-		stakingKeeper:  stakingKeeper,
-		BaseUTXOKeeper: *NewBaseUTXOKeeper(cdc, storeKey),
-		authority:      authority,
+		cdc:             cdc,
+		storeKey:        storeKey,
+		memKey:          memKey,
+		bankKeeper:      bankKeeper,
+		stakingKeeper:   stakingKeeper,
+		incentiveKeeper: incentiveKeeper,
+		BaseUTXOKeeper:  *NewBaseUTXOKeeper(cdc, storeKey),
+		authority:       authority,
 	}
 }
 

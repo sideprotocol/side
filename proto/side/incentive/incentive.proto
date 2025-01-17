@@ -1,0 +1,15 @@
+syntax = "proto3";
+package side.incentive;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/sideprotocol/side/x/incentive/types";
+
+// Reward
+message Reward {
+  string address = 1;
+  uint64 deposit_count = 2;
+  uint64 withdraw_count = 3;
+  cosmos.base.v1beta1.Coin totalAmount = 4 [(gogoproto.nullable) = false];
+}

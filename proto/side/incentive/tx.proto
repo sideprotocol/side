@@ -1,0 +1,39 @@
+syntax = "proto3";
+package side.incentive;
+
+import "cosmos/msg/v1/msg.proto";
+import "gogoproto/gogo.proto";
+import "side/incentive/params.proto";
+
+option go_package = "github.com/sideprotocol/side/x/incentive/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // UpdateParams defines a governance operation for updating the x/incentive module
+  // parameters. The authority defaults to the x/gov module account.
+  //
+  // Since: cosmos-sdk 0.47
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+
+  // params defines the x/incentive parameters to be updated.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsResponse {}

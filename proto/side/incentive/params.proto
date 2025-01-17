@@ -1,0 +1,17 @@
+syntax = "proto3";
+package side.incentive;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/sideprotocol/side/x/incentive/types";
+
+// Params defines the parameters for the module.
+message Params {
+  // Indicates if the incentive mechanism is enabled
+  bool enabled = 1;
+  // Reward per deposit tx via btc bridge
+  cosmos.base.v1beta1.Coin reward_per_deposit = 2 [(gogoproto.nullable) = false];
+  // Reward per withdrawal tx via btc bridge
+  cosmos.base.v1beta1.Coin reward_per_withdraw = 3 [(gogoproto.nullable) = false];
+}
