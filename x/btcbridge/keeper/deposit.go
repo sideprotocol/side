@@ -25,6 +25,11 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 		return nil, nil, err
 	}
 
+	// distribute deposit reward
+	if k.incentiveKeeper.IncentiveEnabled(ctx) {
+		_ = k.incentiveKeeper.DistributeDepositReward(ctx, recipient.EncodeAddress())
+	}
+
 	return tx.Hash(), recipient, nil
 }
 

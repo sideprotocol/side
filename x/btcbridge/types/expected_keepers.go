@@ -42,6 +42,8 @@ type StakingKeeper interface {
 
 // IncentiveKeeper defines the expected incentive keeper
 type IncentiveKeeper interface {
+	IncentiveEnabled(ctx sdk.Context) bool
+
 	DistributeDepositReward(ctx sdk.Context, addr string) error
 	DistributeWithdrawReward(ctx sdk.Context, addr string) error
 }
