@@ -161,6 +161,7 @@ func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount string
 		Sequence: k.IncreaseWithdrawRequestSequence(ctx),
 	}
 }
+
 // NewRunesSigningRequest creates the signing request for runes withdrawal
 func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, btcVault string) (*types.SigningRequest, error) {
 	var runeId types.RuneId
@@ -604,6 +605,14 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 
 	// unlock the change utxos
 	k.unlockChangeUTXOs(ctx, txHash.String())
+
+	// distribute rewards for all withdrawals
+	if k.incentiveKeeper.IncentiveEnabled(ctx) {
+		withdrawRequests := k.GetWithdrawRequestsByTxHash(ctx, txHash.String())
+		for _, req := range withdrawRequests {
+			_ = k.incentiveKeeper.DistributeWithdrawReward(ctx, req.Address)
+		}
+	}
 
 	return txHash, nil
 }
