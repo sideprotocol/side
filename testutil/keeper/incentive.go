@@ -19,11 +19,11 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	"github.com/sideprotocol/side/app"
-	"github.com/sideprotocol/side/x/btcbridge/keeper"
-	"github.com/sideprotocol/side/x/btcbridge/types"
+	"github.com/sideprotocol/side/x/incentive/keeper"
+	"github.com/sideprotocol/side/x/incentive/types"
 )
 
-func BtcBridgeKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
+func IncentiveKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	db := dbm.NewMemDB()
 
 	app := app.New(log.NewNopLogger(), db, nil, true, simtestutil.EmptyAppOptions{})
@@ -46,8 +46,6 @@ func BtcBridgeKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		storeKey,
 		memStoreKey,
 		app.BankKeeper,
-		app.StakingKeeper,
-		app.IncentiveKeeper,
 		authority,
 	)
 

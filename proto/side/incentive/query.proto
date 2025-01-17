@@ -1,0 +1,40 @@
+syntax = "proto3";
+package side.incentive;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "side/incentive/params.proto";
+import "side/incentive/incentive.proto";
+
+option go_package = "github.com/sideprotocol/side/x/incentive/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/side/incentive/params";
+  }
+  // Reward queries the reward of the given address.
+  rpc Reward(QueryRewardRequest) returns (QueryRewardResponse) {
+    option (google.api.http).get = "/side/incentive/rewards/{address}";
+  }
+}
+
+// QueryRewardRequest is request type for the Query/Reward RPC method.
+message QueryRewardRequest {
+  string address = 1;
+}
+
+// QueryRewardResponse is response type for the Query/Reward RPC method.
+message QueryRewardResponse {
+  Reward reward = 1;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}

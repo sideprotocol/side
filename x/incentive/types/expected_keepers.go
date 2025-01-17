@@ -4,16 +4,8 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
-
-// AccountKeeper defines the expected account keeper used for simulations (noalias)
-type AccountKeeper interface {
-	GetAccount(ctx sdk.Context, addr sdk.AccAddress) types.AccountI
-	// Methods imported from account should be defined here
-}
 
 // BankKeeper defines the expected interface needed to retrieve account balances.
 type BankKeeper interface {
@@ -32,16 +24,4 @@ type BankKeeper interface {
 
 	HasSupply(ctx context.Context, denom string) bool
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
-}
-
-// StakingKeeper defines the expected staking keeper used to retrieve validator (noalias)
-type StakingKeeper interface {
-	GetValidator(ctx context.Context, addr sdk.ValAddress) (stakingtypes.Validator, error)
-	GetValidatorByConsAddr(ctx context.Context, consAddr sdk.ConsAddress) (stakingtypes.Validator, error)
-}
-
-// IncentiveKeeper defines the expected incentive keeper
-type IncentiveKeeper interface {
-	DistributeDepositReward(ctx sdk.Context, addr string) error
-	DistributeWithdrawReward(ctx sdk.Context, addr string) error
 }
