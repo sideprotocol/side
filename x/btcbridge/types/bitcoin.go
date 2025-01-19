@@ -385,52 +385,81 @@ func BuildUnsignedTransactionWithoutExtraChange(utxos []*UTXO, txOuts []*wire.Tx
 
 // AddPaymentUTXOsToTx adds the given payment utxos to the tx.
 func AddPaymentUTXOsToTx(tx *wire.MsgTx, utxos []*UTXO, inOutDiff int64, paymentUTXOIterator UTXOIterator, changeOut *wire.TxOut, feeRate int64, maxUTXONum int) ([]*UTXO, error) {
-	selectedUTXOs := make([]*UTXO, 0)
-	paymentValue := int64(0)
+	minUTXO := paymentUTXOIterator.GetMinimumUTXO()
+	if minUTXO == nil {
+		return nil, ErrInsufficientUTXOs
+	}
+
+	ok, err := AddPaymentUTXOToTx(tx, utxos, minUTXO, inOutDiff, changeOut, feeRate, maxUTXONum)
+	if err != nil {
+		return nil, err
+	}
+	if ok {
+		return []*UTXO{minUTXO}, nil
+	}
+
+	utxos = append(utxos, minUTXO)
+	selectedUTXOs := []*UTXO{minUTXO}
+	inOutDiff += int64(minUTXO.Amount)
 
 	defer paymentUTXOIterator.Close()
 
 	for ; paymentUTXOIterator.Valid(); paymentUTXOIterator.Next() {
 		utxo := paymentUTXOIterator.GetUTXO()
-
-		utxos = append(utxos, utxo)
-		if len(utxos) > maxUTXONum {
-			return nil, ErrMaxUTXONumExceeded
-		}
-
 		selectedUTXOs = append(selectedUTXOs, utxo)
 
-		AddUTXOToTx(tx, utxo)
-		tx.AddTxOut(changeOut)
-
-		paymentValue += int64(utxo.Amount)
-		fee := GetTxVirtualSize(tx, utxos) * feeRate
-
-		changeValue := paymentValue + inOutDiff - fee
-		if changeValue > 0 {
-			tx.TxOut[len(tx.TxOut)-1].Value = changeValue
-			if IsDustOut(tx.TxOut[len(tx.TxOut)-1]) {
-				tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
-			}
-
+		ok, err := AddPaymentUTXOToTx(tx, utxos, utxo, inOutDiff, changeOut, feeRate, maxUTXONum)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
 			return selectedUTXOs, nil
 		}
 
-		tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
-
-		if changeValue == 0 {
-			return selectedUTXOs, nil
-		}
-
-		if changeValue < 0 {
-			feeWithoutChange := GetTxVirtualSize(tx, utxos) * feeRate
-			if paymentValue+inOutDiff-feeWithoutChange >= 0 {
-				return selectedUTXOs, nil
-			}
-		}
+		utxos = append(utxos, utxo)
+		inOutDiff += int64(utxo.Amount)
 	}
 
 	return nil, ErrInsufficientUTXOs
+}
+
+// AddPaymentUTXOToTx adds the given payment utxo to the tx.
+func AddPaymentUTXOToTx(tx *wire.MsgTx, utxos []*UTXO, utxo *UTXO, inOutDiff int64, changeOut *wire.TxOut, feeRate int64, maxUTXONum int) (bool, error) {
+	utxos = append(utxos, utxo)
+	if len(utxos) > maxUTXONum {
+		return false, ErrMaxUTXONumExceeded
+	}
+
+	AddUTXOToTx(tx, utxo)
+	tx.AddTxOut(changeOut)
+
+	paymentValue := int64(utxo.Amount)
+	fee := GetTxVirtualSize(tx, utxos) * feeRate
+
+	changeValue := paymentValue + inOutDiff - fee
+	if changeValue > 0 {
+		tx.TxOut[len(tx.TxOut)-1].Value = changeValue
+		if IsDustOut(tx.TxOut[len(tx.TxOut)-1]) {
+			tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
+		}
+
+		return true, nil
+	}
+
+	tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
+
+	if changeValue == 0 {
+		return true, nil
+	}
+
+	if changeValue < 0 {
+		feeWithoutChange := GetTxVirtualSize(tx, utxos) * feeRate
+		if paymentValue+inOutDiff-feeWithoutChange >= 0 {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
 
 // AddUTXOToTx adds the given utxo to the specified tx

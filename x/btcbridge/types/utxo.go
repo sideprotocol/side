@@ -7,4 +7,5 @@ type UTXOIterator interface {
 	Close() error
 
 	GetUTXO() *UTXO
+	GetMinimumUTXO() *UTXO
 }
