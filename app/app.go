@@ -1142,6 +1142,20 @@ func BlockedAddresses() map[string]bool {
 // SetUpgradeHandlers sets the upgrade handlers
 func (app *App) SetUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev2.UpgradeName, upgradev2.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk: %v", err))
+	}
+
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	// register store loader for current upgrade
+	if upgradeInfo.Name == upgradev2.UpgradeName {
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgradev2.StoreUpgrades))
+	}
 }
 
 func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {
