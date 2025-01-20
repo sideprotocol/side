@@ -8,6 +8,7 @@ import (
 
 // x/incentive module sentinel errors
 var (
-	ErrIncentiveNotEnabled = errorsmod.Register(ModuleName, 1001, "incentive not enabled")
-	ErrInvalidParams       = errorsmod.Register(ModuleName, 1002, "invalid params")
+	ErrDepositIncentiveNotEnabled  = errorsmod.Register(ModuleName, 1001, "incentive not enabled for deposit")
+	ErrWithdrawIncentiveNotEnabled = errorsmod.Register(ModuleName, 1002, "incentive not enabled for withdrawal")
+	ErrInvalidParams               = errorsmod.Register(ModuleName, 1003, "invalid params")
 )

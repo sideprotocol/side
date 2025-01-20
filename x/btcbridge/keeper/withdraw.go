@@ -606,12 +606,9 @@ func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.Ms
 	// unlock the change utxos
 	k.unlockChangeUTXOs(ctx, txHash.String())
 
-	// distribute rewards for all withdrawals
-	if k.incentiveKeeper.IncentiveEnabled(ctx) {
-		withdrawRequests := k.GetWithdrawRequestsByTxHash(ctx, txHash.String())
-		for _, req := range withdrawRequests {
-			_ = k.incentiveKeeper.DistributeWithdrawReward(ctx, req.Address)
-		}
+	// hook
+	if err := k.AfterWithdraw(ctx, txHash.String()); err != nil {
+		return nil, err
 	}
 
 	return txHash, nil

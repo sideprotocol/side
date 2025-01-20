@@ -78,8 +78,8 @@ func (k Keeper) UpdateTotalRewards(ctx sdk.Context, delta sdk.Coin) {
 
 // DistributeDepositReward distributes reward for deposit
 func (k Keeper) DistributeDepositReward(ctx sdk.Context, address string) error {
-	if !k.IncentiveEnabled(ctx) {
-		return types.ErrIncentiveNotEnabled
+	if !k.DepositIncentiveEnabled(ctx) {
+		return types.ErrDepositIncentiveNotEnabled
 	}
 
 	rewardAmount := k.RewardPerDeposit(ctx)
@@ -96,8 +96,8 @@ func (k Keeper) DistributeDepositReward(ctx sdk.Context, address string) error {
 
 // DistributeWithdrawReward distributes reward for withdrawal
 func (k Keeper) DistributeWithdrawReward(ctx sdk.Context, address string) error {
-	if !k.IncentiveEnabled(ctx) {
-		return types.ErrIncentiveNotEnabled
+	if !k.WithdrawIncentiveEnabled(ctx) {
+		return types.ErrWithdrawIncentiveNotEnabled
 	}
 
 	rewardAmount := k.RewardPerWithdraw(ctx)
