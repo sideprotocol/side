@@ -130,7 +130,10 @@ import (
 	incentivekeeper "github.com/sideprotocol/side/x/incentive/keeper"
 	incentivemodule "github.com/sideprotocol/side/x/incentive/module"
 	incentivetypes "github.com/sideprotocol/side/x/incentive/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
+
+	upgradev2 "github.com/sideprotocol/side/app/upgrades/v2"
 )
 
 const (
@@ -857,6 +860,9 @@ func New(
 		panic(err)
 	}
 
+	// set upgrade handlers
+	app.SetUpgradeHandlers()
+
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.ModuleManager.Modules))
 
 	reflectionSvc, err := runtimeservices.NewReflectionService()
@@ -1131,6 +1137,11 @@ func BlockedAddresses() map[string]bool {
 	delete(modAccAddrs, authtypes.NewModuleAddress(incentivetypes.ModuleName).String())
 
 	return modAccAddrs
+}
+
+// SetUpgradeHandlers sets the upgrade handlers
+func (app *App) SetUpgradeHandlers() {
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev2.UpgradeName, upgradev2.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 }
 
 func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {

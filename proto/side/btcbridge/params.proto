@@ -39,6 +39,36 @@ message Params {
   TSSParams tss_params = 14 [(gogoproto.nullable) = false];
 }
 
+// ParamsV1 defines the V1 parameters for the module.
+message ParamsV1 {
+  // The minimum number of confirmations required for a block to be accepted
+  int32 confirmations = 1;
+  // Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
+  uint64 max_acceptable_block_depth = 2;
+  // The denomination of the voucher
+  string btc_voucher_denom = 3;
+  // Indicates if deposit is enabled
+  bool deposit_enabled = 4;
+  // Indicates if withdrawal is enabled
+  bool withdraw_enabled = 5;
+  // Trusted relayers for non-btc asset deposit
+  repeated string trusted_non_btc_relayers = 6;
+  // Trusted fee providers to submit bitcoin fee rate
+  repeated string trusted_oracles = 7;
+  // Period of validity for the fee rate
+  int64 fee_rate_validity_period = 8;
+  // Asset vaults
+  repeated Vault vaults = 9;
+  // Withdrawal params
+  WithdrawParams withdraw_params = 10 [(gogoproto.nullable) = false];
+  // Protocol limitations
+  ProtocolLimits protocol_limits = 11 [(gogoproto.nullable) = false];
+  // Protocol fees
+  ProtocolFees protocol_fees = 12 [(gogoproto.nullable) = false];
+  // TSS params
+  TSSParams tss_params = 13 [(gogoproto.nullable) = false];
+}
+
 // AssetType defines the type of asset
 enum AssetType {
   // Unspecified asset type
