@@ -6,10 +6,19 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sideprotocol/side/x/incentive/types";
 
-// Reward
-message Reward {
+// Rewards
+message Rewards {
   string address = 1;
   uint64 deposit_count = 2;
   uint64 withdraw_count = 3;
-  cosmos.base.v1beta1.Coin totalAmount = 4 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin deposit_reward = 4 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin withdraw_reward = 5 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin total_amount = 6 [(gogoproto.nullable) = false];
+}
+
+// Reward Statistics
+message RewardStats {
+  uint64 address_count = 1;
+  uint64 tx_count = 2;
+  cosmos.base.v1beta1.Coin total_reward_amount = 3 [(gogoproto.nullable) = false];
 }

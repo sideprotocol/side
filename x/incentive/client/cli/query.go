@@ -25,7 +25,8 @@ func GetQueryCmd(_ string) *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdQueryParams())
-	cmd.AddCommand(CmdQueryReward())
+	cmd.AddCommand(CmdQueryRewards())
+	cmd.AddCommand(CmdQueryRewardStats())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -58,10 +59,10 @@ func CmdQueryParams() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryReward() *cobra.Command {
+func CmdQueryRewards() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "reward",
-		Short: "Query the reward of the given address",
+		Use:   "rewards",
+		Short: "Query the rewards of the given address",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -71,9 +72,36 @@ func CmdQueryReward() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.Reward(cmd.Context(), &types.QueryRewardRequest{
+			res, err := queryClient.Rewards(cmd.Context(), &types.QueryRewardsRequest{
 				Address: args[0],
 			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRewardStats() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "reward-stats",
+		Short: "Query total reward statistics",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.RewardStats(cmd.Context(), &types.QueryRewardStatsRequest{})
 			if err != nil {
 				return err
 			}

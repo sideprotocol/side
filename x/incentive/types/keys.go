@@ -17,10 +17,10 @@ const (
 var (
 	ParamsStoreKey = []byte{0x1}
 
-	TotalRewardsKey = []byte{0x10} // key for total distributed rewards
-	RewardKeyPrefix = []byte{0x11} // prefix for each key to a reward
+	RewardStatsKey   = []byte{0x11} // key for total reward statistics
+	RewardsKeyPrefix = []byte{0x12} // prefix for each key to the rewards
 )
 
-func RewardKey(address string) []byte {
-	return append(RewardKeyPrefix, []byte(address)...)
+func RewardsKey(address string) []byte {
+	return append(RewardsKeyPrefix, []byte(address)...)
 }

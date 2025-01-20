@@ -15,31 +15,35 @@ import (
 )
 
 var (
-	md_Reward                protoreflect.MessageDescriptor
-	fd_Reward_address        protoreflect.FieldDescriptor
-	fd_Reward_deposit_count  protoreflect.FieldDescriptor
-	fd_Reward_withdraw_count protoreflect.FieldDescriptor
-	fd_Reward_totalAmount    protoreflect.FieldDescriptor
+	md_Rewards                 protoreflect.MessageDescriptor
+	fd_Rewards_address         protoreflect.FieldDescriptor
+	fd_Rewards_deposit_count   protoreflect.FieldDescriptor
+	fd_Rewards_withdraw_count  protoreflect.FieldDescriptor
+	fd_Rewards_deposit_reward  protoreflect.FieldDescriptor
+	fd_Rewards_withdraw_reward protoreflect.FieldDescriptor
+	fd_Rewards_total_amount    protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_incentive_incentive_proto_init()
-	md_Reward = File_side_incentive_incentive_proto.Messages().ByName("Reward")
-	fd_Reward_address = md_Reward.Fields().ByName("address")
-	fd_Reward_deposit_count = md_Reward.Fields().ByName("deposit_count")
-	fd_Reward_withdraw_count = md_Reward.Fields().ByName("withdraw_count")
-	fd_Reward_totalAmount = md_Reward.Fields().ByName("totalAmount")
+	md_Rewards = File_side_incentive_incentive_proto.Messages().ByName("Rewards")
+	fd_Rewards_address = md_Rewards.Fields().ByName("address")
+	fd_Rewards_deposit_count = md_Rewards.Fields().ByName("deposit_count")
+	fd_Rewards_withdraw_count = md_Rewards.Fields().ByName("withdraw_count")
+	fd_Rewards_deposit_reward = md_Rewards.Fields().ByName("deposit_reward")
+	fd_Rewards_withdraw_reward = md_Rewards.Fields().ByName("withdraw_reward")
+	fd_Rewards_total_amount = md_Rewards.Fields().ByName("total_amount")
 }
 
-var _ protoreflect.Message = (*fastReflection_Reward)(nil)
+var _ protoreflect.Message = (*fastReflection_Rewards)(nil)
 
-type fastReflection_Reward Reward
+type fastReflection_Rewards Rewards
 
-func (x *Reward) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_Reward)(x)
+func (x *Rewards) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_Rewards)(x)
 }
 
-func (x *Reward) slowProtoReflect() protoreflect.Message {
+func (x *Rewards) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_incentive_incentive_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -51,43 +55,43 @@ func (x *Reward) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_Reward_messageType fastReflection_Reward_messageType
-var _ protoreflect.MessageType = fastReflection_Reward_messageType{}
+var _fastReflection_Rewards_messageType fastReflection_Rewards_messageType
+var _ protoreflect.MessageType = fastReflection_Rewards_messageType{}
 
-type fastReflection_Reward_messageType struct{}
+type fastReflection_Rewards_messageType struct{}
 
-func (x fastReflection_Reward_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_Reward)(nil)
+func (x fastReflection_Rewards_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_Rewards)(nil)
 }
-func (x fastReflection_Reward_messageType) New() protoreflect.Message {
-	return new(fastReflection_Reward)
+func (x fastReflection_Rewards_messageType) New() protoreflect.Message {
+	return new(fastReflection_Rewards)
 }
-func (x fastReflection_Reward_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_Reward
+func (x fastReflection_Rewards_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_Rewards
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_Reward) Descriptor() protoreflect.MessageDescriptor {
-	return md_Reward
+func (x *fastReflection_Rewards) Descriptor() protoreflect.MessageDescriptor {
+	return md_Rewards
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_Reward) Type() protoreflect.MessageType {
-	return _fastReflection_Reward_messageType
+func (x *fastReflection_Rewards) Type() protoreflect.MessageType {
+	return _fastReflection_Rewards_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_Reward) New() protoreflect.Message {
-	return new(fastReflection_Reward)
+func (x *fastReflection_Rewards) New() protoreflect.Message {
+	return new(fastReflection_Rewards)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_Reward) Interface() protoreflect.ProtoMessage {
-	return (*Reward)(x)
+func (x *fastReflection_Rewards) Interface() protoreflect.ProtoMessage {
+	return (*Rewards)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -95,28 +99,40 @@ func (x *fastReflection_Reward) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_Reward) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_Rewards) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Address != "" {
 		value := protoreflect.ValueOfString(x.Address)
-		if !f(fd_Reward_address, value) {
+		if !f(fd_Rewards_address, value) {
 			return
 		}
 	}
 	if x.DepositCount != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.DepositCount)
-		if !f(fd_Reward_deposit_count, value) {
+		if !f(fd_Rewards_deposit_count, value) {
 			return
 		}
 	}
 	if x.WithdrawCount != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.WithdrawCount)
-		if !f(fd_Reward_withdraw_count, value) {
+		if !f(fd_Rewards_withdraw_count, value) {
+			return
+		}
+	}
+	if x.DepositReward != nil {
+		value := protoreflect.ValueOfMessage(x.DepositReward.ProtoReflect())
+		if !f(fd_Rewards_deposit_reward, value) {
+			return
+		}
+	}
+	if x.WithdrawReward != nil {
+		value := protoreflect.ValueOfMessage(x.WithdrawReward.ProtoReflect())
+		if !f(fd_Rewards_withdraw_reward, value) {
 			return
 		}
 	}
 	if x.TotalAmount != nil {
 		value := protoreflect.ValueOfMessage(x.TotalAmount.ProtoReflect())
-		if !f(fd_Reward_totalAmount, value) {
+		if !f(fd_Rewards_total_amount, value) {
 			return
 		}
 	}
@@ -133,21 +149,25 @@ func (x *fastReflection_Reward) Range(f func(protoreflect.FieldDescriptor, proto
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_Reward) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_Rewards) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.incentive.Reward.address":
+	case "side.incentive.Rewards.address":
 		return x.Address != ""
-	case "side.incentive.Reward.deposit_count":
+	case "side.incentive.Rewards.deposit_count":
 		return x.DepositCount != uint64(0)
-	case "side.incentive.Reward.withdraw_count":
+	case "side.incentive.Rewards.withdraw_count":
 		return x.WithdrawCount != uint64(0)
-	case "side.incentive.Reward.totalAmount":
+	case "side.incentive.Rewards.deposit_reward":
+		return x.DepositReward != nil
+	case "side.incentive.Rewards.withdraw_reward":
+		return x.WithdrawReward != nil
+	case "side.incentive.Rewards.total_amount":
 		return x.TotalAmount != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Reward"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Rewards"))
 		}
-		panic(fmt.Errorf("message side.incentive.Reward does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.incentive.Rewards does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -157,21 +177,25 @@ func (x *fastReflection_Reward) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Reward) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_Rewards) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.incentive.Reward.address":
+	case "side.incentive.Rewards.address":
 		x.Address = ""
-	case "side.incentive.Reward.deposit_count":
+	case "side.incentive.Rewards.deposit_count":
 		x.DepositCount = uint64(0)
-	case "side.incentive.Reward.withdraw_count":
+	case "side.incentive.Rewards.withdraw_count":
 		x.WithdrawCount = uint64(0)
-	case "side.incentive.Reward.totalAmount":
+	case "side.incentive.Rewards.deposit_reward":
+		x.DepositReward = nil
+	case "side.incentive.Rewards.withdraw_reward":
+		x.WithdrawReward = nil
+	case "side.incentive.Rewards.total_amount":
 		x.TotalAmount = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Reward"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Rewards"))
 		}
-		panic(fmt.Errorf("message side.incentive.Reward does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.incentive.Rewards does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -181,25 +205,31 @@ func (x *fastReflection_Reward) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_Reward) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Rewards) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.incentive.Reward.address":
+	case "side.incentive.Rewards.address":
 		value := x.Address
 		return protoreflect.ValueOfString(value)
-	case "side.incentive.Reward.deposit_count":
+	case "side.incentive.Rewards.deposit_count":
 		value := x.DepositCount
 		return protoreflect.ValueOfUint64(value)
-	case "side.incentive.Reward.withdraw_count":
+	case "side.incentive.Rewards.withdraw_count":
 		value := x.WithdrawCount
 		return protoreflect.ValueOfUint64(value)
-	case "side.incentive.Reward.totalAmount":
+	case "side.incentive.Rewards.deposit_reward":
+		value := x.DepositReward
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.incentive.Rewards.withdraw_reward":
+		value := x.WithdrawReward
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.incentive.Rewards.total_amount":
 		value := x.TotalAmount
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Reward"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Rewards"))
 		}
-		panic(fmt.Errorf("message side.incentive.Reward does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.incentive.Rewards does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -213,21 +243,25 @@ func (x *fastReflection_Reward) Get(descriptor protoreflect.FieldDescriptor) pro
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Reward) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_Rewards) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.incentive.Reward.address":
+	case "side.incentive.Rewards.address":
 		x.Address = value.Interface().(string)
-	case "side.incentive.Reward.deposit_count":
+	case "side.incentive.Rewards.deposit_count":
 		x.DepositCount = value.Uint()
-	case "side.incentive.Reward.withdraw_count":
+	case "side.incentive.Rewards.withdraw_count":
 		x.WithdrawCount = value.Uint()
-	case "side.incentive.Reward.totalAmount":
+	case "side.incentive.Rewards.deposit_reward":
+		x.DepositReward = value.Message().Interface().(*v1beta1.Coin)
+	case "side.incentive.Rewards.withdraw_reward":
+		x.WithdrawReward = value.Message().Interface().(*v1beta1.Coin)
+	case "side.incentive.Rewards.total_amount":
 		x.TotalAmount = value.Message().Interface().(*v1beta1.Coin)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Reward"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Rewards"))
 		}
-		panic(fmt.Errorf("message side.incentive.Reward does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.incentive.Rewards does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -241,56 +275,72 @@ func (x *fastReflection_Reward) Set(fd protoreflect.FieldDescriptor, value proto
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Reward) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Rewards) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.incentive.Reward.totalAmount":
+	case "side.incentive.Rewards.deposit_reward":
+		if x.DepositReward == nil {
+			x.DepositReward = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.DepositReward.ProtoReflect())
+	case "side.incentive.Rewards.withdraw_reward":
+		if x.WithdrawReward == nil {
+			x.WithdrawReward = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.WithdrawReward.ProtoReflect())
+	case "side.incentive.Rewards.total_amount":
 		if x.TotalAmount == nil {
 			x.TotalAmount = new(v1beta1.Coin)
 		}
 		return protoreflect.ValueOfMessage(x.TotalAmount.ProtoReflect())
-	case "side.incentive.Reward.address":
-		panic(fmt.Errorf("field address of message side.incentive.Reward is not mutable"))
-	case "side.incentive.Reward.deposit_count":
-		panic(fmt.Errorf("field deposit_count of message side.incentive.Reward is not mutable"))
-	case "side.incentive.Reward.withdraw_count":
-		panic(fmt.Errorf("field withdraw_count of message side.incentive.Reward is not mutable"))
+	case "side.incentive.Rewards.address":
+		panic(fmt.Errorf("field address of message side.incentive.Rewards is not mutable"))
+	case "side.incentive.Rewards.deposit_count":
+		panic(fmt.Errorf("field deposit_count of message side.incentive.Rewards is not mutable"))
+	case "side.incentive.Rewards.withdraw_count":
+		panic(fmt.Errorf("field withdraw_count of message side.incentive.Rewards is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Reward"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Rewards"))
 		}
-		panic(fmt.Errorf("message side.incentive.Reward does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.incentive.Rewards does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_Reward) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Rewards) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.incentive.Reward.address":
+	case "side.incentive.Rewards.address":
 		return protoreflect.ValueOfString("")
-	case "side.incentive.Reward.deposit_count":
+	case "side.incentive.Rewards.deposit_count":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "side.incentive.Reward.withdraw_count":
+	case "side.incentive.Rewards.withdraw_count":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "side.incentive.Reward.totalAmount":
+	case "side.incentive.Rewards.deposit_reward":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.incentive.Rewards.withdraw_reward":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.incentive.Rewards.total_amount":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Reward"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.Rewards"))
 		}
-		panic(fmt.Errorf("message side.incentive.Reward does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.incentive.Rewards does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_Reward) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_Rewards) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.incentive.Reward", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.incentive.Rewards", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -298,7 +348,7 @@ func (x *fastReflection_Reward) WhichOneof(d protoreflect.OneofDescriptor) proto
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_Reward) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_Rewards) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -309,7 +359,7 @@ func (x *fastReflection_Reward) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Reward) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_Rewards) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -321,7 +371,7 @@ func (x *fastReflection_Reward) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_Reward) IsValid() bool {
+func (x *fastReflection_Rewards) IsValid() bool {
 	return x != nil
 }
 
@@ -331,9 +381,9 @@ func (x *fastReflection_Reward) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_Reward) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_Rewards) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*Reward)
+		x := input.Message.Interface().(*Rewards)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -355,6 +405,14 @@ func (x *fastReflection_Reward) ProtoMethods() *protoiface.Methods {
 		if x.WithdrawCount != 0 {
 			n += 1 + runtime.Sov(uint64(x.WithdrawCount))
 		}
+		if x.DepositReward != nil {
+			l = options.Size(x.DepositReward)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.WithdrawReward != nil {
+			l = options.Size(x.WithdrawReward)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.TotalAmount != nil {
 			l = options.Size(x.TotalAmount)
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -369,7 +427,7 @@ func (x *fastReflection_Reward) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*Reward)
+		x := input.Message.Interface().(*Rewards)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -390,6 +448,34 @@ func (x *fastReflection_Reward) ProtoMethods() *protoiface.Methods {
 		}
 		if x.TotalAmount != nil {
 			encoded, err := options.Marshal(x.TotalAmount)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if x.WithdrawReward != nil {
+			encoded, err := options.Marshal(x.WithdrawReward)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if x.DepositReward != nil {
+			encoded, err := options.Marshal(x.DepositReward)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -430,7 +516,7 @@ func (x *fastReflection_Reward) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*Reward)
+		x := input.Message.Interface().(*Rewards)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -462,10 +548,10 @@ func (x *fastReflection_Reward) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Reward: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Rewards: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Reward: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Rewards: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -540,6 +626,78 @@ func (x *fastReflection_Reward) ProtoMethods() *protoiface.Methods {
 				}
 			case 4:
 				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositReward", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.DepositReward == nil {
+					x.DepositReward = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DepositReward); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field WithdrawReward", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.WithdrawReward == nil {
+					x.WithdrawReward = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.WithdrawReward); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TotalAmount", wireType)
 				}
 				var msglen int
@@ -609,6 +767,537 @@ func (x *fastReflection_Reward) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var (
+	md_RewardStats                     protoreflect.MessageDescriptor
+	fd_RewardStats_address_count       protoreflect.FieldDescriptor
+	fd_RewardStats_tx_count            protoreflect.FieldDescriptor
+	fd_RewardStats_total_reward_amount protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_incentive_incentive_proto_init()
+	md_RewardStats = File_side_incentive_incentive_proto.Messages().ByName("RewardStats")
+	fd_RewardStats_address_count = md_RewardStats.Fields().ByName("address_count")
+	fd_RewardStats_tx_count = md_RewardStats.Fields().ByName("tx_count")
+	fd_RewardStats_total_reward_amount = md_RewardStats.Fields().ByName("total_reward_amount")
+}
+
+var _ protoreflect.Message = (*fastReflection_RewardStats)(nil)
+
+type fastReflection_RewardStats RewardStats
+
+func (x *RewardStats) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_RewardStats)(x)
+}
+
+func (x *RewardStats) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_incentive_incentive_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_RewardStats_messageType fastReflection_RewardStats_messageType
+var _ protoreflect.MessageType = fastReflection_RewardStats_messageType{}
+
+type fastReflection_RewardStats_messageType struct{}
+
+func (x fastReflection_RewardStats_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_RewardStats)(nil)
+}
+func (x fastReflection_RewardStats_messageType) New() protoreflect.Message {
+	return new(fastReflection_RewardStats)
+}
+func (x fastReflection_RewardStats_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_RewardStats
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_RewardStats) Descriptor() protoreflect.MessageDescriptor {
+	return md_RewardStats
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_RewardStats) Type() protoreflect.MessageType {
+	return _fastReflection_RewardStats_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_RewardStats) New() protoreflect.Message {
+	return new(fastReflection_RewardStats)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_RewardStats) Interface() protoreflect.ProtoMessage {
+	return (*RewardStats)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_RewardStats) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.AddressCount != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.AddressCount)
+		if !f(fd_RewardStats_address_count, value) {
+			return
+		}
+	}
+	if x.TxCount != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.TxCount)
+		if !f(fd_RewardStats_tx_count, value) {
+			return
+		}
+	}
+	if x.TotalRewardAmount != nil {
+		value := protoreflect.ValueOfMessage(x.TotalRewardAmount.ProtoReflect())
+		if !f(fd_RewardStats_total_reward_amount, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_RewardStats) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.incentive.RewardStats.address_count":
+		return x.AddressCount != uint64(0)
+	case "side.incentive.RewardStats.tx_count":
+		return x.TxCount != uint64(0)
+	case "side.incentive.RewardStats.total_reward_amount":
+		return x.TotalRewardAmount != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.RewardStats"))
+		}
+		panic(fmt.Errorf("message side.incentive.RewardStats does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RewardStats) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.incentive.RewardStats.address_count":
+		x.AddressCount = uint64(0)
+	case "side.incentive.RewardStats.tx_count":
+		x.TxCount = uint64(0)
+	case "side.incentive.RewardStats.total_reward_amount":
+		x.TotalRewardAmount = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.RewardStats"))
+		}
+		panic(fmt.Errorf("message side.incentive.RewardStats does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_RewardStats) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.incentive.RewardStats.address_count":
+		value := x.AddressCount
+		return protoreflect.ValueOfUint64(value)
+	case "side.incentive.RewardStats.tx_count":
+		value := x.TxCount
+		return protoreflect.ValueOfUint64(value)
+	case "side.incentive.RewardStats.total_reward_amount":
+		value := x.TotalRewardAmount
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.RewardStats"))
+		}
+		panic(fmt.Errorf("message side.incentive.RewardStats does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RewardStats) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.incentive.RewardStats.address_count":
+		x.AddressCount = value.Uint()
+	case "side.incentive.RewardStats.tx_count":
+		x.TxCount = value.Uint()
+	case "side.incentive.RewardStats.total_reward_amount":
+		x.TotalRewardAmount = value.Message().Interface().(*v1beta1.Coin)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.RewardStats"))
+		}
+		panic(fmt.Errorf("message side.incentive.RewardStats does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RewardStats) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.incentive.RewardStats.total_reward_amount":
+		if x.TotalRewardAmount == nil {
+			x.TotalRewardAmount = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.TotalRewardAmount.ProtoReflect())
+	case "side.incentive.RewardStats.address_count":
+		panic(fmt.Errorf("field address_count of message side.incentive.RewardStats is not mutable"))
+	case "side.incentive.RewardStats.tx_count":
+		panic(fmt.Errorf("field tx_count of message side.incentive.RewardStats is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.RewardStats"))
+		}
+		panic(fmt.Errorf("message side.incentive.RewardStats does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_RewardStats) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.incentive.RewardStats.address_count":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.incentive.RewardStats.tx_count":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.incentive.RewardStats.total_reward_amount":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.incentive.RewardStats"))
+		}
+		panic(fmt.Errorf("message side.incentive.RewardStats does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_RewardStats) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.incentive.RewardStats", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_RewardStats) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RewardStats) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_RewardStats) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_RewardStats) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*RewardStats)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.AddressCount != 0 {
+			n += 1 + runtime.Sov(uint64(x.AddressCount))
+		}
+		if x.TxCount != 0 {
+			n += 1 + runtime.Sov(uint64(x.TxCount))
+		}
+		if x.TotalRewardAmount != nil {
+			l = options.Size(x.TotalRewardAmount)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*RewardStats)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.TotalRewardAmount != nil {
+			encoded, err := options.Marshal(x.TotalRewardAmount)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.TxCount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TxCount))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.AddressCount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.AddressCount))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*RewardStats)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: RewardStats: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: RewardStats: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AddressCount", wireType)
+				}
+				x.AddressCount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.AddressCount |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TxCount", wireType)
+				}
+				x.TxCount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.TxCount |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TotalRewardAmount", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.TotalRewardAmount == nil {
+					x.TotalRewardAmount = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TotalRewardAmount); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -622,20 +1311,22 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Reward
-type Reward struct {
+// Rewards
+type Rewards struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Address       string        `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	DepositCount  uint64        `protobuf:"varint,2,opt,name=deposit_count,json=depositCount,proto3" json:"deposit_count,omitempty"`
-	WithdrawCount uint64        `protobuf:"varint,3,opt,name=withdraw_count,json=withdrawCount,proto3" json:"withdraw_count,omitempty"`
-	TotalAmount   *v1beta1.Coin `protobuf:"bytes,4,opt,name=totalAmount,proto3" json:"totalAmount,omitempty"`
+	Address        string        `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	DepositCount   uint64        `protobuf:"varint,2,opt,name=deposit_count,json=depositCount,proto3" json:"deposit_count,omitempty"`
+	WithdrawCount  uint64        `protobuf:"varint,3,opt,name=withdraw_count,json=withdrawCount,proto3" json:"withdraw_count,omitempty"`
+	DepositReward  *v1beta1.Coin `protobuf:"bytes,4,opt,name=deposit_reward,json=depositReward,proto3" json:"deposit_reward,omitempty"`
+	WithdrawReward *v1beta1.Coin `protobuf:"bytes,5,opt,name=withdraw_reward,json=withdrawReward,proto3" json:"withdraw_reward,omitempty"`
+	TotalAmount    *v1beta1.Coin `protobuf:"bytes,6,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
 }
 
-func (x *Reward) Reset() {
-	*x = Reward{}
+func (x *Rewards) Reset() {
+	*x = Rewards{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_incentive_incentive_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -643,41 +1334,107 @@ func (x *Reward) Reset() {
 	}
 }
 
-func (x *Reward) String() string {
+func (x *Rewards) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Reward) ProtoMessage() {}
+func (*Rewards) ProtoMessage() {}
 
-// Deprecated: Use Reward.ProtoReflect.Descriptor instead.
-func (*Reward) Descriptor() ([]byte, []int) {
+// Deprecated: Use Rewards.ProtoReflect.Descriptor instead.
+func (*Rewards) Descriptor() ([]byte, []int) {
 	return file_side_incentive_incentive_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Reward) GetAddress() string {
+func (x *Rewards) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
 	return ""
 }
 
-func (x *Reward) GetDepositCount() uint64 {
+func (x *Rewards) GetDepositCount() uint64 {
 	if x != nil {
 		return x.DepositCount
 	}
 	return 0
 }
 
-func (x *Reward) GetWithdrawCount() uint64 {
+func (x *Rewards) GetWithdrawCount() uint64 {
 	if x != nil {
 		return x.WithdrawCount
 	}
 	return 0
 }
 
-func (x *Reward) GetTotalAmount() *v1beta1.Coin {
+func (x *Rewards) GetDepositReward() *v1beta1.Coin {
+	if x != nil {
+		return x.DepositReward
+	}
+	return nil
+}
+
+func (x *Rewards) GetWithdrawReward() *v1beta1.Coin {
+	if x != nil {
+		return x.WithdrawReward
+	}
+	return nil
+}
+
+func (x *Rewards) GetTotalAmount() *v1beta1.Coin {
 	if x != nil {
 		return x.TotalAmount
+	}
+	return nil
+}
+
+// Reward Statistics
+type RewardStats struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	AddressCount      uint64        `protobuf:"varint,1,opt,name=address_count,json=addressCount,proto3" json:"address_count,omitempty"`
+	TxCount           uint64        `protobuf:"varint,2,opt,name=tx_count,json=txCount,proto3" json:"tx_count,omitempty"`
+	TotalRewardAmount *v1beta1.Coin `protobuf:"bytes,3,opt,name=total_reward_amount,json=totalRewardAmount,proto3" json:"total_reward_amount,omitempty"`
+}
+
+func (x *RewardStats) Reset() {
+	*x = RewardStats{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_incentive_incentive_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RewardStats) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RewardStats) ProtoMessage() {}
+
+// Deprecated: Use RewardStats.ProtoReflect.Descriptor instead.
+func (*RewardStats) Descriptor() ([]byte, []int) {
+	return file_side_incentive_incentive_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *RewardStats) GetAddressCount() uint64 {
+	if x != nil {
+		return x.AddressCount
+	}
+	return 0
+}
+
+func (x *RewardStats) GetTxCount() uint64 {
+	if x != nil {
+		return x.TxCount
+	}
+	return 0
+}
+
+func (x *RewardStats) GetTotalRewardAmount() *v1beta1.Coin {
+	if x != nil {
+		return x.TotalRewardAmount
 	}
 	return nil
 }
@@ -691,29 +1448,48 @@ var file_side_incentive_incentive_proto_rawDesc = []byte{
 	0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62,
 	0x61, 0x73, 0x65, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb1, 0x01, 0x0a, 0x06, 0x52, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x0c, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x43, 0x6f, 0x75, 0x6e, 0x74,
-	0x12, 0x25, 0x0a, 0x0e, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x63, 0x6f, 0x75,
-	0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72,
-	0x61, 0x77, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x41, 0x0a, 0x0b, 0x74, 0x6f, 0x74, 0x61, 0x6c,
-	0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
-	0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x74,
-	0x6f, 0x74, 0x61, 0x6c, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x9e, 0x01, 0x0a, 0x12, 0x63,
-	0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
-	0x65, 0x42, 0x0e, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x50, 0x72, 0x6f, 0x74,
-	0x6f, 0x50, 0x01, 0x5a, 0x1f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
-	0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x69, 0x6e, 0x63, 0x65, 0x6e,
-	0x74, 0x69, 0x76, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x49, 0x58, 0xaa, 0x02, 0x0e, 0x53, 0x69, 0x64,
-	0x65, 0x2e, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xca, 0x02, 0x0e, 0x53, 0x69,
-	0x64, 0x65, 0x5c, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xe2, 0x02, 0x1a, 0x53,
-	0x69, 0x64, 0x65, 0x5c, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x5c, 0x47, 0x50,
-	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f, 0x53, 0x69, 0x64, 0x65,
-	0x3a, 0x3a, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc5, 0x02, 0x0a, 0x07, 0x52, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x23, 0x0a, 0x0d,
+	0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x0c, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x43, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x25, 0x0a, 0x0e, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x63, 0x6f,
+	0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x77, 0x69, 0x74, 0x68, 0x64,
+	0x72, 0x61, 0x77, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x46, 0x0a, 0x0e, 0x64, 0x65, 0x70, 0x6f,
+	0x73, 0x69, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76,
+	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f,
+	0x00, 0x52, 0x0d, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64,
+	0x12, 0x48, 0x0a, 0x0f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x77, 0x69, 0x74, 0x68,
+	0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x42, 0x0a, 0x0c, 0x74, 0x6f,
+	0x74, 0x61, 0x6c, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76,
+	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f,
+	0x00, 0x52, 0x0b, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x9e,
+	0x01, 0x0a, 0x0b, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x53, 0x74, 0x61, 0x74, 0x73, 0x12, 0x23,
+	0x0a, 0x0d, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x43, 0x6f,
+	0x75, 0x6e, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x74, 0x78, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x74, 0x78, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x4f,
+	0x0a, 0x13, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x5f, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x11, 0x74, 0x6f,
+	0x74, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42,
+	0x9e, 0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x69, 0x6e, 0x63,
+	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x42, 0x0e, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
+	0x65, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
+	0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x49, 0x58, 0xaa,
+	0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
+	0xca, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
+	0x65, 0xe2, 0x02, 0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
+	0x76, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
+	0x0f, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -728,18 +1504,22 @@ func file_side_incentive_incentive_proto_rawDescGZIP() []byte {
 	return file_side_incentive_incentive_proto_rawDescData
 }
 
-var file_side_incentive_incentive_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_side_incentive_incentive_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_side_incentive_incentive_proto_goTypes = []interface{}{
-	(*Reward)(nil),       // 0: side.incentive.Reward
-	(*v1beta1.Coin)(nil), // 1: cosmos.base.v1beta1.Coin
+	(*Rewards)(nil),      // 0: side.incentive.Rewards
+	(*RewardStats)(nil),  // 1: side.incentive.RewardStats
+	(*v1beta1.Coin)(nil), // 2: cosmos.base.v1beta1.Coin
 }
 var file_side_incentive_incentive_proto_depIdxs = []int32{
-	1, // 0: side.incentive.Reward.totalAmount:type_name -> cosmos.base.v1beta1.Coin
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	2, // 0: side.incentive.Rewards.deposit_reward:type_name -> cosmos.base.v1beta1.Coin
+	2, // 1: side.incentive.Rewards.withdraw_reward:type_name -> cosmos.base.v1beta1.Coin
+	2, // 2: side.incentive.Rewards.total_amount:type_name -> cosmos.base.v1beta1.Coin
+	2, // 3: side.incentive.RewardStats.total_reward_amount:type_name -> cosmos.base.v1beta1.Coin
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_side_incentive_incentive_proto_init() }
@@ -749,7 +1529,19 @@ func file_side_incentive_incentive_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_side_incentive_incentive_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Reward); i {
+			switch v := v.(*Rewards); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_incentive_incentive_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RewardStats); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -767,7 +1559,7 @@ func file_side_incentive_incentive_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_incentive_incentive_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
