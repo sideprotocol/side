@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName = "/side.incentive.Query/Params"
-	Query_Reward_FullMethodName = "/side.incentive.Query/Reward"
+	Query_Params_FullMethodName      = "/side.incentive.Query/Params"
+	Query_Rewards_FullMethodName     = "/side.incentive.Query/Rewards"
+	Query_RewardStats_FullMethodName = "/side.incentive.Query/RewardStats"
 )
 
 // QueryClient is the client API for Query service.
@@ -29,8 +30,10 @@ const (
 type QueryClient interface {
 	// Params queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Reward queries the reward of the given address.
-	Reward(ctx context.Context, in *QueryRewardRequest, opts ...grpc.CallOption) (*QueryRewardResponse, error)
+	// Rewards queries the rewards of the given address.
+	Rewards(ctx context.Context, in *QueryRewardsRequest, opts ...grpc.CallOption) (*QueryRewardsResponse, error)
+	// RewardStats queries total reward statistics.
+	RewardStats(ctx context.Context, in *QueryRewardStatsRequest, opts ...grpc.CallOption) (*QueryRewardStatsResponse, error)
 }
 
 type queryClient struct {
@@ -50,9 +53,18 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) Reward(ctx context.Context, in *QueryRewardRequest, opts ...grpc.CallOption) (*QueryRewardResponse, error) {
-	out := new(QueryRewardResponse)
-	err := c.cc.Invoke(ctx, Query_Reward_FullMethodName, in, out, opts...)
+func (c *queryClient) Rewards(ctx context.Context, in *QueryRewardsRequest, opts ...grpc.CallOption) (*QueryRewardsResponse, error) {
+	out := new(QueryRewardsResponse)
+	err := c.cc.Invoke(ctx, Query_Rewards_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) RewardStats(ctx context.Context, in *QueryRewardStatsRequest, opts ...grpc.CallOption) (*QueryRewardStatsResponse, error) {
+	out := new(QueryRewardStatsResponse)
+	err := c.cc.Invoke(ctx, Query_RewardStats_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +77,10 @@ func (c *queryClient) Reward(ctx context.Context, in *QueryRewardRequest, opts .
 type QueryServer interface {
 	// Params queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Reward queries the reward of the given address.
-	Reward(context.Context, *QueryRewardRequest) (*QueryRewardResponse, error)
+	// Rewards queries the rewards of the given address.
+	Rewards(context.Context, *QueryRewardsRequest) (*QueryRewardsResponse, error)
+	// RewardStats queries total reward statistics.
+	RewardStats(context.Context, *QueryRewardStatsRequest) (*QueryRewardStatsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -77,8 +91,11 @@ type UnimplementedQueryServer struct {
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (UnimplementedQueryServer) Reward(context.Context, *QueryRewardRequest) (*QueryRewardResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Reward not implemented")
+func (UnimplementedQueryServer) Rewards(context.Context, *QueryRewardsRequest) (*QueryRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Rewards not implemented")
+}
+func (UnimplementedQueryServer) RewardStats(context.Context, *QueryRewardStatsRequest) (*QueryRewardStatsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RewardStats not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -111,20 +128,38 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Reward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryRewardRequest)
+func _Query_Rewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRewardsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Reward(ctx, in)
+		return srv.(QueryServer).Rewards(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_Reward_FullMethodName,
+		FullMethod: Query_Rewards_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Reward(ctx, req.(*QueryRewardRequest))
+		return srv.(QueryServer).Rewards(ctx, req.(*QueryRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_RewardStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRewardStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).RewardStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_RewardStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).RewardStats(ctx, req.(*QueryRewardStatsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -141,8 +176,12 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
-			MethodName: "Reward",
-			Handler:    _Query_Reward_Handler,
+			MethodName: "Rewards",
+			Handler:    _Query_Rewards_Handler,
+		},
+		{
+			MethodName: "RewardStats",
+			Handler:    _Query_RewardStats_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
