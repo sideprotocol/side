@@ -16,7 +16,7 @@ service Query {
   }
   // Rewards queries the rewards of the given address.
   rpc Rewards(QueryRewardsRequest) returns (QueryRewardsResponse) {
-    option (google.api.http).get = "/side/incentive/rewards/{address}";
+    option (google.api.http).get = "/side/incentive/rewards";
   }
   // RewardStats queries total reward statistics.
   rpc RewardStats(QueryRewardStatsRequest) returns (QueryRewardStatsResponse) {
