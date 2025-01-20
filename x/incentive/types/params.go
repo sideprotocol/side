@@ -29,11 +29,11 @@ func DefaultParams() Params {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if !p.RewardPerDeposit.IsValid() || !p.RewardPerDeposit.IsPositive() {
+	if !p.RewardPerDeposit.IsValid() {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid deposit reward")
 	}
 
-	if !p.RewardPerDeposit.IsValid() || !p.RewardPerDeposit.IsPositive() {
+	if !p.RewardPerWithdraw.IsValid() {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid withdrawal reward")
 	}
 
