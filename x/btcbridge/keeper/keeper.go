@@ -117,8 +117,6 @@ func (k Keeper) InsertBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockH
 		return nil
 	}
 
-	params := k.GetParams(ctx)
-
 	// get the best block header
 	best := k.GetBestBlockHeader(ctx)
 
@@ -128,8 +126,8 @@ func (k Keeper) InsertBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockH
 		}
 	} else {
 		// reorg detected
-		// check if the reorg depth exceeds the safe confirmations
-		if best.Height-startBlockHeader.Height+1 > uint64(params.Confirmations) {
+		// check if the reorg depth exceeds the allowed maximum depth
+		if best.Height-startBlockHeader.Height+1 > uint64(k.MaxReorgDepth(ctx)) {
 			return types.ErrInvalidReorgDepth
 		}
 
@@ -147,7 +145,7 @@ func (k Keeper) InsertBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockH
 		// check if the new block headers has more work than the work accumulated from the forked block to the current tip
 		totalWorkOldToTip := k.CalcTotalWork(ctx, startBlockHeader.Height, best.Height)
 		totalWorkNew := types.BlockHeaders(blockHeaders).GetTotalWork()
-		if sdk.GetConfig().GetBtcChainCfg().Net == wire.MainNet && totalWorkNew.Cmp(totalWorkOldToTip) <= 0 || totalWorkNew.Cmp(totalWorkOldToTip) < 0 {
+		if totalWorkNew.Cmp(totalWorkOldToTip) <= 0 {
 			return errorsmod.Wrap(types.ErrInvalidBlockHeaders, "invalid forking block headers")
 		}
 
@@ -226,9 +224,7 @@ func (k Keeper) CalcTotalWork(ctx sdk.Context, startHeight uint64, endHeight uin
 }
 
 // ValidateTransaction validates the given transaction
-func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes string, blockHash string, proof []string) (*btcutil.Tx, *btcutil.Tx, error) {
-	params := k.GetParams(ctx)
-
+func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes string, blockHash string, proof []string, confirmationDepth int32) (*btcutil.Tx, *btcutil.Tx, error) {
 	header := k.GetBlockHeader(ctx, blockHash)
 	// Check if block confirmed
 	if header == nil || header.Height == 0 {
@@ -237,7 +233,7 @@ func (k Keeper) ValidateTransaction(ctx sdk.Context, txBytes string, prevTxBytes
 
 	best := k.GetBestBlockHeader(ctx)
 	// Check if the block is confirmed
-	if best.Height-header.Height+1 < uint64(params.Confirmations) {
+	if best.Height-header.Height+1 < uint64(confirmationDepth) {
 		return nil, nil, types.ErrNotConfirmed
 	}
 	// Check if the block is within the acceptable depth

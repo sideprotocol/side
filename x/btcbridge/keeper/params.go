@@ -6,6 +6,21 @@ import (
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
+// DepositConfirmationDepth gets the confirmation depth for deposit transactions
+func (k Keeper) DepositConfirmationDepth(ctx sdk.Context) int32 {
+	return k.GetParams(ctx).DepositConfirmationDepth
+}
+
+// WithdrawConfirmationDepth gets the confirmation depth for withdrawal transactions
+func (k Keeper) WithdrawConfirmationDepth(ctx sdk.Context) int32 {
+	return k.GetParams(ctx).WithdrawConfirmationDepth
+}
+
+// MaxReorgDepth gets the allowed maximum reorg depth
+func (k Keeper) MaxReorgDepth(ctx sdk.Context) int32 {
+	return k.GetParams(ctx).MaxReorgDepth
+}
+
 // DepositEnabled returns true if deposit enabled, false otherwise
 func (k Keeper) DepositEnabled(ctx sdk.Context) bool {
 	return k.GetParams(ctx).DepositEnabled
