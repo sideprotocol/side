@@ -35,6 +35,7 @@ jobs:
         env:
           DO_NOT_TRACK: 1
           GOFLAGS: "-buildvcs=false"
+        continue-on-error: true
 
       - name: Delete the "latest" Release
         uses: dev-drprasad/delete-tag-and-release@v0.2.1
