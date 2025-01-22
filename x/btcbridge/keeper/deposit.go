@@ -15,7 +15,7 @@ import (
 
 // ProcessBitcoinDepositTransaction handles the deposit transaction
 func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.MsgSubmitDepositTransaction) (*chainhash.Hash, btcutil.Address, error) {
-	tx, prevTx, err := k.ValidateTransaction(ctx, msg.TxBytes, msg.PrevTxBytes, msg.Blockhash, msg.Proof)
+	tx, prevTx, err := k.ValidateTransaction(ctx, msg.TxBytes, msg.PrevTxBytes, msg.Blockhash, msg.Proof, k.DepositConfirmationDepth(ctx))
 	if err != nil {
 		return nil, nil, err
 	}

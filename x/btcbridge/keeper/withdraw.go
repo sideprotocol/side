@@ -584,7 +584,7 @@ func (k Keeper) FilterSigningRequestsByAddr(ctx sdk.Context, req *types.QuerySig
 
 // ProcessBitcoinWithdrawTransaction handles the withdrawal transaction
 func (k Keeper) ProcessBitcoinWithdrawTransaction(ctx sdk.Context, msg *types.MsgSubmitWithdrawTransaction) (*chainhash.Hash, error) {
-	tx, _, err := k.ValidateTransaction(ctx, msg.TxBytes, "", msg.Blockhash, msg.Proof)
+	tx, _, err := k.ValidateTransaction(ctx, msg.TxBytes, "", msg.Blockhash, msg.Proof, k.WithdrawConfirmationDepth(ctx))
 	if err != nil {
 		return nil, err
 	}

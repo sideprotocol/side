@@ -15,98 +15,6 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_Params_6_list)(nil)
-
-type _Params_6_list struct {
-	list *[]string
-}
-
-func (x *_Params_6_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_Params_6_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfString((*x.list)[i])
-}
-
-func (x *_Params_6_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_Params_6_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_Params_6_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field TrustedBtcRelayers as it is not of Message kind"))
-}
-
-func (x *_Params_6_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_Params_6_list) NewElement() protoreflect.Value {
-	v := ""
-	return protoreflect.ValueOfString(v)
-}
-
-func (x *_Params_6_list) IsValid() bool {
-	return x.list != nil
-}
-
-var _ protoreflect.List = (*_Params_7_list)(nil)
-
-type _Params_7_list struct {
-	list *[]string
-}
-
-func (x *_Params_7_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_Params_7_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfString((*x.list)[i])
-}
-
-func (x *_Params_7_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_Params_7_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_Params_7_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field TrustedNonBtcRelayers as it is not of Message kind"))
-}
-
-func (x *_Params_7_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_Params_7_list) NewElement() protoreflect.Value {
-	v := ""
-	return protoreflect.ValueOfString(v)
-}
-
-func (x *_Params_7_list) IsValid() bool {
-	return x.list != nil
-}
-
 var _ protoreflect.List = (*_Params_8_list)(nil)
 
 type _Params_8_list struct {
@@ -137,7 +45,7 @@ func (x *_Params_8_list) Append(value protoreflect.Value) {
 }
 
 func (x *_Params_8_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field TrustedFeeProviders as it is not of Message kind"))
+	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field TrustedBtcRelayers as it is not of Message kind"))
 }
 
 func (x *_Params_8_list) Truncate(n int) {
@@ -153,10 +61,56 @@ func (x *_Params_8_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_Params_9_list)(nil)
+
+type _Params_9_list struct {
+	list *[]string
+}
+
+func (x *_Params_9_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_Params_9_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_Params_9_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_Params_9_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_Params_9_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field TrustedNonBtcRelayers as it is not of Message kind"))
+}
+
+func (x *_Params_9_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_Params_9_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_Params_9_list) IsValid() bool {
+	return x.list != nil
+}
+
 var _ protoreflect.List = (*_Params_10_list)(nil)
 
 type _Params_10_list struct {
-	list *[]*Vault
+	list *[]string
 }
 
 func (x *_Params_10_list) Len() int {
@@ -167,65 +121,115 @@ func (x *_Params_10_list) Len() int {
 }
 
 func (x *_Params_10_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+	return protoreflect.ValueOfString((*x.list)[i])
 }
 
 func (x *_Params_10_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Vault)
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_Params_10_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Vault)
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_Params_10_list) AppendMutable() protoreflect.Value {
-	v := new(Vault)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
+	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field TrustedFeeProviders as it is not of Message kind"))
 }
 
 func (x *_Params_10_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
 	*x.list = (*x.list)[:n]
 }
 
 func (x *_Params_10_list) NewElement() protoreflect.Value {
-	v := new(Vault)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
+	v := ""
+	return protoreflect.ValueOfString(v)
 }
 
 func (x *_Params_10_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_Params_12_list)(nil)
+
+type _Params_12_list struct {
+	list *[]*Vault
+}
+
+func (x *_Params_12_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_Params_12_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_Params_12_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Vault)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_Params_12_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Vault)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_Params_12_list) AppendMutable() protoreflect.Value {
+	v := new(Vault)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_Params_12_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_Params_12_list) NewElement() protoreflect.Value {
+	v := new(Vault)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_Params_12_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_Params                            protoreflect.MessageDescriptor
-	fd_Params_confirmations              protoreflect.FieldDescriptor
-	fd_Params_max_acceptable_block_depth protoreflect.FieldDescriptor
-	fd_Params_btc_voucher_denom          protoreflect.FieldDescriptor
-	fd_Params_deposit_enabled            protoreflect.FieldDescriptor
-	fd_Params_withdraw_enabled           protoreflect.FieldDescriptor
-	fd_Params_trusted_btc_relayers       protoreflect.FieldDescriptor
-	fd_Params_trusted_non_btc_relayers   protoreflect.FieldDescriptor
-	fd_Params_trusted_fee_providers      protoreflect.FieldDescriptor
-	fd_Params_fee_rate_validity_period   protoreflect.FieldDescriptor
-	fd_Params_vaults                     protoreflect.FieldDescriptor
-	fd_Params_withdraw_params            protoreflect.FieldDescriptor
-	fd_Params_protocol_limits            protoreflect.FieldDescriptor
-	fd_Params_protocol_fees              protoreflect.FieldDescriptor
-	fd_Params_tss_params                 protoreflect.FieldDescriptor
+	md_Params                             protoreflect.MessageDescriptor
+	fd_Params_deposit_confirmation_depth  protoreflect.FieldDescriptor
+	fd_Params_withdraw_confirmation_depth protoreflect.FieldDescriptor
+	fd_Params_max_reorg_depth             protoreflect.FieldDescriptor
+	fd_Params_max_acceptable_block_depth  protoreflect.FieldDescriptor
+	fd_Params_btc_voucher_denom           protoreflect.FieldDescriptor
+	fd_Params_deposit_enabled             protoreflect.FieldDescriptor
+	fd_Params_withdraw_enabled            protoreflect.FieldDescriptor
+	fd_Params_trusted_btc_relayers        protoreflect.FieldDescriptor
+	fd_Params_trusted_non_btc_relayers    protoreflect.FieldDescriptor
+	fd_Params_trusted_fee_providers       protoreflect.FieldDescriptor
+	fd_Params_fee_rate_validity_period    protoreflect.FieldDescriptor
+	fd_Params_vaults                      protoreflect.FieldDescriptor
+	fd_Params_withdraw_params             protoreflect.FieldDescriptor
+	fd_Params_protocol_limits             protoreflect.FieldDescriptor
+	fd_Params_protocol_fees               protoreflect.FieldDescriptor
+	fd_Params_tss_params                  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_btcbridge_params_proto_init()
 	md_Params = File_side_btcbridge_params_proto.Messages().ByName("Params")
-	fd_Params_confirmations = md_Params.Fields().ByName("confirmations")
+	fd_Params_deposit_confirmation_depth = md_Params.Fields().ByName("deposit_confirmation_depth")
+	fd_Params_withdraw_confirmation_depth = md_Params.Fields().ByName("withdraw_confirmation_depth")
+	fd_Params_max_reorg_depth = md_Params.Fields().ByName("max_reorg_depth")
 	fd_Params_max_acceptable_block_depth = md_Params.Fields().ByName("max_acceptable_block_depth")
 	fd_Params_btc_voucher_denom = md_Params.Fields().ByName("btc_voucher_denom")
 	fd_Params_deposit_enabled = md_Params.Fields().ByName("deposit_enabled")
@@ -306,9 +310,21 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Confirmations != int32(0) {
-		value := protoreflect.ValueOfInt32(x.Confirmations)
-		if !f(fd_Params_confirmations, value) {
+	if x.DepositConfirmationDepth != int32(0) {
+		value := protoreflect.ValueOfInt32(x.DepositConfirmationDepth)
+		if !f(fd_Params_deposit_confirmation_depth, value) {
+			return
+		}
+	}
+	if x.WithdrawConfirmationDepth != int32(0) {
+		value := protoreflect.ValueOfInt32(x.WithdrawConfirmationDepth)
+		if !f(fd_Params_withdraw_confirmation_depth, value) {
+			return
+		}
+	}
+	if x.MaxReorgDepth != int32(0) {
+		value := protoreflect.ValueOfInt32(x.MaxReorgDepth)
+		if !f(fd_Params_max_reorg_depth, value) {
 			return
 		}
 	}
@@ -337,19 +353,19 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 		}
 	}
 	if len(x.TrustedBtcRelayers) != 0 {
-		value := protoreflect.ValueOfList(&_Params_6_list{list: &x.TrustedBtcRelayers})
+		value := protoreflect.ValueOfList(&_Params_8_list{list: &x.TrustedBtcRelayers})
 		if !f(fd_Params_trusted_btc_relayers, value) {
 			return
 		}
 	}
 	if len(x.TrustedNonBtcRelayers) != 0 {
-		value := protoreflect.ValueOfList(&_Params_7_list{list: &x.TrustedNonBtcRelayers})
+		value := protoreflect.ValueOfList(&_Params_9_list{list: &x.TrustedNonBtcRelayers})
 		if !f(fd_Params_trusted_non_btc_relayers, value) {
 			return
 		}
 	}
 	if len(x.TrustedFeeProviders) != 0 {
-		value := protoreflect.ValueOfList(&_Params_8_list{list: &x.TrustedFeeProviders})
+		value := protoreflect.ValueOfList(&_Params_10_list{list: &x.TrustedFeeProviders})
 		if !f(fd_Params_trusted_fee_providers, value) {
 			return
 		}
@@ -361,7 +377,7 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 		}
 	}
 	if len(x.Vaults) != 0 {
-		value := protoreflect.ValueOfList(&_Params_10_list{list: &x.Vaults})
+		value := protoreflect.ValueOfList(&_Params_12_list{list: &x.Vaults})
 		if !f(fd_Params_vaults, value) {
 			return
 		}
@@ -405,8 +421,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.btcbridge.Params.confirmations":
-		return x.Confirmations != int32(0)
+	case "side.btcbridge.Params.deposit_confirmation_depth":
+		return x.DepositConfirmationDepth != int32(0)
+	case "side.btcbridge.Params.withdraw_confirmation_depth":
+		return x.WithdrawConfirmationDepth != int32(0)
+	case "side.btcbridge.Params.max_reorg_depth":
+		return x.MaxReorgDepth != int32(0)
 	case "side.btcbridge.Params.max_acceptable_block_depth":
 		return x.MaxAcceptableBlockDepth != uint64(0)
 	case "side.btcbridge.Params.btc_voucher_denom":
@@ -449,8 +469,12 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.btcbridge.Params.confirmations":
-		x.Confirmations = int32(0)
+	case "side.btcbridge.Params.deposit_confirmation_depth":
+		x.DepositConfirmationDepth = int32(0)
+	case "side.btcbridge.Params.withdraw_confirmation_depth":
+		x.WithdrawConfirmationDepth = int32(0)
+	case "side.btcbridge.Params.max_reorg_depth":
+		x.MaxReorgDepth = int32(0)
 	case "side.btcbridge.Params.max_acceptable_block_depth":
 		x.MaxAcceptableBlockDepth = uint64(0)
 	case "side.btcbridge.Params.btc_voucher_denom":
@@ -493,8 +517,14 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.btcbridge.Params.confirmations":
-		value := x.Confirmations
+	case "side.btcbridge.Params.deposit_confirmation_depth":
+		value := x.DepositConfirmationDepth
+		return protoreflect.ValueOfInt32(value)
+	case "side.btcbridge.Params.withdraw_confirmation_depth":
+		value := x.WithdrawConfirmationDepth
+		return protoreflect.ValueOfInt32(value)
+	case "side.btcbridge.Params.max_reorg_depth":
+		value := x.MaxReorgDepth
 		return protoreflect.ValueOfInt32(value)
 	case "side.btcbridge.Params.max_acceptable_block_depth":
 		value := x.MaxAcceptableBlockDepth
@@ -510,30 +540,30 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 		return protoreflect.ValueOfBool(value)
 	case "side.btcbridge.Params.trusted_btc_relayers":
 		if len(x.TrustedBtcRelayers) == 0 {
-			return protoreflect.ValueOfList(&_Params_6_list{})
+			return protoreflect.ValueOfList(&_Params_8_list{})
 		}
-		listValue := &_Params_6_list{list: &x.TrustedBtcRelayers}
+		listValue := &_Params_8_list{list: &x.TrustedBtcRelayers}
 		return protoreflect.ValueOfList(listValue)
 	case "side.btcbridge.Params.trusted_non_btc_relayers":
 		if len(x.TrustedNonBtcRelayers) == 0 {
-			return protoreflect.ValueOfList(&_Params_7_list{})
+			return protoreflect.ValueOfList(&_Params_9_list{})
 		}
-		listValue := &_Params_7_list{list: &x.TrustedNonBtcRelayers}
+		listValue := &_Params_9_list{list: &x.TrustedNonBtcRelayers}
 		return protoreflect.ValueOfList(listValue)
 	case "side.btcbridge.Params.trusted_fee_providers":
 		if len(x.TrustedFeeProviders) == 0 {
-			return protoreflect.ValueOfList(&_Params_8_list{})
+			return protoreflect.ValueOfList(&_Params_10_list{})
 		}
-		listValue := &_Params_8_list{list: &x.TrustedFeeProviders}
+		listValue := &_Params_10_list{list: &x.TrustedFeeProviders}
 		return protoreflect.ValueOfList(listValue)
 	case "side.btcbridge.Params.fee_rate_validity_period":
 		value := x.FeeRateValidityPeriod
 		return protoreflect.ValueOfInt64(value)
 	case "side.btcbridge.Params.vaults":
 		if len(x.Vaults) == 0 {
-			return protoreflect.ValueOfList(&_Params_10_list{})
+			return protoreflect.ValueOfList(&_Params_12_list{})
 		}
-		listValue := &_Params_10_list{list: &x.Vaults}
+		listValue := &_Params_12_list{list: &x.Vaults}
 		return protoreflect.ValueOfList(listValue)
 	case "side.btcbridge.Params.withdraw_params":
 		value := x.WithdrawParams
@@ -567,8 +597,12 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.btcbridge.Params.confirmations":
-		x.Confirmations = int32(value.Int())
+	case "side.btcbridge.Params.deposit_confirmation_depth":
+		x.DepositConfirmationDepth = int32(value.Int())
+	case "side.btcbridge.Params.withdraw_confirmation_depth":
+		x.WithdrawConfirmationDepth = int32(value.Int())
+	case "side.btcbridge.Params.max_reorg_depth":
+		x.MaxReorgDepth = int32(value.Int())
 	case "side.btcbridge.Params.max_acceptable_block_depth":
 		x.MaxAcceptableBlockDepth = value.Uint()
 	case "side.btcbridge.Params.btc_voucher_denom":
@@ -579,21 +613,21 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.WithdrawEnabled = value.Bool()
 	case "side.btcbridge.Params.trusted_btc_relayers":
 		lv := value.List()
-		clv := lv.(*_Params_6_list)
+		clv := lv.(*_Params_8_list)
 		x.TrustedBtcRelayers = *clv.list
 	case "side.btcbridge.Params.trusted_non_btc_relayers":
 		lv := value.List()
-		clv := lv.(*_Params_7_list)
+		clv := lv.(*_Params_9_list)
 		x.TrustedNonBtcRelayers = *clv.list
 	case "side.btcbridge.Params.trusted_fee_providers":
 		lv := value.List()
-		clv := lv.(*_Params_8_list)
+		clv := lv.(*_Params_10_list)
 		x.TrustedFeeProviders = *clv.list
 	case "side.btcbridge.Params.fee_rate_validity_period":
 		x.FeeRateValidityPeriod = value.Int()
 	case "side.btcbridge.Params.vaults":
 		lv := value.List()
-		clv := lv.(*_Params_10_list)
+		clv := lv.(*_Params_12_list)
 		x.Vaults = *clv.list
 	case "side.btcbridge.Params.withdraw_params":
 		x.WithdrawParams = value.Message().Interface().(*WithdrawParams)
@@ -627,25 +661,25 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		if x.TrustedBtcRelayers == nil {
 			x.TrustedBtcRelayers = []string{}
 		}
-		value := &_Params_6_list{list: &x.TrustedBtcRelayers}
+		value := &_Params_8_list{list: &x.TrustedBtcRelayers}
 		return protoreflect.ValueOfList(value)
 	case "side.btcbridge.Params.trusted_non_btc_relayers":
 		if x.TrustedNonBtcRelayers == nil {
 			x.TrustedNonBtcRelayers = []string{}
 		}
-		value := &_Params_7_list{list: &x.TrustedNonBtcRelayers}
+		value := &_Params_9_list{list: &x.TrustedNonBtcRelayers}
 		return protoreflect.ValueOfList(value)
 	case "side.btcbridge.Params.trusted_fee_providers":
 		if x.TrustedFeeProviders == nil {
 			x.TrustedFeeProviders = []string{}
 		}
-		value := &_Params_8_list{list: &x.TrustedFeeProviders}
+		value := &_Params_10_list{list: &x.TrustedFeeProviders}
 		return protoreflect.ValueOfList(value)
 	case "side.btcbridge.Params.vaults":
 		if x.Vaults == nil {
 			x.Vaults = []*Vault{}
 		}
-		value := &_Params_10_list{list: &x.Vaults}
+		value := &_Params_12_list{list: &x.Vaults}
 		return protoreflect.ValueOfList(value)
 	case "side.btcbridge.Params.withdraw_params":
 		if x.WithdrawParams == nil {
@@ -667,8 +701,12 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 			x.TssParams = new(TSSParams)
 		}
 		return protoreflect.ValueOfMessage(x.TssParams.ProtoReflect())
-	case "side.btcbridge.Params.confirmations":
-		panic(fmt.Errorf("field confirmations of message side.btcbridge.Params is not mutable"))
+	case "side.btcbridge.Params.deposit_confirmation_depth":
+		panic(fmt.Errorf("field deposit_confirmation_depth of message side.btcbridge.Params is not mutable"))
+	case "side.btcbridge.Params.withdraw_confirmation_depth":
+		panic(fmt.Errorf("field withdraw_confirmation_depth of message side.btcbridge.Params is not mutable"))
+	case "side.btcbridge.Params.max_reorg_depth":
+		panic(fmt.Errorf("field max_reorg_depth of message side.btcbridge.Params is not mutable"))
 	case "side.btcbridge.Params.max_acceptable_block_depth":
 		panic(fmt.Errorf("field max_acceptable_block_depth of message side.btcbridge.Params is not mutable"))
 	case "side.btcbridge.Params.btc_voucher_denom":
@@ -692,7 +730,11 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.btcbridge.Params.confirmations":
+	case "side.btcbridge.Params.deposit_confirmation_depth":
+		return protoreflect.ValueOfInt32(int32(0))
+	case "side.btcbridge.Params.withdraw_confirmation_depth":
+		return protoreflect.ValueOfInt32(int32(0))
+	case "side.btcbridge.Params.max_reorg_depth":
 		return protoreflect.ValueOfInt32(int32(0))
 	case "side.btcbridge.Params.max_acceptable_block_depth":
 		return protoreflect.ValueOfUint64(uint64(0))
@@ -704,18 +746,18 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfBool(false)
 	case "side.btcbridge.Params.trusted_btc_relayers":
 		list := []string{}
-		return protoreflect.ValueOfList(&_Params_6_list{list: &list})
+		return protoreflect.ValueOfList(&_Params_8_list{list: &list})
 	case "side.btcbridge.Params.trusted_non_btc_relayers":
 		list := []string{}
-		return protoreflect.ValueOfList(&_Params_7_list{list: &list})
+		return protoreflect.ValueOfList(&_Params_9_list{list: &list})
 	case "side.btcbridge.Params.trusted_fee_providers":
 		list := []string{}
-		return protoreflect.ValueOfList(&_Params_8_list{list: &list})
+		return protoreflect.ValueOfList(&_Params_10_list{list: &list})
 	case "side.btcbridge.Params.fee_rate_validity_period":
 		return protoreflect.ValueOfInt64(int64(0))
 	case "side.btcbridge.Params.vaults":
 		list := []*Vault{}
-		return protoreflect.ValueOfList(&_Params_10_list{list: &list})
+		return protoreflect.ValueOfList(&_Params_12_list{list: &list})
 	case "side.btcbridge.Params.withdraw_params":
 		m := new(WithdrawParams)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -797,8 +839,14 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		if x.Confirmations != 0 {
-			n += 1 + runtime.Sov(uint64(x.Confirmations))
+		if x.DepositConfirmationDepth != 0 {
+			n += 1 + runtime.Sov(uint64(x.DepositConfirmationDepth))
+		}
+		if x.WithdrawConfirmationDepth != 0 {
+			n += 1 + runtime.Sov(uint64(x.WithdrawConfirmationDepth))
+		}
+		if x.MaxReorgDepth != 0 {
+			n += 1 + runtime.Sov(uint64(x.MaxReorgDepth))
 		}
 		if x.MaxAcceptableBlockDepth != 0 {
 			n += 1 + runtime.Sov(uint64(x.MaxAcceptableBlockDepth))
@@ -854,7 +902,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		}
 		if x.TssParams != nil {
 			l = options.Size(x.TssParams)
-			n += 1 + l + runtime.Sov(uint64(l))
+			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -897,7 +945,9 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x72
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0x82
 		}
 		if x.ProtocolFees != nil {
 			encoded, err := options.Marshal(x.ProtocolFees)
@@ -911,7 +961,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x6a
+			dAtA[i] = 0x7a
 		}
 		if x.ProtocolLimits != nil {
 			encoded, err := options.Marshal(x.ProtocolLimits)
@@ -925,7 +975,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x62
+			dAtA[i] = 0x72
 		}
 		if x.WithdrawParams != nil {
 			encoded, err := options.Marshal(x.WithdrawParams)
@@ -939,7 +989,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x5a
+			dAtA[i] = 0x6a
 		}
 		if len(x.Vaults) > 0 {
 			for iNdEx := len(x.Vaults) - 1; iNdEx >= 0; iNdEx-- {
@@ -954,13 +1004,13 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], encoded)
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 				i--
-				dAtA[i] = 0x52
+				dAtA[i] = 0x62
 			}
 		}
 		if x.FeeRateValidityPeriod != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.FeeRateValidityPeriod))
 			i--
-			dAtA[i] = 0x48
+			dAtA[i] = 0x58
 		}
 		if len(x.TrustedFeeProviders) > 0 {
 			for iNdEx := len(x.TrustedFeeProviders) - 1; iNdEx >= 0; iNdEx-- {
@@ -968,7 +1018,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], x.TrustedFeeProviders[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.TrustedFeeProviders[iNdEx])))
 				i--
-				dAtA[i] = 0x42
+				dAtA[i] = 0x52
 			}
 		}
 		if len(x.TrustedNonBtcRelayers) > 0 {
@@ -977,7 +1027,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], x.TrustedNonBtcRelayers[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.TrustedNonBtcRelayers[iNdEx])))
 				i--
-				dAtA[i] = 0x3a
+				dAtA[i] = 0x4a
 			}
 		}
 		if len(x.TrustedBtcRelayers) > 0 {
@@ -986,7 +1036,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], x.TrustedBtcRelayers[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.TrustedBtcRelayers[iNdEx])))
 				i--
-				dAtA[i] = 0x32
+				dAtA[i] = 0x42
 			}
 		}
 		if x.WithdrawEnabled {
@@ -997,7 +1047,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0
 			}
 			i--
-			dAtA[i] = 0x28
+			dAtA[i] = 0x38
 		}
 		if x.DepositEnabled {
 			i--
@@ -1007,22 +1057,32 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0
 			}
 			i--
-			dAtA[i] = 0x20
+			dAtA[i] = 0x30
 		}
 		if len(x.BtcVoucherDenom) > 0 {
 			i -= len(x.BtcVoucherDenom)
 			copy(dAtA[i:], x.BtcVoucherDenom)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BtcVoucherDenom)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x2a
 		}
 		if x.MaxAcceptableBlockDepth != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.MaxAcceptableBlockDepth))
 			i--
+			dAtA[i] = 0x20
+		}
+		if x.MaxReorgDepth != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.MaxReorgDepth))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.WithdrawConfirmationDepth != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.WithdrawConfirmationDepth))
+			i--
 			dAtA[i] = 0x10
 		}
-		if x.Confirmations != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Confirmations))
+		if x.DepositConfirmationDepth != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.DepositConfirmationDepth))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -1077,9 +1137,9 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Confirmations", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositConfirmationDepth", wireType)
 				}
-				x.Confirmations = 0
+				x.DepositConfirmationDepth = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1089,12 +1149,50 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Confirmations |= int32(b&0x7F) << shift
+					x.DepositConfirmationDepth |= int32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
 			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field WithdrawConfirmationDepth", wireType)
+				}
+				x.WithdrawConfirmationDepth = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.WithdrawConfirmationDepth |= int32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxReorgDepth", wireType)
+				}
+				x.MaxReorgDepth = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.MaxReorgDepth |= int32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxAcceptableBlockDepth", wireType)
 				}
@@ -1113,7 +1211,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 3:
+			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BtcVoucherDenom", wireType)
 				}
@@ -1145,7 +1243,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.BtcVoucherDenom = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 4:
+			case 6:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositEnabled", wireType)
 				}
@@ -1165,7 +1263,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				x.DepositEnabled = bool(v != 0)
-			case 5:
+			case 7:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field WithdrawEnabled", wireType)
 				}
@@ -1185,7 +1283,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				x.WithdrawEnabled = bool(v != 0)
-			case 6:
+			case 8:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustedBtcRelayers", wireType)
 				}
@@ -1217,7 +1315,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.TrustedBtcRelayers = append(x.TrustedBtcRelayers, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
-			case 7:
+			case 9:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustedNonBtcRelayers", wireType)
 				}
@@ -1249,7 +1347,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.TrustedNonBtcRelayers = append(x.TrustedNonBtcRelayers, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
-			case 8:
+			case 10:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustedFeeProviders", wireType)
 				}
@@ -1281,7 +1379,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.TrustedFeeProviders = append(x.TrustedFeeProviders, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
-			case 9:
+			case 11:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeRateValidityPeriod", wireType)
 				}
@@ -1300,7 +1398,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 10:
+			case 12:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Vaults", wireType)
 				}
@@ -1334,7 +1432,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 11:
+			case 13:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field WithdrawParams", wireType)
 				}
@@ -1370,7 +1468,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 12:
+			case 14:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolLimits", wireType)
 				}
@@ -1406,7 +1504,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 13:
+			case 15:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolFees", wireType)
 				}
@@ -1442,7 +1540,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 14:
+			case 16:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TssParams", wireType)
 				}
@@ -4199,34 +4297,38 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The minimum number of confirmations required for a block to be accepted
-	Confirmations int32 `protobuf:"varint,1,opt,name=confirmations,proto3" json:"confirmations,omitempty"`
+	// The minimum number of confirmations required for the deposit transactions
+	DepositConfirmationDepth int32 `protobuf:"varint,1,opt,name=deposit_confirmation_depth,json=depositConfirmationDepth,proto3" json:"deposit_confirmation_depth,omitempty"`
+	// The minimum number of confirmations required for the withdrawal transactions
+	WithdrawConfirmationDepth int32 `protobuf:"varint,2,opt,name=withdraw_confirmation_depth,json=withdrawConfirmationDepth,proto3" json:"withdraw_confirmation_depth,omitempty"`
+	// The allowed maximum depth for bitcoin block reorganization
+	MaxReorgDepth int32 `protobuf:"varint,3,opt,name=max_reorg_depth,json=maxReorgDepth,proto3" json:"max_reorg_depth,omitempty"`
 	// Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
-	MaxAcceptableBlockDepth uint64 `protobuf:"varint,2,opt,name=max_acceptable_block_depth,json=maxAcceptableBlockDepth,proto3" json:"max_acceptable_block_depth,omitempty"`
+	MaxAcceptableBlockDepth uint64 `protobuf:"varint,4,opt,name=max_acceptable_block_depth,json=maxAcceptableBlockDepth,proto3" json:"max_acceptable_block_depth,omitempty"`
 	// The denomination of the voucher
-	BtcVoucherDenom string `protobuf:"bytes,3,opt,name=btc_voucher_denom,json=btcVoucherDenom,proto3" json:"btc_voucher_denom,omitempty"`
+	BtcVoucherDenom string `protobuf:"bytes,5,opt,name=btc_voucher_denom,json=btcVoucherDenom,proto3" json:"btc_voucher_denom,omitempty"`
 	// Indicates if deposit is enabled
-	DepositEnabled bool `protobuf:"varint,4,opt,name=deposit_enabled,json=depositEnabled,proto3" json:"deposit_enabled,omitempty"`
+	DepositEnabled bool `protobuf:"varint,6,opt,name=deposit_enabled,json=depositEnabled,proto3" json:"deposit_enabled,omitempty"`
 	// Indicates if withdrawal is enabled
-	WithdrawEnabled bool `protobuf:"varint,5,opt,name=withdraw_enabled,json=withdrawEnabled,proto3" json:"withdraw_enabled,omitempty"`
+	WithdrawEnabled bool `protobuf:"varint,7,opt,name=withdraw_enabled,json=withdrawEnabled,proto3" json:"withdraw_enabled,omitempty"`
 	// Trusted relayers to submit bitcoin block headers
-	TrustedBtcRelayers []string `protobuf:"bytes,6,rep,name=trusted_btc_relayers,json=trustedBtcRelayers,proto3" json:"trusted_btc_relayers,omitempty"`
+	TrustedBtcRelayers []string `protobuf:"bytes,8,rep,name=trusted_btc_relayers,json=trustedBtcRelayers,proto3" json:"trusted_btc_relayers,omitempty"`
 	// Trusted relayers for non-btc asset deposit
-	TrustedNonBtcRelayers []string `protobuf:"bytes,7,rep,name=trusted_non_btc_relayers,json=trustedNonBtcRelayers,proto3" json:"trusted_non_btc_relayers,omitempty"`
+	TrustedNonBtcRelayers []string `protobuf:"bytes,9,rep,name=trusted_non_btc_relayers,json=trustedNonBtcRelayers,proto3" json:"trusted_non_btc_relayers,omitempty"`
 	// Trusted fee providers to submit bitcoin fee rate
-	TrustedFeeProviders []string `protobuf:"bytes,8,rep,name=trusted_fee_providers,json=trustedFeeProviders,proto3" json:"trusted_fee_providers,omitempty"`
+	TrustedFeeProviders []string `protobuf:"bytes,10,rep,name=trusted_fee_providers,json=trustedFeeProviders,proto3" json:"trusted_fee_providers,omitempty"`
 	// Period of validity for the fee rate
-	FeeRateValidityPeriod int64 `protobuf:"varint,9,opt,name=fee_rate_validity_period,json=feeRateValidityPeriod,proto3" json:"fee_rate_validity_period,omitempty"`
+	FeeRateValidityPeriod int64 `protobuf:"varint,11,opt,name=fee_rate_validity_period,json=feeRateValidityPeriod,proto3" json:"fee_rate_validity_period,omitempty"`
 	// Asset vaults
-	Vaults []*Vault `protobuf:"bytes,10,rep,name=vaults,proto3" json:"vaults,omitempty"`
+	Vaults []*Vault `protobuf:"bytes,12,rep,name=vaults,proto3" json:"vaults,omitempty"`
 	// Withdrawal params
-	WithdrawParams *WithdrawParams `protobuf:"bytes,11,opt,name=withdraw_params,json=withdrawParams,proto3" json:"withdraw_params,omitempty"`
+	WithdrawParams *WithdrawParams `protobuf:"bytes,13,opt,name=withdraw_params,json=withdrawParams,proto3" json:"withdraw_params,omitempty"`
 	// Protocol limitations
-	ProtocolLimits *ProtocolLimits `protobuf:"bytes,12,opt,name=protocol_limits,json=protocolLimits,proto3" json:"protocol_limits,omitempty"`
+	ProtocolLimits *ProtocolLimits `protobuf:"bytes,14,opt,name=protocol_limits,json=protocolLimits,proto3" json:"protocol_limits,omitempty"`
 	// Protocol fees
-	ProtocolFees *ProtocolFees `protobuf:"bytes,13,opt,name=protocol_fees,json=protocolFees,proto3" json:"protocol_fees,omitempty"`
+	ProtocolFees *ProtocolFees `protobuf:"bytes,15,opt,name=protocol_fees,json=protocolFees,proto3" json:"protocol_fees,omitempty"`
 	// TSS params
-	TssParams *TSSParams `protobuf:"bytes,14,opt,name=tss_params,json=tssParams,proto3" json:"tss_params,omitempty"`
+	TssParams *TSSParams `protobuf:"bytes,16,opt,name=tss_params,json=tssParams,proto3" json:"tss_params,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -4249,9 +4351,23 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_side_btcbridge_params_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Params) GetConfirmations() int32 {
+func (x *Params) GetDepositConfirmationDepth() int32 {
 	if x != nil {
-		return x.Confirmations
+		return x.DepositConfirmationDepth
+	}
+	return 0
+}
+
+func (x *Params) GetWithdrawConfirmationDepth() int32 {
+	if x != nil {
+		return x.WithdrawConfirmationDepth
+	}
+	return 0
+}
+
+func (x *Params) GetMaxReorgDepth() int32 {
+	if x != nil {
+		return x.MaxReorgDepth
 	}
 	return 0
 }
@@ -4632,53 +4748,61 @@ var file_side_btcbridge_params_proto_rawDesc = []byte{
 	0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65,
 	0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x22, 0x99, 0x06, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x24,
-	0x0a, 0x0d, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0d, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3b, 0x0a, 0x1a, 0x6d, 0x61, 0x78, 0x5f, 0x61, 0x63, 0x63, 0x65,
+	0x6f, 0x74, 0x6f, 0x22, 0x99, 0x07, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3c,
+	0x0a, 0x1a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72,
+	0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x65, 0x70, 0x74, 0x68, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x05, 0x52, 0x18, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69,
+	0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x70, 0x74, 0x68, 0x12, 0x3e, 0x0a, 0x1b,
+	0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x65, 0x70, 0x74, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x05, 0x52, 0x19, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x43, 0x6f, 0x6e, 0x66, 0x69,
+	0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x70, 0x74, 0x68, 0x12, 0x26, 0x0a, 0x0f,
+	0x6d, 0x61, 0x78, 0x5f, 0x72, 0x65, 0x6f, 0x72, 0x67, 0x5f, 0x64, 0x65, 0x70, 0x74, 0x68, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0d, 0x6d, 0x61, 0x78, 0x52, 0x65, 0x6f, 0x72, 0x67, 0x44,
+	0x65, 0x70, 0x74, 0x68, 0x12, 0x3b, 0x0a, 0x1a, 0x6d, 0x61, 0x78, 0x5f, 0x61, 0x63, 0x63, 0x65,
 	0x70, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x64, 0x65, 0x70,
-	0x74, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x17, 0x6d, 0x61, 0x78, 0x41, 0x63, 0x63,
+	0x74, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x17, 0x6d, 0x61, 0x78, 0x41, 0x63, 0x63,
 	0x65, 0x70, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x44, 0x65, 0x70, 0x74,
 	0x68, 0x12, 0x2a, 0x0a, 0x11, 0x62, 0x74, 0x63, 0x5f, 0x76, 0x6f, 0x75, 0x63, 0x68, 0x65, 0x72,
-	0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x62, 0x74,
+	0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x62, 0x74,
 	0x63, 0x56, 0x6f, 0x75, 0x63, 0x68, 0x65, 0x72, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x27, 0x0a,
 	0x0f, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0e, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x45,
+	0x18, 0x06, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0e, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x45,
 	0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x29, 0x0a, 0x10, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72,
-	0x61, 0x77, 0x5f, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08,
+	0x61, 0x77, 0x5f, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x08,
 	0x52, 0x0f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65,
 	0x64, 0x12, 0x30, 0x0a, 0x14, 0x74, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64, 0x5f, 0x62, 0x74, 0x63,
-	0x5f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x52,
+	0x5f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52,
 	0x12, 0x74, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64, 0x42, 0x74, 0x63, 0x52, 0x65, 0x6c, 0x61, 0x79,
 	0x65, 0x72, 0x73, 0x12, 0x37, 0x0a, 0x18, 0x74, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64, 0x5f, 0x6e,
 	0x6f, 0x6e, 0x5f, 0x62, 0x74, 0x63, 0x5f, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x18,
-	0x07, 0x20, 0x03, 0x28, 0x09, 0x52, 0x15, 0x74, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64, 0x4e, 0x6f,
+	0x09, 0x20, 0x03, 0x28, 0x09, 0x52, 0x15, 0x74, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64, 0x4e, 0x6f,
 	0x6e, 0x42, 0x74, 0x63, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x12, 0x32, 0x0a, 0x15,
 	0x74, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76,
-	0x69, 0x64, 0x65, 0x72, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52, 0x13, 0x74, 0x72, 0x75,
+	0x69, 0x64, 0x65, 0x72, 0x73, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x09, 0x52, 0x13, 0x74, 0x72, 0x75,
 	0x73, 0x74, 0x65, 0x64, 0x46, 0x65, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73,
 	0x12, 0x37, 0x0a, 0x18, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x5f, 0x76, 0x61, 0x6c,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x09, 0x20, 0x01,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x0b, 0x20, 0x01,
 	0x28, 0x03, 0x52, 0x15, 0x66, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x56, 0x61, 0x6c, 0x69, 0x64,
 	0x69, 0x74, 0x79, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x2d, 0x0a, 0x06, 0x76, 0x61, 0x75,
-	0x6c, 0x74, 0x73, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x6c, 0x74, 0x73, 0x18, 0x0c, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x73, 0x69, 0x64, 0x65,
 	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x56, 0x61, 0x75, 0x6c, 0x74,
 	0x52, 0x06, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x73, 0x12, 0x4d, 0x0a, 0x0f, 0x77, 0x69, 0x74, 0x68,
-	0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x0b, 0x20, 0x01, 0x28,
+	0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x0d, 0x20, 0x01, 0x28,
 	0x0b, 0x32, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
 	0x67, 0x65, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x50, 0x61, 0x72, 0x61, 0x6d,
 	0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
 	0x77, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4d, 0x0a, 0x0f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x63, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x73, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0b,
+	0x63, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x73, 0x18, 0x0e, 0x20, 0x01, 0x28, 0x0b,
 	0x32, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
 	0x65, 0x2e, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x73,
 	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c,
 	0x4c, 0x69, 0x6d, 0x69, 0x74, 0x73, 0x12, 0x47, 0x0a, 0x0d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63,
-	0x6f, 0x6c, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e,
+	0x6f, 0x6c, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x0f, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e,
 	0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x50,
 	0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x46, 0x65, 0x65, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f,
 	0x00, 0x52, 0x0c, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x46, 0x65, 0x65, 0x73, 0x12,
-	0x3e, 0x0a, 0x0a, 0x74, 0x73, 0x73, 0x5f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x0e, 0x20,
+	0x3e, 0x0a, 0x0a, 0x74, 0x73, 0x73, 0x5f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x10, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72,
 	0x69, 0x64, 0x67, 0x65, 0x2e, 0x54, 0x53, 0x53, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04,
 	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x09, 0x74, 0x73, 0x73, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22,

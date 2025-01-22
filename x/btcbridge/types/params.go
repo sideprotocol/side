@@ -17,8 +17,15 @@ import (
 )
 
 var (
-	// default confirmation number for bitcoin network
-	DefaultConfirmations = int32(6)
+
+	// default confirmation depth for bitcoin deposit transactions
+	DefaultDepositConfirmationDepth = int32(6)
+
+	// default confirmation depth for bitcoin withdrawal transactions
+	DefaultWithdrawConfirmationDepth = int32(6)
+
+	// default allowed maximum depth for bitcoin block reorganization
+	DefaultMaxReorgDepth = int32(6)
 
 	// default BTC voucher denom
 	DefaultBtcVoucherDenom = "sat"
@@ -45,16 +52,18 @@ var (
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		Confirmations:           DefaultConfirmations,
-		MaxAcceptableBlockDepth: 100,
-		BtcVoucherDenom:         DefaultBtcVoucherDenom,
-		DepositEnabled:          true,
-		WithdrawEnabled:         true,
-		TrustedBtcRelayers:      []string{},
-		TrustedNonBtcRelayers:   []string{},
-		TrustedFeeProviders:     []string{},
-		FeeRateValidityPeriod:   DefaultFeeRateValidityPeriod,
-		Vaults:                  []*Vault{},
+		DepositConfirmationDepth:  DefaultDepositConfirmationDepth,
+		WithdrawConfirmationDepth: DefaultWithdrawConfirmationDepth,
+		MaxReorgDepth:             DefaultMaxReorgDepth,
+		MaxAcceptableBlockDepth:   100,
+		BtcVoucherDenom:           DefaultBtcVoucherDenom,
+		DepositEnabled:            true,
+		WithdrawEnabled:           true,
+		TrustedBtcRelayers:        []string{},
+		TrustedNonBtcRelayers:     []string{},
+		TrustedFeeProviders:       []string{},
+		FeeRateValidityPeriod:     DefaultFeeRateValidityPeriod,
+		Vaults:                    []*Vault{},
 		WithdrawParams: WithdrawParams{
 			MaxUtxoNum:             DefaultMaxUtxoNum,
 			BtcBatchWithdrawPeriod: DefaultBtcBatchWithdrawPeriod,
@@ -84,6 +93,10 @@ func DefaultParams() Params {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
+	if err := validateConfirmationAndReorgParams(p.DepositConfirmationDepth, p.WithdrawConfirmationDepth, p.MaxReorgDepth); err != nil {
+		return err
+	}
+
 	if err := sdk.ValidateDenom(p.BtcVoucherDenom); err != nil {
 		return err
 	}
@@ -174,6 +187,19 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 		if bytes.Equal(addrScript, pkScript) {
 			return v
 		}
+	}
+
+	return nil
+}
+
+// validateConfirmationAndReorgParams validates the given confirmation and reorg params
+func validateConfirmationAndReorgParams(depositConfirmationDepth int32, withdrawConfirmationDepth int32, maxReorgDepth int32) error {
+	if depositConfirmationDepth <= 0 || withdrawConfirmationDepth <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "confirmation depth must be greater than 0")
+	}
+
+	if maxReorgDepth <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "max reorg depth must be greater than 0")
 	}
 
 	return nil
