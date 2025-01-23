@@ -49,10 +49,11 @@ enum SigningStatus {
 message SigningRequest {
   string address = 1;
   uint64 sequence = 2;
-  string txid = 3;
-  string psbt = 4;
-  google.protobuf.Timestamp creation_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
-  SigningStatus status = 6;
+  AssetType type = 3;
+  string txid = 4;
+  string psbt = 5;
+  google.protobuf.Timestamp creation_time = 6 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  SigningStatus status = 7;
 }
 
 // Withdrawal Request
