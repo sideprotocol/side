@@ -20,24 +20,26 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 		return nil, nil, err
 	}
 
-	recipient, err := k.Mint(ctx, msg.Sender, tx, prevTx, k.GetBlockHeader(ctx, msg.Blockhash).Height)
+	assetType, recipient, err := k.Mint(ctx, msg.Sender, tx, prevTx, k.GetBlockHeader(ctx, msg.Blockhash).Height)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	// hook
-	if err := k.AfterDeposit(ctx, recipient.EncodeAddress()); err != nil {
-		return nil, nil, err
+	if assetType == types.AssetType_ASSET_TYPE_BTC {
+		if err := k.AfterDeposit(ctx, recipient.EncodeAddress()); err != nil {
+			return nil, nil, err
+		}
 	}
 
 	return tx.Hash(), recipient, nil
 }
 
 // Mint performs the minting operation of the voucher token
-func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btcutil.Tx, height uint64) (btcutil.Address, error) {
+func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btcutil.Tx, height uint64) (types.AssetType, btcutil.Address, error) {
 	hash := tx.Hash().String()
 	if k.existsInHistory(ctx, hash) {
-		return nil, types.ErrTransactionAlreadyMinted
+		return types.AssetType_ASSET_TYPE_UNSPECIFIED, nil, types.ErrTransactionAlreadyMinted
 	}
 
 	k.addToMintHistory(ctx, hash)
@@ -50,43 +52,48 @@ func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btc
 	// if the edict is not nil, it indicates that this is a legal runes deposit tx
 	edict, err := types.CheckRunesDepositTransaction(tx.MsgTx(), params.Vaults)
 	if err != nil {
-		return nil, err
+		return types.AssetType_ASSET_TYPE_UNSPECIFIED, nil, err
 	}
 
 	isRunes := edict != nil
 
+	assetType := types.AssetType_ASSET_TYPE_BTC
+	if isRunes {
+		assetType = types.AssetType_ASSET_TYPE_RUNES
+	}
+
 	// check if the sender is trusted to relay runes deposit
 	if isRunes && !k.IsTrustedNonBtcRelayer(ctx, sender) {
-		return nil, types.ErrUntrustedNonBtcRelayer
+		return assetType, nil, types.ErrUntrustedNonBtcRelayer
 	}
 
 	// extract the recipient for minting voucher token
 	recipient, err := types.ExtractRecipientAddr(tx.MsgTx(), prevTx.MsgTx(), params.Vaults, isRunes, chainCfg)
 	if err != nil {
-		return nil, err
+		return assetType, nil, err
 	}
 
 	if !isRunes {
 		out, vout, vault, err := k.getOutputForMintBTC(ctx, tx.MsgTx(), chainCfg)
 		if err != nil {
-			return nil, err
+			return assetType, nil, err
 		}
 
 		if err := k.mintBTC(ctx, tx, height, recipient.EncodeAddress(), vault, out, vout, params.BtcVoucherDenom); err != nil {
-			return nil, err
+			return assetType, nil, err
 		}
 	} else {
 		outs, vouts, vaults, err := k.getOutputsForMintRunes(ctx, tx.MsgTx(), edict, chainCfg)
 		if err != nil {
-			return nil, err
+			return assetType, nil, err
 		}
 
 		if err := k.mintRunes(ctx, tx, height, recipient.EncodeAddress(), vaults, outs, vouts, edict.Id, edict.Amount); err != nil {
-			return nil, err
+			return assetType, nil, err
 		}
 	}
 
-	return recipient, nil
+	return assetType, recipient, nil
 }
 
 func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vault string, out *wire.TxOut, vout int, denom string) error {
