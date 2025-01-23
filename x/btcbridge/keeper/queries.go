@@ -157,6 +157,18 @@ func (k Keeper) QueryPendingBtcWithdrawRequests(goCtx context.Context, req *type
 	return &types.QueryPendingBtcWithdrawRequestsResponse{Requests: requests}, nil
 }
 
+func (k Keeper) QuerySigningRequest(goCtx context.Context, req *types.QuerySigningRequestRequest) (*types.QuerySigningRequestResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	request := k.GetSigningRequest(ctx, req.Sequence)
+
+	return &types.QuerySigningRequestResponse{Request: request}, nil
+}
+
 func (k Keeper) QuerySigningRequests(goCtx context.Context, req *types.QuerySigningRequestsRequest) (*types.QuerySigningRequestsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")

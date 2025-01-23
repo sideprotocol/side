@@ -28,6 +28,7 @@ const (
 	Query_QueryWithdrawRequestsByAddress_FullMethodName     = "/side.btcbridge.Query/QueryWithdrawRequestsByAddress"
 	Query_QueryWithdrawRequestsByTxHash_FullMethodName      = "/side.btcbridge.Query/QueryWithdrawRequestsByTxHash"
 	Query_QueryPendingBtcWithdrawRequests_FullMethodName    = "/side.btcbridge.Query/QueryPendingBtcWithdrawRequests"
+	Query_QuerySigningRequest_FullMethodName                = "/side.btcbridge.Query/QuerySigningRequest"
 	Query_QuerySigningRequests_FullMethodName               = "/side.btcbridge.Query/QuerySigningRequests"
 	Query_QuerySigningRequestsByAddress_FullMethodName      = "/side.btcbridge.Query/QuerySigningRequestsByAddress"
 	Query_QuerySigningRequestByTxHash_FullMethodName        = "/side.btcbridge.Query/QuerySigningRequestByTxHash"
@@ -62,6 +63,8 @@ type QueryClient interface {
 	QueryWithdrawRequestsByTxHash(ctx context.Context, in *QueryWithdrawRequestsByTxHashRequest, opts ...grpc.CallOption) (*QueryWithdrawRequestsByTxHashResponse, error)
 	// QueryPendingBtcWithdrawRequests queries the pending btc withdrawal requests.
 	QueryPendingBtcWithdrawRequests(ctx context.Context, in *QueryPendingBtcWithdrawRequestsRequest, opts ...grpc.CallOption) (*QueryPendingBtcWithdrawRequestsResponse, error)
+	// QuerySigningRequest queries the signing requests by sequence.
+	QuerySigningRequest(ctx context.Context, in *QuerySigningRequestRequest, opts ...grpc.CallOption) (*QuerySigningRequestResponse, error)
 	// QuerySigningRequests queries the signing requests by the given status.
 	QuerySigningRequests(ctx context.Context, in *QuerySigningRequestsRequest, opts ...grpc.CallOption) (*QuerySigningRequestsResponse, error)
 	// QuerySigningRequestsByAddress queries the signing requests by the given address.
@@ -167,6 +170,15 @@ func (c *queryClient) QueryWithdrawRequestsByTxHash(ctx context.Context, in *Que
 func (c *queryClient) QueryPendingBtcWithdrawRequests(ctx context.Context, in *QueryPendingBtcWithdrawRequestsRequest, opts ...grpc.CallOption) (*QueryPendingBtcWithdrawRequestsResponse, error) {
 	out := new(QueryPendingBtcWithdrawRequestsResponse)
 	err := c.cc.Invoke(ctx, Query_QueryPendingBtcWithdrawRequests_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) QuerySigningRequest(ctx context.Context, in *QuerySigningRequestRequest, opts ...grpc.CallOption) (*QuerySigningRequestResponse, error) {
+	out := new(QuerySigningRequestResponse)
+	err := c.cc.Invoke(ctx, Query_QuerySigningRequest_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -285,6 +297,8 @@ type QueryServer interface {
 	QueryWithdrawRequestsByTxHash(context.Context, *QueryWithdrawRequestsByTxHashRequest) (*QueryWithdrawRequestsByTxHashResponse, error)
 	// QueryPendingBtcWithdrawRequests queries the pending btc withdrawal requests.
 	QueryPendingBtcWithdrawRequests(context.Context, *QueryPendingBtcWithdrawRequestsRequest) (*QueryPendingBtcWithdrawRequestsResponse, error)
+	// QuerySigningRequest queries the signing requests by sequence.
+	QuerySigningRequest(context.Context, *QuerySigningRequestRequest) (*QuerySigningRequestResponse, error)
 	// QuerySigningRequests queries the signing requests by the given status.
 	QuerySigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error)
 	// QuerySigningRequestsByAddress queries the signing requests by the given address.
@@ -338,6 +352,9 @@ func (UnimplementedQueryServer) QueryWithdrawRequestsByTxHash(context.Context, *
 }
 func (UnimplementedQueryServer) QueryPendingBtcWithdrawRequests(context.Context, *QueryPendingBtcWithdrawRequestsRequest) (*QueryPendingBtcWithdrawRequestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryPendingBtcWithdrawRequests not implemented")
+}
+func (UnimplementedQueryServer) QuerySigningRequest(context.Context, *QuerySigningRequestRequest) (*QuerySigningRequestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QuerySigningRequest not implemented")
 }
 func (UnimplementedQueryServer) QuerySigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QuerySigningRequests not implemented")
@@ -540,6 +557,24 @@ func _Query_QueryPendingBtcWithdrawRequests_Handler(srv interface{}, ctx context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).QueryPendingBtcWithdrawRequests(ctx, req.(*QueryPendingBtcWithdrawRequestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_QuerySigningRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySigningRequestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QuerySigningRequest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QuerySigningRequest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QuerySigningRequest(ctx, req.(*QuerySigningRequestRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -766,6 +801,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryPendingBtcWithdrawRequests",
 			Handler:    _Query_QueryPendingBtcWithdrawRequests_Handler,
+		},
+		{
+			MethodName: "QuerySigningRequest",
+			Handler:    _Query_QuerySigningRequest_Handler,
 		},
 		{
 			MethodName: "QuerySigningRequests",
