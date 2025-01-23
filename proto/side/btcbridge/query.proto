@@ -47,6 +47,10 @@ service Query {
   rpc QueryPendingBtcWithdrawRequests(QueryPendingBtcWithdrawRequestsRequest) returns (QueryPendingBtcWithdrawRequestsResponse) {
     option (google.api.http).get = "/side/btcbridge/withdrawal/requests/btc/pending";
   }
+  // QuerySigningRequest queries the signing requests by sequence.
+  rpc QuerySigningRequest(QuerySigningRequestRequest) returns (QuerySigningRequestResponse) {
+    option (google.api.http).get = "/side/btcbridge/signing/requests/{sequence}";
+  }
   // QuerySigningRequests queries the signing requests by the given status.
   rpc QuerySigningRequests(QuerySigningRequestsRequest) returns (QuerySigningRequestsResponse) {
     option (google.api.http).get = "/side/btcbridge/signing/requests";
@@ -120,6 +124,16 @@ message QueryPendingBtcWithdrawRequestsRequest {
 message QueryPendingBtcWithdrawRequestsResponse {
   repeated WithdrawRequest requests = 1;
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method.
+message QuerySigningRequestRequest {
+  uint64 sequence = 1;
+}
+
+// QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method.
+message QuerySigningRequestResponse {
+  SigningRequest request = 1;
 }
 
 // QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method.
