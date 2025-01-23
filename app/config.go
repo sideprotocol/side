@@ -19,6 +19,6 @@ func init() {
 	config.SetBech32PrefixForAccount(AccountAddressPrefix, accountPubKeyPrefix)
 	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
-	config.SetBtcChainCfg(&chaincfg.MainNetParams)
+	config.SetBtcChainCfg(&chaincfg.TestNet3Params)
 	config.Seal()
 }
