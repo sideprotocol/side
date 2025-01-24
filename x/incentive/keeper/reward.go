@@ -39,11 +39,14 @@ func (k Keeper) AddDepositReward(ctx sdk.Context, address string, amount sdk.Coi
 
 	if len(rewards.Address) == 0 {
 		rewards.Address = address
+		rewards.DepositReward = amount
+		rewards.TotalAmount = amount
+	} else {
+		rewards.DepositReward = amount.AddAmount(rewards.DepositReward.Amount)
+		rewards.TotalAmount = amount.AddAmount(rewards.TotalAmount.Amount)
 	}
 
 	rewards.DepositCount += 1
-	rewards.DepositReward = amount.AddAmount(rewards.DepositReward.Amount)
-	rewards.TotalAmount = amount.AddAmount(rewards.TotalAmount.Amount)
 
 	k.SetRewards(ctx, rewards)
 }
@@ -54,11 +57,14 @@ func (k Keeper) AddWithdrawReward(ctx sdk.Context, address string, amount sdk.Co
 
 	if len(rewards.Address) == 0 {
 		rewards.Address = address
+		rewards.WithdrawReward = amount
+		rewards.TotalAmount = amount
+	} else {
+		rewards.WithdrawReward = amount.AddAmount(rewards.WithdrawReward.Amount)
+		rewards.TotalAmount = amount.AddAmount(rewards.TotalAmount.Amount)
 	}
 
 	rewards.WithdrawCount += 1
-	rewards.WithdrawReward = amount.AddAmount(rewards.WithdrawReward.Amount)
-	rewards.TotalAmount = amount.AddAmount(rewards.TotalAmount.Amount)
 
 	k.SetRewards(ctx, rewards)
 }
@@ -91,8 +97,13 @@ func (k Keeper) UpdateRewardStats(ctx sdk.Context, address string, reward sdk.Co
 		stats.AddressCount += 1
 	}
 
+	if stats.TxCount == 0 {
+		stats.TotalRewardAmount = reward
+	} else {
+		stats.TotalRewardAmount = reward.AddAmount(stats.TotalRewardAmount.Amount)
+	}
+
 	stats.TxCount += 1
-	stats.TotalRewardAmount = reward.AddAmount(stats.TotalRewardAmount.Amount)
 
 	k.SetRewardStats(ctx, stats)
 }
