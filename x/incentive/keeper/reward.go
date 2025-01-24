@@ -120,8 +120,8 @@ func (k Keeper) DistributeDepositReward(ctx sdk.Context, address string) error {
 		return err
 	}
 
-	k.AddDepositReward(ctx, address, rewardAmount)
 	k.UpdateRewardStats(ctx, address, rewardAmount)
+	k.AddDepositReward(ctx, address, rewardAmount)
 
 	return nil
 }
@@ -138,8 +138,8 @@ func (k Keeper) DistributeWithdrawReward(ctx sdk.Context, address string) error 
 		return err
 	}
 
-	k.AddWithdrawReward(ctx, address, rewardAmount)
 	k.UpdateRewardStats(ctx, address, rewardAmount)
+	k.AddWithdrawReward(ctx, address, rewardAmount)
 
 	return nil
 }
