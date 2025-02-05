@@ -121,6 +121,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/cast"
 
+	"github.com/babylonlabs-io/babylon-sdk/x/babylon"
+	babylonkeeper "github.com/babylonlabs-io/babylon-sdk/x/babylon/keeper"
+	babylontypes "github.com/babylonlabs-io/babylon-sdk/x/babylon/types"
+
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
@@ -187,6 +191,7 @@ var (
 		vesting.AppModuleBasic{},
 		consensus.AppModuleBasic{},
 		wasm.AppModuleBasic{},
+		babylon.AppModuleBasic{},
 		btcbridgemodule.AppModuleBasic{},
 		incentivemodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
@@ -262,7 +267,8 @@ type App struct {
 	GroupKeeper           groupkeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
 
-	WasmKeeper wasmkeeper.Keeper
+	WasmKeeper    wasmkeeper.Keeper
+	BabylonKeeper babylonkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -335,7 +341,7 @@ func New(
 		govtypes.StoreKey, paramstypes.StoreKey, ibcexported.StoreKey, upgradetypes.StoreKey,
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
-		ibcfeetypes.StoreKey, wasmtypes.StoreKey,
+		ibcfeetypes.StoreKey, wasmtypes.StoreKey, babylontypes.StoreKey,
 		btcbridgetypes.StoreKey, incentivetypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
@@ -656,6 +662,17 @@ func New(
 
 	wasmModule := wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName))
 
+	app.BabylonKeeper = *babylonkeeper.NewKeeper(
+		appCodec,
+		keys[babylontypes.StoreKey],
+		keys[babylontypes.MemStoreKey],
+		app.BankKeeper,
+		app.StakingKeeper,
+		app.WasmKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+	babylonModule := babylon.NewAppModule(appCodec, &app.BabylonKeeper)
+
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	/**** IBC Routing ****/
@@ -726,6 +743,7 @@ func New(
 		icaModule,
 		ibctm.AppModule{},
 		wasmModule,
+		babylonModule,
 
 		btcbridgeModule,
 		incentiveModule,
@@ -783,6 +801,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		wasmtypes.ModuleName,
+		babylontypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		incentivetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
@@ -812,6 +831,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		wasmtypes.ModuleName,
+		babylontypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		incentivetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
@@ -846,6 +866,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		wasmtypes.ModuleName,
+		babylontypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		incentivetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
@@ -1116,6 +1137,8 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibcexported.ModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
+
+	paramsKeeper.Subspace(babylontypes.ModuleName)
 
 	paramsKeeper.Subspace(btcbridgetypes.ModuleName)
 	paramsKeeper.Subspace(incentivetypes.ModuleName)
