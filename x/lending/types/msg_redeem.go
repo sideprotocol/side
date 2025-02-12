@@ -1,6 +1,9 @@
 package types
 
 import (
+	"encoding/hex"
+
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -16,12 +19,16 @@ func NewMsgRedeem(borrower string, loanId string, loanSecret string) *MsgRedeem 
 
 // ValidateBasic performs basic MsgAddLiquidity message validation.
 func (m *MsgRedeem) ValidateBasic() error {
-	if len(m.Borrower) == 0 {
-		return ErrEmptySender
+	if _, err := sdk.AccAddressFromBech32(m.Borrower); err != nil {
+		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	if len(m.LoanSecret) == 0 {
-		return ErrEmptyLoanSecret
+	if len(m.LoanId) == 0 {
+		return ErrEmptyLoanId
+	}
+
+	if secretBytes, err := hex.DecodeString(m.LoanSecret); err != nil || len(secretBytes) != LoanSecretLength {
+		return ErrInvalidLoanSecret
 	}
 
 	return nil

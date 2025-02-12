@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -16,12 +17,12 @@ func NewMsgRemoveLiquidity(lender string, amount sdk.Coin) *MsgRemoveLiquidity {
 
 // ValidateBasic performs basic MsgAddLiquidity message validation.
 func (m *MsgRemoveLiquidity) ValidateBasic() error {
-	if m.Shares.Amount.LTE(math.NewInt(0)) {
-		return ErrInvalidLiquidation
+	if _, err := sdk.AccAddressFromBech32(m.Lender); err != nil {
+		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	if len(m.Lender) == 0 {
-		return ErrEmptySender
+	if m.Shares.Amount.LTE(math.NewInt(0)) {
+		return ErrInvalidLiquidity
 	}
 
 	return nil

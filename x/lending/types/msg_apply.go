@@ -1,6 +1,11 @@
 package types
 
 import (
+	"encoding/hex"
+
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
+
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -18,6 +23,10 @@ func NewMsgApply(borrower string, borrowerPubkey string, hashLoanSecret string, 
 
 // ValidateBasic performs basic MsgAddLiquidity message validation.
 func (m *MsgApply) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(m.Borrower); err != nil {
+		return errorsmod.Wrap(err, "invalid sender address")
+	}
+
 	if m.MaturityTime <= 0 {
 		return ErrInvalidMaturityTime
 	}
@@ -26,16 +35,17 @@ func (m *MsgApply) ValidateBasic() error {
 		return ErrInvalidFinalTimeout
 	}
 
-	if len(m.Borrower) == 0 {
-		return ErrEmptySender
+	if secretHashBytes, err := hex.DecodeString(m.LoanSecretHash); err != nil || len(secretHashBytes) != LoanSecretHashLength {
+		return ErrInvalidLoanSecretHash
 	}
 
-	if len(m.LoanSecretHash) == 0 {
-		return ErrInvalidLoanSecret
+	pubKeyBytes, err := hex.DecodeString(m.BorrowerPubkey)
+	if err != nil {
+		return ErrInvalidBorrowerPubkey
 	}
 
-	if len(m.BorrowerPubkey) == 0 {
-		return ErrEmptyBorrowerPubkey
+	if _, err := schnorr.ParsePubKey(pubKeyBytes); err != nil {
+		return ErrInvalidBorrowerPubkey
 	}
 
 	return nil

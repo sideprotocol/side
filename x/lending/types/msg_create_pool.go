@@ -1,6 +1,9 @@
 package types
 
 import (
+	"fmt"
+
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -16,14 +19,16 @@ func NewMsgCreatePool(creator string, poolId string, lendingAsset string) *MsgCr
 
 // ValidateBasic performs basic MsgCreatePool message validation.
 func (m *MsgCreatePool) ValidateBasic() error {
-	if len(m.PoolId) < 2 {
-		return ErrEmptyPoolId
+	if _, err := sdk.AccAddressFromBech32(m.Creator); err != nil {
+		return errorsmod.Wrap(err, "invalid sender address")
 	}
-	if len(m.Creator) == 0 {
-		return ErrEmptySender
+
+	if len(m.PoolId) < MinPoolIdLength {
+		return errorsmod.Wrap(ErrInvalidPoolId, fmt.Sprintf("minimum length of the pool id is %d", MinPoolIdLength))
 	}
-	if len(m.LendingAsset) == 0 {
-		return ErrInvalidLengthParams
+
+	if err := sdk.ValidateDenom(m.LendingAsset); err != nil {
+		return ErrInvalidLendingAsset
 	}
 
 	return nil

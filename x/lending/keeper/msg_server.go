@@ -22,13 +22,11 @@ type msgServer struct {
 
 // CreateLoan implements types.MsgServer.
 func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.MsgApplyResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	// _borrower, errb := sdk.AccAddressFromBech32(msg.Borrower)
-	// if errb != nil {
-	// 	return nil, errb
-	// }
 
 	if !m.dlcKeeper.HasEvent(ctx, msg.EventId) {
 		return nil, types.ErrInvalidPriceEvent
@@ -143,16 +141,19 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 // Approve implements types.MsgServer.
 func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types.MsgApproveResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.HasDepositLog(ctx, msg.DepositTxId) {
-		return nil, types.ErrDepositTxNotExists
+		return nil, types.ErrDepositTxDoesNotExist
 	}
 
 	log := m.GetDepositLog(ctx, msg.DepositTxId)
 	if !m.HasLoan(ctx, log.VaultAddress) {
-		return nil, types.ErrLoanNotExists
+		return nil, types.ErrLoanDoesNotExist
 	}
 
 	if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, log.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
@@ -176,6 +177,10 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 
 // Redeem implements types.MsgServer.
 func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.MsgRedeemResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	borrower, err := sdk.AccAddressFromBech32(msg.Borrower)
@@ -184,7 +189,7 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 	}
 
 	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanNotExists
+		return nil, types.ErrLoanDoesNotExist
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
@@ -194,7 +199,7 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 	}
 
 	if types.HashLoanSecret(msg.LoanSecret) != loan.HashLoanSecret {
-		return nil, types.ErrMismatchLoanSecret
+		return nil, types.ErrMismatchedLoanSecret
 	}
 
 	m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, sdk.NewCoins(*loan.BorrowAmount))
@@ -214,6 +219,10 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 
 // Repay implements types.MsgServer.
 func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.MsgRepayResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	borrower, err := sdk.AccAddressFromBech32(msg.Borrower)
@@ -222,7 +231,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	}
 
 	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanNotExists
+		return nil, types.ErrLoanDoesNotExist
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
@@ -282,7 +291,7 @@ func (m msgServer) SubmitRepaymentAdaptorSignature(goCtx context.Context, msg *t
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanNotExists
+		return nil, types.ErrLoanDoesNotExist
 	}
 
 	if !m.HasRepayment(ctx, msg.LoanId) {
@@ -320,10 +329,14 @@ func (m msgServer) SubmitRepaymentAdaptorSignature(goCtx context.Context, msg *t
 
 // Close implements types.MsgServer.
 func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.MsgCloseResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanNotExists
+		return nil, types.ErrLoanDoesNotExist
 	}
 
 	if !m.HasRepayment(ctx, msg.LoanId) {

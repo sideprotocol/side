@@ -62,7 +62,7 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	}
 
 	if !m.HasPool(ctx, msg.PoolId) {
-		return nil, types.ErrPootNotExists
+		return nil, types.ErrPoolDoesNotExist
 	}
 
 	pool := m.GetPool(ctx, msg.PoolId)
@@ -127,7 +127,7 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	}
 
 	if !m.HasPool(ctx, msg.Shares.Denom) {
-		return nil, types.ErrPootNotExists
+		return nil, types.ErrPoolDoesNotExist
 	}
 
 	pool := m.GetPool(ctx, msg.Shares.Denom)
