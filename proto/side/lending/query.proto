@@ -48,9 +48,10 @@ message QueryLiquidationEventResponse {
 
 message QueryCollateralAddressRequest{
     string borrower_pubkey = 1;
-    string hash_of_loan_secret = 2;
-    uint64 maturity_time = 3;
-    uint64 final_timeout =4;
+    string agency_pubkey = 2;
+    string hash_of_loan_secret = 3;
+    uint64 maturity_time = 4;
+    uint64 final_timeout = 5;
 }
 
 message QueryCollateralAddressResponse{

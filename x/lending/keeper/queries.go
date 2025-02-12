@@ -19,10 +19,7 @@ func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollate
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	// TODO: query the DCA public key
-	dcaPubKey := ""
-
-	collateralAddr, err := types.CreateVaultAddress(req.BorrowerPubkey, dcaPubKey, req.HashOfLoanSecret, int64(req.MaturityTime), int64(req.FinalTimeout))
+	collateralAddr, err := types.CreateVaultAddress(req.BorrowerPubkey, req.AgencyPubkey, req.HashOfLoanSecret, int64(req.MaturityTime), int64(req.FinalTimeout))
 	if err != nil {
 		return nil, err
 	}
