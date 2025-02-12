@@ -1,7 +1,10 @@
 package types
 
 import (
+	"encoding/base64"
+
 	errorsmod "cosmossdk.io/errors"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -33,10 +36,18 @@ func (m *MsgCreateAgency) ValidateBasic() error {
 		return errorsmod.Wrap(ErrInvalidParticipants, "incorrect participant length")
 	}
 
+	participants := make(map[string]bool)
+
 	for _, p := range m.Participants {
-		if _, err := sdk.ConsAddressFromHex(p); err != nil {
-			return errorsmod.Wrap(ErrInvalidParticipants, "invalid consensus address")
+		if pubKey, err := base64.StdEncoding.DecodeString(p); err != nil || len(pubKey) != ed25519.PubKeySize {
+			return errorsmod.Wrap(err, "invalid participant public key")
 		}
+
+		if participants[p] {
+			return errorsmod.Wrap(ErrInvalidParticipants, "duplicate participant")
+		}
+
+		participants[p] = true
 	}
 
 	return nil
