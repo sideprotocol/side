@@ -85,6 +85,13 @@ func (k Keeper) IncrementAgencyId(ctx sdk.Context) uint64 {
 	return id
 }
 
+// HasAgency returns true if the given agency exists, false otherwise
+func (k Keeper) HasAgency(ctx sdk.Context, id uint64) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.AgencyKey(id))
+}
+
 // GetAgency gets the agency by the given id
 func (k Keeper) GetAgency(ctx sdk.Context, id uint64) *types.Agency {
 	store := ctx.KVStore(k.storeKey)
