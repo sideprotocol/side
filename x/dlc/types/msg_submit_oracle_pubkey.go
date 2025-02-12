@@ -3,7 +3,7 @@ package types
 import (
 	"encoding/hex"
 
-	"github.com/btcsuite/btcd/btcec/v2"
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -48,7 +48,7 @@ func (m *MsgSubmitOraclePubKey) ValidateBasic() error {
 		return ErrInvalidPubKey
 	}
 
-	if _, err := btcec.ParsePubKey(oraclePubKey); err != nil {
+	if _, err := schnorr.ParsePubKey(oraclePubKey); err != nil {
 		return ErrInvalidPubKey
 	}
 
