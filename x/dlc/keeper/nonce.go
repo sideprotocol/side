@@ -116,7 +116,12 @@ func (k Keeper) GetNonces(ctx sdk.Context, oracleId uint64) []*types.DLCNonce {
 func (k Keeper) GetNonceCounts(ctx sdk.Context) []uint32 {
 	counts := make([]uint32, 0)
 
-	// TODO
+	oracles := k.GetOracles(ctx, types.DLCOracleStatus_Oracle_status_Enable)
+
+	for _, oracle := range oracles {
+		nonceCount := k.GetNonceIndex(ctx, oracle.Id)
+		counts = append(counts, uint32(nonceCount))
+	}
 
 	return counts
 }
