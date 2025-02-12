@@ -1,9 +1,11 @@
 package types
 
 import (
+	"bytes"
 	"encoding/hex"
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
+	"github.com/btcsuite/btcd/btcutil/psbt"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -27,6 +29,15 @@ func (m *MsgApply) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
+	pubKeyBytes, err := hex.DecodeString(m.BorrowerPubkey)
+	if err != nil {
+		return ErrInvalidBorrowerPubkey
+	}
+
+	if _, err := schnorr.ParsePubKey(pubKeyBytes); err != nil {
+		return ErrInvalidBorrowerPubkey
+	}
+
 	if m.MaturityTime <= 0 {
 		return ErrInvalidMaturityTime
 	}
@@ -39,13 +50,9 @@ func (m *MsgApply) ValidateBasic() error {
 		return ErrInvalidLoanSecretHash
 	}
 
-	pubKeyBytes, err := hex.DecodeString(m.BorrowerPubkey)
+	_, err = psbt.NewFromRawBytes(bytes.NewReader([]byte(m.DepositTx)), true)
 	if err != nil {
-		return ErrInvalidBorrowerPubkey
-	}
-
-	if _, err := schnorr.ParsePubKey(pubKeyBytes); err != nil {
-		return ErrInvalidBorrowerPubkey
+		return ErrInvalidDepositTx
 	}
 
 	return nil

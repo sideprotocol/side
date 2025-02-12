@@ -3,7 +3,6 @@ package keeper
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 
@@ -37,7 +36,13 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrInvalidPriceEvent
 	}
 
-	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, event.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.FinalTimeout)
+	if !m.dlcKeeper.HasAgency(ctx, msg.AgencyId) {
+		return nil, types.ErrInvalidAgency
+	}
+
+	agency := m.dlcKeeper.GetAgency(ctx, msg.AgencyId)
+
+	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, agency.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -46,12 +51,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
-	fundBytes, err := base64.StdEncoding.DecodeString(msg.DepositTx)
-	if err != nil {
-		return nil, types.ErrInvalidFunding
-	}
-
-	fundTx, err := psbt.NewFromRawBytes(bytes.NewReader(fundBytes), true)
+	fundTx, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
 	if err != nil {
 		return nil, types.ErrInvalidFunding
 	}
@@ -94,7 +94,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	loan := types.Loan{
 		VaultAddress:     vault,
 		Borrower:         msg.Borrower,
-		Agency:           event.Pubkey,
+		Agency:           agency.Pubkey,
 		HashLoanSecret:   msg.LoanSecretHash,
 		MaturityTime:     msg.MaturityTime,
 		FinalTimeout:     msg.FinalTimeout,

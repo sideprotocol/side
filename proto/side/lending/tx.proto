@@ -88,8 +88,9 @@ message MsgApply {
     string pool_id = 6;
     cosmos.base.v1beta1.Coin borrow_amount = 7;
     uint64 event_id = 8;
-    CETs cets = 9;
-    string deposit_tx = 10;
+    uint64 agency_id = 9;
+    CETs cets = 10;
+    string deposit_tx = 11;
 }
 
 message MsgApplyResponse {

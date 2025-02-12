@@ -25,7 +25,7 @@ func (m *MsgApprove) ValidateBasic() error {
 	}
 
 	if _, err := chainhash.NewHashFromStr(m.DepositTxId); err != nil {
-		return ErrInvalidDepositTx
+		return ErrInvalidDepositTxHash
 	}
 
 	if _, err := chainhash.NewHashFromStr(m.BlockHash); err != nil {
