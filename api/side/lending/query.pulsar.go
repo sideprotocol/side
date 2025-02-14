@@ -2982,25 +2982,25 @@ func (x *fastReflection_QueryParamsResponse) ProtoMethods() *protoiface.Methods 
 }
 
 var (
-	md_QueryLoanCETsRequest         protoreflect.MessageDescriptor
-	fd_QueryLoanCETsRequest_loan_id protoreflect.FieldDescriptor
+	md_QueryLoanCetsRequest         protoreflect.MessageDescriptor
+	fd_QueryLoanCetsRequest_loan_id protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_query_proto_init()
-	md_QueryLoanCETsRequest = File_side_lending_query_proto.Messages().ByName("QueryLoanCETsRequest")
-	fd_QueryLoanCETsRequest_loan_id = md_QueryLoanCETsRequest.Fields().ByName("loan_id")
+	md_QueryLoanCetsRequest = File_side_lending_query_proto.Messages().ByName("QueryLoanCetsRequest")
+	fd_QueryLoanCetsRequest_loan_id = md_QueryLoanCetsRequest.Fields().ByName("loan_id")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryLoanCETsRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryLoanCetsRequest)(nil)
 
-type fastReflection_QueryLoanCETsRequest QueryLoanCETsRequest
+type fastReflection_QueryLoanCetsRequest QueryLoanCetsRequest
 
-func (x *QueryLoanCETsRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryLoanCETsRequest)(x)
+func (x *QueryLoanCetsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryLoanCetsRequest)(x)
 }
 
-func (x *QueryLoanCETsRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryLoanCetsRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_query_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3012,43 +3012,43 @@ func (x *QueryLoanCETsRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryLoanCETsRequest_messageType fastReflection_QueryLoanCETsRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryLoanCETsRequest_messageType{}
+var _fastReflection_QueryLoanCetsRequest_messageType fastReflection_QueryLoanCetsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryLoanCetsRequest_messageType{}
 
-type fastReflection_QueryLoanCETsRequest_messageType struct{}
+type fastReflection_QueryLoanCetsRequest_messageType struct{}
 
-func (x fastReflection_QueryLoanCETsRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryLoanCETsRequest)(nil)
+func (x fastReflection_QueryLoanCetsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryLoanCetsRequest)(nil)
 }
-func (x fastReflection_QueryLoanCETsRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryLoanCETsRequest)
+func (x fastReflection_QueryLoanCetsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryLoanCetsRequest)
 }
-func (x fastReflection_QueryLoanCETsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryLoanCETsRequest
+func (x fastReflection_QueryLoanCetsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryLoanCetsRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryLoanCETsRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryLoanCETsRequest
+func (x *fastReflection_QueryLoanCetsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryLoanCetsRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryLoanCETsRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryLoanCETsRequest_messageType
+func (x *fastReflection_QueryLoanCetsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryLoanCetsRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryLoanCETsRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryLoanCETsRequest)
+func (x *fastReflection_QueryLoanCetsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryLoanCetsRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryLoanCETsRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryLoanCETsRequest)(x)
+func (x *fastReflection_QueryLoanCetsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryLoanCetsRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3056,10 +3056,10 @@ func (x *fastReflection_QueryLoanCETsRequest) Interface() protoreflect.ProtoMess
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryLoanCETsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryLoanCetsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.LoanId != "" {
 		value := protoreflect.ValueOfString(x.LoanId)
-		if !f(fd_QueryLoanCETsRequest_loan_id, value) {
+		if !f(fd_QueryLoanCetsRequest_loan_id, value) {
 			return
 		}
 	}
@@ -3076,15 +3076,15 @@ func (x *fastReflection_QueryLoanCETsRequest) Range(f func(protoreflect.FieldDes
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryLoanCETsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryLoanCetsRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsRequest.loan_id":
+	case "side.lending.QueryLoanCetsRequest.loan_id":
 		return x.LoanId != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3094,15 +3094,15 @@ func (x *fastReflection_QueryLoanCETsRequest) Has(fd protoreflect.FieldDescripto
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCETsRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryLoanCetsRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsRequest.loan_id":
+	case "side.lending.QueryLoanCetsRequest.loan_id":
 		x.LoanId = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3112,16 +3112,16 @@ func (x *fastReflection_QueryLoanCETsRequest) Clear(fd protoreflect.FieldDescrip
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryLoanCETsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanCetsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.QueryLoanCETsRequest.loan_id":
+	case "side.lending.QueryLoanCetsRequest.loan_id":
 		value := x.LoanId
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3135,15 +3135,15 @@ func (x *fastReflection_QueryLoanCETsRequest) Get(descriptor protoreflect.FieldD
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCETsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryLoanCetsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsRequest.loan_id":
+	case "side.lending.QueryLoanCetsRequest.loan_id":
 		x.LoanId = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3157,40 +3157,40 @@ func (x *fastReflection_QueryLoanCETsRequest) Set(fd protoreflect.FieldDescripto
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCETsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanCetsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsRequest.loan_id":
-		panic(fmt.Errorf("field loan_id of message side.lending.QueryLoanCETsRequest is not mutable"))
+	case "side.lending.QueryLoanCetsRequest.loan_id":
+		panic(fmt.Errorf("field loan_id of message side.lending.QueryLoanCetsRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryLoanCETsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanCetsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsRequest.loan_id":
+	case "side.lending.QueryLoanCetsRequest.loan_id":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryLoanCETsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryLoanCetsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryLoanCETsRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryLoanCetsRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3198,7 +3198,7 @@ func (x *fastReflection_QueryLoanCETsRequest) WhichOneof(d protoreflect.OneofDes
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryLoanCETsRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryLoanCetsRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3209,7 +3209,7 @@ func (x *fastReflection_QueryLoanCETsRequest) GetUnknown() protoreflect.RawField
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCETsRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryLoanCetsRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3221,7 +3221,7 @@ func (x *fastReflection_QueryLoanCETsRequest) SetUnknown(fields protoreflect.Raw
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryLoanCETsRequest) IsValid() bool {
+func (x *fastReflection_QueryLoanCetsRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -3231,9 +3231,9 @@ func (x *fastReflection_QueryLoanCETsRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryLoanCETsRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryLoanCetsRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryLoanCETsRequest)
+		x := input.Message.Interface().(*QueryLoanCetsRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3259,7 +3259,7 @@ func (x *fastReflection_QueryLoanCETsRequest) ProtoMethods() *protoiface.Methods
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryLoanCETsRequest)
+		x := input.Message.Interface().(*QueryLoanCetsRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3296,7 +3296,7 @@ func (x *fastReflection_QueryLoanCETsRequest) ProtoMethods() *protoiface.Methods
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryLoanCETsRequest)
+		x := input.Message.Interface().(*QueryLoanCetsRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3328,10 +3328,10 @@ func (x *fastReflection_QueryLoanCETsRequest) ProtoMethods() *protoiface.Methods
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCETsRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCetsRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCETsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCetsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -3402,25 +3402,25 @@ func (x *fastReflection_QueryLoanCETsRequest) ProtoMethods() *protoiface.Methods
 }
 
 var (
-	md_QueryLoanCETsResponse      protoreflect.MessageDescriptor
-	fd_QueryLoanCETsResponse_cets protoreflect.FieldDescriptor
+	md_QueryLoanCetsResponse      protoreflect.MessageDescriptor
+	fd_QueryLoanCetsResponse_cets protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_query_proto_init()
-	md_QueryLoanCETsResponse = File_side_lending_query_proto.Messages().ByName("QueryLoanCETsResponse")
-	fd_QueryLoanCETsResponse_cets = md_QueryLoanCETsResponse.Fields().ByName("cets")
+	md_QueryLoanCetsResponse = File_side_lending_query_proto.Messages().ByName("QueryLoanCetsResponse")
+	fd_QueryLoanCetsResponse_cets = md_QueryLoanCetsResponse.Fields().ByName("cets")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryLoanCETsResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryLoanCetsResponse)(nil)
 
-type fastReflection_QueryLoanCETsResponse QueryLoanCETsResponse
+type fastReflection_QueryLoanCetsResponse QueryLoanCetsResponse
 
-func (x *QueryLoanCETsResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryLoanCETsResponse)(x)
+func (x *QueryLoanCetsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryLoanCetsResponse)(x)
 }
 
-func (x *QueryLoanCETsResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryLoanCetsResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_query_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3432,43 +3432,43 @@ func (x *QueryLoanCETsResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryLoanCETsResponse_messageType fastReflection_QueryLoanCETsResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryLoanCETsResponse_messageType{}
+var _fastReflection_QueryLoanCetsResponse_messageType fastReflection_QueryLoanCetsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryLoanCetsResponse_messageType{}
 
-type fastReflection_QueryLoanCETsResponse_messageType struct{}
+type fastReflection_QueryLoanCetsResponse_messageType struct{}
 
-func (x fastReflection_QueryLoanCETsResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryLoanCETsResponse)(nil)
+func (x fastReflection_QueryLoanCetsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryLoanCetsResponse)(nil)
 }
-func (x fastReflection_QueryLoanCETsResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryLoanCETsResponse)
+func (x fastReflection_QueryLoanCetsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryLoanCetsResponse)
 }
-func (x fastReflection_QueryLoanCETsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryLoanCETsResponse
+func (x fastReflection_QueryLoanCetsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryLoanCetsResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryLoanCETsResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryLoanCETsResponse
+func (x *fastReflection_QueryLoanCetsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryLoanCetsResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryLoanCETsResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryLoanCETsResponse_messageType
+func (x *fastReflection_QueryLoanCetsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryLoanCetsResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryLoanCETsResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryLoanCETsResponse)
+func (x *fastReflection_QueryLoanCetsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryLoanCetsResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryLoanCETsResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryLoanCETsResponse)(x)
+func (x *fastReflection_QueryLoanCetsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryLoanCetsResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3476,10 +3476,10 @@ func (x *fastReflection_QueryLoanCETsResponse) Interface() protoreflect.ProtoMes
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryLoanCETsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryLoanCetsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Cets != nil {
 		value := protoreflect.ValueOfMessage(x.Cets.ProtoReflect())
-		if !f(fd_QueryLoanCETsResponse_cets, value) {
+		if !f(fd_QueryLoanCetsResponse_cets, value) {
 			return
 		}
 	}
@@ -3496,15 +3496,15 @@ func (x *fastReflection_QueryLoanCETsResponse) Range(f func(protoreflect.FieldDe
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryLoanCETsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryLoanCetsResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsResponse.cets":
+	case "side.lending.QueryLoanCetsResponse.cets":
 		return x.Cets != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3514,15 +3514,15 @@ func (x *fastReflection_QueryLoanCETsResponse) Has(fd protoreflect.FieldDescript
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCETsResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryLoanCetsResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsResponse.cets":
+	case "side.lending.QueryLoanCetsResponse.cets":
 		x.Cets = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3532,16 +3532,16 @@ func (x *fastReflection_QueryLoanCETsResponse) Clear(fd protoreflect.FieldDescri
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryLoanCETsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanCetsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.QueryLoanCETsResponse.cets":
+	case "side.lending.QueryLoanCetsResponse.cets":
 		value := x.Cets
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3555,15 +3555,15 @@ func (x *fastReflection_QueryLoanCETsResponse) Get(descriptor protoreflect.Field
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCETsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryLoanCetsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsResponse.cets":
-		x.Cets = value.Message().Interface().(*CETs)
+	case "side.lending.QueryLoanCetsResponse.cets":
+		x.Cets = value.Message().Interface().(*Cets)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3577,44 +3577,44 @@ func (x *fastReflection_QueryLoanCETsResponse) Set(fd protoreflect.FieldDescript
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCETsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanCetsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsResponse.cets":
+	case "side.lending.QueryLoanCetsResponse.cets":
 		if x.Cets == nil {
-			x.Cets = new(CETs)
+			x.Cets = new(Cets)
 		}
 		return protoreflect.ValueOfMessage(x.Cets.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryLoanCETsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanCetsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCETsResponse.cets":
-		m := new(CETs)
+	case "side.lending.QueryLoanCetsResponse.cets":
+		m := new(Cets)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCETsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCETsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryLoanCETsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryLoanCetsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryLoanCETsResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryLoanCetsResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3622,7 +3622,7 @@ func (x *fastReflection_QueryLoanCETsResponse) WhichOneof(d protoreflect.OneofDe
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryLoanCETsResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryLoanCetsResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3633,7 +3633,7 @@ func (x *fastReflection_QueryLoanCETsResponse) GetUnknown() protoreflect.RawFiel
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCETsResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryLoanCetsResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3645,7 +3645,7 @@ func (x *fastReflection_QueryLoanCETsResponse) SetUnknown(fields protoreflect.Ra
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryLoanCETsResponse) IsValid() bool {
+func (x *fastReflection_QueryLoanCetsResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -3655,9 +3655,9 @@ func (x *fastReflection_QueryLoanCETsResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryLoanCETsResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryLoanCetsResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryLoanCETsResponse)
+		x := input.Message.Interface().(*QueryLoanCetsResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3683,7 +3683,7 @@ func (x *fastReflection_QueryLoanCETsResponse) ProtoMethods() *protoiface.Method
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryLoanCETsResponse)
+		x := input.Message.Interface().(*QueryLoanCetsResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3727,7 +3727,7 @@ func (x *fastReflection_QueryLoanCETsResponse) ProtoMethods() *protoiface.Method
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryLoanCETsResponse)
+		x := input.Message.Interface().(*QueryLoanCetsResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3759,10 +3759,10 @@ func (x *fastReflection_QueryLoanCETsResponse) ProtoMethods() *protoiface.Method
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCETsResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCetsResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCETsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCetsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -3795,7 +3795,7 @@ func (x *fastReflection_QueryLoanCETsResponse) ProtoMethods() *protoiface.Method
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.Cets == nil {
-					x.Cets = &CETs{}
+					x.Cets = &Cets{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Cets); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -4956,8 +4956,8 @@ func (x *QueryParamsResponse) GetParams() *Params {
 	return nil
 }
 
-// QueryLoanCETsRequest is request type for the Query/LoanCETs RPC method.
-type QueryLoanCETsRequest struct {
+// QueryLoanCetsRequest is request type for the Query/LoanCets RPC method.
+type QueryLoanCetsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -4965,8 +4965,8 @@ type QueryLoanCETsRequest struct {
 	LoanId string `protobuf:"bytes,1,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
 }
 
-func (x *QueryLoanCETsRequest) Reset() {
-	*x = QueryLoanCETsRequest{}
+func (x *QueryLoanCetsRequest) Reset() {
+	*x = QueryLoanCetsRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_query_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4974,35 +4974,35 @@ func (x *QueryLoanCETsRequest) Reset() {
 	}
 }
 
-func (x *QueryLoanCETsRequest) String() string {
+func (x *QueryLoanCetsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryLoanCETsRequest) ProtoMessage() {}
+func (*QueryLoanCetsRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryLoanCETsRequest.ProtoReflect.Descriptor instead.
-func (*QueryLoanCETsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryLoanCetsRequest.ProtoReflect.Descriptor instead.
+func (*QueryLoanCetsRequest) Descriptor() ([]byte, []int) {
 	return file_side_lending_query_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *QueryLoanCETsRequest) GetLoanId() string {
+func (x *QueryLoanCetsRequest) GetLoanId() string {
 	if x != nil {
 		return x.LoanId
 	}
 	return ""
 }
 
-// QueryLoanCETsResponse is response type for the Query/LoanCETs RPC method.
-type QueryLoanCETsResponse struct {
+// QueryLoanCetsResponse is response type for the Query/LoanCets RPC method.
+type QueryLoanCetsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Cets *CETs `protobuf:"bytes,1,opt,name=cets,proto3" json:"cets,omitempty"`
+	Cets *Cets `protobuf:"bytes,1,opt,name=cets,proto3" json:"cets,omitempty"`
 }
 
-func (x *QueryLoanCETsResponse) Reset() {
-	*x = QueryLoanCETsResponse{}
+func (x *QueryLoanCetsResponse) Reset() {
+	*x = QueryLoanCetsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_query_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5010,18 +5010,18 @@ func (x *QueryLoanCETsResponse) Reset() {
 	}
 }
 
-func (x *QueryLoanCETsResponse) String() string {
+func (x *QueryLoanCetsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryLoanCETsResponse) ProtoMessage() {}
+func (*QueryLoanCetsResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryLoanCETsResponse.ProtoReflect.Descriptor instead.
-func (*QueryLoanCETsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryLoanCetsResponse.ProtoReflect.Descriptor instead.
+func (*QueryLoanCetsResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_query_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *QueryLoanCETsResponse) GetCets() *CETs {
+func (x *QueryLoanCetsResponse) GetCets() *Cets {
 	if x != nil {
 		return x.Cets
 	}
@@ -5159,13 +5159,13 @@ var file_side_lending_query_proto_rawDesc = []byte{
 	0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64,
 	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
 	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x2f,
-	0x0a, 0x14, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x45, 0x54, 0x73, 0x52,
+	0x0a, 0x14, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x73, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x22,
-	0x49, 0x0a, 0x15, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x45, 0x54, 0x73,
+	0x49, 0x0a, 0x15, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x73,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x30, 0x0a, 0x04, 0x63, 0x65, 0x74, 0x73,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x43, 0x45, 0x54, 0x73, 0x42, 0x08, 0xe2, 0xde, 0x1f, 0x04,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x43, 0x65, 0x74, 0x73, 0x42, 0x08, 0xe2, 0xde, 0x1f, 0x04,
 	0x43, 0x45, 0x54, 0x73, 0x52, 0x04, 0x63, 0x65, 0x74, 0x73, 0x22, 0x32, 0x0a, 0x17, 0x51, 0x75,
 	0x65, 0x72, 0x79, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x54, 0x78, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64,
@@ -5202,9 +5202,9 @@ var file_side_lending_query_proto_rawDesc = []byte{
 	0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x12, 0x74,
 	0x0a, 0x08, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x45, 0x54, 0x73, 0x12, 0x22, 0x2e, 0x73, 0x69, 0x64,
 	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c,
-	0x6f, 0x61, 0x6e, 0x43, 0x45, 0x54, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23,
+	0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23,
 	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x45, 0x54, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x22, 0x1f, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x19, 0x12, 0x17, 0x2f, 0x73, 0x69,
 	0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x2f,
 	0x63, 0x65, 0x74, 0x73, 0x12, 0x94, 0x01, 0x0a, 0x11, 0x55, 0x6e, 0x73, 0x69, 0x67, 0x6e, 0x65,
@@ -5249,28 +5249,28 @@ var file_side_lending_query_proto_goTypes = []interface{}{
 	(*QueryCollateralAddressResponse)(nil), // 3: side.lending.QueryCollateralAddressResponse
 	(*QueryParamsRequest)(nil),             // 4: side.lending.QueryParamsRequest
 	(*QueryParamsResponse)(nil),            // 5: side.lending.QueryParamsResponse
-	(*QueryLoanCETsRequest)(nil),           // 6: side.lending.QueryLoanCETsRequest
-	(*QueryLoanCETsResponse)(nil),          // 7: side.lending.QueryLoanCETsResponse
+	(*QueryLoanCetsRequest)(nil),           // 6: side.lending.QueryLoanCetsRequest
+	(*QueryLoanCetsResponse)(nil),          // 7: side.lending.QueryLoanCetsResponse
 	(*QueryRepaymentTxRequest)(nil),        // 8: side.lending.QueryRepaymentTxRequest
 	(*QueryRepaymentTxResponse)(nil),       // 9: side.lending.QueryRepaymentTxResponse
 	(*v1beta1.Coin)(nil),                   // 10: cosmos.base.v1beta1.Coin
 	(*Params)(nil),                         // 11: side.lending.Params
-	(*CETs)(nil),                           // 12: side.lending.CETs
+	(*Cets)(nil),                           // 12: side.lending.Cets
 }
 var file_side_lending_query_proto_depIdxs = []int32{
 	10, // 0: side.lending.QueryLiquidationEventRequest.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
 	10, // 1: side.lending.QueryLiquidationEventRequest.collateral_acmount:type_name -> cosmos.base.v1beta1.Coin
 	11, // 2: side.lending.QueryParamsResponse.params:type_name -> side.lending.Params
-	12, // 3: side.lending.QueryLoanCETsResponse.cets:type_name -> side.lending.CETs
+	12, // 3: side.lending.QueryLoanCetsResponse.cets:type_name -> side.lending.Cets
 	4,  // 4: side.lending.Query.Params:input_type -> side.lending.QueryParamsRequest
 	2,  // 5: side.lending.Query.CollateralAddress:input_type -> side.lending.QueryCollateralAddressRequest
 	0,  // 6: side.lending.Query.LiquidationEvent:input_type -> side.lending.QueryLiquidationEventRequest
-	6,  // 7: side.lending.Query.LoanCETs:input_type -> side.lending.QueryLoanCETsRequest
+	6,  // 7: side.lending.Query.LoanCETs:input_type -> side.lending.QueryLoanCetsRequest
 	8,  // 8: side.lending.Query.UnsignedPaymentTx:input_type -> side.lending.QueryRepaymentTxRequest
 	5,  // 9: side.lending.Query.Params:output_type -> side.lending.QueryParamsResponse
 	3,  // 10: side.lending.Query.CollateralAddress:output_type -> side.lending.QueryCollateralAddressResponse
 	1,  // 11: side.lending.Query.LiquidationEvent:output_type -> side.lending.QueryLiquidationEventResponse
-	7,  // 12: side.lending.Query.LoanCETs:output_type -> side.lending.QueryLoanCETsResponse
+	7,  // 12: side.lending.Query.LoanCETs:output_type -> side.lending.QueryLoanCetsResponse
 	9,  // 13: side.lending.Query.UnsignedPaymentTx:output_type -> side.lending.QueryRepaymentTxResponse
 	9,  // [9:14] is the sub-list for method output_type
 	4,  // [4:9] is the sub-list for method input_type
@@ -5360,7 +5360,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryLoanCETsRequest); i {
+			switch v := v.(*QueryLoanCetsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5372,7 +5372,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryLoanCETsResponse); i {
+			switch v := v.(*QueryLoanCetsResponse); i {
 			case 0:
 				return &v.state
 			case 1:

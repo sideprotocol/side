@@ -4984,7 +4984,7 @@ func (x *fastReflection_MsgApply) Set(fd protoreflect.FieldDescriptor, value pro
 	case "side.lending.MsgApply.agency_id":
 		x.AgencyId = value.Uint()
 	case "side.lending.MsgApply.cets":
-		x.Cets = value.Message().Interface().(*CETs)
+		x.Cets = value.Message().Interface().(*Cets)
 	case "side.lending.MsgApply.deposit_tx":
 		x.DepositTx = value.Interface().(string)
 	default:
@@ -5014,7 +5014,7 @@ func (x *fastReflection_MsgApply) Mutable(fd protoreflect.FieldDescriptor) proto
 		return protoreflect.ValueOfMessage(x.BorrowAmount.ProtoReflect())
 	case "side.lending.MsgApply.cets":
 		if x.Cets == nil {
-			x.Cets = new(CETs)
+			x.Cets = new(Cets)
 		}
 		return protoreflect.ValueOfMessage(x.Cets.ProtoReflect())
 	case "side.lending.MsgApply.borrower":
@@ -5068,7 +5068,7 @@ func (x *fastReflection_MsgApply) NewField(fd protoreflect.FieldDescriptor) prot
 	case "side.lending.MsgApply.agency_id":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.lending.MsgApply.cets":
-		m := new(CETs)
+		m := new(Cets)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.lending.MsgApply.deposit_tx":
 		return protoreflect.ValueOfString("")
@@ -5612,7 +5612,7 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.Cets == nil {
-					x.Cets = &CETs{}
+					x.Cets = &Cets{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Cets); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -9363,7 +9363,7 @@ type MsgApply struct {
 	BorrowAmount   *v1beta1.Coin `protobuf:"bytes,7,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
 	EventId        uint64        `protobuf:"varint,8,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
 	AgencyId       uint64        `protobuf:"varint,9,opt,name=agency_id,json=agencyId,proto3" json:"agency_id,omitempty"`
-	Cets           *CETs         `protobuf:"bytes,10,opt,name=cets,proto3" json:"cets,omitempty"`
+	Cets           *Cets         `protobuf:"bytes,10,opt,name=cets,proto3" json:"cets,omitempty"`
 	DepositTx      string        `protobuf:"bytes,11,opt,name=deposit_tx,json=depositTx,proto3" json:"deposit_tx,omitempty"`
 }
 
@@ -9450,7 +9450,7 @@ func (x *MsgApply) GetAgencyId() uint64 {
 	return 0
 }
 
-func (x *MsgApply) GetCets() *CETs {
+func (x *MsgApply) GetCets() *Cets {
 	if x != nil {
 		return x.Cets
 	}
@@ -9824,7 +9824,7 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x61, 0x67, 0x65, 0x6e, 0x63, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x09, 0x20, 0x01, 0x28, 0x04, 0x52,
 	0x08, 0x61, 0x67, 0x65, 0x6e, 0x63, 0x79, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x04, 0x63, 0x65, 0x74,
 	0x73, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x43, 0x45, 0x54, 0x73, 0x52, 0x04, 0x63, 0x65, 0x74,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x43, 0x65, 0x74, 0x73, 0x52, 0x04, 0x63, 0x65, 0x74,
 	0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78, 0x18,
 	0x0b, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x78,
 	0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22,
@@ -9954,7 +9954,7 @@ var file_side_lending_tx_proto_goTypes = []interface{}{
 	(*MsgClose)(nil),                                   // 16: side.lending.MsgClose
 	(*MsgCloseResponse)(nil),                           // 17: side.lending.MsgCloseResponse
 	(*v1beta1.Coin)(nil),                               // 18: cosmos.base.v1beta1.Coin
-	(*CETs)(nil),                                       // 19: side.lending.CETs
+	(*Cets)(nil),                                       // 19: side.lending.Cets
 }
 var file_side_lending_tx_proto_depIdxs = []int32{
 	18, // 0: side.lending.MsgAddLiquidity.amount:type_name -> cosmos.base.v1beta1.Coin
@@ -9962,7 +9962,7 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	18, // 2: side.lending.MsgRemoveLiquidity.shares:type_name -> cosmos.base.v1beta1.Coin
 	18, // 3: side.lending.MsgRemoveLiquidityResponse.amount:type_name -> cosmos.base.v1beta1.Coin
 	18, // 4: side.lending.MsgApply.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
-	19, // 5: side.lending.MsgApply.cets:type_name -> side.lending.CETs
+	19, // 5: side.lending.MsgApply.cets:type_name -> side.lending.Cets
 	0,  // 6: side.lending.Msg.CreatePool:input_type -> side.lending.MsgCreatePool
 	6,  // 7: side.lending.Msg.AddLiquidity:input_type -> side.lending.MsgAddLiquidity
 	8,  // 8: side.lending.Msg.RemoveLiquidity:input_type -> side.lending.MsgRemoveLiquidity

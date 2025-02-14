@@ -12,7 +12,7 @@ func CreateDLCTransactions(borrower string, agency string, muturityTime int64, f
 }
 
 // VerifyCETs verifies the given CETs
-func VerifyCETs(depositTx *psbt.Packet, cets *CETs) error {
+func VerifyCETs(depositTx *psbt.Packet, cets *Cets) error {
 	if err := depositTx.SanityCheck(); err != nil {
 		return ErrInvalidFunding
 	}

@@ -34,7 +34,7 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	CollateralAddress(ctx context.Context, in *QueryCollateralAddressRequest, opts ...grpc.CallOption) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(ctx context.Context, in *QueryLiquidationEventRequest, opts ...grpc.CallOption) (*QueryLiquidationEventResponse, error)
-	LoanCETs(ctx context.Context, in *QueryLoanCETsRequest, opts ...grpc.CallOption) (*QueryLoanCETsResponse, error)
+	LoanCETs(ctx context.Context, in *QueryLoanCetsRequest, opts ...grpc.CallOption) (*QueryLoanCetsResponse, error)
 	UnsignedPaymentTx(ctx context.Context, in *QueryRepaymentTxRequest, opts ...grpc.CallOption) (*QueryRepaymentTxResponse, error)
 }
 
@@ -73,8 +73,8 @@ func (c *queryClient) LiquidationEvent(ctx context.Context, in *QueryLiquidation
 	return out, nil
 }
 
-func (c *queryClient) LoanCETs(ctx context.Context, in *QueryLoanCETsRequest, opts ...grpc.CallOption) (*QueryLoanCETsResponse, error) {
-	out := new(QueryLoanCETsResponse)
+func (c *queryClient) LoanCETs(ctx context.Context, in *QueryLoanCetsRequest, opts ...grpc.CallOption) (*QueryLoanCetsResponse, error) {
+	out := new(QueryLoanCetsResponse)
 	err := c.cc.Invoke(ctx, Query_LoanCETs_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	CollateralAddress(context.Context, *QueryCollateralAddressRequest) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(context.Context, *QueryLiquidationEventRequest) (*QueryLiquidationEventResponse, error)
-	LoanCETs(context.Context, *QueryLoanCETsRequest) (*QueryLoanCETsResponse, error)
+	LoanCETs(context.Context, *QueryLoanCetsRequest) (*QueryLoanCetsResponse, error)
 	UnsignedPaymentTx(context.Context, *QueryRepaymentTxRequest) (*QueryRepaymentTxResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
@@ -117,7 +117,7 @@ func (UnimplementedQueryServer) CollateralAddress(context.Context, *QueryCollate
 func (UnimplementedQueryServer) LiquidationEvent(context.Context, *QueryLiquidationEventRequest) (*QueryLiquidationEventResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LiquidationEvent not implemented")
 }
-func (UnimplementedQueryServer) LoanCETs(context.Context, *QueryLoanCETsRequest) (*QueryLoanCETsResponse, error) {
+func (UnimplementedQueryServer) LoanCETs(context.Context, *QueryLoanCetsRequest) (*QueryLoanCetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoanCETs not implemented")
 }
 func (UnimplementedQueryServer) UnsignedPaymentTx(context.Context, *QueryRepaymentTxRequest) (*QueryRepaymentTxResponse, error) {
@@ -191,7 +191,7 @@ func _Query_LiquidationEvent_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _Query_LoanCETs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryLoanCETsRequest)
+	in := new(QueryLoanCetsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -203,7 +203,7 @@ func _Query_LoanCETs_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: Query_LoanCETs_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).LoanCETs(ctx, req.(*QueryLoanCETsRequest))
+		return srv.(QueryServer).LoanCETs(ctx, req.(*QueryLoanCetsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

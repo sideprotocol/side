@@ -78,7 +78,7 @@ message Loan {
     string pool_id = 18;
 }
 
-message CETs {
+message Cets {
     string loan_id = 1;
     string liquidate = 2;
     string force_repay = 3;
