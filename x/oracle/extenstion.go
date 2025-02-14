@@ -3,7 +3,9 @@ package oracle
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"time"
 
 	"cosmossdk.io/math"
@@ -29,19 +31,20 @@ type VoteExtHandler struct {
 
 func (h *VoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
+
 		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
-		// prices := h.getAllVolumeWeightedPrices()
+		prices := h.getAllVolumeWeightedPrices()
 
-		// voteExt := OracleVoteExtension{
-		// 	Height: req.Height,
-		// 	Prices: prices,
-		// }
+		voteExt := OracleVoteExtension{
+			Height: req.Height,
+			Prices: prices,
+		}
 
-		bz := []byte{}
-		// bz, err := json.Marshal(voteExt)
-		// if err != nil {
-		// 	return nil, fmt.Errorf("failed to marshal vote extension: %w", err)
-		// }
+		// bz := []byte{}
+		bz, err := json.Marshal(voteExt)
+		if err != nil {
+			return nil, fmt.Errorf("failed to marshal vote extension: %w", err)
+		}
 
 		return &abci.ResponseExtendVote{VoteExtension: bz}, nil
 	}
@@ -68,6 +71,54 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHan
 
 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 	}
+}
+
+// deepseek
+
+func (h *VoteExtHandler) getAllVolumeWeightedPrices() map[string]math.LegacyDec {
+
+	// connect price providers and get prices
+	resp, err := http.Get("http://localhost:8181")
+	if err != nil {
+		return nil
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil
+	}
+	// use json.Unmarshal to parse the response body
+	var prices map[string]Price
+	json.Unmarshal(body, &prices)
+
+	// calculate the weighted average
+	symbolPrices := make(map[string][]math.LegacyDec)
+	for _, price := range prices {
+		if price.Symbol != "BTCUSD" {
+			continue
+		}
+		p, err := math.LegacyNewDecFromStr(price.Price)
+		if err == nil {
+			symbolPrices[price.Symbol] = append(symbolPrices[price.Symbol], p)
+		}
+
+	}
+	avgPrices := make(map[string]math.LegacyDec)
+	for symbol, prices := range symbolPrices {
+		sum := math.LegacyNewDec(0)
+		for _, p := range prices {
+			sum.Add(p)
+		}
+		avgPrices[symbol] = sum.Quo(math.LegacyNewDec(int64(len(prices))))
+	}
+
+	return avgPrices
+}
+
+type Price struct {
+	Symbol string `json:"symbol"`
+	Price  string `json:"price"`
+	Time   uint64 `json:"time"`
 }
 
 type ProposalHandler struct {
