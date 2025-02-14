@@ -51,7 +51,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 }
 
 // LoanCETs implements types.QueryServer.
-func (k Keeper) LoanCETs(goCtx context.Context, req *types.QueryLoanCetsRequest) (*types.QueryLoanCetsResponse, error) {
+func (k Keeper) LoanCets(goCtx context.Context, req *types.QueryLoanCetsRequest) (*types.QueryLoanCetsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}

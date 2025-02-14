@@ -25,7 +25,7 @@ service Query {
         option (google.api.http).get = "/side/lending/liquidation/price";
     }
 
-    rpc LoanCETs(QueryLoanCetsRequest) returns (QueryLoanCetsResponse) {
+    rpc LoanCets(QueryLoanCetsRequest) returns (QueryLoanCetsResponse) {
         option (google.api.http).get = "/side/lending/loan/cets";
     }
 
