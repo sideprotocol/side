@@ -51,14 +51,14 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 }
 
 // LoanCETs implements types.QueryServer.
-func (k Keeper) LoanCETs(goCtx context.Context, req *types.QueryLoanCETsRequest) (*types.QueryLoanCETsResponse, error) {
+func (k Keeper) LoanCets(goCtx context.Context, req *types.QueryLoanCetsRequest) (*types.QueryLoanCetsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryLoanCETsResponse{CETs: k.GetCETs(ctx, req.LoanId)}, nil
+	return &types.QueryLoanCetsResponse{CETs: k.GetCETs(ctx, req.LoanId)}, nil
 }
 
 // UnsignedPaymentTx implements types.QueryServer.

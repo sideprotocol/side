@@ -158,7 +158,7 @@ func CmdQueryCETs() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.LoanCETs(cmd.Context(), &types.QueryLoanCETsRequest{LoanId: args[0]})
+			res, err := queryClient.LoanCets(cmd.Context(), &types.QueryLoanCetsRequest{LoanId: args[0]})
 			if err != nil {
 				return err
 			}

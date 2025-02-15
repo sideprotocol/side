@@ -7,7 +7,7 @@ import (
 )
 
 // SetCETs sets the given CETs
-func (k Keeper) SetCETs(ctx sdk.Context, loanId string, cets *types.CETs) {
+func (k Keeper) SetCETs(ctx sdk.Context, loanId string, cets *types.Cets) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(cets)
@@ -15,10 +15,10 @@ func (k Keeper) SetCETs(ctx sdk.Context, loanId string, cets *types.CETs) {
 }
 
 // GetCETs gets the specified CETs
-func (k Keeper) GetCETs(ctx sdk.Context, loanId string) *types.CETs {
+func (k Keeper) GetCETs(ctx sdk.Context, loanId string) *types.Cets {
 	store := ctx.KVStore(k.storeKey)
 
-	var cets types.CETs
+	var cets types.Cets
 	bz := store.Get(types.LoanCETsKey(loanId))
 	k.cdc.MustUnmarshal(bz, &cets)
 
