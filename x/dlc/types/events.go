@@ -1,5 +1,9 @@
 package types
 
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
 // DLC module event types
 const (
 	EventTypeCreateOracle = "create_oracle"
@@ -16,3 +20,14 @@ const (
 	AttributeKeyNonce   = "nonce"
 	AttributeKeyPrice   = "price"
 )
+
+// GetParticipantsAttributes gets the attribute list for the given participants
+func GetParticipantsAttributes(participants []string) []sdk.Attribute {
+	attributes := []sdk.Attribute{}
+
+	for _, p := range participants {
+		attributes = append(attributes, sdk.NewAttribute(AttributeKeyParticipants, p))
+	}
+
+	return attributes
+}

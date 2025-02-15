@@ -92,10 +92,9 @@ func (m msgServer) CreateOracle(goCtx context.Context, msg *types.MsgCreateOracl
 		sdk.NewEvent(
 			types.EventTypeCreateOracle,
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", oracle.Id)),
-			sdk.NewAttribute(types.AttributeKeyParticipants, fmt.Sprintf("%s", oracle.Participants)),
 			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
 			sdk.NewAttribute(types.AttributeKeyExpirationTime, oracle.Time.Add(m.GetDKGTimeoutPeriod(ctx)).String()),
-		),
+		).AppendAttributes(types.GetParticipantsAttributes(oracle.Participants)...),
 	)
 
 	return &types.MsgCreateOracleResponse{}, nil
@@ -118,10 +117,9 @@ func (m msgServer) CreateAgency(goCtx context.Context, msg *types.MsgCreateAgenc
 		sdk.NewEvent(
 			types.EventTypeCreateAgency,
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", agency.Id)),
-			sdk.NewAttribute(types.AttributeKeyParticipants, fmt.Sprintf("%s", agency.Participants)),
 			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", agency.Threshold)),
 			sdk.NewAttribute(types.AttributeKeyExpirationTime, agency.Time.Add(m.GetDKGTimeoutPeriod(ctx)).String()),
-		),
+		).AppendAttributes(types.GetParticipantsAttributes(agency.Participants)...),
 	)
 
 	return &types.MsgCreateAgencyResponse{}, nil
