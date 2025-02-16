@@ -26,8 +26,8 @@ TRUSTED_ORACLE=""
 PROTOCOL_FEE_COLLECTOR=""
 
 # gov params
-GOV_VOTING_PERIOD="600s"
-GOV_EXPEDITED_VOTING_PERIOD="300s"
+GOV_VOTING_PERIOD="60s"
+GOV_EXPEDITED_VOTING_PERIOD="30s"
 
 # Remember to change to other types of keyring like 'file' in-case exposing to outside world,
 # otherwise your balance will be wiped quickly
@@ -75,8 +75,8 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	rm -rf "$HOMEDIR"
 
 	# Set client config
-	$BINARY config keyring-backend $KEYRING --home "$HOMEDIR"
-	$BINARY config chain-id $CHAINID --home "$HOMEDIR"
+	#$BINARY config keyring-backend $KEYRING --home "$HOMEDIR"
+	#$BINARY config chain-id $CHAINID --home "$HOMEDIR"
 
 	# If keys exist they should be deleted
 	for KEY in "${KEYS[@]}"; do
