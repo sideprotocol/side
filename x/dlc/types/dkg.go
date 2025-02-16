@@ -23,7 +23,7 @@ func CheckPendingPubKeys(pubKeys [][]byte) bool {
 	expectedPubKey := pubKeys[0]
 
 	for _, pk := range pubKeys[1:] {
-		if bytes.Equal(pk, expectedPubKey) {
+		if !bytes.Equal(pk, expectedPubKey) {
 			return false
 		}
 	}
