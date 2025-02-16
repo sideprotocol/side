@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/base64"
 	"encoding/hex"
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
@@ -34,7 +35,7 @@ func (m *MsgSubmitOraclePubKey) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	pubKey, err := hex.DecodeString(m.PubKey)
+	pubKey, err := base64.StdEncoding.DecodeString(m.PubKey)
 	if err != nil {
 		return ErrInvalidPubKey
 	}

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/base64"
 	"encoding/hex"
 
 	errorsmod "cosmossdk.io/errors"
@@ -36,7 +37,7 @@ func (k Keeper) SubmitAgencyPubKey(ctx sdk.Context, sender string, pubKey string
 		return types.ErrUnauthorizedParticipant
 	}
 
-	pubKeyBytes, _ := hex.DecodeString(pubKey)
+	pubKeyBytes, _ := base64.StdEncoding.DecodeString(pubKey)
 
 	if k.HasPendingAgencyPubKey(ctx, agencyId, pubKeyBytes) {
 		return types.ErrPendingAgencyPubKeyExists
