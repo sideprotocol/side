@@ -94,6 +94,9 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	# Set moniker and chain-id for Cascadia (Moniker can be anything, chain-id must be an integer)
 	$BINARY init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR"
 
+    # sed -i -e "/minimum =/ s/= .*/= 133" "$APP_TOML"
+    # exit
+
 	jq --arg denom "${DENOMS[0]}" '.app_state["staking"]["params"]["bond_denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["mint"]["params"]["mint_denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["crisis"]["constant_fee"]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
@@ -101,7 +104,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	# Set gas limit in genesis
 	jq --arg max_gas "$MAX_GAS" '.consensus_params["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-
+  
     # set gov voting period
 	if [ -n "$GOV_VOTING_PERIOD" ]; then
         jq --arg voting_period "${GOV_VOTING_PERIOD}" '.app_state["gov"]["params"]["voting_period"]=$voting_period' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
@@ -169,7 +172,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	    for key in "${!DENOMS[@]}"; do
 	        BALANCES+=",${INITIAL_SUPPLY}${DENOMS[$key]}"
 	    done
-	    echo ${BALANCES:1}
+	    # echo ${BALANCES:1}
 	    $BINARY genesis add-genesis-account "$ADDR" ${BALANCES:1} --home "$HOMEDIR"
 	done
 	echo "Genesis accounts allocated for initial accounts"
