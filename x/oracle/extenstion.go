@@ -10,6 +10,7 @@ import (
 
 	"cosmossdk.io/math"
 	abci "github.com/cometbft/cometbft/abci/types"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -124,8 +125,9 @@ type Price struct {
 type ProposalHandler struct {
 	logger log.Logger
 	// keeper   keeper.Keeper // our oracle module keeper
-	// valStore baseapp.ValidatorStore // to get the current validators' pubkeys
+	valStore baseapp.ValidatorStore // to get the current validators' pubkeys
 }
+
 type StakeWeightedPrices struct {
 	StakeWeightedPrices map[string]math.LegacyDec
 	ExtendedCommitInfo  abci.ExtendedCommitInfo
@@ -135,10 +137,27 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 		// err := baseapp.ValidateVoteExtensions(ctx, h.valStore, req.Height, ctx.ChainID(), req.LocalLastCommit)
 		// if err != nil {
-		//     return nil, err
+		// 	return nil, err
 		// }
-		return nil, nil
+		// proposalTxs := req.Txs
+
+		// if req.Height > ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight {
+		// 	stakeWeightedPrices, err := h.computeStakeWeightedOraclePrices(ctx, req.LocalLastCommit)
+		// 	if err != nil {
+		// 		return nil, errors.New("failed to compute stake-weighted oracle prices")
+		// 	}
+
+		// 	injectedVoteExtTx := StakeWeightedPrices{
+		// 		StakeWeightedPrices: stakeWeightedPrices,
+		// 		ExtendedCommitInfo:  req.LocalLastCommit,
+		// 	}
+		// }
+		return &abci.ResponsePrepareProposal{}, nil
 	}
+}
+
+func (h *ProposalHandler) computeStakeWeightedOraclePrices(ctx sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, error) {
+	return nil, nil
 }
 
 func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
