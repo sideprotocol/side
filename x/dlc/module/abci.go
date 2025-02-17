@@ -51,6 +51,7 @@ func handlePendingOracles(ctx sdk.Context, k keeper.Keeper) {
 		oracle.Status = types.DLCOracleStatus_Oracle_status_Enable
 
 		k.SetOracle(ctx, oracle)
+		k.SetOracleByPubKey(ctx, oracle.Id, pubKeys[0])
 	}
 }
 

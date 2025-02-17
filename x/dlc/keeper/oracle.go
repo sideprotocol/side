@@ -124,6 +124,13 @@ func (k Keeper) SetOracle(ctx sdk.Context, oracle *types.DLCOracle) {
 	store.Set(types.OracleKey(oracle.Id), bz)
 }
 
+// SetOracleByPubKey sets the given oracle by pub key
+func (k Keeper) SetOracleByPubKey(ctx sdk.Context, oracleId uint64, pubKey []byte) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.OracleByPubKeyKey(pubKey), sdk.Uint64ToBigEndian(oracleId))
+}
+
 // HasPendingOraclePubKey returns true if the given pending oracle pubkey exists, false otherwise
 func (k Keeper) HasPendingOraclePubKey(ctx sdk.Context, oracleId uint64, pubKey []byte) bool {
 	store := ctx.KVStore(k.storeKey)
