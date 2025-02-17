@@ -13,7 +13,7 @@ const PricePairSeparator = "-"
 
 var (
 	// default nonce queue size
-	DefaultNonceQueueSize = uint32(50)
+	DefaultNonceQueueSize = uint32(20)
 
 	// default price interval for btc-usd
 	DefaultPriceIntervalForBTCUSD = int32(100)

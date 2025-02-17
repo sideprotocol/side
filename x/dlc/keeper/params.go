@@ -6,6 +6,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// GetNonceQueueSize gets the nonce queue size
+func (k Keeper) GetNonceQueueSize(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).NonceQueueSize
+}
+
 // GetPriceInterval gets the price interval for the given pair
 func (k Keeper) GetPriceInterval(ctx sdk.Context, pair string) int32 {
 	priceIntervals := k.GetParams(ctx).PriceIntervals

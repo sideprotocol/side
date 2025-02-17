@@ -6,9 +6,10 @@ import (
 
 // DLC module event types
 const (
-	EventTypeCreateOracle = "create_oracle"
-	EventTypeCreateAgency = "create_agency"
-	EventTypeTriggerEvent = "trigger_event"
+	EventTypeCreateOracle  = "create_oracle"
+	EventTypeCreateAgency  = "create_agency"
+	EventTypeGenerateNonce = "generate_nonce"
+	EventTypeTriggerEvent  = "trigger_event"
 
 	AttributeKeyId             = "id"
 	AttributeKeyParticipants   = "participants"
@@ -19,6 +20,8 @@ const (
 	AttributeKeyPubKey  = "pub_key"
 	AttributeKeyNonce   = "nonce"
 	AttributeKeyPrice   = "price"
+
+	AttributeKeyOraclePubKey = "oracle_pub_key"
 )
 
 // GetParticipantsAttributes gets the attribute list for the given participants
