@@ -16,14 +16,17 @@ import (
 
 // HandleNonce performs the nonce handling
 func (k Keeper) HandleNonce(ctx sdk.Context, sender string, nonce string, oraclePubKey string, signature string) error {
+	nonceBytes, _ := hex.DecodeString(nonce)
+	if k.HasNonce(ctx, nonceBytes) {
+		return errorsmod.Wrap(types.ErrInvalidNonce, "nonce already exists")
+	}
+
 	oraclePKBytes, _ := hex.DecodeString(oraclePubKey)
 	if !k.HasOracleByPubKey(ctx, oraclePKBytes) {
 		return types.ErrOracleDoesNotExist
 	}
 
-	nonceBytes, _ := hex.DecodeString(nonce)
 	sigBytes, _ := hex.DecodeString(signature)
-
 	if !schnorr.Verify(sigBytes, hash.Sha256(nonceBytes), oraclePKBytes) {
 		return errorsmod.Wrap(types.ErrInvalidSignature, "failed to verify the signature")
 	}
@@ -53,6 +56,7 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, nonce string, oracle
 	dlcEvent.Description = fmt.Sprintf("Liquidation event at price %s", dlcEvent.PriceDecimal)
 
 	k.SetNonce(ctx, dlcNonce, oracle.Id)
+	k.SetNonceByValue(ctx, nonceBytes)
 	k.SetEvent(ctx, dlcEvent)
 	k.SetCurrentEventPrice(ctx, pair, dlcEvent.TriggerPrice)
 
@@ -81,6 +85,13 @@ func (k Keeper) IncrementNonceIndex(ctx sdk.Context, oracleId uint64) uint64 {
 	return index
 }
 
+// HasNonce returns true if the given nonce exists, false otherwise
+func (k Keeper) HasNonce(ctx sdk.Context, nonce []byte) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.NonceByValueKey(nonce))
+}
+
 // GetNonce gets the nonce by the given oracle id and index
 func (k Keeper) GetNonce(ctx sdk.Context, oracleId uint64, index uint64) *types.DLCNonce {
 	store := ctx.KVStore(k.storeKey)
@@ -98,6 +109,13 @@ func (k Keeper) SetNonce(ctx sdk.Context, nonce *types.DLCNonce, oracleId uint64
 
 	bz := k.cdc.MustMarshal(nonce)
 	store.Set(types.NonceKey(oracleId, nonce.Index), bz)
+}
+
+// SetNonceByValue sets the given nonce value
+func (k Keeper) SetNonceByValue(ctx sdk.Context, nonce []byte) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.NonceByValueKey(nonce), []byte{})
 }
 
 // GetNonces gets nonces of the given oracle

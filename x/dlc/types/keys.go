@@ -33,11 +33,12 @@ var (
 	PendingAgencyPubKeyKeyPrefix = []byte{0x14} // key prefix for the pending agency public key
 	NonceIndexKeyPrefix          = []byte{0x15} // key prefix for the nonce index
 	NonceKeyPrefix               = []byte{0x16} // prefix for each key to a nonce
-	EventKeyPrefix               = []byte{0x17} // prefix for each key to an event
-	EventByPriceKeyPrefix        = []byte{0x18} // prefix for each key to an event by triggering price
-	CurrentEventPriceKeyPrefix   = []byte{0x19} // key prefix for the current event price
-	AttestationKeyPrefix         = []byte{0x20} // prefix for each key to an attestation
-	AttestationByEventKeyPrefix  = []byte{0x21} // prefix for each key to an attestation by event
+	NonceByValueKeyPrefix        = []byte{0x17} // key prefix for the nonce value
+	EventKeyPrefix               = []byte{0x18} // prefix for each key to an event
+	EventByPriceKeyPrefix        = []byte{0x19} // prefix for each key to an event by triggering price
+	CurrentEventPriceKeyPrefix   = []byte{0x20} // key prefix for the current event price
+	AttestationKeyPrefix         = []byte{0x21} // prefix for each key to an attestation
+	AttestationByEventKeyPrefix  = []byte{0x22} // prefix for each key to an attestation by event
 
 	PriceKeyPrefix = []byte{0x30} // key prefix for the price
 )
@@ -74,6 +75,10 @@ func NonceIndexKey(oracleId uint64) []byte {
 
 func NonceKey(oracleId uint64, index uint64) []byte {
 	return append(append(NonceKeyPrefix, sdk.Uint64ToBigEndian(oracleId)...), sdk.Uint64ToBigEndian(index)...)
+}
+
+func NonceByValueKey(nonce []byte) []byte {
+	return append(NonceByValueKeyPrefix, nonce...)
 }
 
 func EventKey(id uint64) []byte {
