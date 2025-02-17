@@ -2,6 +2,7 @@ package dlc
 
 import (
 	"encoding/hex"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -13,6 +14,7 @@ import (
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handlePendingOracles(ctx, k)
 	handlePendingAgencies(ctx, k)
+	generateNonces(ctx, k)
 }
 
 // handlePendingOracles handles the pending oracles
@@ -86,5 +88,28 @@ func handlePendingAgencies(ctx sdk.Context, k keeper.Keeper) {
 		agency.Status = types.AgencyStatus_Agency_status_Enable
 
 		k.SetAgency(ctx, agency)
+	}
+}
+
+// generateNonces emits nonce generation events
+func generateNonces(ctx sdk.Context, k keeper.Keeper) {
+	// get all enabled oracles
+	oracles := k.GetOracles(ctx, types.DLCOracleStatus_Oracle_status_Enable)
+
+	for _, oracle := range oracles {
+		if k.GetNonceIndex(ctx, oracle.Id) >= uint64(k.GetNonceQueueSize(ctx)) {
+			continue
+		}
+
+		nonceIndex := k.IncrementNonceIndex(ctx, oracle.Id)
+
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeGenerateNonce,
+				sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", nonceIndex)),
+				sdk.NewAttribute(types.AttributeKeyOraclePubKey, oracle.Pubkey),
+				sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
+			).AppendAttributes(types.GetParticipantsAttributes(oracle.Participants)...),
+		)
 	}
 }
