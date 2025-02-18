@@ -12,6 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/crypto/adaptor"
+	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
@@ -57,7 +58,12 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	}
 	depositTxid := fundTx.UnsignedTx.TxHash().String()
 
-	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, msg.BorrowerPubkey, msg.LiquidationAdaptorSignature, ""); err != nil {
+	adaptorPoint, err := dlctypes.GetSignaturePointFromEvent(event)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, msg.BorrowerPubkey, msg.LiquidationAdaptorSignature, hex.EncodeToString(adaptorPoint)); err != nil {
 		return nil, err
 	}
 
