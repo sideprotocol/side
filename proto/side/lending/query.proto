@@ -25,8 +25,8 @@ service Query {
         option (google.api.http).get = "/side/lending/liquidation/price";
     }
 
-    rpc LoanCets(QueryLoanCetsRequest) returns (QueryLoanCetsResponse) {
-        option (google.api.http).get = "/side/lending/loan/cets";
+    rpc LoanDlcMeta(QueryLoanDlcMetaRequest) returns (QueryLoanDlcMetaResponse) {
+        option (google.api.http).get = "/side/lending/loan/dlc/meta";
     }
 
     rpc UnsignedPaymentTx(QueryRepaymentTxRequest) returns (QueryRepaymentTxResponse) {
@@ -67,14 +67,14 @@ message QueryParamsResponse {
     Params params = 1 [(gogoproto.nullable) = false];
 }
 
-// QueryLoanCetsRequest is request type for the Query/LoanCets RPC method.
-message QueryLoanCetsRequest {
+// QueryLoanDlcMetaRequest is request type for the Query/LoanDlcMeta RPC method.
+message QueryLoanDlcMetaRequest {
     string loan_id = 1;
 }
 
-// QueryLoanCetsResponse is response type for the Query/LoanCets RPC method.
-message QueryLoanCetsResponse {
-    Cets cets = 1 [(gogoproto.customname) = "CETs"];
+// QueryLoanDlcMetaResponse is response type for the Query/LoanDlcMeta RPC method.
+message QueryLoanDlcMetaResponse {
+    DLCMeta dlc_meta = 1;
 }
 
 message QueryRepaymentTxRequest {

@@ -2,8 +2,10 @@ package types
 
 import (
 	"encoding/hex"
+	"fmt"
 
 	h2c "github.com/bytemare/hash2curve/secp256k1"
+	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
@@ -162,4 +164,49 @@ func GetInternalKey() *btcec.PublicKey {
 	Y.SetByteSlice(p.Y.Bytes())
 
 	return btcec.NewPublicKey(&X, &Y)
+}
+
+// GetTapscriptsMerkleRoot gets the merkle root of the given tapscripts
+func GetTapscriptsMerkleRoot(scripts [][]byte) string {
+	tapLeaves := []txscript.TapLeaf{}
+
+	for _, s := range scripts {
+		tapLeaves = append(tapLeaves, txscript.NewBaseTapLeaf(s))
+	}
+
+	return txscript.AssembleTaprootScriptTree(tapLeaves...).RootNode.TapHash().String()
+}
+
+// GetVaultPkScript gets the pk script of the given vault
+// Assume that the given vault is valid
+func GetVaultPkScript(vault string) []byte {
+	vaultAddr, err := btcutil.DecodeAddress(vault, sdk.GetConfig().GetBtcChainCfg())
+	if err != nil {
+		panic(err)
+	}
+
+	return vaultAddr.ScriptAddress()
+}
+
+// GetAgencyPkScript gets the pk script from the given agency pubkey
+// Assume that the given pubkey is valid
+func GetAgencyPkScript(agencyPubKey string) []byte {
+	pubKey, err := hex.DecodeString(fmt.Sprintf("02%s", agencyPubKey))
+	if err != nil {
+		panic(err)
+	}
+
+	parsedPubKey, err := secp256k1.ParsePubKey(pubKey)
+	if err != nil {
+		panic(err)
+	}
+
+	taprootOutKey := txscript.ComputeTaprootKeyNoScript(parsedPubKey)
+
+	address, err := btcutil.NewAddressTaproot(taprootOutKey.SerializeCompressed(), sdk.GetConfig().GetBtcChainCfg())
+	if err != nil {
+		panic(err)
+	}
+
+	return address.ScriptAddress()
 }

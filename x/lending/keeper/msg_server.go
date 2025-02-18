@@ -57,8 +57,13 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	}
 	depositTxid := fundTx.UnsignedTx.TxHash().String()
 
-	if e := types.VerifyCETs(fundTx, msg.Cets); e != nil {
-		return nil, e
+	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, msg.BorrowerPubkey, msg.LiquidationAdaptorSignature, ""); err != nil {
+		return nil, err
+	}
+
+	dlcMeta, err := types.BuildDLCMeta(fundTx, types.GetVaultPkScript(vault), msg.LiquidationCet, msg.LiquidationAdaptorSignature, msg.BorrowerPubkey, agency.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.FinalTimeout)
+	if err != nil {
+		return nil, err
 	}
 
 	params := m.GetParams(ctx)
@@ -119,8 +124,8 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	m.SetDepositLog(ctx, depositLog)
 
-	// set CETs
-	m.SetCETs(ctx, loan.VaultAddress, msg.Cets)
+	// set dlc meta
+	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
 	m.EmitEvent(ctx, msg.Borrower,
 		sdk.NewAttribute("vault", loan.VaultAddress),
@@ -252,19 +257,35 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		dls = append(dls, dl.DepositTx)
 	}
 
-	claimTx, err := types.CreateRepaymentTransaction(dls)
+	depositTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dls[0])), true)
+
+	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
+
+	repaymentTx, err := types.CreateForcedRepaymentTransaction(
+		depositTx,
+		types.GetVaultPkScript(loan.VaultAddress),
+		types.GetAgencyPkScript(loan.Agency),
+		[]byte(dlcMeta.InternalKey),
+		[][]byte{
+			[]byte(dlcMeta.LiquidationCetScript),
+			[]byte(dlcMeta.ForcedRepaymentScript),
+			[]byte(dlcMeta.TimeoutRefundScript),
+		},
+		[]byte(dlcMeta.TapscriptMerkleRoot), m.btcbridgeKeeper.GetFeeRate(ctx).Value,
+	)
 	if err != nil {
 		return nil, err
 	}
-	tx, err := claimTx.B64Encode()
+
+	repaymentTxPsbt, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentTx)), true)
 	if err != nil {
 		return nil, err
 	}
 
 	repayment := types.Repayment{
 		LoanId:            msg.LoanId,
-		Txid:              claimTx.UnsignedTx.TxHash().String(),
-		Tx:                tx,
+		Txid:              repaymentTxPsbt.UnsignedTx.TxHash().String(),
+		Tx:                repaymentTx,
 		RepayAdaptorPoint: msg.AdaptorPoint,
 		CreateAt:          ctx.BlockTime(),
 	}

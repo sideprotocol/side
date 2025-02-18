@@ -80,19 +80,19 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		// check if the final borrower signature has been set in CETs
-		cets := k.GetCETs(ctx, loan.VaultAddress)
-		if len(cets.LiquidationBorrowerSignature) != 0 {
+		// check if the adapted signature has been set in the dlc meta
+		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
+		if len(dlcMeta.LiquidationAdaptedSignature) != 0 {
 			continue
 		}
 
-		// decrypt the liquidation borrower adaptor signature
-		adaptorSignature, _ := hex.DecodeString(cets.LiquidationBorrowerAdaptorSignature)
+		// decrypt the liquidation adaptor signature
+		adaptorSignature, _ := hex.DecodeString(dlcMeta.LiquidationAdaptorSignature)
 		adaptorSecret, _ := hex.DecodeString(attestation.Signature)
 		adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
 
-		// set the final borrower signature
-		cets.LiquidationBorrowerSignature = hex.EncodeToString(adaptedSignature)
-		k.SetCETs(ctx, loan.VaultAddress, cets)
+		// set the adapted signature
+		dlcMeta.LiquidationAdaptedSignature = hex.EncodeToString(adaptedSignature)
+		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 	}
 }

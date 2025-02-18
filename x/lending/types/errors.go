@@ -31,6 +31,7 @@ var (
 	ErrInvalidCET             = errorsmod.Register(ModuleName, 3010, "invalid cet")
 	ErrInsufficientCollateral = errorsmod.Register(ModuleName, 3011, "insufficient collateral")
 	ErrLoanDoesNotExist       = errorsmod.Register(ModuleName, 3012, "loan does not exist")
+	ErrFailedToBuildTx        = errorsmod.Register(ModuleName, 3013, "failed to build tx")
 
 	ErrInvalidDepositTxHash  = errorsmod.Register(ModuleName, 4001, "invalid deposit tx hash")
 	ErrInvalidBlockHash      = errorsmod.Register(ModuleName, 4002, "invalid block hash")

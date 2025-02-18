@@ -4,6 +4,7 @@ package side.lending;
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "side/btcbridge/btcbridge.proto";
 
 option go_package = "github.com/sideprotocol/side/x/lending/types";
 // Status options for a lending pool
@@ -72,19 +73,23 @@ message Loan {
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
+
     string loan_secret = 15;
     google.protobuf.Timestamp create_at = 16 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     LoanStatus status = 17;
     string pool_id = 18;
 }
 
-message Cets {
-    string loan_id = 1;
-    string liquidate = 2;
-    string force_repay = 3;
-    string refund = 4;
-    string liquidation_borrower_adaptor_signature = 5;
-    string liquidation_borrower_signature = 6;
+message DLCMeta {
+    string liquidation_cet = 1;
+    string liquidation_adaptor_signature = 2;
+    string liquidation_adapted_signature = 3;
+    side.btcbridge.UTXO vault_utxo = 4;
+    string internal_key = 5;
+    string liquidation_cet_script = 6;
+    string forced_repayment_script = 7;
+    string timeout_refund_script = 8;
+    string tapscript_merkle_root = 9;
 }
 
 message DepositLog {

@@ -89,12 +89,13 @@ message MsgApply {
     cosmos.base.v1beta1.Coin borrow_amount = 7;
     uint64 event_id = 8;
     uint64 agency_id = 9;
-    Cets cets = 10;
-    string deposit_tx = 11;
+    string deposit_tx = 10;
+    string liquidation_cet = 11;
+    string liquidation_adaptor_signature = 12;
 }
 
 message MsgApplyResponse {
-    string vault_address = 1;  
+    string vault_address = 1;
 }
 
 message MsgApprove {
