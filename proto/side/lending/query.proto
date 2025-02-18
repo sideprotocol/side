@@ -26,7 +26,7 @@ service Query {
     }
 
     rpc Loan(QueryLoanRequest) returns (QueryLoanResponse) {
-        option (google.api.http).get = "/side/lending/loan/<id>";
+        option (google.api.http).get = "/side/lending/loan/<loan_id>";
     }
 
     rpc Loans(QueryLoansRequest) returns (QueryLoansResponse) {
@@ -37,8 +37,8 @@ service Query {
         option (google.api.http).get = "/side/lending/loan/dlc/meta";
     }
 
-    rpc UnsignedPaymentTx(QueryRepaymentTxRequest) returns (QueryRepaymentTxResponse) {
-        option (google.api.http).get = "/side/lending/loan/repayment/unsigned_tx";
+    rpc Repayment(QueryRepaymentRequest) returns (QueryRepaymentResponse) {
+        option (google.api.http).get = "/side/lending/loan/repayment";
     }
 }
 
@@ -107,10 +107,10 @@ message QueryLoanDlcMetaResponse {
     DLCMeta dlc_meta = 1;
 }
 
-message QueryRepaymentTxRequest {
+message QueryRepaymentRequest {
     string loan_id = 1;
 }
 
-message QueryRepaymentTxResponse {
-    string claim_tx = 1;
+message QueryRepaymentResponse {
+    Repayment repayment = 1;
 }

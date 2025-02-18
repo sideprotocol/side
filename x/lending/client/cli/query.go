@@ -32,7 +32,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryLoan())
 	cmd.AddCommand(CmdQueryLoans())
 	cmd.AddCommand(CmdQueryDlcMeta())
-	cmd.AddCommand(CmdQueryRepaymentTx())
+	cmd.AddCommand(CmdQueryRepayment())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -233,10 +233,10 @@ func CmdQueryDlcMeta() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryRepaymentTx() *cobra.Command {
+func CmdQueryRepayment() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "repayment-tx [loan id]",
-		Short: "Query the unsigned btc repayment tx of the repaid loan",
+		Use:   "repayment [loan id]",
+		Short: "Query repayment of the given loan",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -246,7 +246,7 @@ func CmdQueryRepaymentTx() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.UnsignedPaymentTx(cmd.Context(), &types.QueryRepaymentTxRequest{LoanId: args[0]})
+			res, err := queryClient.Repayment(cmd.Context(), &types.QueryRepaymentRequest{LoanId: args[0]})
 			if err != nil {
 				return err
 			}

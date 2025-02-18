@@ -25,7 +25,7 @@ const (
 	Query_Loan_FullMethodName              = "/side.lending.Query/Loan"
 	Query_Loans_FullMethodName             = "/side.lending.Query/Loans"
 	Query_LoanDlcMeta_FullMethodName       = "/side.lending.Query/LoanDlcMeta"
-	Query_UnsignedPaymentTx_FullMethodName = "/side.lending.Query/UnsignedPaymentTx"
+	Query_Repayment_FullMethodName         = "/side.lending.Query/Repayment"
 )
 
 // QueryClient is the client API for Query service.
@@ -39,7 +39,7 @@ type QueryClient interface {
 	Loan(ctx context.Context, in *QueryLoanRequest, opts ...grpc.CallOption) (*QueryLoanResponse, error)
 	Loans(ctx context.Context, in *QueryLoansRequest, opts ...grpc.CallOption) (*QueryLoansResponse, error)
 	LoanDlcMeta(ctx context.Context, in *QueryLoanDlcMetaRequest, opts ...grpc.CallOption) (*QueryLoanDlcMetaResponse, error)
-	UnsignedPaymentTx(ctx context.Context, in *QueryRepaymentTxRequest, opts ...grpc.CallOption) (*QueryRepaymentTxResponse, error)
+	Repayment(ctx context.Context, in *QueryRepaymentRequest, opts ...grpc.CallOption) (*QueryRepaymentResponse, error)
 }
 
 type queryClient struct {
@@ -104,9 +104,9 @@ func (c *queryClient) LoanDlcMeta(ctx context.Context, in *QueryLoanDlcMetaReque
 	return out, nil
 }
 
-func (c *queryClient) UnsignedPaymentTx(ctx context.Context, in *QueryRepaymentTxRequest, opts ...grpc.CallOption) (*QueryRepaymentTxResponse, error) {
-	out := new(QueryRepaymentTxResponse)
-	err := c.cc.Invoke(ctx, Query_UnsignedPaymentTx_FullMethodName, in, out, opts...)
+func (c *queryClient) Repayment(ctx context.Context, in *QueryRepaymentRequest, opts ...grpc.CallOption) (*QueryRepaymentResponse, error) {
+	out := new(QueryRepaymentResponse)
+	err := c.cc.Invoke(ctx, Query_Repayment_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +124,7 @@ type QueryServer interface {
 	Loan(context.Context, *QueryLoanRequest) (*QueryLoanResponse, error)
 	Loans(context.Context, *QueryLoansRequest) (*QueryLoansResponse, error)
 	LoanDlcMeta(context.Context, *QueryLoanDlcMetaRequest) (*QueryLoanDlcMetaResponse, error)
-	UnsignedPaymentTx(context.Context, *QueryRepaymentTxRequest) (*QueryRepaymentTxResponse, error)
+	Repayment(context.Context, *QueryRepaymentRequest) (*QueryRepaymentResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -150,8 +150,8 @@ func (UnimplementedQueryServer) Loans(context.Context, *QueryLoansRequest) (*Que
 func (UnimplementedQueryServer) LoanDlcMeta(context.Context, *QueryLoanDlcMetaRequest) (*QueryLoanDlcMetaResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoanDlcMeta not implemented")
 }
-func (UnimplementedQueryServer) UnsignedPaymentTx(context.Context, *QueryRepaymentTxRequest) (*QueryRepaymentTxResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UnsignedPaymentTx not implemented")
+func (UnimplementedQueryServer) Repayment(context.Context, *QueryRepaymentRequest) (*QueryRepaymentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Repayment not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -274,20 +274,20 @@ func _Query_LoanDlcMeta_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_UnsignedPaymentTx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryRepaymentTxRequest)
+func _Query_Repayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRepaymentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).UnsignedPaymentTx(ctx, in)
+		return srv.(QueryServer).Repayment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_UnsignedPaymentTx_FullMethodName,
+		FullMethod: Query_Repayment_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).UnsignedPaymentTx(ctx, req.(*QueryRepaymentTxRequest))
+		return srv.(QueryServer).Repayment(ctx, req.(*QueryRepaymentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -324,8 +324,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_LoanDlcMeta_Handler,
 		},
 		{
-			MethodName: "UnsignedPaymentTx",
-			Handler:    _Query_UnsignedPaymentTx_Handler,
+			MethodName: "Repayment",
+			Handler:    _Query_Repayment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -3,7 +3,7 @@ package lending
 
 import (
 	v1beta1 "cosmossdk.io/api/cosmos/base/v1beta1"
-	btcbridge "cosmossdk.io/api/side/btcbridge"
+	btcbridge "github.com/sideprotocol/side/api/side/btcbridge"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"

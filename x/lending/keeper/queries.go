@@ -85,15 +85,17 @@ func (k Keeper) LoanDlcMeta(goCtx context.Context, req *types.QueryLoanDlcMetaRe
 	return &types.QueryLoanDlcMetaResponse{DlcMeta: k.GetDLCMeta(ctx, req.LoanId)}, nil
 }
 
-// UnsignedPaymentTx implements types.QueryServer.
-func (k Keeper) UnsignedPaymentTx(goCtx context.Context, req *types.QueryRepaymentTxRequest) (*types.QueryRepaymentTxResponse, error) {
+// Repayment implements types.QueryServer.
+func (k Keeper) Repayment(goCtx context.Context, req *types.QueryRepaymentRequest) (*types.QueryRepaymentResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryRepaymentTxResponse{ClaimTx: k.GetRepayment(ctx, req.LoanId).Tx}, nil
+	repayment := k.GetRepayment(ctx, req.LoanId)
+
+	return &types.QueryRepaymentResponse{Repayment: &repayment}, nil
 }
 
 // Params implements types.QueryServer.
