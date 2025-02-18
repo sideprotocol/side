@@ -29,6 +29,8 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdQueryCollateralAddress())
 	cmd.AddCommand(CmdQueryLiquidationEvent())
+	cmd.AddCommand(CmdQueryLoan())
+	cmd.AddCommand(CmdQueryLoans())
 	cmd.AddCommand(CmdQueryDlcMeta())
 	cmd.AddCommand(CmdQueryRepaymentTx())
 	// this line is used by starport scaffolding # 1
@@ -132,6 +134,65 @@ func CmdQueryLiquidationEvent() *cobra.Command {
 				BorrowAmount:      &borrowedAmount,
 				CollateralAcmount: &collateralAmount,
 			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryLoan() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "loan [loan id]",
+		Short: "Query the given loan",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Loan(cmd.Context(), &types.QueryLoanRequest{LoanId: args[0]})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryLoans() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "loans [status]",
+		Short: "Query loans by the given status",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			status, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.Loans(cmd.Context(), &types.QueryLoansRequest{Status: types.LoanStatus(status)})
 			if err != nil {
 				return err
 			}

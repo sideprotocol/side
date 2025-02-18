@@ -25,6 +25,14 @@ service Query {
         option (google.api.http).get = "/side/lending/liquidation/price";
     }
 
+    rpc Loan(QueryLoanRequest) returns (QueryLoanResponse) {
+        option (google.api.http).get = "/side/lending/loan/<id>";
+    }
+
+    rpc Loans(QueryLoansRequest) returns (QueryLoansResponse) {
+        option (google.api.http).get = "/side/lending/loans";
+    }
+
     rpc LoanDlcMeta(QueryLoanDlcMetaRequest) returns (QueryLoanDlcMetaResponse) {
         option (google.api.http).get = "/side/lending/loan/dlc/meta";
     }
@@ -65,6 +73,28 @@ message QueryParamsRequest {
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
     Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryLoanRequest is request type for the Query/Loan RPC method.
+message QueryLoanRequest {
+    string loan_id = 1;
+}
+
+// QueryLoanResponse is response type for the Query/Loan RPC method.
+message QueryLoanResponse {
+    Loan loan = 1;
+}
+
+// QueryLoansRequest is request type for the Query/Loans RPC method.
+message QueryLoansRequest {
+    LoanStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryLoansResponse is response type for the Query/Loans RPC method.
+message QueryLoansResponse {
+    repeated Loan loans = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryLoanDlcMetaRequest is request type for the Query/LoanDlcMeta RPC method.

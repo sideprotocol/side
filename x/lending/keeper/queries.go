@@ -50,6 +50,30 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 	}, nil
 }
 
+// Loan implements types.QueryServer.
+func (k Keeper) Loan(goCtx context.Context, req *types.QueryLoanRequest) (*types.QueryLoanResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	loan := k.GetLoan(ctx, req.LoanId)
+
+	return &types.QueryLoanResponse{Loan: &loan}, nil
+}
+
+// Loans implements types.QueryServer.
+func (k Keeper) Loans(goCtx context.Context, req *types.QueryLoansRequest) (*types.QueryLoansResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryLoansResponse{Loans: k.GetLoans(ctx, req.Status)}, nil
+}
+
 // LoanDlcMeta implements types.QueryServer.
 func (k Keeper) LoanDlcMeta(goCtx context.Context, req *types.QueryLoanDlcMetaRequest) (*types.QueryLoanDlcMetaResponse, error) {
 	if req == nil {
