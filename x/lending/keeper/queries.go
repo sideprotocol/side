@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -47,6 +48,22 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		OraclePubkey: event.Pubkey,
 		Nonce:        event.Nonce,
 		Price:        event.TriggerPrice.String(),
+	}, nil
+}
+
+// LiquidationCet implements types.QueryServer.
+func (k Keeper) LiquidationCet(goCtx context.Context, req *types.QueryLiquidationCetRequest) (*types.QueryLiquidationCetResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	liquidation_cet_script, err := types.CreateMultisigScript([]string{req.BorrowerPubkey, req.AgencyPubkey})
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid params")
+	}
+
+	return &types.QueryLiquidationCetResponse{
+		LiquidationCetScript: hex.EncodeToString(liquidation_cet_script),
 	}, nil
 }
 

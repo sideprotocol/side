@@ -38,7 +38,7 @@ func GetTaprootAddress(script []byte) (*btcutil.AddressTaproot, error) {
 }
 
 // Branch 1: multisig signature script
-func createMultisigScript(pubKeys []string) ([]byte, error) {
+func CreateMultisigScript(pubKeys []string) ([]byte, error) {
 	builder := txscript.NewScriptBuilder()
 	for i, pubKeyHex := range pubKeys {
 		pubKey, err := hex.DecodeString(pubKeyHex)
@@ -62,7 +62,7 @@ func createMultisigScript(pubKeys []string) ([]byte, error) {
 }
 
 // Branch 2: Hash Time lock script for DCA
-func createHashTimeLockScript(pubkey string, hashlock string, locktime int64) ([]byte, error) {
+func CreateHashTimeLockScript(pubkey string, hashlock string, locktime int64) ([]byte, error) {
 	pubKeyBytes, err := hex.DecodeString(pubkey)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func createHashTimeLockScript(pubkey string, hashlock string, locktime int64) ([
 }
 
 // Branch 3: PubKey with Time lock script
-func createPubKeyTimeLockScript(pubKeyHex string, locktime int64) ([]byte, error) {
+func CreatePubKeyTimeLockScript(pubKeyHex string, locktime int64) ([]byte, error) {
 	// pubKeyHex := "03abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
 	// locktime := int64(600000) // Example block height
 	pubKey, err := hex.DecodeString(pubKeyHex)
@@ -102,7 +102,7 @@ func createPubKeyTimeLockScript(pubKeyHex string, locktime int64) ([]byte, error
 }
 
 // Create Taproot address with complex script branches
-func createTaprootAddress(branches [][]byte, params *chaincfg.Params) (string, error) {
+func CreateTaprootAddress(branches [][]byte, params *chaincfg.Params) (string, error) {
 	// Create Taproot script tree
 	leaves := []txscript.TapLeaf{}
 	for _, b := range branches {
@@ -129,22 +129,22 @@ func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, loanSecretHash 
 	// params := &chaincfg.MainNetParams
 	params := sdk.GetConfig().GetBtcChainCfg()
 	// Create script branches
-	thresholdScript, err := createMultisigScript([]string{borrowerPubkey, dcaPubkey})
+	thresholdScript, err := CreateMultisigScript([]string{borrowerPubkey, dcaPubkey})
 	if err != nil {
 		return "", err
 	}
-	hashTimeLockScript, err := createHashTimeLockScript(dcaPubkey, loanSecretHash, muturityTime)
+	hashTimeLockScript, err := CreateHashTimeLockScript(dcaPubkey, loanSecretHash, muturityTime)
 	if err != nil {
 		return "", err
 	}
-	pubKeyTimeLockScript, err := createPubKeyTimeLockScript(borrowerPubkey, finalTimeout)
+	pubKeyTimeLockScript, err := CreatePubKeyTimeLockScript(borrowerPubkey, finalTimeout)
 	if err != nil {
 		return "", err
 	}
 	// Combine branches
 	branches := [][]byte{thresholdScript, hashTimeLockScript, pubKeyTimeLockScript}
 	// Generate Taproot address
-	taprootAddress, err := createTaprootAddress(branches, params)
+	taprootAddress, err := CreateTaprootAddress(branches, params)
 	if err != nil {
 		return "", err
 	}

@@ -19,17 +19,17 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCET s
 		return nil, err
 	}
 
-	liquidationCETScript, err := createMultisigScript([]string{borrowerPubKey, agencyPubKey})
+	liquidationCETScript, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
 	if err != nil {
 		return nil, err
 	}
 
-	forcedRepaymentScript, err := createHashTimeLockScript(agencyPubKey, secretHash, muturityTime)
+	forcedRepaymentScript, err := CreateHashTimeLockScript(agencyPubKey, secretHash, muturityTime)
 	if err != nil {
 		return nil, err
 	}
 
-	timeoutRefundScript, err := createPubKeyTimeLockScript(borrowerPubKey, finalTimeout)
+	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubKey, finalTimeout)
 	if err != nil {
 		return nil, err
 	}

@@ -22,7 +22,11 @@ service Query {
     }
 
     rpc LiquidationEvent(QueryLiquidationEventRequest) returns (QueryLiquidationEventResponse) {
-        option (google.api.http).get = "/side/lending/liquidation/price";
+        option (google.api.http).get = "/side/lending/liquidation/event";
+    }
+
+    rpc LiquidationCet(QueryLiquidationCetRequest) returns (QueryLiquidationCetResponse) {
+        option (google.api.http).get = "/side/lending/liquidation/cet";
     }
 
     rpc Loan(QueryLoanRequest) returns (QueryLoanResponse) {
@@ -52,6 +56,15 @@ message QueryLiquidationEventResponse {
     string oracle_pubkey = 2;
     string nonce = 3;
     string price = 4;
+}
+
+message QueryLiquidationCetRequest {
+    string borrower_pubkey = 1;
+    string agency_pubkey = 2;
+}
+
+message QueryLiquidationCetResponse {
+    string liquidation_cet_script = 1;
 }
 
 message QueryCollateralAddressRequest{

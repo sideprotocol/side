@@ -22,6 +22,7 @@ const (
 	Query_Params_FullMethodName            = "/side.lending.Query/Params"
 	Query_CollateralAddress_FullMethodName = "/side.lending.Query/CollateralAddress"
 	Query_LiquidationEvent_FullMethodName  = "/side.lending.Query/LiquidationEvent"
+	Query_LiquidationCet_FullMethodName    = "/side.lending.Query/LiquidationCet"
 	Query_Loan_FullMethodName              = "/side.lending.Query/Loan"
 	Query_Loans_FullMethodName             = "/side.lending.Query/Loans"
 	Query_LoanDlcMeta_FullMethodName       = "/side.lending.Query/LoanDlcMeta"
@@ -36,6 +37,7 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	CollateralAddress(ctx context.Context, in *QueryCollateralAddressRequest, opts ...grpc.CallOption) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(ctx context.Context, in *QueryLiquidationEventRequest, opts ...grpc.CallOption) (*QueryLiquidationEventResponse, error)
+	LiquidationCet(ctx context.Context, in *QueryLiquidationCetRequest, opts ...grpc.CallOption) (*QueryLiquidationCetResponse, error)
 	Loan(ctx context.Context, in *QueryLoanRequest, opts ...grpc.CallOption) (*QueryLoanResponse, error)
 	Loans(ctx context.Context, in *QueryLoansRequest, opts ...grpc.CallOption) (*QueryLoansResponse, error)
 	LoanDlcMeta(ctx context.Context, in *QueryLoanDlcMetaRequest, opts ...grpc.CallOption) (*QueryLoanDlcMetaResponse, error)
@@ -71,6 +73,15 @@ func (c *queryClient) CollateralAddress(ctx context.Context, in *QueryCollateral
 func (c *queryClient) LiquidationEvent(ctx context.Context, in *QueryLiquidationEventRequest, opts ...grpc.CallOption) (*QueryLiquidationEventResponse, error) {
 	out := new(QueryLiquidationEventResponse)
 	err := c.cc.Invoke(ctx, Query_LiquidationEvent_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) LiquidationCet(ctx context.Context, in *QueryLiquidationCetRequest, opts ...grpc.CallOption) (*QueryLiquidationCetResponse, error) {
+	out := new(QueryLiquidationCetResponse)
+	err := c.cc.Invoke(ctx, Query_LiquidationCet_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -121,6 +132,7 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	CollateralAddress(context.Context, *QueryCollateralAddressRequest) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(context.Context, *QueryLiquidationEventRequest) (*QueryLiquidationEventResponse, error)
+	LiquidationCet(context.Context, *QueryLiquidationCetRequest) (*QueryLiquidationCetResponse, error)
 	Loan(context.Context, *QueryLoanRequest) (*QueryLoanResponse, error)
 	Loans(context.Context, *QueryLoansRequest) (*QueryLoansResponse, error)
 	LoanDlcMeta(context.Context, *QueryLoanDlcMetaRequest) (*QueryLoanDlcMetaResponse, error)
@@ -140,6 +152,9 @@ func (UnimplementedQueryServer) CollateralAddress(context.Context, *QueryCollate
 }
 func (UnimplementedQueryServer) LiquidationEvent(context.Context, *QueryLiquidationEventRequest) (*QueryLiquidationEventResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LiquidationEvent not implemented")
+}
+func (UnimplementedQueryServer) LiquidationCet(context.Context, *QueryLiquidationCetRequest) (*QueryLiquidationCetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LiquidationCet not implemented")
 }
 func (UnimplementedQueryServer) Loan(context.Context, *QueryLoanRequest) (*QueryLoanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Loan not implemented")
@@ -216,6 +231,24 @@ func _Query_LiquidationEvent_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).LiquidationEvent(ctx, req.(*QueryLiquidationEventRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_LiquidationCet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLiquidationCetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).LiquidationCet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_LiquidationCet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).LiquidationCet(ctx, req.(*QueryLiquidationCetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -310,6 +343,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LiquidationEvent",
 			Handler:    _Query_LiquidationEvent_Handler,
+		},
+		{
+			MethodName: "LiquidationCet",
+			Handler:    _Query_LiquidationCet_Handler,
 		},
 		{
 			MethodName: "Loan",
