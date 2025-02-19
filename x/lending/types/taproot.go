@@ -8,6 +8,7 @@ import (
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 
 	"github.com/btcsuite/btcd/btcec/v2"
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
@@ -110,15 +111,12 @@ func CreateTaprootAddress(branches [][]byte, params *chaincfg.Params) (string, e
 	}
 	tree := txscript.AssembleTaprootScriptTree(leaves...)
 
-	scriptRoot, err := hex.DecodeString(tree.RootNode.TapHash().String())
-	if err != nil {
-		return "", err
-	}
+	scriptRoot := tree.RootNode.TapHash()
 
 	// Derive Taproot output key
-	taprootPubKey := txscript.ComputeTaprootOutputKey(GetInternalKey(), scriptRoot)
+	taprootPubKey := txscript.ComputeTaprootOutputKey(GetInternalKey(), scriptRoot[:])
 	// Generate Taproot address
-	address, err := btcutil.NewAddressTaproot(taprootPubKey.SerializeCompressed(), params)
+	address, err := btcutil.NewAddressTaproot(schnorr.SerializePubKey(taprootPubKey), params)
 	if err != nil {
 		return "", err
 	}
