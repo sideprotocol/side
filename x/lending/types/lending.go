@@ -1,8 +1,6 @@
 package types
 
 import (
-	"math/big"
-
 	sdkmath "cosmossdk.io/math"
 )
 
@@ -18,9 +16,11 @@ const (
 )
 
 // GetLiquidationPrice gets the liquidation price according to the liquidation LTV
-func GetLiquidationPrice(collateralAmout sdkmath.Int, borrowedAmount sdkmath.Int, lltv sdkmath.Int) sdkmath.Int {
-	liquidationValue := new(big.Int).Div(borrowedAmount.BigInt(), lltv.BigInt())
-	liquidationPrice := new(big.Int).Div(liquidationValue, collateralAmout.BigInt())
+func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowedAmount sdkmath.Int, lltv sdkmath.Int) sdkmath.Int {
+	liquidationValue := borrowedAmount.Mul(lltv).Quo(Percent).Quo(sdkmath.NewInt(1000000))
+	liquidationPrice := liquidationValue.Mul(sdkmath.NewInt(100000000)).Quo(collateralAmount)
 
-	return sdkmath.NewIntFromBigInt(liquidationPrice)
+	precision := sdkmath.NewInt(100)
+
+	return liquidationPrice.Quo(precision).Mul(precision)
 }
