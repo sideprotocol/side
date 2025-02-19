@@ -164,15 +164,17 @@ func GetInternalKey() *btcec.PublicKey {
 	return btcec.NewPublicKey(&X, &Y)
 }
 
-// GetTapscriptsMerkleRoot gets the merkle root of the given tapscripts
-func GetTapscriptsMerkleRoot(scripts [][]byte) string {
+// GetTapscriptMerkleRoot gets the merkle root of the given scripts
+func GetTapscriptMerkleRoot(scripts [][]byte) string {
 	tapLeaves := []txscript.TapLeaf{}
 
 	for _, s := range scripts {
 		tapLeaves = append(tapLeaves, txscript.NewBaseTapLeaf(s))
 	}
 
-	return txscript.AssembleTaprootScriptTree(tapLeaves...).RootNode.TapHash().String()
+	rootHash := txscript.AssembleTaprootScriptTree(tapLeaves...).RootNode.TapHash()
+
+	return hex.EncodeToString(rootHash[:])
 }
 
 // GetVaultPkScript gets the pk script of the given vault

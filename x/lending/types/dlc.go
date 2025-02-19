@@ -19,7 +19,7 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCET s
 		return nil, err
 	}
 
-	liquidationCETScript, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
+	multiSigScript, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
 	if err != nil {
 		return nil, err
 	}
@@ -39,10 +39,11 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCET s
 		LiquidationAdaptorSignature: liquidationAdaptorSig,
 		VaultUtxo:                   vaultUtxo,
 		InternalKey:                 hex.EncodeToString(schnorr.SerializePubKey(GetInternalKey())),
-		LiquidationCetScript:        hex.EncodeToString(liquidationCETScript),
+		LiquidationCetScript:        hex.EncodeToString(multiSigScript),
+		RepaymentScript:             hex.EncodeToString(multiSigScript),
 		ForcedRepaymentScript:       hex.EncodeToString(forcedRepaymentScript),
 		TimeoutRefundScript:         hex.EncodeToString(timeoutRefundScript),
-		TapscriptMerkleRoot:         GetTapscriptsMerkleRoot([][]byte{liquidationCETScript, forcedRepaymentScript, timeoutRefundScript}),
+		TapscriptMerkleRoot:         GetTapscriptMerkleRoot([][]byte{multiSigScript, forcedRepaymentScript, timeoutRefundScript}),
 	}, nil
 }
 
