@@ -9,6 +9,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
@@ -43,11 +44,17 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, nil
 	}
 
+	signaturePoint, err := dlctypes.GetSignaturePointFromEvent(event)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "failed to calculate signature point")
+	}
+
 	return &types.QueryLiquidationEventResponse{
-		EventId:      event.Id,
-		OraclePubkey: event.Pubkey,
-		Nonce:        event.Nonce,
-		Price:        event.TriggerPrice.String(),
+		EventId:        event.Id,
+		OraclePubkey:   event.Pubkey,
+		Nonce:          event.Nonce,
+		Price:          event.TriggerPrice.String(),
+		SignaturePoint: hex.EncodeToString(signaturePoint),
 	}, nil
 }
 

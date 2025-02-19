@@ -56,6 +56,7 @@ message QueryLiquidationEventResponse {
     string oracle_pubkey = 2;
     string nonce = 3;
     string price = 4;
+    string signature_point = 5;
 }
 
 message QueryLiquidationCetRequest {
