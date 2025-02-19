@@ -24,6 +24,9 @@ service Msg {
     rpc SubmitLiquidationCetSignatures(MsgSubmitLiquidationCetSignatures) returns (MsgSubmitLiquidationCetSignaturesResponse);
     rpc Close(MsgClose) returns (MsgCloseResponse);
 
+    // SubmitPrice submits the price for testing 
+    rpc SubmitPrice(MsgSubmitPrice) returns (MsgSubmitPriceResponse);
+
     // UpdateParams defines a governance operation for updating the x/dlc module
     // parameters. The authority defaults to the x/gov module account.
     //
@@ -152,6 +155,15 @@ message MsgClose {
 }
 
 message MsgCloseResponse{}
+
+message MsgSubmitPrice {
+    option (cosmos.msg.v1.signer) = "sender";
+
+    string sender = 1;
+    string price = 2;
+}
+
+message MsgSubmitPriceResponse{}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

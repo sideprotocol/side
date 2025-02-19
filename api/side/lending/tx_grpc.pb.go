@@ -29,6 +29,7 @@ const (
 	Msg_SubmitRepaymentAdaptorSignature_FullMethodName = "/side.lending.Msg/SubmitRepaymentAdaptorSignature"
 	Msg_SubmitLiquidationCetSignatures_FullMethodName  = "/side.lending.Msg/SubmitLiquidationCetSignatures"
 	Msg_Close_FullMethodName                           = "/side.lending.Msg/Close"
+	Msg_SubmitPrice_FullMethodName                     = "/side.lending.Msg/SubmitPrice"
 	Msg_UpdateParams_FullMethodName                    = "/side.lending.Msg/UpdateParams"
 )
 
@@ -46,6 +47,8 @@ type MsgClient interface {
 	SubmitRepaymentAdaptorSignature(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignature, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignatureResponse, error)
 	SubmitLiquidationCetSignatures(ctx context.Context, in *MsgSubmitLiquidationCetSignatures, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetSignaturesResponse, error)
 	Close(ctx context.Context, in *MsgClose, opts ...grpc.CallOption) (*MsgCloseResponse, error)
+	// SubmitPrice submits the price for testing
+	SubmitPrice(ctx context.Context, in *MsgSubmitPrice, opts ...grpc.CallOption) (*MsgSubmitPriceResponse, error)
 	// UpdateParams defines a governance operation for updating the x/dlc module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -151,6 +154,15 @@ func (c *msgClient) Close(ctx context.Context, in *MsgClose, opts ...grpc.CallOp
 	return out, nil
 }
 
+func (c *msgClient) SubmitPrice(ctx context.Context, in *MsgSubmitPrice, opts ...grpc.CallOption) (*MsgSubmitPriceResponse, error) {
+	out := new(MsgSubmitPriceResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitPrice_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	out := new(MsgUpdateParamsResponse)
 	err := c.cc.Invoke(ctx, Msg_UpdateParams_FullMethodName, in, out, opts...)
@@ -174,6 +186,8 @@ type MsgServer interface {
 	SubmitRepaymentAdaptorSignature(context.Context, *MsgSubmitRepaymentAdaptorSignature) (*MsgSubmitRepaymentAdaptorSignatureResponse, error)
 	SubmitLiquidationCetSignatures(context.Context, *MsgSubmitLiquidationCetSignatures) (*MsgSubmitLiquidationCetSignaturesResponse, error)
 	Close(context.Context, *MsgClose) (*MsgCloseResponse, error)
+	// SubmitPrice submits the price for testing
+	SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error)
 	// UpdateParams defines a governance operation for updating the x/dlc module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -215,6 +229,9 @@ func (UnimplementedMsgServer) SubmitLiquidationCetSignatures(context.Context, *M
 }
 func (UnimplementedMsgServer) Close(context.Context, *MsgClose) (*MsgCloseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Close not implemented")
+}
+func (UnimplementedMsgServer) SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitPrice not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -412,6 +429,24 @@ func _Msg_Close_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SubmitPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitPrice)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitPrice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SubmitPrice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitPrice(ctx, req.(*MsgSubmitPrice))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -476,6 +511,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Close",
 			Handler:    _Msg_Close_Handler,
+		},
+		{
+			MethodName: "SubmitPrice",
+			Handler:    _Msg_SubmitPrice_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

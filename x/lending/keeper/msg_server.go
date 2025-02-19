@@ -14,6 +14,18 @@ type msgServer struct {
 	Keeper
 }
 
+// SubmitPrice implements types.MsgServer.
+func (m msgServer) SubmitPrice(goCtx context.Context, msg *types.MsgSubmitPrice) (*types.MsgSubmitPriceResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	m.SetPrice(ctx, msg.Price)
+
+	return &types.MsgSubmitPriceResponse{}, nil
+}
+
 // UpdateParams updates the module params.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {

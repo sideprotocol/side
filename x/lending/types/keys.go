@@ -27,6 +27,8 @@ var (
 	DepositLogPrefix     = []byte{0x4}
 	RepaymentPrefix      = []byte{0x5}
 	LoanDLCMetaKeyPrefix = []byte{0x06}
+
+	PriceKey = []byte{0x07}
 )
 
 func PoolStoreKey(pool_id string) []byte {

@@ -42,7 +42,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, k.GetParams(ctx).LiquidationThresholdPercent)
 
-		price, err := k.OracleKeeper().GetPrice(ctx, fmt.Sprintf("BTC-%s", loan.BorrowAmount.Denom))
+		price, err := k.GetPrice(ctx, fmt.Sprintf("BTC-%s", loan.BorrowAmount.Denom))
 		if err != nil {
 			k.Logger(ctx).Info("failed to get oracle price", "err", err)
 			continue

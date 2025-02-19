@@ -81,8 +81,12 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		}
 	}
 
-	currentPrice := math.NewInt(1) // read it from price oracle later
-	decimal := math.NewInt(1)
+	currentPrice, err := m.GetPrice(ctx, "")
+	if err != nil {
+		return nil, err
+	}
+
+	decimal := math.NewInt(100000000)
 
 	// verify LTV (Loan-to-Value Ratio)
 	// collateral value * min_ltv > borrow amount
