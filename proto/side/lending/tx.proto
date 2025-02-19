@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "side/lending/lending.proto";
+import "side/lending/params.proto";
 
 option go_package = "github.com/sideprotocol/side/x/lending/types";
 
@@ -22,6 +23,12 @@ service Msg {
     rpc SubmitRepaymentAdaptorSignature(MsgSubmitRepaymentAdaptorSignature) returns (MsgSubmitRepaymentAdaptorSignatureResponse);
     rpc SubmitLiquidationCetSignatures(MsgSubmitLiquidationCetSignatures) returns (MsgSubmitLiquidationCetSignaturesResponse);
     rpc Close(MsgClose) returns (MsgCloseResponse);
+
+    // UpdateParams defines a governance operation for updating the x/dlc module
+    // parameters. The authority defaults to the x/gov module account.
+    //
+    // Since: cosmos-sdk 0.47
+    rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
 message MsgCreatePool {
@@ -145,3 +152,23 @@ message MsgClose {
 }
 
 message MsgCloseResponse{}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+
+  // params defines the x/dlc parameters to be updated.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsResponse {}

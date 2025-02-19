@@ -18,10 +18,6 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
-type msgServer struct {
-	Keeper
-}
-
 // CreateLoan implements types.MsgServer.
 func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.MsgApplyResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -461,11 +457,3 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 
 	return &types.MsgCloseResponse{}, nil
 }
-
-// NewMsgServerImpl returns an implementation of the MsgServer interface
-// for the provided Keeper.
-func NewMsgServerImpl(keeper Keeper) types.MsgServer {
-	return &msgServer{Keeper: keeper}
-}
-
-var _ types.MsgServer = msgServer{}
