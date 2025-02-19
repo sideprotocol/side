@@ -84,12 +84,13 @@ message DLCMeta {
     string liquidation_cet = 1;
     string liquidation_adaptor_signature = 2;
     string liquidation_adapted_signature = 3;
-    side.btcbridge.UTXO vault_utxo = 4;
-    string internal_key = 5;
-    string liquidation_cet_script = 6;
-    string repayment_script = 7;
-    string forced_repayment_script = 8;
-    string timeout_refund_script = 9;
+    repeated string liquidation_agency_signatures = 4;
+    side.btcbridge.UTXO vault_utxo = 5;
+    string internal_key = 6;
+    string liquidation_cet_script = 7;
+    string repayment_script = 8;
+    string forced_repayment_script = 9;
+    string timeout_refund_script = 10;
 }
 
 message DepositLog {

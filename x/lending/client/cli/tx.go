@@ -308,6 +308,38 @@ func CmdSubmitRepaymentAdaptorSignature() *cobra.Command {
 	return cmd
 }
 
+func CmdSubmitLiquidationCetSignatures() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "submit-liquidation-signatures [loan id] [DCA signatures]",
+		Short: "Submit the DCA liquidation signatures for the loan to be liquidated",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			signatures := strings.Split(args[1], listSeparator)
+
+			msg := types.NewMsgSubmitLiquidationCetSignatures(
+				clientCtx.GetFromAddress().String(),
+				args[0],
+				signatures,
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
 func CmdClose() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "close [loan id] [repayment tx signature]",

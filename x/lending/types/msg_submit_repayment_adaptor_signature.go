@@ -11,9 +11,9 @@ import (
 
 var _ sdk.Msg = &MsgSubmitRepaymentAdaptorSignature{}
 
-func NewMsgSubmitRepaymentAdaptorSignature(relayer string, loanId string, adaptorSignature string) *MsgSubmitRepaymentAdaptorSignature {
+func NewMsgSubmitRepaymentAdaptorSignature(sender string, loanId string, adaptorSignature string) *MsgSubmitRepaymentAdaptorSignature {
 	return &MsgSubmitRepaymentAdaptorSignature{
-		Relayer:          relayer,
+		Sender:           sender,
 		LoanId:           loanId,
 		AdaptorSignature: adaptorSignature,
 	}
@@ -21,7 +21,7 @@ func NewMsgSubmitRepaymentAdaptorSignature(relayer string, loanId string, adapto
 
 // ValidateBasic performs basic message validation.
 func (m *MsgSubmitRepaymentAdaptorSignature) ValidateBasic() error {
-	if _, err := sdk.AccAddressFromBech32(m.Relayer); err != nil {
+	if _, err := sdk.AccAddressFromBech32(m.Sender); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 

@@ -9,9 +9,11 @@ import (
 	"cosmossdk.io/math"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/crypto/adaptor"
+	"github.com/sideprotocol/side/crypto/schnorr"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -353,12 +355,59 @@ func (m msgServer) SubmitRepaymentAdaptorSignature(goCtx context.Context, msg *t
 	repayment.DcaAdaptorSignature = msg.AdaptorSignature
 	m.SetRepayment(ctx, repayment)
 
-	m.EmitEvent(ctx, msg.Relayer,
+	m.EmitEvent(ctx, msg.Sender,
 		sdk.NewAttribute("loan_id", msg.LoanId),
 		sdk.NewAttribute("adaptor_signature", msg.AdaptorSignature),
 	)
 
 	return &types.MsgSubmitRepaymentAdaptorSignatureResponse{}, nil
+}
+
+// SubmitLiquidationCetSignatures implements types.MsgServer.
+func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *types.MsgSubmitLiquidationCetSignatures) (*types.MsgSubmitLiquidationCetSignaturesResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanDoesNotExist
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+	if loan.Status != types.LoanStatus_Liquidate {
+		return nil, types.ErrLoanNotLiquidated
+	}
+
+	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
+	if len(dlcMeta.LiquidationAgencySignatures) > 0 {
+		return nil, types.ErrLiquidationSignaturesAlreadyExist
+	}
+
+	liquidationCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet)), true)
+
+	if len(msg.Signatures) != len(liquidationCet.Inputs) {
+		return nil, errorsmod.Wrap(types.ErrInvalidLiquidationSignatures, "incorrect signature number")
+	}
+
+	agencyPubKey, _ := hex.DecodeString(loan.Agency)
+
+	for i := range liquidationCet.Inputs {
+		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
+
+		// TODO: calculate sig hash
+		sigHash := []byte{}
+
+		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
+			return nil, types.ErrInvalidSignature
+		}
+	}
+
+	dlcMeta.LiquidationAgencySignatures = msg.Signatures
+	m.SetDLCMeta(ctx, msg.LoanId, dlcMeta)
+
+	return &types.MsgSubmitLiquidationCetSignaturesResponse{}, nil
 }
 
 // Close implements types.MsgServer.
