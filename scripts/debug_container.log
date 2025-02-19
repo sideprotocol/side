@@ -1,0 +1,394 @@
+Initializing logger
+Registering providers
+ Registering github.com/sideprotocol/side/app.GetInterfaceRegistry (github.com/sideprotocol/side/app/app.go:201)
+  Registering resolver for simple type types.InterfaceRegistry
+ Registering github.com/cosmos/cosmos-sdk/runtime.ProvideApp (github.com/cosmos/cosmos-sdk@v0.50.9/runtime/module.go:84)
+  Registering resolver for simple type codec.Codec
+  Registering resolver for simple type *codec.LegacyAmino
+  Registering resolver for simple type *runtime.AppBuilder
+  Registering resolver for simple type *baseapp.MsgServiceRouter
+  Registering resolver for simple type *baseapp.GRPCQueryRouter
+  Registering resolver for one-per-module type appmodule.AppModule
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+  Registering resolver for simple type protodesc.Resolver
+  Registering resolver for simple type protoregistry.MessageTypeResolver
+ Registering resolver for many-per-container type signing.CustomGetSigner
+ Registering github.com/cosmos/cosmos-sdk/runtime.ProvideInterfaceRegistry (github.com/cosmos/cosmos-sdk@v0.50.9/runtime/module.go:164)
+  Found resolver for types.InterfaceRegistry: *depinject.simpleResolver
+ Failed registering providers because of: duplicate provision of type types.InterfaceRegistry by github.com/cosmos/cosmos-sdk/runtime.ProvideInterfaceRegistry (github.com/cosmos/cosmos-sdk@v0.50.9/runtime/module.go:164)
+	already provided by github.com/sideprotocol/side/app.GetInterfaceRegistry (github.com/sideprotocol/side/app/app.go:201)
+goroutine 1 [running]:
+cosmossdk.io/depinject.getStackTrace(...)
+	cosmossdk.io/depinject@v1.0.0/config.go:193
+cosmossdk.io/depinject.provide(0x140003c4230, 0x14000ebf5c0, {0x14000ebeed0?, 0x103cf7d4c?, 0x140003c4230?})
+	cosmossdk.io/depinject@v1.0.0/config.go:52 +0x168
+cosmossdk.io/depinject/appconfig.Compose.ProvideInModule.func11(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:40 +0x80
+cosmossdk.io/depinject.containerConfig.apply(0x1061ee120?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject/appconfig.Compose.Configs.func15(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x8?, 0x8?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.AppConfig.Configs.func1(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x30?, 0x14000099208?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.NewSideApp.Configs.func2(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x140001864c0?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject.doInject(0x1400053cd80, {0x104d8fc18, 0x14000ccda80}, {0x104d68780?, 0x1400101aae0?}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:74 +0x228
+cosmossdk.io/depinject.inject({0x104d8fc18, 0x14000ccda80}, {0x104d68780, 0x1400101aae0}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:45 +0x218
+cosmossdk.io/depinject.Inject({0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:19 +0x68
+github.com/sideprotocol/side/app.NewSideApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, 0x1, {0x104d682c0, 0x14000d2bdc0}, {0x140003d0000, ...})
+	github.com/sideprotocol/side/app/app.go:138 +0x37c
+github.com/sideprotocol/side/cmd/sided/cmd.newApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, {0x104d682c0, 0x14000d2bdc0})
+	github.com/sideprotocol/side/cmd/sided/cmd/commands.go:102 +0x78
+github.com/cosmos/cosmos-sdk/server.startApp(0x140005a61a0, 0x104d59e30, {0x104d5a548, 0x0, 0x0, 0x0, 0x104d5a558})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:618 +0x1f4
+github.com/cosmos/cosmos-sdk/server.start(_, {{0x0, 0x0, 0x0}, {0x104dabdd8, 0x14000d62900}, 0x0, {0x0, 0x0}, {0x104dc02a8, ...}, ...}, ...)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:224 +0xdc
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2.1()
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:198 +0x68
+github.com/cosmos/cosmos-sdk/server.wrapCPUProfile(0x140005a61a0, 0x14000f0f9d8)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:570 +0x16c
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2(0x14000c61508, {0x14000a85630?, 0x0?, 0x5?})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:197 +0x184
+github.com/spf13/cobra.(*Command).execute(0x14000c61508, {0x14000a855e0, 0x5, 0x5})
+	github.com/spf13/cobra@v1.8.1/command.go:985 +0x840
+github.com/spf13/cobra.(*Command).ExecuteC(0x14000b35208)
+	github.com/spf13/cobra@v1.8.1/command.go:1117 +0x344
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+github.com/spf13/cobra.(*Command).ExecuteContext(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1034
+github.com/cosmos/cosmos-sdk/server/cmd.Execute(0x14000b35208, {0x0, 0x0}, {0x14000a33608, 0x17})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/cmd/execute.go:34 +0x154
+main.main()
+	github.com/sideprotocol/side/cmd/sided/main.go:18 +0x40
+
+goroutine 1 [running]:
+cosmossdk.io/depinject.getStackTrace()
+	cosmossdk.io/depinject@v1.0.0/config.go:193 +0x38
+cosmossdk.io/depinject/appconfig.Compose.Configs.func15(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:176 +0x74
+cosmossdk.io/depinject.containerConfig.apply(0x8?, 0x8?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.AppConfig.Configs.func1(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x30?, 0x14000099208?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.NewSideApp.Configs.func2(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x140001864c0?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject.doInject(0x1400053cd80, {0x104d8fc18, 0x14000ccda80}, {0x104d68780?, 0x1400101aae0?}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:74 +0x228
+cosmossdk.io/depinject.inject({0x104d8fc18, 0x14000ccda80}, {0x104d68780, 0x1400101aae0}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:45 +0x218
+cosmossdk.io/depinject.Inject({0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:19 +0x68
+github.com/sideprotocol/side/app.NewSideApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, 0x1, {0x104d682c0, 0x14000d2bdc0}, {0x140003d0000, ...})
+	github.com/sideprotocol/side/app/app.go:138 +0x37c
+github.com/sideprotocol/side/cmd/sided/cmd.newApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, {0x104d682c0, 0x14000d2bdc0})
+	github.com/sideprotocol/side/cmd/sided/cmd/commands.go:102 +0x78
+github.com/cosmos/cosmos-sdk/server.startApp(0x140005a61a0, 0x104d59e30, {0x104d5a548, 0x0, 0x0, 0x0, 0x104d5a558})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:618 +0x1f4
+github.com/cosmos/cosmos-sdk/server.start(_, {{0x0, 0x0, 0x0}, {0x104dabdd8, 0x14000d62900}, 0x0, {0x0, 0x0}, {0x104dc02a8, ...}, ...}, ...)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:224 +0xdc
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2.1()
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:198 +0x68
+github.com/cosmos/cosmos-sdk/server.wrapCPUProfile(0x140005a61a0, 0x14000f0f9d8)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:570 +0x16c
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2(0x14000c61508, {0x14000a85630?, 0x0?, 0x5?})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:197 +0x184
+github.com/spf13/cobra.(*Command).execute(0x14000c61508, {0x14000a855e0, 0x5, 0x5})
+	github.com/spf13/cobra@v1.8.1/command.go:985 +0x840
+github.com/spf13/cobra.(*Command).ExecuteC(0x14000b35208)
+	github.com/spf13/cobra@v1.8.1/command.go:1117 +0x344
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+github.com/spf13/cobra.(*Command).ExecuteContext(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1034
+github.com/cosmos/cosmos-sdk/server/cmd.Execute(0x14000b35208, {0x0, 0x0}, {0x14000a33608, 0x17})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/cmd/execute.go:34 +0x154
+main.main()
+	github.com/sideprotocol/side/cmd/sided/main.go:18 +0x40
+
+goroutine 1 [running]:
+cosmossdk.io/depinject.getStackTrace()
+	cosmossdk.io/depinject@v1.0.0/config.go:193 +0x38
+github.com/sideprotocol/side/app.AppConfig.Configs.func1(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:176 +0x74
+cosmossdk.io/depinject.containerConfig.apply(0x30?, 0x14000099208?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.NewSideApp.Configs.func2(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x140001864c0?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject.doInject(0x1400053cd80, {0x104d8fc18, 0x14000ccda80}, {0x104d68780?, 0x1400101aae0?}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:74 +0x228
+cosmossdk.io/depinject.inject({0x104d8fc18, 0x14000ccda80}, {0x104d68780, 0x1400101aae0}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:45 +0x218
+cosmossdk.io/depinject.Inject({0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:19 +0x68
+github.com/sideprotocol/side/app.NewSideApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, 0x1, {0x104d682c0, 0x14000d2bdc0}, {0x140003d0000, ...})
+	github.com/sideprotocol/side/app/app.go:138 +0x37c
+github.com/sideprotocol/side/cmd/sided/cmd.newApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, {0x104d682c0, 0x14000d2bdc0})
+	github.com/sideprotocol/side/cmd/sided/cmd/commands.go:102 +0x78
+github.com/cosmos/cosmos-sdk/server.startApp(0x140005a61a0, 0x104d59e30, {0x104d5a548, 0x0, 0x0, 0x0, 0x104d5a558})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:618 +0x1f4
+github.com/cosmos/cosmos-sdk/server.start(_, {{0x0, 0x0, 0x0}, {0x104dabdd8, 0x14000d62900}, 0x0, {0x0, 0x0}, {0x104dc02a8, ...}, ...}, ...)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:224 +0xdc
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2.1()
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:198 +0x68
+github.com/cosmos/cosmos-sdk/server.wrapCPUProfile(0x140005a61a0, 0x14000f0f9d8)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:570 +0x16c
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2(0x14000c61508, {0x14000a85630?, 0x0?, 0x5?})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:197 +0x184
+github.com/spf13/cobra.(*Command).execute(0x14000c61508, {0x14000a855e0, 0x5, 0x5})
+	github.com/spf13/cobra@v1.8.1/command.go:985 +0x840
+github.com/spf13/cobra.(*Command).ExecuteC(0x14000b35208)
+	github.com/spf13/cobra@v1.8.1/command.go:1117 +0x344
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+github.com/spf13/cobra.(*Command).ExecuteContext(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1034
+github.com/cosmos/cosmos-sdk/server/cmd.Execute(0x14000b35208, {0x0, 0x0}, {0x14000a33608, 0x17})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/cmd/execute.go:34 +0x154
+main.main()
+	github.com/sideprotocol/side/cmd/sided/main.go:18 +0x40
+
+goroutine 1 [running]:
+cosmossdk.io/depinject.getStackTrace()
+	cosmossdk.io/depinject@v1.0.0/config.go:193 +0x38
+github.com/sideprotocol/side/app.NewSideApp.Configs.func2(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:176 +0x74
+cosmossdk.io/depinject.containerConfig.apply(0x140001864c0?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject.doInject(0x1400053cd80, {0x104d8fc18, 0x14000ccda80}, {0x104d68780?, 0x1400101aae0?}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:74 +0x228
+cosmossdk.io/depinject.inject({0x104d8fc18, 0x14000ccda80}, {0x104d68780, 0x1400101aae0}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:45 +0x218
+cosmossdk.io/depinject.Inject({0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:19 +0x68
+github.com/sideprotocol/side/app.NewSideApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, 0x1, {0x104d682c0, 0x14000d2bdc0}, {0x140003d0000, ...})
+	github.com/sideprotocol/side/app/app.go:138 +0x37c
+github.com/sideprotocol/side/cmd/sided/cmd.newApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, {0x104d682c0, 0x14000d2bdc0})
+	github.com/sideprotocol/side/cmd/sided/cmd/commands.go:102 +0x78
+github.com/cosmos/cosmos-sdk/server.startApp(0x140005a61a0, 0x104d59e30, {0x104d5a548, 0x0, 0x0, 0x0, 0x104d5a558})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:618 +0x1f4
+github.com/cosmos/cosmos-sdk/server.start(_, {{0x0, 0x0, 0x0}, {0x104dabdd8, 0x14000d62900}, 0x0, {0x0, 0x0}, {0x104dc02a8, ...}, ...}, ...)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:224 +0xdc
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2.1()
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:198 +0x68
+github.com/cosmos/cosmos-sdk/server.wrapCPUProfile(0x140005a61a0, 0x14000f0f9d8)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:570 +0x16c
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2(0x14000c61508, {0x14000a85630?, 0x0?, 0x5?})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:197 +0x184
+github.com/spf13/cobra.(*Command).execute(0x14000c61508, {0x14000a855e0, 0x5, 0x5})
+	github.com/spf13/cobra@v1.8.1/command.go:985 +0x840
+github.com/spf13/cobra.(*Command).ExecuteC(0x14000b35208)
+	github.com/spf13/cobra@v1.8.1/command.go:1117 +0x344
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+github.com/spf13/cobra.(*Command).ExecuteContext(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1034
+github.com/cosmos/cosmos-sdk/server/cmd.Execute(0x14000b35208, {0x0, 0x0}, {0x14000a33608, 0x17})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/cmd/execute.go:34 +0x154
+main.main()
+	github.com/sideprotocol/side/cmd/sided/main.go:18 +0x40
+
+ Error: duplicate provision of type types.InterfaceRegistry by github.com/cosmos/cosmos-sdk/runtime.ProvideInterfaceRegistry (github.com/cosmos/cosmos-sdk@v0.50.9/runtime/module.go:164)
+	already provided by github.com/sideprotocol/side/app.GetInterfaceRegistry (github.com/sideprotocol/side/app/app.go:201)
+goroutine 1 [running]:
+cosmossdk.io/depinject.getStackTrace(...)
+	cosmossdk.io/depinject@v1.0.0/config.go:193
+cosmossdk.io/depinject.provide(0x140003c4230, 0x14000ebf5c0, {0x14000ebeed0?, 0x103cf7d4c?, 0x140003c4230?})
+	cosmossdk.io/depinject@v1.0.0/config.go:52 +0x168
+cosmossdk.io/depinject/appconfig.Compose.ProvideInModule.func11(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:40 +0x80
+cosmossdk.io/depinject.containerConfig.apply(0x1061ee120?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject/appconfig.Compose.Configs.func15(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x8?, 0x8?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.AppConfig.Configs.func1(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x30?, 0x14000099208?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.NewSideApp.Configs.func2(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x140001864c0?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject.doInject(0x1400053cd80, {0x104d8fc18, 0x14000ccda80}, {0x104d68780?, 0x1400101aae0?}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:74 +0x228
+cosmossdk.io/depinject.inject({0x104d8fc18, 0x14000ccda80}, {0x104d68780, 0x1400101aae0}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:45 +0x218
+cosmossdk.io/depinject.Inject({0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:19 +0x68
+github.com/sideprotocol/side/app.NewSideApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, 0x1, {0x104d682c0, 0x14000d2bdc0}, {0x140003d0000, ...})
+	github.com/sideprotocol/side/app/app.go:138 +0x37c
+github.com/sideprotocol/side/cmd/sided/cmd.newApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, {0x104d682c0, 0x14000d2bdc0})
+	github.com/sideprotocol/side/cmd/sided/cmd/commands.go:102 +0x78
+github.com/cosmos/cosmos-sdk/server.startApp(0x140005a61a0, 0x104d59e30, {0x104d5a548, 0x0, 0x0, 0x0, 0x104d5a558})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:618 +0x1f4
+github.com/cosmos/cosmos-sdk/server.start(_, {{0x0, 0x0, 0x0}, {0x104dabdd8, 0x14000d62900}, 0x0, {0x0, 0x0}, {0x104dc02a8, ...}, ...}, ...)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:224 +0xdc
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2.1()
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:198 +0x68
+github.com/cosmos/cosmos-sdk/server.wrapCPUProfile(0x140005a61a0, 0x14000f0f9d8)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:570 +0x16c
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2(0x14000c61508, {0x14000a85630?, 0x0?, 0x5?})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:197 +0x184
+github.com/spf13/cobra.(*Command).execute(0x14000c61508, {0x14000a855e0, 0x5, 0x5})
+	github.com/spf13/cobra@v1.8.1/command.go:985 +0x840
+github.com/spf13/cobra.(*Command).ExecuteC(0x14000b35208)
+	github.com/spf13/cobra@v1.8.1/command.go:1117 +0x344
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+github.com/spf13/cobra.(*Command).ExecuteContext(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1034
+github.com/cosmos/cosmos-sdk/server/cmd.Execute(0x14000b35208, {0x0, 0x0}, {0x14000a33608, 0x17})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/cmd/execute.go:34 +0x154
+main.main()
+	github.com/sideprotocol/side/cmd/sided/main.go:18 +0x40
+
+goroutine 1 [running]:
+cosmossdk.io/depinject.getStackTrace()
+	cosmossdk.io/depinject@v1.0.0/config.go:193 +0x38
+cosmossdk.io/depinject/appconfig.Compose.Configs.func15(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:176 +0x74
+cosmossdk.io/depinject.containerConfig.apply(0x8?, 0x8?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.AppConfig.Configs.func1(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x30?, 0x14000099208?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.NewSideApp.Configs.func2(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x140001864c0?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject.doInject(0x1400053cd80, {0x104d8fc18, 0x14000ccda80}, {0x104d68780?, 0x1400101aae0?}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:74 +0x228
+cosmossdk.io/depinject.inject({0x104d8fc18, 0x14000ccda80}, {0x104d68780, 0x1400101aae0}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:45 +0x218
+cosmossdk.io/depinject.Inject({0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:19 +0x68
+github.com/sideprotocol/side/app.NewSideApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, 0x1, {0x104d682c0, 0x14000d2bdc0}, {0x140003d0000, ...})
+	github.com/sideprotocol/side/app/app.go:138 +0x37c
+github.com/sideprotocol/side/cmd/sided/cmd.newApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, {0x104d682c0, 0x14000d2bdc0})
+	github.com/sideprotocol/side/cmd/sided/cmd/commands.go:102 +0x78
+github.com/cosmos/cosmos-sdk/server.startApp(0x140005a61a0, 0x104d59e30, {0x104d5a548, 0x0, 0x0, 0x0, 0x104d5a558})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:618 +0x1f4
+github.com/cosmos/cosmos-sdk/server.start(_, {{0x0, 0x0, 0x0}, {0x104dabdd8, 0x14000d62900}, 0x0, {0x0, 0x0}, {0x104dc02a8, ...}, ...}, ...)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:224 +0xdc
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2.1()
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:198 +0x68
+github.com/cosmos/cosmos-sdk/server.wrapCPUProfile(0x140005a61a0, 0x14000f0f9d8)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:570 +0x16c
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2(0x14000c61508, {0x14000a85630?, 0x0?, 0x5?})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:197 +0x184
+github.com/spf13/cobra.(*Command).execute(0x14000c61508, {0x14000a855e0, 0x5, 0x5})
+	github.com/spf13/cobra@v1.8.1/command.go:985 +0x840
+github.com/spf13/cobra.(*Command).ExecuteC(0x14000b35208)
+	github.com/spf13/cobra@v1.8.1/command.go:1117 +0x344
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+github.com/spf13/cobra.(*Command).ExecuteContext(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1034
+github.com/cosmos/cosmos-sdk/server/cmd.Execute(0x14000b35208, {0x0, 0x0}, {0x14000a33608, 0x17})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/cmd/execute.go:34 +0x154
+main.main()
+	github.com/sideprotocol/side/cmd/sided/main.go:18 +0x40
+
+goroutine 1 [running]:
+cosmossdk.io/depinject.getStackTrace()
+	cosmossdk.io/depinject@v1.0.0/config.go:193 +0x38
+github.com/sideprotocol/side/app.AppConfig.Configs.func1(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:176 +0x74
+cosmossdk.io/depinject.containerConfig.apply(0x30?, 0x14000099208?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+github.com/sideprotocol/side/app.NewSideApp.Configs.func2(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:174 +0x64
+cosmossdk.io/depinject.containerConfig.apply(0x140001864c0?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject.doInject(0x1400053cd80, {0x104d8fc18, 0x14000ccda80}, {0x104d68780?, 0x1400101aae0?}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:74 +0x228
+cosmossdk.io/depinject.inject({0x104d8fc18, 0x14000ccda80}, {0x104d68780, 0x1400101aae0}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:45 +0x218
+cosmossdk.io/depinject.Inject({0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:19 +0x68
+github.com/sideprotocol/side/app.NewSideApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, 0x1, {0x104d682c0, 0x14000d2bdc0}, {0x140003d0000, ...})
+	github.com/sideprotocol/side/app/app.go:138 +0x37c
+github.com/sideprotocol/side/cmd/sided/cmd.newApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, {0x104d682c0, 0x14000d2bdc0})
+	github.com/sideprotocol/side/cmd/sided/cmd/commands.go:102 +0x78
+github.com/cosmos/cosmos-sdk/server.startApp(0x140005a61a0, 0x104d59e30, {0x104d5a548, 0x0, 0x0, 0x0, 0x104d5a558})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:618 +0x1f4
+github.com/cosmos/cosmos-sdk/server.start(_, {{0x0, 0x0, 0x0}, {0x104dabdd8, 0x14000d62900}, 0x0, {0x0, 0x0}, {0x104dc02a8, ...}, ...}, ...)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:224 +0xdc
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2.1()
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:198 +0x68
+github.com/cosmos/cosmos-sdk/server.wrapCPUProfile(0x140005a61a0, 0x14000f0f9d8)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:570 +0x16c
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2(0x14000c61508, {0x14000a85630?, 0x0?, 0x5?})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:197 +0x184
+github.com/spf13/cobra.(*Command).execute(0x14000c61508, {0x14000a855e0, 0x5, 0x5})
+	github.com/spf13/cobra@v1.8.1/command.go:985 +0x840
+github.com/spf13/cobra.(*Command).ExecuteC(0x14000b35208)
+	github.com/spf13/cobra@v1.8.1/command.go:1117 +0x344
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+github.com/spf13/cobra.(*Command).ExecuteContext(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1034
+github.com/cosmos/cosmos-sdk/server/cmd.Execute(0x14000b35208, {0x0, 0x0}, {0x14000a33608, 0x17})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/cmd/execute.go:34 +0x154
+main.main()
+	github.com/sideprotocol/side/cmd/sided/main.go:18 +0x40
+
+goroutine 1 [running]:
+cosmossdk.io/depinject.getStackTrace()
+	cosmossdk.io/depinject@v1.0.0/config.go:193 +0x38
+github.com/sideprotocol/side/app.NewSideApp.Configs.func2(0x140003c4230)
+	cosmossdk.io/depinject@v1.0.0/config.go:176 +0x74
+cosmossdk.io/depinject.containerConfig.apply(0x140001864c0?, 0x0?)
+	cosmossdk.io/depinject@v1.0.0/config.go:186 +0x28
+cosmossdk.io/depinject.doInject(0x1400053cd80, {0x104d8fc18, 0x14000ccda80}, {0x104d68780?, 0x1400101aae0?}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:74 +0x228
+cosmossdk.io/depinject.inject({0x104d8fc18, 0x14000ccda80}, {0x104d68780, 0x1400101aae0}, {0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:45 +0x218
+cosmossdk.io/depinject.Inject({0x104d68238, 0x1400101aa40}, {0x14000d58a00, 0xa, 0xa})
+	cosmossdk.io/depinject@v1.0.0/inject.go:19 +0x68
+github.com/sideprotocol/side/app.NewSideApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, 0x1, {0x104d682c0, 0x14000d2bdc0}, {0x140003d0000, ...})
+	github.com/sideprotocol/side/app/app.go:138 +0x37c
+github.com/sideprotocol/side/cmd/sided/cmd.newApp({0x104d96c48, 0x140003d0310}, {0x104da7820, 0x14000096110}, {0x0, 0x0}, {0x104d682c0, 0x14000d2bdc0})
+	github.com/sideprotocol/side/cmd/sided/cmd/commands.go:102 +0x78
+github.com/cosmos/cosmos-sdk/server.startApp(0x140005a61a0, 0x104d59e30, {0x104d5a548, 0x0, 0x0, 0x0, 0x104d5a558})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:618 +0x1f4
+github.com/cosmos/cosmos-sdk/server.start(_, {{0x0, 0x0, 0x0}, {0x104dabdd8, 0x14000d62900}, 0x0, {0x0, 0x0}, {0x104dc02a8, ...}, ...}, ...)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:224 +0xdc
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2.1()
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:198 +0x68
+github.com/cosmos/cosmos-sdk/server.wrapCPUProfile(0x140005a61a0, 0x14000f0f9d8)
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:570 +0x16c
+github.com/cosmos/cosmos-sdk/server.StartCmdWithOptions.func2(0x14000c61508, {0x14000a85630?, 0x0?, 0x5?})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/start.go:197 +0x184
+github.com/spf13/cobra.(*Command).execute(0x14000c61508, {0x14000a855e0, 0x5, 0x5})
+	github.com/spf13/cobra@v1.8.1/command.go:985 +0x840
+github.com/spf13/cobra.(*Command).ExecuteC(0x14000b35208)
+	github.com/spf13/cobra@v1.8.1/command.go:1117 +0x344
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+github.com/spf13/cobra.(*Command).ExecuteContext(...)
+	github.com/spf13/cobra@v1.8.1/command.go:1034
+github.com/cosmos/cosmos-sdk/server/cmd.Execute(0x14000b35208, {0x0, 0x0}, {0x14000a33608, 0x17})
+	github.com/cosmos/cosmos-sdk@v0.50.9/server/cmd/execute.go:34 +0x154
+main.main()
+	github.com/sideprotocol/side/cmd/sided/main.go:18 +0x40
+
+ Saved graph of container to /Users/madongdong/Desktop/workspace/com.side.mainnet/side/scripts/debug_container.dot

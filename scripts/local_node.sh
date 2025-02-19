@@ -55,7 +55,9 @@ command -v jq >/dev/null 2>&1 || {
 set -e
 
 # Reinstall daemon
+cd ..
 make install
+cd scripts
 
 # User prompt if an existing local node configuration is found.
 if [ -d "$HOMEDIR" ]; then
@@ -161,24 +163,26 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 
 	echo "Genesis accounts allocated for local accounts"
 
-	# Allocate genesis accounts (cosmos formatted addresses)
-	for ADDR in "${INITIAL_ACCOUNTS[@]}"; do
-	    BALANCES=""
-	    for key in "${!DENOMS[@]}"; do
-	        BALANCES+=",${INITIAL_SUPPLY}${DENOMS[$key]}"
-	    done
-	    echo ${BALANCES:1}
-	    $BINARY genesis add-genesis-account "$ADDR" ${BALANCES:1} --home "$HOMEDIR"
-	done
-	echo "Genesis accounts allocated for initial accounts"
+	# # Allocate genesis accounts (cosmos formatted addresses)
+	# for ADDR in "${INITIAL_ACCOUNTS[@]}"; do
+	#     BALANCES=""
+	#     for key in "${!DENOMS[@]}"; do
+	#         BALANCES+=",${INITIAL_SUPPLY}${DENOMS[$key]}"
+	#     done
+	#     echo ${BALANCES:1}
+	#     $BINARY genesis add-genesis-account "$ADDR" ${BALANCES:1} --home "$HOMEDIR"
+	# done
+	# echo "Genesis accounts allocated for initial accounts"
 
 
 
 	# Sign genesis transaction
 	# echo $INITIAL_SUPPLY${DENOMS[0]}
+	echo "genesis gentx \"${KEYS[0]}\" ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity \"666AC57CC678BEC4\" --website=\"https://side.one\" --home \"$HOMEDIR\""
+
 	$BINARY genesis gentx "${KEYS[0]}" ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home "$HOMEDIR"
 	echo "Genesis transaction signed"
-
+	
 	## In case you want to create multiple validators at genesis
 	## 1. Back to `$BINARY keys add` step, init more keys
 	## 2. Back to `$BINARY add-genesis-account` step, add balance for those

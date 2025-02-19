@@ -26,7 +26,10 @@ import (
 func AuctionKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	db := dbm.NewMemDB()
 
-	app := app.New(log.NewNopLogger(), db, nil, true, simtestutil.EmptyAppOptions{})
+	app, err := app.NewSideApp(log.NewNopLogger(), db, nil, true, simtestutil.EmptyAppOptions{})
+	if err != nil {
+		panic(err)
+	}
 
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 	memStoreKey := storetypes.NewMemoryStoreKey(types.MemStoreKey)

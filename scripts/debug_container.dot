@@ -1,0 +1,40 @@
+digraph "" {
+    subgraph "cluster_runtime" {
+      graph [fontsize="12.0", label="Module: runtime", penwidth="0.5", style="rounded"];
+      "github.com/cosmos/cosmos-sdk/runtime.ProvideApp"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5", shape="box"];
+      "github.com/cosmos/cosmos-sdk/runtime.ProvideInterfaceRegistry"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5", shape="box"];
+    }
+
+  "*cosmossdk.io/api/cosmos/app/runtime/v1alpha1.Module"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "*github.com/cosmos/cosmos-sdk/baseapp.GRPCQueryRouter"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "*github.com/cosmos/cosmos-sdk/baseapp.MsgServiceRouter"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "*github.com/cosmos/cosmos-sdk/codec.LegacyAmino"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "*github.com/cosmos/cosmos-sdk/runtime.AppBuilder"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "*google.golang.org/protobuf/types/dynamicpb.Message"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "[]cosmossdk.io/x/tx/signing.CustomGetSigner"[color="lightgrey", comment="many-per-container", fontcolor="dimgrey", penwidth="0.5"];
+  "cosmossdk.io/core/address.Codec"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "cosmossdk.io/depinject/appconfig.Compose"[color="black", fontcolor="black", penwidth="1.5", shape="box"];
+  "github.com/cosmos/cosmos-sdk/codec.Codec"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "github.com/cosmos/cosmos-sdk/codec/types.InterfaceRegistry"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "github.com/cosmos/cosmos-sdk/runtime.ValidatorAddressCodec"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "github.com/sideprotocol/side/app.GetInterfaceRegistry"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5", shape="box"];
+  "google.golang.org/protobuf/reflect/protodesc.Resolver"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "google.golang.org/protobuf/reflect/protoregistry.MessageTypeResolver"[color="lightgrey", fontcolor="dimgrey", penwidth="0.5"];
+  "map[string]cosmossdk.io/core/appmodule.AppModule"[color="lightgrey", comment="one-per-module", fontcolor="dimgrey", penwidth="0.5"];
+  "github.com/sideprotocol/side/app.GetInterfaceRegistry" -> "github.com/cosmos/cosmos-sdk/codec/types.InterfaceRegistry";
+  "cosmossdk.io/depinject/appconfig.Compose" -> "*google.golang.org/protobuf/types/dynamicpb.Message";
+  "cosmossdk.io/depinject/appconfig.Compose" -> "*cosmossdk.io/api/cosmos/app/runtime/v1alpha1.Module";
+  "github.com/cosmos/cosmos-sdk/codec/types.InterfaceRegistry" -> "github.com/cosmos/cosmos-sdk/runtime.ProvideApp";
+  "github.com/cosmos/cosmos-sdk/runtime.ProvideApp" -> "github.com/cosmos/cosmos-sdk/codec.Codec";
+  "github.com/cosmos/cosmos-sdk/runtime.ProvideApp" -> "*github.com/cosmos/cosmos-sdk/codec.LegacyAmino";
+  "github.com/cosmos/cosmos-sdk/runtime.ProvideApp" -> "*github.com/cosmos/cosmos-sdk/runtime.AppBuilder";
+  "github.com/cosmos/cosmos-sdk/runtime.ProvideApp" -> "*github.com/cosmos/cosmos-sdk/baseapp.MsgServiceRouter";
+  "github.com/cosmos/cosmos-sdk/runtime.ProvideApp" -> "*github.com/cosmos/cosmos-sdk/baseapp.GRPCQueryRouter";
+  "github.com/cosmos/cosmos-sdk/runtime.ProvideApp" -> "map[string]cosmossdk.io/core/appmodule.AppModule";
+  "github.com/cosmos/cosmos-sdk/runtime.ProvideApp" -> "google.golang.org/protobuf/reflect/protodesc.Resolver";
+  "github.com/cosmos/cosmos-sdk/runtime.ProvideApp" -> "google.golang.org/protobuf/reflect/protoregistry.MessageTypeResolver";
+  "cosmossdk.io/core/address.Codec" -> "github.com/cosmos/cosmos-sdk/runtime.ProvideInterfaceRegistry";
+  "github.com/cosmos/cosmos-sdk/runtime.ValidatorAddressCodec" -> "github.com/cosmos/cosmos-sdk/runtime.ProvideInterfaceRegistry";
+  "[]cosmossdk.io/x/tx/signing.CustomGetSigner" -> "github.com/cosmos/cosmos-sdk/runtime.ProvideInterfaceRegistry";
+}
+
