@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"slices"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -19,9 +18,7 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		return nil, err
 	}
 
-	params := m.GetParams(ctx)
-
-	if !slices.Contains(params.PoolCreators, msg.Creator) {
+	if !m.IsAuthorizedPoolCreator(ctx, msg.Creator) {
 		return nil, types.ErrNotAuthorized
 	}
 
