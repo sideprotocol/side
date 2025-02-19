@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
 
@@ -182,6 +183,22 @@ func GetControlBlock(pubKey *secp256k1.PublicKey, proof txscript.TapscriptProof)
 	}
 
 	return controlBlockBz, nil
+}
+
+// CalcTapscriptSigHash computes the sig hash of the given script
+// Assume that the psbt is valid
+func CalcTapscriptSigHash(p *psbt.Packet, idx int, sigHashType txscript.SigHashType, script []byte) ([]byte, error) {
+	prevOutFetcher := txscript.NewMultiPrevOutFetcher(nil)
+	for i, txIn := range p.UnsignedTx.TxIn {
+		prevOutFetcher.AddPrevOut(txIn.PreviousOutPoint, p.Inputs[i].WitnessUtxo)
+	}
+
+	sigHash, err := txscript.CalcTapscriptSignaturehash(txscript.NewTxSigHashes(p.UnsignedTx, prevOutFetcher), sigHashType, p.UnsignedTx, idx, prevOutFetcher, txscript.NewBaseTapLeaf(script), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return sigHash, nil
 }
 
 // GetPkScriptFromAddress gets the pk script of the given address

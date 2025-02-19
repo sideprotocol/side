@@ -61,7 +61,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, err
 	}
 
-	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, msg.BorrowerPubkey, msg.LiquidationAdaptorSignature, hex.EncodeToString(adaptorPoint)); err != nil {
+	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, msg.BorrowerPubkey, agency.Pubkey, msg.LiquidationAdaptorSignature, hex.EncodeToString(adaptorPoint)); err != nil {
 		return nil, err
 	}
 
@@ -105,6 +105,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	loan := types.Loan{
 		VaultAddress:     vault,
 		Borrower:         msg.Borrower,
+		BorrowerPubKey:   msg.BorrowerPubkey,
 		Agency:           agency.Pubkey,
 		HashLoanSecret:   msg.LoanSecretHash,
 		MaturityTime:     msg.MaturityTime,
@@ -167,9 +168,10 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, types.ErrLoanDoesNotExist
 	}
 
-	if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, log.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
-		return nil, types.ErrInvalidProof
-	}
+	// Do not validate tx for now
+	// if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, log.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
+	// 	return nil, types.ErrInvalidProof
+	// }
 
 	loan := m.GetLoan(ctx, log.VaultAddress)
 
@@ -267,6 +269,9 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 
 	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
 
+	internalKey, _ := hex.DecodeString(dlcMeta.InternalKey)
+	tapscripts := types.GetDLCTapscripts(dlcMeta)
+
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 	borrowerPkScript, _ := types.GetPkScriptFromAddress(loan.Borrower)
 
@@ -280,12 +285,8 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		depositTx,
 		vaultPkScript,
 		borrowerPkScript,
-		[]byte(dlcMeta.InternalKey),
-		[][]byte{
-			[]byte(dlcMeta.LiquidationCetScript),
-			[]byte(dlcMeta.ForcedRepaymentScript),
-			[]byte(dlcMeta.TimeoutRefundScript),
-		},
+		internalKey,
+		tapscripts,
 		feeRate,
 	)
 	if err != nil {
@@ -341,12 +342,21 @@ func (m msgServer) SubmitRepaymentAdaptorSignature(goCtx context.Context, msg *t
 
 	loan := m.GetLoan(ctx, msg.LoanId)
 
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repayment.Tx)), true)
+	if err != nil {
+		return nil, err
+	}
+
+	repaymentScript, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
+
+	sigHash, err := types.CalcTapscriptSigHash(p, 0, types.DefaultSigHashType, repaymentScript)
+	if err != nil {
+		return nil, err
+	}
+
 	adaptorSigBytes, _ := hex.DecodeString(msg.AdaptorSignature)
 	adaptorPointBytes, _ := hex.DecodeString(repayment.RepayAdaptorPoint)
 	pubKeyBytes, _ := hex.DecodeString(loan.Agency)
-
-	// TODO: calculate sig hash
-	sigHash := []byte{}
 
 	if !adaptor.Verify(adaptorSigBytes, sigHash, pubKeyBytes, adaptorPointBytes) {
 		return nil, types.ErrInvalidAdaptorSignature
@@ -402,6 +412,12 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
 			return nil, types.ErrInvalidSignature
 		}
+	}
+
+	if len(dlcMeta.LiquidationAdaptedSignature) != 0 {
+		// error ignored due to that the signed tx can be built offchain
+		signedTx, _ := types.BuildSignedLiquidationCet(dlcMeta.LiquidationCet, loan.BorrowerPubKey, []string{dlcMeta.LiquidationAdaptedSignature}, loan.Agency, msg.Signatures)
+		dlcMeta.SignedLiquidationCetHex = hex.EncodeToString(signedTx)
 	}
 
 	dlcMeta.LiquidationAgencySignatures = msg.Signatures

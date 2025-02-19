@@ -93,6 +93,17 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		// set the adapted signature
 		dlcMeta.LiquidationAdaptedSignature = hex.EncodeToString(adaptedSignature)
+
+		// build signed liquidation cet if the agency signatures already exist
+		if len(dlcMeta.LiquidationAgencySignatures) != 0 {
+			signedTx, err := types.BuildSignedLiquidationCet(dlcMeta.LiquidationCet, loan.BorrowerPubKey, []string{dlcMeta.LiquidationAdaptedSignature}, loan.Agency, dlcMeta.LiquidationAgencySignatures)
+			if err != nil {
+				k.Logger(ctx).Info("failed to build signed liquidation cet", "err", err)
+			}
+
+			dlcMeta.SignedLiquidationCetHex = hex.EncodeToString(signedTx)
+		}
+
 		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 	}
 }

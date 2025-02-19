@@ -7,14 +7,20 @@ import (
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
+	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 
 	"github.com/sideprotocol/side/crypto/adaptor"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 )
 
 // BuildDLCMeta creates the dlc meta from the given params
-func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCET string, liquidationAdaptorSig string, borrowerPubKey string, agencyPubKey string, secretHash string, muturityTime int64, finalTimeout int64) (*DLCMeta, error) {
+func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet string, liquidationAdaptorSig string, borrowerPubKey string, agencyPubKey string, secretHash string, muturityTime int64, finalTimeout int64) (*DLCMeta, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
+	if err != nil {
+		return nil, err
+	}
+
+	liquidationCetPacket, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCet)), true)
 	if err != nil {
 		return nil, err
 	}
@@ -34,11 +40,40 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCET s
 		return nil, err
 	}
 
+	merkleTree := GetTapscriptTree([][]byte{
+		multiSigScript, forcedRepaymentScript, timeoutRefundScript,
+	})
+
+	multiSigScriptProof := merkleTree.LeafMerkleProofs[0]
+
+	internalKey := GetInternalKey()
+	controlBlock, err := GetControlBlock(internalKey, multiSigScriptProof)
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range liquidationCetPacket.Inputs {
+		liquidationCetPacket.Inputs[i].SighashType = txscript.SigHashDefault
+		liquidationCetPacket.Inputs[i].TaprootInternalKey = schnorr.SerializePubKey(internalKey)
+		liquidationCetPacket.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
+			{
+				ControlBlock: controlBlock,
+				Script:       multiSigScript,
+				LeafVersion:  txscript.BaseLeafVersion,
+			},
+		}
+	}
+
+	liquidationCet, err = liquidationCetPacket.B64Encode()
+	if err != nil {
+		return nil, err
+	}
+
 	return &DLCMeta{
-		LiquidationCet:              liquidationCET,
+		LiquidationCet:              liquidationCet,
 		LiquidationAdaptorSignature: liquidationAdaptorSig,
 		VaultUtxo:                   vaultUtxo,
-		InternalKey:                 hex.EncodeToString(schnorr.SerializePubKey(GetInternalKey())),
+		InternalKey:                 hex.EncodeToString(internalKey.SerializeCompressed()),
 		LiquidationCetScript:        hex.EncodeToString(multiSigScript),
 		RepaymentScript:             hex.EncodeToString(multiSigScript),
 		ForcedRepaymentScript:       hex.EncodeToString(forcedRepaymentScript),
@@ -47,7 +82,7 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCET s
 }
 
 // VerifyLiquidationCET verifies the given liquidation cet and corresponding adaptor signature
-func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowerPubKey string, adaptorSignature string, adaptorPoint string) error {
+func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowerPubKey string, agencyPubKey string, adaptorSignature string, adaptorPoint string) error {
 	if err := depositTx.SanityCheck(); err != nil {
 		return ErrInvalidFunding
 	}
@@ -65,7 +100,16 @@ func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowe
 		}
 	}
 
-	sigHash, err := txscript.CalcTapscriptSignaturehash(txscript.NewTxSigHashes(p.UnsignedTx, nil), DefaultSigHashType, p.UnsignedTx, 0, nil, txscript.NewBaseTapLeaf(p.Inputs[0].TaprootLeafScript[0].Script), nil)
+	if p.Inputs[0].WitnessUtxo == nil {
+		return ErrInvalidCET
+	}
+
+	multiSigScript, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
+	if err != nil {
+		return err
+	}
+
+	sigHash, err := CalcTapscriptSigHash(p, 0, DefaultSigHashType, multiSigScript)
 	if err != nil {
 		return ErrInvalidCET
 	}
@@ -93,7 +137,7 @@ func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowe
 }
 
 // CreateLiquidationCET creates the liquidation cet
-func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPkScript []byte, internalKey []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
 	if err != nil {
 		return "", err
@@ -104,8 +148,29 @@ func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPk
 		return "", err
 	}
 
-	p.Inputs[0].TaprootInternalKey = internalKey
-	p.Inputs[0].TaprootLeafScript = []*psbt.TaprootTapLeafScript{}
+	internalKey, err := secp256k1.ParsePubKey(internalKeyBytes)
+	if err != nil {
+		return "", err
+	}
+
+	merkleTree := GetTapscriptTree(tapscripts)
+	multiSigScriptProof := merkleTree.LeafMerkleProofs[0]
+
+	controlBlock, err := GetControlBlock(internalKey, multiSigScriptProof)
+	if err != nil {
+		return "", err
+	}
+
+	for i := range p.Inputs {
+		p.Inputs[i].TaprootInternalKey = schnorr.SerializePubKey(internalKey)
+		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
+			{
+				ControlBlock: controlBlock,
+				Script:       tapscripts[0],
+				LeafVersion:  txscript.BaseLeafVersion,
+			},
+		}
+	}
 
 	psbtB64, err := p.B64Encode()
 	if err != nil {
@@ -116,7 +181,7 @@ func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPk
 }
 
 // CreateRepaymentTransaction creates the repayment transaction
-func CreateRepaymentTransaction(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKey []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+func CreateRepaymentTransaction(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
 	if err != nil {
 		return "", err
@@ -127,8 +192,29 @@ func CreateRepaymentTransaction(depositTx *psbt.Packet, vaultPkScript []byte, bo
 		return "", err
 	}
 
-	p.Inputs[0].TaprootInternalKey = internalKey
-	p.Inputs[0].TaprootLeafScript = []*psbt.TaprootTapLeafScript{}
+	internalKey, err := secp256k1.ParsePubKey(internalKeyBytes)
+	if err != nil {
+		return "", err
+	}
+
+	merkleTree := GetTapscriptTree(tapscripts)
+	multiSigScriptProof := merkleTree.LeafMerkleProofs[0]
+
+	controlBlock, err := GetControlBlock(internalKey, multiSigScriptProof)
+	if err != nil {
+		return "", err
+	}
+
+	for i := range p.Inputs {
+		p.Inputs[i].TaprootInternalKey = schnorr.SerializePubKey(internalKey)
+		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
+			{
+				ControlBlock: controlBlock,
+				Script:       tapscripts[0],
+				LeafVersion:  txscript.BaseLeafVersion,
+			},
+		}
+	}
 
 	psbtB64, err := p.B64Encode()
 	if err != nil {
@@ -182,6 +268,77 @@ func CreateTimeoutRefundTransaction(depositTx *psbt.Packet, vaultPkScript []byte
 	}
 
 	return psbtB64, nil
+}
+
+// BuildSignedLiquidationCet builds the signed liquidation cet from the given signatures
+func BuildSignedLiquidationCet(liquidationCet string, borrowerPubKey string, borrowerSignatures []string, agencyPubKey string, agencySignatures []string) ([]byte, error) {
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCet)), true)
+	if err != nil {
+		return nil, err
+	}
+
+	borrowerPubKeyBytes, err := hex.DecodeString(borrowerPubKey)
+	if err != nil {
+		return nil, err
+	}
+
+	agencyPubKeyBytes, err := hex.DecodeString(agencyPubKey)
+	if err != nil {
+		return nil, err
+	}
+
+	borrowerSig, err := hex.DecodeString(borrowerSignatures[0])
+	if err != nil {
+		return nil, err
+	}
+
+	agencySig, err := hex.DecodeString(agencySignatures[0])
+	if err != nil {
+		return nil, err
+	}
+
+	leafHash := txscript.NewBaseTapLeaf(p.Inputs[0].TaprootLeafScript[0].Script).TapHash()
+
+	p.Inputs[0].TaprootScriptSpendSig = []*psbt.TaprootScriptSpendSig{
+		{
+			XOnlyPubKey: agencyPubKeyBytes,
+			LeafHash:    leafHash[:],
+			Signature:   agencySig,
+			SigHash:     txscript.SigHashDefault,
+		},
+		{
+			XOnlyPubKey: borrowerPubKeyBytes,
+			LeafHash:    leafHash[:],
+			Signature:   borrowerSig,
+			SigHash:     txscript.SigHashDefault,
+		},
+	}
+
+	if err := psbt.MaybeFinalizeAll(p); err != nil {
+		return nil, err
+	}
+
+	signedTx, err := psbt.Extract(p)
+	if err != nil {
+		return nil, err
+	}
+
+	var buf bytes.Buffer
+	if err := signedTx.Serialize(&buf); err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
+// GetDLCTapscripts gets the tap scripts from the given dlc meta
+// Assume that the dlc meta is valid
+func GetDLCTapscripts(dlcMeta *DLCMeta) [][]byte {
+	multiSigScript, _ := hex.DecodeString(dlcMeta.LiquidationCetScript)
+	forcedRepaymentScript, _ := hex.DecodeString(dlcMeta.ForcedRepaymentScript)
+	timeoutRefundScript, _ := hex.DecodeString(dlcMeta.TimeoutRefundScript)
+
+	return [][]byte{multiSigScript, forcedRepaymentScript, timeoutRefundScript}
 }
 
 // getVaultOutIndex returns the index of the vault output

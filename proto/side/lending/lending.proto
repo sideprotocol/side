@@ -47,50 +47,52 @@ enum LoanStatus {
 message Loan {
     string vault_address = 1; // id
     string borrower = 2;
-    string agency = 3;
-    string hash_loan_secret = 4;
-    int64 maturity_time = 5;
-    int64 final_timeout = 6; 
+    string borrowerPubKey = 3;
+    string agency = 4;
+    string hash_loan_secret = 5;
+    int64 maturity_time = 6;
+    int64 final_timeout = 7; 
     
-    cosmos.base.v1beta1.Coin borrow_amount = 7;
-    string fees = 8[
+    cosmos.base.v1beta1.Coin borrow_amount = 8;
+    string fees = 9 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
-    string interests = 10[
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-      ];
-
-    string term = 9 [
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-      ];
-    uint64 event_id = 11;
-    uint64 attestation_id = 12;
-    repeated string deposit_txs = 13;
-    string collateral_amount = 14 [
+    string interests = 10 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
 
-    string loan_secret = 15;
-    google.protobuf.Timestamp create_at = 16 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 17;
-    string pool_id = 18;
+    string term = 11 [
+        (gogoproto.customtype) = "cosmossdk.io/math.Int",
+        (gogoproto.nullable) = false
+      ];
+    uint64 event_id = 12;
+    uint64 attestation_id = 13;
+    repeated string deposit_txs = 14;
+    string collateral_amount = 15 [
+        (gogoproto.customtype) = "cosmossdk.io/math.Int",
+        (gogoproto.nullable) = false
+      ];
+
+    string loan_secret = 16;
+    google.protobuf.Timestamp create_at = 17 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 18;
+    string pool_id = 19;
 }
 
 message DLCMeta {
     string liquidation_cet = 1;
-    string liquidation_adaptor_signature = 2;
-    string liquidation_adapted_signature = 3;
-    repeated string liquidation_agency_signatures = 4;
-    side.btcbridge.UTXO vault_utxo = 5;
-    string internal_key = 6;
-    string liquidation_cet_script = 7;
-    string repayment_script = 8;
-    string forced_repayment_script = 9;
-    string timeout_refund_script = 10;
+    string signed_liquidation_cet_hex = 2;
+    string liquidation_adaptor_signature = 3;
+    string liquidation_adapted_signature = 4;
+    repeated string liquidation_agency_signatures = 5;
+    side.btcbridge.UTXO vault_utxo = 6;
+    string internal_key = 7;
+    string liquidation_cet_script = 8;
+    string repayment_script = 9;
+    string forced_repayment_script = 10;
+    string timeout_refund_script = 11;
 }
 
 message DepositLog {
