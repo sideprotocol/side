@@ -33,11 +33,6 @@ func AdaptorPoint(secret []byte) string {
 	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
 }
 
-func GetTaprootAddress(script []byte) (*btcutil.AddressTaproot, error) {
-	conf := sdk.GetConfig().GetBtcChainCfg()
-	return btcutil.NewAddressTaproot(script, conf)
-}
-
 // Branch 1: multisig signature script
 func CreateMultisigScript(pubKeys []string) ([]byte, error) {
 	builder := txscript.NewScriptBuilder()
@@ -63,89 +58,91 @@ func CreateMultisigScript(pubKeys []string) ([]byte, error) {
 }
 
 // Branch 2: Hash Time lock script for DCA
-func CreateHashTimeLockScript(pubkey string, hashlock string, locktime int64) ([]byte, error) {
-	pubKeyBytes, err := hex.DecodeString(pubkey)
+func CreateHashTimeLockScript(pubKey string, hashLock string, lockTime int64) ([]byte, error) {
+	pubKeyBytes, err := hex.DecodeString(pubKey)
 	if err != nil {
 		return nil, err
 	}
-	// locktime := int64(500000) // Example block height
-	hashBytes, err := hex.DecodeString(hashlock)
+
+	hashLockBytes, err := hex.DecodeString(hashLock)
 	if err != nil {
 		return nil, err
 	}
+
 	builder := txscript.NewScriptBuilder()
-	builder.AddInt64(locktime)                     // Add locktime
+	builder.AddInt64(lockTime)                     // Add lock time
 	builder.AddOp(txscript.OP_CHECKLOCKTIMEVERIFY) // Enforce time lock
 	builder.AddOp(txscript.OP_DROP)                // Drop locktime from the stack
 	builder.AddOp(txscript.OP_SHA256)              // Add hash lock
-	builder.AddData(hashBytes)                     // Push hash
+	builder.AddData(hashLockBytes)                 // Push hash lock
 	builder.AddOp(txscript.OP_EQUALVERIFY)         // Verify hash preimage
 	builder.AddData(pubKeyBytes)                   // Push pubkey
 	builder.AddOp(txscript.OP_CHECKSIG)            // Verify signature
+
 	return builder.Script()
 }
 
 // Branch 3: PubKey with Time lock script
-func CreatePubKeyTimeLockScript(pubKeyHex string, locktime int64) ([]byte, error) {
-	// pubKeyHex := "03abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
-	// locktime := int64(600000) // Example block height
+func CreatePubKeyTimeLockScript(pubKeyHex string, lockTime int64) ([]byte, error) {
 	pubKey, err := hex.DecodeString(pubKeyHex)
 	if err != nil {
 		return nil, err
 	}
+
 	builder := txscript.NewScriptBuilder()
-	builder.AddInt64(locktime)
+	builder.AddInt64(lockTime)
 	builder.AddOp(txscript.OP_CHECKLOCKTIMEVERIFY)
 	builder.AddOp(txscript.OP_DROP)
 	builder.AddData(pubKey)
 	builder.AddOp(txscript.OP_CHECKSIG)
+
 	return builder.Script()
 }
 
 // Create Taproot address with complex script branches
-func CreateTaprootAddress(branches [][]byte, params *chaincfg.Params) (string, error) {
-	// Create Taproot script tree
-	leaves := []txscript.TapLeaf{}
-	for _, b := range branches {
-		leaves = append(leaves, txscript.NewBaseTapLeaf(b))
-	}
-	tree := txscript.AssembleTaprootScriptTree(leaves...)
+func CreateTaprootAddress(internalKey *secp256k1.PublicKey, branches [][]byte, params *chaincfg.Params) (string, error) {
+	tapScriptTree := GetTapscriptTree(branches)
+	scriptRoot := tapScriptTree.RootNode.TapHash()
 
-	scriptRoot := tree.RootNode.TapHash()
+	taprootOutKey := txscript.ComputeTaprootOutputKey(internalKey, scriptRoot[:])
 
-	// Derive Taproot output key
-	taprootPubKey := txscript.ComputeTaprootOutputKey(GetInternalKey(), scriptRoot[:])
 	// Generate Taproot address
-	address, err := btcutil.NewAddressTaproot(schnorr.SerializePubKey(taprootPubKey), params)
+	address, err := btcutil.NewAddressTaproot(schnorr.SerializePubKey(taprootOutKey), params)
 	if err != nil {
 		return "", err
 	}
+
 	return address.EncodeAddress(), nil
 }
+
 func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, loanSecretHash string, muturityTime int64, finalTimeout int64) (string, error) {
-	// Define network parameters (e.g., MainNet, TestNet)
-	// params := &chaincfg.MainNetParams
 	params := sdk.GetConfig().GetBtcChainCfg()
-	// Create script branches
-	thresholdScript, err := CreateMultisigScript([]string{borrowerPubkey, dcaPubkey})
+
+	// multisig script for liquidation cet and repayment
+	multisigScript, err := CreateMultisigScript([]string{borrowerPubkey, dcaPubkey})
 	if err != nil {
 		return "", err
 	}
-	hashTimeLockScript, err := CreateHashTimeLockScript(dcaPubkey, loanSecretHash, muturityTime)
+
+	forcedRepaymentScript, err := CreateHashTimeLockScript(dcaPubkey, loanSecretHash, muturityTime)
 	if err != nil {
 		return "", err
 	}
-	pubKeyTimeLockScript, err := CreatePubKeyTimeLockScript(borrowerPubkey, finalTimeout)
+
+	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubkey, finalTimeout)
 	if err != nil {
 		return "", err
 	}
+
 	// Combine branches
-	branches := [][]byte{thresholdScript, hashTimeLockScript, pubKeyTimeLockScript}
+	branches := [][]byte{multisigScript, forcedRepaymentScript, timeoutRefundScript}
+
 	// Generate Taproot address
-	taprootAddress, err := CreateTaprootAddress(branches, params)
+	taprootAddress, err := CreateTaprootAddress(GetInternalKey(), branches, params)
 	if err != nil {
 		return "", err
 	}
+
 	return taprootAddress, nil
 }
 
@@ -164,49 +161,53 @@ func GetInternalKey() *btcec.PublicKey {
 	return btcec.NewPublicKey(&X, &Y)
 }
 
-// GetTapscriptMerkleRoot gets the merkle root of the given scripts
-func GetTapscriptMerkleRoot(scripts [][]byte) string {
-	tapLeaves := []txscript.TapLeaf{}
+func GetTapscriptTree(scripts [][]byte) *txscript.IndexedTapScriptTree {
+	leaves := []txscript.TapLeaf{}
 
-	for _, s := range scripts {
-		tapLeaves = append(tapLeaves, txscript.NewBaseTapLeaf(s))
+	for _, script := range scripts {
+		leaves = append(leaves, txscript.NewBaseTapLeaf(script))
 	}
 
-	rootHash := txscript.AssembleTaprootScriptTree(tapLeaves...).RootNode.TapHash()
+	tree := txscript.AssembleTaprootScriptTree(leaves...)
 
-	return hex.EncodeToString(rootHash[:])
+	return tree
 }
 
-// GetVaultPkScript gets the pk script of the given vault
-// Assume that the given vault is valid
-func GetVaultPkScript(vault string) []byte {
-	vaultAddr, err := btcutil.DecodeAddress(vault, sdk.GetConfig().GetBtcChainCfg())
+func GetControlBlock(pubKey *secp256k1.PublicKey, proof txscript.TapscriptProof) ([]byte, error) {
+	controlBlock := proof.ToControlBlock(pubKey)
+
+	controlBlockBz, err := controlBlock.ToBytes()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return vaultAddr.ScriptAddress()
+	return controlBlockBz, nil
 }
 
-// GetAgencyPkScript gets the pk script from the given agency pubkey
-// Assume that the given pubkey is valid
-func GetAgencyPkScript(agencyPubKey string) []byte {
-	pubKey, err := hex.DecodeString(fmt.Sprintf("02%s", agencyPubKey))
+// GetPkScriptFromAddress gets the pk script of the given address
+func GetPkScriptFromAddress(address string) ([]byte, error) {
+	addr, err := btcutil.DecodeAddress(address, sdk.GetConfig().GetBtcChainCfg())
 	if err != nil {
-		panic(err)
+		return nil, err
+	}
+
+	return txscript.PayToAddrScript(addr)
+}
+
+// GetPkScriptFromPubKey gets the pk script from the given agency pubkey
+// Assume that the given pubkey is 32 bytes w/o 0x prefix
+func GetPkScriptFromPubKey(pubKeyHex string) ([]byte, error) {
+	pubKey, err := hex.DecodeString(fmt.Sprintf("02%s", pubKeyHex))
+	if err != nil {
+		return nil, err
 	}
 
 	parsedPubKey, err := secp256k1.ParsePubKey(pubKey)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	taprootOutKey := txscript.ComputeTaprootKeyNoScript(parsedPubKey)
 
-	address, err := btcutil.NewAddressTaproot(taprootOutKey.SerializeCompressed(), sdk.GetConfig().GetBtcChainCfg())
-	if err != nil {
-		panic(err)
-	}
-
-	return address.ScriptAddress()
+	return txscript.PayToTaprootScript(taprootOutKey)
 }

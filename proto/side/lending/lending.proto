@@ -90,7 +90,6 @@ message DLCMeta {
     string repayment_script = 7;
     string forced_repayment_script = 8;
     string timeout_refund_script = 9;
-    string tapscript_merkle_root = 10;
 }
 
 message DepositLog {

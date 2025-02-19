@@ -43,7 +43,6 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCET s
 		RepaymentScript:             hex.EncodeToString(multiSigScript),
 		ForcedRepaymentScript:       hex.EncodeToString(forcedRepaymentScript),
 		TimeoutRefundScript:         hex.EncodeToString(timeoutRefundScript),
-		TapscriptMerkleRoot:         GetTapscriptMerkleRoot([][]byte{multiSigScript, forcedRepaymentScript, timeoutRefundScript}),
 	}, nil
 }
 
@@ -94,7 +93,7 @@ func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowe
 }
 
 // CreateLiquidationCET creates the liquidation cet
-func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPkScript []byte, internalKey []byte, tapscripts [][]byte, merkleRoot []byte, feeRate int64) (string, error) {
+func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPkScript []byte, internalKey []byte, tapscripts [][]byte, feeRate int64) (string, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
 	if err != nil {
 		return "", err
@@ -107,7 +106,6 @@ func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPk
 
 	p.Inputs[0].TaprootInternalKey = internalKey
 	p.Inputs[0].TaprootLeafScript = []*psbt.TaprootTapLeafScript{}
-	p.Inputs[0].TaprootMerkleRoot = merkleRoot
 
 	psbtB64, err := p.B64Encode()
 	if err != nil {
@@ -117,32 +115,8 @@ func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPk
 	return psbtB64, nil
 }
 
-// CreateForcedRepaymentTransaction creates the forced repayment tx
-func CreateForcedRepaymentTransaction(depositTx *psbt.Packet, vaultPkScript []byte, agencyPkScript []byte, internalKey []byte, tapscripts [][]byte, merkleRoot []byte, feeRate int64) (string, error) {
-	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
-	if err != nil {
-		return "", err
-	}
-
-	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, agencyPkScript, feeRate)
-	if err != nil {
-		return "", err
-	}
-
-	p.Inputs[0].TaprootInternalKey = internalKey
-	p.Inputs[0].TaprootLeafScript = []*psbt.TaprootTapLeafScript{}
-	p.Inputs[0].TaprootMerkleRoot = merkleRoot
-
-	psbtB64, err := p.B64Encode()
-	if err != nil {
-		return "", err
-	}
-
-	return psbtB64, nil
-}
-
-// CreateTimeoutRefundTransaction creates the timeout refund tx
-func CreateTimeoutRefundTransaction(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKey []byte, tapscripts [][]byte, merkleRoot []byte, feeRate int64) (string, error) {
+// CreateRepaymentTransaction creates the repayment transaction
+func CreateRepaymentTransaction(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKey []byte, tapscripts [][]byte, feeRate int64) (string, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
 	if err != nil {
 		return "", err
@@ -155,7 +129,52 @@ func CreateTimeoutRefundTransaction(depositTx *psbt.Packet, vaultPkScript []byte
 
 	p.Inputs[0].TaprootInternalKey = internalKey
 	p.Inputs[0].TaprootLeafScript = []*psbt.TaprootTapLeafScript{}
-	p.Inputs[0].TaprootMerkleRoot = merkleRoot
+
+	psbtB64, err := p.B64Encode()
+	if err != nil {
+		return "", err
+	}
+
+	return psbtB64, nil
+}
+
+// CreateForcedRepaymentTransaction creates the forced repayment tx
+func CreateForcedRepaymentTransaction(depositTx *psbt.Packet, vaultPkScript []byte, agencyPkScript []byte, internalKey []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
+	if err != nil {
+		return "", err
+	}
+
+	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, agencyPkScript, feeRate)
+	if err != nil {
+		return "", err
+	}
+
+	p.Inputs[0].TaprootInternalKey = internalKey
+	p.Inputs[0].TaprootLeafScript = []*psbt.TaprootTapLeafScript{}
+
+	psbtB64, err := p.B64Encode()
+	if err != nil {
+		return "", err
+	}
+
+	return psbtB64, nil
+}
+
+// CreateTimeoutRefundTransaction creates the timeout refund tx
+func CreateTimeoutRefundTransaction(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKey []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
+	if err != nil {
+		return "", err
+	}
+
+	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, borrowerPkScript, feeRate)
+	if err != nil {
+		return "", err
+	}
+
+	p.Inputs[0].TaprootInternalKey = internalKey
+	p.Inputs[0].TaprootLeafScript = []*psbt.TaprootTapLeafScript{}
 
 	psbtB64, err := p.B64Encode()
 	if err != nil {
@@ -176,6 +195,7 @@ func getVaultOutIndex(depositTx *psbt.Packet, vaultPkScript []byte) (int, error)
 	return 0, ErrInvalidDepositTx
 }
 
+// getVaultUTXO gets the vault utxo from the given params
 func getVaultUTXO(depositTx *psbt.Packet, vaultPkScript []byte) (*btcbridgetypes.UTXO, error) {
 	vaultOutIndex, err := getVaultOutIndex(depositTx, vaultPkScript)
 	if err != nil {

@@ -67,7 +67,9 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, err
 	}
 
-	dlcMeta, err := types.BuildDLCMeta(fundTx, types.GetVaultPkScript(vault), msg.LiquidationCet, msg.LiquidationAdaptorSignature, msg.BorrowerPubkey, agency.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.FinalTimeout)
+	vaultPkScript, _ := types.GetPkScriptFromAddress(vault)
+
+	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignature, msg.BorrowerPubkey, agency.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -75,13 +77,9 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	params := m.GetParams(ctx)
 
 	collateralAmount := math.NewInt(0)
-	for _, o := range fundTx.UnsignedTx.TxOut {
-		address, e := types.GetTaprootAddress(o.PkScript)
-		if e != nil {
-			return nil, e
-		}
-		if address.EncodeAddress() == vault {
-			collateralAmount.Add(math.NewInt(o.Value))
+	for _, out := range fundTx.UnsignedTx.TxOut {
+		if bytes.Equal(out.PkScript, vaultPkScript) {
+			collateralAmount.Add(math.NewInt(out.Value))
 		}
 	}
 
@@ -267,17 +265,26 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 
 	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
 
-	repaymentTx, err := types.CreateForcedRepaymentTransaction(
+	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
+	borrowerPkScript, _ := types.GetPkScriptFromAddress(loan.Borrower)
+
+	feeRate := m.btcbridgeKeeper.GetFeeRate(ctx).Value
+	if feeRate == 0 {
+		// use default fee rate for now
+		feeRate = 10
+	}
+
+	repaymentTx, err := types.CreateRepaymentTransaction(
 		depositTx,
-		types.GetVaultPkScript(loan.VaultAddress),
-		types.GetAgencyPkScript(loan.Agency),
+		vaultPkScript,
+		borrowerPkScript,
 		[]byte(dlcMeta.InternalKey),
 		[][]byte{
 			[]byte(dlcMeta.LiquidationCetScript),
 			[]byte(dlcMeta.ForcedRepaymentScript),
 			[]byte(dlcMeta.TimeoutRefundScript),
 		},
-		[]byte(dlcMeta.TapscriptMerkleRoot), m.btcbridgeKeeper.GetFeeRate(ctx).Value,
+		feeRate,
 	)
 	if err != nil {
 		return nil, err
