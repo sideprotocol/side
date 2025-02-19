@@ -4,6 +4,7 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sideprotocol/side/x/dlc/types"
 )
 
 // GetNonceQueueSize gets the nonce queue size
@@ -21,7 +22,7 @@ func (k Keeper) GetPriceInterval(ctx sdk.Context, pair string) int32 {
 		}
 	}
 
-	return 0
+	return types.DefaultPriceInterval
 }
 
 // GetDKGTimeoutPeriod gets the DKG timeout period

@@ -15,8 +15,8 @@ var (
 	// default nonce queue size
 	DefaultNonceQueueSize = uint32(20)
 
-	// default price interval for btc-usd
-	DefaultPriceIntervalForBTCUSD = int32(100)
+	// default price interval
+	DefaultPriceInterval = int32(100)
 
 	// default DKG timeout period
 	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
@@ -28,8 +28,8 @@ func NewParams() Params {
 		NonceQueueSize: DefaultNonceQueueSize,
 		PriceIntervals: []PriceInterval{
 			{
-				PricePair: "btc-usd",
-				Interval:  int32(DefaultPriceIntervalForBTCUSD),
+				PricePair: "BTC-USD",
+				Interval:  int32(DefaultPriceInterval),
 			},
 		},
 		DkgTimeoutPeriod: DefaultDKGTimeoutPeriod,
