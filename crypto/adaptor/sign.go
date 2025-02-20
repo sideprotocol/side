@@ -214,13 +214,11 @@ func schnorrAdaptorSign(privKey, nonce *btcec.ModNScalar, pubKey *btcec.PublicKe
 	}
 
 	// Step 14.
-	//
+
 	// If Verify(bytes(P), m, sig) fails, abort.
-	// if !opts.fastSign {
-	// 	if err := schnorrVerify(sig, hash, pBytes); err != nil {
-	// 		return nil, err
-	// 	}
-	// }
+	if err := verifySchnorrAdaptorSignature(sig, hash, pubKey, adaptorPoint); err != nil {
+		return nil, err
+	}
 
 	// Step 15.
 	//

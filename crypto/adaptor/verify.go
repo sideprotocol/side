@@ -135,17 +135,17 @@ func verifySchnorrAdaptorSignature(sig *Signature, hash []byte, pubKey *secp256k
 
 	// Step 8.
 	//
-	// R = s*G - e*P
-	var P, sG, eP btcec.JacobianPoint
+	// ER = s*G - e*P
+	var P, sG, eP, ER btcec.JacobianPoint
 	pubKey.AsJacobian(&P)
 	btcec.ScalarBaseMultNonConst(&sig.s, &sG)
 	btcec.ScalarMultNonConst(&e, &P, &eP)
-	btcec.AddNonConst(&sG, &eP, &R)
+	btcec.AddNonConst(&sG, &eP, &ER)
 
 	// Step 9.
 	//
-	// Fail if R is the point at infinity
-	if (R.X.IsZero() && R.Y.IsZero()) || R.Z.IsZero() {
+	// Fail if CR is the point at infinity
+	if (ER.X.IsZero() && ER.Y.IsZero()) || ER.Z.IsZero() {
 		str := "calculated R point is the point at infinity"
 		return fmt.Errorf("invalid signature: %s", str)
 	}
@@ -155,21 +155,25 @@ func verifySchnorrAdaptorSignature(sig *Signature, hash []byte, pubKey *secp256k
 	// Fail if (R+AP).y is odd
 	//
 	// Note that R+AP must be in affine coordinates for this check.
-	btcec.AddNonConst(&R, &AP, &AR)
 	AR.ToAffine()
 	if AR.Y.IsOdd() {
-		str := "calculated AR y-value is odd"
-		return fmt.Errorf("invalid signature: %s", str)
-	}
+		var Check btcec.JacobianPoint
+		btcec.AddNonConst(&R, &ER, &Check)
 
-	// Step 11.
-	//
-	// Verified if R.x == r
-	//
-	// Note that R must be in affine coordinates for this check.
-	if !sig.r.Equals(&R.X) {
-		str := "calculated R point was not given R"
-		return fmt.Errorf("invalid signature: %s", str)
+		if !Check.X.IsZero() || !Check.Y.IsZero() {
+			str := "effective R point is not negated R"
+			return fmt.Errorf("invalid signature: %s", str)
+		}
+	} else {
+		// Step 11.
+		//
+		// Verified if R.x == r
+		//
+		// Note that R must be in affine coordinates for this check.
+		if R != ER {
+			str := "effective R point was not given R"
+			return fmt.Errorf("invalid signature: %s", str)
+		}
 	}
 
 	// Step 12.
