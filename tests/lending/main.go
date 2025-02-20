@@ -36,11 +36,11 @@ func init() {
 
 func main() {
 	borrowerPrivKeyHex := "7b769bcd5372539ce9ad7d4d80deb668cd07b9e6d90a6744ea7390b6b18aa55e"
-	agencyPubKeyHex := "8f05f98ecdc52ff4019fd904869e539f35b847698aab2acb257e26dee539a45b"
+	agencyPubKeyHex := "cffb68790fa1df3418b44fc43acd58e2cccb8b3c4fb7018bcfe84ff4fd0c9410"
 
-	poolId := "usdc"
-	depositAmount := int64(100000)  // 0.001 btc
-	borrowAmount := int64(70000000) // 70 usdc
+	poolId := "usdc1"
+	depositAmount := int64(20000)  // 0.0002 btc
+	borrowAmount := int64(2000000) // 2 usdc
 	loanSecret := hash.Sha256([]byte("secret"))
 	loanSecretHash := hash.Sha256(loanSecret)
 	maturityTime := int64(100000)
@@ -50,8 +50,8 @@ func main() {
 
 	eventId := 1
 	agencyId := 1
-	oraclePubKey := "8f05f98ecdc52ff4019fd904869e539f35b847698aab2acb257e26dee539a45b"
-	nonce := "8f05f98ecdc52ff4019fd904869e539f35b847698aab2acb257e26dee539a45b"
+	oraclePubKey := "849be811b51189b268604f4f5baea331c26e213d1f19dbc8c701d5464f895c00"
+	nonce := "77a14bec326bbc7ea596db62b59503e448197d6f70e282d59a6ce492c6840262"
 	triggerPrice := lendingtypes.GetLiquidationPrice(sdkmath.NewInt(depositAmount), sdkmath.NewInt(borrowAmount), sdkmath.NewInt(70))
 
 	println("trigger price:", triggerPrice.String())
@@ -62,7 +62,7 @@ func main() {
 	}
 
 	borrowerPrivKey, borrowerPubKey := btcec.PrivKeyFromBytes(borrowPrivKeyBytes)
-	borrowerPubKeyHex := borrowerPubKey.SerializeCompressed()[1:]
+	borrowerPubKeyHex := hex.EncodeToString(borrowerPubKey.SerializeCompressed()[1:])
 
 	agencyPkScript, err := lendingtypes.GetPkScriptFromPubKey(agencyPubKeyHex)
 	if err != nil {
@@ -176,9 +176,11 @@ func main() {
 		panic(err)
 	}
 
+	println("adaptor signature verified:", adaptor.Verify(adaptorSig.Serialize(), sigHash, borrowerPubKey.SerializeCompressed()[1:], signaturePoint))
+
 	fmt.Println("adaptor sig:", hex.EncodeToString(adaptorSig.Serialize()))
 
-	fmt.Printf("sided tx lending apply %s %s %d %d %s %s %s %d %d %s %s", borrowerPubKeyHex, hex.EncodeToString(loanSecretHash), maturityTime, finalTimeout, depositTxPsbtB64, poolId, fmt.Sprintf("%d%s", borrowAmount, "uusdc"), eventId, agencyId, liquidationCetPsbt, hex.EncodeToString(adaptorSig.Serialize()))
+	fmt.Printf("sided tx lending apply %s %s %d %d %s %s %s %d %d %s %s --from test --keyring-backend test --fees 1000uside --gas auto --chain-id devnet", borrowerPubKeyHex, hex.EncodeToString(loanSecretHash), maturityTime, finalTimeout, depositTxPsbtB64, poolId, fmt.Sprintf("%d%s", borrowAmount, "uusdc"), eventId, agencyId, liquidationCetPsbt, hex.EncodeToString(adaptorSig.Serialize()))
 }
 
 func SignTaprootTransaction(key *secp256k1.PrivateKey, tx *wire.MsgTx, prevOuts []*wire.TxOut, hashType txscript.SigHashType) error {

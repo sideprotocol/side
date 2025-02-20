@@ -11,7 +11,7 @@ require (
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0
 	github.com/cosmos/cosmos-sdk v0.50.9
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0
-	github.com/sideprotocol/side v0.9.2-0.20250219234122-d0616df0a92c
+	github.com/sideprotocol/side v0.9.2-0.20250220083232-dc93badd38ad
 	github.com/tidwall/gjson v1.18.0
 	github.com/valyala/fasthttp v1.40.0
 )
