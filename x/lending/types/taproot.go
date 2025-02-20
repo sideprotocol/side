@@ -193,7 +193,7 @@ func CalcTapscriptSigHash(p *psbt.Packet, idx int, sigHashType txscript.SigHashT
 		prevOutFetcher.AddPrevOut(txIn.PreviousOutPoint, p.Inputs[i].WitnessUtxo)
 	}
 
-	sigHash, err := txscript.CalcTapscriptSignaturehash(txscript.NewTxSigHashes(p.UnsignedTx, prevOutFetcher), sigHashType, p.UnsignedTx, idx, prevOutFetcher, txscript.NewBaseTapLeaf(script), nil)
+	sigHash, err := txscript.CalcTapscriptSignaturehash(txscript.NewTxSigHashes(p.UnsignedTx, prevOutFetcher), sigHashType, p.UnsignedTx, idx, prevOutFetcher, txscript.NewBaseTapLeaf(script))
 	if err != nil {
 		return nil, err
 	}
