@@ -77,7 +77,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	collateralAmount := math.NewInt(0)
 	for _, out := range fundTx.UnsignedTx.TxOut {
 		if bytes.Equal(out.PkScript, vaultPkScript) {
-			collateralAmount.Add(math.NewInt(out.Value))
+			collateralAmount = collateralAmount.Add(math.NewInt(out.Value))
 		}
 	}
 
@@ -86,18 +86,20 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, err
 	}
 
-	decimal := math.NewInt(100000000)
+	// TODO: retrieve from params
+	collateralDecimal := math.NewInt(100000000)
+	borrowedDecimal := math.NewInt(1000000)
 
 	// verify LTV (Loan-to-Value Ratio)
 	// collateral value * min_ltv > borrow amount
-	if collateralAmount.Mul(currentPrice).Quo(decimal).Mul(params.MinInitialLtvPercent).Quo(types.Percent).LT(msg.BorrowAmount.Amount) {
+	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(params.MinInitialLtvPercent).Quo(types.Percent).LT(msg.BorrowAmount.Amount) {
 		return nil, types.ErrInsufficientCollateral
 	}
 
 	// verify liquidation events. TODO improve price interval
-	if collateralAmount.Mul(event.TriggerPrice).Quo(event.PriceDecimal).Mul(params.LiquidationThresholdPercent.Quo(types.Percent)).LT(msg.BorrowAmount.Amount) {
-		return nil, types.ErrInvalidPriceEvent
-	}
+	// if collateralAmount.Mul(event.TriggerPrice).Mul(borrowedDecimal).Quo(event.PriceDecimal).Mul(params.LiquidationThresholdPercent).Quo(types.Percent).LT(msg.BorrowAmount.Amount) {
+	// 	return nil, types.ErrInvalidPriceEvent
+	// }
 
 	interests := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille).Quo(types.Permille)
 	fees := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille.Sub(params.SupplyRatePermille)).Quo(types.Permille)

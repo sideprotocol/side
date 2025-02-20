@@ -68,7 +68,7 @@ func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 func (k Keeper) SetDepositLog(ctx sdk.Context, deposit types.DepositLog) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&deposit)
-	store.Set(types.DepositLogKey(deposit.VaultAddress), bz)
+	store.Set(types.DepositLogKey(deposit.Txid), bz)
 }
 
 func (k Keeper) HasDepositLog(ctx sdk.Context, txid string) bool {
