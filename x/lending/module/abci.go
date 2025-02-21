@@ -54,13 +54,17 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			loan.Status = types.LoanStatus_Liquidate
 			k.SetLoan(ctx, *loan)
 
+			// get liquidation cet sig hashes
+			// no error
+			liquidationCetSigHashes, _ := types.GetLiquidationCetSigHashes(k.GetDLCMeta(ctx, loan.VaultAddress))
+
 			// emit liquidation event
 			ctx.EventManager().EmitEvent(
 				sdk.NewEvent(
 					types.EventTypeLiquidate,
 					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
 					sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
-				),
+				).AppendAttributes(types.GetSigHashesAttributes(liquidationCetSigHashes)...),
 			)
 
 			// create auction
