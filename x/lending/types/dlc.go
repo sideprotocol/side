@@ -331,6 +331,32 @@ func BuildSignedLiquidationCet(liquidationCet string, borrowerPubKey string, bor
 	return buf.Bytes(), nil
 }
 
+// GetLiquidationCetSigHashes gets the sig hashes of the liquidation cet
+func GetLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet)), true)
+	if err != nil {
+		return nil, err
+	}
+
+	script, err := hex.DecodeString(dlcMeta.LiquidationCetScript)
+	if err != nil {
+		return nil, err
+	}
+
+	sigHashes := []string{}
+
+	for i, input := range p.Inputs {
+		sigHash, err := CalcTapscriptSigHash(p, i, input.SighashType, script)
+		if err != nil {
+			return nil, err
+		}
+
+		sigHashes = append(sigHashes, hex.EncodeToString(sigHash))
+	}
+
+	return sigHashes, nil
+}
+
 // GetDLCTapscripts gets the tap scripts from the given dlc meta
 // Assume that the dlc meta is valid
 func GetDLCTapscripts(dlcMeta *DLCMeta) [][]byte {

@@ -60,12 +60,14 @@ message QueryLiquidationEventResponse {
 }
 
 message QueryLiquidationCetRequest {
-    string borrower_pubkey = 1;
-    string agency_pubkey = 2;
+    string loan_id = 1;
+    string borrower_pubkey = 2;
+    string agency_pubkey = 3;
 }
 
 message QueryLiquidationCetResponse {
-    string liquidation_cet_script = 1;
+    string script = 1;
+    repeated string sig_hashes = 2;
 }
 
 message QueryCollateralAddressRequest{

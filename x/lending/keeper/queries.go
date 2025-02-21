@@ -64,13 +64,36 @@ func (k Keeper) LiquidationCet(goCtx context.Context, req *types.QueryLiquidatio
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	liquidation_cet_script, err := types.CreateMultisigScript([]string{req.BorrowerPubkey, req.AgencyPubkey})
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid params")
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	var err error
+	var script string
+	var sigHashes []string
+
+	if len(req.LoanId) != 0 {
+		if !k.HasLoan(ctx, req.LoanId) {
+			return nil, status.Error(codes.InvalidArgument, "loan does not exist")
+		}
+
+		dlcMeta := k.GetDLCMeta(ctx, req.LoanId)
+		script = dlcMeta.LiquidationCetScript
+
+		sigHashes, err = types.GetLiquidationCetSigHashes(dlcMeta)
+		if err != nil {
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+	} else {
+		scriptBytes, err := types.CreateMultisigScript([]string{req.BorrowerPubkey, req.AgencyPubkey})
+		if err != nil {
+			return nil, status.Error(codes.InvalidArgument, "invalid params")
+		}
+
+		script = hex.EncodeToString(scriptBytes)
 	}
 
 	return &types.QueryLiquidationCetResponse{
-		LiquidationCetScript: hex.EncodeToString(liquidation_cet_script),
+		Script:    script,
+		SigHashes: sigHashes,
 	}, nil
 }
 
