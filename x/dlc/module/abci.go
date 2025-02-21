@@ -3,6 +3,7 @@ package dlc
 import (
 	"encoding/hex"
 	"fmt"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -116,7 +117,8 @@ func generateNonces(ctx sdk.Context, k keeper.Keeper) {
 			types.EventTypeGenerateNonce,
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", nonceIndex+1)),
 			sdk.NewAttribute(types.AttributeKeyOraclePubKey, oracle.Pubkey),
+			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(oracle.Participants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
-		).AppendAttributes(types.GetParticipantsAttributes(oracle.Participants)...),
+		),
 	)
 }

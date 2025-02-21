@@ -3,6 +3,7 @@ package lending
 import (
 	"encoding/hex"
 	"fmt"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -54,8 +55,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			loan.Status = types.LoanStatus_Liquidate
 			k.SetLoan(ctx, *loan)
 
-			// get liquidation cet sig hashes
-			// no error
+			// get liquidation cet sig hashes; no error
 			liquidationCetSigHashes, _ := types.GetLiquidationCetSigHashes(k.GetDLCMeta(ctx, loan.VaultAddress))
 
 			// emit liquidation event
@@ -64,7 +64,8 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 					types.EventTypeLiquidate,
 					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
 					sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
-				).AppendAttributes(types.GetSigHashesAttributes(liquidationCetSigHashes)...),
+					sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(liquidationCetSigHashes, types.AttributeValueSeparator)),
+				),
 			)
 
 			// create auction

@@ -100,7 +100,7 @@ func (k Keeper) TriggerEvent(ctx sdk.Context, id uint64) {
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.EventTypeTriggerEvent,
+			types.EventTypeTriggerPriceEvent,
 			sdk.NewAttribute(types.AttributeKeyEventId, fmt.Sprintf("%d", id)),
 			sdk.NewAttribute(types.AttributeKeyPubKey, event.Pubkey),
 			sdk.NewAttribute(types.AttributeKeyNonce, event.Nonce),
