@@ -442,6 +442,15 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanDoesNotExist
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+	if loan.Status == types.LoanStatus_Close {
+		return nil, types.ErrInvalidLoanStatus
+	}
+
 	if !m.HasRepayment(ctx, msg.LoanId) {
 		return nil, types.ErrInvalidRepayment
 	}
@@ -464,8 +473,6 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 		return nil, types.ErrInvalidRepaymentSecret
 	}
 
-	loan := m.GetLoan(ctx, msg.LoanId)
-
 	amount := loan.BorrowAmount.Amount.Add(loan.Interests).Add(loan.Fees)
 	if err := m.bankKeeper.SendCoinsFromModuleToModule(ctx, types.RepaymentEscrowAccount, types.ModuleName, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
 		return nil, err
@@ -473,6 +480,9 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 
 	loan.Status = types.LoanStatus_Close
 	m.SetLoan(ctx, loan)
+
+	repayment.BorrowerSignature = msg.Signature
+	m.SetRepayment(ctx, repayment)
 
 	m.EmitEvent(ctx, msg.Relayer,
 		sdk.NewAttribute("loan_id", loan.VaultAddress),
