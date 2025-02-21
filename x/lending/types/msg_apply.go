@@ -49,7 +49,7 @@ func (m *MsgApply) ValidateBasic() error {
 		return ErrInvalidMaturityTime
 	}
 
-	if m.MaturityTime <= m.FinalTimeout {
+	if m.FinalTimeout <= m.MaturityTime {
 		return ErrInvalidFinalTimeout
 	}
 
