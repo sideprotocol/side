@@ -30,6 +30,8 @@ func GetQueryCmd(_ string) *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdQueryParams())
+	cmd.AddCommand(CmdQueryPool())
+	cmd.AddCommand(CmdQueryPools())
 	cmd.AddCommand(CmdQueryCollateralAddress())
 	cmd.AddCommand(CmdQueryLiquidationEvent())
 	cmd.AddCommand(CmdQueryLiquidationCet())
@@ -56,6 +58,62 @@ func CmdQueryParams() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.Params(cmd.Context(), &types.QueryParamsRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryPool() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "pool [id]",
+		Short: "Query the given lending pool",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Pool(cmd.Context(), &types.QueryPoolRequest{
+				Id: args[0],
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryPools() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "pools",
+		Short: "Query all lending pools",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Pools(cmd.Context(), &types.QueryPoolsRequest{})
 			if err != nil {
 				return err
 			}

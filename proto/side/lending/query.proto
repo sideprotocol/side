@@ -16,6 +16,15 @@ service Query {
     rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
       option (google.api.http).get = "/side/lending/params";
     }
+
+    rpc Pool(QueryPoolRequest) returns (QueryPoolResponse) {
+        option (google.api.http).get = "/side/lending/pool/<id>";
+    }
+
+    rpc Pools(QueryPoolsRequest) returns (QueryPoolsResponse) {
+        option (google.api.http).get = "/side/lending/pools";
+    }
+
     rpc CollateralAddress(QueryCollateralAddressRequest) returns (QueryCollateralAddressResponse) {
         option (google.api.http).get = "/side/lending/collateral/address";
 
@@ -30,7 +39,7 @@ service Query {
     }
 
     rpc Loan(QueryLoanRequest) returns (QueryLoanResponse) {
-        option (google.api.http).get = "/side/lending/loan/<loan_id>";
+        option (google.api.http).get = "/side/lending/loans/<loan_id>";
     }
 
     rpc Loans(QueryLoansRequest) returns (QueryLoansResponse) {
@@ -44,6 +53,27 @@ service Query {
     rpc Repayment(QueryRepaymentRequest) returns (QueryRepaymentResponse) {
         option (google.api.http).get = "/side/lending/loan/repayment";
     }
+}
+
+// QueryPoolRequest is request type for the Query/Pool RPC method.
+message QueryPoolRequest {
+    string id = 1;
+}
+
+// QueryPoolResponse is response type for the Query/Pool RPC method.
+message QueryPoolResponse {
+    LendingPool pool = 1;
+}
+
+// QueryPoolsRequest is request type for the Query/Pools RPC method.
+message QueryPoolsRequest {
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryPoolsResponse is response type for the Query/Pools RPC method.
+message QueryPoolsResponse {
+    repeated LendingPool pools = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryLiquidationEventRequest{

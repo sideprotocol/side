@@ -15,6 +15,34 @@ import (
 
 var _ types.QueryServer = Keeper{}
 
+// Pool implements types.QueryServer.
+func (k Keeper) Pool(goCtx context.Context, req *types.QueryPoolRequest) (*types.QueryPoolResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasPool(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "pool does not exist")
+	}
+
+	pool := k.GetPool(ctx, req.Id)
+
+	return &types.QueryPoolResponse{Pool: &pool}, nil
+}
+
+// Pools implements types.QueryServer.
+func (k Keeper) Pools(goCtx context.Context, req *types.QueryPoolsRequest) (*types.QueryPoolsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryPoolsResponse{Pools: k.GetAllPools(ctx)}, nil
+}
+
 // CollateralAddress implements types.QueryServer.
 func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollateralAddressRequest) (*types.QueryCollateralAddressResponse, error) {
 	if req == nil {
