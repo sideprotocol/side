@@ -358,6 +358,32 @@ func GetLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 	return sigHashes, nil
 }
 
+// GetRepaymentTxSigHashes gets the sig hashes of the repayment tx
+func GetRepaymentTxSigHashes(repaymentTx string, repaymentScript string) ([]string, error) {
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentTx)), true)
+	if err != nil {
+		return nil, err
+	}
+
+	script, err := hex.DecodeString(repaymentScript)
+	if err != nil {
+		return nil, err
+	}
+
+	sigHashes := []string{}
+
+	for i, input := range p.Inputs {
+		sigHash, err := CalcTapscriptSigHash(p, i, input.SighashType, script)
+		if err != nil {
+			return nil, err
+		}
+
+		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
+	}
+
+	return sigHashes, nil
+}
+
 // GetDLCTapscripts gets the tap scripts from the given dlc meta
 // Assume that the dlc meta is valid
 func GetDLCTapscripts(dlcMeta *DLCMeta) [][]byte {

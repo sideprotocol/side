@@ -55,5 +55,6 @@ var (
 	ErrLiquidationSignaturesAlreadyExist = errorsmod.Register(ModuleName, 7002, "agency liquidation signatures already exist")
 	ErrInvalidLiquidationSignatures      = errorsmod.Register(ModuleName, 7003, "invalid agency liquidation signatures")
 
-	ErrInvalidSignature = errorsmod.Register(ModuleName, 8001, "invalid signature")
+	ErrInvalidLoanStatus = errorsmod.Register(ModuleName, 8001, "invalid loan status")
+	ErrInvalidSignature  = errorsmod.Register(ModuleName, 8002, "invalid signature")
 )

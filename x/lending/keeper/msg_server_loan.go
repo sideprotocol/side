@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
+	"strings"
 
 	"cosmossdk.io/math"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -240,22 +241,20 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	borrower, err := sdk.AccAddressFromBech32(msg.Borrower)
-	if err != nil {
-		return nil, types.ErrInvalidSender
-	}
-
 	if !m.HasLoan(ctx, msg.LoanId) {
 		return nil, types.ErrLoanDoesNotExist
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
+	if loan.Status != types.LoanStatus_Disburse {
+		return nil, types.ErrInvalidLoanStatus
+	}
 
 	amount := loan.BorrowAmount.Amount.Add(loan.Interests).Add(loan.Fees)
 
 	// send repayment to escrow account
-	if e := m.bankKeeper.SendCoinsFromAccountToModule(ctx, borrower, types.RepaymentEscrowAccount, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); e != nil {
-		return nil, e
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), types.RepaymentEscrowAccount, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
+		return nil, err
 	}
 
 	loan.Status = types.LoanStatus_Repay
@@ -310,11 +309,19 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 
 	m.SetRepayment(ctx, repayment)
 
+	// get sig hashes
+	sigHashes, err := types.GetRepaymentTxSigHashes(repaymentTx, dlcMeta.RepaymentScript)
+	if err != nil {
+		return nil, err
+	}
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeRepay,
 			sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
 			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, msg.AdaptorPoint),
+			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
 		),
 	)
 

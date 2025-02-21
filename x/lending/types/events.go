@@ -12,8 +12,7 @@ const (
 	AttributeKeyAdaptorPoint = "adaptor_point"
 
 	AttributeKeyAgencyPubKey = "agency_pub_key"
-
-	AttributeKeySigHashes = "sig_hashes"
+	AttributeKeySigHashes    = "sig_hashes"
 )
 
 const (
