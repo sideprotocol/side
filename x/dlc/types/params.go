@@ -13,7 +13,7 @@ const PricePairSeparator = "-"
 
 var (
 	// default nonce queue size
-	DefaultNonceQueueSize = uint32(20)
+	DefaultNonceQueueSize = uint32(50)
 
 	// default price interval
 	DefaultPriceInterval = int32(100)
