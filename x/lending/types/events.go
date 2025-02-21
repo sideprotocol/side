@@ -11,7 +11,5 @@ const (
 	AttributeKeyBorrower     = "borrower"
 	AttributeKeyAdaptorPoint = "adaptor_point"
 
-	AttributeKeyEventPubKey = "event_pub_key"
-	AttributeKeyEventNonce  = "event_nonce"
-	AttributeKeyEventPrice  = "event_price"
+	AttributeKeyAgencyPubKey = "agency_pub_key"
 )

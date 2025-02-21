@@ -34,6 +34,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				sdk.NewEvent(
 					types.EventTypeDefault,
 					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+					sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
 				),
 			)
 
@@ -52,6 +53,15 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 		if price.LTE(liquidationPrice) {
 			loan.Status = types.LoanStatus_Liquidate
 			k.SetLoan(ctx, *loan)
+
+			// emit liquidation event
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeLiquidate,
+					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+					sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+				),
+			)
 
 			// create auction
 			auction := &auctiontypes.Auction{
