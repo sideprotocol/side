@@ -40,7 +40,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdApprove())
 	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
-	cmd.AddCommand(CmdSubmitRepaymentAdaptorSignature())
+	cmd.AddCommand(CmdSubmitRepaymentAdaptorSignatures())
 	cmd.AddCommand(CmdSubmitLiquidationCetSignatures())
 	cmd.AddCommand(CmdClose())
 	cmd.AddCommand(CmdSubmitPrice())
@@ -302,10 +302,10 @@ func CmdRepay() *cobra.Command {
 	return cmd
 }
 
-func CmdSubmitRepaymentAdaptorSignature() *cobra.Command {
+func CmdSubmitRepaymentAdaptorSignatures() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-repay-adaptor-signature [loan id] [DCA adaptor signature]",
-		Short: "Submit the DCA adaptor signature for loan repayment",
+		Use:   "submit-repay-adaptor-signatures [loan id] [DCA adaptor signatures]",
+		Short: "Submit the DCA adaptor signatures for loan repayment",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -313,10 +313,12 @@ func CmdSubmitRepaymentAdaptorSignature() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgSubmitRepaymentAdaptorSignature(
+			signatures := strings.Split(args[1], listSeparator)
+
+			msg := types.NewMsgSubmitRepaymentAdaptorSignatures(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				args[1],
+				signatures,
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

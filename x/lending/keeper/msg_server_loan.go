@@ -328,58 +328,54 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	return &types.MsgRepayResponse{}, nil
 }
 
-// SubmitRepaymentAdaptorSignature implements types.MsgServer.
-func (m msgServer) SubmitRepaymentAdaptorSignature(goCtx context.Context, msg *types.MsgSubmitRepaymentAdaptorSignature) (*types.MsgSubmitRepaymentAdaptorSignatureResponse, error) {
+// SubmitRepaymentAdaptorSignatures implements types.MsgServer.
+func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *types.MsgSubmitRepaymentAdaptorSignatures) (*types.MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanDoesNotExist
-	}
-
 	if !m.HasRepayment(ctx, msg.LoanId) {
 		return nil, types.ErrInvalidRepayment
 	}
 
 	repayment := m.GetRepayment(ctx, msg.LoanId)
-	if len(repayment.DcaAdaptorSignature) != 0 {
-		return nil, types.ErrRepaymentAdaptorSigAlreadyExists
+	if len(repayment.DcaAdaptorSignatures) != 0 {
+		return nil, types.ErrRepaymentAdaptorSigsAlreadyExist
 	}
-
-	loan := m.GetLoan(ctx, msg.LoanId)
 
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repayment.Tx)), true)
 	if err != nil {
 		return nil, err
 	}
 
+	if len(msg.AdaptorSignatures) != len(p.Inputs) {
+		return nil, errorsmod.Wrap(types.ErrInvalidAdaptorSignatures, "mismatched adaptor signature number")
+	}
+
 	repaymentScript, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
 
-	sigHash, err := types.CalcTapscriptSigHash(p, 0, types.DefaultSigHashType, repaymentScript)
-	if err != nil {
-		return nil, err
-	}
-
-	adaptorSigBytes, _ := hex.DecodeString(msg.AdaptorSignature)
 	adaptorPointBytes, _ := hex.DecodeString(repayment.RepayAdaptorPoint)
-	pubKeyBytes, _ := hex.DecodeString(loan.Agency)
+	agencyPubKeyBytes, _ := hex.DecodeString(m.GetLoan(ctx, msg.LoanId).Agency)
 
-	if !adaptor.Verify(adaptorSigBytes, sigHash, pubKeyBytes, adaptorPointBytes) {
-		return nil, types.ErrInvalidAdaptorSignature
+	for i, input := range p.Inputs {
+		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, repaymentScript)
+		if err != nil {
+			return nil, err
+		}
+
+		adaptorSigBytes, _ := hex.DecodeString(msg.AdaptorSignatures[i])
+
+		if !adaptor.Verify(adaptorSigBytes, sigHash, agencyPubKeyBytes, adaptorPointBytes) {
+			return nil, types.ErrInvalidAdaptorSignature
+		}
 	}
 
-	repayment.DcaAdaptorSignature = msg.AdaptorSignature
+	repayment.DcaAdaptorSignatures = msg.AdaptorSignatures
 	m.SetRepayment(ctx, repayment)
 
-	m.EmitEvent(ctx, msg.Sender,
-		sdk.NewAttribute("loan_id", msg.LoanId),
-		sdk.NewAttribute("adaptor_signature", msg.AdaptorSignature),
-	)
-
-	return &types.MsgSubmitRepaymentAdaptorSignatureResponse{}, nil
+	return &types.MsgSubmitRepaymentAdaptorSignaturesResponse{}, nil
 }
 
 // SubmitLiquidationCetSignatures implements types.MsgServer.
@@ -407,16 +403,19 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 	liquidationCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet)), true)
 
 	if len(msg.Signatures) != len(liquidationCet.Inputs) {
-		return nil, errorsmod.Wrap(types.ErrInvalidLiquidationSignatures, "incorrect signature number")
+		return nil, errorsmod.Wrap(types.ErrInvalidLiquidationSignatures, "mismatched signature number")
 	}
 
+	liquidationCetScript, _ := hex.DecodeString(dlcMeta.LiquidationCetScript)
 	agencyPubKey, _ := hex.DecodeString(loan.Agency)
 
-	for i := range liquidationCet.Inputs {
-		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
+	for i, input := range liquidationCet.Inputs {
+		sigHash, err := types.CalcTapscriptSigHash(liquidationCet, i, input.SighashType, liquidationCetScript)
+		if err != nil {
+			return nil, err
+		}
 
-		// TODO: calculate sig hash
-		sigHash := []byte{}
+		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
 
 		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
 			return nil, types.ErrInvalidSignature
@@ -443,21 +442,17 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanDoesNotExist
-	}
-
 	if !m.HasRepayment(ctx, msg.LoanId) {
 		return nil, types.ErrInvalidRepayment
 	}
 
 	repayment := m.GetRepayment(ctx, msg.LoanId)
-	if len(repayment.DcaAdaptorSignature) == 0 {
-		return nil, types.ErrRepaymentAdaptorSigDoesNotExist
+	if len(repayment.DcaAdaptorSignatures) == 0 {
+		return nil, types.ErrRepaymentAdaptorSigsDoNotExist
 	}
 
 	sigBytes, _ := hex.DecodeString(msg.Signature)
-	adaptorSigBytes, _ := hex.DecodeString(repayment.DcaAdaptorSignature)
+	adaptorSigBytes, _ := hex.DecodeString(repayment.DcaAdaptorSignatures[0])
 
 	// extract secret from signature
 	secret := adaptor.Extract(sigBytes, adaptorSigBytes)

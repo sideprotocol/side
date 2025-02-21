@@ -106,7 +106,7 @@ message Repayment {
     string txid = 2;
     string tx = 3;
     string repay_adaptor_point = 4;
-    string dca_adaptor_signature = 5;
+    repeated string dca_adaptor_signatures = 5;
     string borrower_signature = 6;
     google.protobuf.Timestamp create_at = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }

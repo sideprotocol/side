@@ -16,7 +16,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgRedeem{}, "lending/MsgRedeem", nil)
 	cdc.RegisterConcrete(&MsgRepay{}, "lending/MsgRepay", nil)
 	cdc.RegisterConcrete(&MsgClose{}, "lending/MsgClose", nil)
-	cdc.RegisterConcrete(&MsgSubmitRepaymentAdaptorSignature{}, "lending/MsgSubmitRepaymentAdaptorSignature", nil)
+	cdc.RegisterConcrete(&MsgSubmitRepaymentAdaptorSignatures{}, "lending/MsgSubmitRepaymentAdaptorSignatures", nil)
 	cdc.RegisterConcrete(&MsgSubmitLiquidationCetSignatures{}, "lending/MsgSubmitLiquidationCetSignatures", nil)
 	cdc.RegisterConcrete(&MsgUpdateParams{}, "lending/MsgUpdateParams", nil)
 
@@ -32,7 +32,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgRedeem{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgRepay{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgClose{})
-	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitRepaymentAdaptorSignature{})
+	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitRepaymentAdaptorSignatures{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitLiquidationCetSignatures{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgUpdateParams{})
 

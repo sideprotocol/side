@@ -20,7 +20,7 @@ service Msg {
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
     rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
-    rpc SubmitRepaymentAdaptorSignature(MsgSubmitRepaymentAdaptorSignature) returns (MsgSubmitRepaymentAdaptorSignatureResponse);
+    rpc SubmitRepaymentAdaptorSignatures(MsgSubmitRepaymentAdaptorSignatures) returns (MsgSubmitRepaymentAdaptorSignaturesResponse);
     rpc SubmitLiquidationCetSignatures(MsgSubmitLiquidationCetSignatures) returns (MsgSubmitLiquidationCetSignaturesResponse);
     rpc Close(MsgClose) returns (MsgCloseResponse);
 
@@ -122,15 +122,15 @@ message MsgApproveResponse {
 
 }
 
-message MsgSubmitRepaymentAdaptorSignature {
+message MsgSubmitRepaymentAdaptorSignatures {
     option (cosmos.msg.v1.signer) = "sender";
     
     string sender = 1;
     string loan_id = 2;
-    string adaptor_signature = 3;
+    repeated string adaptor_signatures = 3;
 }
 
-message MsgSubmitRepaymentAdaptorSignatureResponse {
+message MsgSubmitRepaymentAdaptorSignaturesResponse {
 
 }
 
