@@ -70,6 +70,13 @@ func (k Keeper) IncrementAttestationId(ctx sdk.Context) uint64 {
 	return id
 }
 
+// HasAttestation returns true if the given attestation exists, false otherwise
+func (k Keeper) HasAttestation(ctx sdk.Context, id uint64) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.AttestationKey(id))
+}
+
 // GetAttestation gets the attestation by the given id
 func (k Keeper) GetAttestation(ctx sdk.Context, id uint64) *types.DLCAttestation {
 	store := ctx.KVStore(k.storeKey)

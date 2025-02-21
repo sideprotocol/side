@@ -80,6 +80,10 @@ func (k Keeper) Event(goCtx context.Context, req *types.QueryEventRequest) (*typ
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if !k.HasEvent(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "event does not exist")
+	}
+
 	return &types.QueryEventResponse{Event: k.GetEvent(ctx, req.Id)}, nil
 }
 
@@ -99,6 +103,10 @@ func (k Keeper) Attestation(goCtx context.Context, req *types.QueryAttestationRe
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasAttestation(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "attestation does not exist")
+	}
 
 	return &types.QueryAttestationResponse{Attestation: k.GetAttestation(ctx, req.Id)}, nil
 }

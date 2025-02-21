@@ -30,6 +30,10 @@ func (k Keeper) Auction(goCtx context.Context, req *types.QueryAuctionRequest) (
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if !k.HasAuction(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "auction does not exist")
+	}
+
 	return &types.QueryAuctionResponse{Auction: k.GetAuction(ctx, req.Id)}, nil
 }
 
@@ -49,6 +53,10 @@ func (k Keeper) Bid(goCtx context.Context, req *types.QueryBidRequest) (*types.Q
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasBid(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "bid does not exist")
+	}
 
 	return &types.QueryBidResponse{Bid: k.GetBid(ctx, req.Id)}, nil
 }

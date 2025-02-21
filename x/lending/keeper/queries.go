@@ -41,12 +41,12 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 
 	event := k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	if event == nil {
-		return nil, nil
+		return nil, status.Error(codes.NotFound, "liquidation event does not exist")
 	}
 
 	signaturePoint, err := dlctypes.GetSignaturePointFromEvent(event)
 	if err != nil {
-		return nil, status.Error(codes.Internal, "failed to calculate signature point")
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &types.QueryLiquidationEventResponse{
@@ -85,7 +85,7 @@ func (k Keeper) LiquidationCet(goCtx context.Context, req *types.QueryLiquidatio
 	} else {
 		scriptBytes, err := types.CreateMultisigScript([]string{req.BorrowerPubkey, req.AgencyPubkey})
 		if err != nil {
-			return nil, status.Error(codes.InvalidArgument, "invalid params")
+			return nil, status.Error(codes.InvalidArgument, err.Error())
 		}
 
 		script = hex.EncodeToString(scriptBytes)
@@ -104,6 +104,10 @@ func (k Keeper) Loan(goCtx context.Context, req *types.QueryLoanRequest) (*types
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasLoan(ctx, req.LoanId) {
+		return nil, status.Error(codes.NotFound, "loan does not exist")
+	}
 
 	loan := k.GetLoan(ctx, req.LoanId)
 
@@ -129,6 +133,10 @@ func (k Keeper) LoanDlcMeta(goCtx context.Context, req *types.QueryLoanDlcMetaRe
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if !k.HasLoan(ctx, req.LoanId) {
+		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
+	}
+
 	return &types.QueryLoanDlcMetaResponse{DlcMeta: k.GetDLCMeta(ctx, req.LoanId)}, nil
 }
 
@@ -139,6 +147,10 @@ func (k Keeper) Repayment(goCtx context.Context, req *types.QueryRepaymentReques
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasRepayment(ctx, req.LoanId) {
+		return nil, status.Error(codes.NotFound, "repayment does not exist")
+	}
 
 	repayment := k.GetRepayment(ctx, req.LoanId)
 
