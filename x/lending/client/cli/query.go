@@ -1,12 +1,15 @@
 package cli
 
 import (
+	"encoding/hex"
 	"fmt"
 	"strconv"
 
 	// "strings"
 
 	"github.com/spf13/cobra"
+
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -29,6 +32,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdQueryCollateralAddress())
 	cmd.AddCommand(CmdQueryLiquidationEvent())
+	cmd.AddCommand(CmdQueryLiquidationCet())
 	cmd.AddCommand(CmdQueryLoan())
 	cmd.AddCommand(CmdQueryLoans())
 	cmd.AddCommand(CmdQueryDlcMeta())
@@ -133,6 +137,67 @@ func CmdQueryLiquidationEvent() *cobra.Command {
 			res, err := queryClient.LiquidationEvent(cmd.Context(), &types.QueryLiquidationEventRequest{
 				BorrowAmount:      &borrowedAmount,
 				CollateralAcmount: &collateralAmount,
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryLiquidationCet() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "liquidation-cet [loan id] [borrower public key] [agency public key]",
+		Short: "Query the liquidation CET info according to the given loan id or public keys",
+		Args:  cobra.RangeArgs(1, 2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if len(args) == 1 {
+				res, err := queryClient.LiquidationCet(cmd.Context(), &types.QueryLiquidationCetRequest{
+					LoanId: args[0],
+				})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			borrowerPubKey, err := hex.DecodeString(args[0])
+			if err != nil {
+				return err
+			}
+
+			_, err = schnorr.ParsePubKey(borrowerPubKey)
+			if err != nil {
+				return err
+			}
+
+			agencyPubKey, err := hex.DecodeString(args[1])
+			if err != nil {
+				return err
+			}
+
+			_, err = schnorr.ParsePubKey(agencyPubKey)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.LiquidationCet(cmd.Context(), &types.QueryLiquidationCetRequest{
+				BorrowerPubkey: args[0],
+				AgencyPubkey:   args[1],
 			})
 			if err != nil {
 				return err
