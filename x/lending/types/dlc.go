@@ -2,6 +2,7 @@ package types
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/hex"
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
@@ -351,7 +352,7 @@ func GetLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 			return nil, err
 		}
 
-		sigHashes = append(sigHashes, hex.EncodeToString(sigHash))
+		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
 	}
 
 	return sigHashes, nil
