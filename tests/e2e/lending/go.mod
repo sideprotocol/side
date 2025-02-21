@@ -3,7 +3,6 @@ module lending-tests
 go 1.22.2
 
 require (
-	cosmossdk.io/math v1.3.0
 	github.com/btcsuite/btcd v0.24.0
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2
 	github.com/btcsuite/btcd/btcutil v1.1.5
@@ -14,6 +13,7 @@ require (
 	github.com/sideprotocol/side v0.9.2-0.20250220083232-dc93badd38ad
 	github.com/tidwall/gjson v1.18.0
 	github.com/valyala/fasthttp v1.40.0
+	google.golang.org/grpc v1.64.1
 )
 
 require (
@@ -23,6 +23,7 @@ require (
 	cosmossdk.io/depinject v1.0.0 // indirect
 	cosmossdk.io/errors v1.0.1 // indirect
 	cosmossdk.io/log v1.4.1 // indirect
+	cosmossdk.io/math v1.3.0 // indirect
 	cosmossdk.io/store v1.1.0 // indirect
 	cosmossdk.io/x/tx v0.13.5 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
@@ -158,7 +159,6 @@ require (
 	google.golang.org/genproto v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240617180043-68d350f18fd4 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240709173604-40e1e62336c5 // indirect
-	google.golang.org/grpc v1.64.1 // indirect
 	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -169,4 +169,7 @@ require (
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
 
-replace github.com/cosmos/cosmos-sdk => github.com/sideprotocol/cosmos-sdk v0.50.9-btc1
+replace (
+	github.com/cosmos/cosmos-sdk => github.com/sideprotocol/cosmos-sdk v0.50.9-btc1
+	github.com/sideprotocol/side => ../../../../side
+)
