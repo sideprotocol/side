@@ -199,20 +199,21 @@ var (
 
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName:     nil,
-		distrtypes.ModuleName:          nil,
-		icatypes.ModuleName:            nil,
-		minttypes.ModuleName:           {authtypes.Minter},
-		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:            {authtypes.Burner},
-		ibcfeetypes.ModuleName:         nil,
-		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
-		wasmtypes.ModuleName:           {authtypes.Burner},
-		btcbridgetypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
-		auctiontypes.ModuleName:        nil,
-		dlctypes.ModuleName:            nil,
-		lendingtypes.ModuleName:        {authtypes.Minter},
+		authtypes.FeeCollectorName:          nil,
+		distrtypes.ModuleName:               nil,
+		icatypes.ModuleName:                 nil,
+		minttypes.ModuleName:                {authtypes.Minter},
+		stakingtypes.BondedPoolName:         {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:      {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:                 {authtypes.Burner},
+		ibcfeetypes.ModuleName:              nil,
+		ibctransfertypes.ModuleName:         {authtypes.Minter, authtypes.Burner},
+		wasmtypes.ModuleName:                {authtypes.Burner},
+		btcbridgetypes.ModuleName:           {authtypes.Minter, authtypes.Burner},
+		auctiontypes.ModuleName:             nil,
+		dlctypes.ModuleName:                 nil,
+		lendingtypes.ModuleName:             {authtypes.Minter},
+		lendingtypes.RepaymentEscrowAccount: nil,
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -644,6 +645,7 @@ func New(
 		appCodec,
 		keys[lendingtypes.StoreKey],
 		keys[lendingtypes.MemStoreKey],
+		app.AccountKeeper,
 		app.BankKeeper,
 		nil,
 		app.AuctionKeeper,
