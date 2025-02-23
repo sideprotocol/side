@@ -1,10 +1,10 @@
 #!/bin/bash
 
 KEYS=("validator" "test")
-CHAINID="sidechain-testnet-4"
+CHAINID="devnet"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
-DENOM_STR="uside,uusdc,uusdt"
+DENOM_STR="uside,sat,uusdc,uusdt"
 INITIAL_ACCOUNT_STR=""
 set -f
 IFS=,
@@ -26,8 +26,8 @@ TRUSTED_ORACLE=""
 PROTOCOL_FEE_COLLECTOR=""
 
 # gov params
-GOV_VOTING_PERIOD="1800s"
-GOV_EXPEDITED_VOTING_PERIOD="900s"
+GOV_VOTING_PERIOD="60s"
+GOV_EXPEDITED_VOTING_PERIOD="30s"
 
 # Remember to change to other types of keyring like 'file' in-case exposing to outside world,
 # otherwise your balance will be wiped quickly
@@ -55,7 +55,9 @@ command -v jq >/dev/null 2>&1 || {
 set -e
 
 # Reinstall daemon
+cd ..
 make install
+cd scripts
 
 # User prompt if an existing local node configuration is found.
 if [ -d "$HOMEDIR" ]; then
@@ -73,16 +75,23 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	rm -rf "$HOMEDIR"
 
 	# Set client config
-	$BINARY config keyring-backend $KEYRING --home "$HOMEDIR"
-	$BINARY config chain-id $CHAINID --home "$HOMEDIR"
+	#$BINARY config keyring-backend $KEYRING --home "$HOMEDIR"
+	#$BINARY config chain-id $CHAINID --home "$HOMEDIR"
 
 	# Set moniker and chain-id for Cascadia (Moniker can be anything, chain-id must be an integer)
-	$BINARY init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR"
+	$BINARY init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR" &> /dev/null
 
 	# If keys exist they should be deleted
 	for KEY in "${KEYS[@]}"; do
 		$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR" &> $HOMEDIR/$KEY.mnemonic
 	done
+	# for KEY in "${KEYS[@]}"; do
+    # # Add the --recover flag to initiate recovery mode
+    # 	$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --recover --home "$HOMEDIR"
+	# done
+
+    # sed -i -e "/minimum =/ s/= .*/= 133" "$APP_TOML"
+    # exit
 
 	jq --arg denom "${DENOMS[0]}" '.app_state["staking"]["params"]["bond_denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["mint"]["params"]["mint_denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
@@ -91,7 +100,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	# Set gas limit in genesis
 	jq --arg max_gas "$MAX_GAS" '.consensus_params["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-
+  
     # set gov voting period
 	if [ -n "$GOV_VOTING_PERIOD" ]; then
         jq --arg voting_period "${GOV_VOTING_PERIOD}" '.app_state["gov"]["params"]["voting_period"]=$voting_period' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
@@ -112,12 +121,12 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		jq --arg runes_vault_asset_type "${RUNES_VAULT[2]}" '.app_state["btcbridge"]["params"]["vaults"][1]["asset_type"]=$runes_vault_asset_type' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
     fi
 
-	# set trusted btc relayer
+    # set trusted btc relayer
 	if [ -n "$TRUSTED_BTC_RELAYER" ]; then
 	    jq --arg relayer "$TRUSTED_BTC_RELAYER" '.app_state["btcbridge"]["params"]["trusted_btc_relayers"][0]=$relayer' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
     fi
 
-    # set trusted non btc relayer
+	# set trusted non btc relayer
 	if [ -n "$TRUSTED_NON_BTC_RELAYER" ]; then
 	    jq --arg relayer "$TRUSTED_NON_BTC_RELAYER" '.app_state["btcbridge"]["params"]["trusted_non_btc_relayers"][0]=$relayer' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
     fi
@@ -148,7 +157,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	    for key in "${!DENOMS[@]}"; do
 	        BALANCES+=",${INITIAL_SUPPLY}${DENOMS[$key]}"
 	    done
-	    echo ${BALANCES:1}
+	    echo "$KEY ${BALANCES:1}"
 	    $BINARY genesis add-genesis-account "$KEY" ${BALANCES:1} --keyring-backend $KEYRING --home "$HOMEDIR"
 	done
 
@@ -160,7 +169,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	    for key in "${!DENOMS[@]}"; do
 	        BALANCES+=",${INITIAL_SUPPLY}${DENOMS[$key]}"
 	    done
-	    echo ${BALANCES:1}
+	    # echo ${BALANCES:1}
 	    $BINARY genesis add-genesis-account "$ADDR" ${BALANCES:1} --home "$HOMEDIR"
 	done
 	echo "Genesis accounts allocated for initial accounts"
@@ -170,7 +179,6 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	# Sign genesis transaction
 	# echo $INITIAL_SUPPLY${DENOMS[0]}
 	$BINARY genesis gentx "${KEYS[0]}" ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home "$HOMEDIR"
-	echo "Genesis transaction signed"
 
 	## In case you want to create multiple validators at genesis
 	## 1. Back to `$BINARY keys add` step, init more keys
@@ -180,12 +188,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	## 5. Copy the `gentx-*` folders under `~/.clonedCascadiad/config/gentx/` folders into the original `~/.$BINARY/config/gentx`
 
 	# Collect genesis tx
-	$BINARY genesis collect-gentxs --home "$HOMEDIR"
+	$BINARY genesis collect-gentxs --home "$HOMEDIR" &> /dev/null
 	echo "Genesis transactions collected"
 
 	# Run this to ensure everything worked and that the genesis file is setup correctly
-	$BINARY genesis validate-genesis --home "$HOMEDIR"
-	echo "Genesis file validated"
+	$BINARY genesis validate --home "$HOMEDIR"
 
 	if [[ $1 == "pending" ]]; then
 		echo "pending mode is on, please wait for the first block committed."

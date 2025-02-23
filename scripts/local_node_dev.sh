@@ -79,7 +79,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	#$BINARY config chain-id $CHAINID --home "$HOMEDIR"
 
 	# Set moniker and chain-id for Cascadia (Moniker can be anything, chain-id must be an integer)
-	$BINARY init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR"
+	$BINARY init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR" &> /dev/null
 
 	# If keys exist they should be deleted
 	for KEY in "${KEYS[@]}"; do
@@ -157,7 +157,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	    for key in "${!DENOMS[@]}"; do
 	        BALANCES+=",${INITIAL_SUPPLY}${DENOMS[$key]}"
 	    done
-	    echo ${BALANCES:1}
+	    echo "$KEY ${BALANCES:1}"
 	    $BINARY genesis add-genesis-account "$KEY" ${BALANCES:1} --keyring-backend $KEYRING --home "$HOMEDIR"
 	done
 
@@ -179,7 +179,6 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	# Sign genesis transaction
 	# echo $INITIAL_SUPPLY${DENOMS[0]}
 	$BINARY genesis gentx "${KEYS[0]}" ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home "$HOMEDIR"
-	echo "Genesis transaction signed"
 
 	## In case you want to create multiple validators at genesis
 	## 1. Back to `$BINARY keys add` step, init more keys
@@ -189,12 +188,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	## 5. Copy the `gentx-*` folders under `~/.clonedCascadiad/config/gentx/` folders into the original `~/.$BINARY/config/gentx`
 
 	# Collect genesis tx
-	$BINARY genesis collect-gentxs --home "$HOMEDIR"
+	$BINARY genesis collect-gentxs --home "$HOMEDIR" &> /dev/null
 	echo "Genesis transactions collected"
 
 	# Run this to ensure everything worked and that the genesis file is setup correctly
 	$BINARY genesis validate --home "$HOMEDIR"
-	echo "Genesis file validated"
 
 	if [[ $1 == "pending" ]]; then
 		echo "pending mode is on, please wait for the first block committed."
