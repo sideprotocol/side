@@ -78,21 +78,17 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	#$BINARY config keyring-backend $KEYRING --home "$HOMEDIR"
 	#$BINARY config chain-id $CHAINID --home "$HOMEDIR"
 
+	# Set moniker and chain-id for Cascadia (Moniker can be anything, chain-id must be an integer)
+	$BINARY init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR"
+
 	# If keys exist they should be deleted
 	for KEY in "${KEYS[@]}"; do
-		$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR"
+		$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR" &> $HOMEDIR/$KEY.mnemonic
 	done
 	# for KEY in "${KEYS[@]}"; do
     # # Add the --recover flag to initiate recovery mode
     # 	$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --recover --home "$HOMEDIR"
 	# done
-
-	echo ""
-	echo "☝️ Copy the above mnemonic phrases and import them to relayer! Press [Enter] to continue..."
-	read -r continue
-
-	# Set moniker and chain-id for Cascadia (Moniker can be anything, chain-id must be an integer)
-	$BINARY init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR"
 
     # sed -i -e "/minimum =/ s/= .*/= 133" "$APP_TOML"
     # exit
@@ -153,6 +149,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	sed -i.bak 's/127.0.0.1:26657/0.0.0.0:26657/g' "$CONFIG"
 	sed -i.bak 's/cors_allowed_origins\s*=\s*\[\]/cors_allowed_origins = ["*",]/g' "$CONFIG"
 	sed -i.bak 's/swagger = false/swagger = true/g' $APP_TOML
+	sed -i.bak "s/minimum-gas-prices = \"\"/minimum-gas-prices = \"0.000001${DENOMS[0]}\"/g" $APP_TOML
 
 	# Allocate genesis accounts (cosmos formatted addresses)
 	for KEY in "${KEYS[@]}"; do
