@@ -29,6 +29,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/crypto/adaptor"
 	"github.com/sideprotocol/side/crypto/hash"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
@@ -47,8 +48,7 @@ var (
 )
 
 func init() {
-	config := sdk.GetConfig()
-	config.SetBtcChainCfg(&chainParams)
+	bitcoin.Network = &chainParams
 }
 
 func main() {

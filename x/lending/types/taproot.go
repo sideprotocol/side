@@ -14,8 +14,7 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
+	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/crypto/adaptor"
 	"github.com/sideprotocol/side/crypto/hash"
 	"github.com/sideprotocol/side/x/dlc/types"
@@ -117,7 +116,7 @@ func CreateTaprootAddress(internalKey *secp256k1.PublicKey, branches [][]byte, p
 }
 
 func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, loanSecretHash string, muturityTime int64, finalTimeout int64) (string, error) {
-	params := sdk.GetConfig().GetBtcChainCfg()
+	params := bitcoin.Network
 
 	// multisig script for liquidation cet and repayment
 	multisigScript, err := CreateMultisigScript([]string{borrowerPubkey, dcaPubkey})
@@ -203,7 +202,7 @@ func CalcTapscriptSigHash(p *psbt.Packet, idx int, sigHashType txscript.SigHashT
 
 // GetPkScriptFromAddress gets the pk script of the given address
 func GetPkScriptFromAddress(address string) ([]byte, error) {
-	addr, err := btcutil.DecodeAddress(address, sdk.GetConfig().GetBtcChainCfg())
+	addr, err := btcutil.DecodeAddress(address, bitcoin.Network)
 	if err != nil {
 		return nil, err
 	}

@@ -83,7 +83,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 
 	# If keys exist they should be deleted
 	for KEY in "${KEYS[@]}"; do
-		$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR" &> $HOMEDIR/$KEY.mnemonic
+		$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR" # &> $HOMEDIR/$KEY.mnemonic
 	done
 	# for KEY in "${KEYS[@]}"; do
     # # Add the --recover flag to initiate recovery mode

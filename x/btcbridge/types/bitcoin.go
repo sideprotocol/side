@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcd/mempool"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
+	"github.com/sideprotocol/side/bitcoin"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -31,7 +32,7 @@ const (
 // BuildPsbt builds a bitcoin psbt from the given params.
 // Assume that the utxo script type is witness.
 func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRate int64, change string, maxUTXONum int) (*psbt.Packet, []*UTXO, *UTXO, error) {
-	chaincfg := sdk.GetConfig().GetBtcChainCfg()
+	chaincfg := bitcoin.Network
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
 	if err != nil {
@@ -72,7 +73,7 @@ func BuildPsbt(utxoIterator UTXOIterator, recipient string, amount int64, feeRat
 // BuildTransferAllBtcPsbt builds a bitcoin psbt to transfer all given btc.
 // Assume that the utxo script type is witness.
 func BuildTransferAllBtcPsbt(utxos []*UTXO, recipient string, feeRate int64) (*psbt.Packet, *UTXO, error) {
-	chaincfg := sdk.GetConfig().GetBtcChainCfg()
+	chaincfg := bitcoin.Network
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
 	if err != nil {
@@ -109,7 +110,7 @@ func BuildTransferAllBtcPsbt(utxos []*UTXO, recipient string, feeRate int64) (*p
 
 // BuildBtcBatchWithdrawPsbt builds the psbt to perform btc batch withdrawal
 func BuildBtcBatchWithdrawPsbt(utxoIterator UTXOIterator, withdrawRequests []*WithdrawRequest, feeRate int64, change string, maxUTXONum int) (*psbt.Packet, []*UTXO, *UTXO, error) {
-	chainCfg := sdk.GetConfig().GetBtcChainCfg()
+	chainCfg := bitcoin.Network
 
 	txOuts := make([]*wire.TxOut, len(withdrawRequests))
 
@@ -155,7 +156,7 @@ func BuildBtcBatchWithdrawPsbt(utxoIterator UTXOIterator, withdrawRequests []*Wi
 // BuildRunesPsbt builds a bitcoin psbt for runes edict from the given params.
 // Assume that the utxo script type is witness.
 func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeId string, amount uint128.Uint128, feeRate int64, runeBalancesDelta []*RuneBalance, runesChange string, change string, maxUTXONum int) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
-	chaincfg := sdk.GetConfig().GetBtcChainCfg()
+	chaincfg := bitcoin.Network
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
 	if err != nil {
@@ -241,7 +242,7 @@ func BuildRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient s
 // BuildTransferAllRunesPsbt builds a bitcoin psbt to transfer all specified runes.
 // Assume that the utxo script type is witness.
 func BuildTransferAllRunesPsbt(utxos []*UTXO, paymentUTXOIterator UTXOIterator, recipient string, runeBalancesDelta []*RuneBalance, feeRate int64, btcChange string, maxUTXONum int) (*psbt.Packet, []*UTXO, *UTXO, *UTXO, error) {
-	chaincfg := sdk.GetConfig().GetBtcChainCfg()
+	chaincfg := bitcoin.Network
 
 	recipientAddr, err := btcutil.DecodeAddress(recipient, chaincfg)
 	if err != nil {
@@ -549,14 +550,14 @@ func IsOpReturnOutput(out *wire.TxOut) bool {
 
 // IsValidBtcAddress returns true if the given address is a standard bitcoin address, false otherwise
 func IsValidBtcAddress(address string) bool {
-	_, err := btcutil.DecodeAddress(address, sdk.GetConfig().GetBtcChainCfg())
+	_, err := btcutil.DecodeAddress(address, bitcoin.Network)
 	return err == nil
 }
 
 // MustPkScriptFromAddress returns the public key script of the given address
 // Panic if any error occurred
 func MustPkScriptFromAddress(address string) []byte {
-	addr, err := btcutil.DecodeAddress(address, sdk.GetConfig().GetBtcChainCfg())
+	addr, err := btcutil.DecodeAddress(address, bitcoin.Network)
 	if err != nil {
 		panic(err)
 	}
