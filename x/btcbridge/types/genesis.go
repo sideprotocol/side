@@ -2,14 +2,13 @@ package types
 
 import (
 	"github.com/btcsuite/btcd/chaincfg"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sideprotocol/side/bitcoin"
 )
 
 // this line is used by starport scaffolding # genesis/types/import
 
 func DefaultBestBlockHeader() *BlockHeader {
-	config := sdk.GetConfig().GetBtcChainCfg()
+	config := bitcoin.Network
 	switch config.Name {
 	case chaincfg.MainNetParams.Name:
 		return DefaultMainNetBestBlockHeader()

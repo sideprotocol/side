@@ -7,9 +7,9 @@ import (
 	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
+	"github.com/sideprotocol/side/bitcoin"
 
 	errorsmod "cosmossdk.io/errors"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // Validate validates the block header
@@ -18,7 +18,7 @@ func (header *BlockHeader) Validate() error {
 
 	if err := blockchain.CheckBlockHeaderSanity(
 		wireHeader,
-		sdk.GetConfig().GetBtcChainCfg().PowLimit,
+		bitcoin.Network.PowLimit,
 		blockchain.NewMedianTime(),
 		blockchain.BFNone,
 	); err != nil {

@@ -10,7 +10,6 @@ import (
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/config"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/server"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
@@ -22,6 +21,7 @@ import (
 
 	"github.com/sideprotocol/side/app"
 	"github.com/sideprotocol/side/app/params"
+	"github.com/sideprotocol/side/bitcoin"
 )
 
 // NewRootCmd creates a new root command for a Cosmos SDK application
@@ -37,6 +37,7 @@ func NewRootCmd() *cobra.Command {
 	}
 
 	initClientCtx := client.Context{}.
+		WithKeyringOptions(bitcoin.KeyringOption).
 		WithCodec(encodingConfig.Codec).
 		WithInterfaceRegistry(encodingConfig.InterfaceRegistry).
 		WithTxConfig(encodingConfig.TxConfig).
@@ -102,12 +103,12 @@ func NewRootCmd() *cobra.Command {
 	// add keyring to autocli opts
 	autoCliOpts := tempApp.AutoCliOpts()
 	initClientCtx, _ = config.ReadFromClientConfig(initClientCtx)
-	autoCliOpts.Keyring, _ = keyring.NewAutoCLIKeyring(initClientCtx.Keyring)
+	// autoCliOpts.Keyring, _ = keyring.NewAutoCLIKeyring(initClientCtx.Keyring)
 	autoCliOpts.ClientCtx = initClientCtx
-	autoCliOpts.TxConfigOpts = tx.ConfigOptions{
-		EnabledSignModes:           tx.DefaultSignModes,
-		TextualCoinMetadataQueryFn: txmodule.NewGRPCCoinMetadataQueryFn(initClientCtx),
-	}
+	// autoCliOpts.TxConfigOpts = tx.ConfigOptions{
+	// 	EnabledSignModes:           tx.DefaultSignModes,
+	// 	TextualCoinMetadataQueryFn: txmodule.NewGRPCCoinMetadataQueryFn(initClientCtx),
+	// }
 
 	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {
 		panic(err)

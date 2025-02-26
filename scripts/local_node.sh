@@ -35,6 +35,7 @@ GOV_EXPEDITED_VOTING_PERIOD="30s"
 KEYRING="test"
 #KEYALGO="secp256k1"
 KEYALGO="segwit"
+# KEYALGO="taproot"
 LOGLEVEL="info"
 # Set dedicated home directory for the $BINARY instance
 HOMEDIR="$HOME/.side"
@@ -83,8 +84,9 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 
 	# If keys exist they should be deleted
 	for KEY in "${KEYS[@]}"; do
-		$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR" &> $HOMEDIR/$KEY.mnemonic
+		$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR" # &> $HOMEDIR/$KEY.mnemonic
 	done
+
 	# for KEY in "${KEYS[@]}"; do
     # # Add the --recover flag to initiate recovery mode
     # 	$BINARY keys add "$KEY" --keyring-backend $KEYRING --algo $KEYALGO --recover --home "$HOMEDIR"
@@ -178,6 +180,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 
 	# Sign genesis transaction
 	# echo $INITIAL_SUPPLY${DENOMS[0]}
+	echo "genesis gentx ${KEYS[0]} ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --home $HOMEDIR"
 	$BINARY genesis gentx "${KEYS[0]}" ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home "$HOMEDIR"
 
 	## In case you want to create multiple validators at genesis

@@ -9,6 +9,7 @@ import (
 	secp256k1 "github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/txscript"
+	"github.com/sideprotocol/side/bitcoin"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -158,7 +159,7 @@ func SelectVaultByAssetType(vaults []*Vault, assetType AssetType) *Vault {
 
 // SelectVaultByPkScript returns the vault by the given pk script for convenience
 func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
-	chainCfg := sdk.GetConfig().GetBtcChainCfg()
+	chainCfg := bitcoin.Network
 
 	for _, v := range vaults {
 		addr, err := btcutil.DecodeAddress(v.Address, chainCfg)

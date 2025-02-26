@@ -17,6 +17,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
@@ -144,7 +145,7 @@ func (k Keeper) InsertBlockHeaders(ctx sdk.Context, blockHeaders []*types.BlockH
 		// check if the new block headers has more work than the work accumulated from the forked block to the current tip
 		totalWorkOldToTip := k.CalcTotalWork(ctx, startBlockHeader.Height, best.Height)
 		totalWorkNew := types.BlockHeaders(blockHeaders).GetTotalWork()
-		if sdk.GetConfig().GetBtcChainCfg().Net == wire.MainNet && totalWorkNew.Cmp(totalWorkOldToTip) <= 0 || totalWorkNew.Cmp(totalWorkOldToTip) < 0 {
+		if bitcoin.Network.Net == wire.MainNet && totalWorkNew.Cmp(totalWorkOldToTip) <= 0 || totalWorkNew.Cmp(totalWorkOldToTip) < 0 {
 			return errorsmod.Wrap(types.ErrInvalidBlockHeaders, "invalid forking block headers")
 		}
 

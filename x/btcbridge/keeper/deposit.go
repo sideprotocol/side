@@ -10,6 +10,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
@@ -38,7 +39,7 @@ func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btc
 	k.addToMintHistory(ctx, hash)
 
 	params := k.GetParams(ctx)
-	chainCfg := sdk.GetConfig().GetBtcChainCfg()
+	chainCfg := bitcoin.Network
 
 	// check if this is a valid runes deposit tx
 	// if any error encountered, this tx is illegal runes deposit
