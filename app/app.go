@@ -324,8 +324,14 @@ func New(
 	if err != nil {
 		panic(err)
 	}
-	appCodec := codec.NewProtoCodec(interfaceRegistry)
+
 	legacyAmino := codec.NewLegacyAmino()
+
+	btccodec.RegisterCrypto(legacyAmino)
+	btccodec.RegisterInterfaces(interfaceRegistry)
+
+	appCodec := codec.NewProtoCodec(interfaceRegistry)
+
 	txConfig := authtx.NewTxConfig(appCodec, authtx.DefaultSignModes)
 
 	std.RegisterLegacyAminoCodec(legacyAmino)
@@ -932,7 +938,7 @@ func New(
 			BankKeeper:      app.BankKeeper,
 			SignModeHandler: txConfig.SignModeHandler(),
 			FeegrantKeeper:  app.FeeGrantKeeper,
-			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
+			SigGasConsumer:  bitcoin.DefaultSigVerificationGasConsumer,
 		},
 	)
 	if err != nil {
@@ -954,9 +960,6 @@ func New(
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
 	// this line is used by starport scaffolding # stargate/app/beforeInitReturn
-
-	btccodec.RegisterCrypto(legacyAmino)
-	btccodec.RegisterInterfaces(interfaceRegistry)
 
 	return app
 }

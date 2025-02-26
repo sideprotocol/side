@@ -10,13 +10,13 @@ import (
 
 	secp256k1 "github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/chaincfg"
 
 	"github.com/cometbft/cometbft/crypto"
 
 	errorsmod "cosmossdk.io/errors"
 
 	//nolint: staticcheck
+
 	"github.com/cosmos/btcutil/bech32"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -161,16 +161,20 @@ func (pubKey *PubKey) Address() crypto.Address {
 		panic("length of pubkey is incorrect") // Handle this as needed
 	}
 
-	witnessProg := btcutil.Hash160(pubKey.Bytes())
-	bech32Address, err := btcutil.NewAddressWitnessPubKeyHash(witnessProg, &chaincfg.MainNetParams)
+	witnessProgram := btcutil.Hash160(pubKey.Bytes())
+
+	converted, err := bech32.ConvertBits(witnessProgram, 8, 5, true)
 	if err != nil {
 		panic(err)
 	}
-	_, bz, err1 := bech32.Decode(bech32Address.String(), 1023)
-	if err1 != nil {
-		panic(err1)
-	}
-	return crypto.Address(bz)
+
+	// Concatenate the witness version and program, and encode the resulting
+	// bytes using bech32 encoding.
+	combined := make([]byte, len(converted)+1)
+	combined[0] = 0x0
+	copy(combined[1:], converted)
+
+	return crypto.Address(combined)
 }
 
 // Bytes returns the pubkey byte format.

@@ -31,8 +31,10 @@ func (s segWigAlgo) Derive() hd.DeriveFn {
 		if !strings.HasPrefix(hdPath, "m/84'") {
 			sps := strings.Split(hdPath, "/")
 			sps[1] = "84'" // replace purpose
+			sps[2] = "0'"
 			hdPath = strings.Join(sps, "/")
 		}
+		println("hdPath", hdPath)
 		seed, err := bip39.NewSeedWithErrorChecking(mnemonic, bip39Passphrase)
 		if err != nil {
 			return nil, err
@@ -70,6 +72,7 @@ func (s taprootAlgo) Derive() hd.DeriveFn {
 		if !strings.HasPrefix(hdPath, "m/86'") {
 			sps := strings.Split(hdPath, "/")
 			sps[1] = "86'" // replace purpose
+			sps[2] = "0'"
 			hdPath = strings.Join(sps, "/")
 			// panic("Invalid HD path for Taproot")
 		}

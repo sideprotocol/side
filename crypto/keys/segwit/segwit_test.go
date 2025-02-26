@@ -72,13 +72,13 @@ func TestSegwit(t *testing.T) {
 
 	// data, err := sdk.GetFromBech32(bech32Address, "bc")
 
-	hrp, version, data, err2 := bech32.DecodeUnsafe(bech32Address)
+	hrp, data, version, err2 := bech32.DecodeNoLimitWithVersion(bech32Address)
 	assert.NoError(t, err2)
 
 	println(hrp, version, data)
 	t.Log(hrp)
 
-	hrp, bz, err := bech32.Decode(bech32Address, 1000)
+	hrp, bz, err := bech32.Decode(bech32Address, 1024)
 	//hrp, bz, err := bech32.Decode("bc1qc2zm9xeje96yh6st7wmy60mmsteemsm3tfr2tn", 1000)
 	assert.NoError(t, err)
 	println(hrp, bz)

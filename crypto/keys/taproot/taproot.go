@@ -18,6 +18,7 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
+	"github.com/cosmos/btcutil/bech32"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/types/errors"
@@ -167,7 +168,19 @@ func (pubKey *PubKey) Address() crypto.Address {
 
 	tp := txscript.ComputeTaprootKeyNoScript(pk)
 	witnessProg := schnorr.SerializePubKey(tp)
-	return crypto.Address(witnessProg)
+
+	converted, err := bech32.ConvertBits(witnessProg, 8, 5, true)
+	if err != nil {
+		panic(err)
+	}
+
+	// Concatenate the witness version and program, and encode the resulting
+	// bytes using bech32 encoding.
+	combined := make([]byte, len(converted)+1)
+	combined[0] = 0x1
+	copy(combined[1:], converted)
+	return crypto.Address(combined)
+
 }
 
 // Bytes returns the pubkey byte format.
