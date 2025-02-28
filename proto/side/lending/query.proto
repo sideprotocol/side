@@ -77,8 +77,8 @@ message QueryPoolsResponse {
 }
 
 message QueryLiquidationEventRequest{
-    cosmos.base.v1beta1.Coin borrow_amount = 1;
-    cosmos.base.v1beta1.Coin collateral_acmount =2;
+    string collateral_amount = 1;
+    string borrow_amount = 2;
 }
 
 message QueryLiquidationEventResponse {

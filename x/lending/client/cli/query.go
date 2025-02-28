@@ -13,7 +13,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -182,19 +181,9 @@ func CmdQueryLiquidationEvent() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			collateralAmount, err := sdk.ParseCoinNormalized(args[0])
-			if err != nil {
-				return err
-			}
-
-			borrowedAmount, err := sdk.ParseCoinNormalized(args[1])
-			if err != nil {
-				return err
-			}
-
 			res, err := queryClient.LiquidationEvent(cmd.Context(), &types.QueryLiquidationEventRequest{
-				BorrowAmount:      &borrowedAmount,
-				CollateralAcmount: &collateralAmount,
+				CollateralAmount: args[0],
+				BorrowAmount:     args[1],
 			})
 			if err != nil {
 				return err

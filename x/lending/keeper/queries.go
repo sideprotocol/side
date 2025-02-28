@@ -63,9 +63,19 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+	collateralAmount, err := sdk.ParseCoinNormalized(req.CollateralAmount)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	borrowedAmount, err := sdk.ParseCoinNormalized(req.BorrowAmount)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	liquidationPrice := types.GetLiquidationPrice(req.CollateralAcmount.Amount, req.BorrowAmount.Amount, k.GetParams(ctx).LiquidationThresholdPercent)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, k.GetParams(ctx).LiquidationThresholdPercent)
 
 	event := k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	if event == nil {
