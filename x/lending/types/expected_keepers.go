@@ -62,6 +62,8 @@ type DLCKeeper interface {
 	GetAgency(ctx sdk.Context, id uint64) *dlctypes.Agency
 
 	TriggerEvent(ctx sdk.Context, id uint64)
+
+	SetPrice(ctx sdk.Context, pair string, price string)
 }
 
 // BtcBridgeKeeper defines the expected BtcBridge keeper interface

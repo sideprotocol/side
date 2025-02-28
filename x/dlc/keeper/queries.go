@@ -128,5 +128,5 @@ func (k Keeper) Price(goCtx context.Context, req *types.QueryPriceRequest) (*typ
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryPriceResponse{Price: uint64(k.GetPrice(ctx, req.Symbol))}, nil
+	return &types.QueryPriceResponse{Price: k.GetPrice(ctx, req.Symbol).Uint64()}, nil
 }
