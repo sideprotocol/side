@@ -28,20 +28,22 @@ message LendingPool {
 }
 
 enum LoanStatus {
+    // Unspecified
+    Unspecified = 0;
     // Loan Application
-    Apply = 0;
+    Apply = 1;
     // Loan Approval
-    Approve = 1;
+    Approve = 2;
     // Loan Disbursement
-    Disburse = 2;
+    Disburse = 3;
     // Loan Repayment
-    Repay = 3;
+    Repay = 4;
     // Loan Default/Delinquency
-    Default = 4;
+    Default = 5;
     // Loan Liquidation
-    Liquidate = 5;
+    Liquidate = 6;
     // Loan Closure
-    Close = 6;
+    Close = 7;
 }
 
 message Loan {

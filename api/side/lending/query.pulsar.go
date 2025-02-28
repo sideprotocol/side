@@ -10261,7 +10261,7 @@ func (x *QueryLoansRequest) GetStatus() LoanStatus {
 	if x != nil {
 		return x.Status
 	}
-	return LoanStatus_Apply
+	return LoanStatus_Unspecified
 }
 
 func (x *QueryLoansRequest) GetPagination() *v1beta1.PageRequest {

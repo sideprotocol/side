@@ -150,7 +150,15 @@ func (k Keeper) Loans(goCtx context.Context, req *types.QueryLoansRequest) (*typ
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryLoansResponse{Loans: k.GetLoans(ctx, req.Status)}, nil
+	var loans []*types.Loan
+
+	if req.Status == types.LoanStatus_Unspecified {
+		loans = k.GetAllLoans(ctx)
+	} else {
+		loans = k.GetLoans(ctx, req.Status)
+	}
+
+	return &types.QueryLoansResponse{Loans: loans}, nil
 }
 
 // LoanDlcMeta implements types.QueryServer.
