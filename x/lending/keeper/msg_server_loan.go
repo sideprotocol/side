@@ -137,18 +137,19 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	// set dlc meta
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
-	m.EmitEvent(ctx, msg.Borrower,
-		sdk.NewAttribute("vault", loan.VaultAddress),
-		sdk.NewAttribute("borrower", loan.Borrower),
-		sdk.NewAttribute("agency", loan.Agency),
-		sdk.NewAttribute("loan_secret_hash", loan.HashLoanSecret),
-		sdk.NewAttribute("muturity_time", fmt.Sprint(loan.MaturityTime)),
-		sdk.NewAttribute("final_timeout", fmt.Sprint(loan.FinalTimeout)),
-		sdk.NewAttribute("borrow_amount", loan.BorrowAmount.String()),
-		sdk.NewAttribute("collateral", loan.CollateralAmount.String()),
-		sdk.NewAttribute("pool_id", loan.PoolId),
-		sdk.NewAttribute("event_id", fmt.Sprintf("%d", loan.EventId)),
-	)
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(types.EventTypeApply,
+			sdk.NewAttribute(types.AttributeKeyVault, loan.VaultAddress),
+			sdk.NewAttribute(types.AttributeKeyBorrower, loan.Borrower),
+			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+			sdk.NewAttribute(types.AttributeKeyLoanSecretHash, loan.HashLoanSecret),
+			sdk.NewAttribute(types.AttributeKeyMuturityTime, fmt.Sprint(loan.MaturityTime)),
+			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
+			sdk.NewAttribute(types.AttributeKeyCollateralAmount, loan.CollateralAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyPoolId, loan.PoolId),
+			sdk.NewAttribute(types.AttributeKeyEventId, fmt.Sprintf("%d", loan.EventId)),
+		))
 
 	return &types.MsgApplyResponse{}, nil
 
