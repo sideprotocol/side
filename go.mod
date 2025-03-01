@@ -51,6 +51,7 @@ require (
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
 	google.golang.org/protobuf v1.36.3
 	lukechampine.com/uint128 v1.3.0
+
 )
 
 require (

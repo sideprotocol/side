@@ -137,6 +137,7 @@ import (
 	lendingkeeper "github.com/sideprotocol/side/x/lending/keeper"
 	lendingmodule "github.com/sideprotocol/side/x/lending/module"
 	lendingtypes "github.com/sideprotocol/side/x/lending/types"
+	"github.com/sideprotocol/side/x/oracle"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
@@ -950,6 +951,15 @@ func New(
 	app.SetPreBlocker(app.PreBlocker)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
+
+	voteExtHander := oracle.NewVoteExtHandler(app.Logger())
+	propHandler := oracle.NewProposalHandler(app.Logger(), app.StakingKeeper)
+
+	app.SetExtendVoteHandler(voteExtHander.ExtendVoteHandler())
+	app.SetVerifyVoteExtensionHandler(voteExtHander.VerifyVoteExtensionHandler())
+	app.SetPrepareProposal(propHandler.PrepareProposal())
+	app.SetProcessProposal(propHandler.ProcessProposal())
+	app.SetPreBlocker(propHandler.PreBlocker)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
