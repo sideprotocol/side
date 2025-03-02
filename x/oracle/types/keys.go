@@ -17,6 +17,8 @@ const (
 	MemStoreKey = "mem_" + ModuleName
 
 	BTCUSD = "BTCUSD"
+
+	flagOracleEnable = "oracle.enable"
 )
 
 var (

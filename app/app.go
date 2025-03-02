@@ -139,6 +139,8 @@ import (
 	lendingtypes "github.com/sideprotocol/side/x/lending/types"
 	"github.com/sideprotocol/side/x/oracle"
 
+	oracletypes "github.com/sideprotocol/side/x/oracle/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	btccodec "github.com/sideprotocol/side/crypto/codec"
@@ -696,6 +698,12 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		wasmOpts...,
 	)
+
+	oracleConfig, err := oracletypes.ReadOracleConfig(appOpts)
+	if err != nil {
+		panic(fmt.Sprintf("error while reading oracle config: %s", err))
+	}
+	logger.Info("Oracle Status", "Enable", oracleConfig.Enable)
 
 	wasmModule := wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName))
 

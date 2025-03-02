@@ -46,11 +46,12 @@ func subscribe(conn *websocket.Conn) {
 	conn.WriteJSON(msg)
 }
 
-func Subscribe(svrCtx *server.Context) {
+func Subscribe(svrCtx *server.Context) error {
 	url := "ws://wbs-api.mexc.com/ws"
 	c, re, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
 		svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+		return nil
 	}
 	defer c.Close()
 

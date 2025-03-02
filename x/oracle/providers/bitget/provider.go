@@ -52,11 +52,12 @@ func subscribe(conn *websocket.Conn) {
 	conn.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 
-func Subscribe(svrCtx *server.Context) {
+func Subscribe(svrCtx *server.Context) error {
 	url := "wss://ws.bitget.com/v2/ws/public"
 	c, re, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
 		svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+		return err
 	}
 	defer c.Close()
 

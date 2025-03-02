@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 
 	"cosmossdk.io/log"
 	dbm "github.com/cosmos/cosmos-db"
@@ -117,18 +116,18 @@ func NewRootCmd() *cobra.Command {
 	return rootCmd
 }
 
-func overwriteFlagDefaults(c *cobra.Command, defaults map[string]string) {
-	set := func(s *pflag.FlagSet, key, val string) {
-		if f := s.Lookup(key); f != nil {
-			f.DefValue = val
-			_ = f.Value.Set(val)
-		}
-	}
-	for key, val := range defaults {
-		set(c.Flags(), key, val)
-		set(c.PersistentFlags(), key, val)
-	}
-	for _, c := range c.Commands() {
-		overwriteFlagDefaults(c, defaults)
-	}
-}
+// func overwriteFlagDefaults(c *cobra.Command, defaults map[string]string) {
+// 	set := func(s *pflag.FlagSet, key, val string) {
+// 		if f := s.Lookup(key); f != nil {
+// 			f.DefValue = val
+// 			_ = f.Value.Set(val)
+// 		}
+// 	}
+// 	for key, val := range defaults {
+// 		set(c.Flags(), key, val)
+// 		set(c.PersistentFlags(), key, val)
+// 	}
+// 	for _, c := range c.Commands() {
+// 		overwriteFlagDefaults(c, defaults)
+// 	}
+// }

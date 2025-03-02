@@ -37,12 +37,13 @@ func subscribe(conn *websocket.Conn) {
 	conn.WriteMessage(websocket.TextMessage, []byte("{\"type\":\"subscribe\",\"product_ids\":[\"BTC-USD\"],\"channels\":[{\"name\":\"ticker\",\"product_ids\":[\"BTC-USD\"]}]}"))
 }
 
-func Subscribe(svrCtx *server.Context) {
+func Subscribe(svrCtx *server.Context) error {
 	// url := "wss://ws-feed-public.sandbox.exchange.coinbase.com"
 	url := "wss://ws-feed.exchange.coinbase.com"
 	c, re, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
 		svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+		return err
 	}
 	defer c.Close()
 

@@ -51,12 +51,13 @@ func subscribe(conn *websocket.Conn) {
 	conn.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 
-func Subscribe(svrCtx *server.Context) {
+func Subscribe(svrCtx *server.Context) error {
 	url := "wss://ws.okx.com:8443/ws/v5/public"
 	// url := "wss://wspap.okx.com:8443/ws/v5/public"
 	c, re, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
 		svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+		return err
 	}
 	defer c.Close()
 

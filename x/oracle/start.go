@@ -13,7 +13,8 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// var PRICE_CACHE = make(map[string]Price)
+type Starter struct {
+}
 
 // Start Oracle Price Service
 // Subscrible Prices from providers
@@ -21,11 +22,11 @@ func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context
 
 	svrCtx.Logger.Info("service start", "module", "oracle", "msg", "Start Oracle Price Subscriber")
 
-	go binance.Subscribe(svrCtx)
-	go okex.Subscribe(svrCtx)
-	go coinbase.Subscribe(svrCtx)
-	go bybit.Subscribe(svrCtx)
-	go bitget.Subscribe(svrCtx)
+	g.Go(func() error { return binance.Subscribe(svrCtx) })
+	g.Go(func() error { return okex.Subscribe(svrCtx) })
+	g.Go(func() error { return coinbase.Subscribe(svrCtx) })
+	g.Go(func() error { return bybit.Subscribe(svrCtx) })
+	g.Go(func() error { return bitget.Subscribe(svrCtx) })
 
 	return nil
 

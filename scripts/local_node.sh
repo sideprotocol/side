@@ -100,9 +100,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg denom "${DENOMS[0]}" '.app_state["crisis"]["constant_fee"]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+
 	# Set gas limit in genesis
-	jq --arg max_gas "$MAX_GAS" '.consensus_params["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-  
+	jq --arg max_gas "$MAX_GAS" '.consensus["params"]["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	jq --arg height "3" '.consensus["params"]["abci"]["vote_extensions_enable_height"]=$height' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+
     # set gov voting period
 	if [ -n "$GOV_VOTING_PERIOD" ]; then
         jq --arg voting_period "${GOV_VOTING_PERIOD}" '.app_state["gov"]["params"]["voting_period"]=$voting_period' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
@@ -204,4 +206,4 @@ fi
 
 
 # Start the node (remove the --pruning=nothing flag if historical queries are not needed)
-$BINARY start --log_level info --minimum-gas-prices=0.0001${DENOMS[0]} --home "$HOMEDIR"
+$BINARY start --log_level info --home "$HOMEDIR"
