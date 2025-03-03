@@ -41,9 +41,9 @@ func NewVoteExtHandler(logger log.Logger) VoteExtHandler {
 func (h *VoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
-		types.CleanPrices(h.lastPriceSyncTS)
-		prices := h.getAllVolumeWeightedPrices(req.Height, req.Time.UnixMilli())
 
+		types.CleanPrices(h.lastPriceSyncTS)
+		prices := h.getAllVolumeWeightedPrices()
 		h.lastPriceSyncTS = req.Time.UnixMilli()
 
 		voteExt := OracleVoteExtension{
@@ -86,9 +86,17 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHan
 	}
 }
 
-func (h *VoteExtHandler) getAllVolumeWeightedPrices(mock_price int64, time int64) map[string]math.LegacyDec {
+func (h *VoteExtHandler) getAllVolumeWeightedPrices() map[string]math.LegacyDec {
 
-	h.logger.Info("Current Price Cache", "cache", types.PRICE_CACHE)
+	for _, v := range types.PRICE_CACHE {
+
+		output := make(map[string]int)
+		for k1, v1 := range v {
+			output[k1] = len(v1)
+		}
+		h.logger.Info("Current Price Cache", "cache", output)
+	}
+
 	// calculate the weighted average
 	symbolPrices := make(map[string][]math.LegacyDec)
 	for symbol, pairs := range types.PRICE_CACHE {
