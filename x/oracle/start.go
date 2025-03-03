@@ -21,7 +21,7 @@ func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context
 
 	svrCtx.Logger.Info("service start", "module", "oracle", "msg", "Start Oracle Price Subscriber")
 
-	// g.Go(func() error { return binance.Subscribe(svrCtx) })
+	// g.Go(func() error { return binance.Subscribe(svrCtx, ctx) })
 	// g.Go(func() error { return okex.Subscribe(svrCtx) })
 	// g.Go(func() error { return coinbase.Subscribe(svrCtx) })
 	// g.Go(func() error { return bybit.Subscribe(svrCtx) })

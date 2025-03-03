@@ -53,11 +53,12 @@ func Subscribe(svrCtx *server.Context) error {
 		subscription := &Subscription{}
 		err := c.ReadJSON(subscription)
 		if err != nil {
-			svrCtx.Logger.Error("reconnect websocket", "url", url, "error", err)
-			time.Sleep(5 * time.Second)
-			c, _, err = websocket.DefaultDialer.Dial(url, nil)
-			if err != nil {
-				svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+			for {
+				time.Sleep(10 * time.Second)
+				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
+					svrCtx.Logger.Info("reconnected price provider", "url", url, "status", re.Status, "body", re.Body)
+					break
+				}
 			}
 		}
 

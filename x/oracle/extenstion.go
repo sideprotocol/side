@@ -194,11 +194,11 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 
 func (h *ProposalHandler) computeStakeWeightedOraclePrices(ctx sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, error) {
 	// requiredPairs := h.keeper.GetSupportedPairs(ctx)
-	requiredPairs := []string{"BTCUSD"}
-	stakeWeightedPrices := make(map[string]math.LegacyDec, len(requiredPairs)) // base -> average stake-weighted price
-	for _, pair := range requiredPairs {
-		stakeWeightedPrices[pair] = math.LegacyZeroDec()
-	}
+	// requiredPairs := []string{"BTCUSD"}
+	stakeWeightedPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE)) // base -> average stake-weighted price
+	// for _, pair := range requiredPairs {
+	// 	stakeWeightedPrices[pair] = math.LegacyZeroDec()
+	// }
 
 	var totalStake int64
 	for _, v := range commit.Votes {
@@ -225,6 +225,8 @@ func (h *ProposalHandler) computeStakeWeightedOraclePrices(ctx sdk.Context, comm
 			// supported pairs are supplied, but we add this here for demo purposes.
 			if _, ok := stakeWeightedPrices[base]; ok {
 				stakeWeightedPrices[base] = stakeWeightedPrices[base].Add(price.MulInt64(v.Validator.Power))
+			} else {
+				stakeWeightedPrices[base] = price.MulInt64(v.Validator.Power)
 			}
 		}
 	}
@@ -243,9 +245,6 @@ func (h *ProposalHandler) computeStakeWeightedOraclePrices(ctx sdk.Context, comm
 
 func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
-
-		h.logger.Info("ProcessProposalHandler", "height", req.Height)
-
 		if len(req.Txs) == 0 {
 			return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_ACCEPT}, nil
 		}
@@ -277,8 +276,6 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 }
 
 func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
-
-	h.logger.Info("PreBlocker", "height", req.Height)
 
 	res := &sdk.ResponsePreBlock{}
 	if len(req.Txs) == 0 {
