@@ -1,6 +1,7 @@
 package oracle
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -66,7 +67,7 @@ func (h *VoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 func (h *VoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHandler {
 	return func(ctx sdk.Context, req *abci.RequestVerifyVoteExtension) (*abci.ResponseVerifyVoteExtension, error) {
 
-		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", req.ValidatorAddress)
+		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", hex.EncodeToString(req.ValidatorAddress))
 		var voteExt OracleVoteExtension
 		err := json.Unmarshal(req.VoteExtension, &voteExt)
 		if err != nil {
