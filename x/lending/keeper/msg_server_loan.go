@@ -51,10 +51,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
-	fundTx, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
-	if err != nil {
-		return nil, types.ErrInvalidFunding
-	}
+	fundTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
 	depositTxid := fundTx.UnsignedTx.TxHash().String()
 
 	adaptorPoint, err := dlctypes.GetSignaturePointFromEvent(event)

@@ -10,6 +10,8 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 
+	errorsmod "cosmossdk.io/errors"
+
 	"github.com/sideprotocol/side/crypto/adaptor"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 )
@@ -84,10 +86,6 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet s
 
 // VerifyLiquidationCET verifies the given liquidation cet and corresponding adaptor signature
 func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowerPubKey string, agencyPubKey string, adaptorSignature string, adaptorPoint string) error {
-	if err := depositTx.SanityCheck(); err != nil {
-		return ErrInvalidFunding
-	}
-
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCET)), true)
 	if err != nil {
 		return ErrInvalidCET
@@ -96,13 +94,13 @@ func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowe
 	depositTxHash := depositTx.UnsignedTx.TxHash()
 
 	for _, input := range p.UnsignedTx.TxIn {
-		if input.PreviousOutPoint.Hash != depositTxHash {
-			return ErrInvalidCET
+		if !input.PreviousOutPoint.Hash.IsEqual(&depositTxHash) {
+			return errorsmod.Wrap(ErrInvalidCET, "incorrect previous tx hash")
 		}
 	}
 
 	if p.Inputs[0].WitnessUtxo == nil {
-		return ErrInvalidCET
+		return errorsmod.Wrap(ErrInvalidCET, "missing witness utxo")
 	}
 
 	multiSigScript, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
@@ -112,7 +110,7 @@ func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowe
 
 	sigHash, err := CalcTapscriptSigHash(p, 0, DefaultSigHashType, multiSigScript)
 	if err != nil {
-		return ErrInvalidCET
+		return errorsmod.Wrapf(ErrInvalidCET, "failed to calculate sig hash: %v", err)
 	}
 
 	sigBytes, err := hex.DecodeString(adaptorSignature)

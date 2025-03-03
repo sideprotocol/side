@@ -68,7 +68,7 @@ func (m *MsgApply) ValidateBasic() error {
 
 	_, err = psbt.NewFromRawBytes(bytes.NewReader([]byte(m.LiquidationCet)), true)
 	if err != nil {
-		return ErrInvalidCET
+		return errorsmod.Wrapf(ErrInvalidCET, "failed to deserialize psbt: %v", err)
 	}
 
 	adaptorSigBytes, err := hex.DecodeString(m.LiquidationAdaptorSignature)
