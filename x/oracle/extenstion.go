@@ -144,9 +144,6 @@ type StakeWeightedPrices struct {
 func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 
-		h.logger.Info("PrepareProposal", "height", req.Height)
-		// ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight = 1
-
 		proposalTxs := req.Txs
 
 		if req.Height >= ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight && ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight != 0 {
@@ -176,7 +173,7 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 
 			// Inject a "fake" tx into the proposal s.t. validators can decode, verify,
 			// and store the canonical stake-weighted average prices.
-			proposalTxs = append(proposalTxs, bz)
+			proposalTxs = append([][]byte{bz}, proposalTxs...)
 		}
 
 		// proceed with normal block proposal construction, e.g. POB, normal txs, etc...

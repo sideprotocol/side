@@ -71,6 +71,9 @@ func CleanPrices(expire int64) {
 
 func setMapValue(target map[string][]Price, ex string, p Price) {
 	if list, ok := target[ex]; ok {
+		if len(list) > 500 {
+			list = list[500:]
+		}
 		list = append(list, p)
 		target[ex] = list
 	} else {
