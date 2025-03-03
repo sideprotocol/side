@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"maps"
+	"slices"
 
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
@@ -64,7 +66,7 @@ func (h *VoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 func (h *VoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHandler {
 	return func(ctx sdk.Context, req *abci.RequestVerifyVoteExtension) (*abci.ResponseVerifyVoteExtension, error) {
 
-		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height)
+		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", req.ValidatorAddress)
 		var voteExt OracleVoteExtension
 		err := json.Unmarshal(req.VoteExtension, &voteExt)
 		if err != nil {
@@ -74,13 +76,6 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHan
 		if voteExt.Height != req.Height {
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
 		}
-
-		// Verify incoming prices from a validator are valid. Note, verification during
-		// VerifyVoteExtensionHandler MUST be deterministic. For brevity and demo
-		// purposes, we omit implementation.
-		// if err := h.verifyOraclePrices(ctx, voteExt.Prices); err != nil {
-		// 	return nil, fmt.Errorf("failed to verify oracle prices from validator %X: %w", req.ValidatorAddress, err)
-		// }
 
 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 	}
@@ -299,5 +294,13 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeB
 }
 
 func compareOraclePrices(p1, p2 map[string]math.LegacyDec) error {
+	if len(p1) != len(p2) {
+		return fmt.Errorf("price maps are different, length %s != length %s", slices.Collect(maps.Keys(p1)), slices.Collect(maps.Keys(p2)))
+	}
+	for k, v := range p1 {
+		if v2, ok := p2[k]; !ok || !v.Equal(v2) {
+			return fmt.Errorf("[%s] prices are different, %s!=%s", k, v, v2)
+		}
+	}
 	return nil
 }
