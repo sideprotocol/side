@@ -21,9 +21,9 @@ type OracleVoteExtension struct {
 }
 
 type VoteExtHandler struct {
-	logger       log.Logger
-	currentBlock int64 // current block height
-	// lastPriceSyncTS time.Time     // last time we synced prices
+	logger          log.Logger
+	currentBlock    int64 // current block height
+	lastPriceSyncTS int64 // last time we synced prices
 	// providerTimeout time.Duration // timeout for fetching prices from providers
 	// providers       map[string]Provider              // mapping of provider name to provider (e.g. Binance -> BinanceProvider)
 	// providerPairs   map[string][]keeper.CurrencyPair // mapping of provider name to supported pairs (e.g. Binance -> [ATOM/USD])
@@ -40,11 +40,11 @@ func NewVoteExtHandler(logger log.Logger) VoteExtHandler {
 
 func (h *VoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
-
-		h.logger.Info(" ====== computing oracle prices for vote extension ====", "height", req.Height)
-
 		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
+		types.CleanPrices(h.lastPriceSyncTS)
 		prices := h.getAllVolumeWeightedPrices(req.Height, req.Time.UnixMilli())
+
+		h.lastPriceSyncTS = req.Time.UnixMilli()
 
 		voteExt := OracleVoteExtension{
 			Height: req.Height,
@@ -88,35 +88,21 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHan
 
 func (h *VoteExtHandler) getAllVolumeWeightedPrices(mock_price int64, time int64) map[string]math.LegacyDec {
 
-	// connect price providers and get prices
-	// resp, err := http.Get("http://localhost:8181")
-	// if err != nil {
-	// 	return nil
-	// }
-	// defer resp.Body.Close()
-	// body, err := io.ReadAll(resp.Body)
-	// if err != nil {
-	// 	return nil
-	// }
-	// use json.Unmarshal to parse the response body
-	// var prices map[string]Price
-	// json.Unmarshal(body, &prices)
-	// prices := make(map[string]types.Price)
-	// prices["mock"] = types.Price{
-	// 	Symbol: "BTCUSD",
-	// 	Price:  strconv.FormatInt(mock_price, 10),
-	// 	Time:   uint64(time),
-	// }
-
+	h.logger.Info("Current Price Cache", "cache", types.PRICE_CACHE)
 	// calculate the weighted average
 	symbolPrices := make(map[string][]math.LegacyDec)
 	for symbol, pairs := range types.PRICE_CACHE {
-		for _, price := range pairs {
-			p, err := math.LegacyNewDecFromStr(price.Price)
+		providers := []string{}
+		prices := []string{}
+		for ex, price := range pairs {
+			p, err := math.LegacyNewDecFromStr(price[0].Price)
 			if err == nil { // TODO fitler price by time
 				symbolPrices[symbol] = append(symbolPrices[symbol], p)
+				providers = append(providers, ex)
+				prices = append(prices, price[0].Price)
 			}
 		}
+		h.logger.Info("fetch price", "providers", providers, "price", prices)
 	}
 
 	avgPrices := make(map[string]math.LegacyDec)
@@ -126,7 +112,9 @@ func (h *VoteExtHandler) getAllVolumeWeightedPrices(mock_price int64, time int64
 			for _, p := range prices {
 				sum = sum.Add(p)
 			}
-			avgPrices[symbol] = sum.QuoInt64(int64(len(prices)))
+			if avg := sum.QuoInt64(int64(len(prices))); avg.GT(math.LegacyNewDec(0)) {
+				avgPrices[symbol] = avg
+			}
 		}
 	}
 

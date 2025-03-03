@@ -15,7 +15,7 @@ type Subscription struct {
 
 type SubscriptionData struct {
 	Event     string `json:"e"`
-	EventTime uint64 `json:"E"`
+	EventTime int64  `json:"E"`
 	Symbol    string `json:"s"`
 	Close     string `json:"c"`
 	// o string

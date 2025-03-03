@@ -69,7 +69,7 @@ func Subscribe(svrCtx *server.Context) error {
 				price := types.Price{
 					Symbol: symbol(subscription.Symbol),
 					Price:  subscription.Price,
-					Time:   uint64(t.UnixMilli()),
+					Time:   t.UnixMilli(),
 				}
 				types.CachePrice(ProviderName, price)
 			} else {

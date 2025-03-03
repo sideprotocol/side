@@ -29,7 +29,7 @@ func symbol(source string) string {
 
 type Subscription struct {
 	Topic string           `json:"topic"`
-	Time  uint64           `json:"ts"`
+	Time  int64            `json:"ts"`
 	Data  SubscriptionData `json:"data"`
 }
 

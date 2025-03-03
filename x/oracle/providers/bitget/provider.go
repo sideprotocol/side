@@ -83,7 +83,7 @@ func Subscribe(svrCtx *server.Context) error {
 				for _, data := range subscription.Data {
 					// svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "symbol", data.Symbol, "price", data.Price)
 
-					if t, err := strconv.ParseUint(data.Time, 10, 64); err == nil {
+					if t, err := strconv.ParseInt(data.Time, 10, 64); err == nil {
 						price := types.Price{
 							Symbol: symbol(data.Symbol),
 							Price:  data.Price,
