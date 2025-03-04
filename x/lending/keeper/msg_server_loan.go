@@ -456,8 +456,8 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 	sigBytes, _ := hex.DecodeString(msg.Signature)
 	adaptorSigBytes, _ := hex.DecodeString(repayment.DcaAdaptorSignatures[0])
 
-	// extract secret from signature
-	secret := adaptor.Extract(sigBytes, adaptorSigBytes)
+	// extract secret from signatures
+	secret := adaptor.Extract(adaptorSigBytes, sigBytes)
 	if len(secret) == 0 {
 		return nil, types.ErrInvalidSignature
 	}

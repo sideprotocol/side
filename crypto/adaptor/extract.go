@@ -5,40 +5,49 @@ import (
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 )
 
-// Extract extracts the secret from the given adapted signature and adaptor signature
-func Extract(adaptedSigBytes []byte, adaptorSigBytes []byte) []byte {
-	adaptedR, err := schnorr.ParsePubKey(adaptedSigBytes[0:32])
-	if err != nil {
-		return nil
-	}
-
+// Extract extracts the secret from the given adaptor signature and adapted signature
+func Extract(adaptorSigBytes []byte, adaptedSigBytes []byte) []byte {
 	adaptorR, err := schnorr.ParsePubKey(adaptorSigBytes[0:32])
 	if err != nil {
 		return nil
 	}
 
-	var adaptedRPoint, adaptorRPoint secp256k1.JacobianPoint
-	adaptedR.AsJacobian(&adaptedRPoint)
+	adaptedR, err := schnorr.ParsePubKey(adaptedSigBytes[0:32])
+	if err != nil {
+		return nil
+	}
+
+	var adaptorRPoint, adaptedRPoint secp256k1.JacobianPoint
 	adaptorR.AsJacobian(&adaptorRPoint)
+	adaptedR.AsJacobian(&adaptedRPoint)
 
-	var rPointSub, rPointAdd secp256k1.JacobianPoint
-	secp256k1.AddNonConst(&adaptedRPoint, NegatePoint(&adaptorRPoint), &rPointSub)
-	secp256k1.AddNonConst(&adaptedRPoint, &adaptorRPoint, &rPointAdd)
-
-	adaptedSig := NewSignature(adaptedSigBytes)
 	adaptorSig := NewSignature(adaptorSigBytes)
+	adaptedSig := NewSignature(adaptedSigBytes)
 
 	t := adaptedSig.s.Add(adaptorSig.s.Negate())
 
-	var T secp256k1.JacobianPoint
-	secp256k1.ScalarBaseMultNonConst(t, &T)
-
-	switch T {
-	case rPointSub:
+	switch {
+	case verifySecret(t, false, adaptorRPoint, adaptedRPoint):
 		return SerializeScalar(t)
-	case rPointAdd:
-		return SerializeScalar(t.Negate())
+
+	case verifySecret(t.Negate(), true, adaptorRPoint, adaptedRPoint):
+		return SerializeScalar(t)
+
 	default:
 		return nil
 	}
+}
+
+// verifySecret returns true if the computed R is correct according to the given secret and parity, false otherwise
+func verifySecret(t *secp256k1.ModNScalar, expectOdd bool, adaptorRPoint secp256k1.JacobianPoint, adaptedRPoint secp256k1.JacobianPoint) bool {
+	var T secp256k1.JacobianPoint
+	secp256k1.ScalarBaseMultNonConst(t, &T)
+
+	var computedAdaptedRPoint secp256k1.JacobianPoint
+	secp256k1.AddNonConst(&adaptorRPoint, &T, &computedAdaptedRPoint)
+
+	adaptedRPoint.ToAffine()
+	computedAdaptedRPoint.ToAffine()
+
+	return computedAdaptedRPoint.Y.IsOdd() == expectOdd && computedAdaptedRPoint.X.Equals(&adaptedRPoint.X)
 }
