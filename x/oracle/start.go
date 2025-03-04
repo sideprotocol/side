@@ -6,6 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/sideprotocol/side/x/oracle/providers/binance"
+	"github.com/sideprotocol/side/x/oracle/providers/bitget"
 	"github.com/sideprotocol/side/x/oracle/providers/bybit"
 	"github.com/sideprotocol/side/x/oracle/providers/coinbase"
 	"github.com/sideprotocol/side/x/oracle/providers/okex"
@@ -30,6 +31,7 @@ func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context
 	go okex.Subscribe(svrCtx)
 	go coinbase.Subscribe(svrCtx)
 	go bybit.Subscribe(svrCtx)
+	go bitget.Subscribe(svrCtx)
 
 	return nil
 

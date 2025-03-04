@@ -50,34 +50,38 @@ func Subscribe(svrCtx *server.Context) error {
 	subscribe(c)
 
 	for {
-		subscription := &Subscription{}
-		err := c.ReadJSON(subscription)
-		if err != nil {
+
+		if websocket.IsCloseError(err) || websocket.IsUnexpectedCloseError(err) {
 			for {
 				time.Sleep(10 * time.Second)
 				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
+					subscribe(c)
 					svrCtx.Logger.Info("reconnected price provider", "url", url, "status", re.Status, "body", re.Body)
 					break
 				}
 			}
 		}
 
-		if subscription.Type == "ticker" {
-			// svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "message", subscription, "symbol", subscription.Symbol, "price", subscription.Price)
+		subscription := &Subscription{}
+		if err = c.ReadJSON(subscription); err == nil {
+			if subscription.Type == "ticker" {
+				// svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "message", subscription, "symbol", subscription.Symbol, "price", subscription.Price)
 
-			// sample time: 2025-03-01T03:42:43.951417Z
-			if t, err := time.Parse(time.RFC3339Nano, subscription.Time); err == nil {
-				price := types.Price{
-					Symbol: symbol(subscription.Symbol),
-					Price:  subscription.Price,
-					Time:   t.UnixMilli(),
+				// sample time: 2025-03-01T03:42:43.951417Z
+				if t, err := time.Parse(time.RFC3339Nano, subscription.Time); err == nil {
+					price := types.Price{
+						Symbol: symbol(subscription.Symbol),
+						Price:  subscription.Price,
+						Time:   t.UnixMilli(),
+					}
+					types.CachePrice(ProviderName, price)
+				} else {
+					svrCtx.Logger.Error("Parse time error")
 				}
-				types.CachePrice(ProviderName, price)
-			} else {
-				svrCtx.Logger.Error("Parse time error")
-			}
 
+			}
 		}
+
 		// adaptor(steam)
 
 	}

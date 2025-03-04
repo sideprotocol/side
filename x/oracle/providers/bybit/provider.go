@@ -62,32 +62,34 @@ func Subscribe(svrCtx *server.Context) error {
 	subscribe(c)
 
 	for {
-		subscription := &Subscription{}
-		b := []byte{}
-		if err == nil {
-			_, b, err = c.ReadMessage()
-		}
-		if err != nil {
+
+		if websocket.IsCloseError(err) || websocket.IsUnexpectedCloseError(err) {
 			for {
 				time.Sleep(10 * time.Second)
 				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
+					subscribe(c)
 					svrCtx.Logger.Info("reconnected price provider", "url", url, "status", re.Status, "body", re.Body)
 					break
 				}
 			}
 		}
 
-		text := string(b)
-		if strings.Contains(text, "topic") {
-			if err = json.Unmarshal(b, subscription); err == nil {
-				// svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "symbol", subscription.Data.Symbol, "price", subscription.Data.Price)
+		if _, b, err := c.ReadMessage(); err == nil {
+			text := string(b)
+			if strings.Contains(text, "topic") {
 
-				price := types.Price{
-					Symbol: symbol(subscription.Data.Symbol),
-					Price:  subscription.Data.Price,
-					Time:   subscription.Time,
+				subscription := &Subscription{}
+				if err = json.Unmarshal(b, subscription); err == nil {
+					// svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "symbol", subscription.Data.Symbol, "price", subscription.Data.Price)
+
+					price := types.Price{
+						Symbol: symbol(subscription.Data.Symbol),
+						Price:  subscription.Data.Price,
+						Time:   subscription.Time,
+					}
+					types.CachePrice(ProviderName, price)
+
 				}
-				types.CachePrice(ProviderName, price)
 
 			}
 

@@ -58,9 +58,8 @@ func Subscribe(svrCtx *server.Context) error {
 	subscribe(c)
 
 	for {
-		subscription := &Subscription{}
-		err := c.ReadJSON(subscription)
-		if err != nil {
+
+		if websocket.IsCloseError(err) || websocket.IsUnexpectedCloseError(err) {
 			svrCtx.Logger.Error("reconnect websocket", "url", url, "error", err)
 			time.Sleep(5 * time.Second)
 			c, _, err = websocket.DefaultDialer.Dial(url, nil)
@@ -69,14 +68,17 @@ func Subscribe(svrCtx *server.Context) error {
 			}
 		}
 
-		// adaptor(steam)
-		svrCtx.Logger.Info("Websocket Received", "message", subscription, "symbol", subscription.Data.Symbol, "price", subscription.Data.Close)
+		subscription := &Subscription{}
+		if err = c.ReadJSON(subscription); err == nil {
+			svrCtx.Logger.Info("Websocket Received", "message", subscription, "symbol", subscription.Data.Symbol, "price", subscription.Data.Close)
 
-		price := types.Price{
-			Symbol: symbol(subscription.Data.Symbol),
-			Price:  subscription.Data.Close,
-			Time:   subscription.Data.EventTime,
+			price := types.Price{
+				Symbol: symbol(subscription.Data.Symbol),
+				Price:  subscription.Data.Close,
+				Time:   subscription.Data.EventTime,
+			}
+			types.CachePrice(ProviderName, price)
 		}
-		types.CachePrice(ProviderName, price)
+
 	}
 }
