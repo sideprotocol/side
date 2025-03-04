@@ -56,15 +56,17 @@ func Subscribe(svrCtx *server.Context) error {
 	defer c.Close()
 
 	subscribe(c)
-
+	reconnect := false
 	for {
 
-		if websocket.IsCloseError(err) || websocket.IsUnexpectedCloseError(err) {
+		if reconnect {
 			svrCtx.Logger.Error("reconnect websocket", "url", url, "error", err)
 			time.Sleep(5 * time.Second)
 			c, _, err = websocket.DefaultDialer.Dial(url, nil)
 			if err != nil {
 				svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+			} else {
+				reconnect = false
 			}
 		}
 
@@ -78,6 +80,11 @@ func Subscribe(svrCtx *server.Context) error {
 				Time:   subscription.Data.EventTime,
 			}
 			types.CachePrice(ProviderName, price)
+		} else {
+			c.Close()
+			svrCtx.Logger.Error("Read Error", "error", err, "provider", ProviderName)
+			reconnect = true
+
 		}
 
 	}

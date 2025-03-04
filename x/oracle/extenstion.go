@@ -99,12 +99,15 @@ func (h *VoteExtHandler) getAllVolumeWeightedPrices() map[string]math.LegacyDec 
 		providers := []string{}
 		prices := []string{}
 		for ex, price := range pairs {
-			p, err := math.LegacyNewDecFromStr(price[0].Price)
-			if err == nil { // TODO fitler price by time
-				symbolPrices[symbol] = append(symbolPrices[symbol], p)
-				providers = append(providers, ex)
-				prices = append(prices, price[0].Price)
+			if len(price) > 0 {
+				p, err := math.LegacyNewDecFromStr(price[0].Price)
+				if err == nil { // TODO fitler price by time
+					symbolPrices[symbol] = append(symbolPrices[symbol], p)
+					providers = append(providers, ex)
+					prices = append(prices, price[0].Price)
+				}
 			}
+
 		}
 		h.logger.Info("fetch price", "providers", providers, "price", prices)
 	}

@@ -54,18 +54,21 @@ func subscribe(conn *websocket.Conn) {
 
 func Subscribe(svrCtx *server.Context) error {
 	url := "wss://ws.bitget.com/v2/ws/public"
-	c, re, err := websocket.DefaultDialer.Dial(url, nil)
+	c, _, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
-		svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+		svrCtx.Logger.Error("price provider connection", "url", url)
 	}
 	defer c.Close()
 	subscribe(c)
 
+	reconnect := false
+
 	for {
-		if websocket.IsCloseError(err) || websocket.IsUnexpectedCloseError(err) {
+		if reconnect {
 			for {
-				time.Sleep(10 * time.Second)
-				if c, re, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
+				time.Sleep(5 * time.Second)
+				if c, re, err := websocket.DefaultDialer.Dial(url, nil); err == nil {
+					reconnect = false
 					subscribe(c)
 					svrCtx.Logger.Info("reconnected price provider", "url", url, "status", re.Status, "body", re.Body)
 					break
@@ -96,6 +99,10 @@ func Subscribe(svrCtx *server.Context) error {
 				}
 			}
 
+		} else {
+			svrCtx.Logger.Error("Read Error", "error", err, "provider", ProviderName)
+			c.Close()
+			reconnect = true
 		}
 
 	}

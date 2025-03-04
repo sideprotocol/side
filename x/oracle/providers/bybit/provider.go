@@ -54,19 +54,21 @@ func Subscribe(svrCtx *server.Context) error {
 	url := "wss://stream.bybit.com/v5/public/spot"
 	c, re, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
-		svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+		svrCtx.Logger.Error("price provider connection", "url", url)
 		return err
 	}
 	defer c.Close()
 
 	subscribe(c)
+	reconnect := false
 
 	for {
 
-		if websocket.IsCloseError(err) || websocket.IsUnexpectedCloseError(err) {
+		if reconnect {
 			for {
-				time.Sleep(10 * time.Second)
+				time.Sleep(5 * time.Second)
 				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
+					reconnect = false
 					subscribe(c)
 					svrCtx.Logger.Info("reconnected price provider", "url", url, "status", re.Status, "body", re.Body)
 					break
@@ -92,6 +94,11 @@ func Subscribe(svrCtx *server.Context) error {
 				}
 
 			}
+
+		} else {
+			c.Close()
+			svrCtx.Logger.Error("Read Error", "error", err, "provider", ProviderName)
+			reconnect = true
 
 		}
 
