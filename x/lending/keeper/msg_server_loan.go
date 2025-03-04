@@ -320,6 +320,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, msg.AdaptorPoint),
 			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
 			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AtrtibuteKeyRepaymentTxHash, repaymentTxPsbt.UnsignedTx.TxHash().String()),
 		),
 	)
 

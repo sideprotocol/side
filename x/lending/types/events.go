@@ -20,7 +20,8 @@ const (
 
 	AttributeKeyLoanId = "loan_id"
 
-	AttributeKeyAdaptorPoint = "adaptor_point"
+	AttributeKeyAdaptorPoint    = "adaptor_point"
+	AtrtibuteKeyRepaymentTxHash = "repayment_tx_hash"
 
 	AttributeKeySigHashes = "sig_hashes"
 )
