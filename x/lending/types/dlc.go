@@ -7,6 +7,7 @@ import (
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 
@@ -270,30 +271,30 @@ func CreateTimeoutRefundTransaction(depositTx *psbt.Packet, vaultPkScript []byte
 }
 
 // BuildSignedLiquidationCet builds the signed liquidation cet from the given signatures
-func BuildSignedLiquidationCet(liquidationCet string, borrowerPubKey string, borrowerSignatures []string, agencyPubKey string, agencySignatures []string) ([]byte, error) {
+func BuildSignedLiquidationCet(liquidationCet string, borrowerPubKey string, borrowerSignatures []string, agencyPubKey string, agencySignatures []string) ([]byte, *chainhash.Hash, error) {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCet)), true)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	borrowerPubKeyBytes, err := hex.DecodeString(borrowerPubKey)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	agencyPubKeyBytes, err := hex.DecodeString(agencyPubKey)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	borrowerSig, err := hex.DecodeString(borrowerSignatures[0])
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	agencySig, err := hex.DecodeString(agencySignatures[0])
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	leafHash := txscript.NewBaseTapLeaf(p.Inputs[0].TaprootLeafScript[0].Script).TapHash()
@@ -314,20 +315,22 @@ func BuildSignedLiquidationCet(liquidationCet string, borrowerPubKey string, bor
 	}
 
 	if err := psbt.MaybeFinalizeAll(p); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	signedTx, err := psbt.Extract(p)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var buf bytes.Buffer
 	if err := signedTx.Serialize(&buf); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return buf.Bytes(), nil
+	txHash := signedTx.TxHash()
+
+	return buf.Bytes(), &txHash, nil
 }
 
 // GetLiquidationCetSigHashes gets the sig hashes of the liquidation cet

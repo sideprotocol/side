@@ -2,10 +2,11 @@ package types
 
 // Lending module event types
 const (
-	EventTypeApply     = "apply"
-	EventTypeRepay     = "repay"
-	EventTypeDefault   = "default"
-	EventTypeLiquidate = "liquidate"
+	EventTypeApply                        = "apply"
+	EventTypeRepay                        = "repay"
+	EventTypeDefault                      = "default"
+	EventTypeLiquidate                    = "liquidate"
+	EventTypeGenerateSignedLiquidationCet = "generate_signed_liquidation_cet"
 
 	AttributeKeyVault            = "vault"
 	AttributeKeyBorrower         = "borrower"
@@ -24,6 +25,8 @@ const (
 	AtrtibuteKeyRepaymentTxHash = "repayment_tx_hash"
 
 	AttributeKeySigHashes = "sig_hashes"
+
+	AttributeKeyTxHash = "tx_hash"
 )
 
 const (

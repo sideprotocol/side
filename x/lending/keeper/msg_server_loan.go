@@ -421,12 +421,6 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 		}
 	}
 
-	if len(dlcMeta.LiquidationAdaptedSignature) != 0 {
-		// error ignored due to that the signed tx can be built offchain
-		signedTx, _ := types.BuildSignedLiquidationCet(dlcMeta.LiquidationCet, loan.BorrowerPubKey, []string{dlcMeta.LiquidationAdaptedSignature}, loan.Agency, msg.Signatures)
-		dlcMeta.SignedLiquidationCetHex = hex.EncodeToString(signedTx)
-	}
-
 	dlcMeta.LiquidationAgencySignatures = msg.Signatures
 	m.SetDLCMeta(ctx, msg.LoanId, dlcMeta)
 
