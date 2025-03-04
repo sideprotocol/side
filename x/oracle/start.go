@@ -5,7 +5,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/sideprotocol/side/x/oracle/providers/binance"
 	"github.com/sideprotocol/side/x/oracle/providers/bitget"
 	"golang.org/x/sync/errgroup"
 )
@@ -24,7 +23,7 @@ func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context
 	// g.Go(func() error { return coinbase.Subscribe(svrCtx) })
 	// g.Go(func() error { return bybit.Subscribe(svrCtx) })
 	// g.Go(func() error { return bitget.Subscribe(svrCtx) })
-	go binance.Subscribe(svrCtx)
+	// go binance.Subscribe(svrCtx)
 	// go okex.Subscribe(svrCtx)
 	// go coinbase.Subscribe(svrCtx)
 	// go bybit.Subscribe(svrCtx)

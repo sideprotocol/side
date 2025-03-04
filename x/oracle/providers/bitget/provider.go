@@ -67,10 +67,10 @@ func Subscribe(svrCtx *server.Context) error {
 		if reconnect {
 			for {
 				time.Sleep(5 * time.Second)
-				if c, re, err := websocket.DefaultDialer.Dial(url, nil); err == nil {
+				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
 					reconnect = false
 					subscribe(c)
-					svrCtx.Logger.Info("reconnected price provider", "url", url, "status", re.Status, "body", re.Body)
+					svrCtx.Logger.Info("reconnected price provider", "url", url)
 					break
 				}
 			}
