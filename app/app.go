@@ -137,7 +137,7 @@ import (
 	lendingkeeper "github.com/sideprotocol/side/x/lending/keeper"
 	lendingmodule "github.com/sideprotocol/side/x/lending/module"
 	lendingtypes "github.com/sideprotocol/side/x/lending/types"
-	"github.com/sideprotocol/side/x/oracle"
+	oracleabci "github.com/sideprotocol/side/x/oracle/abci"
 
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 
@@ -960,14 +960,14 @@ func New(
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
 
-	voteExtHander := oracle.NewVoteExtHandler(app.Logger())
-	propHandler := oracle.NewProposalHandler(app.Logger(), app.StakingKeeper)
+	voteExtHander := oracleabci.NewPriceOracleVoteExtHandler(app.Logger(), app.StakingKeeper)
+	// propHandler := oracle.NewProposalHandler(app.Logger(), app.StakingKeeper)
 
 	app.SetExtendVoteHandler(voteExtHander.ExtendVoteHandler())
 	app.SetVerifyVoteExtensionHandler(voteExtHander.VerifyVoteExtensionHandler())
-	app.SetPrepareProposal(propHandler.PrepareProposal())
-	app.SetProcessProposal(propHandler.ProcessProposal())
-	app.SetPreBlocker(propHandler.PreBlocker)
+	app.SetPrepareProposal(voteExtHander.PrepareProposal())
+	app.SetProcessProposal(voteExtHander.ProcessProposal())
+	app.SetPreBlocker(voteExtHander.PreBlocker)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {

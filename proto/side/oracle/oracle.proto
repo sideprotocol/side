@@ -1,0 +1,35 @@
+syntax = "proto3";
+package side.oracle;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/sideprotocol/side/x/oracle/types";
+
+// Oracle Price from Price Extention
+message OraclePrice {
+    string symbol = 1; // id
+    string price = 2 [ (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",(gogoproto.nullable) = false ];
+}
+
+// Bitcoin Block Header From Price Extention
+message BlockHeader {
+    uint64 version = 1;
+    string hash = 2;
+    uint64 height = 3;
+    string previous_block_hash = 4;
+    string merkle_root = 5;
+    uint64 nonce = 6;
+    string bits = 7;
+    uint64 time = 8;
+    uint64 ntx = 9;
+}
+
+// Oracle Vote Extenstion
+message OracleVoteExtension {
+    int64 height = 1;
+    map<string, string> prices = 2 [ (gogoproto.nullable) = false ];
+    repeated BlockHeader blocks = 3;
+}
+  

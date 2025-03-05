@@ -70,7 +70,7 @@ func Subscribe(svrCtx *server.Context) error {
 
 				types.CachePrice(ProviderName, price)
 			} else {
-				svrCtx.Logger.Error("Read Error", "error", err, "provider", ProviderName)
+				svrCtx.Logger.Error("Price Read Error", "error", err, "provider", ProviderName)
 				c.Close()
 				reconnect = true
 			}

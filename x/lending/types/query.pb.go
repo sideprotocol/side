@@ -794,7 +794,7 @@ func (m *QueryLoansRequest) GetStatus() LoanStatus {
 	if m != nil {
 		return m.Status
 	}
-	return LoanStatus_Apply
+	return LoanStatus_Requested
 }
 
 func (m *QueryLoansRequest) GetPagination() *query.PageRequest {
