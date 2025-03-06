@@ -59,7 +59,9 @@ func (k Keeper) CancelBid(ctx sdk.Context, sender string, id uint64) error {
 	}
 
 	bid.Status = types.BidStatus_BID_STATUS_CANCELLED
+
 	k.SetBid(ctx, bid)
+	k.RemoveBidFromPendingQueue(ctx, bid.AuctionId, bid.Id)
 
 	return nil
 }

@@ -37,7 +37,6 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 		for _, bid := range pendingBids {
 			if bid.BidPrice >= currentAuctionPrice.Int64() {
 				bidValue := bid.BidAmount.Amount.Int64() * bid.BidPrice
-				// totalEscrowAsset := totalEscrowAsset.Add(sdk.NewInt64Coin("uusdc", bidValue))
 				auction.BiddedValue += bidValue
 
 				bid.BiddedAmount = bid.BidAmount
@@ -58,8 +57,6 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 
 		// update auction
 		k.SetAuction(ctx, auction)
-
-		//k.SetTotalEscrowAsset(ctx, auction.Id, totalEscrowAsset)
 	}
 }
 
@@ -84,6 +81,12 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 				continue
 			}
 
+			bid.Status = types.BidStatus_BID_STATUS_REJECTED
+
+			// update bid
+			k.SetBid(ctx, bid)
+
+			// remove from the pending queue
 			k.RemoveBidFromPendingQueue(ctx, auction.Id, bid.Id)
 		}
 
