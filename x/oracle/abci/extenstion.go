@@ -63,36 +63,14 @@ func (h *ProceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 		prices := h.getAllVolumeWeightedPrices()
 		h.lastPriceSyncTS = req.Time.UnixMilli()
 
-		tips, err := h.bitcoinClient.GetChainTips()
+		headers, err := h.getBitcoinHeaders()
 		if err != nil {
-			return nil, fmt.Errorf("failed to fetch best block header: %w", err)
+			return nil, fmt.Errorf("failed to fetch bitcoin headers: %w", err)
 		}
-
-		hash, err := chainhash.NewHashFromStr(tips[0].Hash)
-		height := tips[0].Height
-		if err != nil {
-			return nil, fmt.Errorf("failed to fetch best block header: %w", err)
-		}
-		b, err := h.bitcoinClient.GetBlockHeader(hash)
-		if err != nil {
-			return nil, fmt.Errorf("failed to fetch header: %w", err)
-		}
-
-		header := types.BlockHeader{
-			Version:           uint64(b.Version),
-			Hash:              b.BlockHash().String(),
-			Height:            uint64(height),
-			PreviousBlockHash: b.PrevBlock.String(),
-			MerkleRoot:        b.MerkleRoot.String(),
-			Nonce:             uint64(b.Nonce),
-			Bits:              fmt.Sprintf("%x", b.Bits),
-			Time:              uint64(b.Timestamp.Unix()),
-		}
-
 		voteExt := types.OracleVoteExtension{
 			Height: req.Height,
 			Prices: prices,
-			Blocks: []*types.BlockHeader{&header},
+			Blocks: headers,
 		}
 
 		// bz := []byte{}
@@ -123,6 +101,35 @@ func (h *ProceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 
 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 	}
+}
+
+func (h *ProceOracleVoteExtHandler) getBitcoinHeaders() ([]*types.BlockHeader, error) {
+	tips, err := h.bitcoinClient.GetChainTips()
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
+	}
+
+	hash, err := chainhash.NewHashFromStr(tips[0].Hash)
+	height := tips[0].Height
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
+	}
+	b, err := h.bitcoinClient.GetBlockHeader(hash)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch header: %w", err)
+	}
+
+	header := types.BlockHeader{
+		Version:           uint64(b.Version),
+		Hash:              b.BlockHash().String(),
+		Height:            uint64(height),
+		PreviousBlockHash: b.PrevBlock.String(),
+		MerkleRoot:        b.MerkleRoot.String(),
+		Nonce:             uint64(b.Nonce),
+		Bits:              fmt.Sprintf("%x", b.Bits),
+		Time:              uint64(b.Timestamp.Unix()),
+	}
+	return []*types.BlockHeader{&header}, nil
 }
 
 func (h *ProceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]string {
