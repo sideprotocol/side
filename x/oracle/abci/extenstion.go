@@ -325,7 +325,10 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 	// for _, head := range headers {
 	// 	h.Keeper.SetBlockHeaders(ctx, head)
 	// }
-	h.Keeper.SetBlockHeaders(ctx, headers)
+	err = h.Keeper.SetBlockHeaders(ctx, headers)
+	if err != nil {
+		return nil, err
+	}
 
 	h.logger.Warn("Oracle Final States", "price", prices)
 
