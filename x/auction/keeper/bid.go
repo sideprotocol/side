@@ -15,8 +15,8 @@ func (k Keeper) HandleBid(ctx sdk.Context, sender string, auctionId uint64, pric
 	}
 
 	auction := k.GetAuction(ctx, auctionId)
-	if auction.Status == types.AuctionStatus_AUCTION_STATUS_CLOSED {
-		return nil, types.ErrAuctionClosed
+	if auction.Status != types.AuctionStatus_AUCTION_STATUS_OPEN {
+		return nil, types.ErrAuctionEnded
 	}
 
 	if amount.Amount.Uint64() < k.GetParams(ctx).MinBidAmount {

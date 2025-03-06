@@ -68,9 +68,6 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 	for _, auction := range completedAuctions {
 		// get pending bids
 		pendingBids := k.GetPendingBids(ctx, auction.Id)
-		if len(pendingBids) == 0 {
-			continue
-		}
 
 		// refund and remove from the pending queue
 		for _, bid := range pendingBids {
@@ -97,5 +94,10 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 
 			continue
 		}
+
+		auction.Status = types.AuctionStatus_AUCTION_STATUS_SETTLED
+
+		// update auction
+		k.SetAuction(ctx, auction)
 	}
 }

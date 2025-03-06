@@ -46,6 +46,7 @@ enum AuctionStatus {
     AUCTION_STATUS_UNSPECIFIED = 0;
     AUCTION_STATUS_OPEN = 1;
     AUCTION_STATUS_CLOSED = 2;
+    AUCTION_STATUS_SETTLED = 3;
 }
 
 enum BidStatus {
