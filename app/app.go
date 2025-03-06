@@ -139,6 +139,7 @@ import (
 	lendingtypes "github.com/sideprotocol/side/x/lending/types"
 	oracleabci "github.com/sideprotocol/side/x/oracle/abci"
 
+	oraclekeeper "github.com/sideprotocol/side/x/oracle/keeper"
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -290,6 +291,7 @@ type App struct {
 	AuctionKeeper   auctionkeeper.Keeper
 	DLCKeeper       dlckeeper.Keeper
 	LendingKeeper   lendingkeeper.Keeper
+	OracleKeeper    oraclekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -360,7 +362,7 @@ func New(
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey,
 		btcbridgetypes.StoreKey, auctiontypes.StoreKey,
-		dlctypes.StoreKey, lendingtypes.StoreKey,
+		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 
@@ -668,6 +670,8 @@ func New(
 	)
 	lendingModule := lendingmodule.NewAppModule(appCodec, app.LendingKeeper)
 
+	app.OracleKeeper = oraclekeeper.NewKeeper(appCodec, keys[oracletypes.StoreKey], keys[oracletypes.MemStoreKey], "")
+
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
 	if err != nil {
@@ -960,7 +964,7 @@ func New(
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
 
-	voteExtHander := oracleabci.NewPriceOracleVoteExtHandler(app.Logger(), app.StakingKeeper)
+	voteExtHander := oracleabci.NewPriceOracleVoteExtHandler(app.Logger(), app.StakingKeeper, app.OracleKeeper, &oracleConfig)
 	// propHandler := oracle.NewProposalHandler(app.Logger(), app.StakingKeeper)
 
 	app.SetExtendVoteHandler(voteExtHander.ExtendVoteHandler())

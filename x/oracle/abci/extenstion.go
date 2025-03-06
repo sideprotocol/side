@@ -8,10 +8,14 @@ import (
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
 
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/btcsuite/btcd/rpcclient"
+
 	abci "github.com/cometbft/cometbft/abci/types"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sideprotocol/side/x/oracle/keeper"
 	"github.com/sideprotocol/side/x/oracle/types"
 )
 
@@ -20,18 +24,34 @@ type ProceOracleVoteExtHandler struct {
 	logger          log.Logger
 	currentBlock    int64 // current block height
 	lastPriceSyncTS int64 // last time we synced prices
+	bitcoinClient   *rpcclient.Client
 	// providerTimeout time.Duration // timeout for fetching prices from providers
 	// providers       map[string]Provider              // mapping of provider name to provider (e.g. Binance -> BinanceProvider)
 	// providerPairs   map[string][]keeper.CurrencyPair // mapping of provider name to supported pairs (e.g. Binance -> [ATOM/USD])
 
-	// Keeper keeper.Keeper // keeper of our oracle module
+	Keeper keeper.Keeper // keeper of our oracle module
+	config *types.OracleConfig
 }
 
-func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorStore) ProceOracleVoteExtHandler {
+func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorStore, oracleKeeper keeper.Keeper, config *types.OracleConfig) ProceOracleVoteExtHandler {
+	client, err := rpcclient.New(&rpcclient.ConnConfig{
+		Host:         config.BitcoinRpc,
+		User:         config.BitcoinRpcUser,
+		Pass:         config.BitcoinRpcPass,
+		HTTPPostMode: config.HTTPPostMode,
+		DisableTLS:   config.DisableTLS,
+	}, nil)
+	if err != nil {
+		panic("unable to create bitcoin rpc")
+	}
+
 	return ProceOracleVoteExtHandler{
-		logger:       logger,
-		currentBlock: 0,
-		valStore:     valStore,
+		logger:        logger,
+		currentBlock:  0,
+		valStore:      valStore,
+		Keeper:        oracleKeeper,
+		bitcoinClient: client,
+		config:        config,
 	}
 }
 
@@ -43,10 +63,36 @@ func (h *ProceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 		prices := h.getAllVolumeWeightedPrices()
 		h.lastPriceSyncTS = req.Time.UnixMilli()
 
+		tips, err := h.bitcoinClient.GetChainTips()
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch best block header: %w", err)
+		}
+
+		hash, err := chainhash.NewHashFromStr(tips[0].Hash)
+		height := tips[0].Height
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch best block header: %w", err)
+		}
+		b, err := h.bitcoinClient.GetBlockHeader(hash)
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch header: %w", err)
+		}
+
+		header := types.BlockHeader{
+			Version:           uint64(b.Version),
+			Hash:              b.BlockHash().String(),
+			Height:            uint64(height),
+			PreviousBlockHash: b.PrevBlock.String(),
+			MerkleRoot:        b.MerkleRoot.String(),
+			Nonce:             uint64(b.Nonce),
+			Bits:              fmt.Sprintf("%x", b.Bits),
+			Time:              uint64(b.Timestamp.Unix()),
+		}
+
 		voteExt := types.OracleVoteExtension{
 			Height: req.Height,
 			Prices: prices,
-			Blocks: []*types.BlockHeader{},
+			Blocks: []*types.BlockHeader{&header},
 		}
 
 		// bz := []byte{}
@@ -223,22 +269,25 @@ func (h *ProceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 		return nil, err
 	}
 
-	prices, err := h.computeStakeWeightedOraclePrices(ctx, injectedVoteExtTx)
+	prices, headers, err := h.extractPricesAndBlockHeaders(ctx, injectedVoteExtTx)
 	if err != nil {
 		return nil, err
 	}
 
-	// set oracle prices using the passed in context, which will make these prices available in the current block
-	// if err := h.keeper.SetOraclePrices(ctx, injectedVoteExtTx.StakeWeightedPrices); err != nil {
-	// 	return nil, err
-	// }
+	for symbol, price := range prices {
+		h.Keeper.SetPrice(ctx, symbol, price.String())
+	}
+
+	for _, head := range headers {
+		h.Keeper.SetBlockHeader(ctx, head)
+	}
 
 	h.logger.Warn("Oracle Final States", "price", prices)
 
 	return res, nil
 }
 
-func (h *ProceOracleVoteExtHandler) computeStakeWeightedOraclePrices(ctx sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, error) {
+func (h *ProceOracleVoteExtHandler) extractPricesAndBlockHeaders(ctx sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, []*types.BlockHeader, error) {
 	// requiredPairs := h.keeper.GetSupportedPairs(ctx)
 	// requiredPairs := []string{"BTCUSD"}
 	stakeWeightedPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE)) // base -> average stake-weighted price
@@ -247,6 +296,7 @@ func (h *ProceOracleVoteExtHandler) computeStakeWeightedOraclePrices(ctx sdk.Con
 	// }
 
 	var totalStake int64
+	var blockHeaders []*types.BlockHeader
 	for _, v := range commit.Votes {
 		if v.BlockIdFlag != cmtproto.BlockIDFlagCommit {
 			continue
@@ -256,7 +306,17 @@ func (h *ProceOracleVoteExtHandler) computeStakeWeightedOraclePrices(ctx sdk.Con
 		// if err := json.Unmarshal(v.VoteExtension, &voteExt); err != nil {
 		if err := voteExt.Unmarshal(v.VoteExtension); err != nil {
 			h.logger.Error("failed to decode vote extension", "err", err, "validator", fmt.Sprintf("%x", v.Validator.Address))
-			return nil, err
+			return nil, nil, err
+		}
+
+		h.logger.Warn("extension", "validator", hex.EncodeToString(v.Validator.Address), "extension", voteExt)
+
+		if blockHeaders == nil {
+			blockHeaders = voteExt.Blocks
+		} else {
+			if len(blockHeaders) != len(voteExt.Blocks) {
+				h.logger.Error("inconsistent state", "left", blockHeaders, "right", voteExt.Blocks)
+			}
 		}
 
 		totalStake += v.Validator.Power
@@ -283,7 +343,7 @@ func (h *ProceOracleVoteExtHandler) computeStakeWeightedOraclePrices(ctx sdk.Con
 	}
 
 	if totalStake == 0 {
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	// finalize average by dividing by total stake, i.e. total weights
@@ -291,7 +351,7 @@ func (h *ProceOracleVoteExtHandler) computeStakeWeightedOraclePrices(ctx sdk.Con
 		stakeWeightedPrices[base] = price.QuoInt64(totalStake)
 	}
 
-	return stakeWeightedPrices, nil
+	return stakeWeightedPrices, blockHeaders, nil
 }
 
 // func compareOraclePrices(p1, p2 map[string]math.LegacyDec) error {

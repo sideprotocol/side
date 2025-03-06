@@ -18,7 +18,12 @@ const (
 
 	BTCUSD = "BTCUSD"
 
-	flagOracleEnable = "oracle.enable"
+	flagOracleEnable         = "oracle.enable"
+	flagOracleBitcoinRpc     = "oracle.bitcoin_rpc"
+	flagOracleBitcoinRpcUser = "oracle.bitcoin_rpc_user"
+	flagOracleBitcoinRpcPass = "oracle.bitcoin_rpc_password"
+	flagOracleBitcoinRpcPost = "oracle.http_post_mode"
+	flagOracleBitcoinRpcSSL  = "oracle.disable_tls"
 )
 
 var (
@@ -26,8 +31,17 @@ var (
 	Permille       = math.NewInt(1000)
 	ParamsStoreKey = []byte{0x1}
 
-	PriceKey = []byte{0x07}
+	PriceKeyPrefix      = []byte{0x07}
+	BitcoinHeaderPrefix = []byte{0x08}
 
 	PRICE_CACHE = make(map[string]map[string][]Price) // symbol, exchange, price[]
 	mu          sync.Mutex
 )
+
+func PriceKey(symbol string) []byte {
+	return append(PriceKeyPrefix, []byte(symbol)...)
+}
+
+func BitcoinHeaderKey(hash string) []byte {
+	return append(BitcoinHeaderPrefix, []byte(hash)...)
+}

@@ -1,4 +1,4 @@
-package abci
+package oracle
 
 import (
 	"context"
@@ -16,7 +16,7 @@ type Starter struct {
 // Subscrible Prices from providers
 func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context, g *errgroup.Group) error {
 
-	svrCtx.Logger.Info("service start", "module", "oracle", "msg", "Start Oracle Price Subscriber")
+	svrCtx.Logger.Info("price service", "module", "oracle", "msg", "Start Oracle Price Subscriber")
 
 	// g.Go(func() error { return binance.Subscribe(svrCtx, ctx) })
 	// g.Go(func() error { return okex.Subscribe(svrCtx) })

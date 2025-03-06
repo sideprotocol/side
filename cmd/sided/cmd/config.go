@@ -60,11 +60,17 @@ func initAppConfig() (string, interface{}) {
 	// # This is the number of wasm vm instances we keep cached in memory for speed-up
 	// # Warning: this is currently unstable and may lead to crashes, best to keep for 0 unless testing locally
 	// lru_size = 0`
-
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
 [oracle]
 # Validator node should set this to true
 enable = false
+
+bitcoin_rpc = "192.248.150.102:18332"
+bitcoin_rpc_user = "side"
+bitcoin_rpc_password = "12345678"
+http_post_mode = true
+disable_tls = true
+
 `
 
 	return customAppTemplate, customAppConfig

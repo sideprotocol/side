@@ -1,7 +1,11 @@
 package keeper
 
 import (
+	"cosmossdk.io/log"
+
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sideprotocol/side/x/oracle/types"
 
 	storetypes "cosmossdk.io/store/types"
 )
@@ -26,4 +30,23 @@ func NewKeeper(
 		memKey:    memKey,
 		authority: authority,
 	}
+}
+
+func (k Keeper) Logger(ctx sdk.Context) log.Logger {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return sdkCtx.Logger().With("module", "x/"+types.ModuleName)
+}
+
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
+	store := ctx.KVStore(k.storeKey)
+	bz := k.cdc.MustMarshal(&params)
+	store.Set(types.ParamsStoreKey, bz)
+}
+
+func (k Keeper) GetParams(ctx sdk.Context) types.Params {
+	store := ctx.KVStore(k.storeKey)
+	var params types.Params
+	bz := store.Get(types.ParamsStoreKey)
+	k.cdc.MustUnmarshal(bz, &params)
+	return params
 }
