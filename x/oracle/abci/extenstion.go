@@ -22,8 +22,8 @@ import (
 type PriceOracleVoteExtHandler struct {
 	valStore        baseapp.ValidatorStore // to get the current validators' pubkeys
 	logger          log.Logger
-	localBestBlock  *types.BlockHeader // current block height
-	lastPriceSyncTS int64              // last time we synced prices
+	currentBlock    int64 // current block height
+	lastPriceSyncTS int64 // last time we synced prices
 	bitcoinClient   *rpcclient.Client
 	// providerTimeout time.Duration // timeout for fetching prices from providers
 	// providers       map[string]Provider              // mapping of provider name to provider (e.g. Binance -> BinanceProvider)
@@ -46,12 +46,12 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 	}
 
 	return PriceOracleVoteExtHandler{
-		logger:         logger,
-		localBestBlock: nil,
-		valStore:       valStore,
-		Keeper:         oracleKeeper,
-		bitcoinClient:  client,
-		config:         config,
+		logger:        logger,
+		currentBlock:  0,
+		valStore:      valStore,
+		Keeper:        oracleKeeper,
+		bitcoinClient: client,
+		config:        config,
 	}
 }
 
@@ -63,7 +63,7 @@ func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 		prices := h.getAllVolumeWeightedPrices()
 		h.lastPriceSyncTS = req.Time.UnixMilli()
 
-		headers, err := h.getBitcoinHeaders(ctx)
+		headers, err := h.getBitcoinHeaders(ctx, req.Height)
 		if err != nil {
 			return nil, fmt.Errorf("failed to fetch bitcoin headers: %w", err)
 		}
@@ -103,7 +103,11 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 	}
 }
 
-func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context) ([]*types.BlockHeader, error) {
+func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context, sideHeight int64) ([]*types.BlockHeader, error) {
+	// skip
+	if sideHeight%2 == 0 {
+		return nil, nil
+	}
 	bestHeight, err := h.bitcoinClient.GetBlockCount()
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
@@ -122,13 +126,11 @@ func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context) ([]*types
 		return nil, fmt.Errorf("failed to fetch header: %w", err)
 	}
 
-	if h.localBestBlock == nil {
-		h.localBestBlock = h.Keeper.GetBestBlockHeader(ctx)
-	}
+	localBest := h.Keeper.GetBestBlockHeader(ctx)
 
 	headers := []*types.BlockHeader{}
 	// sync if block header
-	if h.localBestBlock == nil || h.localBestBlock.Height == 0 || h.localBestBlock.Hash == best.PreviousHash {
+	if localBest == nil || localBest.Height == 0 || localBest.Hash == best.PreviousHash {
 
 		header := types.BlockHeader{
 			Version:           best.Version,
@@ -140,16 +142,15 @@ func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context) ([]*types
 			Bits:              best.Bits,
 			Time:              best.Time,
 		}
-		h.localBestBlock = &header
 		return append(headers, &header), nil
-	} else if h.localBestBlock.Hash == hash.String() {
+	} else if localBest.Hash == hash.String() {
 		// skip sync if synced to the latest
 		return nil, nil
 	}
 
-	count := h.localBestBlock.Height + 1
+	count := localBest.Height + 1
 	for {
-		if count > int32(bestHeight) || count > h.localBestBlock.Height+10 {
+		if count > int32(bestHeight) || count > localBest.Height+10 {
 			break
 		}
 		hash, err := h.bitcoinClient.GetBlockHash(int64(count))
@@ -173,7 +174,6 @@ func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context) ([]*types
 			Time:              bh.Time,
 		}
 		headers = append(headers, &header)
-		h.localBestBlock = &header
 		count++
 	}
 
@@ -322,9 +322,6 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 		h.Keeper.SetPrice(ctx, symbol, price.String())
 	}
 
-	// for _, head := range headers {
-	// 	h.Keeper.SetBlockHeaders(ctx, head)
-	// }
 	err = h.Keeper.SetBlockHeaders(ctx, headers)
 	if err != nil {
 		return nil, err
