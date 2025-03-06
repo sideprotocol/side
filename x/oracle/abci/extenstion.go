@@ -9,7 +9,6 @@ import (
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/rpcclient"
 
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -64,7 +63,7 @@ func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 		prices := h.getAllVolumeWeightedPrices()
 		h.lastPriceSyncTS = req.Time.UnixMilli()
 
-		headers, err := h.getBitcoinHeaders()
+		headers, err := h.getBitcoinHeaders(ctx)
 		if err != nil {
 			return nil, fmt.Errorf("failed to fetch bitcoin headers: %w", err)
 		}
@@ -104,32 +103,77 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 	}
 }
 
-func (h *PriceOracleVoteExtHandler) getBitcoinHeaders() ([]*types.BlockHeader, error) {
-	tips, err := h.bitcoinClient.GetChainTips()
+func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context) ([]*types.BlockHeader, error) {
+	bestHeight, err := h.bitcoinClient.GetBlockCount()
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
+	}
+	confirmation := 6
+
+	bestHeight = bestHeight - int64(confirmation)
+
+	hash, err := h.bitcoinClient.GetBlockHash(bestHeight)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
 	}
 
-	hash, err := chainhash.NewHashFromStr(tips[0].Hash)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
-	}
-	b, err := h.bitcoinClient.GetBlockHeaderVerbose(hash)
+	best, err := h.bitcoinClient.GetBlockHeaderVerbose(hash)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch header: %w", err)
 	}
 
-	header := types.BlockHeader{
-		Version:           b.Version,
-		Hash:              b.Hash,
-		Height:            b.Height,
-		PreviousBlockHash: b.PreviousHash,
-		MerkleRoot:        b.MerkleRoot,
-		Nonce:             b.Nonce,
-		Bits:              b.Bits,
-		Time:              b.Time,
+	localBest := h.Keeper.GetBestBlockHeader(ctx)
+
+	// sync if block header
+	if localBest == nil || localBest.Height == 0 || localBest.Hash == best.PreviousHash {
+
+		header := types.BlockHeader{
+			Version:           best.Version,
+			Hash:              best.Hash,
+			Height:            best.Height,
+			PreviousBlockHash: best.PreviousHash,
+			MerkleRoot:        best.MerkleRoot,
+			Nonce:             best.Nonce,
+			Bits:              best.Bits,
+			Time:              best.Time,
+		}
+		return []*types.BlockHeader{&header}, nil
+	} else if localBest.Hash == hash.String() {
+		// skip sync if synced to the latest
+		return []*types.BlockHeader{}, nil
 	}
-	return []*types.BlockHeader{&header}, nil
+
+	count := localBest.Height + 1
+	headers := []*types.BlockHeader{}
+	for {
+		if count > int32(bestHeight) || count > localBest.Height+10 {
+			break
+		}
+		hash, err := h.bitcoinClient.GetBlockHash(int64(count))
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch best block header: %w", err)
+		}
+
+		bh, err := h.bitcoinClient.GetBlockHeaderVerbose(hash)
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch header: %w", err)
+		}
+
+		header := types.BlockHeader{
+			Version:           bh.Version,
+			Hash:              bh.Hash,
+			Height:            bh.Height,
+			PreviousBlockHash: bh.PreviousHash,
+			MerkleRoot:        bh.MerkleRoot,
+			Nonce:             bh.Nonce,
+			Bits:              bh.Bits,
+			Time:              bh.Time,
+		}
+		headers = append(headers, &header)
+		count++
+	}
+
+	return headers, nil
 }
 
 func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]string {
@@ -274,9 +318,10 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 		h.Keeper.SetPrice(ctx, symbol, price.String())
 	}
 
-	for _, head := range headers {
-		h.Keeper.SetBlockHeader(ctx, head)
-	}
+	// for _, head := range headers {
+	// 	h.Keeper.SetBlockHeaders(ctx, head)
+	// }
+	h.Keeper.SetBlockHeaders(ctx, headers)
 
 	h.logger.Warn("Oracle Final States", "price", prices)
 

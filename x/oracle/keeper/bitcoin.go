@@ -24,7 +24,7 @@ func (k Keeper) SetBlockHeaders(ctx sdk.Context, headers []*types.BlockHeader) e
 
 	best := k.GetBestBlockHeader(ctx)
 	for _, h := range headers {
-		if best.Hash != h.PreviousBlockHash {
+		if len(best.Hash) > 0 && best.Hash != h.PreviousBlockHash {
 			return types.ErrInvalidBlockHeaders
 		}
 		k.SetBlockHeader(ctx, h)
