@@ -17,7 +17,7 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 // handlePendingAuctions handles the pending auctions
 func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 	// get pending auctions
-	pendingAuctions := k.GetAuctions(ctx, types.AuctionStatus_AuctionOpen)
+	pendingAuctions := k.GetAuctions(ctx, types.AuctionStatus_AUCTION_STATUS_OPEN)
 
 	for _, auction := range pendingAuctions {
 		// get pending bids
@@ -41,7 +41,7 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 				auction.BiddedValue += bidValue
 
 				bid.BiddedAmount = bid.BidAmount
-				bid.Status = types.BidStatus_Accepted
+				bid.Status = types.BidStatus_BID_STATUS_ACCEPTED
 
 				// update bid
 				k.SetBid(ctx, bid)
@@ -53,7 +53,7 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 
 		// close auction if bidded value >= expected value
 		if auction.BiddedValue >= auction.ExpectedValue {
-			auction.Status = types.AuctionStatus_AuctionClose
+			auction.Status = types.AuctionStatus_AUCTION_STATUS_CLOSED
 		}
 
 		// update auction
@@ -66,7 +66,7 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 // handleCompletedAuctions handles the completed auctions
 func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 	// get completed auctions
-	completedAuctions := k.GetAuctions(ctx, types.AuctionStatus_AuctionClose)
+	completedAuctions := k.GetAuctions(ctx, types.AuctionStatus_AUCTION_STATUS_CLOSED)
 
 	for _, auction := range completedAuctions {
 		// get pending bids

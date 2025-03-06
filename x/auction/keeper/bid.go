@@ -15,7 +15,7 @@ func (k Keeper) HandleBid(ctx sdk.Context, sender string, auctionId uint64, pric
 	}
 
 	auction := k.GetAuction(ctx, auctionId)
-	if auction.Status == types.AuctionStatus_AuctionClose {
+	if auction.Status == types.AuctionStatus_AUCTION_STATUS_CLOSED {
 		return nil, types.ErrAuctionClosed
 	}
 
@@ -34,7 +34,7 @@ func (k Keeper) HandleBid(ctx sdk.Context, sender string, auctionId uint64, pric
 		AuctionId: auctionId,
 		BidPrice:  price,
 		BidAmount: amount,
-		Status:    types.BidStatus_Bidding,
+		Status:    types.BidStatus_BID_STATUS_BIDDING,
 	}
 
 	k.SetBid(ctx, bid)
@@ -54,11 +54,11 @@ func (k Keeper) CancelBid(ctx sdk.Context, sender string, id uint64) error {
 		return errorsmod.Wrap(types.ErrUnauthorized, "sender is not the bidder")
 	}
 
-	if bid.Status != types.BidStatus_Bidding {
+	if bid.Status != types.BidStatus_BID_STATUS_BIDDING {
 		return types.ErrInvalidBidStatus
 	}
 
-	bid.Status = types.BidStatus_Cancelled
+	bid.Status = types.BidStatus_BID_STATUS_CANCELLED
 	k.SetBid(ctx, bid)
 
 	return nil
