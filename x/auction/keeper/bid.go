@@ -23,6 +23,11 @@ func (k Keeper) HandleBid(ctx sdk.Context, sender string, auctionId uint64, pric
 		return nil, errorsmod.Wrap(types.ErrInvalidBid, "amount can not be less than the minimum allowed amount")
 	}
 
+	bidValue := sdk.NewInt64Coin("uusdc", price*amount.Amount.Int64())
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(sender), types.ModuleName, sdk.NewCoins(bidValue)); err != nil {
+		return nil, err
+	}
+
 	bid := &types.Bid{
 		Id:        k.IncrementBidId(ctx),
 		Bidder:    sender,
@@ -33,6 +38,7 @@ func (k Keeper) HandleBid(ctx sdk.Context, sender string, auctionId uint64, pric
 	}
 
 	k.SetBid(ctx, bid)
+	k.AddBidToPendingQueue(ctx, auctionId, bid.Id)
 
 	return bid, nil
 }
@@ -52,7 +58,7 @@ func (k Keeper) CancelBid(ctx sdk.Context, sender string, id uint64) error {
 		return types.ErrInvalidBidStatus
 	}
 
-	bid.Status = types.BidStatus_Rejected
+	bid.Status = types.BidStatus_Cancelled
 	k.SetBid(ctx, bid)
 
 	return nil
@@ -106,18 +112,18 @@ func (k Keeper) SetBid(ctx sdk.Context, bid *types.Bid) {
 	store.Set(types.BidKey(bid.Id), bz)
 }
 
-func (k Keeper) SetEscrowAsset(ctx sdk.Context, auctionId uint64, bidId uint64, asset sdk.Coin) {
+// AddBidToPendingQueue adds the bid to the pending queue of the specified auction
+func (k Keeper) AddBidToPendingQueue(ctx sdk.Context, auctionId uint64, bidId uint64) {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := k.cdc.MustMarshal(&asset)
-	store.Set(types.EscrowAssetKey(auctionId, bidId), bz)
+	store.Set(types.PendingBidKey(auctionId, bidId), []byte{})
 }
 
-// RemoveEscrowAsset deletes the given escrow asset
-func (k Keeper) RemoveEscrowAsset(ctx sdk.Context, auctionId uint64, bidId uint64) {
+// RemoveBidFromPendingQueue removes the bid from the pending queue of the specified auction
+func (k Keeper) RemoveBidFromPendingQueue(ctx sdk.Context, auctionId uint64, bidId uint64) {
 	store := ctx.KVStore(k.storeKey)
 
-	store.Delete(types.EscrowAssetKey(auctionId, bidId))
+	store.Delete(types.PendingBidKey(auctionId, bidId))
 }
 
 // GetAllBids gets all bids
@@ -147,8 +153,20 @@ func (k Keeper) GetBids(ctx sdk.Context, status types.BidStatus) []*types.Bid {
 	return bids
 }
 
+// GetPendingBids gets the pending bids of the specified auction
+func (k Keeper) GetPendingBids(ctx sdk.Context, auctionId uint64) []*types.Bid {
+	bids := make([]*types.Bid, 0)
+
+	k.IteratePendingBids(ctx, auctionId, func(bid *types.Bid) (stop bool) {
+		bids = append(bids, bid)
+		return false
+	})
+
+	return bids
+}
+
 // IterateBids iterates through all bids
-func (k Keeper) IterateBids(ctx sdk.Context, cb func(req *types.Bid) (stop bool)) {
+func (k Keeper) IterateBids(ctx sdk.Context, cb func(bid *types.Bid) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := storetypes.KVStorePrefixIterator(store, types.BidKeyPrefix)
@@ -164,22 +182,19 @@ func (k Keeper) IterateBids(ctx sdk.Context, cb func(req *types.Bid) (stop bool)
 	}
 }
 
-// IterateEscrowAssets iterates through all escrow assets for the given auction
-func (k Keeper) IterateEscrowAssets(ctx sdk.Context, auctionId uint64, cb func(auctoinId uint64, bidId uint64, asset sdk.Coin) (stop bool)) {
+// IteratePendingBids iterates through the pending bids by the specified auction
+func (k Keeper) IteratePendingBids(ctx sdk.Context, auctionId uint64, cb func(bid *types.Bid) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	keyPrefix := append(types.EscrowAssetKeyPrefix, sdk.Uint64ToBigEndian(auctionId)...)
-
-	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, append(types.PendingBidKeyPrefix, sdk.Uint64ToBigEndian(auctionId)...))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		bidId := sdk.BigEndianToUint64(iterator.Key()[len(keyPrefix):])
+		key := iterator.Key()
 
-		var asset sdk.Coin
-		k.cdc.MustUnmarshal(iterator.Value(), &asset)
+		bid := k.GetBid(ctx, sdk.BigEndianToUint64(key[1+8:]))
 
-		if cb(auctionId, bidId, asset) {
+		if cb(bid) {
 			break
 		}
 	}

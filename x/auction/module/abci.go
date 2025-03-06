@@ -10,59 +10,89 @@ import (
 
 // EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
-	handleAuctions(ctx, k)
-	handleBids(ctx, k)
+	handlePendingAuctions(ctx, k)
+	handleCompletedAuctions(ctx, k)
 }
 
-// handleAuction performs the auction handling
-func handleAuctions(ctx sdk.Context, k keeper.Keeper) {
-	auctions := k.GetAuctions(ctx, types.AuctionStatus_AuctionClose)
+// handlePendingAuctions handles the pending auctions
+func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
+	// get pending auctions
+	pendingAuctions := k.GetAuctions(ctx, types.AuctionStatus_AuctionOpen)
 
-	for _, auction := range auctions {
-		k.IterateEscrowAssets(ctx, auction.Id, func(auctoinId, bidId uint64, asset sdk.Coin) (stop bool) {
-			if err := k.BankKeeper().SendCoinsFromModuleToModule(ctx, types.ModuleName, lendingtypes.ModuleName, sdk.NewCoins(asset)); err != nil {
-				k.Logger(ctx).Info("Failed to transfer asset to lending module", "auction id", auctoinId, "err", err)
+	for _, auction := range pendingAuctions {
+		// get pending bids
+		pendingBids := k.GetPendingBids(ctx, auction.Id)
+		if len(pendingBids) == 0 {
+			continue
+		}
 
-				return false
+		// get the current auction price
+		currentAuctionPrice, err := k.GetCurrentPrice(ctx, auction.Id)
+		if err != nil {
+			k.Logger(ctx).Info("Failed to get the current price", "auction id", auction.Id, "err", err)
+
+			continue
+		}
+
+		for _, bid := range pendingBids {
+			if bid.BidPrice >= currentAuctionPrice.Int64() {
+				bidValue := bid.BidAmount.Amount.Int64() * bid.BidPrice
+				// totalEscrowAsset := totalEscrowAsset.Add(sdk.NewInt64Coin("uusdc", bidValue))
+				auction.BiddedValue += bidValue
+
+				bid.BiddedAmount = bid.BidAmount
+				bid.Status = types.BidStatus_Accepted
+
+				// update bid
+				k.SetBid(ctx, bid)
+
+				// remove bid from the pending queue
+				k.RemoveBidFromPendingQueue(ctx, auction.Id, bid.Id)
 			}
+		}
 
-			k.RemoveEscrowAsset(ctx, auctoinId, bidId)
+		// close auction if bidded value >= expected value
+		if auction.BiddedValue >= auction.ExpectedValue {
+			auction.Status = types.AuctionStatus_AuctionClose
+		}
 
-			return false
-		})
+		// update auction
+		k.SetAuction(ctx, auction)
+
+		//k.SetTotalEscrowAsset(ctx, auction.Id, totalEscrowAsset)
 	}
 }
 
-// handleBids performs the bid handling
-func handleBids(ctx sdk.Context, k keeper.Keeper) {
-	bids := k.GetBids(ctx, types.BidStatus_Bidding)
+// handleCompletedAuctions handles the completed auctions
+func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
+	// get completed auctions
+	completedAuctions := k.GetAuctions(ctx, types.AuctionStatus_AuctionClose)
 
-	for _, bid := range bids {
-		auction := k.GetAuction(ctx, bid.AuctionId)
-		if auction.Status != types.AuctionStatus_AuctionOpen {
+	for _, auction := range completedAuctions {
+		// get pending bids
+		pendingBids := k.GetPendingBids(ctx, auction.Id)
+		if len(pendingBids) == 0 {
 			continue
 		}
 
-		price, err := k.GetCurrentPrice(ctx, bid.AuctionId)
-		if err != nil {
-			k.Logger(ctx).Info("Failed to get the current price", "auction id", bid.AuctionId, "err", err)
-
-			continue
-		}
-
-		if bid.BidPrice >= price.Int64() {
-			totalBidPrice := bid.BidAmount.Amount.Int64() * bid.BidPrice
-			totalBidAsset := sdk.NewInt64Coin("uusdc", totalBidPrice)
-
-			if err := k.BankKeeper().SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(bid.Bidder), types.ModuleName, sdk.NewCoins(totalBidAsset)); err != nil {
-				k.Logger(ctx).Info("Failed to transfer coins for bid", "bid id", bid.Id, "err", err)
+		// refund and remove from the pending queue
+		for _, bid := range pendingBids {
+			bidValue := sdk.NewInt64Coin("uusdc", bid.BidPrice*bid.BidAmount.Amount.Int64())
+			if err := k.BankKeeper().SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(bid.Bidder), sdk.NewCoins(bidValue)); err != nil {
+				k.Logger(ctx).Info("Failed to refund", "auction id", auction.Id, "bid id", bid.Id, "amount", bidValue, "err", err)
 
 				continue
 			}
 
-			k.SetEscrowAsset(ctx, bid.AuctionId, bid.Id, totalBidAsset)
+			k.RemoveBidFromPendingQueue(ctx, auction.Id, bid.Id)
+		}
 
-			bid.Status = types.BidStatus_Accepted
+		// transfer bidded asset to the lending pool
+		biddedAsset := sdk.NewInt64Coin("uusdc", auction.BiddedValue)
+		if err := k.BankKeeper().SendCoinsFromModuleToModule(ctx, types.ModuleName, lendingtypes.ModuleName, sdk.NewCoins(biddedAsset)); err != nil {
+			k.Logger(ctx).Info("Failed to transfer bidded asset to lending module", "auction id", auction.Id, "amount", biddedAsset, "err", err)
+
+			continue
 		}
 	}
 }

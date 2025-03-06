@@ -16,7 +16,11 @@ message Bid {
         (gogoproto.nullable)     = false,
         (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
     ];
-    BidStatus status = 6;
+    cosmos.base.v1beta1.Coin bidded_amount = 6 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
+    BidStatus status = 7;
 }
 
 message Auction {
