@@ -171,6 +171,17 @@ func (k Keeper) Loans(goCtx context.Context, req *types.QueryLoansRequest) (*typ
 	return &types.QueryLoansResponse{Loans: loans}, nil
 }
 
+// LoansByAddress implements types.QueryServer.
+func (k Keeper) LoansByAddress(goCtx context.Context, req *types.QueryLoansByAddressRequest) (*types.QueryLoansByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryLoansByAddressResponse{Loans: k.GetLoansByAddress(ctx, req.Address, req.Status)}, nil
+}
+
 // LoanDlcMeta implements types.QueryServer.
 func (k Keeper) LoanDlcMeta(goCtx context.Context, req *types.QueryLoanDlcMetaRequest) (*types.QueryLoanDlcMetaResponse, error) {
 	if req == nil {

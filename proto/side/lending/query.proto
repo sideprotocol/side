@@ -46,6 +46,10 @@ service Query {
         option (google.api.http).get = "/side/lending/loans";
     }
 
+    rpc LoansByAddress(QueryLoansByAddressRequest) returns (QueryLoansByAddressResponse) {
+        option (google.api.http).get = "/side/lending/loans/address/{address}";
+    }
+
     rpc LoanDlcMeta(QueryLoanDlcMetaRequest) returns (QueryLoanDlcMetaResponse) {
         option (google.api.http).get = "/side/lending/loan/dlc/meta";
     }
@@ -139,6 +143,19 @@ message QueryLoansRequest {
 
 // QueryLoansResponse is response type for the Query/Loans RPC method.
 message QueryLoansResponse {
+    repeated Loan loans = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryLoansByAddressRequest is request type for the Query/LoansByAddress RPC method.
+message QueryLoansByAddressRequest {
+    string address = 1;
+    LoanStatus status = 2;
+    cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+// QueryLoansByAddressResponse is response type for the Query/LoansByAddress RPC method.
+message QueryLoansByAddressResponse {
     repeated Loan loans = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
