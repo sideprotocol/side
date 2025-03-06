@@ -22,12 +22,12 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 // handleActiveLoans handles active loans
 func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 	// get all active loans
-	loans := k.GetLoans(ctx, types.LoanStatus_Disburse)
+	loans := k.GetLoans(ctx, types.LoanStatus_Open)
 
 	for _, loan := range loans {
 		// check if the loan has defaulted
 		if ctx.BlockTime().Unix() >= loan.MaturityTime {
-			loan.Status = types.LoanStatus_Default
+			loan.Status = types.LoanStatus_Defaulted
 			k.SetLoan(ctx, *loan)
 
 			// emit event
@@ -52,7 +52,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		// check if the loan is to be liquidated
 		if price.LTE(liquidationPrice) {
-			loan.Status = types.LoanStatus_Liquidate
+			loan.Status = types.LoanStatus_Liquidated
 			k.SetLoan(ctx, *loan)
 
 			// get liquidation cet sig hashes; no error
@@ -86,7 +86,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 // handleLiquidatedLoans handles liquidated loans
 func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 	// get all liquidated loans
-	loans := k.GetLoans(ctx, types.LoanStatus_Liquidate)
+	loans := k.GetLoans(ctx, types.LoanStatus_Liquidated)
 
 	for _, loan := range loans {
 		// check if the signed liquidation cet has been generated in the dlc meta

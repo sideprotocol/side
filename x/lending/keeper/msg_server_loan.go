@@ -60,7 +60,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Fees:           fees,
 		PoolId:         msg.PoolId,
 		CreateAt:       ctx.BlockTime(),
-		Status:         types.LoanStatus_Apply,
+		Status:         types.LoanStatus_Requested,
 	}
 
 	m.SetLoan(ctx, loan)
@@ -196,7 +196,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 
 	loan := m.GetLoan(ctx, log.VaultAddress)
 
-	loan.Status = types.LoanStatus_Approve
+	loan.Status = types.LoanStatus_Approved
 	m.SetLoan(ctx, loan)
 
 	m.EmitEvent(ctx, msg.Relayer,
@@ -238,7 +238,7 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 
 	m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, sdk.NewCoins(*loan.BorrowAmount))
 
-	loan.Status = types.LoanStatus_Disburse
+	loan.Status = types.LoanStatus_Open
 	loan.LoanSecret = msg.LoanSecret
 
 	m.SetLoan(ctx, loan)
@@ -264,7 +264,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
-	if loan.Status != types.LoanStatus_Disburse {
+	if loan.Status != types.LoanStatus_Open {
 		return nil, types.ErrInvalidLoanStatus
 	}
 
@@ -275,7 +275,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		return nil, err
 	}
 
-	loan.Status = types.LoanStatus_Repay
+	loan.Status = types.LoanStatus_Repaid
 	m.SetLoan(ctx, loan)
 
 	dls := []string{}
@@ -410,7 +410,7 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
-	if loan.Status != types.LoanStatus_Liquidate {
+	if loan.Status != types.LoanStatus_Liquidated {
 		return nil, types.ErrLoanNotLiquidated
 	}
 
@@ -460,7 +460,7 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
-	if loan.Status == types.LoanStatus_Close {
+	if loan.Status == types.LoanStatus_Closed {
 		return nil, types.ErrInvalidLoanStatus
 	}
 
@@ -491,7 +491,7 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 		return nil, err
 	}
 
-	loan.Status = types.LoanStatus_Close
+	loan.Status = types.LoanStatus_Closed
 	m.SetLoan(ctx, loan)
 
 	repayment.BorrowerSignature = msg.Signature
