@@ -17,6 +17,7 @@ service Msg {
     rpc AddLiquidity(MsgAddLiquidity) returns (MsgAddLiquidityResponse);
     rpc RemoveLiquidity(MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
     rpc Apply(MsgApply) returns (MsgApplyResponse);
+    rpc SubmitLiquidationCet(MsgSubmitLiquidationCet) returns (MsgSubmitLiquidationCetResponse);
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
     rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
@@ -107,6 +108,21 @@ message MsgApply {
 
 message MsgApplyResponse {
     string vault_address = 1;
+}
+
+message MsgSubmitLiquidationCet {
+    option (cosmos.msg.v1.signer) = "borrower";
+
+    string borrower = 1;
+    string loan_id = 2;
+    uint64 event_id = 3;
+    string deposit_tx = 4;
+    string liquidation_cet = 5;
+    string liquidation_adaptor_signature = 6;
+}
+
+message MsgSubmitLiquidationCetResponse {
+
 }
 
 message MsgApprove {

@@ -1,11 +1,9 @@
 package types
 
 import (
-	"bytes"
 	"encoding/hex"
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
-	"github.com/btcsuite/btcd/btcutil/psbt"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -57,27 +55,8 @@ func (m *MsgApply) ValidateBasic() error {
 		return ErrInvalidLoanSecretHash
 	}
 
-	_, err = psbt.NewFromRawBytes(bytes.NewReader([]byte(m.DepositTx)), true)
-	if err != nil {
-		return ErrInvalidDepositTx
-	}
-
 	if !m.BorrowAmount.IsValid() || !m.BorrowAmount.IsPositive() {
 		return ErrInvalidAmount
-	}
-
-	_, err = psbt.NewFromRawBytes(bytes.NewReader([]byte(m.LiquidationCet)), true)
-	if err != nil {
-		return errorsmod.Wrapf(ErrInvalidCET, "failed to deserialize psbt: %v", err)
-	}
-
-	adaptorSigBytes, err := hex.DecodeString(m.LiquidationAdaptorSignature)
-	if err != nil {
-		return ErrInvalidAdaptorSignature
-	}
-
-	if _, err := schnorr.ParseSignature(adaptorSigBytes); err != nil {
-		return ErrInvalidAdaptorSignature
 	}
 
 	return nil
