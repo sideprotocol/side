@@ -1,6 +1,7 @@
 package abci
 
 import (
+	"bytes"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -19,7 +20,7 @@ import (
 	"github.com/sideprotocol/side/x/oracle/types"
 )
 
-type ProceOracleVoteExtHandler struct {
+type PriceOracleVoteExtHandler struct {
 	valStore        baseapp.ValidatorStore // to get the current validators' pubkeys
 	logger          log.Logger
 	currentBlock    int64 // current block height
@@ -33,7 +34,7 @@ type ProceOracleVoteExtHandler struct {
 	config *types.OracleConfig
 }
 
-func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorStore, oracleKeeper keeper.Keeper, config *types.OracleConfig) ProceOracleVoteExtHandler {
+func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorStore, oracleKeeper keeper.Keeper, config *types.OracleConfig) PriceOracleVoteExtHandler {
 	client, err := rpcclient.New(&rpcclient.ConnConfig{
 		Host:         config.BitcoinRpc,
 		User:         config.BitcoinRpcUser,
@@ -45,7 +46,7 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 		panic("unable to create bitcoin rpc")
 	}
 
-	return ProceOracleVoteExtHandler{
+	return PriceOracleVoteExtHandler{
 		logger:        logger,
 		currentBlock:  0,
 		valStore:      valStore,
@@ -55,7 +56,7 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 	}
 }
 
-func (h *ProceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
+func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
 
@@ -84,7 +85,7 @@ func (h *ProceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	}
 }
 
-func (h *ProceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHandler {
+func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHandler {
 	return func(ctx sdk.Context, req *abci.RequestVerifyVoteExtension) (*abci.ResponseVerifyVoteExtension, error) {
 
 		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", hex.EncodeToString(req.ValidatorAddress))
@@ -103,39 +104,37 @@ func (h *ProceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 	}
 }
 
-func (h *ProceOracleVoteExtHandler) getBitcoinHeaders() ([]*types.BlockHeader, error) {
+func (h *PriceOracleVoteExtHandler) getBitcoinHeaders() ([]*types.BlockHeader, error) {
 	tips, err := h.bitcoinClient.GetChainTips()
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
 	}
 
 	hash, err := chainhash.NewHashFromStr(tips[0].Hash)
-	height := tips[0].Height
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
 	}
-	b, err := h.bitcoinClient.GetBlockHeader(hash)
+	b, err := h.bitcoinClient.GetBlockHeaderVerbose(hash)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch header: %w", err)
 	}
 
 	header := types.BlockHeader{
-		Version:           uint64(b.Version),
-		Hash:              b.BlockHash().String(),
-		Height:            uint64(height),
-		PreviousBlockHash: b.PrevBlock.String(),
-		MerkleRoot:        b.MerkleRoot.String(),
-		Nonce:             uint64(b.Nonce),
-		Bits:              fmt.Sprintf("%x", b.Bits),
-		Time:              uint64(b.Timestamp.Unix()),
+		Version:           b.Version,
+		Hash:              b.Hash,
+		Height:            b.Height,
+		PreviousBlockHash: b.PreviousHash,
+		MerkleRoot:        b.MerkleRoot,
+		Nonce:             b.Nonce,
+		Bits:              b.Bits,
+		Time:              b.Time,
 	}
 	return []*types.BlockHeader{&header}, nil
 }
 
-func (h *ProceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]string {
+func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]string {
 
 	for _, v := range types.PRICE_CACHE {
-
 		output := make(map[string]int)
 		for k1, v1 := range v {
 			output[k1] = len(v1)
@@ -185,7 +184,7 @@ func (h *ProceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]stri
 	return textPrices
 }
 
-func (h *ProceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler {
+func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 
 		proposalTxs := req.Txs
@@ -196,16 +195,6 @@ func (h *ProceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 			if err != nil {
 				return nil, err
 			}
-
-			// _, err = h.computeStakeWeightedOraclePrices(ctx, req.LocalLastCommit)
-			// if err != nil {
-			// 	return nil, errors.New("failed to compute stake-weighted oracle prices")
-			// }
-
-			// injectedVoteExtTx := StakeWeightedPrices{
-			// 	StakeWeightedPrices: stakeWeightedPrices,
-			// 	ExtendedCommitInfo:  req.LocalLastCommit,
-			// }
 
 			extInfo := req.LocalLastCommit
 			bz, err := extInfo.Marshal()
@@ -231,7 +220,7 @@ func (h *ProceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 	}
 }
 
-func (h *ProceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler {
+func (h *PriceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
 		if len(req.Txs) == 0 {
 			return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_ACCEPT}, nil
@@ -263,7 +252,7 @@ func (h *ProceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler
 	}
 }
 
-func (h *ProceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
 
 	res := &sdk.ResponsePreBlock{}
 	if len(req.Txs) == 0 {
@@ -294,17 +283,42 @@ func (h *ProceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 	return res, nil
 }
 
-func (h *ProceOracleVoteExtHandler) extractPricesAndBlockHeaders(ctx sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, []*types.BlockHeader, error) {
+// func (h *PriceOracleVoteExtHandler) selectBlockHeaders(extInfo *abci.ExtendedCommitInfo) error {
+// 	for i, v := range extInfo.Votes {
+// 		if v.VoteExtension
+// 	}
+// 	return nil
+// }
+
+func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(ctx sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, []*types.BlockHeader, error) {
 	// requiredPairs := h.keeper.GetSupportedPairs(ctx)
 	// requiredPairs := []string{"BTCUSD"}
 	stakeWeightedPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE)) // base -> average stake-weighted price
 	// for _, pair := range requiredPairs {
 	// 	stakeWeightedPrices[pair] = math.LegacyZeroDec()
 	// }
+	length := len(commit.Votes)
+	selectedIndex := -1
+
+done:
+	for i, v1 := range commit.Votes {
+		count := 0
+		if v1.VoteExtension != nil {
+			for _, v2 := range commit.Votes {
+				if bytes.Equal(v1.VoteExtension, v2.VoteExtension) {
+					count++
+					if count*3 > length*2 {
+						selectedIndex = i
+						break done
+					}
+				}
+			}
+		}
+	}
 
 	var totalStake int64
 	var blockHeaders []*types.BlockHeader
-	for _, v := range commit.Votes {
+	for i, v := range commit.Votes {
 		if v.BlockIdFlag != cmtproto.BlockIDFlagCommit {
 			continue
 		}
@@ -317,14 +331,6 @@ func (h *ProceOracleVoteExtHandler) extractPricesAndBlockHeaders(ctx sdk.Context
 		}
 
 		h.logger.Warn("extension", "validator", hex.EncodeToString(v.Validator.Address), "extension", voteExt)
-
-		if blockHeaders == nil {
-			blockHeaders = voteExt.Blocks
-		} else {
-			if len(blockHeaders) != len(voteExt.Blocks) {
-				h.logger.Error("inconsistent state", "left", blockHeaders, "right", voteExt.Blocks)
-			}
-		}
 
 		totalStake += v.Validator.Power
 
@@ -346,6 +352,10 @@ func (h *ProceOracleVoteExtHandler) extractPricesAndBlockHeaders(ctx sdk.Context
 			} else {
 				stakeWeightedPrices[base] = stakePrice.MulInt64(v.Validator.Power)
 			}
+		}
+
+		if i == selectedIndex {
+			blockHeaders = voteExt.Blocks
 		}
 	}
 

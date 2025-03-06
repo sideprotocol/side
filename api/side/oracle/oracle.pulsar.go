@@ -592,8 +592,8 @@ func (x *fastReflection_BlockHeader) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_BlockHeader) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Version != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Version)
+	if x.Version != int32(0) {
+		value := protoreflect.ValueOfInt32(x.Version)
 		if !f(fd_BlockHeader_version, value) {
 			return
 		}
@@ -604,8 +604,8 @@ func (x *fastReflection_BlockHeader) Range(f func(protoreflect.FieldDescriptor, 
 			return
 		}
 	}
-	if x.Height != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Height)
+	if x.Height != int32(0) {
+		value := protoreflect.ValueOfInt32(x.Height)
 		if !f(fd_BlockHeader_height, value) {
 			return
 		}
@@ -634,14 +634,14 @@ func (x *fastReflection_BlockHeader) Range(f func(protoreflect.FieldDescriptor, 
 			return
 		}
 	}
-	if x.Time != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Time)
+	if x.Time != int64(0) {
+		value := protoreflect.ValueOfInt64(x.Time)
 		if !f(fd_BlockHeader_time, value) {
 			return
 		}
 	}
-	if x.Ntx != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Ntx)
+	if x.Ntx != int32(0) {
+		value := protoreflect.ValueOfInt32(x.Ntx)
 		if !f(fd_BlockHeader_ntx, value) {
 			return
 		}
@@ -662,11 +662,11 @@ func (x *fastReflection_BlockHeader) Range(f func(protoreflect.FieldDescriptor, 
 func (x *fastReflection_BlockHeader) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "side.oracle.BlockHeader.version":
-		return x.Version != uint64(0)
+		return x.Version != int32(0)
 	case "side.oracle.BlockHeader.hash":
 		return x.Hash != ""
 	case "side.oracle.BlockHeader.height":
-		return x.Height != uint64(0)
+		return x.Height != int32(0)
 	case "side.oracle.BlockHeader.previous_block_hash":
 		return x.PreviousBlockHash != ""
 	case "side.oracle.BlockHeader.merkle_root":
@@ -676,9 +676,9 @@ func (x *fastReflection_BlockHeader) Has(fd protoreflect.FieldDescriptor) bool {
 	case "side.oracle.BlockHeader.bits":
 		return x.Bits != ""
 	case "side.oracle.BlockHeader.time":
-		return x.Time != uint64(0)
+		return x.Time != int64(0)
 	case "side.oracle.BlockHeader.ntx":
-		return x.Ntx != uint64(0)
+		return x.Ntx != int32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.oracle.BlockHeader"))
@@ -696,11 +696,11 @@ func (x *fastReflection_BlockHeader) Has(fd protoreflect.FieldDescriptor) bool {
 func (x *fastReflection_BlockHeader) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "side.oracle.BlockHeader.version":
-		x.Version = uint64(0)
+		x.Version = int32(0)
 	case "side.oracle.BlockHeader.hash":
 		x.Hash = ""
 	case "side.oracle.BlockHeader.height":
-		x.Height = uint64(0)
+		x.Height = int32(0)
 	case "side.oracle.BlockHeader.previous_block_hash":
 		x.PreviousBlockHash = ""
 	case "side.oracle.BlockHeader.merkle_root":
@@ -710,9 +710,9 @@ func (x *fastReflection_BlockHeader) Clear(fd protoreflect.FieldDescriptor) {
 	case "side.oracle.BlockHeader.bits":
 		x.Bits = ""
 	case "side.oracle.BlockHeader.time":
-		x.Time = uint64(0)
+		x.Time = int64(0)
 	case "side.oracle.BlockHeader.ntx":
-		x.Ntx = uint64(0)
+		x.Ntx = int32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.oracle.BlockHeader"))
@@ -731,13 +731,13 @@ func (x *fastReflection_BlockHeader) Get(descriptor protoreflect.FieldDescriptor
 	switch descriptor.FullName() {
 	case "side.oracle.BlockHeader.version":
 		value := x.Version
-		return protoreflect.ValueOfUint64(value)
+		return protoreflect.ValueOfInt32(value)
 	case "side.oracle.BlockHeader.hash":
 		value := x.Hash
 		return protoreflect.ValueOfString(value)
 	case "side.oracle.BlockHeader.height":
 		value := x.Height
-		return protoreflect.ValueOfUint64(value)
+		return protoreflect.ValueOfInt32(value)
 	case "side.oracle.BlockHeader.previous_block_hash":
 		value := x.PreviousBlockHash
 		return protoreflect.ValueOfString(value)
@@ -752,10 +752,10 @@ func (x *fastReflection_BlockHeader) Get(descriptor protoreflect.FieldDescriptor
 		return protoreflect.ValueOfString(value)
 	case "side.oracle.BlockHeader.time":
 		value := x.Time
-		return protoreflect.ValueOfUint64(value)
+		return protoreflect.ValueOfInt64(value)
 	case "side.oracle.BlockHeader.ntx":
 		value := x.Ntx
-		return protoreflect.ValueOfUint64(value)
+		return protoreflect.ValueOfInt32(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.oracle.BlockHeader"))
@@ -777,11 +777,11 @@ func (x *fastReflection_BlockHeader) Get(descriptor protoreflect.FieldDescriptor
 func (x *fastReflection_BlockHeader) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "side.oracle.BlockHeader.version":
-		x.Version = value.Uint()
+		x.Version = int32(value.Int())
 	case "side.oracle.BlockHeader.hash":
 		x.Hash = value.Interface().(string)
 	case "side.oracle.BlockHeader.height":
-		x.Height = value.Uint()
+		x.Height = int32(value.Int())
 	case "side.oracle.BlockHeader.previous_block_hash":
 		x.PreviousBlockHash = value.Interface().(string)
 	case "side.oracle.BlockHeader.merkle_root":
@@ -791,9 +791,9 @@ func (x *fastReflection_BlockHeader) Set(fd protoreflect.FieldDescriptor, value 
 	case "side.oracle.BlockHeader.bits":
 		x.Bits = value.Interface().(string)
 	case "side.oracle.BlockHeader.time":
-		x.Time = value.Uint()
+		x.Time = value.Int()
 	case "side.oracle.BlockHeader.ntx":
-		x.Ntx = value.Uint()
+		x.Ntx = int32(value.Int())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.oracle.BlockHeader"))
@@ -846,11 +846,11 @@ func (x *fastReflection_BlockHeader) Mutable(fd protoreflect.FieldDescriptor) pr
 func (x *fastReflection_BlockHeader) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "side.oracle.BlockHeader.version":
-		return protoreflect.ValueOfUint64(uint64(0))
+		return protoreflect.ValueOfInt32(int32(0))
 	case "side.oracle.BlockHeader.hash":
 		return protoreflect.ValueOfString("")
 	case "side.oracle.BlockHeader.height":
-		return protoreflect.ValueOfUint64(uint64(0))
+		return protoreflect.ValueOfInt32(int32(0))
 	case "side.oracle.BlockHeader.previous_block_hash":
 		return protoreflect.ValueOfString("")
 	case "side.oracle.BlockHeader.merkle_root":
@@ -860,9 +860,9 @@ func (x *fastReflection_BlockHeader) NewField(fd protoreflect.FieldDescriptor) p
 	case "side.oracle.BlockHeader.bits":
 		return protoreflect.ValueOfString("")
 	case "side.oracle.BlockHeader.time":
-		return protoreflect.ValueOfUint64(uint64(0))
+		return protoreflect.ValueOfInt64(int64(0))
 	case "side.oracle.BlockHeader.ntx":
-		return protoreflect.ValueOfUint64(uint64(0))
+		return protoreflect.ValueOfInt32(int32(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.oracle.BlockHeader"))
@@ -1108,7 +1108,7 @@ func (x *fastReflection_BlockHeader) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Version |= uint64(b&0x7F) << shift
+					x.Version |= int32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1159,7 +1159,7 @@ func (x *fastReflection_BlockHeader) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Height |= uint64(b&0x7F) << shift
+					x.Height |= int32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1293,7 +1293,7 @@ func (x *fastReflection_BlockHeader) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Time |= uint64(b&0x7F) << shift
+					x.Time |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1312,7 +1312,7 @@ func (x *fastReflection_BlockHeader) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Ntx |= uint64(b&0x7F) << shift
+					x.Ntx |= int32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2261,15 +2261,15 @@ type BlockHeader struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Version           uint64 `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
+	Version           int32  `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
 	Hash              string `protobuf:"bytes,2,opt,name=hash,proto3" json:"hash,omitempty"`
-	Height            uint64 `protobuf:"varint,3,opt,name=height,proto3" json:"height,omitempty"`
+	Height            int32  `protobuf:"varint,3,opt,name=height,proto3" json:"height,omitempty"`
 	PreviousBlockHash string `protobuf:"bytes,4,opt,name=previous_block_hash,json=previousBlockHash,proto3" json:"previous_block_hash,omitempty"`
 	MerkleRoot        string `protobuf:"bytes,5,opt,name=merkle_root,json=merkleRoot,proto3" json:"merkle_root,omitempty"`
 	Nonce             uint64 `protobuf:"varint,6,opt,name=nonce,proto3" json:"nonce,omitempty"`
 	Bits              string `protobuf:"bytes,7,opt,name=bits,proto3" json:"bits,omitempty"`
-	Time              uint64 `protobuf:"varint,8,opt,name=time,proto3" json:"time,omitempty"`
-	Ntx               uint64 `protobuf:"varint,9,opt,name=ntx,proto3" json:"ntx,omitempty"`
+	Time              int64  `protobuf:"varint,8,opt,name=time,proto3" json:"time,omitempty"`
+	Ntx               int32  `protobuf:"varint,9,opt,name=ntx,proto3" json:"ntx,omitempty"`
 }
 
 func (x *BlockHeader) Reset() {
@@ -2292,7 +2292,7 @@ func (*BlockHeader) Descriptor() ([]byte, []int) {
 	return file_side_oracle_oracle_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *BlockHeader) GetVersion() uint64 {
+func (x *BlockHeader) GetVersion() int32 {
 	if x != nil {
 		return x.Version
 	}
@@ -2306,7 +2306,7 @@ func (x *BlockHeader) GetHash() string {
 	return ""
 }
 
-func (x *BlockHeader) GetHeight() uint64 {
+func (x *BlockHeader) GetHeight() int32 {
 	if x != nil {
 		return x.Height
 	}
@@ -2341,14 +2341,14 @@ func (x *BlockHeader) GetBits() string {
 	return ""
 }
 
-func (x *BlockHeader) GetTime() uint64 {
+func (x *BlockHeader) GetTime() int64 {
 	if x != nil {
 		return x.Time
 	}
 	return 0
 }
 
-func (x *BlockHeader) GetNtx() uint64 {
+func (x *BlockHeader) GetNtx() int32 {
 	if x != nil {
 		return x.Ntx
 	}
@@ -2426,9 +2426,9 @@ var file_side_oracle_oracle_proto_rawDesc = []byte{
 	0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65,
 	0x22, 0xf4, 0x01, 0x0a, 0x0b, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72,
 	0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x04, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x68, 0x61,
+	0x05, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x68, 0x61,
 	0x73, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x61, 0x73, 0x68, 0x12, 0x16,
-	0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06,
+	0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06,
 	0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x2e, 0x0a, 0x13, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f,
 	0x75, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x04, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x11, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x42, 0x6c, 0x6f,
@@ -2437,9 +2437,9 @@ var file_side_oracle_oracle_proto_rawDesc = []byte{
 	0x6b, 0x6c, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65,
 	0x18, 0x06, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x12, 0x0a,
 	0x04, 0x62, 0x69, 0x74, 0x73, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x62, 0x69, 0x74,
-	0x73, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x73, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x03, 0x52,
 	0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x6e, 0x74, 0x78, 0x18, 0x09, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x03, 0x6e, 0x74, 0x78, 0x22, 0xe6, 0x01, 0x0a, 0x13, 0x4f, 0x72, 0x61, 0x63,
+	0x28, 0x05, 0x52, 0x03, 0x6e, 0x74, 0x78, 0x22, 0xe6, 0x01, 0x0a, 0x13, 0x4f, 0x72, 0x61, 0x63,
 	0x6c, 0x65, 0x56, 0x6f, 0x74, 0x65, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x12,
 	0x16, 0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
 	0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x4a, 0x0a, 0x06, 0x70, 0x72, 0x69, 0x63, 0x65,

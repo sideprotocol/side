@@ -4,6 +4,8 @@ import (
 	"sync"
 
 	"cosmossdk.io/math"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -31,8 +33,10 @@ var (
 	Permille       = math.NewInt(1000)
 	ParamsStoreKey = []byte{0x1}
 
-	PriceKeyPrefix      = []byte{0x07}
-	BitcoinHeaderPrefix = []byte{0x08}
+	PriceKeyPrefix            = []byte{0x07}
+	BitcoinHeaderPrefix       = []byte{0x10}
+	BitcoinHeaderHeightPrefix = []byte{0x11} // prefix for each key to a block hash, for a height
+	BitcoinBestBlockHeaderKey = []byte{0x12} // key for the best block height
 
 	PRICE_CACHE = make(map[string]map[string][]Price) // symbol, exchange, price[]
 	mu          sync.Mutex
@@ -44,4 +48,8 @@ func PriceKey(symbol string) []byte {
 
 func BitcoinHeaderKey(hash string) []byte {
 	return append(BitcoinHeaderPrefix, []byte(hash)...)
+}
+
+func BitcoinBlockHeaderHeightKey(height int32) []byte {
+	return append(BitcoinHeaderHeightPrefix, sdk.Uint64ToBigEndian(uint64(height))...)
 }
