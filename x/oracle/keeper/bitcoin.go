@@ -28,6 +28,7 @@ func (k Keeper) SetBlockHeaders(ctx sdk.Context, headers []*types.BlockHeader) e
 			return types.ErrInvalidBlockHeaders
 		}
 		k.SetBlockHeader(ctx, h)
+		best = h
 	}
 
 	k.SetBestBlockHeader(ctx, headers[length-1])
