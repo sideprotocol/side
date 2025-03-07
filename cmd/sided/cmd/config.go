@@ -63,11 +63,11 @@ func initAppConfig() (string, interface{}) {
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
 [oracle]
 # Validator node should set this to true
-enable = false
+enable = true
 
-bitcoin_rpc = "192.248.150.102:18332"
-bitcoin_rpc_user = "side"
-bitcoin_rpc_password = "12345678"
+bitcoin_rpc = ""
+bitcoin_rpc_user = ""
+bitcoin_rpc_password = ""
 http_post_mode = true
 disable_tls = true
 

@@ -61,5 +61,21 @@ func ReadOracleConfig(opts servertypes.AppOptions) (OracleConfig, error) {
 			return cfg, err
 		}
 	}
-	return cfg, nil
+	return cfg, validate(&cfg)
+}
+
+func validate(conf *OracleConfig) error {
+	if len(conf.BitcoinRpc) == 0 {
+		return ErrInvalidBitcoinRPC
+	}
+	// if matched, _ := regexp.MatchString("\\w+:[\\d]{2,5}", conf.BitcoinRpc); matched {
+	// 	return ErrInvalidBitcoinRPC
+	// }
+	if len(conf.BitcoinRpcUser) == 0 {
+		return ErrInvalidBitcoinRPCUser
+	}
+	if len(conf.BitcoinRpcPass) == 0 {
+		return ErrInvalidBitcoinRPCPass
+	}
+	return nil
 }

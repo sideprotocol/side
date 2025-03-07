@@ -154,6 +154,9 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	sed -i.bak 's/cors_allowed_origins\s*=\s*\[\]/cors_allowed_origins = ["*",]/g' "$CONFIG"
 	sed -i.bak 's/swagger = false/swagger = true/g' $APP_TOML
 	sed -i.bak "s/minimum-gas-prices = \"\"/minimum-gas-prices = \"0.000001${DENOMS[0]}\"/g" $APP_TOML
+	sed -i.bak "s/bitcoin_rpc = \"\"/bitcoin_rpc = \"192.248.150.102:18332\"/g" $APP_TOML
+	sed -i.bak "s/bitcoin_rpc_user = \"\"/bitcoin_rpc_user = \"side\"/g" $APP_TOML
+	sed -i.bak "s/bitcoin_rpc_password = \"\"/bitcoin_rpc_password = \"12345678\"/g" $APP_TOML
 
 	# Allocate genesis accounts (cosmos formatted addresses)
 	for KEY in "${KEYS[@]}"; do

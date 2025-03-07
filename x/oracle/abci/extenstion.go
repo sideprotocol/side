@@ -57,6 +57,10 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 
 func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
+
+		if !h.config.Enable {
+			return nil, nil
+		}
 		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
 
 		types.CleanPrices(h.lastPriceSyncTS)
