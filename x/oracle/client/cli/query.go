@@ -26,6 +26,8 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdGetPriceBySymbol())
 	cmd.AddCommand(CmdQueryBlockHeaderByHeight())
+	cmd.AddCommand(CmdQueryBlockHeaderByHash())
+	cmd.AddCommand(CmdQueryBestBlockHeader())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -137,6 +139,33 @@ func CmdQueryBlockHeaderByHash() *cobra.Command {
 			res, err := queryClient.QueryBlockHeaderByHash(cmd.Context(), &types.QueryBlockHeaderByHashRequest{
 				Hash: args[0],
 			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryBestBlockHeader() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "bestblockheader",
+		Short: "Query best block header",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.QueryBestBlockHeader(cmd.Context(), &types.QueryBestBlockHeaderRequest{})
 			if err != nil {
 				return err
 			}

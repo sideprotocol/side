@@ -100,9 +100,7 @@ message QueryBlockHeaderByHashResponse {
 }
 
 // QueryBestBlockHeaderRequest is the request type for the Query/BestBlockHeader RPC method.
-message QueryBestBlockHeaderRequest {
-  string hash = 1;
-}
+message QueryBestBlockHeaderRequest {}
 
 // QueryBestBlockHeaderResponse is the response type for the Query/BestBlockHeader RPC method.
 message QueryBestBlockHeaderResponse {

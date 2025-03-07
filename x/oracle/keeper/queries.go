@@ -78,3 +78,18 @@ func (k Keeper) QueryBlockHeaderByHash(goCtx context.Context, req *types.QueryBl
 
 	return &types.QueryBlockHeaderByHashResponse{BlockHeader: block_header}, nil
 }
+
+// QueryBestBlockHeader implements types.QueryServer.
+func (k Keeper) QueryBestBlockHeader(goCtx context.Context, req *types.QueryBestBlockHeaderRequest) (*types.QueryBestBlockHeaderResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	block_header := k.GetBestBlockHeader(ctx)
+	if block_header == nil {
+		return nil, status.Error(codes.NotFound, "best block header not found")
+	}
+
+	return &types.QueryBestBlockHeaderResponse{BlockHeader: block_header}, nil
+}
