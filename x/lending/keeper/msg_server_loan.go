@@ -19,6 +19,8 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
+const OriginationFeeAmount = int64(1000000)
+
 // CreateLoan implements types.MsgServer.
 func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.MsgApplyResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -46,6 +48,10 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	interests := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille).Quo(types.Permille)
 	fees := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille.Sub(params.SupplyRatePermille)).Quo(types.Permille)
+
+	if msg.BorrowAmount.Amount.Int64() <= OriginationFeeAmount+fees.Int64() {
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrowed amount must be greater than origination fee plus protocol fee")
+	}
 
 	loan := types.Loan{
 		VaultAddress:   vault,
@@ -152,7 +158,6 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 	// 	return nil, types.ErrInvalidPriceEvent
 	// }
 
-
 	loan.CollateralAmount = collateralAmount
 	loan.EventId = msg.EventId
 	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
@@ -237,7 +242,10 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		return nil, types.ErrMismatchedLoanSecret
 	}
 
-	m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, sdk.NewCoins(*loan.BorrowAmount))
+	redeemedAmount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-OriginationFeeAmount-loan.Fees.Int64())
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, sdk.NewCoins(redeemedAmount)); err != nil {
+		return nil, err
+	}
 
 	loan.Status = types.LoanStatus_Open
 	loan.LoanSecret = msg.LoanSecret
@@ -269,7 +277,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		return nil, types.ErrInvalidLoanStatus
 	}
 
-	amount := loan.BorrowAmount.Amount.Add(loan.Interests).Add(loan.Fees)
+	amount := loan.BorrowAmount.Amount.Add(loan.Interests)
 
 	// send repayment to escrow account
 	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), types.RepaymentEscrowAccount, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
