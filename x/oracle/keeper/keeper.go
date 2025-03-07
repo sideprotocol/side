@@ -20,16 +20,6 @@ type Keeper struct {
 	authority string
 }
 
-// QueryBlockHeaderByHash implements types.QueryServer.
-func (k Keeper) QueryBlockHeaderByHash(context.Context, *types.QueryBlockHeaderByHashRequest) (*types.QueryBlockHeaderByHashResponse, error) {
-	panic("unimplemented")
-}
-
-// QueryBlockHeaderByHeight implements types.QueryServer.
-func (k Keeper) QueryBlockHeaderByHeight(context.Context, *types.QueryBlockHeaderByHeightRequest) (*types.QueryBlockHeaderByHeightResponse, error) {
-	panic("unimplemented")
-}
-
 // QueryChainTip implements types.QueryServer.
 func (k Keeper) QueryChainTip(context.Context, *types.QueryChainTipRequest) (*types.QueryChainTipResponse, error) {
 	panic("unimplemented")
