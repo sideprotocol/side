@@ -152,6 +152,7 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 	// 	return nil, types.ErrInvalidPriceEvent
 	// }
 
+
 	loan.CollateralAmount = collateralAmount
 	loan.EventId = msg.EventId
 	loan.DepositTxs = append(loan.DepositTxs, depositTxid)

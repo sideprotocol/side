@@ -3,6 +3,7 @@ package cmd
 import (
 	cmtcfg "github.com/cometbft/cometbft/config"
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
+	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 )
 
 // initCometBFTConfig helps to override default CometBFT Config values.
@@ -23,6 +24,7 @@ func initAppConfig() (string, interface{}) {
 	// The following code snippet is just for reference.
 	type CustomAppConfig struct {
 		serverconfig.Config `mapstructure:",squash"`
+		Oracle              oracletypes.OracleConfig `mapstructure:"oracle"`
 	}
 
 	// Optionally allow the chain developer to overwrite the SDK's default
@@ -40,14 +42,15 @@ func initAppConfig() (string, interface{}) {
 	//   own app.toml to override, or use this default value.
 	//
 	// In tests, we set the min gas prices to 0.
-	// srvCfg.MinGasPrices = "0stake"
+	srvCfg.MinGasPrices = "0.0006uside,0.000001sat"
 	// srvCfg.BaseConfig.IAVLDisableFastNode = true // disable fastnode by default
 
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
+		Oracle: oracletypes.DefaultOracleConfig(),
 	}
 
-	customAppTemplate := serverconfig.DefaultConfigTemplate
+	// customAppTemplate := serverconfig.DefaultConfigTemplate
 	// Edit the default template file
 	//
 	// customAppTemplate := serverconfig.DefaultConfigTemplate + `
@@ -57,6 +60,18 @@ func initAppConfig() (string, interface{}) {
 	// # This is the number of wasm vm instances we keep cached in memory for speed-up
 	// # Warning: this is currently unstable and may lead to crashes, best to keep for 0 unless testing locally
 	// lru_size = 0`
+	customAppTemplate := serverconfig.DefaultConfigTemplate + `
+[oracle]
+# Validator node should set this to true
+enable = true
+
+bitcoin_rpc = ""
+bitcoin_rpc_user = ""
+bitcoin_rpc_password = ""
+http_post_mode = true
+disable_tls = true
+
+`
 
 	return customAppTemplate, customAppConfig
 }

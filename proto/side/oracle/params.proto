@@ -1,0 +1,11 @@
+syntax = "proto3";
+package side.oracle;
+
+option go_package = "github.com/sideprotocol/side/x/oracle/types";
+
+
+// Params defines the parameters for the module.
+message Params {
+    // define how many block headers keep on side chain
+    uint32 keep_bitcoin_blocks = 1;
+}

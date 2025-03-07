@@ -27,6 +27,7 @@ message LendingPool {
     PoolStatus status = 5;
 }
 
+// Loan Status
 enum LoanStatus {
     // Unspecified
     Unspecified = 0;

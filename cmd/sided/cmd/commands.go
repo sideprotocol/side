@@ -26,6 +26,7 @@ import (
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 
 	"github.com/sideprotocol/side/app"
+	oracle "github.com/sideprotocol/side/x/oracle/module"
 )
 
 func initRootCmd(
@@ -42,7 +43,13 @@ func initRootCmd(
 		snapshot.Cmd(newApp),
 	)
 
-	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, addModuleInitFlags)
+	// server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, addModuleInitFlags)
+	opts := server.StartCmdOptions{
+		PostSetup:           oracle.Start,
+		PostSetupStandalone: oracle.Start,
+	}
+
+	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, opts)
 
 	// add keybase, auxiliary RPC, query, genesis, and tx child commands
 	rootCmd.AddCommand(

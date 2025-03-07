@@ -4903,6 +4903,7 @@ func (PoolStatus) EnumDescriptor() ([]byte, []int) {
 	return file_side_lending_lending_proto_rawDescGZIP(), []int{0}
 }
 
+// Loan Status
 type LoanStatus int32
 
 const (

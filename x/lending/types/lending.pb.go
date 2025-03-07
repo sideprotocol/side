@@ -56,6 +56,7 @@ func (PoolStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_eb4e0b35327359cc, []int{0}
 }
 
+// Loan Status
 type LoanStatus int32
 
 const (

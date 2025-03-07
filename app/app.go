@@ -137,6 +137,10 @@ import (
 	lendingkeeper "github.com/sideprotocol/side/x/lending/keeper"
 	lendingmodule "github.com/sideprotocol/side/x/lending/module"
 	lendingtypes "github.com/sideprotocol/side/x/lending/types"
+	oracleabci "github.com/sideprotocol/side/x/oracle/abci"
+
+	oraclekeeper "github.com/sideprotocol/side/x/oracle/keeper"
+	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
@@ -287,6 +291,7 @@ type App struct {
 	AuctionKeeper   auctionkeeper.Keeper
 	DLCKeeper       dlckeeper.Keeper
 	LendingKeeper   lendingkeeper.Keeper
+	OracleKeeper    oraclekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -357,7 +362,7 @@ func New(
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey,
 		btcbridgetypes.StoreKey, auctiontypes.StoreKey,
-		dlctypes.StoreKey, lendingtypes.StoreKey,
+		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 
@@ -665,6 +670,8 @@ func New(
 	)
 	lendingModule := lendingmodule.NewAppModule(appCodec, app.LendingKeeper)
 
+	app.OracleKeeper = oraclekeeper.NewKeeper(appCodec, keys[oracletypes.StoreKey], keys[oracletypes.MemStoreKey], "")
+
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
 	if err != nil {
@@ -695,6 +702,12 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		wasmOpts...,
 	)
+
+	oracleConfig, err := oracletypes.ReadOracleConfig(appOpts)
+	if err != nil {
+		panic(fmt.Sprintf("error while reading oracle config: %s", err))
+	}
+	logger.Info("Oracle Status", "Enable", oracleConfig.Enable)
 
 	wasmModule := wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName))
 
@@ -950,6 +963,15 @@ func New(
 	app.SetPreBlocker(app.PreBlocker)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
+
+	voteExtHander := oracleabci.NewPriceOracleVoteExtHandler(app.Logger(), app.StakingKeeper, app.OracleKeeper, &oracleConfig)
+	// propHandler := oracle.NewProposalHandler(app.Logger(), app.StakingKeeper)
+
+	app.SetExtendVoteHandler(voteExtHander.ExtendVoteHandler())
+	app.SetVerifyVoteExtensionHandler(voteExtHander.VerifyVoteExtensionHandler())
+	app.SetPrepareProposal(voteExtHander.PrepareProposal())
+	app.SetProcessProposal(voteExtHander.ProcessProposal())
+	app.SetPreBlocker(voteExtHander.PreBlocker)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
