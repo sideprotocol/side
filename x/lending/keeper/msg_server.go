@@ -24,6 +24,7 @@ func (m msgServer) SubmitPrice(goCtx context.Context, msg *types.MsgSubmitPrice)
 
 	m.SetPrice(ctx, msg.Price)
 	m.dlcKeeper.SetPrice(ctx, "BTC-USD", msg.Price)
+	m.auctionKeeper.SetPrice(ctx, "BTC-USD", msg.Price)
 
 	return &types.MsgSubmitPriceResponse{}, nil
 }
