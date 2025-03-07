@@ -25,6 +25,7 @@ const (
 	Query_QueryChainTip_FullMethodName            = "/side.oracle.Query/QueryChainTip"
 	Query_QueryBlockHeaderByHeight_FullMethodName = "/side.oracle.Query/QueryBlockHeaderByHeight"
 	Query_QueryBlockHeaderByHash_FullMethodName   = "/side.oracle.Query/QueryBlockHeaderByHash"
+	Query_QueryBestBlockHeader_FullMethodName     = "/side.oracle.Query/QueryBestBlockHeader"
 )
 
 // QueryClient is the client API for Query service.
@@ -45,6 +46,8 @@ type QueryClient interface {
 	QueryBlockHeaderByHeight(ctx context.Context, in *QueryBlockHeaderByHeightRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHeightResponse, error)
 	// BlockHeaderByHash queries the block header by hash.
 	QueryBlockHeaderByHash(ctx context.Context, in *QueryBlockHeaderByHashRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHashResponse, error)
+	// BestBlockHeader queries the best block header.
+	QueryBestBlockHeader(ctx context.Context, in *QueryBestBlockHeaderRequest, opts ...grpc.CallOption) (*QueryBestBlockHeaderResponse, error)
 }
 
 type queryClient struct {
@@ -115,6 +118,16 @@ func (c *queryClient) QueryBlockHeaderByHash(ctx context.Context, in *QueryBlock
 	return out, nil
 }
 
+func (c *queryClient) QueryBestBlockHeader(ctx context.Context, in *QueryBestBlockHeaderRequest, opts ...grpc.CallOption) (*QueryBestBlockHeaderResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryBestBlockHeaderResponse)
+	err := c.cc.Invoke(ctx, Query_QueryBestBlockHeader_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility.
@@ -133,6 +146,8 @@ type QueryServer interface {
 	QueryBlockHeaderByHeight(context.Context, *QueryBlockHeaderByHeightRequest) (*QueryBlockHeaderByHeightResponse, error)
 	// BlockHeaderByHash queries the block header by hash.
 	QueryBlockHeaderByHash(context.Context, *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error)
+	// BestBlockHeader queries the best block header.
+	QueryBestBlockHeader(context.Context, *QueryBestBlockHeaderRequest) (*QueryBestBlockHeaderResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -160,6 +175,9 @@ func (UnimplementedQueryServer) QueryBlockHeaderByHeight(context.Context, *Query
 }
 func (UnimplementedQueryServer) QueryBlockHeaderByHash(context.Context, *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryBlockHeaderByHash not implemented")
+}
+func (UnimplementedQueryServer) QueryBestBlockHeader(context.Context, *QueryBestBlockHeaderRequest) (*QueryBestBlockHeaderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryBestBlockHeader not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 func (UnimplementedQueryServer) testEmbeddedByValue()               {}
@@ -290,6 +308,24 @@ func _Query_QueryBlockHeaderByHash_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_QueryBestBlockHeader_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBestBlockHeaderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryBestBlockHeader(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryBestBlockHeader_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryBestBlockHeader(ctx, req.(*QueryBestBlockHeaderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -320,6 +356,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryBlockHeaderByHash",
 			Handler:    _Query_QueryBlockHeaderByHash_Handler,
+		},
+		{
+			MethodName: "QueryBestBlockHeader",
+			Handler:    _Query_QueryBestBlockHeader_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

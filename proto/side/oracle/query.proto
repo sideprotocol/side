@@ -27,15 +27,19 @@ service Query {
 
   // ChainTip queries the chain tip of the module.
   rpc QueryChainTip(QueryChainTipRequest) returns (QueryChainTipResponse) {
-    option (google.api.http).get = "/side/btcbridge/tip";
+    option (google.api.http).get = "/side/oracle/tip";
   }
   // BlockHeaderByHeight queries the block header by height.
   rpc QueryBlockHeaderByHeight(QueryBlockHeaderByHeightRequest) returns (QueryBlockHeaderByHeightResponse) {
-    option (google.api.http).get = "/side/btcbridge/height/{height}";
+    option (google.api.http).get = "/side/oracle/blockheader/height/{height}";
   }
   // BlockHeaderByHash queries the block header by hash.
   rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
-    option (google.api.http).get = "/side/btcbridge/hash/{hash}";
+    option (google.api.http).get = "/side/oracle/blockheader/hash/{hash}";
+  }
+  // BestBlockHeader queries the best block header.
+  rpc QueryBestBlockHeader(QueryBestBlockHeaderRequest) returns (QueryBestBlockHeaderResponse) {
+    option (google.api.http).get = "/side/oracle/bestblockheader";
   }
 }
 
@@ -92,5 +96,15 @@ message QueryBlockHeaderByHashRequest {
 
 // QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
 message QueryBlockHeaderByHashResponse {
+  BlockHeader block_header = 1;
+}
+
+// QueryBestBlockHeaderRequest is the request type for the Query/BestBlockHeader RPC method.
+message QueryBestBlockHeaderRequest {
+  string hash = 1;
+}
+
+// QueryBestBlockHeaderResponse is the response type for the Query/BestBlockHeader RPC method.
+message QueryBestBlockHeaderResponse {
   BlockHeader block_header = 1;
 }
