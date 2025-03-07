@@ -120,7 +120,7 @@ func generateNonces(ctx sdk.Context, k keeper.Keeper) {
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeGenerateNonce,
-			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", nonceIndex+1)),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", ctx.BlockHeight())),
 			sdk.NewAttribute(types.AttributeKeyOraclePubKey, oracle.Pubkey),
 			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(oracle.Participants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
