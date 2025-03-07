@@ -59,7 +59,7 @@ func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 
 		if !h.config.Enable {
-			return nil, nil
+			return &abci.ResponseExtendVote{}, nil
 		}
 		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
 
@@ -241,7 +241,7 @@ func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 
 		proposalTxs := req.Txs
 
-		if req.Height >= ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight && ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight != 0 {
+		if h.config.Enable && req.Height >= ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight && ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight != 0 {
 
 			err := baseapp.ValidateVoteExtensions(ctx, h.valStore, req.Height, ctx.ChainID(), req.LocalLastCommit)
 			if err != nil {
