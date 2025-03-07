@@ -25,17 +25,22 @@ message Bid {
 
 message Auction {
     uint64 id = 1;
-    cosmos.base.v1beta1.Coin deposited_asset = 2 [
+    string loan_id = 2;
+    string borrower = 3;
+    string agency = 4;
+    cosmos.base.v1beta1.Coin deposited_asset = 5 [
         (gogoproto.nullable)     = false,
         (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
     ];
-    string borrower = 3;
-    int64 liquidated_price = 4;
-    google.protobuf.Timestamp liquidated_time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    int64 expected_value = 6;
-    int64 bidded_value = 7;
-    string payment_tx_id = 8;
-    AuctionStatus status = 9;
+    int64 liquidated_price = 6;
+    google.protobuf.Timestamp liquidated_time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    int64 expected_value = 8;
+    int64 bidded_value = 9;
+    int64 bidded_amount = 10;
+    string liquidation_cet = 11;
+    string payment_tx = 12;
+    string payment_tx_id = 13;
+    AuctionStatus status = 14;
 }
 
 enum AssetType {

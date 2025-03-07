@@ -15,4 +15,6 @@ var (
 	ErrAuctionEnded        = errorsmod.Register(ModuleName, 1105, "auction already ended")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 2100, "invalid params")
+
+	ErrFailedToBuildTx = errorsmod.Register(ModuleName, 3100, "failed to build transaction")
 )

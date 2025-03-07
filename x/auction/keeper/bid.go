@@ -178,6 +178,18 @@ func (k Keeper) GetPendingBids(ctx sdk.Context, auctionId uint64) []*types.Bid {
 	return bids
 }
 
+// GetAcceptedBids gets the accepted bids of the specified auction
+func (k Keeper) GetAcceptedBids(ctx sdk.Context, auctionId uint64) []*types.Bid {
+	bids := make([]*types.Bid, 0)
+
+	k.IterateBidsByAuction(ctx, auctionId, types.BidStatus_BID_STATUS_ACCEPTED, func(bid *types.Bid) (stop bool) {
+		bids = append(bids, bid)
+		return false
+	})
+
+	return bids
+}
+
 // IterateBids iterates through all bids
 func (k Keeper) IterateBids(ctx sdk.Context, cb func(bid *types.Bid) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)

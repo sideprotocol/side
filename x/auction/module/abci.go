@@ -1,6 +1,9 @@
 package auction
 
 import (
+	"fmt"
+	"strings"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/auction/keeper"
@@ -97,6 +100,26 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
+		// build payment tx
+		paymentTx, txHash, sigHashes, err := types.BuildPaymentTransaction(auction, k.GetAcceptedBids(ctx, auction.Id), 10)
+		if err != nil {
+			k.Logger(ctx).Info("Failed to build payment transaction", "auction id", auction.Id, "err", err)
+
+			continue
+		}
+
+		// emit event
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeSignPaymentTransaction,
+				sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprintf("%d", auction.Id)),
+				sdk.NewAttribute(types.AttributeKeyAgencyPubKey, auction.Agency),
+				sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
+			),
+		)
+
+		auction.PaymentTx = paymentTx
+		auction.PaymentTxId = txHash.String()
 		auction.Status = types.AuctionStatus_AUCTION_STATUS_SETTLED
 
 		// update auction

@@ -61,6 +61,9 @@ func (k Keeper) CreateAuction(ctx sdk.Context, auction *types.Auction) {
 	// set the id
 	auction.Id = k.IncrementAuctionId(ctx)
 
+	// set the status to open
+	auction.Status = types.AuctionStatus_AUCTION_STATUS_OPEN
+
 	k.SetAuction(ctx, auction)
 }
 
