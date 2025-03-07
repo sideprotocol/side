@@ -18,9 +18,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/sideprotocol/side/x/dlc/client/cli"
-	"github.com/sideprotocol/side/x/dlc/keeper"
-	"github.com/sideprotocol/side/x/dlc/types"
+	"github.com/sideprotocol/side/x/oracle/client/cli"
+	"github.com/sideprotocol/side/x/oracle/keeper"
+	"github.com/sideprotocol/side/x/oracle/types"
 )
 
 var (
