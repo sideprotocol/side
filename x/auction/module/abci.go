@@ -44,9 +44,6 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 
 				// update bid
 				k.SetBid(ctx, bid)
-
-				// remove bid from the pending queue
-				k.RemoveBidFromPendingQueue(ctx, auction.Id, bid.Id)
 			}
 		}
 
@@ -69,22 +66,27 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 		// get pending bids
 		pendingBids := k.GetPendingBids(ctx, auction.Id)
 
-		// refund and remove from the pending queue
+		// refund
 		for _, bid := range pendingBids {
-			bidValue := sdk.NewInt64Coin("uusdc", bid.BidPrice*bid.BidAmount.Amount.Int64())
-			if err := k.BankKeeper().SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(bid.Bidder), sdk.NewCoins(bidValue)); err != nil {
-				k.Logger(ctx).Info("Failed to refund", "auction id", auction.Id, "bid id", bid.Id, "amount", bidValue, "err", err)
+			// must be positive result here
+			refundAmount := bid.BidAmount.Sub(bid.BiddedAmount)
+			refundAsset := sdk.NewInt64Coin("uusdc", bid.BidPrice*refundAmount.Amount.Int64())
+
+			if err := k.BankKeeper().SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(bid.Bidder), sdk.NewCoins(refundAsset)); err != nil {
+				k.Logger(ctx).Info("Failed to refund", "auction id", auction.Id, "bid id", bid.Id, "amount", refundAsset, "err", err)
 
 				continue
 			}
 
-			bid.Status = types.BidStatus_BID_STATUS_REJECTED
+			// possibly partially accepted in case the bid is the last accepted one
+			if bid.BiddedAmount.IsPositive() {
+				bid.Status = types.BidStatus_BID_STATUS_ACCEPTED
+			} else {
+				bid.Status = types.BidStatus_BID_STATUS_REJECTED
+			}
 
 			// update bid
 			k.SetBid(ctx, bid)
-
-			// remove from the pending queue
-			k.RemoveBidFromPendingQueue(ctx, auction.Id, bid.Id)
 		}
 
 		// transfer bidded asset to the lending pool

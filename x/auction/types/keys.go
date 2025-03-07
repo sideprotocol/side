@@ -23,9 +23,10 @@ var (
 	AuctionIdKey = []byte{0x02} // key for auction id
 	BidIdKey     = []byte{0x03} // key for bid id
 
-	AuctionKeyPrefix    = []byte{0x10} // prefix for each key to an auction
-	BidKeyPrefix        = []byte{0x11} // prefix for each key to a bid
-	PendingBidKeyPrefix = []byte{0x12} // prefix for each key to a pending bid
+	AuctionKeyPrefix      = []byte{0x10} // prefix for each key to an auction
+	BidKeyPrefix          = []byte{0x11} // prefix for each key to a bid
+	BidByAuctionKeyPrefix = []byte{0x12} // prefix for each key to a bid by auction
+	PendingBidKeyPrefix   = []byte{0x13} // prefix for each key to a pending bid
 )
 
 func AuctionKey(id uint64) []byte {
@@ -36,6 +37,9 @@ func BidKey(id uint64) []byte {
 	return append(BidKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
-func PendingBidKey(auctionId uint64, bidId uint64) []byte {
-	return append(append(PendingBidKeyPrefix, sdk.Uint64ToBigEndian(auctionId)...), sdk.Uint64ToBigEndian(bidId)...)
+func BidByAuctionKey(auctionId uint64, bidId uint64, status BidStatus) []byte {
+	key := append(BidByAuctionKeyPrefix, sdk.Uint64ToBigEndian(auctionId)...)
+	key = append(key, sdk.Uint64ToBigEndian(uint64(status))...)
+
+	return append(key, sdk.Uint64ToBigEndian(bidId)...)
 }
