@@ -394,7 +394,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(ctx sdk.Context
 
 		blockHeaders[key] = voteExt.Blocks
 		if power, ok := headerStakes[key]; ok {
-			power += v.Validator.Power
+			headerStakes[key] = power + v.Validator.Power
 		} else {
 			headerStakes[key] = v.Validator.Power
 		}
