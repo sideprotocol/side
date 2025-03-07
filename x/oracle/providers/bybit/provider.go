@@ -43,7 +43,8 @@ func subscribe(conn *websocket.Conn) {
 	msg := `{
     "op": "subscribe",
     "args": [
-        "tickers.BTCUSDT"
+        "tickers.BTCUSDT",
+		"tickers.ATOMUSDT"
     ]
 }`
 	conn.WriteMessage(websocket.TextMessage, []byte(msg))

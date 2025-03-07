@@ -41,7 +41,7 @@ func symbol(source string) string {
 }
 
 func Subscribe(svrCtx *server.Context) error {
-	url := "wss://stream.binance.com:443/stream?streams=btcusdt@miniTicker"
+	url := "wss://stream.binance.com:443/stream?streams=btcusdt@miniTicker/atomusdt@miniTicker"
 	c, re, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
 		svrCtx.Logger.Error("price provider connection", "url", url)
