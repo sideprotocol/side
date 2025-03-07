@@ -1,7 +1,7 @@
 package abci
 
 import (
-	"bytes"
+	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -344,34 +344,13 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 // }
 
 func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(ctx sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, []*types.BlockHeader, error) {
-	// requiredPairs := h.keeper.GetSupportedPairs(ctx)
-	// requiredPairs := []string{"BTCUSD"}
-	stakeWeightedPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE)) // base -> average stake-weighted price
-	// for _, pair := range requiredPairs {
-	// 	stakeWeightedPrices[pair] = math.LegacyZeroDec()
-	// }
-	length := len(commit.Votes)
-	selectedIndex := -1
-
-done:
-	for i, v1 := range commit.Votes {
-		count := 0
-		if v1.VoteExtension != nil {
-			for _, v2 := range commit.Votes {
-				if bytes.Equal(v1.VoteExtension, v2.VoteExtension) {
-					count++
-					if count*3 > length*2 {
-						selectedIndex = i
-						break done
-					}
-				}
-			}
-		}
-	}
-
 	var totalStake int64
-	var blockHeaders []*types.BlockHeader
-	for i, v := range commit.Votes {
+
+	stakeWeightedPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE)) // base -> average stake-weighted price
+	blockHeaders := make(map[string][]*types.BlockHeader)
+	headerStakes := make(map[string]int64)
+
+	for _, v := range commit.Votes {
 		if v.BlockIdFlag != cmtproto.BlockIDFlagCommit {
 			continue
 		}
@@ -407,8 +386,17 @@ done:
 			}
 		}
 
-		if i == selectedIndex {
-			blockHeaders = voteExt.Blocks
+		sha := sha256.New()
+		for _, block := range voteExt.Blocks {
+			sha.Write([]byte(block.Hash))
+		}
+		key := fmt.Sprintf("%x", sha.Sum(nil))
+
+		blockHeaders[key] = voteExt.Blocks
+		if power, ok := headerStakes[key]; ok {
+			power += v.Validator.Power
+		} else {
+			headerStakes[key] = v.Validator.Power
 		}
 	}
 
@@ -421,7 +409,14 @@ done:
 		stakeWeightedPrices[base] = price.QuoInt64(totalStake)
 	}
 
-	return stakeWeightedPrices, blockHeaders, nil
+	headers := []*types.BlockHeader{}
+	for key, power := range headerStakes {
+		if selected, ok := blockHeaders[key]; ok && power*3 > totalStake*2 {
+			headers = append(headers, selected...)
+			break
+		}
+	}
+	return stakeWeightedPrices, headers, nil
 }
 
 // func compareOraclePrices(p1, p2 map[string]math.LegacyDec) error {
