@@ -37,6 +37,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdAddLiquidity())
 	cmd.AddCommand(CmdRemoveLiquidity())
 	cmd.AddCommand(CmdApply())
+	cmd.AddCommand(CmdSubmitLiquidationCet())
 	cmd.AddCommand(CmdApprove())
 	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
@@ -149,9 +150,9 @@ func CmdRemoveLiquidity() *cobra.Command {
 
 func CmdApply() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "apply [btc public key] [secret hash] [maturity time] [final timeout] [deposit tx] [pool id] [borrow amount] [event id] [agency id] [liquidation cet] [adaptor signature]",
+		Use:   "apply [btc public key] [secret hash] [maturity time] [final timeout] [pool id] [borrow amount] [agency id]",
 		Short: "Apply loan with the related params",
-		Args:  cobra.ExactArgs(11),
+		Args:  cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -168,17 +169,12 @@ func CmdApply() *cobra.Command {
 				return err
 			}
 
-			borrowAmount, err := sdk.ParseCoinNormalized(args[6])
+			borrowAmount, err := sdk.ParseCoinNormalized(args[5])
 			if err != nil {
 				return err
 			}
 
-			eventId, err := strconv.ParseUint(args[7], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			agencyId, err := strconv.ParseUint(args[8], 10, 64)
+			agencyId, err := strconv.ParseUint(args[6], 10, 64)
 			if err != nil {
 				return err
 			}
@@ -190,12 +186,46 @@ func CmdApply() *cobra.Command {
 				maturityTime,
 				finalTimeout,
 				args[4],
-				args[5],
 				borrowAmount,
-				eventId,
 				agencyId,
-				args[9],
-				args[10],
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdSubmitLiquidationCet() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "submit-liquidation-cet [loan id] [event id] [deposit tx] [liquidation cet] [adaptor signature]",
+		Short: "Submit liquidation cet",
+		Args:  cobra.ExactArgs(5),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			eventId, err := strconv.ParseUint(args[1], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgSubmitLiquidationCet(
+				clientCtx.GetFromAddress().String(),
+				args[0],
+				eventId,
+				args[2],
+				args[3],
+				args[4],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

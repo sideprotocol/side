@@ -29,22 +29,22 @@ message LendingPool {
 
 // Loan Status
 enum LoanStatus {
-    // Loan Application
-    Requested = 0;
-    // Loan Approval
-    Approved = 1;
-    // Loan Disbursement
-    Open = 2;
-    // Loan Repayment
-    Repaid = 3;
-    // Loan Default/Delinquency
-    Defaulted = 4;
-    // Loan Liquidation
-    Liquidated = 5;
-    // Loan Closure
-    Closed = 6;
-    // Rejected
-    Rejected = 7;
+    // Unspecified
+    Unspecified = 0;
+    // Loan Requested
+    Requested = 1;
+    // Loan Approved
+    Approved = 2;
+    // Loan Open
+    Open = 3;
+    // Loan Repaid
+    Repaid = 4;
+    // Loan Defaulted
+    Defaulted = 5;
+    // Loan Liquidated
+    Liquidated = 6;
+    // Loan Closed
+    Closed = 7;
 }
 
 message Loan {

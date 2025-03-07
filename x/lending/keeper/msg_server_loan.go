@@ -27,15 +27,6 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.dlcKeeper.HasEvent(ctx, msg.EventId) {
-		return nil, types.ErrInvalidPriceEvent
-	}
-
-	event := m.dlcKeeper.GetEvent(ctx, msg.EventId)
-	if event.HasTriggered {
-		return nil, types.ErrInvalidPriceEvent
-	}
-
 	if !m.dlcKeeper.HasAgency(ctx, msg.AgencyId) {
 		return nil, types.ErrInvalidAgency
 	}
@@ -51,10 +42,69 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
-	fundTx, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
-	if err != nil {
-		return nil, types.ErrInvalidFunding
+	params := m.GetParams(ctx)
+
+	interests := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille).Quo(types.Permille)
+	fees := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille.Sub(params.SupplyRatePermille)).Quo(types.Permille)
+
+	loan := types.Loan{
+		VaultAddress:   vault,
+		Borrower:       msg.Borrower,
+		BorrowerPubKey: msg.BorrowerPubkey,
+		Agency:         agency.Pubkey,
+		HashLoanSecret: msg.LoanSecretHash,
+		MaturityTime:   msg.MaturityTime,
+		FinalTimeout:   msg.FinalTimeout,
+		BorrowAmount:   msg.BorrowAmount,
+		Interests:      interests,
+		Fees:           fees,
+		PoolId:         msg.PoolId,
+		CreateAt:       ctx.BlockTime(),
+		Status:         types.LoanStatus_Requested,
 	}
+
+	m.SetLoan(ctx, loan)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(types.EventTypeApply,
+			sdk.NewAttribute(types.AttributeKeyVault, loan.VaultAddress),
+			sdk.NewAttribute(types.AttributeKeyBorrower, loan.Borrower),
+			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+			sdk.NewAttribute(types.AttributeKeyLoanSecretHash, loan.HashLoanSecret),
+			sdk.NewAttribute(types.AttributeKeyMuturityTime, fmt.Sprint(loan.MaturityTime)),
+			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
+			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyPoolId, loan.PoolId),
+		))
+
+	return &types.MsgApplyResponse{}, nil
+
+}
+
+// SubmitLiquidationCet implements types.MsgServer.
+func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSubmitLiquidationCet) (*types.MsgSubmitLiquidationCetResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanDoesNotExist
+	}
+
+	if !m.dlcKeeper.HasEvent(ctx, msg.EventId) {
+		return nil, types.ErrInvalidPriceEvent
+	}
+
+	event := m.dlcKeeper.GetEvent(ctx, msg.EventId)
+	if event.HasTriggered {
+		return nil, errorsmod.Wrap(types.ErrInvalidPriceEvent, "event has triggered")
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+
+	fundTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
 	depositTxid := fundTx.UnsignedTx.TxHash().String()
 
 	adaptorPoint, err := dlctypes.GetSignaturePointFromEvent(event)
@@ -62,13 +112,13 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, err
 	}
 
-	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, msg.BorrowerPubkey, agency.Pubkey, msg.LiquidationAdaptorSignature, hex.EncodeToString(adaptorPoint)); err != nil {
+	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, loan.BorrowerPubKey, loan.Agency, msg.LiquidationAdaptorSignature, hex.EncodeToString(adaptorPoint)); err != nil {
 		return nil, err
 	}
 
-	vaultPkScript, _ := types.GetPkScriptFromAddress(vault)
+	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
-	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignature, msg.BorrowerPubkey, agency.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.FinalTimeout)
+	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignature, loan.BorrowerPubKey, loan.Agency, loan.HashLoanSecret, loan.MaturityTime, loan.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +143,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	// verify LTV (Loan-to-Value Ratio)
 	// collateral value * min_ltv > borrow amount
-	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(params.MinInitialLtvPercent).Quo(types.Percent).LT(msg.BorrowAmount.Amount) {
+	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(params.MinInitialLtvPercent).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
 		return nil, types.ErrInsufficientCollateral
 	}
 
@@ -102,33 +152,16 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	// 	return nil, types.ErrInvalidPriceEvent
 	// }
 
-	interests := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille).Quo(types.Permille)
-	fees := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille.Sub(params.SupplyRatePermille)).Quo(types.Permille)
 
-	loan := types.Loan{
-		VaultAddress:     vault,
-		Borrower:         msg.Borrower,
-		BorrowerPubKey:   msg.BorrowerPubkey,
-		Agency:           agency.Pubkey,
-		HashLoanSecret:   msg.LoanSecretHash,
-		MaturityTime:     msg.MaturityTime,
-		FinalTimeout:     msg.FinalTimeout,
-		BorrowAmount:     msg.BorrowAmount,
-		CollateralAmount: collateralAmount,
-		Interests:        interests,
-		Fees:             fees,
-		EventId:          msg.EventId,
-		DepositTxs:       []string{depositTxid},
-		CreateAt:         ctx.BlockTime(),
-		PoolId:           msg.PoolId,
-		Status:           types.LoanStatus_Requested,
-	}
+	loan.CollateralAmount = collateralAmount
+	loan.EventId = msg.EventId
+	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
 
 	m.SetLoan(ctx, loan)
 
 	depositLog := types.DepositLog{
 		Txid:         depositTxid,
-		VaultAddress: vault,
+		VaultAddress: loan.VaultAddress,
 		DepositTx:    msg.DepositTx,
 	}
 
@@ -137,21 +170,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	// set dlc meta
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
-	m.EmitEvent(ctx, msg.Borrower,
-		sdk.NewAttribute("vault", loan.VaultAddress),
-		sdk.NewAttribute("borrower", loan.Borrower),
-		sdk.NewAttribute("agency", loan.Agency),
-		sdk.NewAttribute("loan_secret_hash", loan.HashLoanSecret),
-		sdk.NewAttribute("muturity_time", fmt.Sprint(loan.MaturityTime)),
-		sdk.NewAttribute("final_timeout", fmt.Sprint(loan.FinalTimeout)),
-		sdk.NewAttribute("borrow_amount", loan.BorrowAmount.String()),
-		sdk.NewAttribute("collateral", loan.CollateralAmount.String()),
-		sdk.NewAttribute("pool_id", loan.PoolId),
-		sdk.NewAttribute("event_id", fmt.Sprintf("%d", loan.EventId)),
-	)
-
-	return &types.MsgApplyResponse{}, nil
-
+	return &types.MsgSubmitLiquidationCetResponse{}, nil
 }
 
 // Approve implements types.MsgServer.
@@ -322,6 +341,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, msg.AdaptorPoint),
 			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
 			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AtrtibuteKeyRepaymentTxHash, repaymentTxPsbt.UnsignedTx.TxHash().String()),
 		),
 	)
 
@@ -422,12 +442,6 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 		}
 	}
 
-	if len(dlcMeta.LiquidationAdaptedSignature) != 0 {
-		// error ignored due to that the signed tx can be built offchain
-		signedTx, _ := types.BuildSignedLiquidationCet(dlcMeta.LiquidationCet, loan.BorrowerPubKey, []string{dlcMeta.LiquidationAdaptedSignature}, loan.Agency, msg.Signatures)
-		dlcMeta.SignedLiquidationCetHex = hex.EncodeToString(signedTx)
-	}
-
 	dlcMeta.LiquidationAgencySignatures = msg.Signatures
 	m.SetDLCMeta(ctx, msg.LoanId, dlcMeta)
 
@@ -463,8 +477,8 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 	sigBytes, _ := hex.DecodeString(msg.Signature)
 	adaptorSigBytes, _ := hex.DecodeString(repayment.DcaAdaptorSignatures[0])
 
-	// extract secret from signature
-	secret := adaptor.Extract(sigBytes, adaptorSigBytes)
+	// extract secret from signatures
+	secret := adaptor.Extract(adaptorSigBytes, sigBytes)
 	if len(secret) == 0 {
 		return nil, types.ErrInvalidSignature
 	}

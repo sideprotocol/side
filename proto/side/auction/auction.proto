@@ -16,7 +16,11 @@ message Bid {
         (gogoproto.nullable)     = false,
         (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
     ];
-    BidStatus status = 6;
+    cosmos.base.v1beta1.Coin bidded_amount = 6 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
+    BidStatus status = 7;
 }
 
 message Auction {
@@ -35,17 +39,20 @@ message Auction {
 }
 
 enum AssetType {
-    Bitcoin = 0;
+    ASSET_TYPE_BITCOIN = 0;
 }
 
 enum AuctionStatus {
-    AuctionOpen = 0;
-    AuctionClose = 1;
+    AUCTION_STATUS_UNSPECIFIED = 0;
+    AUCTION_STATUS_OPEN = 1;
+    AUCTION_STATUS_CLOSED = 2;
+    AUCTION_STATUS_SETTLED = 3;
 }
 
 enum BidStatus {
-    Bidding = 0;
-    Accepted = 1;
-    Rejected = 2;
-    Cancelled = 3;
+    BID_STATUS_UNSPECIFIED = 0;
+    BID_STATUS_BIDDING = 1;
+    BID_STATUS_ACCEPTED = 2;
+    BID_STATUS_REJECTED = 3;
+    BID_STATUS_CANCELLED = 4;
 }

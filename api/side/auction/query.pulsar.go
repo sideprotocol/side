@@ -4778,7 +4778,7 @@ func (x *QueryAuctionsRequest) GetStatus() AuctionStatus {
 	if x != nil {
 		return x.Status
 	}
-	return AuctionStatus_AuctionOpen
+	return AuctionStatus_AUCTION_STATUS_UNSPECIFIED
 }
 
 func (x *QueryAuctionsRequest) GetPagination() *v1beta1.PageRequest {
@@ -4938,7 +4938,7 @@ func (x *QueryBidsRequest) GetStatus() BidStatus {
 	if x != nil {
 		return x.Status
 	}
-	return BidStatus_Bidding
+	return BidStatus_BID_STATUS_UNSPECIFIED
 }
 
 func (x *QueryBidsRequest) GetPagination() *v1beta1.PageRequest {
