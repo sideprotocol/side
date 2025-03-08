@@ -49,8 +49,8 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	interests := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille).Quo(types.Permille)
 	fees := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille.Sub(params.SupplyRatePermille)).Quo(types.Permille)
 
-	if msg.BorrowAmount.Amount.Int64() <= OriginationFeeAmount+fees.Int64() {
-		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrowed amount must be greater than origination fee plus protocol fee")
+	if msg.BorrowAmount.Amount.Int64() <= OriginationFeeAmount {
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrowed amount must be greater than origination fee")
 	}
 
 	loan := types.Loan{
@@ -242,8 +242,13 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		return nil, types.ErrMismatchedLoanSecret
 	}
 
-	redeemedAmount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-OriginationFeeAmount-loan.Fees.Int64())
+	redeemedAmount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-OriginationFeeAmount)
 	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, sdk.NewCoins(redeemedAmount)); err != nil {
+		return nil, err
+	}
+
+	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, OriginationFeeAmount)
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.GetParams(ctx).FeeRecipient), sdk.NewCoins(originationFee)); err != nil {
 		return nil, err
 	}
 
@@ -495,10 +500,19 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 		return nil, types.ErrInvalidRepaymentSecret
 	}
 
-	amount := loan.BorrowAmount.Amount.Add(loan.Interests).Add(loan.Fees)
+	amount := loan.BorrowAmount.Amount.Add(loan.Interests).Sub(loan.Fees)
 	if err := m.bankKeeper.SendCoinsFromModuleToModule(ctx, types.RepaymentEscrowAccount, types.ModuleName, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
 		return nil, err
 	}
+
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(m.GetParams(ctx).FeeRecipient), sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, loan.Fees))); err != nil {
+		return nil, err
+	}
+
+	pool := m.GetPool(ctx, loan.PoolId)
+	newSupply := pool.Supply.AddAmount(amount)
+	pool.Supply = &newSupply
+	m.SetPool(ctx, pool)
 
 	loan.Status = types.LoanStatus_Closed
 	m.SetLoan(ctx, loan)
