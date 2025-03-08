@@ -37,15 +37,15 @@ func (p Params) Validate() error {
 		return ErrInvalidParams
 	}
 
-	if p.LiquidationThresholdPercent.LTE(sdkmath.NewInt(0)) {
+	if p.MinInitialLtvPercent.LTE(sdkmath.NewInt(0)) {
 		return ErrInvalidParams
 	}
 
-	if p.MinInitialLtvPercent.LTE(p.LiquidationThresholdPercent) {
+	if p.MinInitialLtvPercent.GTE(p.LiquidationThresholdPercent) {
 		return ErrInvalidParams
 	}
 
-	if p.MinInitialLtvPercent.GT(Percent) {
+	if p.LiquidationThresholdPercent.GTE(Percent) {
 		return ErrInvalidParams
 	}
 
