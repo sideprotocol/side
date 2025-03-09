@@ -29,9 +29,10 @@ func (k Keeper) ListPrices(goCtx context.Context, req *types.QueryListPricesRequ
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	// ctx := sdk.UnwrapSDKContext(goCtx)
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	prices := k.GetAllPrices(ctx)
 
-	return &types.QueryListPricesResponse{}, nil
+	return &types.QueryListPricesResponse{Prices: prices}, nil
 }
 
 // GetPriceBySymbol implements types.QueryServer.
@@ -92,4 +93,19 @@ func (k Keeper) QueryBestBlockHeader(goCtx context.Context, req *types.QueryBest
 	}
 
 	return &types.QueryBestBlockHeaderResponse{BlockHeader: block_header}, nil
+}
+
+// QueryChainTip implements types.QueryServer.
+func (k Keeper) QueryChainTip(goCtx context.Context, req *types.QueryChainTipRequest) (*types.QueryChainTipResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	bbh := k.GetBestBlockHeader(ctx)
+	if bbh == nil {
+		return nil, status.Error(codes.NotFound, "chain tip not found")
+	}
+
+	return &types.QueryChainTipResponse{Hash: bbh.Hash, Height: uint64(bbh.Height)}, nil
 }

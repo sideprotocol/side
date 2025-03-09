@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	sdkmath "cosmossdk.io/math"
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/oracle/types"
@@ -30,4 +31,32 @@ func (k Keeper) GetPrice(ctx sdk.Context, symbol string) (sdkmath.LegacyDec, err
 
 	price, _ := sdkmath.LegacyNewDecFromStr(string(bz))
 	return price, nil
+}
+
+// IteratePrices iterates through all oracle prices
+func (k Keeper) IteratePrices(ctx sdk.Context, process func(header types.OraclePrice) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.PriceKeyPrefix)
+	defer iterator.Close()
+	for ; iterator.Valid(); iterator.Next() {
+		var header types.OraclePrice
+		key := iterator.Key()
+		header.Symbol = string(key[1:])
+		bz := iterator.Value()
+		price, _ := sdkmath.LegacyNewDecFromStr(string(bz))
+		header.Price = price
+		if process(header) {
+			break
+		}
+	}
+}
+
+// GetAllPrices returns all oracle prices
+func (k Keeper) GetAllPrices(ctx sdk.Context) []*types.OraclePrice {
+	var prices []*types.OraclePrice
+	k.IteratePrices(ctx, func(price types.OraclePrice) (stop bool) {
+		prices = append(prices, &price)
+		return false
+	})
+	return prices
 }

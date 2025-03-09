@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"context"
-
 	"cosmossdk.io/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -18,11 +16,6 @@ type Keeper struct {
 	memKey   storetypes.StoreKey
 
 	authority string
-}
-
-// QueryChainTip implements types.QueryServer.
-func (k Keeper) QueryChainTip(context.Context, *types.QueryChainTipRequest) (*types.QueryChainTipResponse, error) {
-	panic("unimplemented")
 }
 
 func NewKeeper(

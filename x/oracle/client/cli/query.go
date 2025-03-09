@@ -24,10 +24,12 @@ func GetQueryCmd(_ string) *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdQueryParams())
+	cmd.AddCommand(CmdQueryListPrices())
 	cmd.AddCommand(CmdGetPriceBySymbol())
 	cmd.AddCommand(CmdQueryBlockHeaderByHeight())
 	cmd.AddCommand(CmdQueryBlockHeaderByHash())
 	cmd.AddCommand(CmdQueryBestBlockHeader())
+	cmd.AddCommand(CmdQueryChainTip())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -60,9 +62,36 @@ func CmdQueryParams() *cobra.Command {
 	return cmd
 }
 
+func CmdQueryListPrices() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "prices",
+		Short: "Query all oracle prices",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.ListPrices(cmd.Context(), &types.QueryListPricesRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
 func CmdGetPriceBySymbol() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "getprice [symbol]",
+		Use:   "price [symbol]",
 		Short: "Query the oracle price by symbol",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -166,6 +195,33 @@ func CmdQueryBestBlockHeader() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.QueryBestBlockHeader(cmd.Context(), &types.QueryBestBlockHeaderRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryChainTip() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "chaintip",
+		Short: "Query the bitcoin chain tip",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.QueryChainTip(cmd.Context(), &types.QueryChainTipRequest{})
 			if err != nil {
 				return err
 			}
