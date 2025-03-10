@@ -90,9 +90,9 @@ func (k Keeper) GetCurrentPrice(ctx sdk.Context, auctionId uint64) (sdkmath.Int,
 
 	params := k.GetParams(ctx)
 
-	discount := uint32(ctx.BlockTime().Sub(auction.LiquidatedTime) / params.PriceDropPeriod)
+	discountMultiplier := uint32(ctx.BlockTime().Sub(auction.LiquidatedTime)/params.PriceDropPeriod) + 1
 
-	return price.Mul(sdkmath.NewInt(int64(100 - params.InitialDiscount - discount))).Quo(sdkmath.NewInt(100)), nil
+	return price.Mul(sdkmath.NewInt(int64(100 - params.InitialDiscount*discountMultiplier))).Quo(sdkmath.NewInt(100)), nil
 }
 
 // GetAllAuctions gets all auctions

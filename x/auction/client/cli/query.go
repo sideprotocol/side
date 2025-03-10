@@ -30,6 +30,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryAuctions())
 	cmd.AddCommand(CmdQueryBid())
 	cmd.AddCommand(CmdQueryBids())
+	cmd.AddCommand(CmdQueryAuctionPrice())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -177,6 +178,38 @@ func CmdQueryBids() *cobra.Command {
 			}
 
 			res, err := queryClient.Bids(cmd.Context(), &types.QueryBidsRequest{Status: types.BidStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryAuctionPrice() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "auction-price",
+		Short: "Query the current price of the given auction",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			auctionId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.AuctionPrice(cmd.Context(), &types.QueryAuctionPriceRequest{AuctionId: auctionId})
 			if err != nil {
 				return err
 			}

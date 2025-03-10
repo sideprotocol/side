@@ -11,7 +11,7 @@ var (
 	DefaultPriceDropPeriod = time.Duration(10) * time.Minute
 
 	// default initial discount
-	DefaultInitialDiscount = uint32(90)
+	DefaultInitialDiscount = uint32(10)
 
 	// default fee rate base point
 	DefaultFeeRate = uint32(30) // fee rate base point; 3/1000

@@ -117,7 +117,7 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 			k.Logger(ctx).Info("Failed to get the current price", "block height", ctx.BlockHeight())
 		} else {
 			remainingAmount := auction.DepositedAsset.Amount.Int64() - auction.BiddedAmount - 10000
-			slashedValue := currentPrice.Mul(sdkmath.NewInt(remainingAmount)).Mul(sdkmath.NewInt(10 ^ 6)).Mul(sdkmath.NewInt(int64(params.FeeRate))).Quo(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(100))
+			slashedValue := currentPrice.Mul(sdkmath.NewInt(remainingAmount)).Mul(sdkmath.NewInt(10 ^ 6)).Mul(sdkmath.NewInt(int64(params.FeeRate))).Quo(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(1000))
 
 			slashedAsset := sdk.NewCoin(auction.ExpectedValue.Denom, slashedValue)
 			if err := k.BankKeeper().SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(auction.Borrower), types.ModuleName, sdk.NewCoins(slashedAsset)); err != nil {

@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName   = "/side.auction.Query/Params"
-	Query_Auction_FullMethodName  = "/side.auction.Query/Auction"
-	Query_Auctions_FullMethodName = "/side.auction.Query/Auctions"
-	Query_Bid_FullMethodName      = "/side.auction.Query/Bid"
-	Query_Bids_FullMethodName     = "/side.auction.Query/Bids"
+	Query_Params_FullMethodName       = "/side.auction.Query/Params"
+	Query_Auction_FullMethodName      = "/side.auction.Query/Auction"
+	Query_Auctions_FullMethodName     = "/side.auction.Query/Auctions"
+	Query_Bid_FullMethodName          = "/side.auction.Query/Bid"
+	Query_Bids_FullMethodName         = "/side.auction.Query/Bids"
+	Query_AuctionPrice_FullMethodName = "/side.auction.Query/AuctionPrice"
 )
 
 // QueryClient is the client API for Query service.
@@ -40,6 +41,8 @@ type QueryClient interface {
 	Bid(ctx context.Context, in *QueryBidRequest, opts ...grpc.CallOption) (*QueryBidResponse, error)
 	// Bids queries the bids by the optional auction and status.
 	Bids(ctx context.Context, in *QueryBidsRequest, opts ...grpc.CallOption) (*QueryBidsResponse, error)
+	// AuctionPrice queries the current auction price.
+	AuctionPrice(ctx context.Context, in *QueryAuctionPriceRequest, opts ...grpc.CallOption) (*QueryAuctionPriceResponse, error)
 }
 
 type queryClient struct {
@@ -95,6 +98,15 @@ func (c *queryClient) Bids(ctx context.Context, in *QueryBidsRequest, opts ...gr
 	return out, nil
 }
 
+func (c *queryClient) AuctionPrice(ctx context.Context, in *QueryAuctionPriceRequest, opts ...grpc.CallOption) (*QueryAuctionPriceResponse, error) {
+	out := new(QueryAuctionPriceResponse)
+	err := c.cc.Invoke(ctx, Query_AuctionPrice_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -109,6 +121,8 @@ type QueryServer interface {
 	Bid(context.Context, *QueryBidRequest) (*QueryBidResponse, error)
 	// Bids queries the bids by the optional auction and status.
 	Bids(context.Context, *QueryBidsRequest) (*QueryBidsResponse, error)
+	// AuctionPrice queries the current auction price.
+	AuctionPrice(context.Context, *QueryAuctionPriceRequest) (*QueryAuctionPriceResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -130,6 +144,9 @@ func (UnimplementedQueryServer) Bid(context.Context, *QueryBidRequest) (*QueryBi
 }
 func (UnimplementedQueryServer) Bids(context.Context, *QueryBidsRequest) (*QueryBidsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Bids not implemented")
+}
+func (UnimplementedQueryServer) AuctionPrice(context.Context, *QueryAuctionPriceRequest) (*QueryAuctionPriceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AuctionPrice not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -234,6 +251,24 @@ func _Query_Bids_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_AuctionPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAuctionPriceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).AuctionPrice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_AuctionPrice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).AuctionPrice(ctx, req.(*QueryAuctionPriceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -260,6 +295,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Bids",
 			Handler:    _Query_Bids_Handler,
+		},
+		{
+			MethodName: "AuctionPrice",
+			Handler:    _Query_AuctionPrice_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

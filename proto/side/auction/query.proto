@@ -31,6 +31,10 @@ service Query {
     rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
         option (google.api.http).get = "/side/auction/bids";
     }
+    // AuctionPrice queries the current auction price.
+    rpc AuctionPrice(QueryAuctionPriceRequest) returns (QueryAuctionPriceResponse) {
+        option (google.api.http).get = "/side/auction/auction/price";
+    }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -85,4 +89,14 @@ message QueryBidsRequest {
 message QueryBidsResponse {
     repeated Bid bids = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryAuctionPriceRequest is request type for the Query/AuctionPrice RPC method.
+message QueryAuctionPriceRequest {
+    uint64 auction_id = 1;
+}
+
+// QueryAuctionPriceResponse is response type for the Query/AuctionPrice RPC method.
+message QueryAuctionPriceResponse {
+    string price = 1;
 }

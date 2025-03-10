@@ -82,3 +82,26 @@ func (k Keeper) Bids(goCtx context.Context, req *types.QueryBidsRequest) (*types
 
 	return &types.QueryBidsResponse{Bids: bids}, nil
 }
+
+func (k Keeper) AuctionPrice(goCtx context.Context, req *types.QueryAuctionPriceRequest) (*types.QueryAuctionPriceResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasAuction(ctx, req.AuctionId) {
+		return nil, status.Error(codes.InvalidArgument, "auction does not exist")
+	}
+
+	if k.GetAuction(ctx, req.AuctionId).Status != types.AuctionStatus_AUCTION_STATUS_OPEN {
+		return nil, status.Error(codes.InvalidArgument, "auction not open")
+	}
+
+	price, err := k.GetCurrentPrice(ctx, req.AuctionId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryAuctionPriceResponse{Price: price.String()}, nil
+}
