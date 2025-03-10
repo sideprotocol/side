@@ -57,7 +57,7 @@ func Subscribe(svrCtx *server.Context, ctx context.Context) error {
 			if err := json.Unmarshal(msg, subscription); err == nil {
 
 				for _, data := range subscription.Data {
-					svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "symbol", data.Symbol, "price", data.Price)
+					// svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "symbol", data.Symbol, "price", data.Price)
 
 					if t, err := strconv.ParseInt(data.Time, 10, 64); err == nil {
 						price := types.Price{
