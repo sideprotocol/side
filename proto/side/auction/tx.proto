@@ -18,6 +18,9 @@ service Msg {
     // Cancel the specified bid.
     rpc CancelBid(MsgCancelBid) returns (MsgCancelBidResponse);
 
+    // Submit payment transaction signatures for the specified auction.
+    rpc SubmitPaymentTransactionSignatures(MsgSubmitPaymentTransactionSignatures) returns (MsgSubmitPaymentTransactionSignaturesResponse);
+
     // UpdateParams defines a governance operation for updating the x/btcbridge module
     // parameters. The authority defaults to the x/gov module account.
     //
@@ -51,6 +54,16 @@ message MsgCancelBid {
 
 // MsgCancelBidResponse defines the Msg/CancelBid response type.
 message MsgCancelBidResponse {}
+
+// MsgSubmitPaymentTransactionSignatures defines the Msg/SubmitPaymentTransactionSignatures request type.
+message MsgSubmitPaymentTransactionSignatures {
+    string relayer = 1;
+    uint64 auction_id = 2;
+    repeated string signatures = 3;
+}
+
+// MsgSubmitPaymentTransactionSignaturesResponse defines the Msg/SubmitPaymentTransactionSignatures response type.
+message MsgSubmitPaymentTransactionSignaturesResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

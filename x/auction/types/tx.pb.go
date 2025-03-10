@@ -226,6 +226,108 @@ func (m *MsgCancelBidResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCancelBidResponse proto.InternalMessageInfo
 
+// MsgSubmitPaymentTransactionSignatures defines the Msg/SubmitPaymentTransactionSignatures request type.
+type MsgSubmitPaymentTransactionSignatures struct {
+	Relayer    string   `protobuf:"bytes,1,opt,name=relayer,proto3" json:"relayer,omitempty"`
+	AuctionId  uint64   `protobuf:"varint,2,opt,name=auction_id,json=auctionId,proto3" json:"auction_id,omitempty"`
+	Signatures []string `protobuf:"bytes,3,rep,name=signatures,proto3" json:"signatures,omitempty"`
+}
+
+func (m *MsgSubmitPaymentTransactionSignatures) Reset()         { *m = MsgSubmitPaymentTransactionSignatures{} }
+func (m *MsgSubmitPaymentTransactionSignatures) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitPaymentTransactionSignatures) ProtoMessage()    {}
+func (*MsgSubmitPaymentTransactionSignatures) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f9ccb9a0c5890ec, []int{4}
+}
+func (m *MsgSubmitPaymentTransactionSignatures) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitPaymentTransactionSignatures) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitPaymentTransactionSignatures.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitPaymentTransactionSignatures) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitPaymentTransactionSignatures.Merge(m, src)
+}
+func (m *MsgSubmitPaymentTransactionSignatures) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitPaymentTransactionSignatures) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitPaymentTransactionSignatures.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitPaymentTransactionSignatures proto.InternalMessageInfo
+
+func (m *MsgSubmitPaymentTransactionSignatures) GetRelayer() string {
+	if m != nil {
+		return m.Relayer
+	}
+	return ""
+}
+
+func (m *MsgSubmitPaymentTransactionSignatures) GetAuctionId() uint64 {
+	if m != nil {
+		return m.AuctionId
+	}
+	return 0
+}
+
+func (m *MsgSubmitPaymentTransactionSignatures) GetSignatures() []string {
+	if m != nil {
+		return m.Signatures
+	}
+	return nil
+}
+
+// MsgSubmitPaymentTransactionSignaturesResponse defines the Msg/SubmitPaymentTransactionSignatures response type.
+type MsgSubmitPaymentTransactionSignaturesResponse struct {
+}
+
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) Reset() {
+	*m = MsgSubmitPaymentTransactionSignaturesResponse{}
+}
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MsgSubmitPaymentTransactionSignaturesResponse) ProtoMessage() {}
+func (*MsgSubmitPaymentTransactionSignaturesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f9ccb9a0c5890ec, []int{5}
+}
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitPaymentTransactionSignaturesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitPaymentTransactionSignaturesResponse.Merge(m, src)
+}
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitPaymentTransactionSignaturesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitPaymentTransactionSignaturesResponse proto.InternalMessageInfo
+
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //
 // Since: cosmos-sdk 0.47
@@ -242,7 +344,7 @@ func (m *MsgUpdateParams) Reset()         { *m = MsgUpdateParams{} }
 func (m *MsgUpdateParams) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParams) ProtoMessage()    {}
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7f9ccb9a0c5890ec, []int{4}
+	return fileDescriptor_7f9ccb9a0c5890ec, []int{6}
 }
 func (m *MsgUpdateParams) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -295,7 +397,7 @@ func (m *MsgUpdateParamsResponse) Reset()         { *m = MsgUpdateParamsResponse
 func (m *MsgUpdateParamsResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParamsResponse) ProtoMessage()    {}
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7f9ccb9a0c5890ec, []int{5}
+	return fileDescriptor_7f9ccb9a0c5890ec, []int{7}
 }
 func (m *MsgUpdateParamsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -329,6 +431,8 @@ func init() {
 	proto.RegisterType((*MsgBidResponse)(nil), "side.auction.MsgBidResponse")
 	proto.RegisterType((*MsgCancelBid)(nil), "side.auction.MsgCancelBid")
 	proto.RegisterType((*MsgCancelBidResponse)(nil), "side.auction.MsgCancelBidResponse")
+	proto.RegisterType((*MsgSubmitPaymentTransactionSignatures)(nil), "side.auction.MsgSubmitPaymentTransactionSignatures")
+	proto.RegisterType((*MsgSubmitPaymentTransactionSignaturesResponse)(nil), "side.auction.MsgSubmitPaymentTransactionSignaturesResponse")
 	proto.RegisterType((*MsgUpdateParams)(nil), "side.auction.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "side.auction.MsgUpdateParamsResponse")
 }
@@ -336,38 +440,44 @@ func init() {
 func init() { proto.RegisterFile("side/auction/tx.proto", fileDescriptor_7f9ccb9a0c5890ec) }
 
 var fileDescriptor_7f9ccb9a0c5890ec = []byte{
-	// 494 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x53, 0xcd, 0x6a, 0xdb, 0x40,
-	0x10, 0xf6, 0xda, 0x8e, 0xc0, 0x63, 0xe3, 0x16, 0xe1, 0x26, 0xb6, 0x48, 0x14, 0x23, 0x28, 0x88,
-	0xd0, 0x6a, 0x6b, 0xf7, 0xd4, 0x1c, 0x6d, 0x28, 0x94, 0x62, 0x28, 0xa2, 0xbd, 0xf4, 0x52, 0xd6,
-	0xd2, 0xa2, 0x2c, 0x8d, 0xb4, 0x42, 0xbb, 0x0e, 0xc9, 0xad, 0xf4, 0x09, 0xfa, 0x1c, 0x3d, 0xe5,
-	0x2d, 0x9a, 0x63, 0x8e, 0x3d, 0xb5, 0xc5, 0x3e, 0x04, 0xfa, 0x14, 0x65, 0xb5, 0xeb, 0xbf, 0xa4,
-	0xc9, 0x69, 0x3d, 0xf3, 0xcd, 0x7c, 0xf3, 0xcd, 0xe7, 0x11, 0x3c, 0x11, 0x2c, 0xa6, 0x98, 0xcc,
-	0x22, 0xc9, 0x78, 0x86, 0xe5, 0x79, 0x90, 0x17, 0x5c, 0x72, 0xbb, 0xa5, 0xd2, 0x81, 0x49, 0x3b,
-	0x9d, 0x84, 0x27, 0xbc, 0x04, 0xb0, 0xfa, 0xa5, 0x6b, 0x1c, 0x37, 0xe2, 0x22, 0xe5, 0x02, 0x4f,
-	0x89, 0xa0, 0xf8, 0x6c, 0x30, 0xa5, 0x92, 0x0c, 0x70, 0xc4, 0x59, 0x66, 0xf0, 0x3d, 0x83, 0xa7,
-	0x22, 0xc1, 0x67, 0x03, 0xf5, 0x18, 0xa0, 0xb7, 0x35, 0x33, 0x27, 0x05, 0x49, 0x85, 0x86, 0xbc,
-	0x1f, 0x08, 0xac, 0x89, 0x48, 0x46, 0x2c, 0xb6, 0x77, 0xc1, 0x12, 0x34, 0x8b, 0x69, 0xd1, 0x45,
-	0x7d, 0xe4, 0x37, 0x42, 0x13, 0xd9, 0x07, 0x00, 0xa6, 0xf5, 0x13, 0x8b, 0xbb, 0xd5, 0x3e, 0xf2,
-	0xeb, 0x61, 0xc3, 0x64, 0xde, 0xc4, 0x76, 0x07, 0x76, 0xf2, 0x82, 0x45, 0xb4, 0x5b, 0xeb, 0x23,
-	0xbf, 0x16, 0xea, 0xc0, 0x8e, 0xc0, 0x22, 0x29, 0x9f, 0x65, 0xb2, 0x5b, 0xef, 0x23, 0xbf, 0x39,
-	0xec, 0x05, 0x5a, 0x5c, 0xa0, 0xc4, 0x07, 0x46, 0x7c, 0x30, 0xe6, 0x2c, 0x1b, 0xbd, 0xb8, 0xfa,
-	0x75, 0x58, 0xf9, 0xfe, 0xfb, 0xd0, 0x4f, 0x98, 0x3c, 0x99, 0x4d, 0x83, 0x88, 0xa7, 0xd8, 0x6c,
-	0xa2, 0x9f, 0xe7, 0x22, 0xfe, 0x8c, 0xe5, 0x45, 0x4e, 0x45, 0xd9, 0x20, 0x42, 0x43, 0x7d, 0xdc,
-	0xfc, 0x7a, 0x73, 0x79, 0x64, 0x64, 0x7a, 0x8f, 0xa1, 0xad, 0x17, 0x09, 0xa9, 0xc8, 0x79, 0x26,
-	0xa8, 0x37, 0x86, 0xd6, 0x44, 0x24, 0x63, 0x92, 0x45, 0xf4, 0xf4, 0xa1, 0x05, 0xdb, 0x50, 0x5d,
-	0x2d, 0x56, 0x65, 0xf1, 0x36, 0xed, 0x2e, 0x74, 0x36, 0x49, 0x56, 0xe4, 0x02, 0x1e, 0x4d, 0x44,
-	0xf2, 0x21, 0x8f, 0x89, 0xa4, 0xef, 0x4a, 0x47, 0xed, 0x7d, 0x68, 0x90, 0x99, 0x3c, 0xe1, 0x05,
-	0x93, 0x17, 0x66, 0xc4, 0x3a, 0x61, 0x0f, 0xc1, 0xd2, 0xce, 0x97, 0x93, 0x9a, 0xc3, 0x4e, 0xb0,
-	0xf9, 0x97, 0x07, 0x9a, 0x63, 0x54, 0x57, 0x66, 0x84, 0xa6, 0xf2, 0xb8, 0xad, 0x94, 0xac, 0x39,
-	0xbc, 0x1e, 0xec, 0xdd, 0x1a, 0xba, 0xd4, 0x33, 0xfc, 0x8b, 0xa0, 0x36, 0x11, 0x89, 0xfd, 0x0a,
-	0x6a, 0x6a, 0xd7, 0x5b, 0xec, 0xda, 0x19, 0x67, 0xff, 0x7f, 0xd9, 0x25, 0x85, 0xfd, 0x16, 0x1a,
-	0x6b, 0xb3, 0x9c, 0x3b, 0xa5, 0x2b, 0xcc, 0xf1, 0xee, 0xc7, 0x56, 0x64, 0xef, 0xa1, 0xb5, 0x65,
-	0xce, 0xc1, 0x9d, 0x9e, 0x4d, 0xd8, 0x79, 0xfa, 0x20, 0xbc, 0x64, 0x75, 0x76, 0xbe, 0xdc, 0x5c,
-	0x1e, 0xa1, 0xd1, 0xeb, 0xab, 0xb9, 0x8b, 0xae, 0xe7, 0x2e, 0xfa, 0x33, 0x77, 0xd1, 0xb7, 0x85,
-	0x5b, 0xb9, 0x5e, 0xb8, 0x95, 0x9f, 0x0b, 0xb7, 0xf2, 0xf1, 0xd9, 0xc6, 0x11, 0x29, 0xc6, 0xf2,
-	0xca, 0x23, 0x7e, 0x5a, 0x06, 0xf8, 0x7c, 0xfd, 0xe1, 0xa9, 0x73, 0x9a, 0x5a, 0x25, 0xfc, 0xf2,
-	0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x54, 0x8c, 0x49, 0xbc, 0x95, 0x03, 0x00, 0x00,
+	// 581 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xc1, 0x4e, 0xdb, 0x4c,
+	0x10, 0xc7, 0xb3, 0x18, 0xf2, 0x29, 0x03, 0xca, 0x57, 0x59, 0x29, 0x38, 0x16, 0x98, 0xc8, 0x12,
+	0x92, 0x85, 0x8a, 0xdd, 0x84, 0x53, 0xe9, 0x2d, 0x91, 0x2a, 0x55, 0x55, 0x24, 0x64, 0xe8, 0xa5,
+	0x97, 0x6a, 0x63, 0xaf, 0xcc, 0xaa, 0xb1, 0xd7, 0xf2, 0xae, 0x11, 0xb9, 0xa1, 0xf6, 0x05, 0x7a,
+	0xea, 0x43, 0xf4, 0xc4, 0x5b, 0x94, 0x23, 0xc7, 0x9e, 0xda, 0x2a, 0x39, 0xf0, 0x1a, 0x95, 0xed,
+	0x8d, 0x93, 0x90, 0x16, 0x50, 0x4f, 0xf6, 0xcc, 0x7f, 0xe7, 0xb7, 0xff, 0xd9, 0x59, 0x1b, 0x9e,
+	0x72, 0xea, 0x13, 0x07, 0xa7, 0x9e, 0xa0, 0x2c, 0x72, 0xc4, 0x85, 0x1d, 0x27, 0x4c, 0x30, 0x75,
+	0x23, 0x4b, 0xdb, 0x32, 0xad, 0x37, 0x02, 0x16, 0xb0, 0x5c, 0x70, 0xb2, 0xb7, 0x62, 0x8d, 0x6e,
+	0x78, 0x8c, 0x87, 0x8c, 0x3b, 0x03, 0xcc, 0x89, 0x73, 0xde, 0x1e, 0x10, 0x81, 0xdb, 0x8e, 0xc7,
+	0x68, 0x24, 0xf5, 0x2d, 0xa9, 0x87, 0x3c, 0x70, 0xce, 0xdb, 0xd9, 0x43, 0x0a, 0xcd, 0x85, 0x3d,
+	0x63, 0x9c, 0xe0, 0x90, 0x17, 0x92, 0xf9, 0x0d, 0x41, 0xb5, 0xcf, 0x83, 0x2e, 0xf5, 0xd5, 0x4d,
+	0xa8, 0x72, 0x12, 0xf9, 0x24, 0xd1, 0x50, 0x0b, 0x59, 0x35, 0x57, 0x46, 0xea, 0x0e, 0x80, 0x2c,
+	0x7d, 0x4f, 0x7d, 0x6d, 0xa5, 0x85, 0xac, 0x55, 0xb7, 0x26, 0x33, 0xaf, 0x7d, 0xb5, 0x01, 0x6b,
+	0x71, 0x42, 0x3d, 0xa2, 0x29, 0x2d, 0x64, 0x29, 0x6e, 0x11, 0xa8, 0x1e, 0x54, 0x71, 0xc8, 0xd2,
+	0x48, 0x68, 0xab, 0x2d, 0x64, 0xad, 0x77, 0x9a, 0x76, 0x61, 0xce, 0xce, 0xcc, 0xdb, 0xd2, 0xbc,
+	0xdd, 0x63, 0x34, 0xea, 0x3e, 0xbf, 0xfe, 0xb1, 0x5b, 0xf9, 0xfa, 0x73, 0xd7, 0x0a, 0xa8, 0x38,
+	0x4b, 0x07, 0xb6, 0xc7, 0x42, 0x47, 0x76, 0x52, 0x3c, 0x0e, 0xb8, 0xff, 0xc1, 0x11, 0xa3, 0x98,
+	0xf0, 0xbc, 0x80, 0xbb, 0x12, 0x7d, 0xb4, 0xfe, 0xf1, 0xf6, 0x6a, 0x5f, 0xda, 0x34, 0x9f, 0x40,
+	0xbd, 0x68, 0xc4, 0x25, 0x3c, 0x66, 0x11, 0x27, 0x66, 0x0f, 0x36, 0xfa, 0x3c, 0xe8, 0xe1, 0xc8,
+	0x23, 0xc3, 0xfb, 0x1a, 0xac, 0xc3, 0x4a, 0xd9, 0xd8, 0x0a, 0xf5, 0x17, 0xb1, 0x9b, 0xd0, 0x98,
+	0x87, 0x94, 0xf0, 0x4b, 0x04, 0x7b, 0x7d, 0x1e, 0x9c, 0xa4, 0x83, 0x90, 0x8a, 0x63, 0x3c, 0x0a,
+	0x49, 0x24, 0x4e, 0x13, 0x1c, 0x71, 0x9c, 0x1f, 0xcc, 0x09, 0x0d, 0x22, 0x2c, 0xd2, 0x84, 0x70,
+	0x55, 0x83, 0xff, 0x12, 0x32, 0xc4, 0xa3, 0x72, 0xdf, 0x69, 0xf8, 0xd0, 0xc9, 0x1a, 0x00, 0xbc,
+	0xc4, 0x68, 0x4a, 0x4b, 0xb1, 0x6a, 0xee, 0x5c, 0xc6, 0x74, 0xe0, 0xe0, 0x51, 0x0e, 0x4a, 0xcf,
+	0x1c, 0xfe, 0xef, 0xf3, 0xe0, 0x6d, 0xec, 0x63, 0x41, 0x8e, 0xf3, 0x5b, 0xa0, 0x6e, 0x43, 0x0d,
+	0xa7, 0xe2, 0x8c, 0x25, 0x54, 0x8c, 0xa4, 0xbd, 0x59, 0x42, 0xed, 0x40, 0xb5, 0xb8, 0x2d, 0xb9,
+	0xb9, 0xf5, 0x4e, 0xc3, 0x9e, 0xbf, 0xa6, 0x76, 0xc1, 0xe8, 0xae, 0x66, 0x03, 0x74, 0xe5, 0xca,
+	0xa3, 0x7a, 0x76, 0x7a, 0x33, 0x86, 0xd9, 0x84, 0xad, 0x3b, 0x9b, 0x4e, 0xfd, 0x74, 0x3e, 0x29,
+	0xa0, 0xf4, 0x79, 0xa0, 0xbe, 0x00, 0x25, 0x9b, 0xcf, 0x1d, 0x7a, 0x31, 0x4d, 0x7d, 0xfb, 0x4f,
+	0xd9, 0x29, 0x42, 0x7d, 0x03, 0xb5, 0xd9, 0x80, 0xf5, 0xa5, 0xa5, 0xa5, 0xa6, 0x9b, 0x7f, 0xd7,
+	0x4a, 0xd8, 0x17, 0x04, 0xe6, 0x23, 0x06, 0x7a, 0xb8, 0x84, 0x7a, 0xb8, 0x48, 0x7f, 0xf9, 0x0f,
+	0x45, 0xa5, 0xb1, 0x53, 0xd8, 0x58, 0x98, 0xda, 0xce, 0x12, 0x6c, 0x5e, 0xd6, 0xf7, 0xee, 0x95,
+	0xa7, 0x54, 0x7d, 0xed, 0xf2, 0xf6, 0x6a, 0x1f, 0x75, 0x5f, 0x5d, 0x8f, 0x0d, 0x74, 0x33, 0x36,
+	0xd0, 0xaf, 0xb1, 0x81, 0x3e, 0x4f, 0x8c, 0xca, 0xcd, 0xc4, 0xa8, 0x7c, 0x9f, 0x18, 0x95, 0x77,
+	0xcf, 0xe6, 0xbe, 0xc8, 0x8c, 0x98, 0xff, 0x32, 0x3c, 0x36, 0xcc, 0x03, 0xe7, 0x62, 0xf6, 0x17,
+	0xcb, 0xbe, 0xcd, 0x41, 0x35, 0x97, 0x0f, 0x7f, 0x07, 0x00, 0x00, 0xff, 0xff, 0x2d, 0x1e, 0xb7,
+	0x62, 0xe2, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -386,6 +496,8 @@ type MsgClient interface {
 	Bid(ctx context.Context, in *MsgBid, opts ...grpc.CallOption) (*MsgBidResponse, error)
 	// Cancel the specified bid.
 	CancelBid(ctx context.Context, in *MsgCancelBid, opts ...grpc.CallOption) (*MsgCancelBidResponse, error)
+	// Submit payment transaction signatures for the specified auction.
+	SubmitPaymentTransactionSignatures(ctx context.Context, in *MsgSubmitPaymentTransactionSignatures, opts ...grpc.CallOption) (*MsgSubmitPaymentTransactionSignaturesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -419,6 +531,15 @@ func (c *msgClient) CancelBid(ctx context.Context, in *MsgCancelBid, opts ...grp
 	return out, nil
 }
 
+func (c *msgClient) SubmitPaymentTransactionSignatures(ctx context.Context, in *MsgSubmitPaymentTransactionSignatures, opts ...grpc.CallOption) (*MsgSubmitPaymentTransactionSignaturesResponse, error) {
+	out := new(MsgSubmitPaymentTransactionSignaturesResponse)
+	err := c.cc.Invoke(ctx, "/side.auction.Msg/SubmitPaymentTransactionSignatures", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	out := new(MsgUpdateParamsResponse)
 	err := c.cc.Invoke(ctx, "/side.auction.Msg/UpdateParams", in, out, opts...)
@@ -434,6 +555,8 @@ type MsgServer interface {
 	Bid(context.Context, *MsgBid) (*MsgBidResponse, error)
 	// Cancel the specified bid.
 	CancelBid(context.Context, *MsgCancelBid) (*MsgCancelBidResponse, error)
+	// Submit payment transaction signatures for the specified auction.
+	SubmitPaymentTransactionSignatures(context.Context, *MsgSubmitPaymentTransactionSignatures) (*MsgSubmitPaymentTransactionSignaturesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -450,6 +573,9 @@ func (*UnimplementedMsgServer) Bid(ctx context.Context, req *MsgBid) (*MsgBidRes
 }
 func (*UnimplementedMsgServer) CancelBid(ctx context.Context, req *MsgCancelBid) (*MsgCancelBidResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelBid not implemented")
+}
+func (*UnimplementedMsgServer) SubmitPaymentTransactionSignatures(ctx context.Context, req *MsgSubmitPaymentTransactionSignatures) (*MsgSubmitPaymentTransactionSignaturesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitPaymentTransactionSignatures not implemented")
 }
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -495,6 +621,24 @@ func _Msg_CancelBid_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SubmitPaymentTransactionSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitPaymentTransactionSignatures)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitPaymentTransactionSignatures(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.auction.Msg/SubmitPaymentTransactionSignatures",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitPaymentTransactionSignatures(ctx, req.(*MsgSubmitPaymentTransactionSignatures))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -525,6 +669,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelBid",
 			Handler:    _Msg_CancelBid_Handler,
+		},
+		{
+			MethodName: "SubmitPaymentTransactionSignatures",
+			Handler:    _Msg_SubmitPaymentTransactionSignatures_Handler,
 		},
 		{
 			MethodName: "UpdateParams",
@@ -666,6 +814,73 @@ func (m *MsgCancelBidResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgSubmitPaymentTransactionSignatures) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitPaymentTransactionSignatures) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitPaymentTransactionSignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Signatures) > 0 {
+		for iNdEx := len(m.Signatures) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Signatures[iNdEx])
+			copy(dAtA[i:], m.Signatures[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Signatures[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.AuctionId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.AuctionId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Relayer) > 0 {
+		i -= len(m.Relayer)
+		copy(dAtA[i:], m.Relayer)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Relayer)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func (m *MsgUpdateParams) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -787,6 +1002,37 @@ func (m *MsgCancelBid) Size() (n int) {
 }
 
 func (m *MsgCancelBidResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSubmitPaymentTransactionSignatures) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Relayer)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.AuctionId != 0 {
+		n += 1 + sovTx(uint64(m.AuctionId))
+	}
+	if len(m.Signatures) > 0 {
+		for _, s := range m.Signatures {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1156,6 +1402,189 @@ func (m *MsgCancelBidResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgCancelBidResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitPaymentTransactionSignatures) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitPaymentTransactionSignatures: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitPaymentTransactionSignatures: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Relayer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Relayer = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuctionId", wireType)
+			}
+			m.AuctionId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AuctionId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Signatures", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Signatures = append(m.Signatures, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitPaymentTransactionSignaturesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitPaymentTransactionSignaturesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitPaymentTransactionSignaturesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_Bid_FullMethodName          = "/side.auction.Msg/Bid"
-	Msg_CancelBid_FullMethodName    = "/side.auction.Msg/CancelBid"
-	Msg_UpdateParams_FullMethodName = "/side.auction.Msg/UpdateParams"
+	Msg_Bid_FullMethodName                                = "/side.auction.Msg/Bid"
+	Msg_CancelBid_FullMethodName                          = "/side.auction.Msg/CancelBid"
+	Msg_SubmitPaymentTransactionSignatures_FullMethodName = "/side.auction.Msg/SubmitPaymentTransactionSignatures"
+	Msg_UpdateParams_FullMethodName                       = "/side.auction.Msg/UpdateParams"
 )
 
 // MsgClient is the client API for Msg service.
@@ -32,6 +33,8 @@ type MsgClient interface {
 	Bid(ctx context.Context, in *MsgBid, opts ...grpc.CallOption) (*MsgBidResponse, error)
 	// Cancel the specified bid.
 	CancelBid(ctx context.Context, in *MsgCancelBid, opts ...grpc.CallOption) (*MsgCancelBidResponse, error)
+	// Submit payment transaction signatures for the specified auction.
+	SubmitPaymentTransactionSignatures(ctx context.Context, in *MsgSubmitPaymentTransactionSignatures, opts ...grpc.CallOption) (*MsgSubmitPaymentTransactionSignaturesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -65,6 +68,15 @@ func (c *msgClient) CancelBid(ctx context.Context, in *MsgCancelBid, opts ...grp
 	return out, nil
 }
 
+func (c *msgClient) SubmitPaymentTransactionSignatures(ctx context.Context, in *MsgSubmitPaymentTransactionSignatures, opts ...grpc.CallOption) (*MsgSubmitPaymentTransactionSignaturesResponse, error) {
+	out := new(MsgSubmitPaymentTransactionSignaturesResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitPaymentTransactionSignatures_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	out := new(MsgUpdateParamsResponse)
 	err := c.cc.Invoke(ctx, Msg_UpdateParams_FullMethodName, in, out, opts...)
@@ -82,6 +94,8 @@ type MsgServer interface {
 	Bid(context.Context, *MsgBid) (*MsgBidResponse, error)
 	// Cancel the specified bid.
 	CancelBid(context.Context, *MsgCancelBid) (*MsgCancelBidResponse, error)
+	// Submit payment transaction signatures for the specified auction.
+	SubmitPaymentTransactionSignatures(context.Context, *MsgSubmitPaymentTransactionSignatures) (*MsgSubmitPaymentTransactionSignaturesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -99,6 +113,9 @@ func (UnimplementedMsgServer) Bid(context.Context, *MsgBid) (*MsgBidResponse, er
 }
 func (UnimplementedMsgServer) CancelBid(context.Context, *MsgCancelBid) (*MsgCancelBidResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelBid not implemented")
+}
+func (UnimplementedMsgServer) SubmitPaymentTransactionSignatures(context.Context, *MsgSubmitPaymentTransactionSignatures) (*MsgSubmitPaymentTransactionSignaturesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitPaymentTransactionSignatures not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -152,6 +169,24 @@ func _Msg_CancelBid_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SubmitPaymentTransactionSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitPaymentTransactionSignatures)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitPaymentTransactionSignatures(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SubmitPaymentTransactionSignatures_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitPaymentTransactionSignatures(ctx, req.(*MsgSubmitPaymentTransactionSignatures))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -184,6 +219,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelBid",
 			Handler:    _Msg_CancelBid_Handler,
+		},
+		{
+			MethodName: "SubmitPaymentTransactionSignatures",
+			Handler:    _Msg_SubmitPaymentTransactionSignatures_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

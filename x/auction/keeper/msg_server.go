@@ -57,6 +57,21 @@ func (m msgServer) CancelBid(goCtx context.Context, msg *types.MsgCancelBid) (*t
 	return &types.MsgCancelBidResponse{}, nil
 }
 
+// SubmitPaymentTransactionSignatures implements types.MsgServer.
+func (m msgServer) SubmitPaymentTransactionSignatures(goCtx context.Context, msg *types.MsgSubmitPaymentTransactionSignatures) (*types.MsgSubmitPaymentTransactionSignaturesResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := m.Keeper.HandlePaymentTransactionSignatures(ctx, msg.Relayer, msg.AuctionId, msg.Signatures); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgSubmitPaymentTransactionSignaturesResponse{}, nil
+}
+
 // UpdateParams updates the module params.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {

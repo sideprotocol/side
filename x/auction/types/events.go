@@ -2,8 +2,9 @@ package types
 
 // Auctioin module event types
 const (
-	EventTypeBid                    = "bid"
-	EventTypeSignPaymentTransaction = "sign_payment_transaction"
+	EventTypeBid                              = "bid"
+	EventTypeSignPaymentTransaction           = "sign_payment_transaction"
+	EventTypeGenerateSignedPaymentTransaction = "generate_signed_payment_transaction"
 
 	AttributeKeyBidId     = "bid_id"
 	AttributeKeyBidder    = "bidder"
@@ -13,6 +14,8 @@ const (
 
 	AttributeKeyAgencyPubKey = "agency_pub_key"
 	AttributeKeySigHashes    = "sig_hashes"
+
+	AttributeKeyTxHash = "tx_hash"
 )
 
 const (
