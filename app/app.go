@@ -224,7 +224,7 @@ var (
 		dlctypes.ModuleName:                 nil,
 		lendingtypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
 		lendingtypes.RepaymentEscrowAccount: nil,
-		oracletypes.ModuleName:              {authtypes.Minter},
+		oracletypes.ModuleName:              nil,
 
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
