@@ -674,7 +674,12 @@ func New(
 	)
 	lendingModule := lendingmodule.NewAppModule(appCodec, app.LendingKeeper)
 
-	app.OracleKeeper = oraclekeeper.NewKeeper(appCodec, keys[oracletypes.StoreKey], keys[oracletypes.MemStoreKey], "")
+	app.OracleKeeper = oraclekeeper.NewKeeper(
+		appCodec,
+		keys[oracletypes.StoreKey],
+		keys[oracletypes.MemStoreKey],
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
 	oracleModule := oraclemodule.NewAppModule(appCodec, app.OracleKeeper)
 
 	wasmDir := filepath.Join(homePath, "wasm")
