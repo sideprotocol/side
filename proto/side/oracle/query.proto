@@ -3,8 +3,6 @@ package side.oracle;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
-import "cosmos/base/v1beta1/coin.proto";
 import "side/oracle/oracle.proto";
 import "side/oracle/params.proto";
 
@@ -12,46 +10,55 @@ option go_package = "github.com/sideprotocol/side/x/oracle/types";
 
 // Query defines the gRPC querier service.
 service Query {
-    // Params queries the parameters of the module.
-    rpc ListPrices(QueryListPricesRequest) returns (QueryListPricesResponse) {
-      option (google.api.http).get = "/side/oracle/prices";
-    }
+  // Params queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/side/oracle/params";
+  }
 
-    rpc GetPrice(QueryGetPriceRequest) returns (QueryGetPriceResponse) {
-        option (google.api.http).get = "/side/oracle/prices/{symbol}";
-    }
+  // ListPrices queries all oracle prices.
+  rpc ListPrices(QueryListPricesRequest) returns (QueryListPricesResponse) {
+    option (google.api.http).get = "/side/oracle/prices";
+  }
 
-    // ChainTip queries the chain tip of the module.
-    rpc QueryChainTip(QueryChainTipRequest) returns (QueryChainTipResponse) {
-        option (google.api.http).get = "/side/btcbridge/tip";
-    }
-    // BlockHeaderByHeight queries the block header by height.
-    rpc QueryBlockHeaderByHeight(QueryBlockHeaderByHeightRequest) returns (QueryBlockHeaderByHeightResponse) {
-        option (google.api.http).get = "/side/btcbridge/height/{height}";
-    }
-    // BlockHeaderByHash queries the block header by hash.
-    rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
-        option (google.api.http).get = "/side/btcbridge/hash/{hash}";
-    }
+  // GetPrice queries the oracle price by symbol.
+  rpc GetPriceBySymbol(QueryGetPriceBySymbolRequest) returns (QueryGetPriceBySymbolResponse) {
+    option (google.api.http).get = "/side/oracle/prices/{symbol}";
+  }
+
+  // ChainTip queries the chain tip of the module.
+  rpc QueryChainTip(QueryChainTipRequest) returns (QueryChainTipResponse) {
+    option (google.api.http).get = "/side/oracle/tip";
+  }
+  // BlockHeaderByHeight queries the block header by height.
+  rpc QueryBlockHeaderByHeight(QueryBlockHeaderByHeightRequest) returns (QueryBlockHeaderByHeightResponse) {
+    option (google.api.http).get = "/side/oracle/blockheader/height/{height}";
+  }
+  // BlockHeaderByHash queries the block header by hash.
+  rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
+    option (google.api.http).get = "/side/oracle/blockheader/hash/{hash}";
+  }
+  // BestBlockHeader queries the best block header.
+  rpc QueryBestBlockHeader(QueryBestBlockHeaderRequest) returns (QueryBestBlockHeaderResponse) {
+    option (google.api.http).get = "/side/oracle/bestblockheader";
+  }
 }
 
 // QueryPoolRequest is request type for the Query/Pool RPC method.
-message QueryGetPriceRequest {
-    string symbol = 1;
+message QueryGetPriceBySymbolRequest {
+  string symbol = 1;
 }
 
 // QueryPoolResponse is response type for the Query/Pool RPC method.
-message QueryGetPriceResponse {
-    string price = 1;
+message QueryGetPriceBySymbolResponse {
+  string price = 1;
 }
 
 // QueryPoolsRequest is request type for the Query/Pools RPC method.
-message QueryListPricesRequest {
-}
+message QueryListPricesRequest {}
 
 // QueryPoolsResponse is response type for the Query/Pools RPC method.
 message QueryListPricesResponse {
-    repeated OraclePrice prices = 1;
+  repeated OraclePrice prices = 1;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -89,5 +96,13 @@ message QueryBlockHeaderByHashRequest {
 
 // QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
 message QueryBlockHeaderByHashResponse {
+  BlockHeader block_header = 1;
+}
+
+// QueryBestBlockHeaderRequest is the request type for the Query/BestBlockHeader RPC method.
+message QueryBestBlockHeaderRequest {}
+
+// QueryBestBlockHeaderResponse is the response type for the Query/BestBlockHeader RPC method.
+message QueryBestBlockHeaderResponse {
   BlockHeader block_header = 1;
 }

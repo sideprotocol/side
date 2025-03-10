@@ -6,8 +6,6 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	_ "github.com/cosmos/cosmos-sdk/types"
-	_ "github.com/cosmos/cosmos-sdk/types/query"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
@@ -32,22 +30,22 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // QueryPoolRequest is request type for the Query/Pool RPC method.
-type QueryGetPriceRequest struct {
+type QueryGetPriceBySymbolRequest struct {
 	Symbol string `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
 }
 
-func (m *QueryGetPriceRequest) Reset()         { *m = QueryGetPriceRequest{} }
-func (m *QueryGetPriceRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPriceRequest) ProtoMessage()    {}
-func (*QueryGetPriceRequest) Descriptor() ([]byte, []int) {
+func (m *QueryGetPriceBySymbolRequest) Reset()         { *m = QueryGetPriceBySymbolRequest{} }
+func (m *QueryGetPriceBySymbolRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetPriceBySymbolRequest) ProtoMessage()    {}
+func (*QueryGetPriceBySymbolRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f4e5fb88539ef5ac, []int{0}
 }
-func (m *QueryGetPriceRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryGetPriceBySymbolRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryGetPriceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryGetPriceBySymbolRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryGetPriceRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryGetPriceBySymbolRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -57,19 +55,19 @@ func (m *QueryGetPriceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *QueryGetPriceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPriceRequest.Merge(m, src)
+func (m *QueryGetPriceBySymbolRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetPriceBySymbolRequest.Merge(m, src)
 }
-func (m *QueryGetPriceRequest) XXX_Size() int {
+func (m *QueryGetPriceBySymbolRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryGetPriceRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPriceRequest.DiscardUnknown(m)
+func (m *QueryGetPriceBySymbolRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetPriceBySymbolRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryGetPriceRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryGetPriceBySymbolRequest proto.InternalMessageInfo
 
-func (m *QueryGetPriceRequest) GetSymbol() string {
+func (m *QueryGetPriceBySymbolRequest) GetSymbol() string {
 	if m != nil {
 		return m.Symbol
 	}
@@ -77,22 +75,22 @@ func (m *QueryGetPriceRequest) GetSymbol() string {
 }
 
 // QueryPoolResponse is response type for the Query/Pool RPC method.
-type QueryGetPriceResponse struct {
+type QueryGetPriceBySymbolResponse struct {
 	Price string `protobuf:"bytes,1,opt,name=price,proto3" json:"price,omitempty"`
 }
 
-func (m *QueryGetPriceResponse) Reset()         { *m = QueryGetPriceResponse{} }
-func (m *QueryGetPriceResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPriceResponse) ProtoMessage()    {}
-func (*QueryGetPriceResponse) Descriptor() ([]byte, []int) {
+func (m *QueryGetPriceBySymbolResponse) Reset()         { *m = QueryGetPriceBySymbolResponse{} }
+func (m *QueryGetPriceBySymbolResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGetPriceBySymbolResponse) ProtoMessage()    {}
+func (*QueryGetPriceBySymbolResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f4e5fb88539ef5ac, []int{1}
 }
-func (m *QueryGetPriceResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryGetPriceBySymbolResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryGetPriceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryGetPriceBySymbolResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryGetPriceResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryGetPriceBySymbolResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -102,19 +100,19 @@ func (m *QueryGetPriceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *QueryGetPriceResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPriceResponse.Merge(m, src)
+func (m *QueryGetPriceBySymbolResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetPriceBySymbolResponse.Merge(m, src)
 }
-func (m *QueryGetPriceResponse) XXX_Size() int {
+func (m *QueryGetPriceBySymbolResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryGetPriceResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPriceResponse.DiscardUnknown(m)
+func (m *QueryGetPriceBySymbolResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetPriceBySymbolResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryGetPriceResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryGetPriceBySymbolResponse proto.InternalMessageInfo
 
-func (m *QueryGetPriceResponse) GetPrice() string {
+func (m *QueryGetPriceBySymbolResponse) GetPrice() string {
 	if m != nil {
 		return m.Price
 	}
@@ -556,9 +554,91 @@ func (m *QueryBlockHeaderByHashResponse) GetBlockHeader() *BlockHeader {
 	return nil
 }
 
+// QueryBestBlockHeaderRequest is the request type for the Query/BestBlockHeader RPC method.
+type QueryBestBlockHeaderRequest struct {
+}
+
+func (m *QueryBestBlockHeaderRequest) Reset()         { *m = QueryBestBlockHeaderRequest{} }
+func (m *QueryBestBlockHeaderRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryBestBlockHeaderRequest) ProtoMessage()    {}
+func (*QueryBestBlockHeaderRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4e5fb88539ef5ac, []int{12}
+}
+func (m *QueryBestBlockHeaderRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryBestBlockHeaderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryBestBlockHeaderRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryBestBlockHeaderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBestBlockHeaderRequest.Merge(m, src)
+}
+func (m *QueryBestBlockHeaderRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryBestBlockHeaderRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBestBlockHeaderRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryBestBlockHeaderRequest proto.InternalMessageInfo
+
+// QueryBestBlockHeaderResponse is the response type for the Query/BestBlockHeader RPC method.
+type QueryBestBlockHeaderResponse struct {
+	BlockHeader *BlockHeader `protobuf:"bytes,1,opt,name=block_header,json=blockHeader,proto3" json:"block_header,omitempty"`
+}
+
+func (m *QueryBestBlockHeaderResponse) Reset()         { *m = QueryBestBlockHeaderResponse{} }
+func (m *QueryBestBlockHeaderResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryBestBlockHeaderResponse) ProtoMessage()    {}
+func (*QueryBestBlockHeaderResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4e5fb88539ef5ac, []int{13}
+}
+func (m *QueryBestBlockHeaderResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryBestBlockHeaderResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryBestBlockHeaderResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryBestBlockHeaderResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBestBlockHeaderResponse.Merge(m, src)
+}
+func (m *QueryBestBlockHeaderResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryBestBlockHeaderResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBestBlockHeaderResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryBestBlockHeaderResponse proto.InternalMessageInfo
+
+func (m *QueryBestBlockHeaderResponse) GetBlockHeader() *BlockHeader {
+	if m != nil {
+		return m.BlockHeader
+	}
+	return nil
+}
+
 func init() {
-	proto.RegisterType((*QueryGetPriceRequest)(nil), "side.oracle.QueryGetPriceRequest")
-	proto.RegisterType((*QueryGetPriceResponse)(nil), "side.oracle.QueryGetPriceResponse")
+	proto.RegisterType((*QueryGetPriceBySymbolRequest)(nil), "side.oracle.QueryGetPriceBySymbolRequest")
+	proto.RegisterType((*QueryGetPriceBySymbolResponse)(nil), "side.oracle.QueryGetPriceBySymbolResponse")
 	proto.RegisterType((*QueryListPricesRequest)(nil), "side.oracle.QueryListPricesRequest")
 	proto.RegisterType((*QueryListPricesResponse)(nil), "side.oracle.QueryListPricesResponse")
 	proto.RegisterType((*QueryParamsRequest)(nil), "side.oracle.QueryParamsRequest")
@@ -569,53 +649,58 @@ func init() {
 	proto.RegisterType((*QueryBlockHeaderByHeightResponse)(nil), "side.oracle.QueryBlockHeaderByHeightResponse")
 	proto.RegisterType((*QueryBlockHeaderByHashRequest)(nil), "side.oracle.QueryBlockHeaderByHashRequest")
 	proto.RegisterType((*QueryBlockHeaderByHashResponse)(nil), "side.oracle.QueryBlockHeaderByHashResponse")
+	proto.RegisterType((*QueryBestBlockHeaderRequest)(nil), "side.oracle.QueryBestBlockHeaderRequest")
+	proto.RegisterType((*QueryBestBlockHeaderResponse)(nil), "side.oracle.QueryBestBlockHeaderResponse")
 }
 
 func init() { proto.RegisterFile("side/oracle/query.proto", fileDescriptor_f4e5fb88539ef5ac) }
 
 var fileDescriptor_f4e5fb88539ef5ac = []byte{
-	// 645 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0x41, 0x6f, 0xd3, 0x3e,
-	0x1c, 0x6d, 0xf6, 0xdf, 0xaa, 0x3f, 0x2e, 0x5c, 0xbc, 0x6e, 0x8b, 0xb2, 0x2d, 0xeb, 0xb2, 0x49,
-	0x4c, 0x1b, 0x8b, 0xd9, 0x76, 0x42, 0xdc, 0x3a, 0x21, 0x26, 0x81, 0xc4, 0xa8, 0x38, 0x21, 0xa1,
-	0xc9, 0x49, 0xad, 0xc4, 0xa2, 0x8d, 0xb3, 0xd8, 0x05, 0xaa, 0xaa, 0x17, 0x3e, 0x01, 0x12, 0x12,
-	0x67, 0x6e, 0x7c, 0x95, 0x1d, 0x27, 0x71, 0xe1, 0x84, 0x50, 0xcb, 0x07, 0x41, 0xb1, 0x1d, 0xb5,
-	0x49, 0xd3, 0xb1, 0x03, 0x97, 0x26, 0xf6, 0xef, 0xfd, 0xde, 0x7b, 0xfe, 0xf5, 0x39, 0x60, 0x8d,
-	0xd3, 0x36, 0x41, 0x2c, 0xc1, 0x7e, 0x87, 0xa0, 0xcb, 0x1e, 0x49, 0xfa, 0x6e, 0x9c, 0x30, 0xc1,
-	0x60, 0x2d, 0x2d, 0xb8, 0xaa, 0x60, 0xd5, 0x03, 0x16, 0x30, 0xb9, 0x8f, 0xd2, 0x37, 0x05, 0xb1,
-	0x36, 0x02, 0xc6, 0x82, 0x0e, 0x41, 0x38, 0xa6, 0x08, 0x47, 0x11, 0x13, 0x58, 0x50, 0x16, 0x71,
-	0x5d, 0xdd, 0xf7, 0x19, 0xef, 0x32, 0x8e, 0x3c, 0xcc, 0x35, 0x33, 0x7a, 0x77, 0xe4, 0x11, 0x81,
-	0x8f, 0x50, 0x8c, 0x03, 0x1a, 0x49, 0xb0, 0xc6, 0xda, 0xd3, 0xd8, 0x0c, 0xe5, 0x33, 0x9a, 0xd5,
-	0xcd, 0x69, 0x97, 0xea, 0x51, 0x56, 0x89, 0x71, 0x82, 0xbb, 0x5a, 0xdf, 0x71, 0x41, 0xfd, 0x65,
-	0xaa, 0xfa, 0x94, 0x88, 0xf3, 0x84, 0xfa, 0xa4, 0x45, 0x2e, 0x7b, 0x84, 0x0b, 0xb8, 0x0a, 0xaa,
-	0xbc, 0xdf, 0xf5, 0x58, 0xc7, 0x34, 0x1a, 0xc6, 0xde, 0x9d, 0x96, 0x5e, 0x39, 0x87, 0x60, 0xa5,
-	0x80, 0xe7, 0x31, 0x8b, 0x38, 0x81, 0x75, 0xb0, 0x14, 0xa7, 0x1b, 0x1a, 0xaf, 0x16, 0x8e, 0x09,
-	0x56, 0x25, 0xfc, 0x39, 0xe5, 0x0a, 0xcf, 0xb5, 0x80, 0xf3, 0x0c, 0xac, 0xcd, 0x54, 0x34, 0xd5,
-	0x43, 0x50, 0x95, 0xdd, 0xdc, 0x34, 0x1a, 0xff, 0xed, 0xd5, 0x8e, 0x4d, 0x77, 0x6a, 0xca, 0xee,
-	0x0b, 0xf9, 0x50, 0xe2, 0x1a, 0xe7, 0xd4, 0x01, 0x94, 0x64, 0xe7, 0xf2, 0x68, 0x99, 0xc4, 0x19,
-	0x58, 0xce, 0xed, 0x6a, 0xfa, 0x23, 0x50, 0x55, 0x23, 0x90, 0x56, 0x6b, 0xc7, 0xcb, 0x39, 0x7a,
-	0x05, 0x6e, 0x2e, 0x5e, 0xfd, 0xdc, 0xaa, 0xb4, 0x34, 0xd0, 0x59, 0xd5, 0x53, 0x3a, 0x0d, 0x31,
-	0x8d, 0x5e, 0xd1, 0x38, 0x53, 0x38, 0xd5, 0xd3, 0x98, 0xec, 0x6b, 0x0d, 0x08, 0x16, 0x43, 0xcc,
-	0x43, 0x3d, 0x0c, 0xf9, 0x9e, 0x8e, 0x34, 0x24, 0x34, 0x08, 0x85, 0xb9, 0xd0, 0x30, 0xf6, 0x16,
-	0x5b, 0x7a, 0xe5, 0x3c, 0x02, 0x5b, 0x92, 0xa4, 0xd9, 0x61, 0xfe, 0xdb, 0x33, 0x82, 0xdb, 0x24,
-	0x69, 0xf6, 0xcf, 0x64, 0x6d, 0xea, 0xdf, 0xd0, 0xad, 0x46, 0xae, 0xf5, 0x02, 0x34, 0xe6, 0xb7,
-	0x6a, 0x2b, 0x8f, 0xc1, 0x5d, 0x2f, 0x2d, 0x5f, 0x84, 0xb2, 0xae, 0x0f, 0x9d, 0x9f, 0xe9, 0x54,
-	0x7f, 0xab, 0xe6, 0x4d, 0x16, 0xce, 0x09, 0xd8, 0x2c, 0x11, 0xc0, 0x3c, 0xcc, 0x9c, 0x95, 0x1c,
-	0xd4, 0x79, 0x03, 0xec, 0x79, 0x4d, 0xff, 0xc0, 0xd3, 0xf1, 0xb7, 0x25, 0xb0, 0x24, 0xf9, 0xa1,
-	0x00, 0x60, 0x12, 0x1f, 0xb8, 0x93, 0x6b, 0x2f, 0x8f, 0x9d, 0xb5, 0x7b, 0x33, 0x48, 0xf9, 0x73,
-	0xd6, 0x3f, 0x7e, 0xff, 0xfd, 0x79, 0x61, 0x05, 0x2e, 0xa3, 0xdc, 0xc5, 0x51, 0x3a, 0xef, 0xc1,
-	0xff, 0x59, 0xfa, 0xe1, 0xf6, 0x2c, 0x5d, 0xe1, 0x26, 0x59, 0xce, 0x4d, 0x10, 0xad, 0xb7, 0x2b,
-	0xf5, 0x6c, 0xb8, 0x51, 0xa2, 0x87, 0x06, 0xea, 0xea, 0x0d, 0x21, 0x07, 0xf7, 0x72, 0x69, 0x2b,
-	0x53, 0x2f, 0x24, 0xb4, 0x4c, 0xbd, 0x18, 0xd6, 0xe2, 0x69, 0x3d, 0xe1, 0x7b, 0x09, 0x6d, 0x07,
-	0x04, 0x09, 0x1a, 0xc3, 0xaf, 0x06, 0x30, 0xe7, 0x65, 0x0c, 0x3e, 0x98, 0x65, 0x9f, 0x9f, 0x62,
-	0xeb, 0xf0, 0x96, 0x68, 0x6d, 0xeb, 0xbe, 0xb4, 0xb5, 0x0d, 0xb7, 0x8a, 0xb6, 0x54, 0xf8, 0xd1,
-	0x40, 0x3d, 0x87, 0xf0, 0x8b, 0xa1, 0xbf, 0x32, 0x33, 0x81, 0x83, 0xfb, 0x7f, 0x93, 0x9c, 0x44,
-	0xd9, 0x3a, 0xb8, 0x15, 0x56, 0x9b, 0xdb, 0x91, 0xe6, 0x36, 0xe1, 0xfa, 0x8c, 0x39, 0xcc, 0x43,
-	0x34, 0x48, 0x7f, 0x87, 0xcd, 0x27, 0x57, 0x23, 0xdb, 0xb8, 0x1e, 0xd9, 0xc6, 0xaf, 0x91, 0x6d,
-	0x7c, 0x1a, 0xdb, 0x95, 0xeb, 0xb1, 0x5d, 0xf9, 0x31, 0xb6, 0x2b, 0xaf, 0x0f, 0x02, 0x2a, 0xc2,
-	0x9e, 0xe7, 0xfa, 0xac, 0x2b, 0x09, 0xe4, 0xc7, 0xd8, 0x67, 0x1d, 0xc5, 0xf6, 0x21, 0x4b, 0x80,
-	0xe8, 0xc7, 0x84, 0x7b, 0x55, 0x59, 0x3d, 0xf9, 0x13, 0x00, 0x00, 0xff, 0xff, 0xee, 0x9b, 0x58,
-	0x6c, 0x86, 0x06, 0x00, 0x00,
+	// 690 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0xdd, 0x4e, 0x13, 0x4f,
+	0x14, 0xef, 0xf0, 0x87, 0xfe, 0xe3, 0xa9, 0x26, 0xe4, 0x50, 0x60, 0xb3, 0xc0, 0x52, 0x57, 0x62,
+	0xca, 0x87, 0x5d, 0x84, 0x68, 0x62, 0xbc, 0x2b, 0x31, 0x92, 0x68, 0x22, 0x56, 0xaf, 0x34, 0x86,
+	0x6c, 0xcb, 0xa4, 0xbb, 0xb1, 0x74, 0x96, 0x9d, 0x25, 0xb1, 0x21, 0xdc, 0xf8, 0x02, 0x6a, 0x7c,
+	0x00, 0xaf, 0x7d, 0x13, 0x6e, 0x4c, 0x48, 0xbc, 0xf1, 0xca, 0x18, 0xf0, 0x41, 0xcc, 0xce, 0x1c,
+	0x64, 0xb7, 0xdb, 0xad, 0xbd, 0xe0, 0xa6, 0xb3, 0x33, 0xe7, 0xfc, 0x3e, 0x66, 0xe6, 0x9c, 0x29,
+	0xcc, 0x4a, 0x7f, 0x8f, 0x3b, 0x22, 0x74, 0x5b, 0x1d, 0xee, 0x1c, 0x1c, 0xf2, 0xb0, 0x57, 0x0b,
+	0x42, 0x11, 0x09, 0x2c, 0xc5, 0x81, 0x9a, 0x0e, 0x98, 0xe5, 0xb6, 0x68, 0x0b, 0xb5, 0xee, 0xc4,
+	0x5f, 0x3a, 0xc5, 0x9c, 0x6f, 0x0b, 0xd1, 0xee, 0x70, 0xc7, 0x0d, 0x7c, 0xc7, 0xed, 0x76, 0x45,
+	0xe4, 0x46, 0xbe, 0xe8, 0x4a, 0x8a, 0x1a, 0x49, 0x66, 0x3d, 0x0c, 0x8a, 0x04, 0x6e, 0xe8, 0xee,
+	0x13, 0xc6, 0xbe, 0x0f, 0xf3, 0xcf, 0x63, 0x0f, 0x8f, 0x79, 0xb4, 0x13, 0xfa, 0x2d, 0x5e, 0xef,
+	0xbd, 0xe8, 0xed, 0x37, 0x45, 0xa7, 0xc1, 0x0f, 0x0e, 0xb9, 0x8c, 0x70, 0x06, 0x8a, 0x52, 0x2d,
+	0x18, 0xac, 0xc2, 0xaa, 0xd7, 0x1a, 0x34, 0xb3, 0xef, 0xc1, 0x42, 0x0e, 0x4e, 0x06, 0xa2, 0x2b,
+	0x39, 0x96, 0x61, 0x22, 0x88, 0x03, 0x84, 0xd3, 0x13, 0xdb, 0x80, 0x19, 0x05, 0x7b, 0xea, 0x4b,
+	0x8d, 0x93, 0x24, 0x64, 0x3f, 0x81, 0xd9, 0x4c, 0x84, 0xa8, 0xd6, 0xa1, 0xa8, 0xd0, 0xd2, 0x60,
+	0x95, 0xff, 0xaa, 0xa5, 0x0d, 0xa3, 0x96, 0x38, 0xa9, 0xda, 0x33, 0x35, 0x28, 0x48, 0x83, 0xf2,
+	0xec, 0x32, 0xa0, 0x22, 0xdb, 0x51, 0x5b, 0xbd, 0x90, 0xd8, 0x86, 0xa9, 0xd4, 0x2a, 0xd1, 0xdf,
+	0x85, 0xa2, 0x3e, 0x12, 0x65, 0xb5, 0xb4, 0x31, 0x95, 0xa2, 0xd7, 0xc9, 0xf5, 0xf1, 0x93, 0x9f,
+	0x8b, 0x85, 0x06, 0x25, 0xda, 0x33, 0x50, 0x56, 0x4c, 0x5b, 0x9e, 0xeb, 0x77, 0x5f, 0xfa, 0xc1,
+	0x85, 0xc2, 0x16, 0x4c, 0xf7, 0xad, 0x93, 0x06, 0xc2, 0xb8, 0xe7, 0x4a, 0x8f, 0x0e, 0x43, 0x7d,
+	0xc7, 0x47, 0xeb, 0x71, 0xbf, 0xed, 0x45, 0xc6, 0x58, 0x85, 0x55, 0xc7, 0x1b, 0x34, 0xb3, 0x1f,
+	0xc0, 0xa2, 0x22, 0xa9, 0x77, 0x44, 0xeb, 0xed, 0x36, 0x77, 0xf7, 0x78, 0x58, 0xef, 0x6d, 0xab,
+	0x58, 0xe2, 0x56, 0x08, 0xca, 0x52, 0xd0, 0x5d, 0xa8, 0xe4, 0x43, 0xc9, 0xca, 0x43, 0xb8, 0xde,
+	0x8c, 0xc3, 0xbb, 0x9e, 0x8a, 0xd3, 0xa6, 0xd3, 0x67, 0x9a, 0xc0, 0x37, 0x4a, 0xcd, 0xcb, 0x89,
+	0xbd, 0x49, 0xd7, 0x9e, 0x16, 0x70, 0xa5, 0x77, 0xe1, 0x6c, 0xc0, 0x46, 0xed, 0x37, 0x60, 0xe5,
+	0x81, 0xae, 0xc2, 0xd3, 0x02, 0xcc, 0x69, 0x7a, 0x2e, 0xa3, 0x64, 0x12, 0xdd, 0xc9, 0x6b, 0xaa,
+	0xf0, 0x4c, 0xf8, 0x0a, 0xb4, 0x37, 0xbe, 0xfd, 0x0f, 0x13, 0x8a, 0x1d, 0x3d, 0x28, 0xea, 0x52,
+	0xc1, 0xc5, 0x14, 0x34, 0x5b, 0x87, 0x66, 0x25, 0x3f, 0x41, 0x7b, 0xb2, 0xe7, 0xde, 0x7f, 0xff,
+	0xfd, 0x79, 0x6c, 0x1a, 0xa7, 0x9c, 0x6c, 0xe3, 0x62, 0x04, 0x70, 0xd9, 0x24, 0x78, 0x2b, 0x4b,
+	0x96, 0x69, 0x2e, 0x73, 0x69, 0x78, 0xd2, 0x70, 0x55, 0xad, 0xf3, 0x81, 0xc1, 0x64, 0x7f, 0xb3,
+	0xe3, 0x72, 0x96, 0x37, 0xe7, 0x21, 0x31, 0x57, 0x46, 0x49, 0x25, 0x23, 0x4b, 0xca, 0x88, 0x85,
+	0xf3, 0x03, 0x8c, 0x38, 0x47, 0xfa, 0x05, 0x3a, 0xc6, 0x00, 0x6e, 0xa4, 0x9a, 0x0d, 0x6f, 0x66,
+	0x25, 0xfa, 0x1a, 0xd4, 0xb4, 0x87, 0xa5, 0x90, 0xba, 0xa1, 0xd4, 0x11, 0x27, 0x53, 0xea, 0x91,
+	0x1f, 0xe0, 0x57, 0x06, 0x46, 0x5e, 0x7f, 0xe1, 0x5a, 0x96, 0x3a, 0xbf, 0x83, 0xcd, 0x3b, 0x23,
+	0x66, 0x93, 0xa7, 0x75, 0xe5, 0x69, 0x05, 0xab, 0x29, 0x4f, 0xaa, 0x12, 0x75, 0xd9, 0x3a, 0xfa,
+	0x05, 0x70, 0x8e, 0xf4, 0x78, 0x8c, 0x5f, 0x18, 0x3d, 0xb5, 0x99, 0xae, 0xc3, 0x95, 0x7f, 0x69,
+	0x5f, 0xf6, 0xb3, 0xb9, 0x3a, 0x52, 0x2e, 0xb9, 0x5c, 0x53, 0x2e, 0x6f, 0xe3, 0x52, 0xbe, 0x4b,
+	0x57, 0x7a, 0xce, 0x51, 0xfc, 0x7b, 0x8c, 0x9f, 0x18, 0xbd, 0xa2, 0x7d, 0x9d, 0x89, 0xd5, 0x01,
+	0x9a, 0x03, 0x7b, 0xdb, 0x5c, 0x1e, 0x21, 0x73, 0x68, 0x4d, 0x35, 0xb9, 0x8c, 0x12, 0xfe, 0xea,
+	0x8f, 0x4e, 0xce, 0x2c, 0x76, 0x7a, 0x66, 0xb1, 0x5f, 0x67, 0x16, 0xfb, 0x78, 0x6e, 0x15, 0x4e,
+	0xcf, 0xad, 0xc2, 0x8f, 0x73, 0xab, 0xf0, 0x6a, 0xb5, 0xed, 0x47, 0xde, 0x61, 0xb3, 0xd6, 0x12,
+	0xfb, 0x8a, 0x41, 0xfd, 0x7d, 0xb6, 0x44, 0x47, 0xd3, 0xbd, 0xfb, 0x5b, 0x26, 0xbd, 0x80, 0xcb,
+	0x66, 0x51, 0x45, 0x37, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0xe7, 0x55, 0x47, 0xdf, 0xec, 0x07,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -631,14 +716,19 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
 	// Params queries the parameters of the module.
+	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// ListPrices queries all oracle prices.
 	ListPrices(ctx context.Context, in *QueryListPricesRequest, opts ...grpc.CallOption) (*QueryListPricesResponse, error)
-	GetPrice(ctx context.Context, in *QueryGetPriceRequest, opts ...grpc.CallOption) (*QueryGetPriceResponse, error)
+	// GetPrice queries the oracle price by symbol.
+	GetPriceBySymbol(ctx context.Context, in *QueryGetPriceBySymbolRequest, opts ...grpc.CallOption) (*QueryGetPriceBySymbolResponse, error)
 	// ChainTip queries the chain tip of the module.
 	QueryChainTip(ctx context.Context, in *QueryChainTipRequest, opts ...grpc.CallOption) (*QueryChainTipResponse, error)
 	// BlockHeaderByHeight queries the block header by height.
 	QueryBlockHeaderByHeight(ctx context.Context, in *QueryBlockHeaderByHeightRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHeightResponse, error)
 	// BlockHeaderByHash queries the block header by hash.
 	QueryBlockHeaderByHash(ctx context.Context, in *QueryBlockHeaderByHashRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHashResponse, error)
+	// BestBlockHeader queries the best block header.
+	QueryBestBlockHeader(ctx context.Context, in *QueryBestBlockHeaderRequest, opts ...grpc.CallOption) (*QueryBestBlockHeaderResponse, error)
 }
 
 type queryClient struct {
@@ -647,6 +737,15 @@ type queryClient struct {
 
 func NewQueryClient(cc grpc1.ClientConn) QueryClient {
 	return &queryClient{cc}
+}
+
+func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
+	out := new(QueryParamsResponse)
+	err := c.cc.Invoke(ctx, "/side.oracle.Query/Params", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *queryClient) ListPrices(ctx context.Context, in *QueryListPricesRequest, opts ...grpc.CallOption) (*QueryListPricesResponse, error) {
@@ -658,9 +757,9 @@ func (c *queryClient) ListPrices(ctx context.Context, in *QueryListPricesRequest
 	return out, nil
 }
 
-func (c *queryClient) GetPrice(ctx context.Context, in *QueryGetPriceRequest, opts ...grpc.CallOption) (*QueryGetPriceResponse, error) {
-	out := new(QueryGetPriceResponse)
-	err := c.cc.Invoke(ctx, "/side.oracle.Query/GetPrice", in, out, opts...)
+func (c *queryClient) GetPriceBySymbol(ctx context.Context, in *QueryGetPriceBySymbolRequest, opts ...grpc.CallOption) (*QueryGetPriceBySymbolResponse, error) {
+	out := new(QueryGetPriceBySymbolResponse)
+	err := c.cc.Invoke(ctx, "/side.oracle.Query/GetPriceBySymbol", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -694,28 +793,45 @@ func (c *queryClient) QueryBlockHeaderByHash(ctx context.Context, in *QueryBlock
 	return out, nil
 }
 
+func (c *queryClient) QueryBestBlockHeader(ctx context.Context, in *QueryBestBlockHeaderRequest, opts ...grpc.CallOption) (*QueryBestBlockHeaderResponse, error) {
+	out := new(QueryBestBlockHeaderResponse)
+	err := c.cc.Invoke(ctx, "/side.oracle.Query/QueryBestBlockHeader", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Params queries the parameters of the module.
+	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// ListPrices queries all oracle prices.
 	ListPrices(context.Context, *QueryListPricesRequest) (*QueryListPricesResponse, error)
-	GetPrice(context.Context, *QueryGetPriceRequest) (*QueryGetPriceResponse, error)
+	// GetPrice queries the oracle price by symbol.
+	GetPriceBySymbol(context.Context, *QueryGetPriceBySymbolRequest) (*QueryGetPriceBySymbolResponse, error)
 	// ChainTip queries the chain tip of the module.
 	QueryChainTip(context.Context, *QueryChainTipRequest) (*QueryChainTipResponse, error)
 	// BlockHeaderByHeight queries the block header by height.
 	QueryBlockHeaderByHeight(context.Context, *QueryBlockHeaderByHeightRequest) (*QueryBlockHeaderByHeightResponse, error)
 	// BlockHeaderByHash queries the block header by hash.
 	QueryBlockHeaderByHash(context.Context, *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error)
+	// BestBlockHeader queries the best block header.
+	QueryBestBlockHeader(context.Context, *QueryBestBlockHeaderRequest) (*QueryBestBlockHeaderResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
 type UnimplementedQueryServer struct {
 }
 
+func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
 func (*UnimplementedQueryServer) ListPrices(ctx context.Context, req *QueryListPricesRequest) (*QueryListPricesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPrices not implemented")
 }
-func (*UnimplementedQueryServer) GetPrice(ctx context.Context, req *QueryGetPriceRequest) (*QueryGetPriceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPrice not implemented")
+func (*UnimplementedQueryServer) GetPriceBySymbol(ctx context.Context, req *QueryGetPriceBySymbolRequest) (*QueryGetPriceBySymbolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPriceBySymbol not implemented")
 }
 func (*UnimplementedQueryServer) QueryChainTip(ctx context.Context, req *QueryChainTipRequest) (*QueryChainTipResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryChainTip not implemented")
@@ -726,9 +842,30 @@ func (*UnimplementedQueryServer) QueryBlockHeaderByHeight(ctx context.Context, r
 func (*UnimplementedQueryServer) QueryBlockHeaderByHash(ctx context.Context, req *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryBlockHeaderByHash not implemented")
 }
+func (*UnimplementedQueryServer) QueryBestBlockHeader(ctx context.Context, req *QueryBestBlockHeaderRequest) (*QueryBestBlockHeaderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryBestBlockHeader not implemented")
+}
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
 	s.RegisterService(&_Query_serviceDesc, srv)
+}
+
+func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryParamsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Params(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.oracle.Query/Params",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Params(ctx, req.(*QueryParamsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Query_ListPrices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -749,20 +886,20 @@ func _Query_ListPrices_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_GetPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetPriceRequest)
+func _Query_GetPriceBySymbol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetPriceBySymbolRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).GetPrice(ctx, in)
+		return srv.(QueryServer).GetPriceBySymbol(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.oracle.Query/GetPrice",
+		FullMethod: "/side.oracle.Query/GetPriceBySymbol",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GetPrice(ctx, req.(*QueryGetPriceRequest))
+		return srv.(QueryServer).GetPriceBySymbol(ctx, req.(*QueryGetPriceBySymbolRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -821,18 +958,40 @@ func _Query_QueryBlockHeaderByHash_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_QueryBestBlockHeader_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBestBlockHeaderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryBestBlockHeader(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.oracle.Query/QueryBestBlockHeader",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryBestBlockHeader(ctx, req.(*QueryBestBlockHeaderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "side.oracle.Query",
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "Params",
+			Handler:    _Query_Params_Handler,
+		},
+		{
 			MethodName: "ListPrices",
 			Handler:    _Query_ListPrices_Handler,
 		},
 		{
-			MethodName: "GetPrice",
-			Handler:    _Query_GetPrice_Handler,
+			MethodName: "GetPriceBySymbol",
+			Handler:    _Query_GetPriceBySymbol_Handler,
 		},
 		{
 			MethodName: "QueryChainTip",
@@ -846,12 +1005,16 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			MethodName: "QueryBlockHeaderByHash",
 			Handler:    _Query_QueryBlockHeaderByHash_Handler,
 		},
+		{
+			MethodName: "QueryBestBlockHeader",
+			Handler:    _Query_QueryBestBlockHeader_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "side/oracle/query.proto",
 }
 
-func (m *QueryGetPriceRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryGetPriceBySymbolRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -861,12 +1024,12 @@ func (m *QueryGetPriceRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryGetPriceRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryGetPriceBySymbolRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryGetPriceRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryGetPriceBySymbolRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -881,7 +1044,7 @@ func (m *QueryGetPriceRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryGetPriceResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryGetPriceBySymbolResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -891,12 +1054,12 @@ func (m *QueryGetPriceResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryGetPriceResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryGetPriceBySymbolResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryGetPriceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryGetPriceBySymbolResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1213,6 +1376,64 @@ func (m *QueryBlockHeaderByHashResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryBestBlockHeaderRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryBestBlockHeaderRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryBestBlockHeaderRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryBestBlockHeaderResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryBestBlockHeaderResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryBestBlockHeaderResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.BlockHeader != nil {
+		{
+			size, err := m.BlockHeader.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -1224,7 +1445,7 @@ func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *QueryGetPriceRequest) Size() (n int) {
+func (m *QueryGetPriceBySymbolRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1237,7 +1458,7 @@ func (m *QueryGetPriceRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryGetPriceResponse) Size() (n int) {
+func (m *QueryGetPriceBySymbolResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1370,13 +1591,35 @@ func (m *QueryBlockHeaderByHashResponse) Size() (n int) {
 	return n
 }
 
+func (m *QueryBestBlockHeaderRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *QueryBestBlockHeaderResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BlockHeader != nil {
+		l = m.BlockHeader.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
 func sovQuery(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozQuery(x uint64) (n int) {
 	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *QueryGetPriceRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryGetPriceBySymbolRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1399,10 +1642,10 @@ func (m *QueryGetPriceRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPriceRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryGetPriceBySymbolRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPriceRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryGetPriceBySymbolRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1458,7 +1701,7 @@ func (m *QueryGetPriceRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryGetPriceResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryGetPriceBySymbolResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1481,10 +1724,10 @@ func (m *QueryGetPriceResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPriceResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryGetPriceBySymbolResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPriceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryGetPriceBySymbolResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2222,6 +2465,142 @@ func (m *QueryBlockHeaderByHashResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: QueryBlockHeaderByHashResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockHeader", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BlockHeader == nil {
+				m.BlockHeader = &BlockHeader{}
+			}
+			if err := m.BlockHeader.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryBestBlockHeaderRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryBestBlockHeaderRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryBestBlockHeaderRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryBestBlockHeaderResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryBestBlockHeaderResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryBestBlockHeaderResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

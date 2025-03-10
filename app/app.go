@@ -140,6 +140,7 @@ import (
 	oracleabci "github.com/sideprotocol/side/x/oracle/abci"
 
 	oraclekeeper "github.com/sideprotocol/side/x/oracle/keeper"
+	oraclemodule "github.com/sideprotocol/side/x/oracle/module"
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -202,6 +203,7 @@ var (
 		auctionmodule.AppModuleBasic{},
 		dlcmodule.AppModuleBasic{},
 		lendingmodule.AppModuleBasic{},
+		oraclemodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -222,6 +224,8 @@ var (
 		dlctypes.ModuleName:                 nil,
 		lendingtypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
 		lendingtypes.RepaymentEscrowAccount: nil,
+		oracletypes.ModuleName:              {authtypes.Minter},
+
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -671,6 +675,7 @@ func New(
 	lendingModule := lendingmodule.NewAppModule(appCodec, app.LendingKeeper)
 
 	app.OracleKeeper = oraclekeeper.NewKeeper(appCodec, keys[oracletypes.StoreKey], keys[oracletypes.MemStoreKey], "")
+	oracleModule := oraclemodule.NewAppModule(appCodec, app.OracleKeeper)
 
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
@@ -784,6 +789,7 @@ func New(
 		auctionModule,
 		dlcModule,
 		lendingModule,
+		oracleModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -842,6 +848,7 @@ func New(
 		auctiontypes.ModuleName,
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
+		oracletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -873,6 +880,7 @@ func New(
 		auctiontypes.ModuleName,
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
+		oracletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -909,6 +917,7 @@ func New(
 		auctiontypes.ModuleName,
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
+		oracletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
@@ -1187,6 +1196,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(auctiontypes.ModuleName)
 	paramsKeeper.Subspace(dlctypes.ModuleName)
 	paramsKeeper.Subspace(lendingtypes.ModuleName)
+	paramsKeeper.Subspace(oracletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
