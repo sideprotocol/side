@@ -7,8 +7,8 @@ type Price struct {
 }
 
 func CachePrice(exchange string, price Price) {
-	mu.Lock()
-	defer mu.Unlock()
+	PriceMu.Lock()
+	defer PriceMu.Unlock()
 	if v, ok := PRICE_CACHE[price.Symbol]; ok {
 		// v[exchange] = price
 		setMapValue(v, exchange, price)
@@ -22,8 +22,8 @@ func CachePrice(exchange string, price Price) {
 }
 
 func CleanPrices(expire int64) {
-	mu.Lock()
-	defer mu.Unlock()
+	PriceMu.Lock()
+	defer PriceMu.Unlock()
 	for symbol, v := range PRICE_CACHE {
 		for ex, list := range v {
 			newList := []Price{}

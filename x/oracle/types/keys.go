@@ -39,7 +39,7 @@ var (
 	BitcoinBestBlockHeaderKey = []byte{0x12} // key for the best block height
 
 	PRICE_CACHE    = make(map[string]map[string][]Price) // symbol, exchange, price[]
-	mu             sync.Mutex
+	PriceMu        sync.RWMutex
 	StartProviders = false
 )
 
