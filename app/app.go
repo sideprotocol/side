@@ -224,7 +224,7 @@ var (
 		dlctypes.ModuleName:                 nil,
 		lendingtypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
 		lendingtypes.RepaymentEscrowAccount: nil,
-		oracletypes.ModuleName:              {authtypes.Minter},
+		oracletypes.ModuleName:              nil,
 
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
@@ -674,7 +674,12 @@ func New(
 	)
 	lendingModule := lendingmodule.NewAppModule(appCodec, app.LendingKeeper)
 
-	app.OracleKeeper = oraclekeeper.NewKeeper(appCodec, keys[oracletypes.StoreKey], keys[oracletypes.MemStoreKey], "")
+	app.OracleKeeper = oraclekeeper.NewKeeper(
+		appCodec,
+		keys[oracletypes.StoreKey],
+		keys[oracletypes.MemStoreKey],
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
 	oracleModule := oraclemodule.NewAppModule(appCodec, app.OracleKeeper)
 
 	wasmDir := filepath.Join(homePath, "wasm")
