@@ -38,7 +38,7 @@ type QueryClient interface {
 	Auctions(ctx context.Context, in *QueryAuctionsRequest, opts ...grpc.CallOption) (*QueryAuctionsResponse, error)
 	// Bid queries the specified bid by id.
 	Bid(ctx context.Context, in *QueryBidRequest, opts ...grpc.CallOption) (*QueryBidResponse, error)
-	// Bids queries the bids by the given status.
+	// Bids queries the bids by the optional auction and status.
 	Bids(ctx context.Context, in *QueryBidsRequest, opts ...grpc.CallOption) (*QueryBidsResponse, error)
 }
 
@@ -107,7 +107,7 @@ type QueryServer interface {
 	Auctions(context.Context, *QueryAuctionsRequest) (*QueryAuctionsResponse, error)
 	// Bid queries the specified bid by id.
 	Bid(context.Context, *QueryBidRequest) (*QueryBidResponse, error)
-	// Bids queries the bids by the given status.
+	// Bids queries the bids by the optional auction and status.
 	Bids(context.Context, *QueryBidsRequest) (*QueryBidsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }

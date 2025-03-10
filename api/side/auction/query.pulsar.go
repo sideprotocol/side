@@ -3542,6 +3542,7 @@ func (x *fastReflection_QueryBidResponse) ProtoMethods() *protoiface.Methods {
 
 var (
 	md_QueryBidsRequest            protoreflect.MessageDescriptor
+	fd_QueryBidsRequest_auction_id protoreflect.FieldDescriptor
 	fd_QueryBidsRequest_status     protoreflect.FieldDescriptor
 	fd_QueryBidsRequest_pagination protoreflect.FieldDescriptor
 )
@@ -3549,6 +3550,7 @@ var (
 func init() {
 	file_side_auction_query_proto_init()
 	md_QueryBidsRequest = File_side_auction_query_proto.Messages().ByName("QueryBidsRequest")
+	fd_QueryBidsRequest_auction_id = md_QueryBidsRequest.Fields().ByName("auction_id")
 	fd_QueryBidsRequest_status = md_QueryBidsRequest.Fields().ByName("status")
 	fd_QueryBidsRequest_pagination = md_QueryBidsRequest.Fields().ByName("pagination")
 }
@@ -3618,6 +3620,12 @@ func (x *fastReflection_QueryBidsRequest) Interface() protoreflect.ProtoMessage 
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_QueryBidsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.AuctionId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.AuctionId)
+		if !f(fd_QueryBidsRequest_auction_id, value) {
+			return
+		}
+	}
 	if x.Status != 0 {
 		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
 		if !f(fd_QueryBidsRequest_status, value) {
@@ -3645,6 +3653,8 @@ func (x *fastReflection_QueryBidsRequest) Range(f func(protoreflect.FieldDescrip
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_QueryBidsRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "side.auction.QueryBidsRequest.auction_id":
+		return x.AuctionId != uint64(0)
 	case "side.auction.QueryBidsRequest.status":
 		return x.Status != 0
 	case "side.auction.QueryBidsRequest.pagination":
@@ -3665,6 +3675,8 @@ func (x *fastReflection_QueryBidsRequest) Has(fd protoreflect.FieldDescriptor) b
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_QueryBidsRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "side.auction.QueryBidsRequest.auction_id":
+		x.AuctionId = uint64(0)
 	case "side.auction.QueryBidsRequest.status":
 		x.Status = 0
 	case "side.auction.QueryBidsRequest.pagination":
@@ -3685,6 +3697,9 @@ func (x *fastReflection_QueryBidsRequest) Clear(fd protoreflect.FieldDescriptor)
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_QueryBidsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "side.auction.QueryBidsRequest.auction_id":
+		value := x.AuctionId
+		return protoreflect.ValueOfUint64(value)
 	case "side.auction.QueryBidsRequest.status":
 		value := x.Status
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
@@ -3711,6 +3726,8 @@ func (x *fastReflection_QueryBidsRequest) Get(descriptor protoreflect.FieldDescr
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_QueryBidsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "side.auction.QueryBidsRequest.auction_id":
+		x.AuctionId = value.Uint()
 	case "side.auction.QueryBidsRequest.status":
 		x.Status = (BidStatus)(value.Enum())
 	case "side.auction.QueryBidsRequest.pagination":
@@ -3740,6 +3757,8 @@ func (x *fastReflection_QueryBidsRequest) Mutable(fd protoreflect.FieldDescripto
 			x.Pagination = new(v1beta1.PageRequest)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	case "side.auction.QueryBidsRequest.auction_id":
+		panic(fmt.Errorf("field auction_id of message side.auction.QueryBidsRequest is not mutable"))
 	case "side.auction.QueryBidsRequest.status":
 		panic(fmt.Errorf("field status of message side.auction.QueryBidsRequest is not mutable"))
 	default:
@@ -3755,6 +3774,8 @@ func (x *fastReflection_QueryBidsRequest) Mutable(fd protoreflect.FieldDescripto
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_QueryBidsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "side.auction.QueryBidsRequest.auction_id":
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.auction.QueryBidsRequest.status":
 		return protoreflect.ValueOfEnum(0)
 	case "side.auction.QueryBidsRequest.pagination":
@@ -3829,6 +3850,9 @@ func (x *fastReflection_QueryBidsRequest) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		if x.AuctionId != 0 {
+			n += 1 + runtime.Sov(uint64(x.AuctionId))
+		}
 		if x.Status != 0 {
 			n += 1 + runtime.Sov(uint64(x.Status))
 		}
@@ -3877,10 +3901,15 @@ func (x *fastReflection_QueryBidsRequest) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 		}
 		if x.Status != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.AuctionId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.AuctionId))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -3935,6 +3964,25 @@ func (x *fastReflection_QueryBidsRequest) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AuctionId", wireType)
+				}
+				x.AuctionId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.AuctionId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 				}
 				x.Status = 0
@@ -3952,7 +4000,7 @@ func (x *fastReflection_QueryBidsRequest) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 2:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
 				}
@@ -4253,7 +4301,7 @@ func (x *fastReflection_QueryBidsResponse) Set(fd protoreflect.FieldDescriptor, 
 		clv := lv.(*_QueryBidsResponse_1_list)
 		x.Bids = *clv.list
 	case "side.auction.QueryBidsResponse.pagination":
-		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.auction.QueryBidsResponse"))
@@ -4282,7 +4330,7 @@ func (x *fastReflection_QueryBidsResponse) Mutable(fd protoreflect.FieldDescript
 		return protoreflect.ValueOfList(value)
 	case "side.auction.QueryBidsResponse.pagination":
 		if x.Pagination == nil {
-			x.Pagination = new(v1beta1.PageRequest)
+			x.Pagination = new(v1beta1.PageResponse)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
 	default:
@@ -4302,7 +4350,7 @@ func (x *fastReflection_QueryBidsResponse) NewField(fd protoreflect.FieldDescrip
 		list := []*Bid{}
 		return protoreflect.ValueOfList(&_QueryBidsResponse_1_list{list: &list})
 	case "side.auction.QueryBidsResponse.pagination":
-		m := new(v1beta1.PageRequest)
+		m := new(v1beta1.PageResponse)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
@@ -4555,7 +4603,7 @@ func (x *fastReflection_QueryBidsResponse) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.Pagination == nil {
-					x.Pagination = &v1beta1.PageRequest{}
+					x.Pagination = &v1beta1.PageResponse{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -4910,8 +4958,9 @@ type QueryBidsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Status     BidStatus            `protobuf:"varint,1,opt,name=status,proto3,enum=side.auction.BidStatus" json:"status,omitempty"`
-	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	AuctionId  uint64               `protobuf:"varint,1,opt,name=auction_id,json=auctionId,proto3" json:"auction_id,omitempty"`
+	Status     BidStatus            `protobuf:"varint,2,opt,name=status,proto3,enum=side.auction.BidStatus" json:"status,omitempty"`
+	Pagination *v1beta1.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (x *QueryBidsRequest) Reset() {
@@ -4934,6 +4983,13 @@ func (*QueryBidsRequest) Descriptor() ([]byte, []int) {
 	return file_side_auction_query_proto_rawDescGZIP(), []int{8}
 }
 
+func (x *QueryBidsRequest) GetAuctionId() uint64 {
+	if x != nil {
+		return x.AuctionId
+	}
+	return 0
+}
+
 func (x *QueryBidsRequest) GetStatus() BidStatus {
 	if x != nil {
 		return x.Status
@@ -4954,8 +5010,8 @@ type QueryBidsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Bids       []*Bid               `protobuf:"bytes,1,rep,name=bids,proto3" json:"bids,omitempty"`
-	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Bids       []*Bid                `protobuf:"bytes,1,rep,name=bids,proto3" json:"bids,omitempty"`
+	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (x *QueryBidsResponse) Reset() {
@@ -4985,7 +5041,7 @@ func (x *QueryBidsResponse) GetBids() []*Bid {
 	return nil
 }
 
-func (x *QueryBidsResponse) GetPagination() *v1beta1.PageRequest {
+func (x *QueryBidsResponse) GetPagination() *v1beta1.PageResponse {
 	if x != nil {
 		return x.Pagination
 	}
@@ -5044,23 +5100,25 @@ var file_side_auction_query_proto_rawDesc = []byte{
 	0x37, 0x0a, 0x10, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x69, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x12, 0x23, 0x0a, 0x03, 0x62, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
 	0x32, 0x11, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e,
-	0x42, 0x69, 0x64, 0x52, 0x03, 0x62, 0x69, 0x64, 0x22, 0x8b, 0x01, 0x0a, 0x10, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x42, 0x69, 0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2f, 0x0a,
-	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x17, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x42, 0x69, 0x64,
-	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x46,
-	0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
-	0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50,
-	0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69,
-	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x82, 0x01, 0x0a, 0x11, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x42, 0x69, 0x64, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x25, 0x0a, 0x04,
-	0x62, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x42, 0x69, 0x64, 0x52, 0x04, 0x62,
-	0x69, 0x64, 0x73, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65,
-	0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52,
+	0x42, 0x69, 0x64, 0x52, 0x03, 0x62, 0x69, 0x64, 0x22, 0xaa, 0x01, 0x0a, 0x10, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x42, 0x69, 0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a,
+	0x0a, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x04, 0x52, 0x09, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x2f, 0x0a, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x17, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x42, 0x69, 0x64, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x46, 0x0a,
+	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61,
+	0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x83, 0x01, 0x0a, 0x11, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42,
+	0x69, 0x64, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x25, 0x0a, 0x04, 0x62,
+	0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x42, 0x69, 0x64, 0x52, 0x04, 0x62, 0x69,
+	0x64, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
+	0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52,
 	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x32, 0xaa, 0x04, 0x0a, 0x05,
 	0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x6b, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12,
 	0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x51,
@@ -5153,7 +5211,7 @@ var file_side_auction_query_proto_depIdxs = []int32{
 	16, // 7: side.auction.QueryBidsRequest.status:type_name -> side.auction.BidStatus
 	13, // 8: side.auction.QueryBidsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
 	15, // 9: side.auction.QueryBidsResponse.bids:type_name -> side.auction.Bid
-	13, // 10: side.auction.QueryBidsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	14, // 10: side.auction.QueryBidsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
 	0,  // 11: side.auction.Query.Params:input_type -> side.auction.QueryParamsRequest
 	2,  // 12: side.auction.Query.Auction:input_type -> side.auction.QueryAuctionRequest
 	4,  // 13: side.auction.Query.Auctions:input_type -> side.auction.QueryAuctionsRequest

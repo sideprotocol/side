@@ -68,5 +68,17 @@ func (k Keeper) Bids(goCtx context.Context, req *types.QueryBidsRequest) (*types
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryBidsResponse{Bids: k.GetBids(ctx, req.Status)}, nil
+	var bids []*types.Bid
+
+	if req.AuctionId == 0 {
+		if req.Status == types.BidStatus_BID_STATUS_UNSPECIFIED {
+			bids = k.GetAllBids(ctx)
+		} else {
+			bids = k.GetBids(ctx, req.Status)
+		}
+	} else {
+		bids = k.GetBidsByAuction(ctx, req.AuctionId, req.Status)
+	}
+
+	return &types.QueryBidsResponse{Bids: bids}, nil
 }

@@ -160,6 +160,18 @@ func (k Keeper) GetBids(ctx sdk.Context, status types.BidStatus) []*types.Bid {
 	return bids
 }
 
+// GetBidsByAuction gets the bids by the specified auction and status
+func (k Keeper) GetBidsByAuction(ctx sdk.Context, auctionId uint64, status types.BidStatus) []*types.Bid {
+	bids := make([]*types.Bid, 0)
+
+	k.IterateBidsByAuction(ctx, auctionId, status, func(bid *types.Bid) (stop bool) {
+		bids = append(bids, bid)
+		return false
+	})
+
+	return bids
+}
+
 // GetPendingBids gets the pending bids of the specified auction, sorted by time(asc) and price(desc)
 func (k Keeper) GetPendingBids(ctx sdk.Context, auctionId uint64) []*types.Bid {
 	bids := make([]*types.Bid, 0)
@@ -211,7 +223,10 @@ func (k Keeper) IterateBids(ctx sdk.Context, cb func(bid *types.Bid) (stop bool)
 func (k Keeper) IterateBidsByAuction(ctx sdk.Context, auctionId uint64, status types.BidStatus, cb func(bid *types.Bid) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	keyPrefix := append(append(types.BidByAuctionKeyPrefix, sdk.Uint64ToBigEndian(auctionId)...), sdk.Uint64ToBigEndian(uint64(status))...)
+	keyPrefix := append(types.BidByAuctionKeyPrefix, sdk.Uint64ToBigEndian(auctionId)...)
+	if status != types.BidStatus_BID_STATUS_UNSPECIFIED {
+		keyPrefix = append(keyPrefix, sdk.Uint64ToBigEndian(uint64(status))...)
+	}
 
 	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
 	defer iterator.Close()

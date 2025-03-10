@@ -27,7 +27,7 @@ service Query {
     rpc Bid(QueryBidRequest) returns (QueryBidResponse) {
         option (google.api.http).get = "/side/auction/bid/{id}";
     }
-    // Bids queries the bids by the given status.
+    // Bids queries the bids by the optional auction and status.
     rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
         option (google.api.http).get = "/side/auction/bids";
     }
@@ -76,12 +76,13 @@ message QueryBidResponse {
 
 // QueryBidsRequest is request type for the Query/Bids RPC method.
 message QueryBidsRequest {
-    BidStatus status = 1;
-    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+    uint64 auction_id = 1;
+    BidStatus status = 2;
+    cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 // QueryBidsResponse is response type for the Query/Bids RPC method.
 message QueryBidsResponse {
     repeated Bid bids = 1;
-    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
