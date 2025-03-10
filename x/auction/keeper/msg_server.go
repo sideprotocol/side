@@ -69,6 +69,15 @@ func (m msgServer) SubmitPaymentTransactionSignatures(goCtx context.Context, msg
 		return nil, err
 	}
 
+	// emit event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeGenerateSignedPaymentTransaction,
+			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprintf("%d", msg.AuctionId)),
+			sdk.NewAttribute(types.AttributeKeyTxHash, m.GetAuction(ctx, msg.AuctionId).PaymentTxId),
+		),
+	)
+
 	return &types.MsgSubmitPaymentTransactionSignaturesResponse{}, nil
 }
 

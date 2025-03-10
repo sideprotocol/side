@@ -3,7 +3,6 @@ package keeper
 import (
 	"bytes"
 	"encoding/hex"
-	"fmt"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -62,15 +61,6 @@ func (k Keeper) HandlePaymentTransactionSignatures(ctx sdk.Context, sender strin
 	// update auction
 	auction.PaymentTx = paymentTxPsbtB64
 	k.SetAuction(ctx, auction)
-
-	// emit event
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeGenerateSignedPaymentTransaction,
-			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprintf("%d", auctionId)),
-			sdk.NewAttribute(types.AttributeKeyTxHash, auction.PaymentTxId),
-		),
-	)
 
 	return nil
 }
