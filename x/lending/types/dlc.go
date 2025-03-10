@@ -7,8 +7,11 @@ import (
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/sideprotocol/side/crypto/adaptor"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
@@ -84,10 +87,6 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet s
 
 // VerifyLiquidationCET verifies the given liquidation cet and corresponding adaptor signature
 func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowerPubKey string, agencyPubKey string, adaptorSignature string, adaptorPoint string) error {
-	if err := depositTx.SanityCheck(); err != nil {
-		return ErrInvalidFunding
-	}
-
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCET)), true)
 	if err != nil {
 		return ErrInvalidCET
@@ -96,13 +95,13 @@ func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowe
 	depositTxHash := depositTx.UnsignedTx.TxHash()
 
 	for _, input := range p.UnsignedTx.TxIn {
-		if input.PreviousOutPoint.Hash != depositTxHash {
-			return ErrInvalidCET
+		if !input.PreviousOutPoint.Hash.IsEqual(&depositTxHash) {
+			return errorsmod.Wrap(ErrInvalidCET, "incorrect previous tx hash")
 		}
 	}
 
 	if p.Inputs[0].WitnessUtxo == nil {
-		return ErrInvalidCET
+		return errorsmod.Wrap(ErrInvalidCET, "missing witness utxo")
 	}
 
 	multiSigScript, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
@@ -112,7 +111,7 @@ func VerifyLiquidationCET(depositTx *psbt.Packet, liquidationCET string, borrowe
 
 	sigHash, err := CalcTapscriptSigHash(p, 0, DefaultSigHashType, multiSigScript)
 	if err != nil {
-		return ErrInvalidCET
+		return errorsmod.Wrapf(ErrInvalidCET, "failed to calculate sig hash: %v", err)
 	}
 
 	sigBytes, err := hex.DecodeString(adaptorSignature)
@@ -272,30 +271,30 @@ func CreateTimeoutRefundTransaction(depositTx *psbt.Packet, vaultPkScript []byte
 }
 
 // BuildSignedLiquidationCet builds the signed liquidation cet from the given signatures
-func BuildSignedLiquidationCet(liquidationCet string, borrowerPubKey string, borrowerSignatures []string, agencyPubKey string, agencySignatures []string) ([]byte, error) {
+func BuildSignedLiquidationCet(liquidationCet string, borrowerPubKey string, borrowerSignatures []string, agencyPubKey string, agencySignatures []string) ([]byte, *chainhash.Hash, error) {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCet)), true)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	borrowerPubKeyBytes, err := hex.DecodeString(borrowerPubKey)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	agencyPubKeyBytes, err := hex.DecodeString(agencyPubKey)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	borrowerSig, err := hex.DecodeString(borrowerSignatures[0])
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	agencySig, err := hex.DecodeString(agencySignatures[0])
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	leafHash := txscript.NewBaseTapLeaf(p.Inputs[0].TaprootLeafScript[0].Script).TapHash()
@@ -316,20 +315,22 @@ func BuildSignedLiquidationCet(liquidationCet string, borrowerPubKey string, bor
 	}
 
 	if err := psbt.MaybeFinalizeAll(p); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	signedTx, err := psbt.Extract(p)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var buf bytes.Buffer
 	if err := signedTx.Serialize(&buf); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return buf.Bytes(), nil
+	txHash := signedTx.TxHash()
+
+	return buf.Bytes(), &txHash, nil
 }
 
 // GetLiquidationCetSigHashes gets the sig hashes of the liquidation cet

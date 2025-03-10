@@ -77,7 +77,7 @@ func Sign(privKey *btcec.PrivateKey, hash []byte, adaptorPointBytes []byte) (*Si
 	// Fail if d = 0 or d >= n
 	if privKeyScalar.IsZero() {
 		str := "private key is zero"
-		return nil, fmt.Errorf("invalid private key", str)
+		return nil, fmt.Errorf("invalid private key: %s", str)
 	}
 
 	// Step 4.

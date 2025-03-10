@@ -82,7 +82,9 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	}
 
 	pool.TotalShares = pool.TotalShares.Add(outAmount)
-	pool.Supply.Add(*msg.Amount)
+
+	newSupply := pool.Supply.Add(*msg.Amount)
+	pool.Supply = &newSupply
 
 	received_shares := sdk.NewCoin(pool.Id, outAmount)
 
@@ -134,7 +136,8 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	pool.TotalShares = pool.TotalShares.Sub(msg.Shares.Amount)
 
 	withdraw := sdk.NewCoin(pool.Supply.Denom, outAmount)
-	pool.Supply.Sub(withdraw)
+	newSupply := pool.Supply.Sub(withdraw)
+	pool.Supply = &newSupply
 
 	m.SetPool(ctx, pool)
 

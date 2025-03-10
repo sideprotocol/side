@@ -220,7 +220,7 @@ var (
 		btcbridgetypes.ModuleName:           {authtypes.Minter, authtypes.Burner},
 		auctiontypes.ModuleName:             nil,
 		dlctypes.ModuleName:                 nil,
-		lendingtypes.ModuleName:             {authtypes.Minter},
+		lendingtypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
 		lendingtypes.RepaymentEscrowAccount: nil,
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
