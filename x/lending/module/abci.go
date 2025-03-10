@@ -53,7 +53,6 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 		// check if the loan is to be liquidated
 		if price.LTE(liquidationPrice) {
 			loan.Status = types.LoanStatus_Liquidated
-			k.SetLoan(ctx, *loan)
 
 			// get liquidation cet sig hashes; no error
 			liquidationCetSigHashes, _ := types.GetLiquidationCetSigHashes(k.GetDLCMeta(ctx, loan.VaultAddress))
@@ -69,20 +68,23 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			)
 
 			// create auction
-			auction := &auctiontypes.Auction{
+			auction := k.AuctionKeeper().CreateAuction(ctx, &auctiontypes.Auction{
 				LoanId:          loan.VaultAddress,
 				Borrower:        loan.Borrower,
 				Agency:          loan.Agency,
 				DepositedAsset:  sdk.NewCoin("sat", loan.CollateralAmount),
 				LiquidatedPrice: liquidationPrice.Int64(),
 				LiquidatedTime:  ctx.BlockTime(),
-				ExpectedValue:   loan.BorrowAmount.Amount.Int64(),
+				ExpectedValue:   loan.BorrowAmount.Amount.Int64() + loan.Interests.Int64(),
 				LiquidationCet:  k.GetDLCMeta(ctx, loan.VaultAddress).LiquidationCet,
-			}
-			k.AuctionKeeper().CreateAuction(ctx, auction)
+			})
+			loan.AuctionId = auction.Id
 
 			// trigger price event
 			k.DLCKeeper().TriggerEvent(ctx, loan.EventId)
+
+			// update loan
+			k.SetLoan(ctx, *loan)
 		}
 	}
 }

@@ -56,8 +56,8 @@ func (k Keeper) SetAuction(ctx sdk.Context, auction *types.Auction) {
 	store.Set(types.AuctionKey(auction.Id), bz)
 }
 
-// CreateAuction creates a new auction
-func (k Keeper) CreateAuction(ctx sdk.Context, auction *types.Auction) {
+// CreateAuction creates and returns the new created auction
+func (k Keeper) CreateAuction(ctx sdk.Context, auction *types.Auction) *types.Auction {
 	// set the id
 	auction.Id = k.IncrementAuctionId(ctx)
 
@@ -65,6 +65,8 @@ func (k Keeper) CreateAuction(ctx sdk.Context, auction *types.Auction) {
 	auction.Status = types.AuctionStatus_AUCTION_STATUS_OPEN
 
 	k.SetAuction(ctx, auction)
+
+	return auction
 }
 
 // GetCurrentPrice gets the current price of the given auction

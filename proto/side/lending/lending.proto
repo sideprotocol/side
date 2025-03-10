@@ -77,11 +77,11 @@ message Loan {
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
-
-    string loan_secret = 16;
-    google.protobuf.Timestamp create_at = 17 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 18;
-    string pool_id = 19;
+    string pool_id = 16;
+    uint64 auction_id = 17;
+    string loan_secret = 18;
+    google.protobuf.Timestamp create_at = 19 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 20;
 }
 
 message DLCMeta {
