@@ -14,7 +14,7 @@ import (
 
 var (
 	ProviderName = "okex"
-	URL          = ""
+	URL          = "wss://ws.okx.com:8443/ws/v5/public"
 	SubscribeMsg = `{
   "op": "subscribe",
   "args": [
