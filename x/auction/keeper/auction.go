@@ -86,7 +86,7 @@ func (k Keeper) GetCurrentPrice(ctx sdk.Context, auctionId uint64) (sdkmath.Int,
 	// 	return sdkmath.Int{}, err
 	// }
 
-	price := k.GetPrice(ctx, "BTCUSD")
+	price := k.GetPrice(ctx, "BTC-USD")
 
 	params := k.GetParams(ctx)
 

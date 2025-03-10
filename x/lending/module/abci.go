@@ -75,7 +75,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				DepositedAsset:  sdk.NewCoin("sat", loan.CollateralAmount),
 				LiquidatedPrice: liquidationPrice.Int64(),
 				LiquidatedTime:  ctx.BlockTime(),
-				ExpectedValue:   loan.BorrowAmount.Amount.Int64() + loan.Interests.Int64(),
+				ExpectedValue:   sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(loan.Interests)),
 				LiquidationCet:  k.GetDLCMeta(ctx, loan.VaultAddress).LiquidationCet,
 			})
 			loan.AuctionId = auction.Id

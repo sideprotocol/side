@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/auction/keeper"
@@ -38,21 +39,36 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 		}
 
 		for _, bid := range pendingBids {
-			if bid.BidPrice >= currentAuctionPrice.Int64() {
-				bidValue := bid.BidAmount.Amount.Int64() * bid.BidPrice
-				auction.BiddedValue += bidValue
+			// get the remaining amount and value
+			// TODO: should set the max amount for auction
+			remainingAmount := auction.DepositedAsset.Amount.Int64() - auction.BiddedAmount - 10000
+			remainingValue := auction.ExpectedValue.Amount.Sub(auction.BiddedValue.Amount)
+			remainingAmountByPrice := remainingValue.Mul(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(10 ^ 6)).Quo(currentAuctionPrice).Int64()
 
-				bid.BiddedAmount = bid.BidAmount
-				bid.Status = types.BidStatus_BID_STATUS_ACCEPTED
+			// check if there is remaining amount and value for the auction
+			if remainingAmount <= 0 || remainingValue.IsNegative() {
+				auction.Status = types.AuctionStatus_AUCTION_STATUS_CLOSED
+				break
+			}
+
+			// check if the bid price satisfies the current price
+			if bid.BidPrice >= currentAuctionPrice.Int64() {
+				biddedAmount := min(bid.BidAmount.Amount.Int64(), remainingAmount, remainingAmountByPrice)
+				biddedValue := sdkmath.NewInt(bid.BidPrice).Mul(sdkmath.NewInt(biddedAmount)).Mul(sdkmath.NewInt(10 ^ 6)).Quo(sdkmath.NewInt(10 ^ 8))
+
+				bid.BiddedAmount = sdk.NewInt64Coin(auction.DepositedAsset.Denom, biddedAmount)
+				if biddedAmount == bid.BidAmount.Amount.Int64() {
+					// will be updated later if partially accepted
+					bid.Status = types.BidStatus_BID_STATUS_ACCEPTED
+				}
 
 				// update bid
 				k.SetBid(ctx, bid)
-			}
-		}
 
-		// close auction if bidded value >= expected value
-		if auction.BiddedValue >= auction.ExpectedValue {
-			auction.Status = types.AuctionStatus_AUCTION_STATUS_CLOSED
+				// accumulate the auction amount and value
+				auction.BiddedAmount += biddedAmount
+				auction.BiddedValue = sdk.NewCoin(auction.ExpectedValue.Denom, auction.BiddedValue.Amount.Add(biddedValue))
+			}
 		}
 
 		// update auction
@@ -62,6 +78,9 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 
 // handleCompletedAuctions handles the completed auctions
 func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
+	// get params
+	params := k.GetParams(ctx)
+
 	// get completed auctions
 	completedAuctions := k.GetAuctions(ctx, types.AuctionStatus_AUCTION_STATUS_CLOSED)
 
@@ -72,8 +91,8 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 		// refund
 		for _, bid := range pendingBids {
 			// must be positive result here
-			refundAmount := bid.BidAmount.Sub(bid.BiddedAmount)
-			refundAsset := sdk.NewInt64Coin("uusdc", bid.BidPrice*refundAmount.Amount.Int64())
+			refundAmount := bid.BidAmount.SubAmount(bid.BiddedAmount.Amount)
+			refundAsset := sdk.NewCoin(auction.ExpectedValue.Denom, sdkmath.NewInt(bid.BidPrice).Mul(refundAmount.Amount).Mul(sdkmath.NewInt(10^6)).Quo(sdkmath.NewInt(10^8)))
 
 			if err := k.BankKeeper().SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(bid.Bidder), sdk.NewCoins(refundAsset)); err != nil {
 				k.Logger(ctx).Info("Failed to refund", "auction id", auction.Id, "bid id", bid.Id, "amount", refundAsset, "err", err)
@@ -92,8 +111,22 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 			k.SetBid(ctx, bid)
 		}
 
+		// slash borrower for liquidation penalty
+		currentPrice := k.GetPrice(ctx, "BTC-USD")
+		if currentPrice.IsZero() {
+			k.Logger(ctx).Info("Failed to get the current price", "block height", ctx.BlockHeight())
+		} else {
+			remainingAmount := auction.DepositedAsset.Amount.Int64() - auction.BiddedAmount - 10000
+			slashedValue := currentPrice.Mul(sdkmath.NewInt(remainingAmount)).Mul(sdkmath.NewInt(10 ^ 6)).Mul(sdkmath.NewInt(int64(params.FeeRate))).Quo(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(100))
+
+			slashedAsset := sdk.NewCoin(auction.ExpectedValue.Denom, slashedValue)
+			if err := k.BankKeeper().SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(auction.Borrower), types.ModuleName, sdk.NewCoins(slashedAsset)); err != nil {
+				k.Logger(ctx).Info("Failed to slash borrower", "auction id", auction.Id, "borrower", auction.Borrower, "amount", slashedAsset, "err", err)
+			}
+		}
+
 		// transfer bidded asset to the lending pool
-		biddedAsset := sdk.NewInt64Coin("uusdc", auction.BiddedValue)
+		biddedAsset := auction.BiddedValue
 		if err := k.BankKeeper().SendCoinsFromModuleToModule(ctx, types.ModuleName, lendingtypes.ModuleName, sdk.NewCoins(biddedAsset)); err != nil {
 			k.Logger(ctx).Info("Failed to transfer bidded asset to lending module", "auction id", auction.Id, "amount", biddedAsset, "err", err)
 

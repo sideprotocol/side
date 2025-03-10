@@ -4,6 +4,7 @@ import (
 	"sort"
 
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -25,7 +26,7 @@ func (k Keeper) HandleBid(ctx sdk.Context, sender string, auctionId uint64, pric
 		return nil, errorsmod.Wrap(types.ErrInvalidBid, "amount can not be less than the minimum allowed amount")
 	}
 
-	bidValue := sdk.NewInt64Coin("uusdc", price*amount.Amount.Int64())
+	bidValue := sdk.NewCoin(auction.ExpectedValue.Denom, sdkmath.NewInt(price).Mul(amount.Amount).Quo(sdkmath.NewInt(10^8)).Mul(sdkmath.NewInt(10^6)))
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(sender), types.ModuleName, sdk.NewCoins(bidValue)); err != nil {
 		return nil, err
 	}

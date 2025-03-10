@@ -30,12 +30,18 @@ message Auction {
     string agency = 4;
     cosmos.base.v1beta1.Coin deposited_asset = 5 [
         (gogoproto.nullable)     = false,
-        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"
     ];
     int64 liquidated_price = 6;
     google.protobuf.Timestamp liquidated_time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    int64 expected_value = 8;
-    int64 bidded_value = 9;
+    cosmos.base.v1beta1.Coin expected_value = 8 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"
+    ];
+    cosmos.base.v1beta1.Coin bidded_value = 9 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"
+    ];
     int64 bidded_amount = 10;
     string liquidation_cet = 11;
     string payment_tx = 12;
