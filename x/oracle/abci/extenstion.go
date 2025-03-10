@@ -59,7 +59,7 @@ func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 
 		if !h.config.Enable {
-			return nil, nil
+			return &abci.ResponseExtendVote{}, nil
 		}
 		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
 
@@ -101,6 +101,12 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 
 		if voteExt.Height != req.Height {
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
+		}
+
+		for _, v := range voteExt.Blocks {
+			if err = v.Validate(); err != nil {
+				return nil, types.ErrInvalidBlockHeader
+			}
 		}
 
 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
@@ -241,7 +247,7 @@ func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 
 		proposalTxs := req.Txs
 
-		if req.Height >= ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight && ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight != 0 {
+		if h.config.Enable && req.Height >= ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight && ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight != 0 {
 
 			err := baseapp.ValidateVoteExtensions(ctx, h.valStore, req.Height, ctx.ChainID(), req.LocalLastCommit)
 			if err != nil {
@@ -394,7 +400,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(ctx sdk.Context
 
 		blockHeaders[key] = voteExt.Blocks
 		if power, ok := headerStakes[key]; ok {
-			power += v.Validator.Power
+			headerStakes[key] = power + v.Validator.Power
 		} else {
 			headerStakes[key] = v.Validator.Power
 		}

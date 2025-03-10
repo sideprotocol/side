@@ -4,7 +4,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/x/dlc/types"
+	"github.com/sideprotocol/side/x/auction/types"
 )
 
 // GetPrice gets the current price for the specified pair

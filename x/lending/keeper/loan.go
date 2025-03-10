@@ -65,6 +65,21 @@ func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 	return loans
 }
 
+// GetLoansByAddress gets loans by the given address and status
+func (k Keeper) GetLoansByAddress(ctx sdk.Context, address string, status types.LoanStatus) []*types.Loan {
+	var loans []*types.Loan
+
+	k.IterateLoans(ctx, func(loan types.Loan) (stop bool) {
+		if loan.Borrower == address && (status == types.LoanStatus_Unspecified || loan.Status == status) {
+			loans = append(loans, &loan)
+		}
+
+		return false
+	})
+
+	return loans
+}
+
 func (k Keeper) SetDepositLog(ctx sdk.Context, deposit types.DepositLog) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&deposit)

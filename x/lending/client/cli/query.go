@@ -13,7 +13,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -37,6 +36,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryLiquidationCet())
 	cmd.AddCommand(CmdQueryLoan())
 	cmd.AddCommand(CmdQueryLoans())
+	cmd.AddCommand(CmdQueryLoansByAddress())
 	cmd.AddCommand(CmdQueryDlcMeta())
 	cmd.AddCommand(CmdQueryRepayment())
 	// this line is used by starport scaffolding # 1
@@ -182,19 +182,9 @@ func CmdQueryLiquidationEvent() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			collateralAmount, err := sdk.ParseCoinNormalized(args[0])
-			if err != nil {
-				return err
-			}
-
-			borrowedAmount, err := sdk.ParseCoinNormalized(args[1])
-			if err != nil {
-				return err
-			}
-
 			res, err := queryClient.LiquidationEvent(cmd.Context(), &types.QueryLiquidationEventRequest{
-				BorrowAmount:      &borrowedAmount,
-				CollateralAcmount: &collateralAmount,
+				CollateralAmount: args[0],
+				BorrowAmount:     args[1],
 			})
 			if err != nil {
 				return err
@@ -316,6 +306,43 @@ func CmdQueryLoans() *cobra.Command {
 			}
 
 			res, err := queryClient.Loans(cmd.Context(), &types.QueryLoansRequest{Status: types.LoanStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryLoansByAddress() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "loans-by-address [address] [status]",
+		Short: "Query loans by the given address with the optional status",
+		Args:  cobra.MaximumNArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			status := uint64(0)
+			if len(args) == 2 {
+				status, err = strconv.ParseUint(args[1], 10, 32)
+				if err != nil {
+					return err
+				}
+			}
+
+			res, err := queryClient.LoansByAddress(cmd.Context(), &types.QueryLoansByAddressRequest{
+				Address: args[0],
+				Status:  types.LoanStatus(status)})
 			if err != nil {
 				return err
 			}

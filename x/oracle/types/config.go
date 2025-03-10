@@ -61,6 +61,7 @@ func ReadOracleConfig(opts servertypes.AppOptions) (OracleConfig, error) {
 			return cfg, err
 		}
 	}
+	StartProviders = cfg.Enable
 	return cfg, validate(&cfg)
 }
 

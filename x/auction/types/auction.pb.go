@@ -31,15 +31,15 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type AssetType int32
 
 const (
-	AssetType_Bitcoin AssetType = 0
+	AssetType_ASSET_TYPE_BITCOIN AssetType = 0
 )
 
 var AssetType_name = map[int32]string{
-	0: "Bitcoin",
+	0: "ASSET_TYPE_BITCOIN",
 }
 
 var AssetType_value = map[string]int32{
-	"Bitcoin": 0,
+	"ASSET_TYPE_BITCOIN": 0,
 }
 
 func (x AssetType) String() string {
@@ -53,18 +53,24 @@ func (AssetType) EnumDescriptor() ([]byte, []int) {
 type AuctionStatus int32
 
 const (
-	AuctionStatus_AuctionOpen  AuctionStatus = 0
-	AuctionStatus_AuctionClose AuctionStatus = 1
+	AuctionStatus_AUCTION_STATUS_UNSPECIFIED AuctionStatus = 0
+	AuctionStatus_AUCTION_STATUS_OPEN        AuctionStatus = 1
+	AuctionStatus_AUCTION_STATUS_CLOSED      AuctionStatus = 2
+	AuctionStatus_AUCTION_STATUS_SETTLED     AuctionStatus = 3
 )
 
 var AuctionStatus_name = map[int32]string{
-	0: "AuctionOpen",
-	1: "AuctionClose",
+	0: "AUCTION_STATUS_UNSPECIFIED",
+	1: "AUCTION_STATUS_OPEN",
+	2: "AUCTION_STATUS_CLOSED",
+	3: "AUCTION_STATUS_SETTLED",
 }
 
 var AuctionStatus_value = map[string]int32{
-	"AuctionOpen":  0,
-	"AuctionClose": 1,
+	"AUCTION_STATUS_UNSPECIFIED": 0,
+	"AUCTION_STATUS_OPEN":        1,
+	"AUCTION_STATUS_CLOSED":      2,
+	"AUCTION_STATUS_SETTLED":     3,
 }
 
 func (x AuctionStatus) String() string {
@@ -78,24 +84,27 @@ func (AuctionStatus) EnumDescriptor() ([]byte, []int) {
 type BidStatus int32
 
 const (
-	BidStatus_Bidding   BidStatus = 0
-	BidStatus_Accepted  BidStatus = 1
-	BidStatus_Rejected  BidStatus = 2
-	BidStatus_Cancelled BidStatus = 3
+	BidStatus_BID_STATUS_UNSPECIFIED BidStatus = 0
+	BidStatus_BID_STATUS_BIDDING     BidStatus = 1
+	BidStatus_BID_STATUS_ACCEPTED    BidStatus = 2
+	BidStatus_BID_STATUS_REJECTED    BidStatus = 3
+	BidStatus_BID_STATUS_CANCELLED   BidStatus = 4
 )
 
 var BidStatus_name = map[int32]string{
-	0: "Bidding",
-	1: "Accepted",
-	2: "Rejected",
-	3: "Cancelled",
+	0: "BID_STATUS_UNSPECIFIED",
+	1: "BID_STATUS_BIDDING",
+	2: "BID_STATUS_ACCEPTED",
+	3: "BID_STATUS_REJECTED",
+	4: "BID_STATUS_CANCELLED",
 }
 
 var BidStatus_value = map[string]int32{
-	"Bidding":   0,
-	"Accepted":  1,
-	"Rejected":  2,
-	"Cancelled": 3,
+	"BID_STATUS_UNSPECIFIED": 0,
+	"BID_STATUS_BIDDING":     1,
+	"BID_STATUS_ACCEPTED":    2,
+	"BID_STATUS_REJECTED":    3,
+	"BID_STATUS_CANCELLED":   4,
 }
 
 func (x BidStatus) String() string {
@@ -107,12 +116,13 @@ func (BidStatus) EnumDescriptor() ([]byte, []int) {
 }
 
 type Bid struct {
-	Id        uint64     `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	AuctionId uint64     `protobuf:"varint,2,opt,name=auction_id,json=auctionId,proto3" json:"auction_id,omitempty"`
-	Bidder    string     `protobuf:"bytes,3,opt,name=bidder,proto3" json:"bidder,omitempty"`
-	BidPrice  int64      `protobuf:"varint,4,opt,name=bid_price,json=bidPrice,proto3" json:"bid_price,omitempty"`
-	BidAmount types.Coin `protobuf:"bytes,5,opt,name=bid_amount,json=bidAmount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"bid_amount"`
-	Status    BidStatus  `protobuf:"varint,6,opt,name=status,proto3,enum=side.auction.BidStatus" json:"status,omitempty"`
+	Id           uint64     `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	AuctionId    uint64     `protobuf:"varint,2,opt,name=auction_id,json=auctionId,proto3" json:"auction_id,omitempty"`
+	Bidder       string     `protobuf:"bytes,3,opt,name=bidder,proto3" json:"bidder,omitempty"`
+	BidPrice     int64      `protobuf:"varint,4,opt,name=bid_price,json=bidPrice,proto3" json:"bid_price,omitempty"`
+	BidAmount    types.Coin `protobuf:"bytes,5,opt,name=bid_amount,json=bidAmount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"bid_amount"`
+	BiddedAmount types.Coin `protobuf:"bytes,6,opt,name=bidded_amount,json=biddedAmount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"bidded_amount"`
+	Status       BidStatus  `protobuf:"varint,7,opt,name=status,proto3,enum=side.auction.BidStatus" json:"status,omitempty"`
 }
 
 func (m *Bid) Reset()         { *m = Bid{} }
@@ -183,23 +193,35 @@ func (m *Bid) GetBidAmount() types.Coin {
 	return types.Coin{}
 }
 
+func (m *Bid) GetBiddedAmount() types.Coin {
+	if m != nil {
+		return m.BiddedAmount
+	}
+	return types.Coin{}
+}
+
 func (m *Bid) GetStatus() BidStatus {
 	if m != nil {
 		return m.Status
 	}
-	return BidStatus_Bidding
+	return BidStatus_BID_STATUS_UNSPECIFIED
 }
 
 type Auction struct {
 	Id              uint64        `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	DepositedAsset  types.Coin    `protobuf:"bytes,2,opt,name=deposited_asset,json=depositedAsset,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"deposited_asset"`
+	LoanId          string        `protobuf:"bytes,2,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
 	Borrower        string        `protobuf:"bytes,3,opt,name=borrower,proto3" json:"borrower,omitempty"`
-	LiquidatedPrice int64         `protobuf:"varint,4,opt,name=liquidated_price,json=liquidatedPrice,proto3" json:"liquidated_price,omitempty"`
-	LiquidatedTime  time.Time     `protobuf:"bytes,5,opt,name=liquidated_time,json=liquidatedTime,proto3,stdtime" json:"liquidated_time"`
-	ExpectedValue   int64         `protobuf:"varint,6,opt,name=expected_value,json=expectedValue,proto3" json:"expected_value,omitempty"`
-	BiddedValue     int64         `protobuf:"varint,7,opt,name=bidded_value,json=biddedValue,proto3" json:"bidded_value,omitempty"`
-	PaymentTxId     string        `protobuf:"bytes,8,opt,name=payment_tx_id,json=paymentTxId,proto3" json:"payment_tx_id,omitempty"`
-	Status          AuctionStatus `protobuf:"varint,9,opt,name=status,proto3,enum=side.auction.AuctionStatus" json:"status,omitempty"`
+	Agency          string        `protobuf:"bytes,4,opt,name=agency,proto3" json:"agency,omitempty"`
+	DepositedAsset  types.Coin    `protobuf:"bytes,5,opt,name=deposited_asset,json=depositedAsset,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"deposited_asset"`
+	LiquidatedPrice int64         `protobuf:"varint,6,opt,name=liquidated_price,json=liquidatedPrice,proto3" json:"liquidated_price,omitempty"`
+	LiquidatedTime  time.Time     `protobuf:"bytes,7,opt,name=liquidated_time,json=liquidatedTime,proto3,stdtime" json:"liquidated_time"`
+	ExpectedValue   int64         `protobuf:"varint,8,opt,name=expected_value,json=expectedValue,proto3" json:"expected_value,omitempty"`
+	BiddedValue     int64         `protobuf:"varint,9,opt,name=bidded_value,json=biddedValue,proto3" json:"bidded_value,omitempty"`
+	BiddedAmount    int64         `protobuf:"varint,10,opt,name=bidded_amount,json=biddedAmount,proto3" json:"bidded_amount,omitempty"`
+	LiquidationCet  string        `protobuf:"bytes,11,opt,name=liquidation_cet,json=liquidationCet,proto3" json:"liquidation_cet,omitempty"`
+	PaymentTx       string        `protobuf:"bytes,12,opt,name=payment_tx,json=paymentTx,proto3" json:"payment_tx,omitempty"`
+	PaymentTxId     string        `protobuf:"bytes,13,opt,name=payment_tx_id,json=paymentTxId,proto3" json:"payment_tx_id,omitempty"`
+	Status          AuctionStatus `protobuf:"varint,14,opt,name=status,proto3,enum=side.auction.AuctionStatus" json:"status,omitempty"`
 }
 
 func (m *Auction) Reset()         { *m = Auction{} }
@@ -242,11 +264,11 @@ func (m *Auction) GetId() uint64 {
 	return 0
 }
 
-func (m *Auction) GetDepositedAsset() types.Coin {
+func (m *Auction) GetLoanId() string {
 	if m != nil {
-		return m.DepositedAsset
+		return m.LoanId
 	}
-	return types.Coin{}
+	return ""
 }
 
 func (m *Auction) GetBorrower() string {
@@ -254,6 +276,20 @@ func (m *Auction) GetBorrower() string {
 		return m.Borrower
 	}
 	return ""
+}
+
+func (m *Auction) GetAgency() string {
+	if m != nil {
+		return m.Agency
+	}
+	return ""
+}
+
+func (m *Auction) GetDepositedAsset() types.Coin {
+	if m != nil {
+		return m.DepositedAsset
+	}
+	return types.Coin{}
 }
 
 func (m *Auction) GetLiquidatedPrice() int64 {
@@ -284,6 +320,27 @@ func (m *Auction) GetBiddedValue() int64 {
 	return 0
 }
 
+func (m *Auction) GetBiddedAmount() int64 {
+	if m != nil {
+		return m.BiddedAmount
+	}
+	return 0
+}
+
+func (m *Auction) GetLiquidationCet() string {
+	if m != nil {
+		return m.LiquidationCet
+	}
+	return ""
+}
+
+func (m *Auction) GetPaymentTx() string {
+	if m != nil {
+		return m.PaymentTx
+	}
+	return ""
+}
+
 func (m *Auction) GetPaymentTxId() string {
 	if m != nil {
 		return m.PaymentTxId
@@ -295,7 +352,7 @@ func (m *Auction) GetStatus() AuctionStatus {
 	if m != nil {
 		return m.Status
 	}
-	return AuctionStatus_AuctionOpen
+	return AuctionStatus_AUCTION_STATUS_UNSPECIFIED
 }
 
 func init() {
@@ -309,46 +366,55 @@ func init() {
 func init() { proto.RegisterFile("side/auction/auction.proto", fileDescriptor_f93c54ffdc046a31) }
 
 var fileDescriptor_f93c54ffdc046a31 = []byte{
-	// 611 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcd, 0x6e, 0xd3, 0x40,
-	0x10, 0xf6, 0x26, 0x25, 0x8d, 0x27, 0x3f, 0xb5, 0x56, 0x08, 0x4c, 0x2a, 0x9c, 0x50, 0x09, 0x29,
-	0x54, 0xb0, 0xa6, 0xed, 0x13, 0x24, 0x91, 0x90, 0x7a, 0x40, 0x20, 0x53, 0x71, 0xe0, 0x12, 0xd9,
-	0xde, 0x25, 0x6c, 0x71, 0xbc, 0x26, 0xbb, 0x2e, 0xe9, 0x0b, 0x70, 0xee, 0x73, 0xf0, 0x24, 0x3d,
-	0xf6, 0xc8, 0x89, 0xa2, 0xf6, 0x45, 0xd0, 0xae, 0x37, 0x69, 0x2a, 0xae, 0x9c, 0xd6, 0xf3, 0x7d,
-	0xb3, 0x3b, 0x33, 0xdf, 0x7c, 0x32, 0xf4, 0x24, 0xa7, 0x2c, 0x8c, 0xcb, 0x54, 0x71, 0x91, 0xaf,
-	0x4e, 0x52, 0x2c, 0x84, 0x12, 0xb8, 0xad, 0x39, 0x62, 0xb1, 0xde, 0xc3, 0x99, 0x98, 0x09, 0x43,
-	0x84, 0xfa, 0xab, 0xca, 0xe9, 0xf5, 0x67, 0x42, 0xcc, 0x32, 0x16, 0x9a, 0x28, 0x29, 0x3f, 0x87,
-	0x8a, 0xcf, 0x99, 0x54, 0xf1, 0xbc, 0xb0, 0x09, 0x41, 0x2a, 0xe4, 0x5c, 0xc8, 0x30, 0x89, 0x25,
-	0x0b, 0xcf, 0x0e, 0x12, 0xa6, 0xe2, 0x83, 0x30, 0x15, 0xdc, 0x16, 0xd9, 0xfb, 0x51, 0x83, 0xfa,
-	0x98, 0x53, 0xdc, 0x85, 0x1a, 0xa7, 0x3e, 0x1a, 0xa0, 0xe1, 0x56, 0x54, 0xe3, 0x14, 0x3f, 0x05,
-	0xb0, 0x95, 0xa7, 0x9c, 0xfa, 0x35, 0x83, 0xbb, 0x16, 0x39, 0xa6, 0xf8, 0x11, 0x34, 0x12, 0x4e,
-	0x29, 0x5b, 0xf8, 0xf5, 0x01, 0x1a, 0xba, 0x91, 0x8d, 0xf0, 0x2e, 0xb8, 0x09, 0xa7, 0xd3, 0x62,
-	0xc1, 0x53, 0xe6, 0x6f, 0x0d, 0xd0, 0xb0, 0x1e, 0x35, 0x13, 0x4e, 0xdf, 0xeb, 0x18, 0x9f, 0x02,
-	0x68, 0x32, 0x9e, 0x8b, 0x32, 0x57, 0xfe, 0x83, 0x01, 0x1a, 0xb6, 0x0e, 0x9f, 0x90, 0xaa, 0x41,
-	0xa2, 0x1b, 0x24, 0xb6, 0x41, 0x32, 0x11, 0x3c, 0x1f, 0xbf, 0xbe, 0xfc, 0xdd, 0x77, 0x7e, 0x5e,
-	0xf7, 0x87, 0x33, 0xae, 0xbe, 0x94, 0x09, 0x49, 0xc5, 0x3c, 0xb4, 0xd3, 0x54, 0xc7, 0x2b, 0x49,
-	0xbf, 0x86, 0xea, 0xbc, 0x60, 0xd2, 0x5c, 0x90, 0x91, 0xae, 0x3d, 0x32, 0xaf, 0xe3, 0x10, 0x1a,
-	0x52, 0xc5, 0xaa, 0x94, 0x7e, 0x63, 0x80, 0x86, 0xdd, 0xc3, 0xc7, 0x64, 0x53, 0x4d, 0x32, 0xe6,
-	0xf4, 0x83, 0xa1, 0x23, 0x9b, 0xb6, 0x77, 0x59, 0x87, 0xed, 0x51, 0xc5, 0xfe, 0x23, 0x86, 0x82,
-	0x1d, 0xca, 0x0a, 0x21, 0xb9, 0x62, 0x74, 0x1a, 0x4b, 0xc9, 0x94, 0x51, 0xe4, 0x3f, 0x77, 0xdf,
-	0x5d, 0xd7, 0x18, 0xe9, 0x12, 0xb8, 0x07, 0xcd, 0x44, 0x2c, 0x16, 0xe2, 0xfb, 0x5a, 0xe5, 0x75,
-	0x8c, 0x5f, 0x80, 0x97, 0xf1, 0x6f, 0x25, 0xa7, 0xb1, 0x6e, 0x69, 0x53, 0xee, 0x9d, 0x3b, 0xbc,
-	0x52, 0xfd, 0x2d, 0x6c, 0x40, 0x53, 0xed, 0x0f, 0x2b, 0x7d, 0x8f, 0x54, 0xe6, 0x21, 0x2b, 0xf3,
-	0x90, 0x93, 0x95, 0x79, 0xc6, 0x4d, 0xdd, 0xfd, 0xc5, 0x75, 0x1f, 0x45, 0xdd, 0xbb, 0xcb, 0x9a,
-	0xc6, 0xcf, 0xa1, 0xcb, 0x96, 0x05, 0x4b, 0xf5, 0x63, 0x67, 0x71, 0x56, 0x32, 0x23, 0x70, 0x3d,
-	0xea, 0xac, 0xd0, 0x8f, 0x1a, 0xc4, 0xcf, 0xa0, 0x6d, 0x2c, 0xb1, 0x4a, 0xda, 0x36, 0x49, 0xad,
-	0x0a, 0xab, 0x52, 0xf6, 0xa0, 0x53, 0xc4, 0xe7, 0x73, 0x96, 0xab, 0xa9, 0x5a, 0x6a, 0x97, 0x35,
-	0xcd, 0x90, 0x2d, 0x0b, 0x9e, 0x2c, 0x8f, 0x29, 0x3e, 0x5a, 0xaf, 0xd1, 0x35, 0x6b, 0xdc, 0xbd,
-	0xbf, 0x46, 0xbb, 0xb0, 0xfb, 0xab, 0xdc, 0xf7, 0xc1, 0x35, 0x0a, 0x9e, 0x9c, 0x17, 0x0c, 0xb7,
-	0x60, 0x7b, 0xcc, 0x95, 0x76, 0xbc, 0xe7, 0xec, 0x1f, 0x42, 0xe7, 0xde, 0x15, 0xbc, 0x03, 0x2d,
-	0x0b, 0xbc, 0x2b, 0x58, 0xee, 0x39, 0xd8, 0x83, 0xb6, 0x05, 0x26, 0x99, 0x90, 0xcc, 0x43, 0xfb,
-	0x13, 0x70, 0xd7, 0x6e, 0xa9, 0x5e, 0xa3, 0x94, 0xe7, 0x33, 0xcf, 0xc1, 0x6d, 0x68, 0x8e, 0xd2,
-	0x94, 0x15, 0x8a, 0x51, 0x0f, 0xe9, 0x28, 0x62, 0xa7, 0x46, 0x02, 0xaf, 0x86, 0x3b, 0xe0, 0x4e,
-	0xe2, 0x3c, 0x65, 0x59, 0xc6, 0xa8, 0x57, 0x1f, 0xbf, 0xb9, 0xbc, 0x09, 0xd0, 0xd5, 0x4d, 0x80,
-	0xfe, 0xdc, 0x04, 0xe8, 0xe2, 0x36, 0x70, 0xae, 0x6e, 0x03, 0xe7, 0xd7, 0x6d, 0xe0, 0x7c, 0x7a,
-	0xb9, 0xe1, 0x0f, 0x3d, 0x9b, 0x59, 0x46, 0x2a, 0x32, 0x13, 0x84, 0xcb, 0xf5, 0xbf, 0xc1, 0x38,
-	0x25, 0x69, 0x18, 0xfa, 0xe8, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x01, 0xa5, 0xcb, 0x30, 0x38,
-	0x04, 0x00, 0x00,
+	// 768 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x54, 0xcd, 0x92, 0xea, 0x44,
+	0x18, 0x25, 0x80, 0x0c, 0x69, 0x06, 0x2e, 0xd5, 0x5e, 0x99, 0x5c, 0x6e, 0x19, 0x70, 0x6e, 0x59,
+	0xe2, 0x94, 0x26, 0xde, 0xb9, 0x4f, 0x90, 0x84, 0x5c, 0x2b, 0xd6, 0x08, 0x54, 0x92, 0xb1, 0x4a,
+	0x37, 0xa9, 0x24, 0xdd, 0x62, 0x2b, 0xd0, 0x91, 0x34, 0x23, 0xac, 0x7c, 0x00, 0x37, 0xf3, 0x1c,
+	0x3e, 0xc9, 0x2c, 0x67, 0xe9, 0xca, 0xb1, 0x66, 0xaa, 0x7c, 0x06, 0x97, 0x56, 0x77, 0x42, 0xf8,
+	0xd1, 0xa5, 0xae, 0xc2, 0x77, 0xce, 0xe9, 0x9c, 0x8f, 0xef, 0x3b, 0x1d, 0xd0, 0x4d, 0x09, 0xc2,
+	0x7a, 0xb8, 0x8a, 0x19, 0xa1, 0x8b, 0xed, 0x53, 0x4b, 0x96, 0x94, 0x51, 0x78, 0xca, 0x39, 0x2d,
+	0xc7, 0xba, 0xcf, 0xa7, 0x74, 0x4a, 0x05, 0xa1, 0xf3, 0x5f, 0x99, 0xa6, 0xdb, 0x9b, 0x52, 0x3a,
+	0x9d, 0x61, 0x5d, 0x54, 0xd1, 0xea, 0x5b, 0x9d, 0x91, 0x39, 0x4e, 0x59, 0x38, 0x4f, 0x72, 0x81,
+	0x1a, 0xd3, 0x74, 0x4e, 0x53, 0x3d, 0x0a, 0x53, 0xac, 0xdf, 0xbc, 0x8e, 0x30, 0x0b, 0x5f, 0xeb,
+	0x31, 0x25, 0xb9, 0xc9, 0xf9, 0x5f, 0x65, 0x50, 0x31, 0x09, 0x82, 0x2d, 0x50, 0x26, 0x48, 0x91,
+	0xfa, 0xd2, 0xa0, 0xea, 0x96, 0x09, 0x82, 0xef, 0x03, 0x90, 0x3b, 0x07, 0x04, 0x29, 0x65, 0x81,
+	0xcb, 0x39, 0xe2, 0x20, 0xd8, 0x01, 0xb5, 0x88, 0x20, 0x84, 0x97, 0x4a, 0xa5, 0x2f, 0x0d, 0x64,
+	0x37, 0xaf, 0xe0, 0x4b, 0x20, 0x47, 0x04, 0x05, 0xc9, 0x92, 0xc4, 0x58, 0xa9, 0xf6, 0xa5, 0x41,
+	0xc5, 0xad, 0x47, 0x04, 0x4d, 0x78, 0x0d, 0xbf, 0x07, 0x80, 0x93, 0xe1, 0x9c, 0xae, 0x16, 0x4c,
+	0x79, 0xa7, 0x2f, 0x0d, 0x1a, 0x97, 0x2f, 0xb4, 0xac, 0x41, 0x8d, 0x37, 0xa8, 0xe5, 0x0d, 0x6a,
+	0x16, 0x25, 0x0b, 0xf3, 0xb3, 0xbb, 0xdf, 0x7b, 0xa5, 0x5f, 0x1f, 0x7a, 0x83, 0x29, 0x61, 0xdf,
+	0xad, 0x22, 0x2d, 0xa6, 0x73, 0x3d, 0xff, 0x37, 0xd9, 0xe3, 0xd3, 0x14, 0xfd, 0xa0, 0xb3, 0x4d,
+	0x82, 0x53, 0x71, 0x20, 0x75, 0xb9, 0xb7, 0x21, 0xde, 0x0e, 0x13, 0xd0, 0x14, 0x2d, 0x15, 0x76,
+	0xb5, 0xff, 0xde, 0xee, 0x34, 0x73, 0xc8, 0x1d, 0x75, 0x50, 0x4b, 0x59, 0xc8, 0x56, 0xa9, 0x72,
+	0xd2, 0x97, 0x06, 0xad, 0xcb, 0x33, 0x6d, 0x7f, 0x7f, 0x9a, 0x49, 0x90, 0x27, 0x68, 0x37, 0x97,
+	0x9d, 0xff, 0x59, 0x05, 0x27, 0x46, 0xc6, 0xfe, 0x63, 0xfc, 0x67, 0xe0, 0x64, 0x46, 0xc3, 0x62,
+	0xf6, 0xb2, 0x5b, 0xe3, 0xa5, 0x83, 0x60, 0x17, 0xd4, 0x23, 0xba, 0x5c, 0xd2, 0x9f, 0x8a, 0xd1,
+	0x17, 0x35, 0x5f, 0x4a, 0x38, 0xc5, 0x8b, 0x78, 0x23, 0x26, 0x2f, 0xbb, 0x79, 0x05, 0x19, 0x78,
+	0x86, 0x70, 0x42, 0x53, 0xc2, 0xf8, 0x38, 0xd2, 0x14, 0xff, 0x2f, 0xc3, 0x6f, 0x15, 0x1e, 0x06,
+	0xb7, 0x80, 0x1f, 0x83, 0xf6, 0x8c, 0xfc, 0xb8, 0x22, 0x28, 0xe4, 0xb6, 0x59, 0x22, 0x6a, 0x22,
+	0x11, 0xcf, 0x76, 0x78, 0x16, 0x8c, 0x2f, 0xc1, 0x1e, 0x14, 0xf0, 0x08, 0x8b, 0x19, 0x36, 0x2e,
+	0xbb, 0x5a, 0x96, 0x6f, 0x6d, 0x9b, 0x6f, 0xcd, 0xdf, 0xe6, 0xdb, 0xac, 0xf3, 0x0e, 0x6f, 0x1f,
+	0x7a, 0x92, 0xdb, 0xda, 0x1d, 0xe6, 0x34, 0xfc, 0x10, 0xb4, 0xf0, 0x3a, 0xc1, 0x31, 0x7f, 0xd9,
+	0x4d, 0x38, 0x5b, 0x61, 0xa5, 0x2e, 0x7c, 0x9b, 0x5b, 0xf4, 0x2b, 0x0e, 0xc2, 0x0f, 0x40, 0xbe,
+	0xc0, 0x5c, 0x24, 0x0b, 0x51, 0x23, 0xc3, 0x32, 0xc9, 0xab, 0xe3, 0x14, 0x01, 0xa1, 0x39, 0x5c,
+	0xfc, 0x47, 0xbb, 0xee, 0xf9, 0x75, 0x89, 0x31, 0x53, 0x1a, 0x62, 0xfe, 0xad, 0x3d, 0xd8, 0xc2,
+	0x8c, 0xdf, 0xa9, 0x24, 0xdc, 0xcc, 0xf1, 0x82, 0x05, 0x6c, 0xad, 0x9c, 0x0a, 0x8d, 0x9c, 0x23,
+	0xfe, 0x1a, 0x9e, 0x83, 0xe6, 0x8e, 0xe6, 0x9b, 0x6f, 0x0a, 0x45, 0xa3, 0x50, 0x38, 0x08, 0xbe,
+	0x29, 0x42, 0xd6, 0x12, 0x21, 0x7b, 0x79, 0x18, 0xb2, 0x3c, 0x4e, 0x87, 0x41, 0xbb, 0x78, 0x05,
+	0x64, 0xb1, 0x12, 0x7f, 0x93, 0x60, 0xd8, 0x01, 0xd0, 0xf0, 0x3c, 0xdb, 0x0f, 0xfc, 0xaf, 0x27,
+	0x76, 0x60, 0x3a, 0xbe, 0x35, 0x76, 0x46, 0xed, 0xd2, 0xc5, 0xcf, 0xa0, 0x79, 0x70, 0x1a, 0xaa,
+	0xa0, 0x6b, 0x5c, 0x5b, 0xbe, 0x33, 0x1e, 0x05, 0x9e, 0x6f, 0xf8, 0xd7, 0x5e, 0x70, 0x3d, 0xf2,
+	0x26, 0xb6, 0xe5, 0xbc, 0x75, 0xec, 0x61, 0xbb, 0x04, 0xcf, 0xc0, 0xbb, 0x47, 0xfc, 0x78, 0x62,
+	0x8f, 0xda, 0x12, 0x7c, 0x01, 0xde, 0x3b, 0x22, 0xac, 0xab, 0xb1, 0x67, 0x0f, 0xdb, 0x65, 0xd8,
+	0x05, 0x9d, 0x23, 0xca, 0xb3, 0x7d, 0xff, 0xca, 0x1e, 0xb6, 0x2b, 0x17, 0xbf, 0x48, 0x40, 0x2e,
+	0x2e, 0x09, 0x57, 0x9a, 0xce, 0xf0, 0xdf, 0x9d, 0x3b, 0x00, 0xee, 0x71, 0xa6, 0x33, 0x1c, 0x3a,
+	0xa3, 0xcf, 0xdb, 0x12, 0xef, 0x68, 0x0f, 0x37, 0x2c, 0xcb, 0x9e, 0xf8, 0xc2, 0xf6, 0x90, 0x70,
+	0xed, 0x2f, 0x6c, 0x8b, 0x13, 0x15, 0xa8, 0x80, 0xe7, 0x7b, 0x84, 0x65, 0x8c, 0x2c, 0xfb, 0x8a,
+	0x77, 0x53, 0x35, 0xdf, 0xde, 0x3d, 0xaa, 0xd2, 0xfd, 0xa3, 0x2a, 0xfd, 0xf1, 0xa8, 0x4a, 0xb7,
+	0x4f, 0x6a, 0xe9, 0xfe, 0x49, 0x2d, 0xfd, 0xf6, 0xa4, 0x96, 0xbe, 0xf9, 0x64, 0xef, 0x46, 0xf0,
+	0xe1, 0x8b, 0x68, 0xc6, 0x74, 0x26, 0x0a, 0x7d, 0x5d, 0x7c, 0xcc, 0xc5, 0xdd, 0x88, 0x6a, 0x82,
+	0x7e, 0xf3, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0x0a, 0x8c, 0x34, 0x32, 0xe9, 0x05, 0x00, 0x00,
 }
 
 func (m *Bid) Marshal() (dAtA []byte, err error) {
@@ -374,8 +440,18 @@ func (m *Bid) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.Status != 0 {
 		i = encodeVarintAuction(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x38
 	}
+	{
+		size, err := m.BiddedAmount.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintAuction(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x32
 	{
 		size, err := m.BidAmount.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -434,44 +510,56 @@ func (m *Auction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.Status != 0 {
 		i = encodeVarintAuction(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x48
+		dAtA[i] = 0x70
 	}
 	if len(m.PaymentTxId) > 0 {
 		i -= len(m.PaymentTxId)
 		copy(dAtA[i:], m.PaymentTxId)
 		i = encodeVarintAuction(dAtA, i, uint64(len(m.PaymentTxId)))
 		i--
-		dAtA[i] = 0x42
+		dAtA[i] = 0x6a
+	}
+	if len(m.PaymentTx) > 0 {
+		i -= len(m.PaymentTx)
+		copy(dAtA[i:], m.PaymentTx)
+		i = encodeVarintAuction(dAtA, i, uint64(len(m.PaymentTx)))
+		i--
+		dAtA[i] = 0x62
+	}
+	if len(m.LiquidationCet) > 0 {
+		i -= len(m.LiquidationCet)
+		copy(dAtA[i:], m.LiquidationCet)
+		i = encodeVarintAuction(dAtA, i, uint64(len(m.LiquidationCet)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.BiddedAmount != 0 {
+		i = encodeVarintAuction(dAtA, i, uint64(m.BiddedAmount))
+		i--
+		dAtA[i] = 0x50
 	}
 	if m.BiddedValue != 0 {
 		i = encodeVarintAuction(dAtA, i, uint64(m.BiddedValue))
 		i--
-		dAtA[i] = 0x38
+		dAtA[i] = 0x48
 	}
 	if m.ExpectedValue != 0 {
 		i = encodeVarintAuction(dAtA, i, uint64(m.ExpectedValue))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x40
 	}
-	n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.LiquidatedTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.LiquidatedTime):])
-	if err2 != nil {
-		return 0, err2
+	n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.LiquidatedTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.LiquidatedTime):])
+	if err3 != nil {
+		return 0, err3
 	}
-	i -= n2
-	i = encodeVarintAuction(dAtA, i, uint64(n2))
+	i -= n3
+	i = encodeVarintAuction(dAtA, i, uint64(n3))
 	i--
-	dAtA[i] = 0x2a
+	dAtA[i] = 0x3a
 	if m.LiquidatedPrice != 0 {
 		i = encodeVarintAuction(dAtA, i, uint64(m.LiquidatedPrice))
 		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.Borrower) > 0 {
-		i -= len(m.Borrower)
-		copy(dAtA[i:], m.Borrower)
-		i = encodeVarintAuction(dAtA, i, uint64(len(m.Borrower)))
-		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x30
 	}
 	{
 		size, err := m.DepositedAsset.MarshalToSizedBuffer(dAtA[:i])
@@ -482,7 +570,28 @@ func (m *Auction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintAuction(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x12
+	dAtA[i] = 0x2a
+	if len(m.Agency) > 0 {
+		i -= len(m.Agency)
+		copy(dAtA[i:], m.Agency)
+		i = encodeVarintAuction(dAtA, i, uint64(len(m.Agency)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Borrower) > 0 {
+		i -= len(m.Borrower)
+		copy(dAtA[i:], m.Borrower)
+		i = encodeVarintAuction(dAtA, i, uint64(len(m.Borrower)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.LoanId) > 0 {
+		i -= len(m.LoanId)
+		copy(dAtA[i:], m.LoanId)
+		i = encodeVarintAuction(dAtA, i, uint64(len(m.LoanId)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.Id != 0 {
 		i = encodeVarintAuction(dAtA, i, uint64(m.Id))
 		i--
@@ -523,6 +632,8 @@ func (m *Bid) Size() (n int) {
 	}
 	l = m.BidAmount.Size()
 	n += 1 + l + sovAuction(uint64(l))
+	l = m.BiddedAmount.Size()
+	n += 1 + l + sovAuction(uint64(l))
 	if m.Status != 0 {
 		n += 1 + sovAuction(uint64(m.Status))
 	}
@@ -538,12 +649,20 @@ func (m *Auction) Size() (n int) {
 	if m.Id != 0 {
 		n += 1 + sovAuction(uint64(m.Id))
 	}
-	l = m.DepositedAsset.Size()
-	n += 1 + l + sovAuction(uint64(l))
+	l = len(m.LoanId)
+	if l > 0 {
+		n += 1 + l + sovAuction(uint64(l))
+	}
 	l = len(m.Borrower)
 	if l > 0 {
 		n += 1 + l + sovAuction(uint64(l))
 	}
+	l = len(m.Agency)
+	if l > 0 {
+		n += 1 + l + sovAuction(uint64(l))
+	}
+	l = m.DepositedAsset.Size()
+	n += 1 + l + sovAuction(uint64(l))
 	if m.LiquidatedPrice != 0 {
 		n += 1 + sovAuction(uint64(m.LiquidatedPrice))
 	}
@@ -554,6 +673,17 @@ func (m *Auction) Size() (n int) {
 	}
 	if m.BiddedValue != 0 {
 		n += 1 + sovAuction(uint64(m.BiddedValue))
+	}
+	if m.BiddedAmount != 0 {
+		n += 1 + sovAuction(uint64(m.BiddedAmount))
+	}
+	l = len(m.LiquidationCet)
+	if l > 0 {
+		n += 1 + l + sovAuction(uint64(l))
+	}
+	l = len(m.PaymentTx)
+	if l > 0 {
+		n += 1 + l + sovAuction(uint64(l))
 	}
 	l = len(m.PaymentTxId)
 	if l > 0 {
@@ -723,6 +853,39 @@ func (m *Bid) Unmarshal(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BiddedAmount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuction
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAuction
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuction
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.BiddedAmount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
@@ -812,9 +975,9 @@ func (m *Auction) Unmarshal(dAtA []byte) error {
 			}
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DepositedAsset", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field LoanId", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowAuction
@@ -824,24 +987,23 @@ func (m *Auction) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthAuction
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthAuction
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.DepositedAsset.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.LoanId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -876,6 +1038,71 @@ func (m *Auction) Unmarshal(dAtA []byte) error {
 			m.Borrower = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Agency", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuction
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuction
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuction
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Agency = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DepositedAsset", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuction
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAuction
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuction
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.DepositedAsset.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LiquidatedPrice", wireType)
 			}
@@ -894,7 +1121,7 @@ func (m *Auction) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 5:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LiquidatedTime", wireType)
 			}
@@ -927,7 +1154,7 @@ func (m *Auction) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 6:
+		case 8:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExpectedValue", wireType)
 			}
@@ -946,7 +1173,7 @@ func (m *Auction) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 7:
+		case 9:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BiddedValue", wireType)
 			}
@@ -965,7 +1192,90 @@ func (m *Auction) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 8:
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BiddedAmount", wireType)
+			}
+			m.BiddedAmount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuction
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BiddedAmount |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LiquidationCet", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuction
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuction
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuction
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LiquidationCet = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PaymentTx", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuction
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuction
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuction
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PaymentTx = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 13:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PaymentTxId", wireType)
 			}
@@ -997,7 +1307,7 @@ func (m *Auction) Unmarshal(dAtA []byte) error {
 			}
 			m.PaymentTxId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 9:
+		case 14:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}

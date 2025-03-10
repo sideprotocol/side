@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -63,6 +61,9 @@ func (k Keeper) CreateAuction(ctx sdk.Context, auction *types.Auction) {
 	// set the id
 	auction.Id = k.IncrementAuctionId(ctx)
 
+	// set the status to open
+	auction.Status = types.AuctionStatus_AUCTION_STATUS_OPEN
+
 	k.SetAuction(ctx, auction)
 }
 
@@ -74,14 +75,16 @@ func (k Keeper) GetCurrentPrice(ctx sdk.Context, auctionId uint64) (sdkmath.Int,
 
 	auction := k.GetAuction(ctx, auctionId)
 
-	if k.oracleKeeper == nil {
-		return sdkmath.Int{}, fmt.Errorf("oracle not set")
-	}
+	// if k.oracleKeeper == nil {
+	// 	return sdkmath.Int{}, fmt.Errorf("oracle not set")
+	// }
 
-	price, err := k.oracleKeeper.GetPrice(ctx, fmt.Sprintf("%s-%s", auction.DepositedAsset.Denom, "uusdc"))
-	if err != nil {
-		return sdkmath.Int{}, err
-	}
+	// price, err := k.oracleKeeper.GetPrice(ctx, fmt.Sprintf("%s-%s", auction.DepositedAsset.Denom, "uusdc"))
+	// if err != nil {
+	// 	return sdkmath.Int{}, err
+	// }
+
+	price := k.GetPrice(ctx, "BTCUSD")
 
 	params := k.GetParams(ctx)
 

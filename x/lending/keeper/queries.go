@@ -63,9 +63,19 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+	collateralAmount, err := sdk.ParseCoinNormalized(req.CollateralAmount)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	borrowedAmount, err := sdk.ParseCoinNormalized(req.BorrowAmount)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	liquidationPrice := types.GetLiquidationPrice(req.CollateralAcmount.Amount, req.BorrowAmount.Amount, k.GetParams(ctx).LiquidationThresholdPercent)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, k.GetParams(ctx).LiquidationThresholdPercent)
 
 	event := k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	if event == nil {
@@ -150,7 +160,26 @@ func (k Keeper) Loans(goCtx context.Context, req *types.QueryLoansRequest) (*typ
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryLoansResponse{Loans: k.GetLoans(ctx, req.Status)}, nil
+	var loans []*types.Loan
+
+	if req.Status == types.LoanStatus_Unspecified {
+		loans = k.GetAllLoans(ctx)
+	} else {
+		loans = k.GetLoans(ctx, req.Status)
+	}
+
+	return &types.QueryLoansResponse{Loans: loans}, nil
+}
+
+// LoansByAddress implements types.QueryServer.
+func (k Keeper) LoansByAddress(goCtx context.Context, req *types.QueryLoansByAddressRequest) (*types.QueryLoansByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryLoansByAddressResponse{Loans: k.GetLoansByAddress(ctx, req.Address, req.Status)}, nil
 }
 
 // LoanDlcMeta implements types.QueryServer.

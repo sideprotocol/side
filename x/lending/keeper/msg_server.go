@@ -21,7 +21,10 @@ func (m msgServer) SubmitPrice(goCtx context.Context, msg *types.MsgSubmitPrice)
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	m.SetPrice(ctx, msg.Price)
+	m.dlcKeeper.SetPrice(ctx, "BTC-USD", msg.Price)
+	m.auctionKeeper.SetPrice(ctx, "BTC-USD", msg.Price)
 
 	return &types.MsgSubmitPriceResponse{}, nil
 }

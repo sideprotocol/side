@@ -49,6 +49,8 @@ type OracleKeeper interface {
 // AuctionKeeper defines the expected auction keeper interface
 type AuctionKeeper interface {
 	CreateAuction(ctx sdk.Context, auction *auctiontypes.Auction)
+
+	SetPrice(ctx sdk.Context, pair string, price string)
 }
 
 // DLCKeeper defines the expected DLC keeper interface
@@ -62,6 +64,8 @@ type DLCKeeper interface {
 	GetAgency(ctx sdk.Context, id uint64) *dlctypes.Agency
 
 	TriggerEvent(ctx sdk.Context, id uint64)
+
+	SetPrice(ctx sdk.Context, pair string, price string)
 }
 
 // BtcBridgeKeeper defines the expected BtcBridge keeper interface

@@ -48,6 +48,7 @@ func initRootCmd(
 		PostSetup:           oracle.Start,
 		PostSetupStandalone: oracle.Start,
 	}
+
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, opts)
 
 	// add keybase, auxiliary RPC, query, genesis, and tx child commands

@@ -12,7 +12,9 @@ var (
 	ErrInvalidBidStatus    = errorsmod.Register(ModuleName, 1102, "invalid bid status")
 	ErrUnauthorized        = errorsmod.Register(ModuleName, 1103, "unauthorized operation")
 	ErrAuctionDoesNotExist = errorsmod.Register(ModuleName, 1104, "auction does not exist")
-	ErrAuctionClosed       = errorsmod.Register(ModuleName, 1105, "auction already closed")
+	ErrAuctionEnded        = errorsmod.Register(ModuleName, 1105, "auction already ended")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 2100, "invalid params")
+
+	ErrFailedToBuildTx = errorsmod.Register(ModuleName, 3100, "failed to build transaction")
 )

@@ -1,11 +1,9 @@
 package types
 
 import (
-	"bytes"
 	"encoding/hex"
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
-	"github.com/btcsuite/btcd/btcutil/psbt"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,20 +11,16 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgApply(borrower string, borrowerPubkey string, hashLoanSecret string, maturityTime int64, finalTimeout int64, depositTx string, poolId string, borrowAmount sdk.Coin, eventId uint64, agencyId uint64, liquidationCet string, liquidationAdaptorSignature string) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, hashLoanSecret string, maturityTime int64, finalTimeout int64, poolId string, borrowAmount sdk.Coin, agencyId uint64) *MsgApply {
 	return &MsgApply{
-		Borrower:                    borrower,
-		BorrowerPubkey:              borrowerPubkey,
-		LoanSecretHash:              hashLoanSecret,
-		MaturityTime:                maturityTime,
-		FinalTimeout:                finalTimeout,
-		DepositTx:                   depositTx,
-		PoolId:                      poolId,
-		BorrowAmount:                &borrowAmount,
-		EventId:                     eventId,
-		AgencyId:                    agencyId,
-		LiquidationCet:              liquidationCet,
-		LiquidationAdaptorSignature: liquidationAdaptorSignature,
+		Borrower:       borrower,
+		BorrowerPubkey: borrowerPubkey,
+		LoanSecretHash: hashLoanSecret,
+		MaturityTime:   maturityTime,
+		FinalTimeout:   finalTimeout,
+		PoolId:         poolId,
+		BorrowAmount:   &borrowAmount,
+		AgencyId:       agencyId,
 	}
 }
 
@@ -57,27 +51,8 @@ func (m *MsgApply) ValidateBasic() error {
 		return ErrInvalidLoanSecretHash
 	}
 
-	_, err = psbt.NewFromRawBytes(bytes.NewReader([]byte(m.DepositTx)), true)
-	if err != nil {
-		return ErrInvalidDepositTx
-	}
-
 	if !m.BorrowAmount.IsValid() || !m.BorrowAmount.IsPositive() {
 		return ErrInvalidAmount
-	}
-
-	_, err = psbt.NewFromRawBytes(bytes.NewReader([]byte(m.LiquidationCet)), true)
-	if err != nil {
-		return ErrInvalidCET
-	}
-
-	adaptorSigBytes, err := hex.DecodeString(m.LiquidationAdaptorSignature)
-	if err != nil {
-		return ErrInvalidAdaptorSignature
-	}
-
-	if _, err := schnorr.ParseSignature(adaptorSigBytes); err != nil {
-		return ErrInvalidAdaptorSignature
 	}
 
 	return nil
