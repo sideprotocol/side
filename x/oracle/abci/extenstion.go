@@ -65,7 +65,6 @@ func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 		}
 		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
 
-		types.CleanPrices(h.lastPriceSyncTS)
 		prices := h.getAllVolumeWeightedPrices()
 		h.lastPriceSyncTS = req.Time.UnixMilli()
 
@@ -199,29 +198,8 @@ func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context, sideHeigh
 
 func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]string {
 
-	types.PriceMu.RLock()
-	defer types.PriceMu.RUnlock()
-
-	// calculate the weighted average
-	symbolPrices := make(map[string][]math.LegacyDec)
-	for symbol, pairs := range types.PRICE_CACHE {
-		providers := []string{}
-		prices := []string{}
-		for ex, price_queue := range pairs {
-			if len(price_queue) > 0 {
-				p, err := math.LegacyNewDecFromStr(price_queue[0].Price)
-				if err == nil {
-					symbolPrices[symbol] = append(symbolPrices[symbol], p)
-					providers = append(providers, ex)
-					prices = append(prices, price_queue[0].Price)
-				}
-			}
-			telemetry.SetGauge(float32(len(prices)), types.ModuleName, "exchange", ex)
-		}
-		h.logger.Info("fetch price", "symbol", symbol, "providers", providers, "price", prices)
-	}
-
 	avgPrices := make(map[string]math.LegacyDec)
+	symbolPrices := types.GetPrices(h.lastPriceSyncTS)
 	for symbol, prices := range symbolPrices {
 		if len(prices) > 0 {
 			sum := math.LegacyNewDec(0)

@@ -21,20 +21,23 @@ func close(c *websocket.Conn) {
 }
 
 func Subscribe(provider string, svrCtx *server.Context, ctx context.Context, url, msg string, priceHander func(msg []byte) []Price) error {
-	go func() {
-		reconnect := true
-		var c *websocket.Conn
-		var err error
-		defer close(c)
 
+	reconnect := true
+	var c *websocket.Conn
+	var err error
+	defer close(c)
+
+	for {
 		if reconnect {
 			for {
 				time.Sleep(5 * time.Second)
 				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
 					reconnect = false
 					sendMessage(c, msg)
-					svrCtx.Logger.Info("reconnected price provider", "url", url)
+					svrCtx.Logger.Info("connected price provider", "url", url)
 					break
+				} else {
+					svrCtx.Logger.Error("re-connecting...", "error", err, "provider", provider)
 				}
 			}
 		}
@@ -45,14 +48,10 @@ func Subscribe(provider string, svrCtx *server.Context, ctx context.Context, url
 				CachePrice(provider, p)
 			}
 		} else {
-			svrCtx.Logger.Error("Read Error", "error", err, "provider", provider)
+			svrCtx.Logger.Error("provider disconnected", "error", err, "provider", provider)
 			c.Close()
 			reconnect = true
 		}
-	}()
+	}
 
-	<-ctx.Done()
-
-	svrCtx.Logger.Info("service stop", "module", ModuleName, "provider", provider)
-	return nil
 }

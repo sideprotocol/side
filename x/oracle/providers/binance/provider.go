@@ -45,7 +45,7 @@ func symbol(source string) string {
 func Subscribe(svrCtx *server.Context, ctx context.Context) error {
 	return types.Subscribe(ProviderName, svrCtx, ctx, URL, SubscribeMsg, func(msg []byte) []types.Price {
 		subscription := &Subscription{}
-		prices := make([]types.Price, 1)
+		prices := []types.Price{}
 		if err := json.Unmarshal(msg, &subscription); err == nil {
 			price := types.Price{
 				Symbol: symbol(subscription.Data.Symbol),
