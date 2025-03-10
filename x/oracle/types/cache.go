@@ -7,8 +7,13 @@ type Price struct {
 }
 
 func CachePrice(exchange string, price Price) {
+	if len(price.Symbol) == 0 || len(price.Price) == 0 {
+		return
+	}
+
 	PriceMu.Lock()
 	defer PriceMu.Unlock()
+
 	if v, ok := PRICE_CACHE[price.Symbol]; ok {
 		// v[exchange] = price
 		setMapValue(v, exchange, price)

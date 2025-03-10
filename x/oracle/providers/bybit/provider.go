@@ -13,7 +13,7 @@ import (
 
 var (
 	ProviderName = "bybit"
-	URL          = "wss://stream-testnet.bybit.com/v5/public/spot"
+	URL          = "wss://stream.bybit.com/v5/public/spot"
 	SubscribeMsg = `{
     "op": "subscribe",
     "args": [
