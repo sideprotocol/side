@@ -1,10 +1,11 @@
 package coinbase
 
 import (
+	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/gorilla/websocket"
 	"github.com/sideprotocol/side/x/oracle/types"
 )
 
@@ -12,6 +13,9 @@ import (
 
 var (
 	ProviderName = "coinbase"
+	// url := "wss://ws-feed-public.sandbox.exchange.coinbase.com"
+	URL          = "wss://ws-feed.exchange.coinbase.com"
+	SubscribeMsg = `{"type":"subscribe","product_ids":["BTC-USD"],"channels":[{"name":"ticker","product_ids":["BTC-USD"]}]}`
 	SymbolMap    = map[string]string{
 		"BTC-USD": types.BTCUSD,
 	}
@@ -32,40 +36,11 @@ type Subscription struct {
 	Time   string `json:"time,omitempty"`
 }
 
-// {"type":"subscribe","product_ids":["BTC-USD"],"channels":[{"name":"ticker","product_ids":["BTC-USD"]}]}
-func subscribe(conn *websocket.Conn) {
-	conn.WriteMessage(websocket.TextMessage, []byte("{\"type\":\"subscribe\",\"product_ids\":[\"BTC-USD\"],\"channels\":[{\"name\":\"ticker\",\"product_ids\":[\"BTC-USD\"]}]}"))
-}
-
-func Subscribe(svrCtx *server.Context) error {
-	// url := "wss://ws-feed-public.sandbox.exchange.coinbase.com"
-	url := "wss://ws-feed.exchange.coinbase.com"
-	c, re, err := websocket.DefaultDialer.Dial(url, nil)
-	if err != nil {
-		svrCtx.Logger.Error("price provider connection", "url", url)
-		return err
-	}
-	defer c.Close()
-
-	subscribe(c)
-	reconnect := false
-
-	for {
-
-		if reconnect {
-			for {
-				time.Sleep(5 * time.Second)
-				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
-					reconnect = false
-					subscribe(c)
-					svrCtx.Logger.Info("reconnected price provider", "url", url, "status", re.Status, "body", re.Body)
-					break
-				}
-			}
-		}
-
+func Subscribe(svrCtx *server.Context, ctx context.Context) error {
+	return types.Subscribe(ProviderName, svrCtx, ctx, URL, SubscribeMsg, func(msg []byte) []types.Price {
+		prices := make([]types.Price, 1)
 		subscription := &Subscription{}
-		if err = c.ReadJSON(subscription); err == nil {
+		if err := json.Unmarshal(msg, subscription); err == nil {
 			if subscription.Type == "ticker" {
 				// svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "message", subscription, "symbol", subscription.Symbol, "price", subscription.Price)
 
@@ -76,20 +51,76 @@ func Subscribe(svrCtx *server.Context) error {
 						Price:  subscription.Price,
 						Time:   t.UnixMilli(),
 					}
-					types.CachePrice(ProviderName, price)
+					prices = append(prices, price)
 				} else {
 					svrCtx.Logger.Error("Parse time error")
 				}
 
 			}
-		} else {
-			c.Close()
-			svrCtx.Logger.Error("Read Error", "error", err, "provider", ProviderName)
-			reconnect = true
-
 		}
 
-		// adaptor(steam)
-
-	}
+		return prices
+	})
 }
+
+// {"type":"subscribe","product_ids":["BTC-USD"],"channels":[{"name":"ticker","product_ids":["BTC-USD"]}]}
+// func subscribe(conn *websocket.Conn) {
+// 	conn.WriteMessage(websocket.TextMessage, []byte("{\"type\":\"subscribe\",\"product_ids\":[\"BTC-USD\"],\"channels\":[{\"name\":\"ticker\",\"product_ids\":[\"BTC-USD\"]}]}"))
+// }
+
+// func Subscribe(svrCtx *server.Context) error {
+// 	// url := "wss://ws-feed-public.sandbox.exchange.coinbase.com"
+// 	url := "wss://ws-feed.exchange.coinbase.com"
+// 	c, re, err := websocket.DefaultDialer.Dial(url, nil)
+// 	if err != nil {
+// 		svrCtx.Logger.Error("price provider connection", "url", url)
+// 		return err
+// 	}
+// 	defer c.Close()
+
+// 	subscribe(c)
+// 	reconnect := false
+
+// 	for {
+
+// 		if reconnect {
+// 			for {
+// 				time.Sleep(5 * time.Second)
+// 				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
+// 					reconnect = false
+// 					subscribe(c)
+// 					svrCtx.Logger.Info("reconnected price provider", "url", url, "status", re.Status, "body", re.Body)
+// 					break
+// 				}
+// 			}
+// 		}
+
+// 		subscription := &Subscription{}
+// 		if err = c.ReadJSON(subscription); err == nil {
+// 			if subscription.Type == "ticker" {
+// 				// svrCtx.Logger.Info("Websocket Received", "provider", ProviderName, "message", subscription, "symbol", subscription.Symbol, "price", subscription.Price)
+
+// 				// sample time: 2025-03-01T03:42:43.951417Z
+// 				if t, err := time.Parse(time.RFC3339Nano, subscription.Time); err == nil {
+// 					price := types.Price{
+// 						Symbol: symbol(subscription.Symbol),
+// 						Price:  subscription.Price,
+// 						Time:   t.UnixMilli(),
+// 					}
+// 					types.CachePrice(ProviderName, price)
+// 				} else {
+// 					svrCtx.Logger.Error("Parse time error")
+// 				}
+
+// 			}
+// 		} else {
+// 			c.Close()
+// 			svrCtx.Logger.Error("Read Error", "error", err, "provider", ProviderName)
+// 			reconnect = true
+
+// 		}
+
+// 		// adaptor(steam)
+
+// 	}
+// }
