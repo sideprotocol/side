@@ -252,6 +252,9 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		return nil, err
 	}
 
+	// update pool
+	m.AfterPoolBorrowed(ctx, loan.PoolId, *loan.BorrowAmount)
+
 	loan.Status = types.LoanStatus_Open
 	loan.LoanSecret = msg.LoanSecret
 
@@ -509,10 +512,8 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 		return nil, err
 	}
 
-	pool := m.GetPool(ctx, loan.PoolId)
-	newSupply := pool.Supply.AddAmount(amount)
-	pool.Supply = &newSupply
-	m.SetPool(ctx, pool)
+	// update pool
+	m.AfterPoolRepaid(ctx, loan.PoolId, *loan.BorrowAmount, loan.Interests.Sub(loan.Fees))
 
 	loan.Status = types.LoanStatus_Closed
 	m.SetLoan(ctx, loan)

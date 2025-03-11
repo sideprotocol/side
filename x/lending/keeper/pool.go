@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -48,4 +49,26 @@ func (k Keeper) IteratePools(ctx sdk.Context, process func(header types.LendingP
 			break
 		}
 	}
+}
+
+func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, amount sdk.Coin) {
+	pool := k.GetPool(ctx, poolId)
+
+	newSupply := pool.Supply.Sub(amount)
+	pool.Supply = &newSupply
+
+	pool.BorrowedAmount = pool.BorrowedAmount.Add(amount.Amount)
+
+	k.SetPool(ctx, pool)
+}
+
+func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, amount sdk.Coin, extraFees sdkmath.Int) {
+	pool := k.GetPool(ctx, poolId)
+
+	newSupply := pool.Supply.Add(amount).AddAmount(extraFees)
+	pool.Supply = &newSupply
+
+	pool.BorrowedAmount = pool.BorrowedAmount.Sub(amount.Amount)
+
+	k.SetPool(ctx, pool)
 }
