@@ -52,7 +52,7 @@ func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollate
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	collateralAddr, err := types.CreateVaultAddress(req.BorrowerPubkey, req.AgencyPubkey, req.HashOfLoanSecret, int64(req.MaturityTime), int64(req.MaturityTime)+k.FinalTimeoutDuration(ctx))
+	collateralAddr, err := types.CreateVaultAddress(req.BorrowerPubkey, req.AgencyPubkey, int64(req.MaturityTime), int64(req.MaturityTime)+k.FinalTimeoutDuration(ctx))
 	if err != nil {
 		return nil, err
 	}

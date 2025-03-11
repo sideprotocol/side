@@ -18,7 +18,7 @@ import (
 )
 
 // BuildDLCMeta creates the dlc meta from the given params
-func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet string, liquidationAdaptorSig string, borrowerPubKey string, agencyPubKey string, secretHash string, muturityTime int64, finalTimeout int64) (*DLCMeta, error) {
+func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet string, liquidationAdaptorSig string, borrowerPubKey string, agencyPubKey string, muturityTime int64, finalTimeout int64) (*DLCMeta, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet s
 		return nil, err
 	}
 
-	forcedRepaymentScript, err := CreateHashTimeLockScript(agencyPubKey, secretHash, muturityTime)
+	forcedRepaymentScript, err := CreatePubKeyTimeLockScript(agencyPubKey, muturityTime)
 	if err != nil {
 		return nil, err
 	}

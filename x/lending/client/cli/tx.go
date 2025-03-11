@@ -40,7 +40,6 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdApprove())
 	cmd.AddCommand(CmdCancel())
 	cmd.AddCommand(CmdSubmitCancellationSignatures())
-	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
 	cmd.AddCommand(CmdSubmitRepaymentAdaptorSignatures())
 	cmd.AddCommand(CmdSubmitLiquidationCetSignatures())
@@ -121,26 +120,26 @@ func CmdRemoveLiquidity() *cobra.Command {
 
 func CmdApply() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "apply [btc public key] [secret hash] [maturity time] [pool id] [borrow amount] [agency id]",
+		Use:   "apply [btc public key] [maturity time] [pool id] [borrow amount] [agency id]",
 		Short: "Apply loan with the related params",
-		Args:  cobra.ExactArgs(6),
+		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			maturityTime, err := strconv.ParseInt(args[2], 10, 64)
+			maturityTime, err := strconv.ParseInt(args[1], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			borrowAmount, err := sdk.ParseCoinNormalized(args[4])
+			borrowAmount, err := sdk.ParseCoinNormalized(args[3])
 			if err != nil {
 				return err
 			}
 
-			agencyId, err := strconv.ParseUint(args[5], 10, 64)
+			agencyId, err := strconv.ParseUint(args[4], 10, 64)
 			if err != nil {
 				return err
 			}
@@ -148,9 +147,8 @@ func CmdApply() *cobra.Command {
 			msg := types.NewMsgApply(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				args[1],
 				maturityTime,
-				args[3],
+				args[2],
 				borrowAmount,
 				agencyId,
 			)
@@ -285,36 +283,6 @@ func CmdSubmitCancellationSignatures() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				signatures,
-			)
-
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdRedeem() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "redeem [loan id] [loan secret]",
-		Short: "Redeem the borrowed coin with the loan secret",
-		Args:  cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgRedeem(
-				clientCtx.GetFromAddress().String(),
-				args[0],
-				args[1],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

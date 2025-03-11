@@ -16,17 +16,8 @@ import (
 
 	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/crypto/adaptor"
-	"github.com/sideprotocol/side/crypto/hash"
 	"github.com/sideprotocol/side/x/dlc/types"
 )
-
-// HashLoanSecret hashes the given secret
-// Assume that the secret is a valid hex string
-func HashLoanSecret(secret string) string {
-	secretBytes, _ := hex.DecodeString(secret)
-
-	return hex.EncodeToString(hash.Sha256(secretBytes))
-}
 
 // AdaptorPoint gets the corresponding adaptor point from the given secret
 func AdaptorPoint(secret []byte) string {
@@ -57,32 +48,7 @@ func CreateMultisigScript(pubKeys []string) ([]byte, error) {
 	return builder.Script()
 }
 
-// Branch 2: Hash Time lock script for DCA
-func CreateHashTimeLockScript(pubKey string, hashLock string, lockTime int64) ([]byte, error) {
-	pubKeyBytes, err := hex.DecodeString(pubKey)
-	if err != nil {
-		return nil, err
-	}
-
-	hashLockBytes, err := hex.DecodeString(hashLock)
-	if err != nil {
-		return nil, err
-	}
-
-	builder := txscript.NewScriptBuilder()
-	builder.AddInt64(lockTime)                     // Add lock time
-	builder.AddOp(txscript.OP_CHECKLOCKTIMEVERIFY) // Enforce time lock
-	builder.AddOp(txscript.OP_DROP)                // Drop locktime from the stack
-	builder.AddOp(txscript.OP_SHA256)              // Add hash lock
-	builder.AddData(hashLockBytes)                 // Push hash lock
-	builder.AddOp(txscript.OP_EQUALVERIFY)         // Verify hash preimage
-	builder.AddData(pubKeyBytes)                   // Push pubkey
-	builder.AddOp(txscript.OP_CHECKSIG)            // Verify signature
-
-	return builder.Script()
-}
-
-// Branch 3: PubKey with Time lock script
+// Branch 2/3: PubKey with Time lock script for DCA/Borrower
 func CreatePubKeyTimeLockScript(pubKeyHex string, lockTime int64) ([]byte, error) {
 	pubKey, err := hex.DecodeString(pubKeyHex)
 	if err != nil {
@@ -115,7 +81,7 @@ func CreateTaprootAddress(internalKey *secp256k1.PublicKey, branches [][]byte, p
 	return address.EncodeAddress(), nil
 }
 
-func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, loanSecretHash string, muturityTime int64, finalTimeout int64) (string, error) {
+func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, muturityTime int64, finalTimeout int64) (string, error) {
 	params := bitcoin.Network
 
 	// multisig script for liquidation cet and repayment
@@ -124,11 +90,13 @@ func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, loanSecretHash 
 		return "", err
 	}
 
-	forcedRepaymentScript, err := CreateHashTimeLockScript(dcaPubkey, loanSecretHash, muturityTime)
+	// forced liquidation script on loan defaulted for DCA
+	forcedRepaymentScript, err := CreatePubKeyTimeLockScript(dcaPubkey, muturityTime)
 	if err != nil {
 		return "", err
 	}
 
+	// refund script when final timeout reached for borrower
 	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubkey, finalTimeout)
 	if err != nil {
 		return "", err

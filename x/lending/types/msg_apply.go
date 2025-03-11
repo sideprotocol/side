@@ -11,11 +11,10 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgApply(borrower string, borrowerPubKey string, hashLoanSecret string, maturityTime int64, poolId string, borrowAmount sdk.Coin, agencyId uint64) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, maturityTime int64, poolId string, borrowAmount sdk.Coin, agencyId uint64) *MsgApply {
 	return &MsgApply{
 		Borrower:       borrower,
-		BorrowerPubkey: borrowerPubKey,
-		LoanSecretHash: hashLoanSecret,
+		BorrowerPubkey: borrowerPubkey,
 		MaturityTime:   maturityTime,
 		PoolId:         poolId,
 		BorrowAmount:   &borrowAmount,
@@ -40,10 +39,6 @@ func (m *MsgApply) ValidateBasic() error {
 
 	if m.MaturityTime <= 0 {
 		return ErrInvalidMaturityTime
-	}
-
-	if secretHashBytes, err := hex.DecodeString(m.LoanSecretHash); err != nil || len(secretHashBytes) != LoanSecretHashLength {
-		return ErrInvalidLoanSecretHash
 	}
 
 	if !m.BorrowAmount.IsValid() || !m.BorrowAmount.IsPositive() {

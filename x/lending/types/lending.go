@@ -5,14 +5,6 @@ import (
 	sdkmath "cosmossdk.io/math"
 )
 
-const (
-	// loan secret length
-	LoanSecretLength = 32
-
-	// loan secret hash length
-	LoanSecretHashLength = 32
-)
-
 // GetLiquidationPrice gets the liquidation price according to the liquidation LTV
 func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowedAmount sdkmath.Int, lltv sdkmath.Int) sdkmath.Int {
 	// liquidation price = borrowed amount / (lltv/100) / collateral amount

@@ -78,22 +78,20 @@ enum LoanStatus {
     Unspecified = 0;
     // Loan Requested
     Requested = 1;
-    // Loan Approved
-    Approved = 2;
+    // Loan Open
+    Open = 2;
     // Loan Rejected
     Rejected = 3;
     // Loan Cancelled
     Cancelled = 4;
-    // Loan Open
-    Open = 5;
     // Loan Repaid
-    Repaid = 6;
+    Repaid = 5;
     // Loan Defaulted
-    Defaulted = 7;
+    Defaulted = 6;
     // Loan Liquidated
-    Liquidated = 8;
+    Liquidated = 7;
     // Loan Closed
-    Closed = 9;
+    Closed = 8;
 }
 
 message Loan {
@@ -101,36 +99,34 @@ message Loan {
     string borrower = 2;
     string borrowerPubKey = 3;
     string agency = 4;
-    string hash_loan_secret = 5;
-    int64 maturity_time = 6;
-    int64 final_timeout = 7; 
+    int64 maturity_time = 5;
+    int64 final_timeout = 6;
     
-    cosmos.base.v1beta1.Coin borrow_amount = 8;
-    string fees = 9 [
+    cosmos.base.v1beta1.Coin borrow_amount = 7;
+    string fees = 8 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
-    string interests = 10 [
+    string interests = 9 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
 
-    string term = 11 [
+    string term = 10 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
-    uint64 event_id = 12;
-    uint64 attestation_id = 13;
-    repeated string deposit_txs = 14;
-    string collateral_amount = 15 [
+    uint64 event_id = 11;
+    uint64 attestation_id = 12;
+    repeated string deposit_txs = 13;
+    string collateral_amount = 14 [
         (gogoproto.customtype) = "cosmossdk.io/math.Int",
         (gogoproto.nullable) = false
       ];
-    string pool_id = 16;
-    uint64 auction_id = 17;
-    string loan_secret = 18;
-    google.protobuf.Timestamp create_at = 19 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 20;
+    string pool_id = 15;
+    uint64 auction_id = 16;
+    google.protobuf.Timestamp create_at = 17 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 18;
 }
 
 message DLCMeta {

@@ -36,7 +36,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	agency := m.dlcKeeper.GetAgency(ctx, msg.AgencyId)
 
-	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, agency.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.MaturityTime+m.FinalTimeoutDuration(ctx))
+	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, agency.Pubkey, msg.MaturityTime, msg.MaturityTime+m.FinalTimeoutDuration(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,6 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Borrower:       msg.Borrower,
 		BorrowerPubKey: msg.BorrowerPubkey,
 		Agency:         agency.Pubkey,
-		HashLoanSecret: msg.LoanSecretHash,
 		MaturityTime:   msg.MaturityTime,
 		FinalTimeout:   msg.MaturityTime + m.FinalTimeoutDuration(ctx),
 		BorrowAmount:   msg.BorrowAmount,
@@ -77,7 +76,6 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 			sdk.NewAttribute(types.AttributeKeyVault, loan.VaultAddress),
 			sdk.NewAttribute(types.AttributeKeyBorrower, loan.Borrower),
 			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
-			sdk.NewAttribute(types.AttributeKeyLoanSecretHash, loan.HashLoanSecret),
 			sdk.NewAttribute(types.AttributeKeyMuturityTime, fmt.Sprint(loan.MaturityTime)),
 			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
 			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
@@ -125,7 +123,7 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
-	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignature, loan.BorrowerPubKey, loan.Agency, loan.HashLoanSecret, loan.MaturityTime, loan.FinalTimeout)
+	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignature, loan.BorrowerPubKey, loan.Agency, loan.MaturityTime, loan.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -196,14 +194,29 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, types.ErrLoanDoesNotExist
 	}
 
+	loan := m.GetLoan(ctx, log.VaultAddress)
+
 	// Do not validate tx for now
 	// if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, log.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
 	// 	return nil, types.ErrInvalidProof
 	// }
 
-	loan := m.GetLoan(ctx, log.VaultAddress)
+	poolConfig := m.GetPool(ctx, loan.PoolId).Config
 
-	loan.Status = types.LoanStatus_Approved
+	amount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-poolConfig.OriginationFee.Int64())
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(loan.Borrower), sdk.NewCoins(amount)); err != nil {
+		return nil, err
+	}
+
+	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, poolConfig.OriginationFee.Int64())
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.GetParams(ctx).OriginationFeeCollector), sdk.NewCoins(originationFee)); err != nil {
+		return nil, err
+	}
+
+	// update pool
+	m.AfterPoolBorrowed(ctx, loan.PoolId, *loan.BorrowAmount)
+
+	loan.Status = types.LoanStatus_Open
 	m.SetLoan(ctx, loan)
 
 	m.EmitEvent(ctx, msg.Relayer,
@@ -401,61 +414,6 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 	)
 
 	return &types.MsgSubmitCancellationSignaturesResponse{}, nil
-}
-
-// Redeem implements types.MsgServer.
-func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.MsgRedeemResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	borrower, err := sdk.AccAddressFromBech32(msg.Borrower)
-	if err != nil {
-		return nil, types.ErrInvalidSender
-	}
-
-	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanDoesNotExist
-	}
-
-	loan := m.GetLoan(ctx, msg.LoanId)
-
-	if msg.Borrower != loan.Borrower {
-		return nil, types.ErrMismatchedBorrower
-	}
-
-	if types.HashLoanSecret(msg.LoanSecret) != loan.HashLoanSecret {
-		return nil, types.ErrMismatchedLoanSecret
-	}
-
-	poolConfig := m.GetPool(ctx, loan.PoolId).Config
-
-	redeemedAmount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-poolConfig.OriginationFee.Int64())
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, sdk.NewCoins(redeemedAmount)); err != nil {
-		return nil, err
-	}
-
-	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, poolConfig.OriginationFee.Int64())
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.GetParams(ctx).OriginationFeeCollector), sdk.NewCoins(originationFee)); err != nil {
-		return nil, err
-	}
-
-	// update pool
-	m.AfterPoolBorrowed(ctx, loan.PoolId, *loan.BorrowAmount)
-
-	loan.Status = types.LoanStatus_Open
-	loan.LoanSecret = msg.LoanSecret
-
-	m.SetLoan(ctx, loan)
-
-	m.EmitEvent(ctx, msg.Borrower,
-		sdk.NewAttribute("vault", loan.VaultAddress),
-		sdk.NewAttribute("loan_secret", msg.LoanSecret),
-	)
-
-	return &types.MsgRedeemResponse{}, nil
 }
 
 // Repay implements types.MsgServer.

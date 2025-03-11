@@ -22,7 +22,6 @@ service Msg {
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
     rpc Cancel(MsgCancel) returns (MsgCancelResponse);
     rpc SubmitCancellationSignatures(MsgSubmitCancellationSignatures) returns (MsgSubmitCancellationSignaturesResponse);
-    rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
     rpc SubmitRepaymentAdaptorSignatures(MsgSubmitRepaymentAdaptorSignatures) returns (MsgSubmitRepaymentAdaptorSignaturesResponse);
     rpc SubmitLiquidationCetSignatures(MsgSubmitLiquidationCetSignatures) returns (MsgSubmitLiquidationCetSignaturesResponse);
@@ -76,15 +75,6 @@ message MsgRepay{
 
 message MsgRepayResponse{}
 
-message MsgRedeem {
-    option (cosmos.msg.v1.signer) = "borrower";
-    string borrower = 1;
-    string loan_id = 2;
-    string loan_secret = 3;
-}
-
-message MsgRedeemResponse{}
-
 message MsgAddLiquidity {
     option (cosmos.msg.v1.signer) = "lender";
 
@@ -113,11 +103,10 @@ message MsgApply {
 
     string borrower = 1;
     string borrower_pubkey = 2;
-    string loan_secret_hash = 3;
-    int64 maturity_time = 4;
-    string pool_id = 5;
-    cosmos.base.v1beta1.Coin borrow_amount = 6;
-    uint64 agency_id = 7;
+    int64 maturity_time = 3;
+    string pool_id = 4;
+    cosmos.base.v1beta1.Coin borrow_amount = 5;
+    uint64 agency_id = 6;
 }
 
 message MsgApplyResponse {

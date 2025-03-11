@@ -13,7 +13,6 @@ const (
 	AttributeKeyVault            = "vault"
 	AttributeKeyBorrower         = "borrower"
 	AttributeKeyAgencyPubKey     = "agency_pub_key"
-	AttributeKeyLoanSecretHash   = "loan_secret_hash"
 	AttributeKeyMuturityTime     = "muturity_time"
 	AttributeKeyFinalTimeout     = "final_timeout"
 	AttributeKeyCollateralAmount = "collateral_amount"

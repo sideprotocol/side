@@ -112,8 +112,7 @@ message QueryLiquidationCetResponse {
 message QueryCollateralAddressRequest{
     string borrower_pubkey = 1;
     string agency_pubkey = 2;
-    string hash_of_loan_secret = 3;
-    uint64 maturity_time = 4;
+    uint64 maturity_time = 3;
 }
 
 message QueryCollateralAddressResponse{
