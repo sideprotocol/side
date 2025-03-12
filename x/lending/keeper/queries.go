@@ -197,6 +197,21 @@ func (k Keeper) LoanDlcMeta(goCtx context.Context, req *types.QueryLoanDlcMetaRe
 	return &types.QueryLoanDlcMetaResponse{DlcMeta: k.GetDLCMeta(ctx, req.LoanId)}, nil
 }
 
+// LoanCancellation implements types.QueryServer.
+func (k Keeper) LoanCancellation(goCtx context.Context, req *types.QueryLoanCancellationRequest) (*types.QueryLoanCancellationResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasLoan(ctx, req.LoanId) {
+		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
+	}
+
+	return &types.QueryLoanCancellationResponse{Cancellation: k.GetCancellation(ctx, req.LoanId)}, nil
+}
+
 // Repayment implements types.QueryServer.
 func (k Keeper) Repayment(goCtx context.Context, req *types.QueryRepaymentRequest) (*types.QueryRepaymentResponse, error) {
 	if req == nil {

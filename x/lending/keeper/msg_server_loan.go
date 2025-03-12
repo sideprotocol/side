@@ -215,6 +215,83 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	return &types.MsgApproveResponse{}, nil
 }
 
+// Cancel implements types.MsgServer.
+func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.MsgCancelResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanDoesNotExist
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+	if msg.Borrower != loan.Borrower {
+		return nil, types.ErrMismatchedBorrower
+	}
+
+	if loan.Status != types.LoanStatus_Rejected {
+		return nil, types.ErrInvalidLoanStatus
+	}
+
+	if len(loan.DepositTxs) == 0 {
+		return nil, types.ErrDepositTxDoesNotExist
+	}
+
+	depositTxId := loan.DepositTxs[0]
+
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Tx)), true)
+
+	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
+	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
+	sigHashes := []string{}
+
+	for i, signature := range msg.Signatures {
+		if p.UnsignedTx.TxIn[i].PreviousOutPoint.Hash.String() != depositTxId {
+			return nil, errorsmod.Wrap(types.ErrDepositTxDoesNotExist, "mismatched deposit tx hash")
+		}
+
+		sigBytes, _ := hex.DecodeString(signature)
+
+		sigHash, err := types.CalcTapscriptSigHash(p, i, types.DefaultSigHashType, script)
+		if err != nil {
+			return nil, err
+		}
+
+		if !schnorr.Verify(sigBytes, sigHash, borrowerPubKey) {
+			return nil, types.ErrInvalidSignature
+		}
+
+		sigHashes = append(sigHashes, hex.EncodeToString(sigHash))
+	}
+
+	loan.Status = types.LoanStatus_Cancelled
+	m.SetLoan(ctx, loan)
+
+	cancellation := &types.Cancellation{
+		LoanId:     msg.LoanId,
+		Txid:       p.UnsignedTx.TxHash().String(),
+		Tx:         msg.Tx,
+		Signatures: msg.Signatures,
+		CreateAt:   ctx.BlockTime(),
+	}
+	m.SetCancellation(ctx, cancellation)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCancel,
+			sdk.NewAttribute(types.AttributeKeyBorrower, msg.Borrower),
+			sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
+			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
+		),
+	)
+
+	return &types.MsgCancelResponse{}, nil
+}
+
 // Redeem implements types.MsgServer.
 func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.MsgRedeemResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {

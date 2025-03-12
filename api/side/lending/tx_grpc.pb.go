@@ -25,6 +25,7 @@ const (
 	Msg_Apply_FullMethodName                            = "/side.lending.Msg/Apply"
 	Msg_SubmitLiquidationCet_FullMethodName             = "/side.lending.Msg/SubmitLiquidationCet"
 	Msg_Approve_FullMethodName                          = "/side.lending.Msg/Approve"
+	Msg_Cancel_FullMethodName                           = "/side.lending.Msg/Cancel"
 	Msg_Redeem_FullMethodName                           = "/side.lending.Msg/Redeem"
 	Msg_Repay_FullMethodName                            = "/side.lending.Msg/Repay"
 	Msg_SubmitRepaymentAdaptorSignatures_FullMethodName = "/side.lending.Msg/SubmitRepaymentAdaptorSignatures"
@@ -44,6 +45,7 @@ type MsgClient interface {
 	Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error)
 	SubmitLiquidationCet(ctx context.Context, in *MsgSubmitLiquidationCet, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetResponse, error)
 	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
+	Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error)
 	Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
 	SubmitRepaymentAdaptorSignatures(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignatures, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
@@ -114,6 +116,15 @@ func (c *msgClient) SubmitLiquidationCet(ctx context.Context, in *MsgSubmitLiqui
 func (c *msgClient) Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error) {
 	out := new(MsgApproveResponse)
 	err := c.cc.Invoke(ctx, Msg_Approve_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error) {
+	out := new(MsgCancelResponse)
+	err := c.cc.Invoke(ctx, Msg_Cancel_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -193,6 +204,7 @@ type MsgServer interface {
 	Apply(context.Context, *MsgApply) (*MsgApplyResponse, error)
 	SubmitLiquidationCet(context.Context, *MsgSubmitLiquidationCet) (*MsgSubmitLiquidationCetResponse, error)
 	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
+	Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error)
 	Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
 	SubmitRepaymentAdaptorSignatures(context.Context, *MsgSubmitRepaymentAdaptorSignatures) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
@@ -229,6 +241,9 @@ func (UnimplementedMsgServer) SubmitLiquidationCet(context.Context, *MsgSubmitLi
 }
 func (UnimplementedMsgServer) Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Approve not implemented")
+}
+func (UnimplementedMsgServer) Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Cancel not implemented")
 }
 func (UnimplementedMsgServer) Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Redeem not implemented")
@@ -368,6 +383,24 @@ func _Msg_Approve_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).Approve(ctx, req.(*MsgApprove))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCancel)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).Cancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_Cancel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).Cancel(ctx, req.(*MsgCancel))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -528,6 +561,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Approve",
 			Handler:    _Msg_Approve_Handler,
+		},
+		{
+			MethodName: "Cancel",
+			Handler:    _Msg_Cancel_Handler,
 		},
 		{
 			MethodName: "Redeem",

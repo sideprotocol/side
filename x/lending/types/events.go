@@ -3,6 +3,7 @@ package types
 // Lending module event types
 const (
 	EventTypeApply                        = "apply"
+	EventTypeCancel = "cancel"
 	EventTypeRepay                        = "repay"
 	EventTypeDefault                      = "default"
 	EventTypeLiquidate                    = "liquidate"

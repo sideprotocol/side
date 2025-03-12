@@ -41,6 +41,7 @@ var (
 	ErrMismatchedBorrower    = errorsmod.Register(ModuleName, 5001, "mismatched borrower")
 	ErrInvalidLoanSecretHash = errorsmod.Register(ModuleName, 5002, "invalid loan secret hash")
 	ErrMismatchedLoanSecret  = errorsmod.Register(ModuleName, 5003, "mismatched loan secret")
+	ErrInvalidTx             = errorsmod.Register(ModuleName, 5004, "invalid tx")
 
 	ErrInvalidAdaptorPoint              = errorsmod.Register(ModuleName, 6001, "invalid adaptor point")
 	ErrInvalidRepayment                 = errorsmod.Register(ModuleName, 6002, "invalid repayment")
@@ -57,5 +58,6 @@ var (
 	ErrInvalidLiquidationSignatures      = errorsmod.Register(ModuleName, 7003, "invalid agency liquidation signatures")
 
 	ErrInvalidLoanStatus = errorsmod.Register(ModuleName, 8001, "invalid loan status")
-	ErrInvalidSignature  = errorsmod.Register(ModuleName, 8002, "invalid signature")
+	ErrInvalidSignatures = errorsmod.Register(ModuleName, 8002, "invalid signatures")
+	ErrInvalidSignature  = errorsmod.Register(ModuleName, 8003, "invalid signature")
 )

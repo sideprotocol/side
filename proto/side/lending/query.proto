@@ -54,6 +54,10 @@ service Query {
         option (google.api.http).get = "/side/lending/loan/dlc/meta";
     }
 
+    rpc LoanCancellation(QueryLoanCancellationRequest) returns (QueryLoanCancellationResponse) {
+        option (google.api.http).get = "/side/lending/loan/cancellation";
+    }
+
     rpc Repayment(QueryRepaymentRequest) returns (QueryRepaymentResponse) {
         option (google.api.http).get = "/side/lending/loan/repayment";
     }
@@ -168,6 +172,16 @@ message QueryLoanDlcMetaRequest {
 // QueryLoanDlcMetaResponse is response type for the Query/LoanDlcMeta RPC method.
 message QueryLoanDlcMetaResponse {
     DLCMeta dlc_meta = 1;
+}
+
+// QueryLoanCancellationRequest is request type for the Query/LoanCancellation RPC method.
+message QueryLoanCancellationRequest {
+    string loan_id = 1;
+}
+
+// QueryLoanCancellationResponse is response type for the Query/LoanCancellation RPC method.
+message QueryLoanCancellationResponse {
+    Cancellation cancellation = 1;
 }
 
 message QueryRepaymentRequest {

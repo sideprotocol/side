@@ -35,16 +35,20 @@ enum LoanStatus {
     Requested = 1;
     // Loan Approved
     Approved = 2;
+    // Loan Rejected
+    Rejected = 3;
+    // Loan Cancelled
+    Cancelled = 4;
     // Loan Open
-    Open = 3;
+    Open = 5;
     // Loan Repaid
-    Repaid = 4;
+    Repaid = 6;
     // Loan Defaulted
-    Defaulted = 5;
+    Defaulted = 7;
     // Loan Liquidated
-    Liquidated = 6;
+    Liquidated = 8;
     // Loan Closed
-    Closed = 7;
+    Closed = 9;
 }
 
 message Loan {
@@ -112,4 +116,13 @@ message Repayment {
     repeated string dca_adaptor_signatures = 5;
     string borrower_signature = 6;
     google.protobuf.Timestamp create_at = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}
+
+message Cancellation {
+    string loan_id = 1;
+    string txid = 2;
+    string tx = 3;
+    repeated string signatures = 4; 
+    repeated string dca_signatures = 5;
+    google.protobuf.Timestamp create_at = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
