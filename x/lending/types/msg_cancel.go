@@ -12,10 +12,12 @@ import (
 
 var _ sdk.Msg = &MsgCancel{}
 
-func NewMsgCancel(borrower string, loanId string) *MsgCancel {
+func NewMsgCancel(borrower string, loanId string, tx string, signatures []string) *MsgCancel {
 	return &MsgCancel{
-		Borrower: borrower,
-		LoanId:   loanId,
+		Borrower:   borrower,
+		LoanId:     loanId,
+		Tx:         tx,
+		Signatures: signatures,
 	}
 }
 

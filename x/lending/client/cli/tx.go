@@ -39,6 +39,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdApply())
 	cmd.AddCommand(CmdSubmitLiquidationCet())
 	cmd.AddCommand(CmdApprove())
+	cmd.AddCommand(CmdCancel())
 	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
 	cmd.AddCommand(CmdSubmitRepaymentAdaptorSignatures())
@@ -253,6 +254,37 @@ func CmdApprove() *cobra.Command {
 			}
 
 			msg := types.NewMsgApprove(
+				clientCtx.GetFromAddress().String(),
+				args[0],
+				args[1],
+				strings.Split(args[2], listSeparator),
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdCancel() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "cancel [loan id] [tx] [signatures]",
+		Short: "Cancel the given loan along with the cancellation tx",
+		Args:  cobra.ExactArgs(3),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgCancel(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				args[1],
