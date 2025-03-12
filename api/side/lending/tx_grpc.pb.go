@@ -26,6 +26,7 @@ const (
 	Msg_SubmitLiquidationCet_FullMethodName             = "/side.lending.Msg/SubmitLiquidationCet"
 	Msg_Approve_FullMethodName                          = "/side.lending.Msg/Approve"
 	Msg_Cancel_FullMethodName                           = "/side.lending.Msg/Cancel"
+	Msg_SubmitCancellationSignatures_FullMethodName     = "/side.lending.Msg/SubmitCancellationSignatures"
 	Msg_Redeem_FullMethodName                           = "/side.lending.Msg/Redeem"
 	Msg_Repay_FullMethodName                            = "/side.lending.Msg/Repay"
 	Msg_SubmitRepaymentAdaptorSignatures_FullMethodName = "/side.lending.Msg/SubmitRepaymentAdaptorSignatures"
@@ -46,6 +47,7 @@ type MsgClient interface {
 	SubmitLiquidationCet(ctx context.Context, in *MsgSubmitLiquidationCet, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetResponse, error)
 	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
 	Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error)
+	SubmitCancellationSignatures(ctx context.Context, in *MsgSubmitCancellationSignatures, opts ...grpc.CallOption) (*MsgSubmitCancellationSignaturesResponse, error)
 	Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
 	SubmitRepaymentAdaptorSignatures(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignatures, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
@@ -131,6 +133,15 @@ func (c *msgClient) Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.Call
 	return out, nil
 }
 
+func (c *msgClient) SubmitCancellationSignatures(ctx context.Context, in *MsgSubmitCancellationSignatures, opts ...grpc.CallOption) (*MsgSubmitCancellationSignaturesResponse, error) {
+	out := new(MsgSubmitCancellationSignaturesResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitCancellationSignatures_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error) {
 	out := new(MsgRedeemResponse)
 	err := c.cc.Invoke(ctx, Msg_Redeem_FullMethodName, in, out, opts...)
@@ -205,6 +216,7 @@ type MsgServer interface {
 	SubmitLiquidationCet(context.Context, *MsgSubmitLiquidationCet) (*MsgSubmitLiquidationCetResponse, error)
 	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
 	Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error)
+	SubmitCancellationSignatures(context.Context, *MsgSubmitCancellationSignatures) (*MsgSubmitCancellationSignaturesResponse, error)
 	Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
 	SubmitRepaymentAdaptorSignatures(context.Context, *MsgSubmitRepaymentAdaptorSignatures) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
@@ -244,6 +256,9 @@ func (UnimplementedMsgServer) Approve(context.Context, *MsgApprove) (*MsgApprove
 }
 func (UnimplementedMsgServer) Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Cancel not implemented")
+}
+func (UnimplementedMsgServer) SubmitCancellationSignatures(context.Context, *MsgSubmitCancellationSignatures) (*MsgSubmitCancellationSignaturesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitCancellationSignatures not implemented")
 }
 func (UnimplementedMsgServer) Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Redeem not implemented")
@@ -401,6 +416,24 @@ func _Msg_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).Cancel(ctx, req.(*MsgCancel))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SubmitCancellationSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitCancellationSignatures)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitCancellationSignatures(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SubmitCancellationSignatures_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitCancellationSignatures(ctx, req.(*MsgSubmitCancellationSignatures))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -565,6 +598,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Cancel",
 			Handler:    _Msg_Cancel_Handler,
+		},
+		{
+			MethodName: "SubmitCancellationSignatures",
+			Handler:    _Msg_SubmitCancellationSignatures_Handler,
 		},
 		{
 			MethodName: "Redeem",

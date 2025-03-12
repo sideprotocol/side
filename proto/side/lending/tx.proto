@@ -20,6 +20,7 @@ service Msg {
     rpc SubmitLiquidationCet(MsgSubmitLiquidationCet) returns (MsgSubmitLiquidationCetResponse);
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
     rpc Cancel(MsgCancel) returns (MsgCancelResponse);
+    rpc SubmitCancellationSignatures(MsgSubmitCancellationSignatures) returns (MsgSubmitCancellationSignaturesResponse);
     rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
     rpc SubmitRepaymentAdaptorSignatures(MsgSubmitRepaymentAdaptorSignatures) returns (MsgSubmitRepaymentAdaptorSignaturesResponse);
@@ -144,6 +145,18 @@ message MsgCancel {
 }
 
 message MsgCancelResponse {
+
+}
+
+message MsgSubmitCancellationSignatures {
+    option (cosmos.msg.v1.signer) = "sender";
+    
+    string sender = 1;
+    string loan_id = 2;
+    repeated string signatures = 3;
+}
+
+message MsgSubmitCancellationSignaturesResponse {
 
 }
 

@@ -38,10 +38,12 @@ var (
 	ErrInvalidProof          = errorsmod.Register(ModuleName, 4003, "invalid proof")
 	ErrDepositTxDoesNotExist = errorsmod.Register(ModuleName, 4004, "deposit tx does not exist")
 
-	ErrMismatchedBorrower    = errorsmod.Register(ModuleName, 5001, "mismatched borrower")
-	ErrInvalidLoanSecretHash = errorsmod.Register(ModuleName, 5002, "invalid loan secret hash")
-	ErrMismatchedLoanSecret  = errorsmod.Register(ModuleName, 5003, "mismatched loan secret")
-	ErrInvalidTx             = errorsmod.Register(ModuleName, 5004, "invalid tx")
+	ErrMismatchedBorrower        = errorsmod.Register(ModuleName, 5001, "mismatched borrower")
+	ErrInvalidLoanSecretHash     = errorsmod.Register(ModuleName, 5002, "invalid loan secret hash")
+	ErrMismatchedLoanSecret      = errorsmod.Register(ModuleName, 5003, "mismatched loan secret")
+	ErrInvalidTx                 = errorsmod.Register(ModuleName, 5004, "invalid tx")
+	ErrCancellationDoesNotExist  = errorsmod.Register(ModuleName, 5005, "cancellation does not exist")
+	ErrDcaSignaturesAlreadyExist = errorsmod.Register(ModuleName, 5006, "dca signatures already exist")
 
 	ErrInvalidAdaptorPoint              = errorsmod.Register(ModuleName, 6001, "invalid adaptor point")
 	ErrInvalidRepayment                 = errorsmod.Register(ModuleName, 6002, "invalid repayment")

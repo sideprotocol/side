@@ -40,6 +40,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdSubmitLiquidationCet())
 	cmd.AddCommand(CmdApprove())
 	cmd.AddCommand(CmdCancel())
+	cmd.AddCommand(CmdSubmitCancellationSignatures())
 	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
 	cmd.AddCommand(CmdSubmitRepaymentAdaptorSignatures())
@@ -289,6 +290,38 @@ func CmdCancel() *cobra.Command {
 				args[0],
 				args[1],
 				strings.Split(args[2], listSeparator),
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdSubmitCancellationSignatures() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "submit-cancellation-signatures [loan id] [DCA signatures]",
+		Short: "Submit the DCA signatures for the loan to be cancelled",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			signatures := strings.Split(args[1], listSeparator)
+
+			msg := types.NewMsgSubmitCancellationSignatures(
+				clientCtx.GetFromAddress().String(),
+				args[0],
+				signatures,
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

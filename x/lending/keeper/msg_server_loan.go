@@ -7,10 +7,12 @@ import (
 	"fmt"
 	"strings"
 
-	"cosmossdk.io/math"
+	btcschnorr "github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
+	"github.com/btcsuite/btcd/txscript"
 
 	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/crypto/adaptor"
@@ -248,6 +250,14 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
 	sigHashes := []string{}
 
+	merkleTree := types.GetTapscriptTree(types.GetDLCTapscripts(m.GetDLCMeta(ctx, msg.LoanId)))
+	scriptProof := merkleTree.LeafMerkleProofs[0]
+
+	controlBlock, err := types.GetControlBlock(types.GetInternalKey(), scriptProof)
+	if err != nil {
+		return nil, err
+	}
+
 	for i, signature := range msg.Signatures {
 		if p.UnsignedTx.TxIn[i].PreviousOutPoint.Hash.String() != depositTxId {
 			return nil, errorsmod.Wrap(types.ErrDepositTxDoesNotExist, "mismatched deposit tx hash")
@@ -265,6 +275,20 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 		}
 
 		sigHashes = append(sigHashes, hex.EncodeToString(sigHash))
+
+		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(types.GetInternalKey())
+		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
+			{
+				ControlBlock: controlBlock,
+				Script:       script,
+				LeafVersion:  txscript.BaseLeafVersion,
+			},
+		}
+	}
+
+	serializedTx, err := p.B64Encode()
+	if err != nil {
+		return nil, err
 	}
 
 	loan.Status = types.LoanStatus_Cancelled
@@ -273,7 +297,7 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 	cancellation := &types.Cancellation{
 		LoanId:     msg.LoanId,
 		Txid:       p.UnsignedTx.TxHash().String(),
-		Tx:         msg.Tx,
+		Tx:         serializedTx,
 		Signatures: msg.Signatures,
 		CreateAt:   ctx.BlockTime(),
 	}
@@ -290,6 +314,94 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 	)
 
 	return &types.MsgCancelResponse{}, nil
+}
+
+// SubmitCancellationSignatures implements types.MsgServer.
+func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *types.MsgSubmitCancellationSignatures) (*types.MsgSubmitCancellationSignaturesResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasCancellation(ctx, msg.LoanId) {
+		return nil, types.ErrCancellationDoesNotExist
+	}
+
+	cancellation := m.GetCancellation(ctx, msg.LoanId)
+	if len(cancellation.DcaSignatures) != 0 {
+		return nil, types.ErrDcaSignaturesAlreadyExist
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(cancellation.Tx)), true)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(msg.Signatures) != len(p.Inputs) {
+		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
+	}
+
+	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
+	agencyPubKey, _ := hex.DecodeString(loan.Agency)
+
+	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
+	leafHash := txscript.NewBaseTapLeaf(script).TapHash()
+
+	for i := range p.Inputs {
+		sigHash, err := types.CalcTapscriptSigHash(p, i, types.DefaultSigHashType, script)
+		if err != nil {
+			return nil, err
+		}
+
+		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
+
+		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
+			return nil, types.ErrInvalidSignature
+		}
+
+		borrowerSig, _ := hex.DecodeString(cancellation.Signatures[i])
+
+		p.Inputs[i].TaprootScriptSpendSig = []*psbt.TaprootScriptSpendSig{
+			{
+				XOnlyPubKey: agencyPubKey,
+				LeafHash:    leafHash[:],
+				Signature:   sigBytes,
+				SigHash:     txscript.SigHashDefault,
+			},
+			{
+				XOnlyPubKey: borrowerPubKey,
+				LeafHash:    leafHash[:],
+				Signature:   borrowerSig,
+				SigHash:     txscript.SigHashDefault,
+			},
+		}
+	}
+
+	if err := psbt.MaybeFinalizeAll(p); err != nil {
+		return nil, err
+	}
+
+	serializedTx, err := p.B64Encode()
+	if err != nil {
+		return nil, err
+	}
+
+	cancellation.Tx = serializedTx
+	cancellation.DcaSignatures = msg.Signatures
+	m.SetCancellation(ctx, cancellation)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeGenerateSignedCancellationTransaction,
+			sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
+			sdk.NewAttribute(types.AttributeKeyTxHash, cancellation.Txid),
+		),
+	)
+
+	return &types.MsgSubmitCancellationSignaturesResponse{}, nil
 }
 
 // Redeem implements types.MsgServer.
