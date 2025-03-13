@@ -14,7 +14,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// set pools
 	for _, pool := range genState.Pools {
-		k.SetPool(ctx, *pool)
+		k.SetPool(ctx, pool)
 	}
 }
 

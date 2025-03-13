@@ -53,7 +53,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrowed amount must be greater than origination fee")
 	}
 
-	loan := types.Loan{
+	loan := &types.Loan{
 		VaultAddress:   vault,
 		Borrower:       msg.Borrower,
 		BorrowerPubKey: msg.BorrowerPubkey,
@@ -164,7 +164,7 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 
 	m.SetLoan(ctx, loan)
 
-	depositLog := types.DepositLog{
+	depositLog := &types.DepositLog{
 		Txid:         depositTxid,
 		VaultAddress: loan.VaultAddress,
 		DepositTx:    msg.DepositTx,
@@ -523,7 +523,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		return nil, err
 	}
 
-	repayment := types.Repayment{
+	repayment := &types.Repayment{
 		LoanId:            msg.LoanId,
 		Txid:              repaymentTxPsbt.UnsignedTx.TxHash().String(),
 		Tx:                repaymentTx,

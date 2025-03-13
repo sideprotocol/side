@@ -29,7 +29,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 		// check if the loan has defaulted
 		if ctx.BlockTime().Unix() >= loan.MaturityTime {
 			loan.Status = types.LoanStatus_Defaulted
-			k.SetLoan(ctx, *loan)
+			k.SetLoan(ctx, loan)
 
 			// emit event
 			ctx.EventManager().EmitEvent(
@@ -85,7 +85,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			k.DLCKeeper().TriggerEvent(ctx, loan.EventId)
 
 			// update loan
-			k.SetLoan(ctx, *loan)
+			k.SetLoan(ctx, loan)
 		}
 	}
 }

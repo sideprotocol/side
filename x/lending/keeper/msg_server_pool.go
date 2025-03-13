@@ -31,7 +31,7 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		return nil, types.ErrDuplicatedPoolId
 	}
 
-	pool := types.LendingPool{
+	pool := &types.LendingPool{
 		Id:             msg.Id,
 		Supply:         sdk.NewCoin(msg.LendingAsset, math.NewInt(0)),
 		TotalShares:    math.NewInt(0),

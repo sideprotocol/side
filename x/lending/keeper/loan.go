@@ -7,34 +7,45 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
-func (k Keeper) SetLoan(ctx sdk.Context, loan types.Loan) {
+// SetLoan sets the given loan
+func (k Keeper) SetLoan(ctx sdk.Context, loan *types.Loan) {
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&loan)
+
+	bz := k.cdc.MustMarshal(loan)
+
 	store.Set(types.LoanStoreKey(loan.VaultAddress), bz)
 }
 
+// HasLoan returns true if the given loan exists, false otherwise
 func (k Keeper) HasLoan(ctx sdk.Context, vault string) bool {
 	store := ctx.KVStore(k.storeKey)
+
 	return store.Has(types.LoanStoreKey(vault))
 }
 
-func (k Keeper) GetLoan(ctx sdk.Context, vault string) types.Loan {
+// GetLoan gets the given loan
+func (k Keeper) GetLoan(ctx sdk.Context, vault string) *types.Loan {
 	store := ctx.KVStore(k.storeKey)
+
 	var loan types.Loan
 	bz := store.Get(types.LoanStoreKey(vault))
 	k.cdc.MustUnmarshal(bz, &loan)
-	return loan
+
+	return &loan
 }
 
-// IterateLoans iterates through all block headers
-func (k Keeper) IterateLoans(ctx sdk.Context, process func(header types.Loan) (stop bool)) {
+// IterateLoans iterates through all loans
+func (k Keeper) IterateLoans(ctx sdk.Context, cb func(loan *types.Loan) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
+
 	iterator := storetypes.KVStorePrefixIterator(store, types.LoanStorePrefix)
 	defer iterator.Close()
+
 	for ; iterator.Valid(); iterator.Next() {
-		var header types.Loan
-		k.cdc.MustUnmarshal(iterator.Value(), &header)
-		if process(header) {
+		var loan types.Loan
+		k.cdc.MustUnmarshal(iterator.Value(), &loan)
+
+		if cb(&loan) {
 			break
 		}
 	}
@@ -44,9 +55,9 @@ func (k Keeper) IterateLoans(ctx sdk.Context, process func(header types.Loan) (s
 func (k Keeper) GetLoans(ctx sdk.Context, status types.LoanStatus) []*types.Loan {
 	var loans []*types.Loan
 
-	k.IterateLoans(ctx, func(loan types.Loan) (stop bool) {
+	k.IterateLoans(ctx, func(loan *types.Loan) (stop bool) {
 		if loan.Status == status {
-			loans = append(loans, &loan)
+			loans = append(loans, loan)
 		}
 
 		return false
@@ -55,13 +66,15 @@ func (k Keeper) GetLoans(ctx sdk.Context, status types.LoanStatus) []*types.Loan
 	return loans
 }
 
-// GetAllLoans returns all block headers
+// GetAllLoans returns all loans
 func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 	var loans []*types.Loan
-	k.IterateLoans(ctx, func(loan types.Loan) (stop bool) {
-		loans = append(loans, &loan)
+
+	k.IterateLoans(ctx, func(loan *types.Loan) (stop bool) {
+		loans = append(loans, loan)
 		return false
 	})
+
 	return loans
 }
 
@@ -69,9 +82,9 @@ func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 func (k Keeper) GetLoansByAddress(ctx sdk.Context, address string, status types.LoanStatus) []*types.Loan {
 	var loans []*types.Loan
 
-	k.IterateLoans(ctx, func(loan types.Loan) (stop bool) {
+	k.IterateLoans(ctx, func(loan *types.Loan) (stop bool) {
 		if loan.Borrower == address && (status == types.LoanStatus_Unspecified || loan.Status == status) {
-			loans = append(loans, &loan)
+			loans = append(loans, loan)
 		}
 
 		return false
@@ -80,42 +93,58 @@ func (k Keeper) GetLoansByAddress(ctx sdk.Context, address string, status types.
 	return loans
 }
 
-func (k Keeper) SetDepositLog(ctx sdk.Context, deposit types.DepositLog) {
+// SetDepositLog sets the given deposit log
+func (k Keeper) SetDepositLog(ctx sdk.Context, depositLog *types.DepositLog) {
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&deposit)
-	store.Set(types.DepositLogKey(deposit.Txid), bz)
+
+	bz := k.cdc.MustMarshal(depositLog)
+
+	store.Set(types.DepositLogKey(depositLog.Txid), bz)
 }
 
+// HasDepositLog returns true if the given deposit log exists, false otherwise
 func (k Keeper) HasDepositLog(ctx sdk.Context, txid string) bool {
 	store := ctx.KVStore(k.storeKey)
+
 	return store.Has(types.DepositLogKey(txid))
 }
 
-func (k Keeper) GetDepositLog(ctx sdk.Context, txid string) types.DepositLog {
+// GetDepositLog gets the given deposit log
+func (k Keeper) GetDepositLog(ctx sdk.Context, txid string) *types.DepositLog {
 	store := ctx.KVStore(k.storeKey)
-	var deposit types.DepositLog
+
+	var depositLog types.DepositLog
 	bz := store.Get(types.DepositLogKey(txid))
-	k.cdc.MustUnmarshal(bz, &deposit)
-	return deposit
+	k.cdc.MustUnmarshal(bz, &depositLog)
+
+	return &depositLog
 }
 
-func (k Keeper) SetRepayment(ctx sdk.Context, repayment types.Repayment) {
+// SetRepayment sets the given repayment
+func (k Keeper) SetRepayment(ctx sdk.Context, repayment *types.Repayment) {
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&repayment)
+
+	bz := k.cdc.MustMarshal(repayment)
+
 	store.Set(types.RepaymentKey(repayment.LoanId), bz)
 }
 
+// HasRepayment returns true if the given repayment exists, false otherwise
 func (k Keeper) HasRepayment(ctx sdk.Context, loanId string) bool {
 	store := ctx.KVStore(k.storeKey)
+
 	return store.Has(types.RepaymentKey(loanId))
 }
 
-func (k Keeper) GetRepayment(ctx sdk.Context, loanId string) types.Repayment {
+// GetRepayment gets the given repayment
+func (k Keeper) GetRepayment(ctx sdk.Context, loanId string) *types.Repayment {
 	store := ctx.KVStore(k.storeKey)
-	var data types.Repayment
+
+	var repayment types.Repayment
 	bz := store.Get(types.RepaymentKey(loanId))
-	k.cdc.MustUnmarshal(bz, &data)
-	return data
+	k.cdc.MustUnmarshal(bz, &repayment)
+
+	return &repayment
 }
 
 // HasCancellation returns true if there exists cancellation for the given loan, false otherwise

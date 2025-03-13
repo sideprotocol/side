@@ -30,7 +30,7 @@ func (k Keeper) Pool(goCtx context.Context, req *types.QueryPoolRequest) (*types
 
 	pool := k.GetPool(ctx, req.Id)
 
-	return &types.QueryPoolResponse{Pool: &pool}, nil
+	return &types.QueryPoolResponse{Pool: pool}, nil
 }
 
 // Pools implements types.QueryServer.
@@ -154,7 +154,7 @@ func (k Keeper) Loan(goCtx context.Context, req *types.QueryLoanRequest) (*types
 
 	loan := k.GetLoan(ctx, req.LoanId)
 
-	return &types.QueryLoanResponse{Loan: &loan}, nil
+	return &types.QueryLoanResponse{Loan: loan}, nil
 }
 
 // Loans implements types.QueryServer.
@@ -231,7 +231,7 @@ func (k Keeper) Repayment(goCtx context.Context, req *types.QueryRepaymentReques
 
 	repayment := k.GetRepayment(ctx, req.LoanId)
 
-	return &types.QueryRepaymentResponse{Repayment: &repayment}, nil
+	return &types.QueryRepaymentResponse{Repayment: repayment}, nil
 }
 
 // Params implements types.QueryServer.

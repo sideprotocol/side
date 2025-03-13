@@ -8,49 +8,63 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
-func (k Keeper) SetPool(ctx sdk.Context, pool types.LendingPool) {
+// SetPool sets the given pool
+func (k Keeper) SetPool(ctx sdk.Context, pool *types.LendingPool) {
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&pool)
+
+	bz := k.cdc.MustMarshal(pool)
+
 	store.Set(types.PoolStoreKey(pool.Id), bz)
 }
 
-func (k Keeper) HasPool(ctx sdk.Context, pool_id string) bool {
+// HasPool returns true if the given pool exists, false otherwise
+func (k Keeper) HasPool(ctx sdk.Context, id string) bool {
 	store := ctx.KVStore(k.storeKey)
-	return store.Has(types.PoolStoreKey(pool_id))
+
+	return store.Has(types.PoolStoreKey(id))
 }
 
-func (k Keeper) GetPool(ctx sdk.Context, pool_id string) types.LendingPool {
+// GetPool gets the given pool
+func (k Keeper) GetPool(ctx sdk.Context, id string) *types.LendingPool {
 	store := ctx.KVStore(k.storeKey)
+
 	var pool types.LendingPool
-	bz := store.Get(types.PoolStoreKey(pool_id))
+	bz := store.Get(types.PoolStoreKey(id))
 	k.cdc.MustUnmarshal(bz, &pool)
-	return pool
+
+	return &pool
 }
 
-// GetAllPools returns all block headers
+// GetAllPools returns all pools
 func (k Keeper) GetAllPools(ctx sdk.Context) []*types.LendingPool {
 	var pools []*types.LendingPool
-	k.IteratePools(ctx, func(pool types.LendingPool) (stop bool) {
-		pools = append(pools, &pool)
+
+	k.IteratePools(ctx, func(pool *types.LendingPool) (stop bool) {
+		pools = append(pools, pool)
 		return false
 	})
+
 	return pools
 }
 
-// IteratePools iterates through all block headers
-func (k Keeper) IteratePools(ctx sdk.Context, process func(header types.LendingPool) (stop bool)) {
+// IteratePools iterates through all pools
+func (k Keeper) IteratePools(ctx sdk.Context, cb func(pool *types.LendingPool) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
+
 	iterator := storetypes.KVStorePrefixIterator(store, types.PoolStorePrefix)
 	defer iterator.Close()
+
 	for ; iterator.Valid(); iterator.Next() {
-		var header types.LendingPool
-		k.cdc.MustUnmarshal(iterator.Value(), &header)
-		if process(header) {
+		var pool types.LendingPool
+		k.cdc.MustUnmarshal(iterator.Value(), &pool)
+
+		if cb(&pool) {
 			break
 		}
 	}
 }
 
+// AfterPoolBorrowed is the hook which is invoked after the loan is disbursed
 func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, amount sdk.Coin) {
 	pool := k.GetPool(ctx, poolId)
 
@@ -60,6 +74,7 @@ func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, amount sdk.Coi
 	k.SetPool(ctx, pool)
 }
 
+// AfterPoolRepaid is the hook which is invoked after the loan is repaid
 func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, amount sdk.Coin, extraFees sdkmath.Int) {
 	pool := k.GetPool(ctx, poolId)
 
