@@ -7,24 +7,69 @@ import "cosmos/base/v1beta1/coin.proto";
 import "side/btcbridge/btcbridge.proto";
 
 option go_package = "github.com/sideprotocol/side/x/lending/types";
+
 // Status options for a lending pool
 enum PoolStatus {
     ACTIVE = 0;
     INACTIVE = 1;
 }
 
+// Lending pool config
+message PoolConfig {
+    // supply rate permille
+    uint32 supply_rate = 1;
+    // borrow rate permille
+    uint32 borrow_rate = 2;
+    // reserve factor permille
+    uint32 reserve_factor = 3;
+    // supply cap
+    string supply_cap = 4 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // borrow cap
+    string borrow_cap = 5 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // debt ceiling
+    string debt_ceiling = 6 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // origination fee
+    string origination_fee = 7 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // maximum loan to value permille
+    uint32 ltv = 8;
+    // liquidation ltv permille
+    uint32 liquidation_threshold = 9;
+    // liquidation penalty permille
+    uint32 liquidation_penalty = 10;
+}
+
 message LendingPool {
     string id = 1;
-    cosmos.base.v1beta1.Coin supply = 2;
-    string total_shares = 3 [
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-      ];
+    cosmos.base.v1beta1.Coin supply = 2 [
+      (gogoproto.nullable)     = false,
+      (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"
+    ];
+    string available_amount = 3 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
     string borrowed_amount = 4 [
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-      ];
-    PoolStatus status = 5;
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string total_shares = 5 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    PoolConfig config = 6 [(gogoproto.nullable) = false];
+    PoolStatus status = 7;
 }
 
 // Loan Status

@@ -2,29 +2,18 @@ syntax = "proto3";
 package side.lending;
 
 import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
 
 option go_package = "github.com/sideprotocol/side/x/lending/types";
 
-
 // Params defines the parameters for the module.
 message Params {
-
-    string supply_rate_permille = 1[
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-    ];
-    string borrow_rate_permille = 2[
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-    ];
-    string fee_recipient = 3;
+    // origination fee collector address
+    string origination_fee_collector = 1;
+    // protocol fee collector address
+    string protocol_fee_collector = 2;
+    // final timeout duration for each loan
+    google.protobuf.Duration final_timeout_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    // authorized pool creators
     repeated string pool_creators = 4;
-    string min_initial_ltv_percent = 5 [
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-    ];
-    string liquidation_threshold_percent = 6[
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-    ]; 
 }

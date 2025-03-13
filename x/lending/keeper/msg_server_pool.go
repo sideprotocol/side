@@ -30,10 +30,9 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		return nil, types.ErrDuplicatedPoolId
 	}
 
-	supply := sdk.NewCoin(msg.LendingAsset, math.NewInt(0))
 	pool := types.LendingPool{
 		Id:             msg.PoolId,
-		Supply:         &supply,
+		Supply:         sdk.NewCoin(msg.LendingAsset, math.NewInt(0)),
 		TotalShares:    math.NewInt(0),
 		BorrowedAmount: math.NewInt(0),
 		Status:         types.PoolStatus_INACTIVE,
@@ -82,9 +81,7 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	}
 
 	pool.TotalShares = pool.TotalShares.Add(outAmount)
-
-	newSupply := pool.Supply.Add(*msg.Amount)
-	pool.Supply = &newSupply
+	pool.Supply = pool.Supply.Add(*msg.Amount)
 
 	received_shares := sdk.NewCoin(pool.Id, outAmount)
 
@@ -136,8 +133,7 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	pool.TotalShares = pool.TotalShares.Sub(msg.Shares.Amount)
 
 	withdraw := sdk.NewCoin(pool.Supply.Denom, outAmount)
-	newSupply := pool.Supply.Sub(withdraw)
-	pool.Supply = &newSupply
+	pool.Supply = pool.Supply.Sub(withdraw)
 
 	m.SetPool(ctx, pool)
 

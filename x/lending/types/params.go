@@ -1,52 +1,39 @@
 package types
 
 import (
-	sdkmath "cosmossdk.io/math"
+	"time"
+
+	errorsmod "cosmossdk.io/errors"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 )
 
 var (
-	DefaultSupplyRatePermille = sdkmath.NewInt(5)
-
-	DefaultBorrowRatePermille = sdkmath.NewInt(7)
-
-	DefaultLiquidationThresholdPercent = sdkmath.NewInt(70)
-
-	DefaultMinInitialLtvPercent = sdkmath.NewInt(80)
+	DefaultFinalTimeoutDuration = time.Duration(15*24*3600) * time.Second // 15days
 )
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
 	return Params{
-		SupplyRatePermille:          DefaultSupplyRatePermille,
-		BorrowRatePermille:          DefaultBorrowRatePermille,
-		LiquidationThresholdPercent: DefaultLiquidationThresholdPercent,
-		MinInitialLtvPercent:        DefaultMinInitialLtvPercent,
-		FeeRecipient:                authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		OriginationFeeCollector: authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		ProtocolFeeCollector:    authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		FinalTimeoutDuration:    DefaultFinalTimeoutDuration,
 	}
 }
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if p.BorrowRatePermille.LTE(p.SupplyRatePermille) {
-		return ErrInvalidParams
+	if _, err := sdk.AccAddressFromBech32(p.OriginationFeeCollector); err != nil {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid origination fee collector: %v", err)
 	}
 
-	if p.BorrowRatePermille.GT(Permille) {
-		return ErrInvalidParams
+	if _, err := sdk.AccAddressFromBech32(p.ProtocolFeeCollector); err != nil {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid protocol fee collector: %v", err)
 	}
 
-	if p.MinInitialLtvPercent.LTE(sdkmath.NewInt(0)) {
-		return ErrInvalidParams
-	}
-
-	if p.MinInitialLtvPercent.GTE(p.LiquidationThresholdPercent) {
-		return ErrInvalidParams
-	}
-
-	if p.LiquidationThresholdPercent.GTE(Percent) {
-		return ErrInvalidParams
+	if p.FinalTimeoutDuration <= 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "final timeout duration must be greater than 0")
 	}
 
 	return nil

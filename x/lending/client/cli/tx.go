@@ -8,6 +8,8 @@ import (
 
 	"github.com/spf13/cobra"
 
+	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -53,11 +55,62 @@ func GetTxCmd() *cobra.Command {
 
 func CmdCreatePool() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-pool [id] [lending asset]",
-		Short: "Create a lending pool with the specified asset",
-		Args:  cobra.ExactArgs(2),
+		Use: `create-pool [id] [lending asset] [supply rate] [borrow rate] [reserve factor] [supply cap] 
+		[borrow cap] [debt ceiling] [origination fee] [ltv] [liquidation threshold] [liquidation penalty]`,
+		Short: "Create a lending pool with the specified params",
+		Args:  cobra.ExactArgs(12),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			supplyRate, err := strconv.ParseUint(args[2], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			borrowRate, err := strconv.ParseUint(args[3], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			reserveFactor, err := strconv.ParseUint(args[4], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			supplyCap, ok := sdkmath.NewIntFromString(args[5])
+			if !ok {
+				return errorsmod.Wrap(types.ErrInvalidPoolConfig, "invalid supply cap")
+			}
+
+			borrowCap, ok := sdkmath.NewIntFromString(args[6])
+			if !ok {
+				return errorsmod.Wrap(types.ErrInvalidPoolConfig, "invalid borrow cap")
+			}
+
+			debtCeiling, ok := sdkmath.NewIntFromString(args[7])
+			if !ok {
+				return errorsmod.Wrap(types.ErrInvalidPoolConfig, "invalid debt ceiling")
+			}
+
+			originationFee, ok := sdkmath.NewIntFromString(args[8])
+			if !ok {
+				return errorsmod.Wrap(types.ErrInvalidPoolConfig, "invalid origination fee")
+			}
+
+			ltv, err := strconv.ParseUint(args[9], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			liquidationThreshold, err := strconv.ParseUint(args[10], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			liquidationPenalty, err := strconv.ParseUint(args[11], 10, 32)
 			if err != nil {
 				return err
 			}
@@ -66,6 +119,18 @@ func CmdCreatePool() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				args[1],
+				types.PoolConfig{
+					SupplyRate:           uint32(supplyRate),
+					BorrowRate:           uint32(borrowRate),
+					ReserveFactor:        uint32(reserveFactor),
+					SupplyCap:            supplyCap,
+					BorrowCap:            borrowCap,
+					DebtCeiling:          debtCeiling,
+					OriginationFee:       originationFee,
+					Ltv:                  uint32(ltv),
+					LiquidationThreshold: uint32(liquidationThreshold),
+					LiquidationPenalty:   uint32(liquidationPenalty),
+				},
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

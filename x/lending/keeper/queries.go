@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
@@ -63,6 +64,12 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasPool(ctx, req.PoolId) {
+		return nil, status.Error(codes.InvalidArgument, "pool does not exist")
+	}
+
 	collateralAmount, err := sdk.ParseCoinNormalized(req.CollateralAmount)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -73,9 +80,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, k.GetParams(ctx).LiquidationThresholdPercent)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, sdkmath.NewInt(int64(k.GetPool(ctx, req.PoolId).Config.LiquidationThreshold)))
 
 	event := k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	if event == nil {

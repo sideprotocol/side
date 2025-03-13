@@ -9,11 +9,12 @@ import (
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, poolId string, lendingAsset string) *MsgCreatePool {
+func NewMsgCreatePool(creator string, poolId string, lendingAsset string, config PoolConfig) *MsgCreatePool {
 	return &MsgCreatePool{
 		Creator:      creator,
 		PoolId:       poolId,
 		LendingAsset: lendingAsset,
+		Config:       config,
 	}
 }
 
@@ -31,5 +32,5 @@ func (m *MsgCreatePool) ValidateBasic() error {
 		return ErrInvalidLendingAsset
 	}
 
-	return nil
+	return ValidatePoolConfig(m.Config)
 }

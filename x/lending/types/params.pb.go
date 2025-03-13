@@ -4,19 +4,22 @@
 package types
 
 import (
-	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
+	_ "google.golang.org/protobuf/types/known/durationpb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -26,12 +29,14 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	SupplyRatePermille          cosmossdk_io_math.Int `protobuf:"bytes,1,opt,name=supply_rate_permille,json=supplyRatePermille,proto3,customtype=cosmossdk.io/math.Int" json:"supply_rate_permille"`
-	BorrowRatePermille          cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=borrow_rate_permille,json=borrowRatePermille,proto3,customtype=cosmossdk.io/math.Int" json:"borrow_rate_permille"`
-	FeeRecipient                string                `protobuf:"bytes,3,opt,name=fee_recipient,json=feeRecipient,proto3" json:"fee_recipient,omitempty"`
-	PoolCreators                []string              `protobuf:"bytes,4,rep,name=pool_creators,json=poolCreators,proto3" json:"pool_creators,omitempty"`
-	MinInitialLtvPercent        cosmossdk_io_math.Int `protobuf:"bytes,5,opt,name=min_initial_ltv_percent,json=minInitialLtvPercent,proto3,customtype=cosmossdk.io/math.Int" json:"min_initial_ltv_percent"`
-	LiquidationThresholdPercent cosmossdk_io_math.Int `protobuf:"bytes,6,opt,name=liquidation_threshold_percent,json=liquidationThresholdPercent,proto3,customtype=cosmossdk.io/math.Int" json:"liquidation_threshold_percent"`
+	// origination fee collector address
+	OriginationFeeCollector string `protobuf:"bytes,1,opt,name=origination_fee_collector,json=originationFeeCollector,proto3" json:"origination_fee_collector,omitempty"`
+	// protocol fee collector address
+	ProtocolFeeCollector string `protobuf:"bytes,2,opt,name=protocol_fee_collector,json=protocolFeeCollector,proto3" json:"protocol_fee_collector,omitempty"`
+	// final timeout duration for each loan
+	FinalTimeoutDuration time.Duration `protobuf:"bytes,3,opt,name=final_timeout_duration,json=finalTimeoutDuration,proto3,stdduration" json:"final_timeout_duration"`
+	// authorized pool creators
+	PoolCreators []string `protobuf:"bytes,4,rep,name=pool_creators,json=poolCreators,proto3" json:"pool_creators,omitempty"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -67,11 +72,25 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetFeeRecipient() string {
+func (m *Params) GetOriginationFeeCollector() string {
 	if m != nil {
-		return m.FeeRecipient
+		return m.OriginationFeeCollector
 	}
 	return ""
+}
+
+func (m *Params) GetProtocolFeeCollector() string {
+	if m != nil {
+		return m.ProtocolFeeCollector
+	}
+	return ""
+}
+
+func (m *Params) GetFinalTimeoutDuration() time.Duration {
+	if m != nil {
+		return m.FinalTimeoutDuration
+	}
+	return 0
 }
 
 func (m *Params) GetPoolCreators() []string {
@@ -88,30 +107,27 @@ func init() {
 func init() { proto.RegisterFile("side/lending/params.proto", fileDescriptor_984b58804a7a7724) }
 
 var fileDescriptor_984b58804a7a7724 = []byte{
-	// 353 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0xc1, 0x6a, 0xdb, 0x40,
-	0x10, 0x86, 0xa5, 0xba, 0x35, 0x54, 0xb8, 0x17, 0xe1, 0x52, 0xb7, 0xc5, 0xb2, 0x69, 0x2f, 0x3d,
-	0x14, 0xe9, 0x90, 0x37, 0x70, 0x20, 0x60, 0x08, 0xc4, 0x08, 0x9f, 0x72, 0x11, 0x6b, 0x69, 0x2c,
-	0x0d, 0x59, 0xed, 0x6c, 0x76, 0xd7, 0x4e, 0xfc, 0x16, 0x79, 0x91, 0xbc, 0x87, 0x8f, 0x3e, 0x86,
-	0x1c, 0x4c, 0xb0, 0x5f, 0x24, 0xac, 0x24, 0x9b, 0x24, 0x27, 0xdf, 0x76, 0xe7, 0x9f, 0xef, 0xdb,
-	0x81, 0x59, 0xef, 0xa7, 0xc6, 0x0c, 0x22, 0x0e, 0x22, 0x43, 0x91, 0x47, 0x92, 0x29, 0x56, 0xea,
-	0x50, 0x2a, 0x32, 0xe4, 0x77, 0x6c, 0x14, 0x36, 0xd1, 0xaf, 0x6e, 0x4e, 0x39, 0x55, 0x41, 0x64,
-	0x4f, 0x75, 0xcf, 0x9f, 0xc7, 0x96, 0xd7, 0x9e, 0x54, 0x90, 0x7f, 0xe5, 0x75, 0xf5, 0x42, 0x4a,
-	0xbe, 0x4a, 0x14, 0x33, 0x90, 0x48, 0x50, 0x25, 0x72, 0x0e, 0x3d, 0x77, 0xe8, 0xfe, 0xfb, 0x3a,
-	0xea, 0xaf, 0xb7, 0x03, 0xe7, 0x79, 0x3b, 0xf8, 0x9e, 0x92, 0x2e, 0x49, 0xeb, 0xec, 0x26, 0x44,
-	0x8a, 0x4a, 0x66, 0x8a, 0x70, 0x2c, 0x4c, 0xec, 0xd7, 0x68, 0xcc, 0x0c, 0x4c, 0x1a, 0xd0, 0x0a,
-	0x67, 0xa4, 0x14, 0xdd, 0x7d, 0x10, 0x7e, 0x3a, 0x49, 0x58, 0xa3, 0xef, 0x84, 0x7f, 0xbd, 0x6f,
-	0x73, 0x80, 0x44, 0x41, 0x8a, 0x12, 0x41, 0x98, 0x5e, 0xcb, 0x9a, 0xe2, 0xce, 0x1c, 0x20, 0x3e,
-	0xd4, 0x6c, 0x93, 0x24, 0xe2, 0x49, 0xaa, 0x80, 0x19, 0x52, 0xba, 0xf7, 0x79, 0xd8, 0xb2, 0x4d,
-	0xb6, 0x78, 0xde, 0xd4, 0xfc, 0xa9, 0xf7, 0xa3, 0x44, 0x91, 0xa0, 0x40, 0x83, 0x8c, 0x27, 0xdc,
-	0x2c, 0xed, 0x78, 0xa9, 0x75, 0x7e, 0x39, 0x65, 0xba, 0x6e, 0x89, 0x62, 0x5c, 0xc3, 0x97, 0x66,
-	0x39, 0xa9, 0x51, 0x9f, 0x79, 0x7d, 0x8e, 0xb7, 0x0b, 0xcc, 0x98, 0x41, 0x12, 0x89, 0x29, 0x14,
-	0xe8, 0x82, 0x78, 0x76, 0x74, 0xb7, 0x4f, 0x71, 0xff, 0x7e, 0xe3, 0x98, 0x1e, 0x14, 0xcd, 0x13,
-	0xa3, 0x8b, 0xf5, 0x2e, 0x70, 0x37, 0xbb, 0xc0, 0x7d, 0xd9, 0x05, 0xee, 0xc3, 0x3e, 0x70, 0x36,
-	0xfb, 0xc0, 0x79, 0xda, 0x07, 0xce, 0xf5, 0xff, 0x1c, 0x4d, 0xb1, 0x98, 0x85, 0x29, 0x95, 0x91,
-	0x5d, 0x7c, 0xb5, 0xdf, 0x94, 0x78, 0x75, 0x89, 0xee, 0x8f, 0x5f, 0xc4, 0xac, 0x24, 0xe8, 0x59,
-	0xbb, 0x8a, 0xcf, 0x5e, 0x03, 0x00, 0x00, 0xff, 0xff, 0x34, 0xe6, 0x81, 0x51, 0x3f, 0x02, 0x00,
-	0x00,
+	// 307 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0x91, 0xb1, 0x4e, 0xf3, 0x30,
+	0x14, 0x85, 0xe3, 0xbf, 0xbf, 0x2a, 0x6a, 0xca, 0x12, 0x55, 0xa5, 0xed, 0xe0, 0x56, 0xb0, 0x74,
+	0x40, 0xb6, 0x04, 0x4c, 0x8c, 0x2d, 0xea, 0x8c, 0x2a, 0x16, 0x58, 0xa2, 0x34, 0x75, 0x8c, 0x25,
+	0x27, 0x37, 0x72, 0x1c, 0x09, 0xde, 0x82, 0x91, 0x47, 0xea, 0xd8, 0x91, 0x09, 0x50, 0xf2, 0x16,
+	0x4c, 0x28, 0x4e, 0x8c, 0x80, 0xcd, 0xf7, 0x7e, 0xe7, 0x1c, 0x1d, 0xf9, 0xe2, 0x71, 0x2e, 0xb7,
+	0x9c, 0x29, 0x9e, 0x6e, 0x65, 0x2a, 0x58, 0x16, 0xea, 0x30, 0xc9, 0x69, 0xa6, 0xc1, 0x80, 0xdf,
+	0xaf, 0x11, 0x6d, 0xd1, 0x64, 0x20, 0x40, 0x80, 0x05, 0xac, 0x7e, 0x35, 0x9a, 0x09, 0x11, 0x00,
+	0x42, 0x71, 0x66, 0xa7, 0x4d, 0x11, 0xb3, 0x6d, 0xa1, 0x43, 0x23, 0x21, 0x6d, 0xf8, 0xc9, 0x27,
+	0xc2, 0xdd, 0x1b, 0x1b, 0xea, 0x5f, 0xe1, 0x31, 0x68, 0x29, 0x64, 0x6a, 0x79, 0x10, 0x73, 0x1e,
+	0x44, 0xa0, 0x14, 0x8f, 0x0c, 0xe8, 0x11, 0x9a, 0xa1, 0x79, 0x6f, 0x7d, 0xfc, 0x43, 0xb0, 0xe2,
+	0x7c, 0xe9, 0xb0, 0x7f, 0x89, 0x87, 0x36, 0x2f, 0x02, 0xf5, 0xc7, 0xf8, 0xcf, 0x1a, 0x07, 0x8e,
+	0xfe, 0x72, 0xdd, 0xe1, 0x61, 0x2c, 0xd3, 0x50, 0x05, 0x46, 0x26, 0x1c, 0x0a, 0x13, 0xb8, 0x72,
+	0xa3, 0xce, 0x0c, 0xcd, 0x0f, 0xcf, 0xc7, 0xb4, 0x69, 0x4f, 0x5d, 0x7b, 0x7a, 0xdd, 0x0a, 0x16,
+	0x07, 0xbb, 0xb7, 0xa9, 0xf7, 0xf2, 0x3e, 0x45, 0xeb, 0x81, 0x8d, 0xb8, 0x6d, 0x12, 0x1c, 0xf7,
+	0x4f, 0xf1, 0x51, 0x06, 0xa0, 0x82, 0x48, 0xf3, 0xd0, 0x80, 0xce, 0x47, 0xff, 0x67, 0x9d, 0x79,
+	0x6f, 0xdd, 0xaf, 0x97, 0xcb, 0x76, 0xb7, 0x58, 0xed, 0x4a, 0x82, 0xf6, 0x25, 0x41, 0x1f, 0x25,
+	0x41, 0xcf, 0x15, 0xf1, 0xf6, 0x15, 0xf1, 0x5e, 0x2b, 0xe2, 0xdd, 0x9f, 0x09, 0x69, 0x1e, 0x8a,
+	0x0d, 0x8d, 0x20, 0x61, 0xf5, 0x2f, 0xbb, 0xfa, 0x76, 0x60, 0x8f, 0xdf, 0xf7, 0x30, 0x4f, 0x19,
+	0xcf, 0x37, 0x5d, 0x8b, 0x2f, 0xbe, 0x02, 0x00, 0x00, 0xff, 0xff, 0x2d, 0x57, 0x8f, 0x65, 0xac,
+	0x01, 0x00, 0x00,
 }
 
 func (m *Params) Marshal() (dAtA []byte, err error) {
@@ -134,26 +150,6 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	{
-		size := m.LiquidationThresholdPercent.Size()
-		i -= size
-		if _, err := m.LiquidationThresholdPercent.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintParams(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x32
-	{
-		size := m.MinInitialLtvPercent.Size()
-		i -= size
-		if _, err := m.MinInitialLtvPercent.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintParams(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x2a
 	if len(m.PoolCreators) > 0 {
 		for iNdEx := len(m.PoolCreators) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.PoolCreators[iNdEx])
@@ -163,33 +159,28 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x22
 		}
 	}
-	if len(m.FeeRecipient) > 0 {
-		i -= len(m.FeeRecipient)
-		copy(dAtA[i:], m.FeeRecipient)
-		i = encodeVarintParams(dAtA, i, uint64(len(m.FeeRecipient)))
+	n1, err1 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.FinalTimeoutDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.FinalTimeoutDuration):])
+	if err1 != nil {
+		return 0, err1
+	}
+	i -= n1
+	i = encodeVarintParams(dAtA, i, uint64(n1))
+	i--
+	dAtA[i] = 0x1a
+	if len(m.ProtocolFeeCollector) > 0 {
+		i -= len(m.ProtocolFeeCollector)
+		copy(dAtA[i:], m.ProtocolFeeCollector)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.ProtocolFeeCollector)))
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x12
 	}
-	{
-		size := m.BorrowRatePermille.Size()
-		i -= size
-		if _, err := m.BorrowRatePermille.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintParams(dAtA, i, uint64(size))
+	if len(m.OriginationFeeCollector) > 0 {
+		i -= len(m.OriginationFeeCollector)
+		copy(dAtA[i:], m.OriginationFeeCollector)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.OriginationFeeCollector)))
+		i--
+		dAtA[i] = 0xa
 	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size := m.SupplyRatePermille.Size()
-		i -= size
-		if _, err := m.SupplyRatePermille.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintParams(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -210,24 +201,22 @@ func (m *Params) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = m.SupplyRatePermille.Size()
-	n += 1 + l + sovParams(uint64(l))
-	l = m.BorrowRatePermille.Size()
-	n += 1 + l + sovParams(uint64(l))
-	l = len(m.FeeRecipient)
+	l = len(m.OriginationFeeCollector)
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
 	}
+	l = len(m.ProtocolFeeCollector)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.FinalTimeoutDuration)
+	n += 1 + l + sovParams(uint64(l))
 	if len(m.PoolCreators) > 0 {
 		for _, s := range m.PoolCreators {
 			l = len(s)
 			n += 1 + l + sovParams(uint64(l))
 		}
 	}
-	l = m.MinInitialLtvPercent.Size()
-	n += 1 + l + sovParams(uint64(l))
-	l = m.LiquidationThresholdPercent.Size()
-	n += 1 + l + sovParams(uint64(l))
 	return n
 }
 
@@ -268,7 +257,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SupplyRatePermille", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field OriginationFeeCollector", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -296,13 +285,11 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.SupplyRatePermille.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.OriginationFeeCollector = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BorrowRatePermille", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ProtocolFeeCollector", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -330,15 +317,13 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.BorrowRatePermille.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.ProtocolFeeCollector = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FeeRecipient", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalTimeoutDuration", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -348,23 +333,24 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthParams
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthParams
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.FeeRecipient = string(dAtA[iNdEx:postIndex])
+			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.FinalTimeoutDuration, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
@@ -397,74 +383,6 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.PoolCreators = append(m.PoolCreators, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MinInitialLtvPercent", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.MinInitialLtvPercent.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LiquidationThresholdPercent", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.LiquidationThresholdPercent.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

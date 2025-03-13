@@ -172,9 +172,9 @@ func CmdQueryCollateralAddress() *cobra.Command {
 
 func CmdQueryLiquidationEvent() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "liquidation-event [collateral amount] [borrowed amount]",
+		Use:   "liquidation-event [pool id] [collateral amount] [borrowed amount]",
 		Short: "Query the corresponding liquidation event according to the collateral amount and borrowed amount",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -184,8 +184,9 @@ func CmdQueryLiquidationEvent() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.LiquidationEvent(cmd.Context(), &types.QueryLiquidationEventRequest{
-				CollateralAmount: args[0],
-				BorrowAmount:     args[1],
+				PoolId:           args[0],
+				CollateralAmount: args[1],
+				BorrowAmount:     args[2],
 			})
 			if err != nil {
 				return err

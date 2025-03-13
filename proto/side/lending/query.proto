@@ -84,9 +84,10 @@ message QueryPoolsResponse {
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryLiquidationEventRequest{
-    string collateral_amount = 1;
-    string borrow_amount = 2;
+message QueryLiquidationEventRequest {
+    string pool_id = 1;
+    string collateral_amount = 2;
+    string borrow_amount = 3;
 }
 
 message QueryLiquidationEventResponse {

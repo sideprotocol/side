@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/crypto/adaptor"
@@ -42,7 +43,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, k.GetParams(ctx).LiquidationThresholdPercent)
+		liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.LiquidationThreshold)))
 
 		price, err := k.GetPrice(ctx, fmt.Sprintf("BTC-%s", loan.BorrowAmount.Denom))
 		if err != nil {

@@ -21,8 +21,6 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
-const OriginationFeeAmount = int64(1000000)
-
 // CreateLoan implements types.MsgServer.
 func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.MsgApplyResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -46,12 +44,12 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
-	params := m.GetParams(ctx)
+	poolConfig := m.GetPool(ctx, msg.PoolId).Config
 
-	interests := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille).Quo(types.Permille)
-	fees := msg.BorrowAmount.Amount.Mul(params.BorrowRatePermille.Sub(params.SupplyRatePermille)).Quo(types.Permille)
+	interests := msg.BorrowAmount.Amount.Mul(math.NewInt(int64(poolConfig.BorrowRate))).Quo(types.Permille)
+	fees := msg.BorrowAmount.Amount.Mul(math.NewInt(int64(poolConfig.BorrowRate)).Sub(math.NewInt(int64(poolConfig.SupplyRate)))).Quo(types.Permille)
 
-	if msg.BorrowAmount.Amount.Int64() <= OriginationFeeAmount {
+	if msg.BorrowAmount.Amount.LTE(poolConfig.OriginationFee) {
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrowed amount must be greater than origination fee")
 	}
 
@@ -131,8 +129,6 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 		return nil, err
 	}
 
-	params := m.GetParams(ctx)
-
 	collateralAmount := math.NewInt(0)
 	for _, out := range fundTx.UnsignedTx.TxOut {
 		if bytes.Equal(out.PkScript, vaultPkScript) {
@@ -149,9 +145,11 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 	collateralDecimal := math.NewInt(100000000)
 	borrowedDecimal := math.NewInt(1000000)
 
-	// verify LTV (Loan-to-Value Ratio)
-	// collateral value * min_ltv > borrow amount
-	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(params.MinInitialLtvPercent).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
+	poolConfig := m.GetPool(ctx, loan.PoolId).Config
+
+	// verify LTV
+	// collateral value * ltv > borrow amount
+	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(math.NewInt(int64(poolConfig.Ltv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
 		return nil, types.ErrInsufficientCollateral
 	}
 
@@ -431,13 +429,15 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		return nil, types.ErrMismatchedLoanSecret
 	}
 
-	redeemedAmount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-OriginationFeeAmount)
+	poolConfig := m.GetPool(ctx, loan.PoolId).Config
+
+	redeemedAmount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-poolConfig.OriginationFee.Int64())
 	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, borrower, sdk.NewCoins(redeemedAmount)); err != nil {
 		return nil, err
 	}
 
-	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, OriginationFeeAmount)
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.GetParams(ctx).FeeRecipient), sdk.NewCoins(originationFee)); err != nil {
+	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, poolConfig.OriginationFee.Int64())
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.GetParams(ctx).OriginationFeeCollector), sdk.NewCoins(originationFee)); err != nil {
 		return nil, err
 	}
 
@@ -697,7 +697,7 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 		return nil, err
 	}
 
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(m.GetParams(ctx).FeeRecipient), sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, loan.Fees))); err != nil {
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(m.GetParams(ctx).ProtocolFeeCollector), sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, loan.Fees))); err != nil {
 		return nil, err
 	}
 

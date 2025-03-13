@@ -54,9 +54,7 @@ func (k Keeper) IteratePools(ctx sdk.Context, process func(header types.LendingP
 func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, amount sdk.Coin) {
 	pool := k.GetPool(ctx, poolId)
 
-	newSupply := pool.Supply.Sub(amount)
-	pool.Supply = &newSupply
-
+	pool.Supply = pool.Supply.Sub(amount)
 	pool.BorrowedAmount = pool.BorrowedAmount.Add(amount.Amount)
 
 	k.SetPool(ctx, pool)
@@ -65,9 +63,7 @@ func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, amount sdk.Coi
 func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, amount sdk.Coin, extraFees sdkmath.Int) {
 	pool := k.GetPool(ctx, poolId)
 
-	newSupply := pool.Supply.Add(amount).AddAmount(extraFees)
-	pool.Supply = &newSupply
-
+	pool.Supply = pool.Supply.Add(amount).AddAmount(extraFees)
 	pool.BorrowedAmount = pool.BorrowedAmount.Sub(amount.Amount)
 
 	k.SetPool(ctx, pool)
