@@ -3,8 +3,10 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -157,4 +159,28 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	return &types.MsgRemoveLiquidityResponse{
 		Amount: &withdraw,
 	}, nil
+}
+
+// UpdatePoolConfig implements types.MsgServer.
+func (m msgServer) UpdatePoolConfig(goCtx context.Context, msg *types.MsgUpdatePoolConfig) (*types.MsgUpdatePoolConfigResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasPool(ctx, msg.PoolId) {
+		return nil, types.ErrPoolDoesNotExist
+	}
+
+	pool := m.GetPool(ctx, msg.PoolId)
+	pool.Config = msg.Config
+
+	m.SetPool(ctx, pool)
+
+	return &types.MsgUpdatePoolConfigResponse{}, nil
 }

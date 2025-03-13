@@ -22,6 +22,7 @@ const (
 	Msg_CreatePool_FullMethodName                       = "/side.lending.Msg/CreatePool"
 	Msg_AddLiquidity_FullMethodName                     = "/side.lending.Msg/AddLiquidity"
 	Msg_RemoveLiquidity_FullMethodName                  = "/side.lending.Msg/RemoveLiquidity"
+	Msg_UpdatePoolConfig_FullMethodName                 = "/side.lending.Msg/UpdatePoolConfig"
 	Msg_Apply_FullMethodName                            = "/side.lending.Msg/Apply"
 	Msg_SubmitLiquidationCet_FullMethodName             = "/side.lending.Msg/SubmitLiquidationCet"
 	Msg_Approve_FullMethodName                          = "/side.lending.Msg/Approve"
@@ -43,6 +44,7 @@ type MsgClient interface {
 	CreatePool(ctx context.Context, in *MsgCreatePool, opts ...grpc.CallOption) (*MsgCreatePoolResponse, error)
 	AddLiquidity(ctx context.Context, in *MsgAddLiquidity, opts ...grpc.CallOption) (*MsgAddLiquidityResponse, error)
 	RemoveLiquidity(ctx context.Context, in *MsgRemoveLiquidity, opts ...grpc.CallOption) (*MsgRemoveLiquidityResponse, error)
+	UpdatePoolConfig(ctx context.Context, in *MsgUpdatePoolConfig, opts ...grpc.CallOption) (*MsgUpdatePoolConfigResponse, error)
 	Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error)
 	SubmitLiquidationCet(ctx context.Context, in *MsgSubmitLiquidationCet, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetResponse, error)
 	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
@@ -55,7 +57,7 @@ type MsgClient interface {
 	Close(ctx context.Context, in *MsgClose, opts ...grpc.CallOption) (*MsgCloseResponse, error)
 	// SubmitPrice submits the price for testing
 	SubmitPrice(ctx context.Context, in *MsgSubmitPrice, opts ...grpc.CallOption) (*MsgSubmitPriceResponse, error)
-	// UpdateParams defines a governance operation for updating the x/dlc module
+	// UpdateParams defines a governance operation for updating the x/lending module
 	// parameters. The authority defaults to the x/gov module account.
 	//
 	// Since: cosmos-sdk 0.47
@@ -91,6 +93,15 @@ func (c *msgClient) AddLiquidity(ctx context.Context, in *MsgAddLiquidity, opts 
 func (c *msgClient) RemoveLiquidity(ctx context.Context, in *MsgRemoveLiquidity, opts ...grpc.CallOption) (*MsgRemoveLiquidityResponse, error) {
 	out := new(MsgRemoveLiquidityResponse)
 	err := c.cc.Invoke(ctx, Msg_RemoveLiquidity_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdatePoolConfig(ctx context.Context, in *MsgUpdatePoolConfig, opts ...grpc.CallOption) (*MsgUpdatePoolConfigResponse, error) {
+	out := new(MsgUpdatePoolConfigResponse)
+	err := c.cc.Invoke(ctx, Msg_UpdatePoolConfig_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -212,6 +223,7 @@ type MsgServer interface {
 	CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error)
 	AddLiquidity(context.Context, *MsgAddLiquidity) (*MsgAddLiquidityResponse, error)
 	RemoveLiquidity(context.Context, *MsgRemoveLiquidity) (*MsgRemoveLiquidityResponse, error)
+	UpdatePoolConfig(context.Context, *MsgUpdatePoolConfig) (*MsgUpdatePoolConfigResponse, error)
 	Apply(context.Context, *MsgApply) (*MsgApplyResponse, error)
 	SubmitLiquidationCet(context.Context, *MsgSubmitLiquidationCet) (*MsgSubmitLiquidationCetResponse, error)
 	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
@@ -224,7 +236,7 @@ type MsgServer interface {
 	Close(context.Context, *MsgClose) (*MsgCloseResponse, error)
 	// SubmitPrice submits the price for testing
 	SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error)
-	// UpdateParams defines a governance operation for updating the x/dlc module
+	// UpdateParams defines a governance operation for updating the x/lending module
 	// parameters. The authority defaults to the x/gov module account.
 	//
 	// Since: cosmos-sdk 0.47
@@ -244,6 +256,9 @@ func (UnimplementedMsgServer) AddLiquidity(context.Context, *MsgAddLiquidity) (*
 }
 func (UnimplementedMsgServer) RemoveLiquidity(context.Context, *MsgRemoveLiquidity) (*MsgRemoveLiquidityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveLiquidity not implemented")
+}
+func (UnimplementedMsgServer) UpdatePoolConfig(context.Context, *MsgUpdatePoolConfig) (*MsgUpdatePoolConfigResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePoolConfig not implemented")
 }
 func (UnimplementedMsgServer) Apply(context.Context, *MsgApply) (*MsgApplyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Apply not implemented")
@@ -344,6 +359,24 @@ func _Msg_RemoveLiquidity_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).RemoveLiquidity(ctx, req.(*MsgRemoveLiquidity))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdatePoolConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdatePoolConfig)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdatePoolConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdatePoolConfig_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdatePoolConfig(ctx, req.(*MsgUpdatePoolConfig))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -582,6 +615,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveLiquidity",
 			Handler:    _Msg_RemoveLiquidity_Handler,
+		},
+		{
+			MethodName: "UpdatePoolConfig",
+			Handler:    _Msg_UpdatePoolConfig_Handler,
 		},
 		{
 			MethodName: "Apply",

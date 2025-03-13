@@ -16,6 +16,7 @@ service Msg {
     rpc CreatePool(MsgCreatePool) returns (MsgCreatePoolResponse);
     rpc AddLiquidity(MsgAddLiquidity) returns (MsgAddLiquidityResponse);
     rpc RemoveLiquidity(MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
+    rpc UpdatePoolConfig(MsgUpdatePoolConfig) returns (MsgUpdatePoolConfigResponse);
     rpc Apply(MsgApply) returns (MsgApplyResponse);
     rpc SubmitLiquidationCet(MsgSubmitLiquidationCet) returns (MsgSubmitLiquidationCetResponse);
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
@@ -30,7 +31,7 @@ service Msg {
     // SubmitPrice submits the price for testing 
     rpc SubmitPrice(MsgSubmitPrice) returns (MsgSubmitPriceResponse);
 
-    // UpdateParams defines a governance operation for updating the x/dlc module
+    // UpdateParams defines a governance operation for updating the x/lending module
     // parameters. The authority defaults to the x/gov module account.
     //
     // Since: cosmos-sdk 0.47
@@ -47,6 +48,19 @@ message MsgCreatePool {
 }
 
 message MsgCreatePoolResponse{}
+
+message MsgUpdatePoolConfig {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // pool id
+  string pool_id = 2;
+  // pool config
+  PoolConfig config = 3 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdatePoolConfigResponse {}
 
 message MsgRepay{
     option (cosmos.msg.v1.signer) = "borrower";
