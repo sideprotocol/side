@@ -14,6 +14,4 @@ message Params {
     string protocol_fee_collector = 2;
     // final timeout duration for each loan
     google.protobuf.Duration final_timeout_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-    // authorized pool creators
-    repeated string pool_creators = 4;
 }

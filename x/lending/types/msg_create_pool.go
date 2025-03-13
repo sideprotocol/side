@@ -9,22 +9,13 @@ import (
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, poolId string, lendingAsset string, config PoolConfig) *MsgCreatePool {
-	return &MsgCreatePool{
-		Creator:      creator,
-		PoolId:       poolId,
-		LendingAsset: lendingAsset,
-		Config:       config,
-	}
-}
-
-// ValidateBasic performs basic MsgCreatePool message validation.
+// ValidateBasic performs basic message validation.
 func (m *MsgCreatePool) ValidateBasic() error {
-	if _, err := sdk.AccAddressFromBech32(m.Creator); err != nil {
+	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	if len(m.PoolId) < MinPoolIdLength {
+	if len(m.Id) < MinPoolIdLength {
 		return errorsmod.Wrap(ErrInvalidPoolId, fmt.Sprintf("minimum length of the pool id is %d", MinPoolIdLength))
 	}
 

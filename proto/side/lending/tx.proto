@@ -39,11 +39,15 @@ service Msg {
 }
 
 message MsgCreatePool {
-    option (cosmos.msg.v1.signer) = "creator";
+    option (cosmos.msg.v1.signer) = "authority";
 
-    string creator = 1;
-    string pool_id = 2;
+    // authority is the address that controls the module (defaults to x/gov unless overwritten).
+    string authority = 1;
+    // pool id
+    string id = 2;
+    // lending asset
     string lending_asset = 3;
+    // pool config
     PoolConfig config = 4 [(gogoproto.nullable) = false];
 }
 

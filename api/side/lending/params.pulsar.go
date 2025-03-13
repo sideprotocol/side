@@ -14,58 +14,11 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_Params_4_list)(nil)
-
-type _Params_4_list struct {
-	list *[]string
-}
-
-func (x *_Params_4_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_Params_4_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfString((*x.list)[i])
-}
-
-func (x *_Params_4_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_Params_4_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.String()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_Params_4_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field PoolCreators as it is not of Message kind"))
-}
-
-func (x *_Params_4_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_Params_4_list) NewElement() protoreflect.Value {
-	v := ""
-	return protoreflect.ValueOfString(v)
-}
-
-func (x *_Params_4_list) IsValid() bool {
-	return x.list != nil
-}
-
 var (
 	md_Params                           protoreflect.MessageDescriptor
 	fd_Params_origination_fee_collector protoreflect.FieldDescriptor
 	fd_Params_protocol_fee_collector    protoreflect.FieldDescriptor
 	fd_Params_final_timeout_duration    protoreflect.FieldDescriptor
-	fd_Params_pool_creators             protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -74,7 +27,6 @@ func init() {
 	fd_Params_origination_fee_collector = md_Params.Fields().ByName("origination_fee_collector")
 	fd_Params_protocol_fee_collector = md_Params.Fields().ByName("protocol_fee_collector")
 	fd_Params_final_timeout_duration = md_Params.Fields().ByName("final_timeout_duration")
-	fd_Params_pool_creators = md_Params.Fields().ByName("pool_creators")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -160,12 +112,6 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if len(x.PoolCreators) != 0 {
-		value := protoreflect.ValueOfList(&_Params_4_list{list: &x.PoolCreators})
-		if !f(fd_Params_pool_creators, value) {
-			return
-		}
-	}
 }
 
 // Has reports whether a field is populated.
@@ -187,8 +133,6 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ProtocolFeeCollector != ""
 	case "side.lending.Params.final_timeout_duration":
 		return x.FinalTimeoutDuration != nil
-	case "side.lending.Params.pool_creators":
-		return len(x.PoolCreators) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -211,8 +155,6 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.ProtocolFeeCollector = ""
 	case "side.lending.Params.final_timeout_duration":
 		x.FinalTimeoutDuration = nil
-	case "side.lending.Params.pool_creators":
-		x.PoolCreators = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -238,12 +180,6 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "side.lending.Params.final_timeout_duration":
 		value := x.FinalTimeoutDuration
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.lending.Params.pool_creators":
-		if len(x.PoolCreators) == 0 {
-			return protoreflect.ValueOfList(&_Params_4_list{})
-		}
-		listValue := &_Params_4_list{list: &x.PoolCreators}
-		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -270,10 +206,6 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.ProtocolFeeCollector = value.Interface().(string)
 	case "side.lending.Params.final_timeout_duration":
 		x.FinalTimeoutDuration = value.Message().Interface().(*durationpb.Duration)
-	case "side.lending.Params.pool_creators":
-		lv := value.List()
-		clv := lv.(*_Params_4_list)
-		x.PoolCreators = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -299,12 +231,6 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 			x.FinalTimeoutDuration = new(durationpb.Duration)
 		}
 		return protoreflect.ValueOfMessage(x.FinalTimeoutDuration.ProtoReflect())
-	case "side.lending.Params.pool_creators":
-		if x.PoolCreators == nil {
-			x.PoolCreators = []string{}
-		}
-		value := &_Params_4_list{list: &x.PoolCreators}
-		return protoreflect.ValueOfList(value)
 	case "side.lending.Params.origination_fee_collector":
 		panic(fmt.Errorf("field origination_fee_collector of message side.lending.Params is not mutable"))
 	case "side.lending.Params.protocol_fee_collector":
@@ -329,9 +255,6 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 	case "side.lending.Params.final_timeout_duration":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.lending.Params.pool_creators":
-		list := []string{}
-		return protoreflect.ValueOfList(&_Params_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Params"))
@@ -413,12 +336,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.FinalTimeoutDuration)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.PoolCreators) > 0 {
-			for _, s := range x.PoolCreators {
-				l = len(s)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -447,15 +364,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.PoolCreators) > 0 {
-			for iNdEx := len(x.PoolCreators) - 1; iNdEx >= 0; iNdEx-- {
-				i -= len(x.PoolCreators[iNdEx])
-				copy(dAtA[i:], x.PoolCreators[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PoolCreators[iNdEx])))
-				i--
-				dAtA[i] = 0x22
-			}
 		}
 		if x.FinalTimeoutDuration != nil {
 			encoded, err := options.Marshal(x.FinalTimeoutDuration)
@@ -634,38 +542,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 4:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolCreators", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.PoolCreators = append(x.PoolCreators, string(dAtA[iNdEx:postIndex]))
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -726,8 +602,6 @@ type Params struct {
 	ProtocolFeeCollector string `protobuf:"bytes,2,opt,name=protocol_fee_collector,json=protocolFeeCollector,proto3" json:"protocol_fee_collector,omitempty"`
 	// final timeout duration for each loan
 	FinalTimeoutDuration *durationpb.Duration `protobuf:"bytes,3,opt,name=final_timeout_duration,json=finalTimeoutDuration,proto3" json:"final_timeout_duration,omitempty"`
-	// authorized pool creators
-	PoolCreators []string `protobuf:"bytes,4,rep,name=pool_creators,json=poolCreators,proto3" json:"pool_creators,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -771,13 +645,6 @@ func (x *Params) GetFinalTimeoutDuration() *durationpb.Duration {
 	return nil
 }
 
-func (x *Params) GetPoolCreators() []string {
-	if x != nil {
-		return x.PoolCreators
-	}
-	return nil
-}
-
 var File_side_lending_params_proto protoreflect.FileDescriptor
 
 var file_side_lending_params_proto_rawDesc = []byte{
@@ -787,7 +654,7 @@ var file_side_lending_params_proto_rawDesc = []byte{
 	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
 	0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
 	0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
-	0xfa, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3a, 0x0a, 0x19, 0x6f, 0x72,
+	0xd5, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3a, 0x0a, 0x19, 0x6f, 0x72,
 	0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63, 0x6f,
 	0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x17, 0x6f,
 	0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x43, 0x6f, 0x6c,
@@ -800,20 +667,18 @@ var file_side_lending_params_proto_rawDesc = []byte{
 	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44,
 	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f,
 	0x01, 0x52, 0x14, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x44,
-	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x23, 0x0a, 0x0d, 0x70, 0x6f, 0x6f, 0x6c, 0x5f,
-	0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0c,
-	0x70, 0x6f, 0x6f, 0x6c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x42, 0x9f, 0x01, 0x0a,
-	0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
-	0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64,
-	0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2,
-	0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
-	0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x9f, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x0b, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69,
+	0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58,
+	0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca,
+	0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02,
+	0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65,
+	0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (

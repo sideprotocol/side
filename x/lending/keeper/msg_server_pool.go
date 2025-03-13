@@ -13,36 +13,36 @@ import (
 
 // CreatePool implements types.MsgServer.
 func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	if m.authority != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
 
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
-	if !m.IsAuthorizedPoolCreator(ctx, msg.Creator) {
-		return nil, types.ErrNotAuthorized
-	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if m.HasPool(ctx, msg.PoolId) {
+	if m.HasPool(ctx, msg.Id) {
 		return nil, types.ErrDuplicatedPoolId
 	}
 
-	if m.bankKeeper.HasSupply(ctx, msg.PoolId) {
+	if m.bankKeeper.HasSupply(ctx, msg.Id) {
 		return nil, types.ErrDuplicatedPoolId
 	}
 
 	pool := types.LendingPool{
-		Id:             msg.PoolId,
+		Id:             msg.Id,
 		Supply:         sdk.NewCoin(msg.LendingAsset, math.NewInt(0)),
 		TotalShares:    math.NewInt(0),
 		BorrowedAmount: math.NewInt(0),
+		Config:         msg.Config,
 		Status:         types.PoolStatus_INACTIVE,
 	}
 
 	m.SetPool(ctx, pool)
 
-	m.EmitEvent(ctx, msg.Creator)
+	m.EmitEvent(ctx, msg.Authority)
 
 	return &types.MsgCreatePoolResponse{}, nil
 }
