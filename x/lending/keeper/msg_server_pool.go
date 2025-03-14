@@ -24,11 +24,11 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if m.HasPool(ctx, msg.Id) {
-		return nil, types.ErrDuplicatedPoolId
+		return nil, types.ErrPoolAlreadyExists
 	}
 
 	if m.bankKeeper.HasSupply(ctx, msg.Id) {
-		return nil, types.ErrDuplicatedPoolId
+		return nil, errorsmod.Wrapf(types.ErrInvalidPoolId, "denom %s already exists", msg.Id)
 	}
 
 	pool := &types.LendingPool{
@@ -83,11 +83,11 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	}
 
 	pool.TotalShares = pool.TotalShares.Add(outAmount)
-	pool.Supply = pool.Supply.Add(*msg.Amount)
+	pool.Supply = pool.Supply.Add(msg.Amount)
 
 	received_shares := sdk.NewCoin(pool.Id, outAmount)
 
-	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, lender, types.ModuleName, sdk.NewCoins(*msg.Amount)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, lender, types.ModuleName, sdk.NewCoins(msg.Amount)); err != nil {
 		return nil, err
 	}
 
@@ -139,11 +139,11 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 
 	m.SetPool(ctx, pool)
 
-	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, lender, types.ModuleName, sdk.NewCoins(*msg.Shares)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, lender, types.ModuleName, sdk.NewCoins(msg.Shares)); err != nil {
 		return nil, err
 	}
 
-	if err := m.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(*msg.Shares)); err != nil {
+	if err := m.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(msg.Shares)); err != nil {
 		return nil, err
 	}
 

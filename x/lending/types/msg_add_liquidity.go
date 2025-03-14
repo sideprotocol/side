@@ -1,10 +1,7 @@
 package types
 
 import (
-	fmt "fmt"
-
 	errorsmod "cosmossdk.io/errors"
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,7 +11,7 @@ func NewMsgAddLiquidity(lender string, poolId string, amount sdk.Coin) *MsgAddLi
 	return &MsgAddLiquidity{
 		Lender: lender,
 		PoolId: poolId,
-		Amount: &amount,
+		Amount: amount,
 	}
 }
 
@@ -24,12 +21,12 @@ func (m *MsgAddLiquidity) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	if len(m.PoolId) < MinPoolIdLength {
-		return errorsmod.Wrap(ErrInvalidPoolId, fmt.Sprintf("minimum length of the pool id is %d", MinPoolIdLength))
+	if len(m.PoolId) == 0 {
+		return errorsmod.Wrap(ErrInvalidPoolId, "empty pool id")
 	}
 
-	if m.Amount.Amount.LTE(math.NewInt(0)) {
-		return ErrInvalidLiquidity
+	if !m.Amount.IsValid() || !m.Amount.IsPositive() {
+		return errorsmod.Wrap(ErrInvalidAmount, "amount must be positive")
 	}
 
 	return nil

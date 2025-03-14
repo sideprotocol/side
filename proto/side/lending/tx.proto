@@ -88,9 +88,9 @@ message MsgRedeemResponse{}
 message MsgAddLiquidity {
     option (cosmos.msg.v1.signer) = "lender";
 
-    string pool_id = 1;
-    string lender = 2;
-    cosmos.base.v1beta1.Coin amount = 3;
+    string lender = 1;
+    string pool_id = 2;
+    cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
 }
 
 message MsgAddLiquidityResponse {
@@ -101,7 +101,7 @@ message MsgRemoveLiquidity {
     option (cosmos.msg.v1.signer) = "lender";
 
     string lender = 1;
-    cosmos.base.v1beta1.Coin shares = 2;
+    cosmos.base.v1beta1.Coin shares = 2 [(gogoproto.nullable) = false];
 }
 
 message MsgRemoveLiquidityResponse {

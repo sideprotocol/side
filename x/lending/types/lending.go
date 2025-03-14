@@ -6,9 +6,6 @@ import (
 )
 
 const (
-	// minimum pool id length
-	MinPoolIdLength = 2
-
 	// loan secret length
 	LoanSecretLength = 32
 
