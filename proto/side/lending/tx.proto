@@ -115,10 +115,9 @@ message MsgApply {
     string borrower_pubkey = 2;
     string loan_secret_hash = 3;
     int64 maturity_time = 4;
-    int64 final_timeout = 5;
-    string pool_id = 6;
-    cosmos.base.v1beta1.Coin borrow_amount = 7;
-    uint64 agency_id = 8;
+    string pool_id = 5;
+    cosmos.base.v1beta1.Coin borrow_amount = 6;
+    uint64 agency_id = 7;
 }
 
 message MsgApplyResponse {

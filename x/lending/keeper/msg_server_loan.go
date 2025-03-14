@@ -36,7 +36,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	agency := m.dlcKeeper.GetAgency(ctx, msg.AgencyId)
 
-	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, agency.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.FinalTimeout)
+	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, agency.Pubkey, msg.LoanSecretHash, msg.MaturityTime, msg.MaturityTime+m.FinalTimeoutDuration(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Agency:         agency.Pubkey,
 		HashLoanSecret: msg.LoanSecretHash,
 		MaturityTime:   msg.MaturityTime,
-		FinalTimeout:   msg.FinalTimeout,
+		FinalTimeout:   msg.MaturityTime + m.FinalTimeoutDuration(ctx),
 		BorrowAmount:   msg.BorrowAmount,
 		Interests:      interests,
 		Fees:           fees,

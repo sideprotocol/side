@@ -130,9 +130,9 @@ func CmdQueryPools() *cobra.Command {
 
 func CmdQueryCollateralAddress() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "collateral-address [btc public key] [hash of loan secret] [maturity time] [final timeout]",
+		Use:   "collateral-address [btc public key] [hash of loan secret] [maturity time]",
 		Short: "Query the collateral address by the specified loan params",
-		Args:  cobra.ExactArgs(4),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -146,16 +146,10 @@ func CmdQueryCollateralAddress() *cobra.Command {
 				return err
 			}
 
-			finalTimeout, err := strconv.ParseUint(args[3], 10, 64)
-			if err != nil {
-				return err
-			}
-
 			res, err := queryClient.CollateralAddress(cmd.Context(), &types.QueryCollateralAddressRequest{
 				BorrowerPubkey:   args[0],
 				HashOfLoanSecret: args[1],
 				MaturityTime:     maturityTime,
-				FinalTimeout:     finalTimeout,
 			})
 			if err != nil {
 				return err

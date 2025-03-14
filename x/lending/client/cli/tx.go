@@ -121,9 +121,9 @@ func CmdRemoveLiquidity() *cobra.Command {
 
 func CmdApply() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "apply [btc public key] [secret hash] [maturity time] [final timeout] [pool id] [borrow amount] [agency id]",
+		Use:   "apply [btc public key] [secret hash] [maturity time] [pool id] [borrow amount] [agency id]",
 		Short: "Apply loan with the related params",
-		Args:  cobra.ExactArgs(7),
+		Args:  cobra.ExactArgs(6),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -135,17 +135,12 @@ func CmdApply() *cobra.Command {
 				return err
 			}
 
-			finalTimeout, err := strconv.ParseInt(args[3], 10, 64)
+			borrowAmount, err := sdk.ParseCoinNormalized(args[4])
 			if err != nil {
 				return err
 			}
 
-			borrowAmount, err := sdk.ParseCoinNormalized(args[5])
-			if err != nil {
-				return err
-			}
-
-			agencyId, err := strconv.ParseUint(args[6], 10, 64)
+			agencyId, err := strconv.ParseUint(args[5], 10, 64)
 			if err != nil {
 				return err
 			}
@@ -155,8 +150,7 @@ func CmdApply() *cobra.Command {
 				args[0],
 				args[1],
 				maturityTime,
-				finalTimeout,
-				args[4],
+				args[3],
 				borrowAmount,
 				agencyId,
 			)
