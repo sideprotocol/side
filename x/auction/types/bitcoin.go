@@ -2,7 +2,7 @@ package types
 
 import (
 	"bytes"
-	"encoding/hex"
+	"encoding/base64"
 
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -58,7 +58,7 @@ func BuildPaymentTransaction(auction *Auction, bids []*Bid, feeRate int64) (stri
 			return "", nil, nil, err
 		}
 
-		sigHashes = append(sigHashes, hex.EncodeToString(sigHash))
+		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
 	}
 
 	txHash := paymentTxPsbt.UnsignedTx.TxHash()

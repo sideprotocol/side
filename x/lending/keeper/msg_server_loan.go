@@ -3,6 +3,7 @@ package keeper
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -272,7 +273,7 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 			return nil, types.ErrInvalidSignature
 		}
 
-		sigHashes = append(sigHashes, hex.EncodeToString(sigHash))
+		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
 
 		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(types.GetInternalKey())
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
