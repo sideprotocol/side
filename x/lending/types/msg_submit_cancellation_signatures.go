@@ -36,7 +36,7 @@ func (m *MsgSubmitCancellationSignatures) ValidateBasic() error {
 	for _, sig := range m.Signatures {
 		sigBytes, err := hex.DecodeString(sig)
 		if err != nil {
-			return ErrInvalidSignature
+			return errorsmod.Wrap(ErrInvalidSignature, "failed to decode signature")
 		}
 
 		if _, err := schnorr.ParseSignature(sigBytes); err != nil {

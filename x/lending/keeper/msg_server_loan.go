@@ -13,7 +13,7 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 
 	errorsmod "cosmossdk.io/errors"
-	"cosmossdk.io/math"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/crypto/adaptor"
@@ -30,8 +30,25 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if !m.HasPool(ctx, msg.PoolId) {
+		return nil, types.ErrPoolDoesNotExist
+	}
+
+	pool := m.GetPool(ctx, msg.PoolId)
+	if pool.Status != types.PoolStatus_ACTIVE {
+		return nil, types.ErrInactivePool
+	}
+
+	if msg.BorrowAmount.Denom != pool.Supply.Denom {
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
+	}
+
+	if msg.BorrowAmount.Amount.GT(pool.AvailableAmount) {
+		return nil, types.ErrInsufficientLiquidity
+	}
+
 	if !m.dlcKeeper.HasAgency(ctx, msg.AgencyId) {
-		return nil, types.ErrInvalidAgency
+		return nil, errorsmod.Wrap(types.ErrInvalidAgency, "agency does not exist")
 	}
 
 	agency := m.dlcKeeper.GetAgency(ctx, msg.AgencyId)
@@ -47,8 +64,8 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	poolConfig := m.GetPool(ctx, msg.PoolId).Config
 
-	interests := msg.BorrowAmount.Amount.Mul(math.NewInt(int64(poolConfig.BorrowRate))).Quo(types.Permille)
-	fees := msg.BorrowAmount.Amount.Mul(math.NewInt(int64(poolConfig.BorrowRate)).Sub(math.NewInt(int64(poolConfig.SupplyRate)))).Quo(types.Permille)
+	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.BorrowRate))).Quo(types.Permille)
+	protocolFee := interest.Mul(sdkmath.NewInt(int64(poolConfig.ReserveFactor))).Quo(types.Permille)
 
 	if msg.BorrowAmount.Amount.LTE(poolConfig.OriginationFee) {
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrowed amount must be greater than origination fee")
@@ -62,8 +79,9 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		MaturityTime:   msg.MaturityTime,
 		FinalTimeout:   msg.MaturityTime + m.FinalTimeoutDuration(ctx),
 		BorrowAmount:   msg.BorrowAmount,
-		Interests:      interests,
-		Fees:           fees,
+		OriginationFee: poolConfig.OriginationFee,
+		Interest:       interest,
+		ProtocolFee:    protocolFee,
 		PoolId:         msg.PoolId,
 		CreateAt:       ctx.BlockTime(),
 		Status:         types.LoanStatus_Requested,
@@ -83,7 +101,6 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		))
 
 	return &types.MsgApplyResponse{}, nil
-
 }
 
 // SubmitLiquidationCet implements types.MsgServer.
@@ -117,21 +134,21 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 		return nil, err
 	}
 
-	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, loan.BorrowerPubKey, loan.Agency, msg.LiquidationAdaptorSignature, hex.EncodeToString(adaptorPoint)); err != nil {
+	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, loan.BorrowerPubKey, loan.Agency, msg.LiquidationAdaptorSignatures, hex.EncodeToString(adaptorPoint)); err != nil {
 		return nil, err
 	}
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
-	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignature, loan.BorrowerPubKey, loan.Agency, loan.MaturityTime, loan.FinalTimeout)
+	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, loan.BorrowerPubKey, loan.Agency, loan.MaturityTime, loan.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
 
-	collateralAmount := math.NewInt(0)
+	collateralAmount := sdkmath.ZeroInt()
 	for _, out := range fundTx.UnsignedTx.TxOut {
 		if bytes.Equal(out.PkScript, vaultPkScript) {
-			collateralAmount = collateralAmount.Add(math.NewInt(out.Value))
+			collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
 		}
 	}
 
@@ -141,14 +158,14 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 	}
 
 	// TODO: retrieve from params
-	collateralDecimal := math.NewInt(100000000)
-	borrowedDecimal := math.NewInt(1000000)
+	collateralDecimal := sdkmath.NewInt(100000000)
+	borrowedDecimal := sdkmath.NewInt(1000000)
 
 	poolConfig := m.GetPool(ctx, loan.PoolId).Config
 
 	// verify LTV
 	// collateral value * ltv > borrow amount
-	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(math.NewInt(int64(poolConfig.Ltv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
+	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(sdkmath.NewInt(int64(poolConfig.Ltv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
 		return nil, types.ErrInsufficientCollateral
 	}
 
@@ -189,32 +206,26 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, types.ErrDepositTxDoesNotExist
 	}
 
-	log := m.GetDepositLog(ctx, msg.DepositTxId)
-	if !m.HasLoan(ctx, log.VaultAddress) {
-		return nil, types.ErrLoanDoesNotExist
-	}
-
-	loan := m.GetLoan(ctx, log.VaultAddress)
+	depositLog := m.GetDepositLog(ctx, msg.DepositTxId)
+	loan := m.GetLoan(ctx, depositLog.VaultAddress)
 
 	// Do not validate tx for now
-	// if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, log.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
+	// if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, depositLog.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
 	// 	return nil, types.ErrInvalidProof
 	// }
 
-	poolConfig := m.GetPool(ctx, loan.PoolId).Config
-
-	amount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-poolConfig.OriginationFee.Int64())
+	amount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-loan.OriginationFee.Int64())
 	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(loan.Borrower), sdk.NewCoins(amount)); err != nil {
 		return nil, err
 	}
 
-	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, poolConfig.OriginationFee.Int64())
+	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.OriginationFee.Int64())
 	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.GetParams(ctx).OriginationFeeCollector), sdk.NewCoins(originationFee)); err != nil {
 		return nil, err
 	}
 
 	// update pool
-	m.AfterPoolBorrowed(ctx, loan.PoolId, *loan.BorrowAmount)
+	m.AfterPoolBorrowed(ctx, loan.PoolId, loan.BorrowAmount)
 
 	loan.Status = types.LoanStatus_Open
 	m.SetLoan(ctx, loan)
@@ -347,11 +358,7 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 
 	loan := m.GetLoan(ctx, msg.LoanId)
 
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(cancellation.Tx)), true)
-	if err != nil {
-		return nil, err
-	}
-
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(cancellation.Tx)), true)
 	if len(msg.Signatures) != len(p.Inputs) {
 		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
 	}
@@ -430,12 +437,11 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 
 	loan := m.GetLoan(ctx, msg.LoanId)
 	if loan.Status != types.LoanStatus_Open {
-		return nil, types.ErrInvalidLoanStatus
+		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not open")
 	}
 
-	amount := loan.BorrowAmount.Amount.Add(loan.Interests)
-
-	// send repayment to escrow account
+	// escrow repaid amount
+	amount := loan.BorrowAmount.Amount.Add(loan.Interest)
 	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), types.RepaymentEscrowAccount, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
 		return nil, err
 	}
@@ -483,11 +489,11 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	}
 
 	repayment := &types.Repayment{
-		LoanId:            msg.LoanId,
-		Txid:              repaymentTxPsbt.UnsignedTx.TxHash().String(),
-		Tx:                repaymentTx,
-		RepayAdaptorPoint: msg.AdaptorPoint,
-		CreateAt:          ctx.BlockTime(),
+		LoanId:       msg.LoanId,
+		Txid:         repaymentTxPsbt.UnsignedTx.TxHash().String(),
+		Tx:           repaymentTx,
+		AdaptorPoint: msg.AdaptorPoint,
+		CreateAt:     ctx.BlockTime(),
 	}
 
 	m.SetRepayment(ctx, repayment)
@@ -520,8 +526,13 @@ func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasRepayment(ctx, msg.LoanId) {
-		return nil, types.ErrInvalidRepayment
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanDoesNotExist
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+	if loan.Status != types.LoanStatus_Repaid {
+		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not repaid")
 	}
 
 	repayment := m.GetRepayment(ctx, msg.LoanId)
@@ -529,22 +540,17 @@ func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *
 		return nil, types.ErrRepaymentAdaptorSigsAlreadyExist
 	}
 
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repayment.Tx)), true)
-	if err != nil {
-		return nil, err
-	}
-
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(repayment.Tx)), true)
 	if len(msg.AdaptorSignatures) != len(p.Inputs) {
 		return nil, errorsmod.Wrap(types.ErrInvalidAdaptorSignatures, "mismatched adaptor signature number")
 	}
 
-	repaymentScript, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
-
-	adaptorPointBytes, _ := hex.DecodeString(repayment.RepayAdaptorPoint)
+	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
+	adaptorPointBytes, _ := hex.DecodeString(repayment.AdaptorPoint)
 	agencyPubKeyBytes, _ := hex.DecodeString(m.GetLoan(ctx, msg.LoanId).Agency)
 
 	for i, input := range p.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, repaymentScript)
+		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
 		if err != nil {
 			return nil, err
 		}
@@ -585,16 +591,15 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 	}
 
 	liquidationCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet)), true)
-
 	if len(msg.Signatures) != len(liquidationCet.Inputs) {
-		return nil, errorsmod.Wrap(types.ErrInvalidLiquidationSignatures, "mismatched signature number")
+		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
 	}
 
-	liquidationCetScript, _ := hex.DecodeString(dlcMeta.LiquidationCetScript)
+	script, _ := hex.DecodeString(dlcMeta.LiquidationCetScript)
 	agencyPubKey, _ := hex.DecodeString(loan.Agency)
 
 	for i, input := range liquidationCet.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(liquidationCet, i, input.SighashType, liquidationCetScript)
+		sigHash, err := types.CalcTapscriptSigHash(liquidationCet, i, input.SighashType, script)
 		if err != nil {
 			return nil, err
 		}
@@ -625,12 +630,8 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
-	if loan.Status == types.LoanStatus_Closed {
-		return nil, types.ErrInvalidLoanStatus
-	}
-
-	if !m.HasRepayment(ctx, msg.LoanId) {
-		return nil, types.ErrInvalidRepayment
+	if loan.Status != types.LoanStatus_Repaid {
+		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not repaid")
 	}
 
 	repayment := m.GetRepayment(ctx, msg.LoanId)
@@ -644,29 +645,30 @@ func (m msgServer) Close(goCtx context.Context, msg *types.MsgClose) (*types.Msg
 	// extract secret from signatures
 	secret := adaptor.Extract(adaptorSigBytes, sigBytes)
 	if len(secret) == 0 {
-		return nil, types.ErrInvalidSignature
+		return nil, errorsmod.Wrap(types.ErrInvalidSignature, "failed to reveal adaptor secret")
 	}
 
-	if types.AdaptorPoint(secret) != repayment.RepayAdaptorPoint {
-		return nil, types.ErrInvalidRepaymentSecret
+	if types.AdaptorPointFromSecret(secret) != repayment.AdaptorPoint {
+		return nil, errorsmod.Wrap(types.ErrInvalidSignature, "revealed adaptor secret does not match the adaptor point")
 	}
 
-	amount := loan.BorrowAmount.Amount.Add(loan.Interests).Sub(loan.Fees)
+	amount := loan.BorrowAmount.Amount.Add(loan.Interest).Sub(loan.ProtocolFee)
 	if err := m.bankKeeper.SendCoinsFromModuleToModule(ctx, types.RepaymentEscrowAccount, types.ModuleName, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
 		return nil, err
 	}
 
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(m.GetParams(ctx).ProtocolFeeCollector), sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, loan.Fees))); err != nil {
+	protocolFee := sdk.NewCoin(loan.BorrowAmount.Denom, loan.ProtocolFee)
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(m.GetParams(ctx).ProtocolFeeCollector), sdk.NewCoins(protocolFee)); err != nil {
 		return nil, err
 	}
 
 	// update pool
-	m.AfterPoolRepaid(ctx, loan.PoolId, *loan.BorrowAmount, loan.Interests.Sub(loan.Fees))
+	m.AfterPoolRepaid(ctx, loan.PoolId, loan.BorrowAmount, loan.Interest.Sub(loan.ProtocolFee))
 
 	loan.Status = types.LoanStatus_Closed
 	m.SetLoan(ctx, loan)
 
-	repayment.BorrowerSignature = msg.Signature
+	repayment.DcaAdaptedSignature = msg.Signature
 	m.SetRepayment(ctx, repayment)
 
 	m.EmitEvent(ctx, msg.Relayer,

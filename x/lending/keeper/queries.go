@@ -216,6 +216,10 @@ func (k Keeper) LoanCancellation(goCtx context.Context, req *types.QueryLoanCanc
 		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
 	}
 
+	if !k.HasCancellation(ctx, req.LoanId) {
+		return nil, status.Error(codes.NotFound, "loan cancellation does not exist")
+	}
+
 	return &types.QueryLoanCancellationResponse{Cancellation: k.GetCancellation(ctx, req.LoanId)}, nil
 }
 
@@ -227,13 +231,15 @@ func (k Keeper) Repayment(goCtx context.Context, req *types.QueryRepaymentReques
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if !k.HasLoan(ctx, req.LoanId) {
+		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
+	}
+
 	if !k.HasRepayment(ctx, req.LoanId) {
 		return nil, status.Error(codes.NotFound, "repayment does not exist")
 	}
 
-	repayment := k.GetRepayment(ctx, req.LoanId)
-
-	return &types.QueryRepaymentResponse{Repayment: repayment}, nil
+	return &types.QueryRepaymentResponse{Repayment: k.GetRepayment(ctx, req.LoanId)}, nil
 }
 
 // Params implements types.QueryServer.

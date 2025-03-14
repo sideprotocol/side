@@ -31,7 +31,7 @@ func (m *MsgClose) ValidateBasic() error {
 
 	sigBytes, err := hex.DecodeString(m.Signature)
 	if err != nil {
-		return ErrInvalidSignature
+		return errorsmod.Wrap(ErrInvalidSignature, "failed to decode signature")
 	}
 
 	if _, err := schnorr.ParseSignature(sigBytes); err != nil {

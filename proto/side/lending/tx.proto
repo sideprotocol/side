@@ -101,7 +101,7 @@ message MsgApply {
     string borrower_pubkey = 2;
     int64 maturity_time = 3;
     string pool_id = 4;
-    cosmos.base.v1beta1.Coin borrow_amount = 5;
+    cosmos.base.v1beta1.Coin borrow_amount = 5 [(gogoproto.nullable) = false];
     uint64 agency_id = 6;
 }
 
@@ -115,7 +115,7 @@ message MsgSubmitLiquidationCet {
     uint64 event_id = 3;
     string deposit_tx = 4;
     string liquidation_cet = 5;
-    string liquidation_adaptor_signature = 6;
+    repeated string liquidation_adaptor_signatures = 6;
 }
 
 message MsgSubmitLiquidationCetResponse {

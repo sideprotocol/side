@@ -30,13 +30,13 @@ func (m *MsgSubmitRepaymentAdaptorSignatures) ValidateBasic() error {
 	}
 
 	if len(m.AdaptorSignatures) == 0 {
-		return errorsmod.Wrap(ErrInvalidAdaptorSignatures, "empty adaptor signatures")
+		return errorsmod.Wrap(ErrInvalidAdaptorSignatures, "adaptor signatures can not be empty")
 	}
 
 	for _, sig := range m.AdaptorSignatures {
 		adaptorSigBytes, err := hex.DecodeString(sig)
 		if err != nil {
-			return ErrInvalidAdaptorSignature
+			return errorsmod.Wrap(ErrInvalidAdaptorSignature, "failed to decode adaptor signature")
 		}
 
 		if _, err := schnorr.ParseSignature(adaptorSigBytes); err != nil {

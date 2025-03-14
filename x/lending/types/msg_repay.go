@@ -31,7 +31,7 @@ func (m *MsgRepay) ValidateBasic() error {
 
 	adaptorPointBytes, err := hex.DecodeString(m.AdaptorPoint)
 	if err != nil {
-		return ErrInvalidAdaptorPoint
+		return errorsmod.Wrap(ErrInvalidAdaptorPoint, "failed to decode adaptor point")
 	}
 
 	if _, err = btcec.ParsePubKey(adaptorPointBytes); err != nil {

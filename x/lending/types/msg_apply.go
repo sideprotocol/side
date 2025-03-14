@@ -17,7 +17,7 @@ func NewMsgApply(borrower string, borrowerPubkey string, maturityTime int64, poo
 		BorrowerPubkey: borrowerPubkey,
 		MaturityTime:   maturityTime,
 		PoolId:         poolId,
-		BorrowAmount:   &borrowAmount,
+		BorrowAmount:   borrowAmount,
 		AgencyId:       agencyId,
 	}
 }
@@ -30,19 +30,23 @@ func (m *MsgApply) ValidateBasic() error {
 
 	pubKeyBytes, err := hex.DecodeString(m.BorrowerPubkey)
 	if err != nil {
-		return ErrInvalidBorrowerPubkey
+		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower public key")
 	}
 
 	if _, err := schnorr.ParsePubKey(pubKeyBytes); err != nil {
-		return ErrInvalidBorrowerPubkey
+		return errorsmod.Wrap(ErrInvalidPubKey, "invalid borrower public key")
 	}
 
 	if m.MaturityTime <= 0 {
 		return ErrInvalidMaturityTime
 	}
 
+	if len(m.PoolId) == 0 {
+		return errorsmod.Wrap(ErrInvalidPoolId, "empty pool id")
+	}
+
 	if !m.BorrowAmount.IsValid() || !m.BorrowAmount.IsPositive() {
-		return ErrInvalidAmount
+		return errorsmod.Wrap(ErrInvalidAmount, "borrowed amount must be positive")
 	}
 
 	return nil

@@ -15,14 +15,8 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 
 	"github.com/sideprotocol/side/bitcoin"
-	"github.com/sideprotocol/side/crypto/adaptor"
 	"github.com/sideprotocol/side/x/dlc/types"
 )
-
-// AdaptorPoint gets the corresponding adaptor point from the given secret
-func AdaptorPoint(secret []byte) string {
-	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
-}
 
 // Branch 1: multisig signature script
 func CreateMultisigScript(pubKeys []string) ([]byte, error) {

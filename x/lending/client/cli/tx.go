@@ -168,7 +168,7 @@ func CmdApply() *cobra.Command {
 
 func CmdSubmitLiquidationCet() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-liquidation-cet [loan id] [event id] [deposit tx] [liquidation cet] [adaptor signature]",
+		Use:   "submit-liquidation-cet [loan id] [event id] [deposit tx] [liquidation cet] [liquidation adaptor signatures]",
 		Short: "Submit liquidation cet",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
@@ -188,7 +188,7 @@ func CmdSubmitLiquidationCet() *cobra.Command {
 				eventId,
 				args[2],
 				args[3],
-				args[4],
+				strings.Split(args[4], listSeparator),
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

@@ -1,8 +1,12 @@
 package types
 
 import (
+	"encoding/hex"
+
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
+
+	"github.com/sideprotocol/side/crypto/adaptor"
 )
 
 // GetLiquidationPrice gets the liquidation price according to the liquidation LTV
@@ -14,6 +18,11 @@ func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowedAmount sdkmath.In
 	precision := sdkmath.NewInt(100)
 
 	return liquidationPrice.Quo(precision).Mul(precision)
+}
+
+// AdaptorPointFromSecret gets the corresponding adaptor point from the given secret
+func AdaptorPointFromSecret(secret []byte) string {
+	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
 }
 
 // ValidatePoolConfig validates the given pool config

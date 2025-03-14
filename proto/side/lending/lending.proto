@@ -101,39 +101,41 @@ message Loan {
     string agency = 4;
     int64 maturity_time = 5;
     int64 final_timeout = 6;
-    
-    cosmos.base.v1beta1.Coin borrow_amount = 7;
-    string fees = 8 [
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-      ];
-    string interests = 9 [
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-      ];
-
-    string term = 10 [
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-      ];
-    uint64 event_id = 11;
-    uint64 attestation_id = 12;
-    repeated string deposit_txs = 13;
-    string collateral_amount = 14 [
-        (gogoproto.customtype) = "cosmossdk.io/math.Int",
-        (gogoproto.nullable) = false
-      ];
-    string pool_id = 15;
-    uint64 auction_id = 16;
-    google.protobuf.Timestamp create_at = 17 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 18;
+    cosmos.base.v1beta1.Coin borrow_amount = 7 [(gogoproto.nullable) = false];
+    string origination_fee = 8 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string interest = 9 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string protocol_fee = 10 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string term = 11 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    uint64 event_id = 12;
+    uint64 attestation_id = 13;
+    repeated string deposit_txs = 14;
+    string collateral_amount = 15 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string pool_id = 16;
+    uint64 auction_id = 17;
+    google.protobuf.Timestamp create_at = 18 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 19;
 }
 
 message DLCMeta {
     string liquidation_cet = 1;
     string signed_liquidation_cet_hex = 2;
-    string liquidation_adaptor_signature = 3;
-    string liquidation_adapted_signature = 4;
+    repeated string liquidation_adaptor_signatures = 3;
+    repeated string liquidation_adapted_signatures = 4;
     repeated string liquidation_agency_signatures = 5;
     side.btcbridge.UTXO vault_utxo = 6;
     string internal_key = 7;
@@ -153,9 +155,9 @@ message Repayment {
     string loan_id = 1;
     string txid = 2;
     string tx = 3;
-    string repay_adaptor_point = 4;
+    string adaptor_point = 4;
     repeated string dca_adaptor_signatures = 5;
-    string borrower_signature = 6;
+    string dca_adapted_signature = 6;
     google.protobuf.Timestamp create_at = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
