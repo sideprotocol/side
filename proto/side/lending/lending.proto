@@ -10,8 +10,8 @@ option go_package = "github.com/sideprotocol/side/x/lending/types";
 
 // Status options for a lending pool
 enum PoolStatus {
-    ACTIVE = 0;
-    INACTIVE = 1;
+    INACTIVE = 0;
+    ACTIVE = 1;
 }
 
 // Lending pool config

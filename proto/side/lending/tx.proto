@@ -83,9 +83,7 @@ message MsgAddLiquidity {
     cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
 }
 
-message MsgAddLiquidityResponse {
-    cosmos.base.v1beta1.Coin shares = 1;
-}
+message MsgAddLiquidityResponse {}
 
 message MsgRemoveLiquidity {
     option (cosmos.msg.v1.signer) = "lender";
@@ -94,9 +92,7 @@ message MsgRemoveLiquidity {
     cosmos.base.v1beta1.Coin shares = 2 [(gogoproto.nullable) = false];
 }
 
-message MsgRemoveLiquidityResponse {
-    cosmos.base.v1beta1.Coin amount = 1;
-}
+message MsgRemoveLiquidityResponse {}
 
 message MsgApply {
     option (cosmos.msg.v1.signer) = "borrower";
@@ -109,9 +105,7 @@ message MsgApply {
     uint64 agency_id = 6;
 }
 
-message MsgApplyResponse {
-    string vault_address = 1;
-}
+message MsgApplyResponse {}
 
 message MsgSubmitLiquidationCet {
     option (cosmos.msg.v1.signer) = "borrower";

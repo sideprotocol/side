@@ -4,7 +4,7 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
-	"cosmossdk.io/math"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
@@ -32,12 +32,13 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	}
 
 	pool := &types.LendingPool{
-		Id:             msg.Id,
-		Supply:         sdk.NewCoin(msg.LendingAsset, math.NewInt(0)),
-		TotalShares:    math.NewInt(0),
-		BorrowedAmount: math.NewInt(0),
-		Config:         msg.Config,
-		Status:         types.PoolStatus_INACTIVE,
+		Id:              msg.Id,
+		Supply:          sdk.NewCoin(msg.LendingAsset, sdkmath.ZeroInt()),
+		AvailableAmount: sdkmath.ZeroInt(),
+		BorrowedAmount:  sdkmath.ZeroInt(),
+		TotalShares:     sdkmath.ZeroInt(),
+		Config:          msg.Config,
+		Status:          types.PoolStatus_INACTIVE,
 	}
 
 	m.SetPool(ctx, pool)
@@ -49,97 +50,91 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 
 // AddLiquidity implements types.MsgServer.
 func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidity) (*types.MsgAddLiquidityResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	lender, err2 := sdk.AccAddressFromBech32(msg.Lender)
-	if err2 != nil {
-		return nil, err2
-	}
-
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.HasPool(ctx, msg.PoolId) {
 		return nil, types.ErrPoolDoesNotExist
 	}
 
 	pool := m.GetPool(ctx, msg.PoolId)
-
 	if msg.Amount.Denom != pool.Supply.Denom {
-		return nil, types.ErrInvalidAmount
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
 	}
 
-	var outAmount math.Int
-	if pool.Supply.Amount.Equal(math.NewInt(0)) {
+	var sharesAmount sdkmath.Int
+
+	if pool.Supply.IsZero() {
 		// active pool on first deposit
 		pool.Status = types.PoolStatus_ACTIVE
-		outAmount = msg.Amount.Amount
+		sharesAmount = msg.Amount.Amount
 	} else {
-		outAmount = msg.Amount.Amount.Mul(pool.TotalShares).Quo(pool.Supply.Amount)
-	}
-	if pool.Status != types.PoolStatus_ACTIVE {
-		return nil, types.ErrInactivePool
+		sharesAmount = msg.Amount.Amount.Mul(pool.TotalShares).Quo(pool.Supply.Amount)
 	}
 
-	pool.TotalShares = pool.TotalShares.Add(outAmount)
 	pool.Supply = pool.Supply.Add(msg.Amount)
-
-	received_shares := sdk.NewCoin(pool.Id, outAmount)
-
-	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, lender, types.ModuleName, sdk.NewCoins(msg.Amount)); err != nil {
-		return nil, err
-	}
-
-	if err := m.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(received_shares)); err != nil {
-		return nil, err
-	}
-
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, lender, sdk.NewCoins(received_shares)); err != nil {
-		return nil, err
-	}
+	pool.AvailableAmount = pool.AvailableAmount.Add(msg.Amount.Amount)
+	pool.TotalShares = pool.TotalShares.Add(sharesAmount)
 
 	m.SetPool(ctx, pool)
+
+	shares := sdk.NewCoin(pool.Id, sharesAmount)
+
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Lender), types.ModuleName, sdk.NewCoins(msg.Amount)); err != nil {
+		return nil, err
+	}
+
+	if err := m.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(shares)); err != nil {
+		return nil, err
+	}
+
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Lender), sdk.NewCoins(shares)); err != nil {
+		return nil, err
+	}
 
 	// Emit Events
 	m.EmitEvent(ctx, msg.Lender,
 		sdk.NewAttribute("deposit", msg.Amount.String()),
-		sdk.NewAttribute("received_share", received_shares.String()),
+		sdk.NewAttribute("shares", shares.String()),
 	)
-	return &types.MsgAddLiquidityResponse{
-		Shares: &received_shares,
-	}, nil
 
+	return &types.MsgAddLiquidityResponse{}, nil
 }
 
 // RemoveLiquidity implements types.MsgServer.
 func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLiquidity) (*types.MsgRemoveLiquidityResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	lender, err2 := sdk.AccAddressFromBech32(msg.Lender)
-	if err2 != nil {
-		return nil, err2
-	}
-
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.HasPool(ctx, msg.Shares.Denom) {
 		return nil, types.ErrPoolDoesNotExist
 	}
 
 	pool := m.GetPool(ctx, msg.Shares.Denom)
+	if pool.Status != types.PoolStatus_ACTIVE {
+		return nil, types.ErrInactivePool
+	}
 
-	var outAmount = msg.Shares.Amount.Quo(pool.TotalShares).Mul(pool.Supply.Amount)
+	var withdrawAmount = msg.Shares.Amount.Mul(pool.Supply.Amount).Quo(pool.TotalShares)
+	if withdrawAmount.GT(pool.AvailableAmount) {
+		return nil, types.ErrInsufficientLiquidity
+	}
+
+	pool.Supply = pool.Supply.SubAmount(withdrawAmount)
+	pool.AvailableAmount = pool.AvailableAmount.Sub(withdrawAmount)
 	pool.TotalShares = pool.TotalShares.Sub(msg.Shares.Amount)
-
-	withdraw := sdk.NewCoin(pool.Supply.Denom, outAmount)
-	pool.Supply = pool.Supply.Sub(withdraw)
 
 	m.SetPool(ctx, pool)
 
-	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, lender, types.ModuleName, sdk.NewCoins(msg.Shares)); err != nil {
+	withdrawAsset := sdk.NewCoin(pool.Supply.Denom, withdrawAmount)
+
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Lender), types.ModuleName, sdk.NewCoins(msg.Shares)); err != nil {
 		return nil, err
 	}
 
@@ -147,18 +142,17 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		return nil, err
 	}
 
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, lender, sdk.NewCoins(withdraw)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Lender), sdk.NewCoins(withdrawAsset)); err != nil {
 		return nil, err
 	}
 
 	// Emit Events
 	m.EmitEvent(ctx, msg.Lender,
 		sdk.NewAttribute("burn", msg.Shares.String()),
-		sdk.NewAttribute("withdraw", withdraw.String()),
+		sdk.NewAttribute("withdraw", withdrawAsset.String()),
 	)
-	return &types.MsgRemoveLiquidityResponse{
-		Amount: &withdraw,
-	}, nil
+
+	return &types.MsgRemoveLiquidityResponse{}, nil
 }
 
 // UpdatePoolConfig implements types.MsgServer.
