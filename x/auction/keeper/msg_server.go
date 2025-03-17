@@ -57,15 +57,15 @@ func (m msgServer) CancelBid(goCtx context.Context, msg *types.MsgCancelBid) (*t
 	return &types.MsgCancelBidResponse{}, nil
 }
 
-// SubmitPaymentTransactionSignatures implements types.MsgServer.
-func (m msgServer) SubmitPaymentTransactionSignatures(goCtx context.Context, msg *types.MsgSubmitPaymentTransactionSignatures) (*types.MsgSubmitPaymentTransactionSignaturesResponse, error) {
+// SubmitPaymentSignatures implements types.MsgServer.
+func (m msgServer) SubmitPaymentSignatures(goCtx context.Context, msg *types.MsgSubmitPaymentSignatures) (*types.MsgSubmitPaymentSignaturesResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.HandlePaymentTransactionSignatures(ctx, msg.Relayer, msg.AuctionId, msg.Signatures); err != nil {
+	if err := m.Keeper.HandlePaymentTransactionSignatures(ctx, msg.Sender, msg.AuctionId, msg.Signatures); err != nil {
 		return nil, err
 	}
 
@@ -78,7 +78,7 @@ func (m msgServer) SubmitPaymentTransactionSignatures(goCtx context.Context, msg
 		),
 	)
 
-	return &types.MsgSubmitPaymentTransactionSignaturesResponse{}, nil
+	return &types.MsgSubmitPaymentSignaturesResponse{}, nil
 }
 
 // UpdateParams updates the module params.

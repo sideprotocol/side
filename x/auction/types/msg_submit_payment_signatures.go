@@ -9,23 +9,23 @@ import (
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 )
 
-var _ sdk.Msg = &MsgSubmitPaymentTransactionSignatures{}
+var _ sdk.Msg = &MsgSubmitPaymentSignatures{}
 
-func NewMsgSubmitPaymentTransactionSignatures(
-	relayer string,
+func NewMsgSubmitPaymentSignatures(
+	sender string,
 	auctionId uint64,
 	signatures []string,
-) *MsgSubmitPaymentTransactionSignatures {
-	return &MsgSubmitPaymentTransactionSignatures{
-		Relayer:    relayer,
+) *MsgSubmitPaymentSignatures {
+	return &MsgSubmitPaymentSignatures{
+		Sender:     sender,
 		AuctionId:  auctionId,
 		Signatures: signatures,
 	}
 }
 
-// ValidateBasic performs basic MsgSubmitPaymentTransactionSignatures message validation.
-func (m *MsgSubmitPaymentTransactionSignatures) ValidateBasic() error {
-	if _, err := sdk.AccAddressFromBech32(m.Relayer); err != nil {
+// ValidateBasic performs basic MsgSubmitPaymentSignatures message validation.
+func (m *MsgSubmitPaymentSignatures) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(m.Sender); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
@@ -36,7 +36,7 @@ func (m *MsgSubmitPaymentTransactionSignatures) ValidateBasic() error {
 	for _, sig := range m.Signatures {
 		sigBytes, err := hex.DecodeString(sig)
 		if err != nil {
-			return errorsmod.Wrapf(ErrInvalidSignature, "%v", err)
+			return errorsmod.Wrapf(ErrInvalidSignature, "failed to decode signature")
 		}
 
 		if _, err := schnorr.ParseSignature(sigBytes); err != nil {
