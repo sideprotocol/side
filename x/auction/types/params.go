@@ -8,13 +8,10 @@ import (
 
 var (
 	// default price drop period
-	DefaultPriceDropPeriod = time.Duration(10) * time.Minute
+	DefaultPriceDropPeriod = time.Duration(10) * time.Minute // 10min
 
 	// default initial discount
-	DefaultInitialDiscount = uint32(10)
-
-	// default fee rate base point
-	DefaultFeeRate = uint32(30) // fee rate base point; 3/1000
+	DefaultInitialDiscount = uint32(3) // 3%
 
 	// default minimum amount for bid
 	DefaultMinBidAmount = uint64(100000) // 100000sat
@@ -25,7 +22,6 @@ func NewParams() Params {
 	return Params{
 		PriceDropPeriod: DefaultPriceDropPeriod,
 		InitialDiscount: DefaultInitialDiscount,
-		FeeRate:         DefaultFeeRate,
 		MinBidAmount:    DefaultMinBidAmount,
 	}
 }
@@ -41,12 +37,8 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(ErrInvalidParams, "price drop period must be greater than 0")
 	}
 
-	if p.InitialDiscount == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "initial discount must be greater than 0")
-	}
-
-	if p.FeeRate == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "fee rate must be greater than 0")
+	if p.InitialDiscount == 0 || p.InitialDiscount >= 100 {
+		return errorsmod.Wrap(ErrInvalidParams, "initial discount must be between (0, 100)")
 	}
 
 	if p.MinBidAmount == 0 {

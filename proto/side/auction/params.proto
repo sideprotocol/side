@@ -10,6 +10,5 @@ option go_package = "github.com/sideprotocol/side/x/auction/types";
 message Params {
     google.protobuf.Duration price_drop_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
     uint32 initial_discount = 2;
-    uint32 fee_rate = 3;
-    uint64 min_bid_amount = 4;
+    uint64 min_bid_amount = 3;
 }
