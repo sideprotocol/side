@@ -98,10 +98,10 @@ func (k Keeper) AuctionPrice(goCtx context.Context, req *types.QueryAuctionPrice
 		return nil, status.Error(codes.InvalidArgument, "auction not open")
 	}
 
-	price, err := k.GetCurrentPrice(ctx, req.AuctionId)
+	price, discount, err := k.GetCurrentPrice(ctx, req.AuctionId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAuctionPriceResponse{Price: price.String()}, nil
+	return &types.QueryAuctionPriceResponse{Price: price.String(), Discount: discount}, nil
 }

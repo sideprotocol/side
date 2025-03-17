@@ -14,6 +14,7 @@ var (
 	ErrAuctionDoesNotExist  = errorsmod.Register(ModuleName, 1104, "auction does not exist")
 	ErrInvalidAuctionStatus = errorsmod.Register(ModuleName, 1105, "invalid auction status")
 	ErrAuctionEnded         = errorsmod.Register(ModuleName, 1106, "auction already ended")
+	ErrInvalidPrice         = errorsmod.Register(ModuleName, 1107, "invalid price")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 2100, "invalid params")
 

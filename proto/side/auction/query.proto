@@ -99,4 +99,5 @@ message QueryAuctionPriceRequest {
 // QueryAuctionPriceResponse is response type for the Query/AuctionPrice RPC method.
 message QueryAuctionPriceResponse {
     string price = 1;
+    uint32 discount = 2;
 }

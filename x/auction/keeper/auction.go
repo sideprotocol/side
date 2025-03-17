@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -70,9 +71,9 @@ func (k Keeper) CreateAuction(ctx sdk.Context, auction *types.Auction) *types.Au
 }
 
 // GetCurrentPrice gets the current price of the given auction
-func (k Keeper) GetCurrentPrice(ctx sdk.Context, auctionId uint64) (sdkmath.Int, error) {
+func (k Keeper) GetCurrentPrice(ctx sdk.Context, auctionId uint64) (sdkmath.Int, uint32, error) {
 	if !k.HasAuction(ctx, auctionId) {
-		return sdkmath.Int{}, types.ErrAuctionDoesNotExist
+		return sdkmath.Int{}, 0, types.ErrAuctionDoesNotExist
 	}
 
 	auction := k.GetAuction(ctx, auctionId)
@@ -87,12 +88,16 @@ func (k Keeper) GetCurrentPrice(ctx sdk.Context, auctionId uint64) (sdkmath.Int,
 	// }
 
 	price := k.GetPrice(ctx, "BTC-USD")
+	if price.IsZero() {
+		return sdkmath.Int{}, 0, errorsmod.Wrap(types.ErrInvalidPrice, "no price found")
+	}
 
 	params := k.GetParams(ctx)
 
 	discountMultiplier := uint32(ctx.BlockTime().Sub(auction.LiquidatedTime)/params.PriceDropPeriod) + 1
+	discount := params.InitialDiscount * discountMultiplier
 
-	return price.Mul(sdkmath.NewInt(int64(100 - params.InitialDiscount*discountMultiplier))).Quo(sdkmath.NewInt(100)), nil
+	return price.Mul(sdkmath.NewInt(int64(100 - discount))).Quo(sdkmath.NewInt(100)), discount, nil
 }
 
 // GetAllAuctions gets all auctions

@@ -31,7 +31,7 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 		}
 
 		// get the current auction price
-		currentAuctionPrice, err := k.GetCurrentPrice(ctx, auction.Id)
+		currentAuctionPrice, _, err := k.GetCurrentPrice(ctx, auction.Id)
 		if err != nil {
 			k.Logger(ctx).Info("Failed to get the current price", "auction id", auction.Id, "err", err)
 
