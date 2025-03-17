@@ -162,8 +162,8 @@ func CmdQueryBid() *cobra.Command {
 func CmdQueryBids() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "bids [status]",
-		Short: "Query bids by the given status",
-		Args:  cobra.ExactArgs(1),
+		Short: "Query bids by the optional auction and status",
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -172,12 +172,20 @@ func CmdQueryBids() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			status, err := strconv.ParseUint(args[0], 10, 32)
+			auctionId, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			res, err := queryClient.Bids(cmd.Context(), &types.QueryBidsRequest{Status: types.BidStatus(status)})
+			status, err := strconv.ParseUint(args[1], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.Bids(cmd.Context(), &types.QueryBidsRequest{
+				AuctionId: auctionId,
+				Status:    types.BidStatus(status),
+			})
 			if err != nil {
 				return err
 			}

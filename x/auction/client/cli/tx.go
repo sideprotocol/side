@@ -2,6 +2,7 @@ package cli
 
 import (
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -34,6 +35,7 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdBid())
 	cmd.AddCommand(CmdCancelBid())
+	cmd.AddCommand(CmdSubmitPaymentSignatures())
 
 	return cmd
 }
@@ -103,6 +105,41 @@ func CmdCancelBid() *cobra.Command {
 			msg := types.NewMsgCancelBid(
 				clientCtx.GetFromAddress().String(),
 				id,
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdSubmitPaymentSignatures() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "submit-payment-signatures [auction id] [signatures]",
+		Short: "Submit the payment signatures for the specified auction",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			auctionId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgSubmitPaymentSignatures(
+				clientCtx.GetFromAddress().String(),
+				auctionId,
+				strings.Split(args[1], listSeparator),
 			)
 
 			if err := msg.ValidateBasic(); err != nil {
