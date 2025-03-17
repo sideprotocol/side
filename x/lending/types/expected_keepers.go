@@ -48,6 +48,8 @@ type OracleKeeper interface {
 
 // AuctionKeeper defines the expected auction keeper interface
 type AuctionKeeper interface {
+	SetBiddedAssetHandler(handler auctiontypes.BiddedAssetHandler)
+
 	CreateAuction(ctx sdk.Context, auction *auctiontypes.Auction) *auctiontypes.Auction
 
 	SetPrice(ctx sdk.Context, pair string, price string)

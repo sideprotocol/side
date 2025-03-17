@@ -9,7 +9,6 @@ import (
 
 	"github.com/sideprotocol/side/x/auction/keeper"
 	"github.com/sideprotocol/side/x/auction/types"
-	lendingtypes "github.com/sideprotocol/side/x/lending/types"
 )
 
 // EndBlocker called at every block
@@ -78,9 +77,6 @@ func handlePendingAuctions(ctx sdk.Context, k keeper.Keeper) {
 
 // handleCompletedAuctions handles the completed auctions
 func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
-	// get params
-	params := k.GetParams(ctx)
-
 	// get completed auctions
 	completedAuctions := k.GetAuctions(ctx, types.AuctionStatus_AUCTION_STATUS_CLOSED)
 
@@ -117,7 +113,7 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 			k.Logger(ctx).Info("Failed to get the current price", "block height", ctx.BlockHeight())
 		} else {
 			remainingAmount := auction.DepositedAsset.Amount.Int64() - auction.BiddedAmount - 10000
-			slashedValue := currentPrice.Mul(sdkmath.NewInt(remainingAmount)).Mul(sdkmath.NewInt(10 ^ 6)).Mul(sdkmath.NewInt(int64(params.FeeRate))).Quo(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(1000))
+			slashedValue := currentPrice.Mul(sdkmath.NewInt(remainingAmount)).Mul(sdkmath.NewInt(10 ^ 6)).Mul(sdkmath.NewInt(int64(auction.LiquidationPenalty))).Quo(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(1000))
 
 			slashedAsset := sdk.NewCoin(auction.ExpectedValue.Denom, slashedValue)
 			if err := k.BankKeeper().SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(auction.Borrower), types.ModuleName, sdk.NewCoins(slashedAsset)); err != nil {
@@ -125,10 +121,10 @@ func handleCompletedAuctions(ctx sdk.Context, k keeper.Keeper) {
 			}
 		}
 
-		// transfer bidded asset to the lending pool
+		// handle bidded asset(repay the lending pool)
 		biddedAsset := auction.BiddedValue
-		if err := k.BankKeeper().SendCoinsFromModuleToModule(ctx, types.ModuleName, lendingtypes.ModuleName, sdk.NewCoins(biddedAsset)); err != nil {
-			k.Logger(ctx).Info("Failed to transfer bidded asset to lending module", "auction id", auction.Id, "amount", biddedAsset, "err", err)
+		if err := k.BiddedAssetHandler()(ctx, auction.LoanId, types.ModuleName, biddedAsset); err != nil {
+			k.Logger(ctx).Info("Failed to call BiddedAssetHandler", "auction id", auction.Id, "amount", biddedAsset, "err", err)
 
 			continue
 		}

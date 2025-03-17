@@ -17,6 +17,8 @@ type Keeper struct {
 	bankKeeper   types.BankKeeper
 	oracleKeeper types.OracleKeeper
 
+	biddedAssetHandler types.BiddedAssetHandler
+
 	authority string
 }
 
@@ -27,8 +29,8 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	oracleKeeper types.OracleKeeper,
 	authority string,
-) Keeper {
-	return Keeper{
+) *Keeper {
+	return &Keeper{
 		cdc:          cdc,
 		storeKey:     storeKey,
 		memKey:       memKey,
@@ -65,4 +67,12 @@ func (k Keeper) BankKeeper() types.BankKeeper {
 
 func (k Keeper) OracleKeeper() types.OracleKeeper {
 	return k.oracleKeeper
+}
+
+func (k Keeper) BiddedAssetHandler() types.BiddedAssetHandler {
+	return k.biddedAssetHandler
+}
+
+func (k *Keeper) SetBiddedAssetHandler(handler types.BiddedAssetHandler) {
+	k.biddedAssetHandler = handler
 }

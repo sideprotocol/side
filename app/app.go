@@ -292,7 +292,7 @@ type App struct {
 	ScopedWasmKeeper     capabilitykeeper.ScopedKeeper
 
 	BtcBridgeKeeper btcbridgekeeper.Keeper
-	AuctionKeeper   auctionkeeper.Keeper
+	AuctionKeeper   *auctionkeeper.Keeper
 	DLCKeeper       dlckeeper.Keeper
 	LendingKeeper   lendingkeeper.Keeper
 	OracleKeeper    oraclekeeper.Keeper
@@ -640,7 +640,6 @@ func New(
 		app.StakingKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	btcbridgeModule := btcbridgemodule.NewAppModule(appCodec, app.BtcBridgeKeeper)
 
 	app.AuctionKeeper = auctionkeeper.NewKeeper(
 		appCodec,
@@ -650,7 +649,6 @@ func New(
 		nil,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	auctionModule := auctionmodule.NewAppModule(appCodec, app.AuctionKeeper)
 
 	app.DLCKeeper = dlckeeper.NewKeeper(
 		appCodec,
@@ -658,7 +656,6 @@ func New(
 		keys[dlctypes.MemStoreKey],
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	dlcModule := dlcmodule.NewAppModule(appCodec, app.DLCKeeper)
 
 	app.LendingKeeper = lendingkeeper.NewKeeper(
 		appCodec,
@@ -672,7 +669,6 @@ func New(
 		app.BtcBridgeKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	lendingModule := lendingmodule.NewAppModule(appCodec, app.LendingKeeper)
 
 	app.OracleKeeper = oraclekeeper.NewKeeper(
 		appCodec,
@@ -680,7 +676,6 @@ func New(
 		keys[oracletypes.MemStoreKey],
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	oracleModule := oraclemodule.NewAppModule(appCodec, app.OracleKeeper)
 
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
@@ -790,11 +785,11 @@ func New(
 		icaModule,
 		wasmModule,
 
-		btcbridgeModule,
-		auctionModule,
-		dlcModule,
-		lendingModule,
-		oracleModule,
+		btcbridgemodule.NewAppModule(appCodec, app.BtcBridgeKeeper),
+		auctionmodule.NewAppModule(appCodec, *app.AuctionKeeper),
+		dlcmodule.NewAppModule(appCodec, app.DLCKeeper),
+		lendingmodule.NewAppModule(appCodec, app.LendingKeeper),
+		oraclemodule.NewAppModule(appCodec, app.OracleKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them

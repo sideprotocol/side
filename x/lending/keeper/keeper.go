@@ -45,7 +45,7 @@ func NewKeeper(
 		panic(fmt.Sprintf("%s module account has not been set", types.RepaymentEscrowAccount))
 	}
 
-	return Keeper{
+	k := Keeper{
 		cdc:             cdc,
 		storeKey:        storeKey,
 		memKey:          memKey,
@@ -57,6 +57,11 @@ func NewKeeper(
 		btcbridgeKeeper: btcbridgeKeeper,
 		authority:       authority,
 	}
+
+	// set bidded asset handler for auction
+	auctionKeeper.SetBiddedAssetHandler(k.HandleBiddedAsset)
+
+	return k
 }
 
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
