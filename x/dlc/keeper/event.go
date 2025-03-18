@@ -98,6 +98,66 @@ func (k Keeper) SetEventByPrice(ctx sdk.Context, price sdkmath.Int, event *types
 	store.Set(types.EventByPriceKey(price), sdk.Uint64ToBigEndian(event.Id))
 }
 
+// GetPendingLendingEventCount gets the pending lending event count
+func (k Keeper) GetPendingLendingEventCount(ctx sdk.Context) uint32 {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.PendingLendingEventCountKey)
+
+	return uint32(sdk.BigEndianToUint64(bz))
+}
+
+// IncreasePendingLendingEventCount increases the pending lending event count by 1
+func (k Keeper) IncreasePendingLendingEventCount(ctx sdk.Context) {
+	store := ctx.KVStore(k.storeKey)
+
+	count := k.GetPendingLendingEventCount(ctx)
+
+	store.Set(types.PendingLendingEventCountKey, sdk.Uint64ToBigEndian(uint64(count+1)))
+}
+
+// DecreasePendingLendingEventCount decreases the pending lending event count by 1
+func (k Keeper) DecreasePendingLendingEventCount(ctx sdk.Context) {
+	store := ctx.KVStore(k.storeKey)
+
+	count := k.GetPendingLendingEventCount(ctx)
+	if count == 0 {
+		return
+	}
+
+	store.Set(types.PendingLendingEventCountKey, sdk.Uint64ToBigEndian(uint64(count-1)))
+}
+
+// AddLendingEventToPendingQueue adds the specified lending event to the pending queue
+func (k Keeper) AddLendingEventToPendingQueue(ctx sdk.Context, event *types.DLCEvent) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.PendingLendingEventKey(event.Id), []byte{})
+
+	k.IncreasePendingLendingEventCount(ctx)
+}
+
+// RemoveLendingEventFromPendingQueue removes the specified lending event from the pending queue
+func (k Keeper) RemoveLendingEventFromPendingQueue(ctx sdk.Context, event *types.DLCEvent) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Delete(types.PendingLendingEventKey(event.Id))
+
+	k.DecreasePendingLendingEventCount(ctx)
+}
+
+// GetAvailableLendingEvent gets an available lending event
+func (k Keeper) GetAvailableLendingEvent(ctx sdk.Context) *types.DLCEvent {
+	var lendingEvent *types.DLCEvent
+
+	k.IteratePendingLendingEvents(ctx, func(event *types.DLCEvent) (stop bool) {
+		lendingEvent = event
+		return true
+	})
+
+	return lendingEvent
+}
+
 // TriggerDLCEvent triggers the given event
 func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 	event := k.GetEvent(ctx, id)
@@ -171,6 +231,24 @@ func (k Keeper) IterateEvents(ctx sdk.Context, cb func(event *types.DLCEvent) (s
 		k.cdc.MustUnmarshal(iterator.Value(), &event)
 
 		if cb(&event) {
+			break
+		}
+	}
+}
+
+// IteratePendingLendingEvents iterates through the pending lending events
+func (k Keeper) IteratePendingLendingEvents(ctx sdk.Context, cb func(event *types.DLCEvent) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.PendingLendingEventKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		key := iterator.Key()
+
+		event := k.GetEvent(ctx, sdk.BigEndianToUint64(key[1:]))
+
+		if cb(event) {
 			break
 		}
 	}

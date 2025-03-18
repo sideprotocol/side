@@ -534,12 +534,11 @@ func (x *_Params_2_list) IsValid() bool {
 }
 
 var (
-	md_Params                                     protoreflect.MessageDescriptor
-	fd_Params_price_event_nonce_queue_size        protoreflect.FieldDescriptor
-	fd_Params_price_intervals                     protoreflect.FieldDescriptor
-	fd_Params_lending_event_initial_nonce_count   protoreflect.FieldDescriptor
-	fd_Params_lending_event_nonce_usage_threshold protoreflect.FieldDescriptor
-	fd_Params_dkg_timeout_period                  protoreflect.FieldDescriptor
+	md_Params                                protoreflect.MessageDescriptor
+	fd_Params_price_event_nonce_queue_size   protoreflect.FieldDescriptor
+	fd_Params_price_intervals                protoreflect.FieldDescriptor
+	fd_Params_lending_event_nonce_queue_size protoreflect.FieldDescriptor
+	fd_Params_dkg_timeout_period             protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -547,8 +546,7 @@ func init() {
 	md_Params = File_side_dlc_params_proto.Messages().ByName("Params")
 	fd_Params_price_event_nonce_queue_size = md_Params.Fields().ByName("price_event_nonce_queue_size")
 	fd_Params_price_intervals = md_Params.Fields().ByName("price_intervals")
-	fd_Params_lending_event_initial_nonce_count = md_Params.Fields().ByName("lending_event_initial_nonce_count")
-	fd_Params_lending_event_nonce_usage_threshold = md_Params.Fields().ByName("lending_event_nonce_usage_threshold")
+	fd_Params_lending_event_nonce_queue_size = md_Params.Fields().ByName("lending_event_nonce_queue_size")
 	fd_Params_dkg_timeout_period = md_Params.Fields().ByName("dkg_timeout_period")
 }
 
@@ -629,15 +627,9 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.LendingEventInitialNonceCount != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.LendingEventInitialNonceCount)
-		if !f(fd_Params_lending_event_initial_nonce_count, value) {
-			return
-		}
-	}
-	if x.LendingEventNonceUsageThreshold != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.LendingEventNonceUsageThreshold)
-		if !f(fd_Params_lending_event_nonce_usage_threshold, value) {
+	if x.LendingEventNonceQueueSize != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.LendingEventNonceQueueSize)
+		if !f(fd_Params_lending_event_nonce_queue_size, value) {
 			return
 		}
 	}
@@ -666,10 +658,8 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.PriceEventNonceQueueSize != uint32(0)
 	case "side.dlc.Params.price_intervals":
 		return len(x.PriceIntervals) != 0
-	case "side.dlc.Params.lending_event_initial_nonce_count":
-		return x.LendingEventInitialNonceCount != uint32(0)
-	case "side.dlc.Params.lending_event_nonce_usage_threshold":
-		return x.LendingEventNonceUsageThreshold != uint32(0)
+	case "side.dlc.Params.lending_event_nonce_queue_size":
+		return x.LendingEventNonceQueueSize != uint32(0)
 	case "side.dlc.Params.dkg_timeout_period":
 		return x.DkgTimeoutPeriod != nil
 	default:
@@ -692,10 +682,8 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.PriceEventNonceQueueSize = uint32(0)
 	case "side.dlc.Params.price_intervals":
 		x.PriceIntervals = nil
-	case "side.dlc.Params.lending_event_initial_nonce_count":
-		x.LendingEventInitialNonceCount = uint32(0)
-	case "side.dlc.Params.lending_event_nonce_usage_threshold":
-		x.LendingEventNonceUsageThreshold = uint32(0)
+	case "side.dlc.Params.lending_event_nonce_queue_size":
+		x.LendingEventNonceQueueSize = uint32(0)
 	case "side.dlc.Params.dkg_timeout_period":
 		x.DkgTimeoutPeriod = nil
 	default:
@@ -723,11 +711,8 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 		}
 		listValue := &_Params_2_list{list: &x.PriceIntervals}
 		return protoreflect.ValueOfList(listValue)
-	case "side.dlc.Params.lending_event_initial_nonce_count":
-		value := x.LendingEventInitialNonceCount
-		return protoreflect.ValueOfUint32(value)
-	case "side.dlc.Params.lending_event_nonce_usage_threshold":
-		value := x.LendingEventNonceUsageThreshold
+	case "side.dlc.Params.lending_event_nonce_queue_size":
+		value := x.LendingEventNonceQueueSize
 		return protoreflect.ValueOfUint32(value)
 	case "side.dlc.Params.dkg_timeout_period":
 		value := x.DkgTimeoutPeriod
@@ -758,10 +743,8 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		lv := value.List()
 		clv := lv.(*_Params_2_list)
 		x.PriceIntervals = *clv.list
-	case "side.dlc.Params.lending_event_initial_nonce_count":
-		x.LendingEventInitialNonceCount = uint32(value.Uint())
-	case "side.dlc.Params.lending_event_nonce_usage_threshold":
-		x.LendingEventNonceUsageThreshold = uint32(value.Uint())
+	case "side.dlc.Params.lending_event_nonce_queue_size":
+		x.LendingEventNonceQueueSize = uint32(value.Uint())
 	case "side.dlc.Params.dkg_timeout_period":
 		x.DkgTimeoutPeriod = value.Message().Interface().(*durationpb.Duration)
 	default:
@@ -797,10 +780,8 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		return protoreflect.ValueOfMessage(x.DkgTimeoutPeriod.ProtoReflect())
 	case "side.dlc.Params.price_event_nonce_queue_size":
 		panic(fmt.Errorf("field price_event_nonce_queue_size of message side.dlc.Params is not mutable"))
-	case "side.dlc.Params.lending_event_initial_nonce_count":
-		panic(fmt.Errorf("field lending_event_initial_nonce_count of message side.dlc.Params is not mutable"))
-	case "side.dlc.Params.lending_event_nonce_usage_threshold":
-		panic(fmt.Errorf("field lending_event_nonce_usage_threshold of message side.dlc.Params is not mutable"))
+	case "side.dlc.Params.lending_event_nonce_queue_size":
+		panic(fmt.Errorf("field lending_event_nonce_queue_size of message side.dlc.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -819,9 +800,7 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 	case "side.dlc.Params.price_intervals":
 		list := []*PriceInterval{}
 		return protoreflect.ValueOfList(&_Params_2_list{list: &list})
-	case "side.dlc.Params.lending_event_initial_nonce_count":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "side.dlc.Params.lending_event_nonce_usage_threshold":
+	case "side.dlc.Params.lending_event_nonce_queue_size":
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "side.dlc.Params.dkg_timeout_period":
 		m := new(durationpb.Duration)
@@ -904,11 +883,8 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if x.LendingEventInitialNonceCount != 0 {
-			n += 1 + runtime.Sov(uint64(x.LendingEventInitialNonceCount))
-		}
-		if x.LendingEventNonceUsageThreshold != 0 {
-			n += 1 + runtime.Sov(uint64(x.LendingEventNonceUsageThreshold))
+		if x.LendingEventNonceQueueSize != 0 {
+			n += 1 + runtime.Sov(uint64(x.LendingEventNonceQueueSize))
 		}
 		if x.DkgTimeoutPeriod != nil {
 			l = options.Size(x.DkgTimeoutPeriod)
@@ -955,15 +931,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x22
 		}
-		if x.LendingEventNonceUsageThreshold != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.LendingEventNonceUsageThreshold))
-			i--
-			dAtA[i] = 0x20
-		}
-		if x.LendingEventInitialNonceCount != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.LendingEventInitialNonceCount))
+		if x.LendingEventNonceQueueSize != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.LendingEventNonceQueueSize))
 			i--
 			dAtA[i] = 0x18
 		}
@@ -1092,9 +1063,9 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LendingEventInitialNonceCount", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LendingEventNonceQueueSize", wireType)
 				}
-				x.LendingEventInitialNonceCount = 0
+				x.LendingEventNonceQueueSize = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1104,31 +1075,12 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.LendingEventInitialNonceCount |= uint32(b&0x7F) << shift
+					x.LendingEventNonceQueueSize |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
 			case 4:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LendingEventNonceUsageThreshold", wireType)
-				}
-				x.LendingEventNonceUsageThreshold = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.LendingEventNonceUsageThreshold |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DkgTimeoutPeriod", wireType)
 				}
@@ -1261,11 +1213,10 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PriceEventNonceQueueSize        uint32               `protobuf:"varint,1,opt,name=price_event_nonce_queue_size,json=priceEventNonceQueueSize,proto3" json:"price_event_nonce_queue_size,omitempty"`
-	PriceIntervals                  []*PriceInterval     `protobuf:"bytes,2,rep,name=price_intervals,json=priceIntervals,proto3" json:"price_intervals,omitempty"`
-	LendingEventInitialNonceCount   uint32               `protobuf:"varint,3,opt,name=lending_event_initial_nonce_count,json=lendingEventInitialNonceCount,proto3" json:"lending_event_initial_nonce_count,omitempty"`
-	LendingEventNonceUsageThreshold uint32               `protobuf:"varint,4,opt,name=lending_event_nonce_usage_threshold,json=lendingEventNonceUsageThreshold,proto3" json:"lending_event_nonce_usage_threshold,omitempty"`
-	DkgTimeoutPeriod                *durationpb.Duration `protobuf:"bytes,5,opt,name=dkg_timeout_period,json=dkgTimeoutPeriod,proto3" json:"dkg_timeout_period,omitempty"`
+	PriceEventNonceQueueSize   uint32               `protobuf:"varint,1,opt,name=price_event_nonce_queue_size,json=priceEventNonceQueueSize,proto3" json:"price_event_nonce_queue_size,omitempty"`
+	PriceIntervals             []*PriceInterval     `protobuf:"bytes,2,rep,name=price_intervals,json=priceIntervals,proto3" json:"price_intervals,omitempty"`
+	LendingEventNonceQueueSize uint32               `protobuf:"varint,3,opt,name=lending_event_nonce_queue_size,json=lendingEventNonceQueueSize,proto3" json:"lending_event_nonce_queue_size,omitempty"`
+	DkgTimeoutPeriod           *durationpb.Duration `protobuf:"bytes,4,opt,name=dkg_timeout_period,json=dkgTimeoutPeriod,proto3" json:"dkg_timeout_period,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -1302,16 +1253,9 @@ func (x *Params) GetPriceIntervals() []*PriceInterval {
 	return nil
 }
 
-func (x *Params) GetLendingEventInitialNonceCount() uint32 {
+func (x *Params) GetLendingEventNonceQueueSize() uint32 {
 	if x != nil {
-		return x.LendingEventInitialNonceCount
-	}
-	return 0
-}
-
-func (x *Params) GetLendingEventNonceUsageThreshold() uint32 {
-	if x != nil {
-		return x.LendingEventNonceUsageThreshold
+		return x.LendingEventNonceQueueSize
 	}
 	return 0
 }
@@ -1336,7 +1280,7 @@ var file_side_dlc_params_proto_rawDesc = []byte{
 	0x65, 0x5f, 0x70, 0x61, 0x69, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x72,
 	0x69, 0x63, 0x65, 0x50, 0x61, 0x69, 0x72, 0x12, 0x1a, 0x0a, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72,
 	0x76, 0x61, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72,
-	0x76, 0x61, 0x6c, 0x22, 0xfb, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3e,
+	0x76, 0x61, 0x6c, 0x22, 0xa7, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3e,
 	0x0a, 0x1c, 0x70, 0x72, 0x69, 0x63, 0x65, 0x5f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x6e, 0x6f,
 	0x6e, 0x63, 0x65, 0x5f, 0x71, 0x75, 0x65, 0x75, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0d, 0x52, 0x18, 0x70, 0x72, 0x69, 0x63, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74,
@@ -1345,31 +1289,25 @@ var file_side_dlc_params_proto_rawDesc = []byte{
 	0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64,
 	0x6c, 0x63, 0x2e, 0x50, 0x72, 0x69, 0x63, 0x65, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c,
 	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x70, 0x72, 0x69, 0x63, 0x65, 0x49, 0x6e, 0x74,
-	0x65, 0x72, 0x76, 0x61, 0x6c, 0x73, 0x12, 0x48, 0x0a, 0x21, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x5f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x5f,
-	0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x0d, 0x52, 0x1d, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x49,
-	0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74,
-	0x12, 0x4c, 0x0a, 0x23, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x65, 0x76, 0x65, 0x6e,
-	0x74, 0x5f, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f, 0x75, 0x73, 0x61, 0x67, 0x65, 0x5f, 0x74, 0x68,
-	0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1f, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65,
-	0x55, 0x73, 0x61, 0x67, 0x65, 0x54, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x12, 0x51,
-	0x0a, 0x12, 0x64, 0x6b, 0x67, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x5f, 0x70, 0x65,
-	0x72, 0x69, 0x6f, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f,
-	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52,
-	0x10, 0x64, 0x6b, 0x67, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x50, 0x65, 0x72, 0x69, 0x6f,
-	0x64, 0x42, 0x87, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64,
-	0x6c, 0x63, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53,
-	0x44, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02, 0x08,
-	0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c,
-	0x44, 0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x44, 0x6c, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x65, 0x72, 0x76, 0x61, 0x6c, 0x73, 0x12, 0x42, 0x0a, 0x1e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x5f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f, 0x71, 0x75,
+	0x65, 0x75, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1a,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x4e, 0x6f, 0x6e, 0x63,
+	0x65, 0x51, 0x75, 0x65, 0x75, 0x65, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x51, 0x0a, 0x12, 0x64, 0x6b,
+	0x67, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x10, 0x64, 0x6b, 0x67,
+	0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x42, 0x87, 0x01,
+	0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x0b,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x73, 0x69, 0x64, 0x65, 0x2f, 0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02,
+	0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65,
+	0x5c, 0x44, 0x6c, 0x63, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0x5c,
+	0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69,
+	0x64, 0x65, 0x3a, 0x3a, 0x44, 0x6c, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

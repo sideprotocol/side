@@ -18,11 +18,8 @@ var (
 	// default price interval
 	DefaultPriceInterval = int32(100)
 
-	// default initial nonce count for lending events
-	DefaultLendingEventInitialNonceCount = uint32(1000)
-
-	// default nonce queue size for price events
-	DefaultLendingEventNonceUsageThreshold = uint32(70) // 70%
+	// default nonce queue size for lending events
+	DefaultLendingEventNonceQueueSize = uint32(1000)
 
 	// default DKG timeout period
 	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
@@ -38,9 +35,8 @@ func NewParams() Params {
 				Interval:  int32(DefaultPriceInterval),
 			},
 		},
-		LendingEventInitialNonceCount:   DefaultLendingEventInitialNonceCount,
-		LendingEventNonceUsageThreshold: DefaultLendingEventNonceUsageThreshold,
-		DkgTimeoutPeriod:                DefaultDKGTimeoutPeriod,
+		LendingEventNonceQueueSize: DefaultLendingEventNonceQueueSize,
+		DkgTimeoutPeriod:           DefaultDKGTimeoutPeriod,
 	}
 }
 
@@ -61,12 +57,8 @@ func (p Params) Validate() error {
 		}
 	}
 
-	if p.LendingEventInitialNonceCount == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "lending event initial nonce count must be greater than 0")
-	}
-
-	if p.LendingEventNonceUsageThreshold == 0 || p.LendingEventNonceUsageThreshold >= 100 {
-		return errorsmod.Wrap(ErrInvalidParams, "lending event nonce usage threshold must be between (0, 100)")
+	if p.LendingEventNonceQueueSize == 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "lending event nonce queue size must be greater than 0")
 	}
 
 	if err := validateDKGTimeoutPeriod(p.DkgTimeoutPeriod); err != nil {

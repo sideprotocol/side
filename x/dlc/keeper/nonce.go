@@ -64,8 +64,9 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 		k.SetCurrentEventPrice(ctx, pair, triggerPrice)
 
 	case types.DlcEventType_LENDING:
-		// no-op
 		// description and outcomes will be updated when bound to a loan
+
+		k.AddLendingEventToPendingQueue(ctx, dlcEvent)
 	}
 
 	k.SetNonce(ctx, dlcNonce, oracle.Id)

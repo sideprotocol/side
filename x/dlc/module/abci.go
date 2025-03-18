@@ -15,7 +15,9 @@ import (
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handlePendingOracles(ctx, k)
 	handlePendingAgencies(ctx, k)
-	generateNonces(ctx, k)
+
+	generatePriceEventNonces(ctx, k)
+	generateLendingEventNonces(ctx, k)
 }
 
 // handlePendingOracles handles the pending oracles
@@ -93,15 +95,15 @@ func handlePendingAgencies(ctx sdk.Context, k keeper.Keeper) {
 	}
 }
 
-// generateNonces emits nonce generation events
-func generateNonces(ctx sdk.Context, k keeper.Keeper) {
+// generatePriceEventNonces emits nonce generation events for dlc price events
+func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 	// get all enabled oracles
 	oracles := k.GetOracles(ctx, types.DLCOracleStatus_Oracle_status_Enable)
 	if len(oracles) == 0 {
 		return
 	}
 
-	// select oralce
+	// select oracle
 	selectedOracleId := ctx.BlockHeight() % int64(len(oracles))
 	oracle := oracles[selectedOracleId]
 
@@ -109,7 +111,7 @@ func generateNonces(ctx sdk.Context, k keeper.Keeper) {
 	nonceIndex := k.GetNonceIndex(ctx, oracle.Id)
 	nonceQueueSize := uint64(k.GetPriceEventNonceQueueSize(ctx))
 
-	// check if nonces need to be generated
+	// check if price event nonces need to be generated
 	currentPrice := k.GetPrice(ctx, "BTC-USD")
 	currentEventPrice := k.GetCurrentEventPrice(ctx, "BTC-USD")
 	if currentEventPrice > 0 && currentEventPrice >= currentPrice.Int64() && nonceIndex >= nonceQueueSize {
@@ -120,7 +122,39 @@ func generateNonces(ctx sdk.Context, k keeper.Keeper) {
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeGenerateNonce,
-			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", ctx.BlockHeight())),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d-%d", ctx.BlockHeight(), types.DlcEventType_PRICE)),
+			sdk.NewAttribute(types.AttributeKeyDLCEventType, fmt.Sprintf("%d", types.DlcEventType_PRICE)),
+			sdk.NewAttribute(types.AttributeKeyOraclePubKey, oracle.Pubkey),
+			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(oracle.Participants, types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
+		),
+	)
+}
+
+// generateLendingEventNonces emits nonce generation events for dlc lending events
+func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
+	// get all enabled oracles
+	oracles := k.GetOracles(ctx, types.DLCOracleStatus_Oracle_status_Enable)
+	if len(oracles) == 0 {
+		return
+	}
+
+	// select oracle
+	selectedOracleId := ctx.BlockHeight() % int64(len(oracles))
+	oracle := oracles[selectedOracleId]
+
+	// check if lending event nonces need to be generated
+	pendingLendingEventCount := k.GetPendingLendingEventCount(ctx)
+	if pendingLendingEventCount >= k.GetLendingEventNonceQueueSize(ctx) {
+		return
+	}
+
+	// emit event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeGenerateNonce,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d-%d", ctx.BlockHeight(), types.DlcEventType_LENDING)),
+			sdk.NewAttribute(types.AttributeKeyDLCEventType, fmt.Sprintf("%d", types.DlcEventType_LENDING)),
 			sdk.NewAttribute(types.AttributeKeyOraclePubKey, oracle.Pubkey),
 			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(oracle.Participants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
