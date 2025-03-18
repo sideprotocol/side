@@ -12,11 +12,17 @@ import (
 const PricePairSeparator = "-"
 
 var (
-	// default nonce queue size
-	DefaultNonceQueueSize = uint32(50)
+	// default nonce queue size for price events
+	DefaultPriceEventNonceQueueSize = uint32(50)
 
 	// default price interval
 	DefaultPriceInterval = int32(100)
+
+	// default initial nonce count for lending events
+	DefaultLendingEventInitialNonceCount = uint32(1000)
+
+	// default nonce queue size for price events
+	DefaultLendingEventNonceUsageThreshold = uint32(70) // 70%
 
 	// default DKG timeout period
 	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
@@ -25,14 +31,16 @@ var (
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		NonceQueueSize: DefaultNonceQueueSize,
+		PriceEventNonceQueueSize: DefaultPriceEventNonceQueueSize,
 		PriceIntervals: []PriceInterval{
 			{
 				PricePair: "BTC-USD",
 				Interval:  int32(DefaultPriceInterval),
 			},
 		},
-		DkgTimeoutPeriod: DefaultDKGTimeoutPeriod,
+		LendingEventInitialNonceCount:   DefaultLendingEventInitialNonceCount,
+		LendingEventNonceUsageThreshold: DefaultLendingEventNonceUsageThreshold,
+		DkgTimeoutPeriod:                DefaultDKGTimeoutPeriod,
 	}
 }
 
@@ -43,14 +51,22 @@ func DefaultParams() Params {
 
 // Validate validates params
 func (p Params) Validate() error {
-	if p.NonceQueueSize == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "nonce queue size must be greater than 0")
+	if p.PriceEventNonceQueueSize == 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "price event nonce queue size must be greater than 0")
 	}
 
 	for _, pi := range p.PriceIntervals {
 		if err := validatePriceInterval(pi); err != nil {
 			return err
 		}
+	}
+
+	if p.LendingEventInitialNonceCount == 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "lending event initial nonce count must be greater than 0")
+	}
+
+	if p.LendingEventNonceUsageThreshold == 0 || p.LendingEventNonceUsageThreshold >= 100 {
+		return errorsmod.Wrap(ErrInvalidParams, "lending event nonce usage threshold must be between (0, 100)")
 	}
 
 	if err := validateDKGTimeoutPeriod(p.DkgTimeoutPeriod); err != nil {

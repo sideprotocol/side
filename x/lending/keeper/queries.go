@@ -89,7 +89,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.NotFound, "liquidation event does not exist")
 	}
 
-	signaturePoint, err := dlctypes.GetSignaturePointFromEvent(event)
+	signaturePoint, err := dlctypes.GetSignaturePointFromEvent(event, 0)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -98,7 +98,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		EventId:        event.Id,
 		OraclePubkey:   event.Pubkey,
 		Nonce:          event.Nonce,
-		Price:          event.TriggerPrice.String(),
+		Price:          liquidationPrice.String(),
 		SignaturePoint: hex.EncodeToString(signaturePoint),
 	}, nil
 }

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/base64"
 	"fmt"
 
 	sdkmath "cosmossdk.io/math"
@@ -59,18 +60,18 @@ func (k Keeper) HasEvent(ctx sdk.Context, id uint64) bool {
 }
 
 // GetEvent gets the event by the given id
-func (k Keeper) GetEvent(ctx sdk.Context, id uint64) *types.DLCPriceEvent {
+func (k Keeper) GetEvent(ctx sdk.Context, id uint64) *types.DLCEvent {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.EventKey(id))
-	var event types.DLCPriceEvent
+	var event types.DLCEvent
 	k.cdc.MustUnmarshal(bz, &event)
 
 	return &event
 }
 
 // GetEventByPrice gets the event by the given price
-func (k Keeper) GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *types.DLCPriceEvent {
+func (k Keeper) GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *types.DLCEvent {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.EventByPriceKey(price))
@@ -82,38 +83,46 @@ func (k Keeper) GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *types.DLCPr
 }
 
 // SetEvent sets the given event
-func (k Keeper) SetEvent(ctx sdk.Context, event *types.DLCPriceEvent) {
+func (k Keeper) SetEvent(ctx sdk.Context, event *types.DLCEvent) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(event)
-	store.Set(types.EventKey(event.Id), bz)
 
-	store.Set(types.EventByPriceKey(event.TriggerPrice), sdk.Uint64ToBigEndian(event.Id))
+	store.Set(types.EventKey(event.Id), bz)
 }
 
-// TriggerEvent triggers the given event
-func (k Keeper) TriggerEvent(ctx sdk.Context, id uint64) {
+// SetEventByPrice sets the event by the given price
+func (k Keeper) SetEventByPrice(ctx sdk.Context, price sdkmath.Int, event *types.DLCEvent) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.EventByPriceKey(price), sdk.Uint64ToBigEndian(event.Id))
+}
+
+// TriggerDLCEvent triggers the given event
+func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 	event := k.GetEvent(ctx, id)
+
 	event.HasTriggered = true
+	event.OutcomeIndex = uint32(outcomeIndex)
 
 	k.SetEvent(ctx, event)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.EventTypeTriggerPriceEvent,
+			types.EventTypeTriggerDLCEvent,
 			sdk.NewAttribute(types.AttributeKeyEventId, fmt.Sprintf("%d", id)),
 			sdk.NewAttribute(types.AttributeKeyPubKey, event.Pubkey),
 			sdk.NewAttribute(types.AttributeKeyNonce, event.Nonce),
-			sdk.NewAttribute(types.AttributeKeyPrice, event.TriggerPrice.String()),
+			sdk.NewAttribute(types.AttributeKeyOutcomeHash, base64.StdEncoding.EncodeToString(types.GetEventOutcomeHash(event, outcomeIndex))),
 		),
 	)
 }
 
 // GetAllEvents gets all events
-func (k Keeper) GetAllEvents(ctx sdk.Context) []*types.DLCPriceEvent {
-	events := make([]*types.DLCPriceEvent, 0)
+func (k Keeper) GetAllEvents(ctx sdk.Context) []*types.DLCEvent {
+	events := make([]*types.DLCEvent, 0)
 
-	k.IterateEvents(ctx, func(event *types.DLCPriceEvent) (stop bool) {
+	k.IterateEvents(ctx, func(event *types.DLCEvent) (stop bool) {
 		events = append(events, event)
 		return false
 	})
@@ -122,10 +131,10 @@ func (k Keeper) GetAllEvents(ctx sdk.Context) []*types.DLCPriceEvent {
 }
 
 // GetEvents gets events according to the specified status
-func (k Keeper) GetEvents(ctx sdk.Context, triggered bool) []*types.DLCPriceEvent {
-	events := make([]*types.DLCPriceEvent, 0)
+func (k Keeper) GetEvents(ctx sdk.Context, triggered bool) []*types.DLCEvent {
+	events := make([]*types.DLCEvent, 0)
 
-	k.IterateEventsByStatus(ctx, triggered, func(event *types.DLCPriceEvent) (stop bool) {
+	k.IterateEventsByStatus(ctx, triggered, func(event *types.DLCEvent) (stop bool) {
 		events = append(events, event)
 		return false
 	})
@@ -134,14 +143,14 @@ func (k Keeper) GetEvents(ctx sdk.Context, triggered bool) []*types.DLCPriceEven
 }
 
 // IterateEventsByStatus iterates through events by the given status
-func (k Keeper) IterateEventsByStatus(ctx sdk.Context, triggered bool, cb func(event *types.DLCPriceEvent) (stop bool)) {
+func (k Keeper) IterateEventsByStatus(ctx sdk.Context, triggered bool, cb func(event *types.DLCEvent) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := storetypes.KVStorePrefixIterator(store, types.EventKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var event types.DLCPriceEvent
+		var event types.DLCEvent
 		k.cdc.MustUnmarshal(iterator.Value(), &event)
 
 		if event.HasTriggered == triggered && cb(&event) {
@@ -151,14 +160,14 @@ func (k Keeper) IterateEventsByStatus(ctx sdk.Context, triggered bool, cb func(e
 }
 
 // IterateEvents iterates through all events
-func (k Keeper) IterateEvents(ctx sdk.Context, cb func(event *types.DLCPriceEvent) (stop bool)) {
+func (k Keeper) IterateEvents(ctx sdk.Context, cb func(event *types.DLCEvent) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := storetypes.KVStorePrefixIterator(store, types.EventKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var event types.DLCPriceEvent
+		var event types.DLCEvent
 		k.cdc.MustUnmarshal(iterator.Value(), &event)
 
 		if cb(&event) {

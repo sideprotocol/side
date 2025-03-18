@@ -4,6 +4,7 @@ package side.dlc;
 import "gogoproto/gogo.proto";
 import "cosmos/msg/v1/msg.proto";
 import "side/dlc/params.proto";
+import "side/dlc/dlc.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
@@ -53,9 +54,10 @@ message MsgSubmitNonce {
     option (cosmos.msg.v1.signer) = "sender";
 
     string sender = 1;
-    string nonce = 2;
-    string oracle_pubkey = 3;
-    string signature = 4;
+    DlcEventType event_type = 2;
+    string nonce = 3;
+    string oracle_pubkey = 4;
+    string signature = 5;
 }
 
 message MsgSubmitNonceResponse {}

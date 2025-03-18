@@ -10,8 +10,15 @@ import (
 	"github.com/sideprotocol/side/crypto/hash"
 )
 
-// GetSignaturePointFromEvent gets the signature point from the given event
-func GetSignaturePointFromEvent(event *DLCPriceEvent) ([]byte, error) {
+// GetEventOutcomeHash gets the event outcome hash by the given index
+// Assume that the outcome index is valid
+func GetEventOutcomeHash(event *DLCEvent, outcomeIndex int) []byte {
+	return hash.Sha256([]byte(event.Outcomes[outcomeIndex]))
+}
+
+// GetSignaturePointFromEvent gets the signature point from the given event and outcome index
+// Assume that the outcome index is valid
+func GetSignaturePointFromEvent(event *DLCEvent, outcomeIndex int) ([]byte, error) {
 	oralcePubKey, err := hex.DecodeString(event.Pubkey)
 	if err != nil {
 		return nil, err
@@ -22,7 +29,7 @@ func GetSignaturePointFromEvent(event *DLCPriceEvent) ([]byte, error) {
 		return nil, err
 	}
 
-	return GetSignaturePoint(oralcePubKey, nonce, hash.Sha256(event.TriggerPrice.BigInt().Bytes()))
+	return GetSignaturePoint(oralcePubKey, nonce, GetEventOutcomeHash(event, outcomeIndex))
 }
 
 // GetSignaturePoint gets the signature point from the given params

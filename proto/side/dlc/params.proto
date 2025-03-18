@@ -13,7 +13,9 @@ message PriceInterval {
 
 // Params defines the parameters for the module.
 message Params {
-    uint32 nonce_queue_size = 1;
+    uint32 price_event_nonce_queue_size = 1;
     repeated PriceInterval price_intervals = 2 [(gogoproto.nullable) = false];
-    google.protobuf.Duration dkg_timeout_period = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    uint32 lending_event_initial_nonce_count = 3;
+    uint32 lending_event_nonce_usage_threshold = 4;
+    google.protobuf.Duration dkg_timeout_period = 5 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }

@@ -129,7 +129,7 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 	fundTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
 	depositTxid := fundTx.UnsignedTx.TxHash().String()
 
-	adaptorPoint, err := dlctypes.GetSignaturePointFromEvent(event)
+	adaptorPoint, err := dlctypes.GetSignaturePointFromEvent(event, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -175,7 +175,7 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 	// }
 
 	loan.CollateralAmount = collateralAmount
-	loan.EventId = msg.EventId
+	loan.PriceEventId = msg.EventId
 	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
 
 	m.SetLoan(ctx, loan)

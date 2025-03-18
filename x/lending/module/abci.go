@@ -83,7 +83,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			loan.AuctionId = auction.Id
 
 			// trigger price event
-			k.DLCKeeper().TriggerEvent(ctx, loan.EventId)
+			k.DLCKeeper().TriggerDLCEvent(ctx, loan.PriceEventId, 0)
 
 			// update loan
 			k.SetLoan(ctx, loan)
@@ -106,7 +106,7 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 		// check if the adapted signature has been set in the dlc meta
 		if len(dlcMeta.LiquidationAdaptedSignatures) == 0 {
 			// check if the event attestation has been submitted
-			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.EventId)
+			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.PriceEventId)
 			if attestation == nil {
 				continue
 			}

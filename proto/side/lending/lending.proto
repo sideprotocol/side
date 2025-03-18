@@ -118,17 +118,18 @@ message Loan {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 event_id = 12;
-    uint64 attestation_id = 13;
-    repeated string deposit_txs = 14;
-    string collateral_amount = 15 [
+    uint64 price_event_id = 12;
+    uint64 lending_event_id = 13;
+    uint64 attestation_id = 14;
+    repeated string deposit_txs = 15;
+    string collateral_amount = 16 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string pool_id = 16;
-    uint64 auction_id = 17;
-    google.protobuf.Timestamp create_at = 18 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 19;
+    string pool_id = 17;
+    uint64 auction_id = 18;
+    google.protobuf.Timestamp create_at = 19 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 20;
 }
 
 message DLCMeta {

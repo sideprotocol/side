@@ -138,7 +138,7 @@ message QueryEventRequest {
 
 // QueryEventResponse is response type for the Query/Event RPC method.
 message QueryEventResponse {
-    DLCPriceEvent event = 1;
+    DLCEvent event = 1;
 }
 
 // QueryEventsRequest is request type for the Query/Events RPC method.
@@ -149,7 +149,7 @@ message QueryEventsRequest {
 
 // QueryEventsResponse is response type for the Query/Events RPC method.
 message QueryEventsResponse {
-    repeated DLCPriceEvent events = 1;
+    repeated DLCEvent events = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

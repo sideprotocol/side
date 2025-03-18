@@ -107,7 +107,7 @@ func generateNonces(ctx sdk.Context, k keeper.Keeper) {
 
 	// get nonce index and params
 	nonceIndex := k.GetNonceIndex(ctx, oracle.Id)
-	nonceQueueSize := uint64(k.GetNonceQueueSize(ctx))
+	nonceQueueSize := uint64(k.GetPriceEventNonceQueueSize(ctx))
 
 	// check if nonces need to be generated
 	currentPrice := k.GetPrice(ctx, "BTC-USD")

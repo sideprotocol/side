@@ -15,7 +15,7 @@ import (
 )
 
 // HandleNonce performs the nonce handling
-func (k Keeper) HandleNonce(ctx sdk.Context, sender string, nonce string, oraclePubKey string, signature string) error {
+func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcEventType, nonce string, oraclePubKey string, signature string) error {
 	nonceBytes, _ := hex.DecodeString(nonce)
 	if k.HasNonce(ctx, nonceBytes) {
 		return errorsmod.Wrap(types.ErrInvalidNonce, "nonce already exists")
@@ -40,25 +40,37 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, nonce string, oracle
 		Time:         ctx.BlockTime(),
 	}
 
-	pair := "BTC-USD"
-	currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
-	priceInterval := k.GetPriceInterval(ctx, pair)
-
-	dlcEvent := &types.DLCPriceEvent{
+	dlcEvent := &types.DLCEvent{
 		Id:           k.IncrementEventId(ctx),
-		TriggerPrice: sdkmath.NewInt(currentEventPrice + int64(priceInterval)),
+		Type:         eventType,
 		Nonce:        nonce,
 		Pubkey:       oraclePubKey,
 		HasTriggered: false,
 		PublishAt:    ctx.BlockTime(),
 	}
-	dlcEvent.PriceDecimal = dlcEvent.TriggerPrice
-	dlcEvent.Description = fmt.Sprintf("Liquidation event at price %s", dlcEvent.PriceDecimal)
+
+	switch eventType {
+	case types.DlcEventType_PRICE:
+		pair := "BTC-USD"
+		currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
+		priceInterval := k.GetPriceInterval(ctx, pair)
+
+		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(priceInterval))
+
+		dlcEvent.Description = fmt.Sprintf("Liquidation event at price %s", triggerPrice.String())
+		dlcEvent.Outcomes = append(dlcEvent.Outcomes, triggerPrice.String())
+
+		k.SetEventByPrice(ctx, triggerPrice, dlcEvent)
+		k.SetCurrentEventPrice(ctx, pair, triggerPrice)
+
+	case types.DlcEventType_LENDING:
+		// no-op
+		// description and outcomes will be updated when bound to a loan
+	}
 
 	k.SetNonce(ctx, dlcNonce, oracle.Id)
 	k.SetNonceByValue(ctx, nonceBytes)
 	k.SetEvent(ctx, dlcEvent)
-	k.SetCurrentEventPrice(ctx, pair, dlcEvent.TriggerPrice)
 
 	return nil
 }

@@ -20,11 +20,13 @@ const (
 )
 
 var (
-	ParamsKey        = []byte{0x01} // key for params
-	OracleIdKey      = []byte{0x02} // key for oracle id
-	AgencyIdKey      = []byte{0x03} // key for agency id
-	EventIdKey       = []byte{0x04} // key for event id
-	AttestationIdKey = []byte{0x05} // key for attestation id
+	ParamsKey                = []byte{0x01} // key for params
+	OracleIdKey              = []byte{0x02} // key for oracle id
+	AgencyIdKey              = []byte{0x03} // key for agency id
+	EventIdKey               = []byte{0x04} // key for event id
+	LendingEventCountKey     = []byte{0x05} // key for lending event count
+	UsedLendingEventCountKey = []byte{0x06} // key for used lending event count
+	AttestationIdKey         = []byte{0x07} // key for attestation id
 
 	OracleKeyPrefix              = []byte{0x10} // prefix for each key to an oracle
 	OracleByPubKeyKeyPrefix      = []byte{0x11} // prefix for each key to an oracle by public key
