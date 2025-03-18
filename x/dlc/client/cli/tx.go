@@ -115,19 +115,26 @@ func CmdSubmitAgencyPubKey() *cobra.Command {
 
 func CmdSubmitNonce() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-nonce [nonce] [signature]",
+		Use:   "submit-nonce [event type] [nonce] [oracle pub key] [signature]",
 		Short: "Submit the nonce along with the signature",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
+			eventType, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
 			msg := types.NewMsgSubmitNonce(
 				clientCtx.GetFromAddress().String(),
-				args[0],
+				types.DlcEventType(eventType),
 				args[1],
+				args[2],
+				args[3],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

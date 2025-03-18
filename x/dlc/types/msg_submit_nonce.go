@@ -13,13 +13,17 @@ var _ sdk.Msg = &MsgSubmitNonce{}
 
 func NewMsgSubmitNonce(
 	sender string,
+	eventType DlcEventType,
 	nonce string,
+	oraclePubKey string,
 	signature string,
 ) *MsgSubmitNonce {
 	return &MsgSubmitNonce{
-		Sender:    sender,
-		Nonce:     nonce,
-		Signature: signature,
+		Sender:       sender,
+		EventType:    eventType,
+		Nonce:        nonce,
+		OraclePubkey: oraclePubKey,
+		Signature:    signature,
 	}
 }
 
@@ -29,9 +33,13 @@ func (m *MsgSubmitNonce) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
+	if m.EventType == DlcEventType_UNSPECIFIED {
+		return ErrInvalidEventType
+	}
+
 	nonceBytes, err := hex.DecodeString(m.Nonce)
 	if err != nil {
-		return ErrInvalidNonce
+		return errorsmod.Wrap(ErrInvalidNonce, "failed to decode nonce")
 	}
 
 	if _, err := schnorr.ParsePubKey(nonceBytes); err != nil {
@@ -40,7 +48,7 @@ func (m *MsgSubmitNonce) ValidateBasic() error {
 
 	oraclePk, err := hex.DecodeString(m.OraclePubkey)
 	if err != nil {
-		return ErrInvalidPubKey
+		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode oracle pub key")
 	}
 
 	if _, err := schnorr.ParsePubKey(oraclePk); err != nil {
@@ -49,7 +57,7 @@ func (m *MsgSubmitNonce) ValidateBasic() error {
 
 	sigBytes, err := hex.DecodeString(m.Signature)
 	if err != nil {
-		return ErrInvalidSignature
+		return errorsmod.Wrap(ErrInvalidSignature, "failed to decode signature")
 	}
 
 	if _, err := schnorr.ParseSignature(sigBytes); err != nil {
