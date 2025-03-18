@@ -24,10 +24,10 @@ const (
 	Query_Pools_FullMethodName             = "/side.lending.Query/Pools"
 	Query_CollateralAddress_FullMethodName = "/side.lending.Query/CollateralAddress"
 	Query_LiquidationEvent_FullMethodName  = "/side.lending.Query/LiquidationEvent"
-	Query_LiquidationCet_FullMethodName    = "/side.lending.Query/LiquidationCet"
 	Query_Loan_FullMethodName              = "/side.lending.Query/Loan"
 	Query_Loans_FullMethodName             = "/side.lending.Query/Loans"
 	Query_LoansByAddress_FullMethodName    = "/side.lending.Query/LoansByAddress"
+	Query_LoanCetInfos_FullMethodName      = "/side.lending.Query/LoanCetInfos"
 	Query_LoanDlcMeta_FullMethodName       = "/side.lending.Query/LoanDlcMeta"
 	Query_LoanCancellation_FullMethodName  = "/side.lending.Query/LoanCancellation"
 	Query_Repayment_FullMethodName         = "/side.lending.Query/Repayment"
@@ -43,10 +43,10 @@ type QueryClient interface {
 	Pools(ctx context.Context, in *QueryPoolsRequest, opts ...grpc.CallOption) (*QueryPoolsResponse, error)
 	CollateralAddress(ctx context.Context, in *QueryCollateralAddressRequest, opts ...grpc.CallOption) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(ctx context.Context, in *QueryLiquidationEventRequest, opts ...grpc.CallOption) (*QueryLiquidationEventResponse, error)
-	LiquidationCet(ctx context.Context, in *QueryLiquidationCetRequest, opts ...grpc.CallOption) (*QueryLiquidationCetResponse, error)
 	Loan(ctx context.Context, in *QueryLoanRequest, opts ...grpc.CallOption) (*QueryLoanResponse, error)
 	Loans(ctx context.Context, in *QueryLoansRequest, opts ...grpc.CallOption) (*QueryLoansResponse, error)
 	LoansByAddress(ctx context.Context, in *QueryLoansByAddressRequest, opts ...grpc.CallOption) (*QueryLoansByAddressResponse, error)
+	LoanCetInfos(ctx context.Context, in *QueryLoanCetInfosRequest, opts ...grpc.CallOption) (*QueryLoanCetInfosResponse, error)
 	LoanDlcMeta(ctx context.Context, in *QueryLoanDlcMetaRequest, opts ...grpc.CallOption) (*QueryLoanDlcMetaResponse, error)
 	LoanCancellation(ctx context.Context, in *QueryLoanCancellationRequest, opts ...grpc.CallOption) (*QueryLoanCancellationResponse, error)
 	Repayment(ctx context.Context, in *QueryRepaymentRequest, opts ...grpc.CallOption) (*QueryRepaymentResponse, error)
@@ -105,15 +105,6 @@ func (c *queryClient) LiquidationEvent(ctx context.Context, in *QueryLiquidation
 	return out, nil
 }
 
-func (c *queryClient) LiquidationCet(ctx context.Context, in *QueryLiquidationCetRequest, opts ...grpc.CallOption) (*QueryLiquidationCetResponse, error) {
-	out := new(QueryLiquidationCetResponse)
-	err := c.cc.Invoke(ctx, Query_LiquidationCet_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *queryClient) Loan(ctx context.Context, in *QueryLoanRequest, opts ...grpc.CallOption) (*QueryLoanResponse, error) {
 	out := new(QueryLoanResponse)
 	err := c.cc.Invoke(ctx, Query_Loan_FullMethodName, in, out, opts...)
@@ -135,6 +126,15 @@ func (c *queryClient) Loans(ctx context.Context, in *QueryLoansRequest, opts ...
 func (c *queryClient) LoansByAddress(ctx context.Context, in *QueryLoansByAddressRequest, opts ...grpc.CallOption) (*QueryLoansByAddressResponse, error) {
 	out := new(QueryLoansByAddressResponse)
 	err := c.cc.Invoke(ctx, Query_LoansByAddress_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) LoanCetInfos(ctx context.Context, in *QueryLoanCetInfosRequest, opts ...grpc.CallOption) (*QueryLoanCetInfosResponse, error) {
+	out := new(QueryLoanCetInfosResponse)
+	err := c.cc.Invoke(ctx, Query_LoanCetInfos_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -178,10 +178,10 @@ type QueryServer interface {
 	Pools(context.Context, *QueryPoolsRequest) (*QueryPoolsResponse, error)
 	CollateralAddress(context.Context, *QueryCollateralAddressRequest) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(context.Context, *QueryLiquidationEventRequest) (*QueryLiquidationEventResponse, error)
-	LiquidationCet(context.Context, *QueryLiquidationCetRequest) (*QueryLiquidationCetResponse, error)
 	Loan(context.Context, *QueryLoanRequest) (*QueryLoanResponse, error)
 	Loans(context.Context, *QueryLoansRequest) (*QueryLoansResponse, error)
 	LoansByAddress(context.Context, *QueryLoansByAddressRequest) (*QueryLoansByAddressResponse, error)
+	LoanCetInfos(context.Context, *QueryLoanCetInfosRequest) (*QueryLoanCetInfosResponse, error)
 	LoanDlcMeta(context.Context, *QueryLoanDlcMetaRequest) (*QueryLoanDlcMetaResponse, error)
 	LoanCancellation(context.Context, *QueryLoanCancellationRequest) (*QueryLoanCancellationResponse, error)
 	Repayment(context.Context, *QueryRepaymentRequest) (*QueryRepaymentResponse, error)
@@ -207,9 +207,6 @@ func (UnimplementedQueryServer) CollateralAddress(context.Context, *QueryCollate
 func (UnimplementedQueryServer) LiquidationEvent(context.Context, *QueryLiquidationEventRequest) (*QueryLiquidationEventResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LiquidationEvent not implemented")
 }
-func (UnimplementedQueryServer) LiquidationCet(context.Context, *QueryLiquidationCetRequest) (*QueryLiquidationCetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LiquidationCet not implemented")
-}
 func (UnimplementedQueryServer) Loan(context.Context, *QueryLoanRequest) (*QueryLoanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Loan not implemented")
 }
@@ -218,6 +215,9 @@ func (UnimplementedQueryServer) Loans(context.Context, *QueryLoansRequest) (*Que
 }
 func (UnimplementedQueryServer) LoansByAddress(context.Context, *QueryLoansByAddressRequest) (*QueryLoansByAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoansByAddress not implemented")
+}
+func (UnimplementedQueryServer) LoanCetInfos(context.Context, *QueryLoanCetInfosRequest) (*QueryLoanCetInfosResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoanCetInfos not implemented")
 }
 func (UnimplementedQueryServer) LoanDlcMeta(context.Context, *QueryLoanDlcMetaRequest) (*QueryLoanDlcMetaResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoanDlcMeta not implemented")
@@ -331,24 +331,6 @@ func _Query_LiquidationEvent_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_LiquidationCet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryLiquidationCetRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).LiquidationCet(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_LiquidationCet_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).LiquidationCet(ctx, req.(*QueryLiquidationCetRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Query_Loan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryLoanRequest)
 	if err := dec(in); err != nil {
@@ -399,6 +381,24 @@ func _Query_LoansByAddress_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).LoansByAddress(ctx, req.(*QueryLoansByAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_LoanCetInfos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLoanCetInfosRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).LoanCetInfos(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_LoanCetInfos_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).LoanCetInfos(ctx, req.(*QueryLoanCetInfosRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -485,10 +485,6 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_LiquidationEvent_Handler,
 		},
 		{
-			MethodName: "LiquidationCet",
-			Handler:    _Query_LiquidationCet_Handler,
-		},
-		{
 			MethodName: "Loan",
 			Handler:    _Query_Loan_Handler,
 		},
@@ -499,6 +495,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoansByAddress",
 			Handler:    _Query_LoansByAddress_Handler,
+		},
+		{
+			MethodName: "LoanCetInfos",
+			Handler:    _Query_LoanCetInfos_Handler,
 		},
 		{
 			MethodName: "LoanDlcMeta",

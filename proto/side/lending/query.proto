@@ -27,15 +27,10 @@ service Query {
 
     rpc CollateralAddress(QueryCollateralAddressRequest) returns (QueryCollateralAddressResponse) {
         option (google.api.http).get = "/side/lending/collateral/address";
-
     }
 
     rpc LiquidationEvent(QueryLiquidationEventRequest) returns (QueryLiquidationEventResponse) {
         option (google.api.http).get = "/side/lending/liquidation/event";
-    }
-
-    rpc LiquidationCet(QueryLiquidationCetRequest) returns (QueryLiquidationCetResponse) {
-        option (google.api.http).get = "/side/lending/liquidation/cet";
     }
 
     rpc Loan(QueryLoanRequest) returns (QueryLoanResponse) {
@@ -48,6 +43,10 @@ service Query {
 
     rpc LoansByAddress(QueryLoansByAddressRequest) returns (QueryLoansByAddressResponse) {
         option (google.api.http).get = "/side/lending/loans/address/{address}";
+    }
+
+    rpc LoanCetInfos(QueryLoanCetInfosRequest) returns (QueryLoanCetInfosResponse) {
+        option (google.api.http).get = "/side/lending/loan/cet/infos";
     }
 
     rpc LoanDlcMeta(QueryLoanDlcMetaRequest) returns (QueryLoanDlcMetaResponse) {
@@ -98,15 +97,15 @@ message QueryLiquidationEventResponse {
     string signature_point = 5;
 }
 
-message QueryLiquidationCetRequest {
+message QueryLoanCetInfosRequest {
     string loan_id = 1;
-    string borrower_pubkey = 2;
-    string agency_pubkey = 3;
+    string collateral_amount = 2;
 }
 
-message QueryLiquidationCetResponse {
-    string script = 1;
-    repeated string sig_hashes = 2;
+message QueryLoanCetInfosResponse {
+    CetInfo liquidation_cet_info = 1;
+    CetInfo default_liquidation_cet_info = 2;
+    CetInfo repayment_cet_info = 3;
 }
 
 message QueryCollateralAddressRequest{

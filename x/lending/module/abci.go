@@ -78,7 +78,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				LiquidatedTime:     ctx.BlockTime(),
 				ExpectedValue:      sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(loan.Interest)),
 				LiquidationPenalty: k.GetPool(ctx, loan.PoolId).Config.LiquidationPenalty,
-				LiquidationCet:     k.GetDLCMeta(ctx, loan.VaultAddress).LiquidationCet,
+				LiquidationCet:     k.GetDLCMeta(ctx, loan.VaultAddress).LiquidationCet.Tx,
 			})
 			loan.AuctionId = auction.Id
 
@@ -99,38 +99,38 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 	for _, loan := range loans {
 		// check if the signed liquidation cet has been generated in the dlc meta
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
-		if len(dlcMeta.SignedLiquidationCetHex) != 0 {
+		if len(dlcMeta.LiquidationCet.SignedTxHex) != 0 {
 			continue
 		}
 
 		// check if the adapted signature has been set in the dlc meta
-		if len(dlcMeta.LiquidationAdaptedSignatures) == 0 {
+		if len(dlcMeta.LiquidationCet.BorrowerAdaptedSignatures) == 0 {
 			// check if the event attestation has been submitted
 			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.PriceEventId)
 			if attestation == nil {
 				continue
 			}
 
-			for _, adaptorSignature := range dlcMeta.LiquidationAdaptorSignatures {
+			for _, adaptorSignature := range dlcMeta.LiquidationCet.BorrowerAdaptorSignatures {
 				// decrypt the adaptor signature
 				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
 				adaptorSecret, _ := hex.DecodeString(attestation.Signature)
 				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
 
 				// update the adapted signatures
-				dlcMeta.LiquidationAdaptedSignatures = append(
-					dlcMeta.LiquidationAdaptedSignatures,
+				dlcMeta.LiquidationCet.BorrowerAdaptedSignatures = append(
+					dlcMeta.LiquidationCet.BorrowerAdaptedSignatures,
 					hex.EncodeToString(adaptedSignature))
 			}
 		}
 
 		// build signed liquidation cet if both adapted signatures(obviously exist) and agency signatures already exist
-		if len(dlcMeta.LiquidationAgencySignatures) != 0 {
-			signedTx, txHash, err := types.BuildSignedLiquidationCet(dlcMeta.LiquidationCet, loan.BorrowerPubKey, dlcMeta.LiquidationAdaptedSignatures, loan.Agency, dlcMeta.LiquidationAgencySignatures)
+		if len(dlcMeta.LiquidationCet.AgencySignatures) != 0 {
+			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.LiquidationCet.Tx, loan.BorrowerPubKey, dlcMeta.LiquidationCet.BorrowerAdaptedSignatures, loan.Agency, dlcMeta.LiquidationCet.AgencySignatures)
 			if err != nil {
 				k.Logger(ctx).Info("failed to build signed liquidation cet", "err", err)
 			} else {
-				dlcMeta.SignedLiquidationCetHex = hex.EncodeToString(signedTx)
+				dlcMeta.LiquidationCet.SignedTxHex = hex.EncodeToString(signedTx)
 
 				// emit event
 				ctx.EventManager().EmitEvent(

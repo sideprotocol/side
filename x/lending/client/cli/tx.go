@@ -36,7 +36,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdAddLiquidity())
 	cmd.AddCommand(CmdRemoveLiquidity())
 	cmd.AddCommand(CmdApply())
-	cmd.AddCommand(CmdSubmitLiquidationCet())
+	cmd.AddCommand(CmdSubmitCets())
 	cmd.AddCommand(CmdApprove())
 	cmd.AddCommand(CmdCancel())
 	cmd.AddCommand(CmdSubmitCancellationSignatures())
@@ -166,29 +166,27 @@ func CmdApply() *cobra.Command {
 	return cmd
 }
 
-func CmdSubmitLiquidationCet() *cobra.Command {
+func CmdSubmitCets() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-liquidation-cet [loan id] [event id] [deposit tx] [liquidation cet] [liquidation adaptor signatures]",
-		Short: "Submit liquidation cet",
-		Args:  cobra.ExactArgs(5),
+		Use: `submit-cets [loan id] [deposit tx] [liquidation cet] [liquidation adaptor signatures] 
+		[default liquidation adaptor signatures] [repayment cet] [repayment signatures]`,
+		Short: "Submit the related cets of the given loan",
+		Args:  cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			eventId, err := strconv.ParseUint(args[1], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgSubmitLiquidationCet(
+			msg := types.NewMsgSubmitCets(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				eventId,
+				args[1],
 				args[2],
-				args[3],
+				strings.Split(args[3], listSeparator),
 				strings.Split(args[4], listSeparator),
+				args[5],
+				strings.Split(args[6], listSeparator),
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

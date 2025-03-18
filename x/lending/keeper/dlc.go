@@ -1,8 +1,10 @@
 package keeper
 
 import (
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
@@ -23,4 +25,32 @@ func (k Keeper) GetDLCMeta(ctx sdk.Context, loanId string) *types.DLCMeta {
 	k.cdc.MustUnmarshal(bz, &dlcMeta)
 
 	return &dlcMeta
+}
+
+// GetCetInfos gets the related cet infos of the given loan
+func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk.Coin) ([]*types.CetInfo, error) {
+	loan := k.GetLoan(ctx, loanId)
+	pool := k.GetPool(ctx, loan.PoolId)
+
+	multisigScript, _ := types.CreateMultisigScript([]string{loan.BorrowerPubKey, loan.Agency})
+
+	var liquidationEvent *dlctypes.DLCEvent
+	if loan.PriceEventId != 0 {
+		liquidationEvent = k.dlcKeeper.GetEvent(ctx, loan.PriceEventId)
+	} else if collateralAmount.Amount.IsPositive() {
+		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(pool.Config.LiquidationThreshold)))
+		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
+	}
+
+	lendingEvent := k.dlcKeeper.GetEvent(ctx, loan.LendingEventId)
+
+	liquidationCetInfo, _ := types.GetCetInfo(liquidationEvent, 0, multisigScript)
+	defaultLiquidationCetInfo, _ := types.GetCetInfo(lendingEvent, 0, multisigScript)
+	repaymentCetInfo, _ := types.GetCetInfo(lendingEvent, 1, multisigScript)
+
+	return []*types.CetInfo{
+		liquidationCetInfo,
+		defaultLiquidationCetInfo,
+		repaymentCetInfo,
+	}, nil
 }

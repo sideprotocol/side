@@ -5674,82 +5674,178 @@ func (x *fastReflection_MsgApplyResponse) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_MsgSubmitLiquidationCet_6_list)(nil)
+var _ protoreflect.List = (*_MsgSubmitCets_5_list)(nil)
 
-type _MsgSubmitLiquidationCet_6_list struct {
+type _MsgSubmitCets_5_list struct {
 	list *[]string
 }
 
-func (x *_MsgSubmitLiquidationCet_6_list) Len() int {
+func (x *_MsgSubmitCets_5_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_MsgSubmitLiquidationCet_6_list) Get(i int) protoreflect.Value {
+func (x *_MsgSubmitCets_5_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_MsgSubmitLiquidationCet_6_list) Set(i int, value protoreflect.Value) {
+func (x *_MsgSubmitCets_5_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_MsgSubmitLiquidationCet_6_list) Append(value protoreflect.Value) {
+func (x *_MsgSubmitCets_5_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_MsgSubmitLiquidationCet_6_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message MsgSubmitLiquidationCet at list field LiquidationAdaptorSignatures as it is not of Message kind"))
+func (x *_MsgSubmitCets_5_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgSubmitCets at list field LiquidationAdaptorSignatures as it is not of Message kind"))
 }
 
-func (x *_MsgSubmitLiquidationCet_6_list) Truncate(n int) {
+func (x *_MsgSubmitCets_5_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_MsgSubmitLiquidationCet_6_list) NewElement() protoreflect.Value {
+func (x *_MsgSubmitCets_5_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_MsgSubmitLiquidationCet_6_list) IsValid() bool {
+func (x *_MsgSubmitCets_5_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_MsgSubmitCets_6_list)(nil)
+
+type _MsgSubmitCets_6_list struct {
+	list *[]string
+}
+
+func (x *_MsgSubmitCets_6_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgSubmitCets_6_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_MsgSubmitCets_6_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgSubmitCets_6_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgSubmitCets_6_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgSubmitCets at list field DefaultLiquidationAdaptorSignatures as it is not of Message kind"))
+}
+
+func (x *_MsgSubmitCets_6_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgSubmitCets_6_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_MsgSubmitCets_6_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_MsgSubmitCets_8_list)(nil)
+
+type _MsgSubmitCets_8_list struct {
+	list *[]string
+}
+
+func (x *_MsgSubmitCets_8_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgSubmitCets_8_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_MsgSubmitCets_8_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgSubmitCets_8_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgSubmitCets_8_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgSubmitCets at list field RepaymentSignatures as it is not of Message kind"))
+}
+
+func (x *_MsgSubmitCets_8_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgSubmitCets_8_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_MsgSubmitCets_8_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_MsgSubmitLiquidationCet                                protoreflect.MessageDescriptor
-	fd_MsgSubmitLiquidationCet_borrower                       protoreflect.FieldDescriptor
-	fd_MsgSubmitLiquidationCet_loan_id                        protoreflect.FieldDescriptor
-	fd_MsgSubmitLiquidationCet_event_id                       protoreflect.FieldDescriptor
-	fd_MsgSubmitLiquidationCet_deposit_tx                     protoreflect.FieldDescriptor
-	fd_MsgSubmitLiquidationCet_liquidation_cet                protoreflect.FieldDescriptor
-	fd_MsgSubmitLiquidationCet_liquidation_adaptor_signatures protoreflect.FieldDescriptor
+	md_MsgSubmitCets                                        protoreflect.MessageDescriptor
+	fd_MsgSubmitCets_borrower                               protoreflect.FieldDescriptor
+	fd_MsgSubmitCets_loan_id                                protoreflect.FieldDescriptor
+	fd_MsgSubmitCets_deposit_tx                             protoreflect.FieldDescriptor
+	fd_MsgSubmitCets_liquidation_cet                        protoreflect.FieldDescriptor
+	fd_MsgSubmitCets_liquidation_adaptor_signatures         protoreflect.FieldDescriptor
+	fd_MsgSubmitCets_default_liquidation_adaptor_signatures protoreflect.FieldDescriptor
+	fd_MsgSubmitCets_repayment_cet                          protoreflect.FieldDescriptor
+	fd_MsgSubmitCets_repayment_signatures                   protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgSubmitLiquidationCet = File_side_lending_tx_proto.Messages().ByName("MsgSubmitLiquidationCet")
-	fd_MsgSubmitLiquidationCet_borrower = md_MsgSubmitLiquidationCet.Fields().ByName("borrower")
-	fd_MsgSubmitLiquidationCet_loan_id = md_MsgSubmitLiquidationCet.Fields().ByName("loan_id")
-	fd_MsgSubmitLiquidationCet_event_id = md_MsgSubmitLiquidationCet.Fields().ByName("event_id")
-	fd_MsgSubmitLiquidationCet_deposit_tx = md_MsgSubmitLiquidationCet.Fields().ByName("deposit_tx")
-	fd_MsgSubmitLiquidationCet_liquidation_cet = md_MsgSubmitLiquidationCet.Fields().ByName("liquidation_cet")
-	fd_MsgSubmitLiquidationCet_liquidation_adaptor_signatures = md_MsgSubmitLiquidationCet.Fields().ByName("liquidation_adaptor_signatures")
+	md_MsgSubmitCets = File_side_lending_tx_proto.Messages().ByName("MsgSubmitCets")
+	fd_MsgSubmitCets_borrower = md_MsgSubmitCets.Fields().ByName("borrower")
+	fd_MsgSubmitCets_loan_id = md_MsgSubmitCets.Fields().ByName("loan_id")
+	fd_MsgSubmitCets_deposit_tx = md_MsgSubmitCets.Fields().ByName("deposit_tx")
+	fd_MsgSubmitCets_liquidation_cet = md_MsgSubmitCets.Fields().ByName("liquidation_cet")
+	fd_MsgSubmitCets_liquidation_adaptor_signatures = md_MsgSubmitCets.Fields().ByName("liquidation_adaptor_signatures")
+	fd_MsgSubmitCets_default_liquidation_adaptor_signatures = md_MsgSubmitCets.Fields().ByName("default_liquidation_adaptor_signatures")
+	fd_MsgSubmitCets_repayment_cet = md_MsgSubmitCets.Fields().ByName("repayment_cet")
+	fd_MsgSubmitCets_repayment_signatures = md_MsgSubmitCets.Fields().ByName("repayment_signatures")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgSubmitLiquidationCet)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgSubmitCets)(nil)
 
-type fastReflection_MsgSubmitLiquidationCet MsgSubmitLiquidationCet
+type fastReflection_MsgSubmitCets MsgSubmitCets
 
-func (x *MsgSubmitLiquidationCet) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgSubmitLiquidationCet)(x)
+func (x *MsgSubmitCets) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitCets)(x)
 }
 
-func (x *MsgSubmitLiquidationCet) slowProtoReflect() protoreflect.Message {
+func (x *MsgSubmitCets) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5761,43 +5857,43 @@ func (x *MsgSubmitLiquidationCet) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgSubmitLiquidationCet_messageType fastReflection_MsgSubmitLiquidationCet_messageType
-var _ protoreflect.MessageType = fastReflection_MsgSubmitLiquidationCet_messageType{}
+var _fastReflection_MsgSubmitCets_messageType fastReflection_MsgSubmitCets_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitCets_messageType{}
 
-type fastReflection_MsgSubmitLiquidationCet_messageType struct{}
+type fastReflection_MsgSubmitCets_messageType struct{}
 
-func (x fastReflection_MsgSubmitLiquidationCet_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgSubmitLiquidationCet)(nil)
+func (x fastReflection_MsgSubmitCets_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitCets)(nil)
 }
-func (x fastReflection_MsgSubmitLiquidationCet_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitLiquidationCet)
+func (x fastReflection_MsgSubmitCets_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitCets)
 }
-func (x fastReflection_MsgSubmitLiquidationCet_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitLiquidationCet
+func (x fastReflection_MsgSubmitCets_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitCets
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgSubmitLiquidationCet) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitLiquidationCet
+func (x *fastReflection_MsgSubmitCets) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitCets
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgSubmitLiquidationCet) Type() protoreflect.MessageType {
-	return _fastReflection_MsgSubmitLiquidationCet_messageType
+func (x *fastReflection_MsgSubmitCets) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitCets_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgSubmitLiquidationCet) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitLiquidationCet)
+func (x *fastReflection_MsgSubmitCets) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitCets)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgSubmitLiquidationCet) Interface() protoreflect.ProtoMessage {
-	return (*MsgSubmitLiquidationCet)(x)
+func (x *fastReflection_MsgSubmitCets) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitCets)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5805,40 +5901,52 @@ func (x *fastReflection_MsgSubmitLiquidationCet) Interface() protoreflect.ProtoM
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgSubmitLiquidationCet) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgSubmitCets) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Borrower != "" {
 		value := protoreflect.ValueOfString(x.Borrower)
-		if !f(fd_MsgSubmitLiquidationCet_borrower, value) {
+		if !f(fd_MsgSubmitCets_borrower, value) {
 			return
 		}
 	}
 	if x.LoanId != "" {
 		value := protoreflect.ValueOfString(x.LoanId)
-		if !f(fd_MsgSubmitLiquidationCet_loan_id, value) {
-			return
-		}
-	}
-	if x.EventId != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.EventId)
-		if !f(fd_MsgSubmitLiquidationCet_event_id, value) {
+		if !f(fd_MsgSubmitCets_loan_id, value) {
 			return
 		}
 	}
 	if x.DepositTx != "" {
 		value := protoreflect.ValueOfString(x.DepositTx)
-		if !f(fd_MsgSubmitLiquidationCet_deposit_tx, value) {
+		if !f(fd_MsgSubmitCets_deposit_tx, value) {
 			return
 		}
 	}
 	if x.LiquidationCet != "" {
 		value := protoreflect.ValueOfString(x.LiquidationCet)
-		if !f(fd_MsgSubmitLiquidationCet_liquidation_cet, value) {
+		if !f(fd_MsgSubmitCets_liquidation_cet, value) {
 			return
 		}
 	}
 	if len(x.LiquidationAdaptorSignatures) != 0 {
-		value := protoreflect.ValueOfList(&_MsgSubmitLiquidationCet_6_list{list: &x.LiquidationAdaptorSignatures})
-		if !f(fd_MsgSubmitLiquidationCet_liquidation_adaptor_signatures, value) {
+		value := protoreflect.ValueOfList(&_MsgSubmitCets_5_list{list: &x.LiquidationAdaptorSignatures})
+		if !f(fd_MsgSubmitCets_liquidation_adaptor_signatures, value) {
+			return
+		}
+	}
+	if len(x.DefaultLiquidationAdaptorSignatures) != 0 {
+		value := protoreflect.ValueOfList(&_MsgSubmitCets_6_list{list: &x.DefaultLiquidationAdaptorSignatures})
+		if !f(fd_MsgSubmitCets_default_liquidation_adaptor_signatures, value) {
+			return
+		}
+	}
+	if x.RepaymentCet != "" {
+		value := protoreflect.ValueOfString(x.RepaymentCet)
+		if !f(fd_MsgSubmitCets_repayment_cet, value) {
+			return
+		}
+	}
+	if len(x.RepaymentSignatures) != 0 {
+		value := protoreflect.ValueOfList(&_MsgSubmitCets_8_list{list: &x.RepaymentSignatures})
+		if !f(fd_MsgSubmitCets_repayment_signatures, value) {
 			return
 		}
 	}
@@ -5855,25 +5963,29 @@ func (x *fastReflection_MsgSubmitLiquidationCet) Range(f func(protoreflect.Field
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgSubmitLiquidationCet) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgSubmitCets) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitLiquidationCet.borrower":
+	case "side.lending.MsgSubmitCets.borrower":
 		return x.Borrower != ""
-	case "side.lending.MsgSubmitLiquidationCet.loan_id":
+	case "side.lending.MsgSubmitCets.loan_id":
 		return x.LoanId != ""
-	case "side.lending.MsgSubmitLiquidationCet.event_id":
-		return x.EventId != uint64(0)
-	case "side.lending.MsgSubmitLiquidationCet.deposit_tx":
+	case "side.lending.MsgSubmitCets.deposit_tx":
 		return x.DepositTx != ""
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_cet":
+	case "side.lending.MsgSubmitCets.liquidation_cet":
 		return x.LiquidationCet != ""
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_adaptor_signatures":
+	case "side.lending.MsgSubmitCets.liquidation_adaptor_signatures":
 		return len(x.LiquidationAdaptorSignatures) != 0
+	case "side.lending.MsgSubmitCets.default_liquidation_adaptor_signatures":
+		return len(x.DefaultLiquidationAdaptorSignatures) != 0
+	case "side.lending.MsgSubmitCets.repayment_cet":
+		return x.RepaymentCet != ""
+	case "side.lending.MsgSubmitCets.repayment_signatures":
+		return len(x.RepaymentSignatures) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCet"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCets"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCet does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCets does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5883,25 +5995,29 @@ func (x *fastReflection_MsgSubmitLiquidationCet) Has(fd protoreflect.FieldDescri
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitLiquidationCet) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgSubmitCets) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitLiquidationCet.borrower":
+	case "side.lending.MsgSubmitCets.borrower":
 		x.Borrower = ""
-	case "side.lending.MsgSubmitLiquidationCet.loan_id":
+	case "side.lending.MsgSubmitCets.loan_id":
 		x.LoanId = ""
-	case "side.lending.MsgSubmitLiquidationCet.event_id":
-		x.EventId = uint64(0)
-	case "side.lending.MsgSubmitLiquidationCet.deposit_tx":
+	case "side.lending.MsgSubmitCets.deposit_tx":
 		x.DepositTx = ""
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_cet":
+	case "side.lending.MsgSubmitCets.liquidation_cet":
 		x.LiquidationCet = ""
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_adaptor_signatures":
+	case "side.lending.MsgSubmitCets.liquidation_adaptor_signatures":
 		x.LiquidationAdaptorSignatures = nil
+	case "side.lending.MsgSubmitCets.default_liquidation_adaptor_signatures":
+		x.DefaultLiquidationAdaptorSignatures = nil
+	case "side.lending.MsgSubmitCets.repayment_cet":
+		x.RepaymentCet = ""
+	case "side.lending.MsgSubmitCets.repayment_signatures":
+		x.RepaymentSignatures = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCet"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCets"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCet does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCets does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5911,34 +6027,46 @@ func (x *fastReflection_MsgSubmitLiquidationCet) Clear(fd protoreflect.FieldDesc
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgSubmitLiquidationCet) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitCets) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.MsgSubmitLiquidationCet.borrower":
+	case "side.lending.MsgSubmitCets.borrower":
 		value := x.Borrower
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgSubmitLiquidationCet.loan_id":
+	case "side.lending.MsgSubmitCets.loan_id":
 		value := x.LoanId
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgSubmitLiquidationCet.event_id":
-		value := x.EventId
-		return protoreflect.ValueOfUint64(value)
-	case "side.lending.MsgSubmitLiquidationCet.deposit_tx":
+	case "side.lending.MsgSubmitCets.deposit_tx":
 		value := x.DepositTx
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_cet":
+	case "side.lending.MsgSubmitCets.liquidation_cet":
 		value := x.LiquidationCet
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_adaptor_signatures":
+	case "side.lending.MsgSubmitCets.liquidation_adaptor_signatures":
 		if len(x.LiquidationAdaptorSignatures) == 0 {
-			return protoreflect.ValueOfList(&_MsgSubmitLiquidationCet_6_list{})
+			return protoreflect.ValueOfList(&_MsgSubmitCets_5_list{})
 		}
-		listValue := &_MsgSubmitLiquidationCet_6_list{list: &x.LiquidationAdaptorSignatures}
+		listValue := &_MsgSubmitCets_5_list{list: &x.LiquidationAdaptorSignatures}
+		return protoreflect.ValueOfList(listValue)
+	case "side.lending.MsgSubmitCets.default_liquidation_adaptor_signatures":
+		if len(x.DefaultLiquidationAdaptorSignatures) == 0 {
+			return protoreflect.ValueOfList(&_MsgSubmitCets_6_list{})
+		}
+		listValue := &_MsgSubmitCets_6_list{list: &x.DefaultLiquidationAdaptorSignatures}
+		return protoreflect.ValueOfList(listValue)
+	case "side.lending.MsgSubmitCets.repayment_cet":
+		value := x.RepaymentCet
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgSubmitCets.repayment_signatures":
+		if len(x.RepaymentSignatures) == 0 {
+			return protoreflect.ValueOfList(&_MsgSubmitCets_8_list{})
+		}
+		listValue := &_MsgSubmitCets_8_list{list: &x.RepaymentSignatures}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCet"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCets"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCet does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCets does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5952,27 +6080,35 @@ func (x *fastReflection_MsgSubmitLiquidationCet) Get(descriptor protoreflect.Fie
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitLiquidationCet) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgSubmitCets) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitLiquidationCet.borrower":
+	case "side.lending.MsgSubmitCets.borrower":
 		x.Borrower = value.Interface().(string)
-	case "side.lending.MsgSubmitLiquidationCet.loan_id":
+	case "side.lending.MsgSubmitCets.loan_id":
 		x.LoanId = value.Interface().(string)
-	case "side.lending.MsgSubmitLiquidationCet.event_id":
-		x.EventId = value.Uint()
-	case "side.lending.MsgSubmitLiquidationCet.deposit_tx":
+	case "side.lending.MsgSubmitCets.deposit_tx":
 		x.DepositTx = value.Interface().(string)
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_cet":
+	case "side.lending.MsgSubmitCets.liquidation_cet":
 		x.LiquidationCet = value.Interface().(string)
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_adaptor_signatures":
+	case "side.lending.MsgSubmitCets.liquidation_adaptor_signatures":
 		lv := value.List()
-		clv := lv.(*_MsgSubmitLiquidationCet_6_list)
+		clv := lv.(*_MsgSubmitCets_5_list)
 		x.LiquidationAdaptorSignatures = *clv.list
+	case "side.lending.MsgSubmitCets.default_liquidation_adaptor_signatures":
+		lv := value.List()
+		clv := lv.(*_MsgSubmitCets_6_list)
+		x.DefaultLiquidationAdaptorSignatures = *clv.list
+	case "side.lending.MsgSubmitCets.repayment_cet":
+		x.RepaymentCet = value.Interface().(string)
+	case "side.lending.MsgSubmitCets.repayment_signatures":
+		lv := value.List()
+		clv := lv.(*_MsgSubmitCets_8_list)
+		x.RepaymentSignatures = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCet"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCets"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCet does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCets does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5986,65 +6122,83 @@ func (x *fastReflection_MsgSubmitLiquidationCet) Set(fd protoreflect.FieldDescri
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitLiquidationCet) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitCets) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_adaptor_signatures":
+	case "side.lending.MsgSubmitCets.liquidation_adaptor_signatures":
 		if x.LiquidationAdaptorSignatures == nil {
 			x.LiquidationAdaptorSignatures = []string{}
 		}
-		value := &_MsgSubmitLiquidationCet_6_list{list: &x.LiquidationAdaptorSignatures}
+		value := &_MsgSubmitCets_5_list{list: &x.LiquidationAdaptorSignatures}
 		return protoreflect.ValueOfList(value)
-	case "side.lending.MsgSubmitLiquidationCet.borrower":
-		panic(fmt.Errorf("field borrower of message side.lending.MsgSubmitLiquidationCet is not mutable"))
-	case "side.lending.MsgSubmitLiquidationCet.loan_id":
-		panic(fmt.Errorf("field loan_id of message side.lending.MsgSubmitLiquidationCet is not mutable"))
-	case "side.lending.MsgSubmitLiquidationCet.event_id":
-		panic(fmt.Errorf("field event_id of message side.lending.MsgSubmitLiquidationCet is not mutable"))
-	case "side.lending.MsgSubmitLiquidationCet.deposit_tx":
-		panic(fmt.Errorf("field deposit_tx of message side.lending.MsgSubmitLiquidationCet is not mutable"))
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_cet":
-		panic(fmt.Errorf("field liquidation_cet of message side.lending.MsgSubmitLiquidationCet is not mutable"))
+	case "side.lending.MsgSubmitCets.default_liquidation_adaptor_signatures":
+		if x.DefaultLiquidationAdaptorSignatures == nil {
+			x.DefaultLiquidationAdaptorSignatures = []string{}
+		}
+		value := &_MsgSubmitCets_6_list{list: &x.DefaultLiquidationAdaptorSignatures}
+		return protoreflect.ValueOfList(value)
+	case "side.lending.MsgSubmitCets.repayment_signatures":
+		if x.RepaymentSignatures == nil {
+			x.RepaymentSignatures = []string{}
+		}
+		value := &_MsgSubmitCets_8_list{list: &x.RepaymentSignatures}
+		return protoreflect.ValueOfList(value)
+	case "side.lending.MsgSubmitCets.borrower":
+		panic(fmt.Errorf("field borrower of message side.lending.MsgSubmitCets is not mutable"))
+	case "side.lending.MsgSubmitCets.loan_id":
+		panic(fmt.Errorf("field loan_id of message side.lending.MsgSubmitCets is not mutable"))
+	case "side.lending.MsgSubmitCets.deposit_tx":
+		panic(fmt.Errorf("field deposit_tx of message side.lending.MsgSubmitCets is not mutable"))
+	case "side.lending.MsgSubmitCets.liquidation_cet":
+		panic(fmt.Errorf("field liquidation_cet of message side.lending.MsgSubmitCets is not mutable"))
+	case "side.lending.MsgSubmitCets.repayment_cet":
+		panic(fmt.Errorf("field repayment_cet of message side.lending.MsgSubmitCets is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCet"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCets"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCet does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCets does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgSubmitLiquidationCet) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitCets) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgSubmitLiquidationCet.borrower":
+	case "side.lending.MsgSubmitCets.borrower":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgSubmitLiquidationCet.loan_id":
+	case "side.lending.MsgSubmitCets.loan_id":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgSubmitLiquidationCet.event_id":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "side.lending.MsgSubmitLiquidationCet.deposit_tx":
+	case "side.lending.MsgSubmitCets.deposit_tx":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_cet":
+	case "side.lending.MsgSubmitCets.liquidation_cet":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgSubmitLiquidationCet.liquidation_adaptor_signatures":
+	case "side.lending.MsgSubmitCets.liquidation_adaptor_signatures":
 		list := []string{}
-		return protoreflect.ValueOfList(&_MsgSubmitLiquidationCet_6_list{list: &list})
+		return protoreflect.ValueOfList(&_MsgSubmitCets_5_list{list: &list})
+	case "side.lending.MsgSubmitCets.default_liquidation_adaptor_signatures":
+		list := []string{}
+		return protoreflect.ValueOfList(&_MsgSubmitCets_6_list{list: &list})
+	case "side.lending.MsgSubmitCets.repayment_cet":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgSubmitCets.repayment_signatures":
+		list := []string{}
+		return protoreflect.ValueOfList(&_MsgSubmitCets_8_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCet"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCets"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCet does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCets does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgSubmitLiquidationCet) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgSubmitCets) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgSubmitLiquidationCet", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgSubmitCets", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6052,7 +6206,7 @@ func (x *fastReflection_MsgSubmitLiquidationCet) WhichOneof(d protoreflect.Oneof
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgSubmitLiquidationCet) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgSubmitCets) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6063,7 +6217,7 @@ func (x *fastReflection_MsgSubmitLiquidationCet) GetUnknown() protoreflect.RawFi
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitLiquidationCet) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgSubmitCets) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6075,7 +6229,7 @@ func (x *fastReflection_MsgSubmitLiquidationCet) SetUnknown(fields protoreflect.
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgSubmitLiquidationCet) IsValid() bool {
+func (x *fastReflection_MsgSubmitCets) IsValid() bool {
 	return x != nil
 }
 
@@ -6085,9 +6239,9 @@ func (x *fastReflection_MsgSubmitLiquidationCet) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgSubmitCets) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgSubmitLiquidationCet)
+		x := input.Message.Interface().(*MsgSubmitCets)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6107,9 +6261,6 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.EventId != 0 {
-			n += 1 + runtime.Sov(uint64(x.EventId))
-		}
 		l = len(x.DepositTx)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -6124,6 +6275,22 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		if len(x.DefaultLiquidationAdaptorSignatures) > 0 {
+			for _, s := range x.DefaultLiquidationAdaptorSignatures {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		l = len(x.RepaymentCet)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if len(x.RepaymentSignatures) > 0 {
+			for _, s := range x.RepaymentSignatures {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -6134,7 +6301,7 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitLiquidationCet)
+		x := input.Message.Interface().(*MsgSubmitCets)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6153,13 +6320,38 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if len(x.RepaymentSignatures) > 0 {
+			for iNdEx := len(x.RepaymentSignatures) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.RepaymentSignatures[iNdEx])
+				copy(dAtA[i:], x.RepaymentSignatures[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RepaymentSignatures[iNdEx])))
+				i--
+				dAtA[i] = 0x42
+			}
+		}
+		if len(x.RepaymentCet) > 0 {
+			i -= len(x.RepaymentCet)
+			copy(dAtA[i:], x.RepaymentCet)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RepaymentCet)))
+			i--
+			dAtA[i] = 0x3a
+		}
+		if len(x.DefaultLiquidationAdaptorSignatures) > 0 {
+			for iNdEx := len(x.DefaultLiquidationAdaptorSignatures) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.DefaultLiquidationAdaptorSignatures[iNdEx])
+				copy(dAtA[i:], x.DefaultLiquidationAdaptorSignatures[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DefaultLiquidationAdaptorSignatures[iNdEx])))
+				i--
+				dAtA[i] = 0x32
+			}
+		}
 		if len(x.LiquidationAdaptorSignatures) > 0 {
 			for iNdEx := len(x.LiquidationAdaptorSignatures) - 1; iNdEx >= 0; iNdEx-- {
 				i -= len(x.LiquidationAdaptorSignatures[iNdEx])
 				copy(dAtA[i:], x.LiquidationAdaptorSignatures[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidationAdaptorSignatures[iNdEx])))
 				i--
-				dAtA[i] = 0x32
+				dAtA[i] = 0x2a
 			}
 		}
 		if len(x.LiquidationCet) > 0 {
@@ -6167,19 +6359,14 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 			copy(dAtA[i:], x.LiquidationCet)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidationCet)))
 			i--
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x22
 		}
 		if len(x.DepositTx) > 0 {
 			i -= len(x.DepositTx)
 			copy(dAtA[i:], x.DepositTx)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DepositTx)))
 			i--
-			dAtA[i] = 0x22
-		}
-		if x.EventId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.EventId))
-			i--
-			dAtA[i] = 0x18
+			dAtA[i] = 0x1a
 		}
 		if len(x.LoanId) > 0 {
 			i -= len(x.LoanId)
@@ -6206,7 +6393,7 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitLiquidationCet)
+		x := input.Message.Interface().(*MsgSubmitCets)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6238,10 +6425,10 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitLiquidationCet: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitCets: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitLiquidationCet: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitCets: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -6309,25 +6496,6 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 				x.LoanId = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 3:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EventId", wireType)
-				}
-				x.EventId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.EventId |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositTx", wireType)
 				}
@@ -6359,7 +6527,7 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 				}
 				x.DepositTx = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 5:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationCet", wireType)
 				}
@@ -6391,7 +6559,7 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 				}
 				x.LiquidationCet = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 6:
+			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationAdaptorSignatures", wireType)
 				}
@@ -6422,6 +6590,102 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.LiquidationAdaptorSignatures = append(x.LiquidationAdaptorSignatures, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DefaultLiquidationAdaptorSignatures", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DefaultLiquidationAdaptorSignatures = append(x.DefaultLiquidationAdaptorSignatures, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RepaymentCet", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.RepaymentCet = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 8:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RepaymentSignatures", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.RepaymentSignatures = append(x.RepaymentSignatures, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -6459,23 +6723,23 @@ func (x *fastReflection_MsgSubmitLiquidationCet) ProtoMethods() *protoiface.Meth
 }
 
 var (
-	md_MsgSubmitLiquidationCetResponse protoreflect.MessageDescriptor
+	md_MsgSubmitCetsResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgSubmitLiquidationCetResponse = File_side_lending_tx_proto.Messages().ByName("MsgSubmitLiquidationCetResponse")
+	md_MsgSubmitCetsResponse = File_side_lending_tx_proto.Messages().ByName("MsgSubmitCetsResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgSubmitLiquidationCetResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgSubmitCetsResponse)(nil)
 
-type fastReflection_MsgSubmitLiquidationCetResponse MsgSubmitLiquidationCetResponse
+type fastReflection_MsgSubmitCetsResponse MsgSubmitCetsResponse
 
-func (x *MsgSubmitLiquidationCetResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgSubmitLiquidationCetResponse)(x)
+func (x *MsgSubmitCetsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitCetsResponse)(x)
 }
 
-func (x *MsgSubmitLiquidationCetResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgSubmitCetsResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6487,43 +6751,43 @@ func (x *MsgSubmitLiquidationCetResponse) slowProtoReflect() protoreflect.Messag
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgSubmitLiquidationCetResponse_messageType fastReflection_MsgSubmitLiquidationCetResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgSubmitLiquidationCetResponse_messageType{}
+var _fastReflection_MsgSubmitCetsResponse_messageType fastReflection_MsgSubmitCetsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitCetsResponse_messageType{}
 
-type fastReflection_MsgSubmitLiquidationCetResponse_messageType struct{}
+type fastReflection_MsgSubmitCetsResponse_messageType struct{}
 
-func (x fastReflection_MsgSubmitLiquidationCetResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgSubmitLiquidationCetResponse)(nil)
+func (x fastReflection_MsgSubmitCetsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitCetsResponse)(nil)
 }
-func (x fastReflection_MsgSubmitLiquidationCetResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitLiquidationCetResponse)
+func (x fastReflection_MsgSubmitCetsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitCetsResponse)
 }
-func (x fastReflection_MsgSubmitLiquidationCetResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitLiquidationCetResponse
+func (x fastReflection_MsgSubmitCetsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitCetsResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgSubmitLiquidationCetResponse
+func (x *fastReflection_MsgSubmitCetsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitCetsResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgSubmitLiquidationCetResponse_messageType
+func (x *fastReflection_MsgSubmitCetsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitCetsResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgSubmitLiquidationCetResponse)
+func (x *fastReflection_MsgSubmitCetsResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitCetsResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgSubmitLiquidationCetResponse)(x)
+func (x *fastReflection_MsgSubmitCetsResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitCetsResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -6531,7 +6795,7 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) Interface() protoreflec
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgSubmitCetsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -6545,13 +6809,13 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) Range(f func(protorefle
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgSubmitCetsResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCetResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCetResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6561,13 +6825,13 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) Has(fd protoreflect.Fie
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgSubmitCetsResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCetResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCetResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6577,13 +6841,13 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) Clear(fd protoreflect.F
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitCetsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCetResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCetResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCetsResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -6597,13 +6861,13 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) Get(descriptor protoref
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgSubmitCetsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCetResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCetResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6617,36 +6881,36 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) Set(fd protoreflect.Fie
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitCetsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCetResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCetResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitCetsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitLiquidationCetResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitCetsResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgSubmitLiquidationCetResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitCetsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgSubmitCetsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgSubmitLiquidationCetResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgSubmitCetsResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6654,7 +6918,7 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) WhichOneof(d protorefle
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgSubmitCetsResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6665,7 +6929,7 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) GetUnknown() protorefle
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgSubmitCetsResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6677,7 +6941,7 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) SetUnknown(fields proto
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) IsValid() bool {
+func (x *fastReflection_MsgSubmitCetsResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -6687,9 +6951,9 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgSubmitLiquidationCetResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgSubmitCetsResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgSubmitLiquidationCetResponse)
+		x := input.Message.Interface().(*MsgSubmitCetsResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6711,7 +6975,7 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) ProtoMethods() *protoif
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitLiquidationCetResponse)
+		x := input.Message.Interface().(*MsgSubmitCetsResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6741,7 +7005,7 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) ProtoMethods() *protoif
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgSubmitLiquidationCetResponse)
+		x := input.Message.Interface().(*MsgSubmitCetsResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6773,10 +7037,10 @@ func (x *fastReflection_MsgSubmitLiquidationCetResponse) ProtoMethods() *protoif
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitLiquidationCetResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitCetsResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitLiquidationCetResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitCetsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -14867,21 +15131,23 @@ func (*MsgApplyResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{11}
 }
 
-type MsgSubmitLiquidationCet struct {
+type MsgSubmitCets struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Borrower                     string   `protobuf:"bytes,1,opt,name=borrower,proto3" json:"borrower,omitempty"`
-	LoanId                       string   `protobuf:"bytes,2,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
-	EventId                      uint64   `protobuf:"varint,3,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
-	DepositTx                    string   `protobuf:"bytes,4,opt,name=deposit_tx,json=depositTx,proto3" json:"deposit_tx,omitempty"`
-	LiquidationCet               string   `protobuf:"bytes,5,opt,name=liquidation_cet,json=liquidationCet,proto3" json:"liquidation_cet,omitempty"`
-	LiquidationAdaptorSignatures []string `protobuf:"bytes,6,rep,name=liquidation_adaptor_signatures,json=liquidationAdaptorSignatures,proto3" json:"liquidation_adaptor_signatures,omitempty"`
+	Borrower                            string   `protobuf:"bytes,1,opt,name=borrower,proto3" json:"borrower,omitempty"`
+	LoanId                              string   `protobuf:"bytes,2,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
+	DepositTx                           string   `protobuf:"bytes,3,opt,name=deposit_tx,json=depositTx,proto3" json:"deposit_tx,omitempty"`
+	LiquidationCet                      string   `protobuf:"bytes,4,opt,name=liquidation_cet,json=liquidationCet,proto3" json:"liquidation_cet,omitempty"`
+	LiquidationAdaptorSignatures        []string `protobuf:"bytes,5,rep,name=liquidation_adaptor_signatures,json=liquidationAdaptorSignatures,proto3" json:"liquidation_adaptor_signatures,omitempty"`
+	DefaultLiquidationAdaptorSignatures []string `protobuf:"bytes,6,rep,name=default_liquidation_adaptor_signatures,json=defaultLiquidationAdaptorSignatures,proto3" json:"default_liquidation_adaptor_signatures,omitempty"`
+	RepaymentCet                        string   `protobuf:"bytes,7,opt,name=repayment_cet,json=repaymentCet,proto3" json:"repayment_cet,omitempty"`
+	RepaymentSignatures                 []string `protobuf:"bytes,8,rep,name=repayment_signatures,json=repaymentSignatures,proto3" json:"repayment_signatures,omitempty"`
 }
 
-func (x *MsgSubmitLiquidationCet) Reset() {
-	*x = MsgSubmitLiquidationCet{}
+func (x *MsgSubmitCets) Reset() {
+	*x = MsgSubmitCets{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -14889,67 +15155,81 @@ func (x *MsgSubmitLiquidationCet) Reset() {
 	}
 }
 
-func (x *MsgSubmitLiquidationCet) String() string {
+func (x *MsgSubmitCets) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgSubmitLiquidationCet) ProtoMessage() {}
+func (*MsgSubmitCets) ProtoMessage() {}
 
-// Deprecated: Use MsgSubmitLiquidationCet.ProtoReflect.Descriptor instead.
-func (*MsgSubmitLiquidationCet) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgSubmitCets.ProtoReflect.Descriptor instead.
+func (*MsgSubmitCets) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *MsgSubmitLiquidationCet) GetBorrower() string {
+func (x *MsgSubmitCets) GetBorrower() string {
 	if x != nil {
 		return x.Borrower
 	}
 	return ""
 }
 
-func (x *MsgSubmitLiquidationCet) GetLoanId() string {
+func (x *MsgSubmitCets) GetLoanId() string {
 	if x != nil {
 		return x.LoanId
 	}
 	return ""
 }
 
-func (x *MsgSubmitLiquidationCet) GetEventId() uint64 {
-	if x != nil {
-		return x.EventId
-	}
-	return 0
-}
-
-func (x *MsgSubmitLiquidationCet) GetDepositTx() string {
+func (x *MsgSubmitCets) GetDepositTx() string {
 	if x != nil {
 		return x.DepositTx
 	}
 	return ""
 }
 
-func (x *MsgSubmitLiquidationCet) GetLiquidationCet() string {
+func (x *MsgSubmitCets) GetLiquidationCet() string {
 	if x != nil {
 		return x.LiquidationCet
 	}
 	return ""
 }
 
-func (x *MsgSubmitLiquidationCet) GetLiquidationAdaptorSignatures() []string {
+func (x *MsgSubmitCets) GetLiquidationAdaptorSignatures() []string {
 	if x != nil {
 		return x.LiquidationAdaptorSignatures
 	}
 	return nil
 }
 
-type MsgSubmitLiquidationCetResponse struct {
+func (x *MsgSubmitCets) GetDefaultLiquidationAdaptorSignatures() []string {
+	if x != nil {
+		return x.DefaultLiquidationAdaptorSignatures
+	}
+	return nil
+}
+
+func (x *MsgSubmitCets) GetRepaymentCet() string {
+	if x != nil {
+		return x.RepaymentCet
+	}
+	return ""
+}
+
+func (x *MsgSubmitCets) GetRepaymentSignatures() []string {
+	if x != nil {
+		return x.RepaymentSignatures
+	}
+	return nil
+}
+
+type MsgSubmitCetsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgSubmitLiquidationCetResponse) Reset() {
-	*x = MsgSubmitLiquidationCetResponse{}
+func (x *MsgSubmitCetsResponse) Reset() {
+	*x = MsgSubmitCetsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -14957,14 +15237,14 @@ func (x *MsgSubmitLiquidationCetResponse) Reset() {
 	}
 }
 
-func (x *MsgSubmitLiquidationCetResponse) String() string {
+func (x *MsgSubmitCetsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgSubmitLiquidationCetResponse) ProtoMessage() {}
+func (*MsgSubmitCetsResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgSubmitLiquidationCetResponse.ProtoReflect.Descriptor instead.
-func (*MsgSubmitLiquidationCetResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgSubmitCetsResponse.ProtoReflect.Descriptor instead.
+func (*MsgSubmitCetsResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{13}
 }
 
@@ -15676,137 +15956,143 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x0a, 0x09, 0x61, 0x67, 0x65, 0x6e, 0x63, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28,
 	0x04, 0x52, 0x08, 0x61, 0x67, 0x65, 0x6e, 0x63, 0x79, 0x49, 0x64, 0x3a, 0x0d, 0x82, 0xe7, 0xb0,
 	0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73,
-	0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x86,
-	0x02, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f,
-	0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f,
-	0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69,
-	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12,
-	0x19, 0x0a, 0x08, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x04, 0x52, 0x07, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09,
-	0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x78, 0x12, 0x27, 0x0a, 0x0f, 0x6c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x05, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x0e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43,
-	0x65, 0x74, 0x12, 0x44, 0x0a, 0x1e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x52, 0x1c, 0x6c, 0x69, 0x71, 0x75,
+	0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x8e,
+	0x03, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73,
+	0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07,
+	0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c,
+	0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x5f, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x54, 0x78, 0x12, 0x27, 0x0a, 0x0f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x44, 0x0a,
+	0x1e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x61, 0x64, 0x61,
+	0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18,
+	0x05, 0x20, 0x03, 0x28, 0x09, 0x52, 0x1c, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
+	0x72, 0x65, 0x73, 0x12, 0x53, 0x0a, 0x26, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74,
+	0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x06, 0x20,
+	0x03, 0x28, 0x09, 0x52, 0x23, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x4c, 0x69, 0x71, 0x75,
 	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69,
-	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62,
-	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x21, 0x0a, 0x1f, 0x4d, 0x73, 0x67, 0x53, 0x75,
-	0x62, 0x6d, 0x69, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43,
-	0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x8d, 0x01, 0x0a, 0x0a, 0x4d,
-	0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x6c,
-	0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x72, 0x65, 0x6c, 0x61,
-	0x79, 0x65, 0x72, 0x12, 0x22, 0x0a, 0x0d, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74,
-	0x78, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x54, 0x78, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
-	0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x18,
-	0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x3a, 0x0c, 0x82, 0xe7,
-	0xb0, 0x2a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x22, 0x14, 0x0a, 0x12, 0x4d, 0x73,
-	0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x7f, 0x0a, 0x09, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x12, 0x1a, 0x0a,
-	0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61,
-	0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e,
-	0x49, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
-	0x74, 0x78, 0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
-	0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72,
-	0x65, 0x73, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
-	0x72, 0x22, 0x13, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f, 0x0a, 0x1f, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62,
-	0x6d, 0x69, 0x74, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53,
-	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e,
-	0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
-	0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69,
-	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a,
-	0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a,
-	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x29, 0x0a, 0x27, 0x4d, 0x73, 0x67, 0x53, 0x75,
-	0x62, 0x6d, 0x69, 0x74, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x92, 0x01, 0x0a, 0x23, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
-	0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x70, 0x61,
+	0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0c, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x65, 0x74, 0x12, 0x31, 0x0a,
+	0x14, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61,
+	0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52, 0x13, 0x72, 0x65, 0x70,
+	0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
+	0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22,
+	0x17, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x8d, 0x01, 0x0a, 0x0a, 0x4d, 0x73, 0x67,
+	0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65,
+	0x72, 0x12, 0x22, 0x0a, 0x0d, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78, 0x5f,
+	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69,
+	0x74, 0x54, 0x78, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68,
+	0x61, 0x73, 0x68, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x48, 0x61, 0x73, 0x68, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x18, 0x04, 0x20,
+	0x03, 0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a,
+	0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x22, 0x14, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x41,
+	0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f,
+	0x0a, 0x09, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x12, 0x1a, 0x0a, 0x08, 0x62,
+	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62,
+	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f,
+	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64,
+	0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74, 0x78,
+	0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x04,
+	0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
+	0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22,
+	0x13, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f, 0x0a, 0x1f, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69,
+	0x74, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x69, 0x67,
+	0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12,
+	0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e,
+	0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73,
+	0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x29, 0x0a, 0x27, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d,
+	0x69, 0x74, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x92, 0x01, 0x0a, 0x23, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x52, 0x65,
+	0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64,
+	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
+	0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x2d, 0x0a, 0x12, 0x61, 0x64, 0x61,
+	0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18,
+	0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x11, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73,
+	0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x2d, 0x0a, 0x2b, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d,
+	0x69, 0x74, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x41, 0x64, 0x61, 0x70, 0x74,
+	0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x81, 0x01, 0x0a, 0x21, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d,
+	0x69, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74,
 	0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65,
 	0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64,
 	0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x2d, 0x0a, 0x12, 0x61,
-	0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65,
-	0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x11, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72,
-	0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a,
-	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x2d, 0x0a, 0x2b, 0x4d, 0x73, 0x67, 0x53, 0x75,
-	0x62, 0x6d, 0x69, 0x74, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x41, 0x64, 0x61,
-	0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x81, 0x01, 0x0a, 0x21, 0x4d, 0x73, 0x67, 0x53, 0x75,
-	0x62, 0x6d, 0x69, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43,
-	0x65, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06,
-	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65,
-	0x6e, 0x64, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x1e, 0x0a,
-	0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28,
-	0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0b, 0x82,
-	0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x2b, 0x0a, 0x29, 0x4d, 0x73,
-	0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x43, 0x65, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x69, 0x0a, 0x08, 0x4d, 0x73, 0x67, 0x43, 0x6c,
-	0x6f, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x17, 0x0a,
-	0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
-	0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61,
-	0x74, 0x75, 0x72, 0x65, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79,
-	0x65, 0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4b, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62,
-	0x6d, 0x69, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64,
-	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
-	0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e,
-	0x64, 0x65, 0x72, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
-	0x50, 0x72, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a,
-	0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x12, 0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x32,
-	0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x3a, 0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
-	0x74, 0x79, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xff, 0x0a,
-	0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x4e, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50,
-	0x6f, 0x6f, 0x6c, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c,
-	0x1a, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
-	0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x0c, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x69, 0x74, 0x79, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x52,
-	0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x1e, 0x0a, 0x0a, 0x73,
+	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52,
+	0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
+	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x2b, 0x0a, 0x29, 0x4d, 0x73, 0x67, 0x53,
+	0x75, 0x62, 0x6d, 0x69, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x43, 0x65, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x69, 0x0a, 0x08, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x6f, 0x73,
+	0x65, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c,
+	0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f,
+	0x61, 0x6e, 0x49, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72,
+	0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
+	0x72, 0x65, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72,
+	0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4b, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69,
+	0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x14,
+	0x0a, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70,
+	0x72, 0x69, 0x63, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x50, 0x72,
+	0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a, 0x0f, 0x4d,
+	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1c,
+	0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x32, 0x0a, 0x06,
+	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x3a, 0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79,
+	0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xe1, 0x0a, 0x0a, 0x03,
+	0x4d, 0x73, 0x67, 0x12, 0x4e, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f,
+	0x6c, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x23,
+	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
+	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x0c, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x52, 0x65, 0x6d,
+	0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x20, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52,
+	0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x28,
 	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
 	0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x1a, 0x28, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
-	0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x10, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x21,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69,
-	0x67, 0x1a, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f,
-	0x6e, 0x66, 0x69, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05,
-	0x41, 0x70, 0x70, 0x6c, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x1a, 0x1e, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
-	0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a,
-	0x14, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x4c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x1a, 0x2d, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53,
-	0x75, 0x62, 0x6d, 0x69, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x43, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a, 0x07, 0x41,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x21, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x1a,
+	0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
+	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66,
+	0x69, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x41, 0x70,
+	0x70, 0x6c, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70,
+	0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4e, 0x0a, 0x0a, 0x53,
+	0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d,
+	0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x1a, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43,
+	0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a, 0x07, 0x41,
 	0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x12, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
 	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65,
 	0x1a, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
@@ -15900,8 +16186,8 @@ var file_side_lending_tx_proto_goTypes = []interface{}{
 	(*MsgRemoveLiquidityResponse)(nil),                  // 9: side.lending.MsgRemoveLiquidityResponse
 	(*MsgApply)(nil),                                    // 10: side.lending.MsgApply
 	(*MsgApplyResponse)(nil),                            // 11: side.lending.MsgApplyResponse
-	(*MsgSubmitLiquidationCet)(nil),                     // 12: side.lending.MsgSubmitLiquidationCet
-	(*MsgSubmitLiquidationCetResponse)(nil),             // 13: side.lending.MsgSubmitLiquidationCetResponse
+	(*MsgSubmitCets)(nil),                               // 12: side.lending.MsgSubmitCets
+	(*MsgSubmitCetsResponse)(nil),                       // 13: side.lending.MsgSubmitCetsResponse
 	(*MsgApprove)(nil),                                  // 14: side.lending.MsgApprove
 	(*MsgApproveResponse)(nil),                          // 15: side.lending.MsgApproveResponse
 	(*MsgCancel)(nil),                                   // 16: side.lending.MsgCancel
@@ -15934,7 +16220,7 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	8,  // 8: side.lending.Msg.RemoveLiquidity:input_type -> side.lending.MsgRemoveLiquidity
 	2,  // 9: side.lending.Msg.UpdatePoolConfig:input_type -> side.lending.MsgUpdatePoolConfig
 	10, // 10: side.lending.Msg.Apply:input_type -> side.lending.MsgApply
-	12, // 11: side.lending.Msg.SubmitLiquidationCet:input_type -> side.lending.MsgSubmitLiquidationCet
+	12, // 11: side.lending.Msg.SubmitCets:input_type -> side.lending.MsgSubmitCets
 	14, // 12: side.lending.Msg.Approve:input_type -> side.lending.MsgApprove
 	16, // 13: side.lending.Msg.Cancel:input_type -> side.lending.MsgCancel
 	18, // 14: side.lending.Msg.SubmitCancellationSignatures:input_type -> side.lending.MsgSubmitCancellationSignatures
@@ -15949,7 +16235,7 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	9,  // 23: side.lending.Msg.RemoveLiquidity:output_type -> side.lending.MsgRemoveLiquidityResponse
 	3,  // 24: side.lending.Msg.UpdatePoolConfig:output_type -> side.lending.MsgUpdatePoolConfigResponse
 	11, // 25: side.lending.Msg.Apply:output_type -> side.lending.MsgApplyResponse
-	13, // 26: side.lending.Msg.SubmitLiquidationCet:output_type -> side.lending.MsgSubmitLiquidationCetResponse
+	13, // 26: side.lending.Msg.SubmitCets:output_type -> side.lending.MsgSubmitCetsResponse
 	15, // 27: side.lending.Msg.Approve:output_type -> side.lending.MsgApproveResponse
 	17, // 28: side.lending.Msg.Cancel:output_type -> side.lending.MsgCancelResponse
 	19, // 29: side.lending.Msg.SubmitCancellationSignatures:output_type -> side.lending.MsgSubmitCancellationSignaturesResponse
@@ -16119,7 +16405,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgSubmitLiquidationCet); i {
+			switch v := v.(*MsgSubmitCets); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16131,7 +16417,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgSubmitLiquidationCetResponse); i {
+			switch v := v.(*MsgSubmitCetsResponse); i {
 			case 0:
 				return &v.state
 			case 1:

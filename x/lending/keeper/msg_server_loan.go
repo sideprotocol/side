@@ -18,7 +18,6 @@ import (
 
 	"github.com/sideprotocol/side/crypto/adaptor"
 	"github.com/sideprotocol/side/crypto/schnorr"
-	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
@@ -103,8 +102,8 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	return &types.MsgApplyResponse{}, nil
 }
 
-// SubmitLiquidationCet implements types.MsgServer.
-func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSubmitLiquidationCet) (*types.MsgSubmitLiquidationCetResponse, error) {
+// SubmitCets implements types.MsgServer.
+func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (*types.MsgSubmitCetsResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
@@ -115,41 +114,40 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 		return nil, types.ErrLoanDoesNotExist
 	}
 
-	if !m.dlcKeeper.HasEvent(ctx, msg.EventId) {
-		return nil, types.ErrInvalidPriceEvent
-	}
-
-	event := m.dlcKeeper.GetEvent(ctx, msg.EventId)
-	if event.HasTriggered {
-		return nil, errorsmod.Wrap(types.ErrInvalidPriceEvent, "event has triggered")
-	}
-
 	loan := m.GetLoan(ctx, msg.LoanId)
-
-	fundTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
-	depositTxid := fundTx.UnsignedTx.TxHash().String()
-
-	adaptorPoint, err := dlctypes.GetSignaturePointFromEvent(event, 0)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := types.VerifyLiquidationCET(fundTx, msg.LiquidationCet, loan.BorrowerPubKey, loan.Agency, msg.LiquidationAdaptorSignatures, hex.EncodeToString(adaptorPoint)); err != nil {
-		return nil, err
-	}
+	poolConfig := m.GetPool(ctx, msg.LoanId).Config
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
-	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, loan.BorrowerPubKey, loan.Agency, loan.MaturityTime, loan.FinalTimeout)
-	if err != nil {
-		return nil, err
-	}
+	fundTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
+	depositTxid := fundTx.UnsignedTx.TxHash().String()
 
 	collateralAmount := sdkmath.ZeroInt()
 	for _, out := range fundTx.UnsignedTx.TxOut {
 		if bytes.Equal(out.PkScript, vaultPkScript) {
 			collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
 		}
+	}
+
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(poolConfig.LiquidationThreshold)))
+	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
+		return nil, errorsmod.Wrap(types.ErrInvalidPriceEvent, "liquidation event does not exist")
+	}
+
+	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
+	if liquidationEvent.HasTriggered {
+		return nil, errorsmod.Wrap(types.ErrInvalidPriceEvent, "liquidation event has triggered")
+	}
+
+	lendingEvent := m.dlcKeeper.GetEvent(ctx, loan.LendingEventId)
+
+	if err := types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.Agency, liquidationEvent, lendingEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+		return nil, err
+	}
+
+	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.Agency, loan.MaturityTime, loan.FinalTimeout)
+	if err != nil {
+		return nil, err
 	}
 
 	currentPrice, err := m.GetPrice(ctx, "")
@@ -160,8 +158,6 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 	// TODO: retrieve from params
 	collateralDecimal := sdkmath.NewInt(100000000)
 	borrowedDecimal := sdkmath.NewInt(1000000)
-
-	poolConfig := m.GetPool(ctx, loan.PoolId).Config
 
 	// verify LTV
 	// collateral value * ltv > borrow amount
@@ -175,7 +171,7 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 	// }
 
 	loan.CollateralAmount = collateralAmount
-	loan.PriceEventId = msg.EventId
+	loan.PriceEventId = liquidationEvent.Id
 	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
 
 	m.SetLoan(ctx, loan)
@@ -188,10 +184,9 @@ func (m msgServer) SubmitLiquidationCet(goCtx context.Context, msg *types.MsgSub
 
 	m.SetDepositLog(ctx, depositLog)
 
-	// set dlc meta
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
-	return &types.MsgSubmitLiquidationCetResponse{}, nil
+	return &types.MsgSubmitCetsResponse{}, nil
 }
 
 // Approve implements types.MsgServer.
@@ -270,7 +265,7 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Tx)), true)
 
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
-	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
+	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
 	sigHashes := []string{}
 
 	merkleTree := types.GetTapscriptTree(types.GetDLCTapscripts(m.GetDLCMeta(ctx, msg.LoanId)))
@@ -366,7 +361,7 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
 	agencyPubKey, _ := hex.DecodeString(loan.Agency)
 
-	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
+	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
 	leafHash := txscript.NewBaseTapLeaf(script).TapHash()
 
 	for i := range p.Inputs {
@@ -471,7 +466,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		feeRate = 10
 	}
 
-	repaymentTx, err := types.CreateRepaymentTransaction(
+	repaymentTx, err := types.CreateRepaymentCet(
 		depositTx,
 		vaultPkScript,
 		borrowerPkScript,
@@ -499,7 +494,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	m.SetRepayment(ctx, repayment)
 
 	// get sig hashes
-	sigHashes, err := types.GetRepaymentTxSigHashes(repaymentTx, dlcMeta.RepaymentScript)
+	sigHashes, err := types.GetRepaymentCetSigHashes(dlcMeta)
 	if err != nil {
 		return nil, err
 	}
@@ -545,7 +540,7 @@ func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *
 		return nil, errorsmod.Wrap(types.ErrInvalidAdaptorSignatures, "mismatched adaptor signature number")
 	}
 
-	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).RepaymentScript)
+	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
 	adaptorPointBytes, _ := hex.DecodeString(repayment.AdaptorPoint)
 	agencyPubKeyBytes, _ := hex.DecodeString(m.GetLoan(ctx, msg.LoanId).Agency)
 
@@ -586,16 +581,16 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 	}
 
 	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
-	if len(dlcMeta.LiquidationAgencySignatures) > 0 {
+	if len(dlcMeta.LiquidationCet.AgencySignatures) > 0 {
 		return nil, types.ErrLiquidationSignaturesAlreadyExist
 	}
 
-	liquidationCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet)), true)
+	liquidationCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet.Tx)), true)
 	if len(msg.Signatures) != len(liquidationCet.Inputs) {
 		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
 	}
 
-	script, _ := hex.DecodeString(dlcMeta.LiquidationCetScript)
+	script, _ := hex.DecodeString(dlcMeta.MultisigScript)
 	agencyPubKey, _ := hex.DecodeString(loan.Agency)
 
 	for i, input := range liquidationCet.Inputs {
@@ -611,7 +606,7 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 		}
 	}
 
-	dlcMeta.LiquidationAgencySignatures = msg.Signatures
+	dlcMeta.LiquidationCet.AgencySignatures = msg.Signatures
 	m.SetDLCMeta(ctx, msg.LoanId, dlcMeta)
 
 	return &types.MsgSubmitLiquidationCetSignaturesResponse{}, nil

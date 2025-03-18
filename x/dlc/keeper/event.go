@@ -70,6 +70,13 @@ func (k Keeper) GetEvent(ctx sdk.Context, id uint64) *types.DLCEvent {
 	return &event
 }
 
+// HasEventByPrice returns true if the given price event exists, false otherwise
+func (k Keeper) HasEventByPrice(ctx sdk.Context, price sdkmath.Int) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.EventByPriceKey(price))
+}
+
 // GetEventByPrice gets the event by the given price
 func (k Keeper) GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *types.DLCEvent {
 	store := ctx.KVStore(k.storeKey)

@@ -132,18 +132,37 @@ message Loan {
     LoanStatus status = 20;
 }
 
+message CetInfo {
+  uint64 event_id = 1;
+  uint32 outcome_index = 2;
+  string signature_point = 3;
+  string script = 4;
+}
+
+message LiquidationCet {
+  string tx = 1;
+  repeated string borrower_adaptor_signatures = 2;
+  repeated string borrower_adapted_signatures = 3;
+  repeated string agency_signatures = 4;
+  string signed_tx_hex = 5;
+}
+
+message RepaymentCet {
+  string tx = 1;
+  repeated string agency_adaptor_signatures = 2;
+  repeated string agency_adapted_signatures = 3;
+  repeated string borrower_signatures = 4;
+  string signed_tx_hex = 5;
+}
+
 message DLCMeta {
-    string liquidation_cet = 1;
-    string signed_liquidation_cet_hex = 2;
-    repeated string liquidation_adaptor_signatures = 3;
-    repeated string liquidation_adapted_signatures = 4;
-    repeated string liquidation_agency_signatures = 5;
-    side.btcbridge.UTXO vault_utxo = 6;
-    string internal_key = 7;
-    string liquidation_cet_script = 8;
-    string repayment_script = 9;
-    string forced_repayment_script = 10;
-    string timeout_refund_script = 11;
+    LiquidationCet liquidation_cet = 1 [(gogoproto.nullable) = false]; 
+    LiquidationCet default_liquidation_cet = 2 [(gogoproto.nullable) = false];
+    RepaymentCet repayment_cet = 3 [(gogoproto.nullable) = false];
+    repeated side.btcbridge.UTXO vault_utxos = 4;
+    string internal_key = 5;
+    string multisig_script = 6;
+    string timeout_refund_script = 7;
 }
 
 message DepositLog {

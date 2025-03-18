@@ -59,6 +59,7 @@ type AuctionKeeper interface {
 type DLCKeeper interface {
 	HasEvent(ctx sdk.Context, id uint64) bool
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCEvent
+	HasEventByPrice(ctx sdk.Context, price sdkmath.Int) bool
 	GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *dlctypes.DLCEvent
 	GetAttestationByEvent(ctx sdk.Context, eventId uint64) *dlctypes.DLCAttestation
 

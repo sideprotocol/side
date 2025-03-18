@@ -103,45 +103,6 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 	}, nil
 }
 
-// LiquidationCet implements types.QueryServer.
-func (k Keeper) LiquidationCet(goCtx context.Context, req *types.QueryLiquidationCetRequest) (*types.QueryLiquidationCetResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	var err error
-	var script string
-	var sigHashes []string
-
-	if len(req.LoanId) != 0 {
-		if !k.HasLoan(ctx, req.LoanId) {
-			return nil, status.Error(codes.InvalidArgument, "loan does not exist")
-		}
-
-		dlcMeta := k.GetDLCMeta(ctx, req.LoanId)
-		script = dlcMeta.LiquidationCetScript
-
-		sigHashes, err = types.GetLiquidationCetSigHashes(dlcMeta)
-		if err != nil {
-			return nil, status.Error(codes.Internal, err.Error())
-		}
-	} else {
-		scriptBytes, err := types.CreateMultisigScript([]string{req.BorrowerPubkey, req.AgencyPubkey})
-		if err != nil {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
-
-		script = hex.EncodeToString(scriptBytes)
-	}
-
-	return &types.QueryLiquidationCetResponse{
-		Script:    script,
-		SigHashes: sigHashes,
-	}, nil
-}
-
 // Loan implements types.QueryServer.
 func (k Keeper) Loan(goCtx context.Context, req *types.QueryLoanRequest) (*types.QueryLoanResponse, error) {
 	if req == nil {
@@ -187,6 +148,40 @@ func (k Keeper) LoansByAddress(goCtx context.Context, req *types.QueryLoansByAdd
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	return &types.QueryLoansByAddressResponse{Loans: k.GetLoansByAddress(ctx, req.Address, req.Status)}, nil
+}
+
+// LoanCetInfos implements types.QueryServer.
+func (k Keeper) LoanCetInfos(goCtx context.Context, req *types.QueryLoanCetInfosRequest) (*types.QueryLoanCetInfosResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasLoan(ctx, req.LoanId) {
+		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
+	}
+
+	var err error
+	var collateralAmount sdk.Coin
+
+	if len(req.CollateralAmount) > 0 {
+		collateralAmount, err = sdk.ParseCoinNormalized(req.CollateralAmount)
+		if err != nil {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
+	}
+
+	cetInfos, err := k.GetCetInfos(ctx, req.LoanId, collateralAmount)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryLoanCetInfosResponse{
+		LiquidationCetInfo:        cetInfos[0],
+		DefaultLiquidationCetInfo: cetInfos[1],
+		RepaymentCetInfo:          cetInfos[2],
+	}, nil
 }
 
 // LoanDlcMeta implements types.QueryServer.

@@ -18,7 +18,7 @@ service Msg {
     rpc RemoveLiquidity(MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
     rpc UpdatePoolConfig(MsgUpdatePoolConfig) returns (MsgUpdatePoolConfigResponse);
     rpc Apply(MsgApply) returns (MsgApplyResponse);
-    rpc SubmitLiquidationCet(MsgSubmitLiquidationCet) returns (MsgSubmitLiquidationCetResponse);
+    rpc SubmitCets(MsgSubmitCets) returns (MsgSubmitCetsResponse);
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
     rpc Cancel(MsgCancel) returns (MsgCancelResponse);
     rpc SubmitCancellationSignatures(MsgSubmitCancellationSignatures) returns (MsgSubmitCancellationSignaturesResponse);
@@ -107,18 +107,20 @@ message MsgApply {
 
 message MsgApplyResponse {}
 
-message MsgSubmitLiquidationCet {
+message MsgSubmitCets {
     option (cosmos.msg.v1.signer) = "borrower";
 
     string borrower = 1;
     string loan_id = 2;
-    uint64 event_id = 3;
-    string deposit_tx = 4;
-    string liquidation_cet = 5;
-    repeated string liquidation_adaptor_signatures = 6;
+    string deposit_tx = 3;
+    string liquidation_cet = 4;
+    repeated string liquidation_adaptor_signatures = 5;
+    repeated string default_liquidation_adaptor_signatures = 6;
+    string repayment_cet = 7;
+    repeated string repayment_signatures = 8;
 }
 
-message MsgSubmitLiquidationCetResponse {
+message MsgSubmitCetsResponse {
 
 }
 

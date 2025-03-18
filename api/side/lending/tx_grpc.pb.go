@@ -24,7 +24,7 @@ const (
 	Msg_RemoveLiquidity_FullMethodName                  = "/side.lending.Msg/RemoveLiquidity"
 	Msg_UpdatePoolConfig_FullMethodName                 = "/side.lending.Msg/UpdatePoolConfig"
 	Msg_Apply_FullMethodName                            = "/side.lending.Msg/Apply"
-	Msg_SubmitLiquidationCet_FullMethodName             = "/side.lending.Msg/SubmitLiquidationCet"
+	Msg_SubmitCets_FullMethodName                       = "/side.lending.Msg/SubmitCets"
 	Msg_Approve_FullMethodName                          = "/side.lending.Msg/Approve"
 	Msg_Cancel_FullMethodName                           = "/side.lending.Msg/Cancel"
 	Msg_SubmitCancellationSignatures_FullMethodName     = "/side.lending.Msg/SubmitCancellationSignatures"
@@ -45,7 +45,7 @@ type MsgClient interface {
 	RemoveLiquidity(ctx context.Context, in *MsgRemoveLiquidity, opts ...grpc.CallOption) (*MsgRemoveLiquidityResponse, error)
 	UpdatePoolConfig(ctx context.Context, in *MsgUpdatePoolConfig, opts ...grpc.CallOption) (*MsgUpdatePoolConfigResponse, error)
 	Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error)
-	SubmitLiquidationCet(ctx context.Context, in *MsgSubmitLiquidationCet, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetResponse, error)
+	SubmitCets(ctx context.Context, in *MsgSubmitCets, opts ...grpc.CallOption) (*MsgSubmitCetsResponse, error)
 	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
 	Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error)
 	SubmitCancellationSignatures(ctx context.Context, in *MsgSubmitCancellationSignatures, opts ...grpc.CallOption) (*MsgSubmitCancellationSignaturesResponse, error)
@@ -115,9 +115,9 @@ func (c *msgClient) Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOp
 	return out, nil
 }
 
-func (c *msgClient) SubmitLiquidationCet(ctx context.Context, in *MsgSubmitLiquidationCet, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetResponse, error) {
-	out := new(MsgSubmitLiquidationCetResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitLiquidationCet_FullMethodName, in, out, opts...)
+func (c *msgClient) SubmitCets(ctx context.Context, in *MsgSubmitCets, opts ...grpc.CallOption) (*MsgSubmitCetsResponse, error) {
+	out := new(MsgSubmitCetsResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitCets_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +214,7 @@ type MsgServer interface {
 	RemoveLiquidity(context.Context, *MsgRemoveLiquidity) (*MsgRemoveLiquidityResponse, error)
 	UpdatePoolConfig(context.Context, *MsgUpdatePoolConfig) (*MsgUpdatePoolConfigResponse, error)
 	Apply(context.Context, *MsgApply) (*MsgApplyResponse, error)
-	SubmitLiquidationCet(context.Context, *MsgSubmitLiquidationCet) (*MsgSubmitLiquidationCetResponse, error)
+	SubmitCets(context.Context, *MsgSubmitCets) (*MsgSubmitCetsResponse, error)
 	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
 	Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error)
 	SubmitCancellationSignatures(context.Context, *MsgSubmitCancellationSignatures) (*MsgSubmitCancellationSignaturesResponse, error)
@@ -251,8 +251,8 @@ func (UnimplementedMsgServer) UpdatePoolConfig(context.Context, *MsgUpdatePoolCo
 func (UnimplementedMsgServer) Apply(context.Context, *MsgApply) (*MsgApplyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Apply not implemented")
 }
-func (UnimplementedMsgServer) SubmitLiquidationCet(context.Context, *MsgSubmitLiquidationCet) (*MsgSubmitLiquidationCetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitLiquidationCet not implemented")
+func (UnimplementedMsgServer) SubmitCets(context.Context, *MsgSubmitCets) (*MsgSubmitCetsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitCets not implemented")
 }
 func (UnimplementedMsgServer) Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Approve not implemented")
@@ -384,20 +384,20 @@ func _Msg_Apply_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitLiquidationCet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitLiquidationCet)
+func _Msg_SubmitCets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitCets)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitLiquidationCet(ctx, in)
+		return srv.(MsgServer).SubmitCets(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_SubmitLiquidationCet_FullMethodName,
+		FullMethod: Msg_SubmitCets_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitLiquidationCet(ctx, req.(*MsgSubmitLiquidationCet))
+		return srv.(MsgServer).SubmitCets(ctx, req.(*MsgSubmitCets))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -592,8 +592,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_Apply_Handler,
 		},
 		{
-			MethodName: "SubmitLiquidationCet",
-			Handler:    _Msg_SubmitLiquidationCet_Handler,
+			MethodName: "SubmitCets",
+			Handler:    _Msg_SubmitCets_Handler,
 		},
 		{
 			MethodName: "Approve",
