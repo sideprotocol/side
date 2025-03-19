@@ -17,6 +17,7 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handlePendingAgencies(ctx, k)
 
 	generatePriceEventNonces(ctx, k)
+	generateDateEventNonces(ctx, k)
 	generateLendingEventNonces(ctx, k)
 }
 
@@ -124,6 +125,37 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 			types.EventTypeGenerateNonce,
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d-%d", ctx.BlockHeight(), types.DlcEventType_PRICE)),
 			sdk.NewAttribute(types.AttributeKeyDLCEventType, fmt.Sprintf("%d", types.DlcEventType_PRICE)),
+			sdk.NewAttribute(types.AttributeKeyOraclePubKey, oracle.Pubkey),
+			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(oracle.Participants, types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
+		),
+	)
+}
+
+// generateDateEventNonces emits nonce generation events for dlc date events
+func generateDateEventNonces(ctx sdk.Context, k keeper.Keeper) {
+	// get all enabled oracles
+	oracles := k.GetOracles(ctx, types.DLCOracleStatus_Oracle_status_Enable)
+	if len(oracles) == 0 {
+		return
+	}
+
+	// select oracle
+	selectedOracleId := ctx.BlockHeight() % int64(len(oracles))
+	oracle := oracles[selectedOracleId]
+
+	// check if date event nonces need to be generated
+	currentEventDate := k.GetCurrentEventDate(ctx)
+	if currentEventDate-ctx.BlockTime().Unix() >= int64(k.GetDateEventNonceQueueSize(ctx)) {
+		return
+	}
+
+	// emit event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeGenerateNonce,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d-%d", ctx.BlockHeight(), types.DlcEventType_DATE)),
+			sdk.NewAttribute(types.AttributeKeyDLCEventType, fmt.Sprintf("%d", types.DlcEventType_DATE)),
 			sdk.NewAttribute(types.AttributeKeyOraclePubKey, oracle.Pubkey),
 			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(oracle.Participants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),

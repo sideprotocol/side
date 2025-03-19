@@ -15,6 +15,8 @@ message PriceInterval {
 message Params {
     uint32 price_event_nonce_queue_size = 1;
     repeated PriceInterval price_intervals = 2 [(gogoproto.nullable) = false];
-    uint32 lending_event_nonce_queue_size = 3;
-    google.protobuf.Duration dkg_timeout_period = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    uint32 date_event_nonce_queue_size = 3;
+    google.protobuf.Duration date_interval = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    uint32 lending_event_nonce_queue_size = 5;
+    google.protobuf.Duration dkg_timeout_period = 6 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }

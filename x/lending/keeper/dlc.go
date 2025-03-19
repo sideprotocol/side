@@ -35,18 +35,19 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	multisigScript, _ := types.CreateMultisigScript([]string{loan.BorrowerPubKey, loan.Agency})
 
 	var liquidationEvent *dlctypes.DLCEvent
-	if loan.PriceEventId != 0 {
-		liquidationEvent = k.dlcKeeper.GetEvent(ctx, loan.PriceEventId)
+	if loan.LiquidationEventId != 0 {
+		liquidationEvent = k.dlcKeeper.GetEvent(ctx, loan.LiquidationEventId)
 	} else if collateralAmount.Amount.IsPositive() {
 		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(pool.Config.LiquidationThreshold)))
 		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	}
 
-	lendingEvent := k.dlcKeeper.GetEvent(ctx, loan.LendingEventId)
+	defaultLiquidationEvent := k.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
+	repaymentEvent := k.dlcKeeper.GetEvent(ctx, loan.RepaymentEventId)
 
 	liquidationCetInfo, _ := types.GetCetInfo(liquidationEvent, 0, multisigScript)
-	defaultLiquidationCetInfo, _ := types.GetCetInfo(lendingEvent, 0, multisigScript)
-	repaymentCetInfo, _ := types.GetCetInfo(lendingEvent, 1, multisigScript)
+	defaultLiquidationCetInfo, _ := types.GetCetInfo(defaultLiquidationEvent, 0, multisigScript)
+	repaymentCetInfo, _ := types.GetCetInfo(repaymentEvent, 0, multisigScript)
 
 	return []*types.CetInfo{
 		liquidationCetInfo,

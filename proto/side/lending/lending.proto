@@ -118,18 +118,19 @@ message Loan {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 price_event_id = 12;
-    uint64 lending_event_id = 13;
-    uint64 attestation_id = 14;
-    repeated string deposit_txs = 15;
-    string collateral_amount = 16 [
+    uint64 liquidation_event_id = 12;
+    uint64 default_liquidation_event_id = 13;
+    uint64 repayment_event_id = 14;
+    uint64 attestation_id = 15;
+    repeated string deposit_txs = 16;
+    string collateral_amount = 17 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string pool_id = 17;
-    uint64 auction_id = 18;
-    google.protobuf.Timestamp create_at = 19 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 20;
+    string pool_id = 18;
+    uint64 auction_id = 19;
+    google.protobuf.Timestamp create_at = 20 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 21;
 }
 
 message CetInfo {

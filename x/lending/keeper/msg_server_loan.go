@@ -139,9 +139,9 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, errorsmod.Wrap(types.ErrInvalidPriceEvent, "liquidation event has triggered")
 	}
 
-	lendingEvent := m.dlcKeeper.GetEvent(ctx, loan.LendingEventId)
+	defaultLiquidationEvent := m.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
 
-	if err := types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.Agency, liquidationEvent, lendingEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+	if err := types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.Agency, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
 		return nil, err
 	}
 
@@ -171,7 +171,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	// }
 
 	loan.CollateralAmount = collateralAmount
-	loan.PriceEventId = liquidationEvent.Id
+	loan.LiquidationEventId = liquidationEvent.Id
 	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
 
 	m.SetLoan(ctx, loan)

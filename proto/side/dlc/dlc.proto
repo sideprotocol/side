@@ -53,7 +53,8 @@ message DLCNonce {
 enum DlcEventType {
     UNSPECIFIED = 0;
     PRICE = 1;
-    LENDING = 2;
+    DATE = 2;
+    LENDING = 3;
 }
 
 message DLCEvent {

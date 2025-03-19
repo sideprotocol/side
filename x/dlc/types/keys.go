@@ -38,9 +38,11 @@ var (
 	EventKeyPrefix               = []byte{0x18} // prefix for each key to an event
 	EventByPriceKeyPrefix        = []byte{0x19} // prefix for each key to an event by triggering price
 	CurrentEventPriceKeyPrefix   = []byte{0x20} // key prefix for the current event price
-	PendingLendingEventKeyPrefix = []byte{0x21} // key prefix for the pending lending event
-	AttestationKeyPrefix         = []byte{0x22} // prefix for each key to an attestation
-	AttestationByEventKeyPrefix  = []byte{0x23} // prefix for each key to an attestation by event
+	EventByDateKeyPrefix         = []byte{0x21} // prefix for each key to an event by date
+	CurrentEventDateKey          = []byte{0x22} // key for the current event date
+	PendingLendingEventKeyPrefix = []byte{0x23} // key prefix for the pending lending event
+	AttestationKeyPrefix         = []byte{0x24} // prefix for each key to an attestation
+	AttestationByEventKeyPrefix  = []byte{0x25} // prefix for each key to an attestation by event
 
 	PriceKeyPrefix = []byte{0x30} // key prefix for the price
 )
@@ -89,6 +91,10 @@ func EventKey(id uint64) []byte {
 
 func EventByPriceKey(price sdkmath.Int) []byte {
 	return append(EventByPriceKeyPrefix, price.BigInt().Bytes()...)
+}
+
+func EventByDateKey(date int64) []byte {
+	return append(EventByDateKeyPrefix, sdk.Uint64ToBigEndian(uint64(date))...)
 }
 
 func CurrentEventPriceKey(pair string) []byte {

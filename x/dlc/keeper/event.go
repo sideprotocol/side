@@ -52,6 +52,25 @@ func (k Keeper) SetCurrentEventPrice(ctx sdk.Context, pair string, price sdkmath
 	store.Set(types.CurrentEventPriceKey(pair), sdk.Uint64ToBigEndian(price.Uint64()))
 }
 
+// GetCurrentEventDate gets the current event date
+func (k Keeper) GetCurrentEventDate(ctx sdk.Context) int64 {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.CurrentEventDateKey)
+	if bz == nil {
+		return 0
+	}
+
+	return int64(sdk.BigEndianToUint64(bz))
+}
+
+// SetCurrentEventDate sets the current event date
+func (k Keeper) SetCurrentEventDate(ctx sdk.Context, date int64) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.CurrentEventDateKey, sdk.Uint64ToBigEndian(uint64(date)))
+}
+
 // HasEvent returns true if the given event exists, false otherwise
 func (k Keeper) HasEvent(ctx sdk.Context, id uint64) bool {
 	store := ctx.KVStore(k.storeKey)
@@ -89,6 +108,25 @@ func (k Keeper) GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *types.DLCEv
 	return k.GetEvent(ctx, sdk.BigEndianToUint64(bz))
 }
 
+// HasEventByDate returns true if the given date event exists, false otherwise
+func (k Keeper) HasEventByDate(ctx sdk.Context, date int64) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.EventByDateKey(date))
+}
+
+// GetEventByDate gets the event by the given date
+func (k Keeper) GetEventByDate(ctx sdk.Context, date int64) *types.DLCEvent {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.EventByDateKey(date))
+	if bz == nil {
+		return nil
+	}
+
+	return k.GetEvent(ctx, sdk.BigEndianToUint64(bz))
+}
+
 // SetEvent sets the given event
 func (k Keeper) SetEvent(ctx sdk.Context, event *types.DLCEvent) {
 	store := ctx.KVStore(k.storeKey)
@@ -103,6 +141,13 @@ func (k Keeper) SetEventByPrice(ctx sdk.Context, price sdkmath.Int, event *types
 	store := ctx.KVStore(k.storeKey)
 
 	store.Set(types.EventByPriceKey(price), sdk.Uint64ToBigEndian(event.Id))
+}
+
+// SetEventByDate sets the event by the given date
+func (k Keeper) SetEventByDate(ctx sdk.Context, date int64, event *types.DLCEvent) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.EventByDateKey(date), sdk.Uint64ToBigEndian(event.Id))
 }
 
 // GetPendingLendingEventCount gets the pending lending event count

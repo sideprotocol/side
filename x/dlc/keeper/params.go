@@ -25,6 +25,16 @@ func (k Keeper) GetPriceInterval(ctx sdk.Context, pair string) int32 {
 	return types.DefaultPriceInterval
 }
 
+// GetDateEventNonceQueueSize gets the nonce queue size for the date events
+func (k Keeper) GetDateEventNonceQueueSize(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).DateEventNonceQueueSize
+}
+
+// GetDateInterval gets the date interval for the date events
+func (k Keeper) GetDateInterval(ctx sdk.Context) int64 {
+	return int64(k.GetParams(ctx).DateInterval)
+}
+
 // GetLendingEventNonceQueueSize gets the nonce queue size for the lending events
 func (k Keeper) GetLendingEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).LendingEventNonceQueueSize

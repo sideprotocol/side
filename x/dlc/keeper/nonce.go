@@ -57,11 +57,23 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 
 		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(priceInterval))
 
-		dlcEvent.Description = fmt.Sprintf("Liquidation event at price %s", triggerPrice.String())
+		dlcEvent.Description = fmt.Sprintf("price event at price %s", triggerPrice.String())
 		dlcEvent.Outcomes = append(dlcEvent.Outcomes, triggerPrice.String())
 
 		k.SetEventByPrice(ctx, triggerPrice, dlcEvent)
 		k.SetCurrentEventPrice(ctx, pair, triggerPrice)
+
+	case types.DlcEventType_DATE:
+		currentEventDate := k.GetCurrentEventDate(ctx)
+		dateInterval := k.GetDateInterval(ctx)
+
+		triggerDate := currentEventDate + dateInterval
+
+		dlcEvent.Description = fmt.Sprintf("date event at date %d", triggerDate)
+		dlcEvent.Outcomes = append(dlcEvent.Outcomes, fmt.Sprintf("%d", triggerDate))
+
+		k.SetEventByDate(ctx, triggerDate, dlcEvent)
+		k.SetCurrentEventDate(ctx, triggerDate)
 
 	case types.DlcEventType_LENDING:
 		// description and outcomes will be updated when bound to a loan

@@ -18,6 +18,12 @@ var (
 	// default price interval
 	DefaultPriceInterval = int32(100)
 
+	// default nonce queue size for date events
+	DefaultDateEventNonceQueueSize = uint32(180)
+
+	// default date interval
+	DefaultDateInterval = time.Duration(86400) * time.Second // 1 day
+
 	// default nonce queue size for lending events
 	DefaultLendingEventNonceQueueSize = uint32(1000)
 
@@ -35,6 +41,8 @@ func NewParams() Params {
 				Interval:  int32(DefaultPriceInterval),
 			},
 		},
+		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
+		DateInterval:               DefaultDateInterval,
 		LendingEventNonceQueueSize: DefaultLendingEventNonceQueueSize,
 		DkgTimeoutPeriod:           DefaultDKGTimeoutPeriod,
 	}
@@ -55,6 +63,14 @@ func (p Params) Validate() error {
 		if err := validatePriceInterval(pi); err != nil {
 			return err
 		}
+	}
+
+	if p.DateEventNonceQueueSize == 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "date event nonce queue size must be greater than 0")
+	}
+
+	if p.DateInterval <= 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "date interval must be greater than 0")
 	}
 
 	if p.LendingEventNonceQueueSize == 0 {

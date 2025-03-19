@@ -113,13 +113,13 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet s
 }
 
 // VerifyCets verifies the given cets
-func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, agencyPubKey string, liquidationEvent *dlctypes.DLCEvent, lendingEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
+func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, agencyPubKey string, liquidationEvent *dlctypes.DLCEvent, defaultLiquidationEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
 	liquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(liquidationEvent, 0)
 	if err != nil {
 		return err
 	}
 
-	defaultLiquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(lendingEvent, 0)
+	defaultLiquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(defaultLiquidationEvent, 0)
 	if err != nil {
 		return err
 	}
