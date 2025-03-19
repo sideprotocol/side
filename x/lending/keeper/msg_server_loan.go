@@ -259,6 +259,58 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	return &types.MsgApproveResponse{}, nil
 }
 
+// SubmitRepaymentAdaptorSignatures implements types.MsgServer.
+func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *types.MsgSubmitRepaymentAdaptorSignatures) (*types.MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasLoan(ctx, msg.LoanId) {
+		return nil, types.ErrLoanDoesNotExist
+	}
+
+	loan := m.GetLoan(ctx, msg.LoanId)
+	if loan.Status != types.LoanStatus_Open && loan.Status != types.LoanStatus_Repaid {
+		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan neither open nor repaid")
+	}
+
+	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
+
+	repaymentCet := dlcMeta.RepaymentCet
+	if len(repaymentCet.AgencyAdaptorSignatures) != 0 {
+		return nil, types.ErrRepaymentAdaptorSigsAlreadyExist
+	}
+
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet.Tx)), true)
+	if len(msg.AdaptorSignatures) != len(p.Inputs) {
+		return nil, errorsmod.Wrap(types.ErrInvalidAdaptorSignatures, "mismatched adaptor signature number")
+	}
+
+	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
+	adaptorPoint, _ := m.GetRepaymentCetAdaptorPoint(ctx, msg.LoanId)
+	agencyPubKey, _ := hex.DecodeString(m.GetLoan(ctx, msg.LoanId).Agency)
+
+	for i, input := range p.Inputs {
+		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
+		if err != nil {
+			return nil, err
+		}
+
+		adaptorSigBytes, _ := hex.DecodeString(msg.AdaptorSignatures[i])
+
+		if !adaptor.Verify(adaptorSigBytes, sigHash, agencyPubKey, adaptorPoint) {
+			return nil, types.ErrInvalidAdaptorSignature
+		}
+	}
+
+	dlcMeta.RepaymentCet.AgencyAdaptorSignatures = msg.AdaptorSignatures
+	m.SetDLCMeta(ctx, msg.LoanId, dlcMeta)
+
+	return &types.MsgSubmitRepaymentAdaptorSignaturesResponse{}, nil
+}
+
 // Cancel implements types.MsgServer.
 func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.MsgCancelResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -535,56 +587,6 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	)
 
 	return &types.MsgRepayResponse{}, nil
-}
-
-// SubmitRepaymentAdaptorSignatures implements types.MsgServer.
-func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *types.MsgSubmitRepaymentAdaptorSignatures) (*types.MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanDoesNotExist
-	}
-
-	loan := m.GetLoan(ctx, msg.LoanId)
-	if loan.Status != types.LoanStatus_Repaid {
-		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not repaid")
-	}
-
-	repayment := m.GetRepayment(ctx, msg.LoanId)
-	if len(repayment.DcaAdaptorSignatures) != 0 {
-		return nil, types.ErrRepaymentAdaptorSigsAlreadyExist
-	}
-
-	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(repayment.Tx)), true)
-	if len(msg.AdaptorSignatures) != len(p.Inputs) {
-		return nil, errorsmod.Wrap(types.ErrInvalidAdaptorSignatures, "mismatched adaptor signature number")
-	}
-
-	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
-	adaptorPointBytes, _ := hex.DecodeString(repayment.AdaptorPoint)
-	agencyPubKeyBytes, _ := hex.DecodeString(m.GetLoan(ctx, msg.LoanId).Agency)
-
-	for i, input := range p.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
-		if err != nil {
-			return nil, err
-		}
-
-		adaptorSigBytes, _ := hex.DecodeString(msg.AdaptorSignatures[i])
-
-		if !adaptor.Verify(adaptorSigBytes, sigHash, agencyPubKeyBytes, adaptorPointBytes) {
-			return nil, types.ErrInvalidAdaptorSignature
-		}
-	}
-
-	repayment.DcaAdaptorSignatures = msg.AdaptorSignatures
-	m.SetRepayment(ctx, repayment)
-
-	return &types.MsgSubmitRepaymentAdaptorSignaturesResponse{}, nil
 }
 
 // SubmitLiquidationCetSignatures implements types.MsgServer.

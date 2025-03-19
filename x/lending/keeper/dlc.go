@@ -60,13 +60,19 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	}, nil
 }
 
-// InitiateRepaymentCetSigningRequest initiates the signing request for the repayment cet
+// GetRepaymentCetAdaptorPoint gets the adaptor point of the repayment cet
 // Assume that the loan exists
-func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId string) error {
+func (k Keeper) GetRepaymentCetAdaptorPoint(ctx sdk.Context, loanId string) ([]byte, error) {
 	loan := k.GetLoan(ctx, loanId)
-
 	repaymentEvent := k.dlcKeeper.GetEvent(ctx, loan.RepaymentEventId)
-	signaturePoint, err := dlctypes.GetSignaturePointFromEvent(repaymentEvent, 0)
+
+	return dlctypes.GetSignaturePointFromEvent(repaymentEvent, 0)
+}
+
+// InitiateRepaymentCetSigningRequest initiates the signing request for the repayment cet
+// Assume that both the loan and repayment cet exist
+func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId string) error {
+	signaturePoint, err := k.GetRepaymentCetAdaptorPoint(ctx, loanId)
 	if err != nil {
 		return err
 	}
@@ -80,7 +86,7 @@ func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId strin
 		sdk.NewEvent(
 			types.EventTypeSignRepaymentCet,
 			sdk.NewAttribute(types.AttributeKeyLoanId, loanId),
-			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, k.GetLoan(ctx, loanId).Agency),
 			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, hex.EncodeToString(signaturePoint)),
 			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
 		),

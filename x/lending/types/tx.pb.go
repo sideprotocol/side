@@ -1597,7 +1597,7 @@ func init() {
 func init() { proto.RegisterFile("side/lending/tx.proto", fileDescriptor_13b5a91577424108) }
 
 var fileDescriptor_13b5a91577424108 = []byte{
-	// 1326 bytes of a gzipped FileDescriptorProto
+	// 1327 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0x4f, 0x6f, 0x1b, 0x45,
 	0x14, 0xcf, 0xc6, 0x89, 0x13, 0xbf, 0xd8, 0x4e, 0xbb, 0x4d, 0x13, 0x77, 0xeb, 0xb8, 0xae, 0x03,
 	0x34, 0x6d, 0xa9, 0xad, 0x04, 0x41, 0x45, 0x2e, 0x28, 0x75, 0x41, 0x54, 0x34, 0x55, 0x70, 0xc2,
@@ -1668,19 +1668,19 @@ var fileDescriptor_13b5a91577424108 = []byte{
 	0xdd, 0xe3, 0x2a, 0xda, 0xed, 0xa9, 0x2a, 0xd2, 0xc3, 0x07, 0x30, 0xcf, 0xa7, 0x9f, 0xd5, 0xf8,
 	0x81, 0xa9, 0x5c, 0xab, 0x24, 0xcb, 0xa5, 0x81, 0x27, 0x00, 0xa1, 0x41, 0x21, 0x9e, 0xa7, 0x11,
 	0x98, 0x90, 0xa7, 0xf8, 0x93, 0xa6, 0x7e, 0x08, 0x0b, 0xf2, 0x39, 0x4b, 0x72, 0x4d, 0x11, 0xad,
-	0x9a, 0x86, 0x48, 0x33, 0x0f, 0x20, 0x2b, 0x1e, 0x9c, 0xb5, 0x78, 0x75, 0x30, 0x40, 0xbb, 0x91,
-	0x02, 0x48, 0x1b, 0x3f, 0x28, 0x50, 0x9e, 0xf8, 0x3e, 0xdc, 0x4b, 0x3b, 0x50, 0xa2, 0xba, 0xf6,
-	0xee, 0x85, 0xd4, 0xc3, 0x29, 0xe2, 0x3f, 0x31, 0x56, 0x13, 0xea, 0xc6, 0xd5, 0x93, 0x52, 0x14,
-	0xf9, 0x75, 0xa0, 0x3e, 0x53, 0xa0, 0x3a, 0xf5, 0xe9, 0xd8, 0x4a, 0x21, 0x97, 0xbe, 0x45, 0x7b,
-	0xff, 0xc2, 0x5b, 0x24, 0xa5, 0x9f, 0x14, 0xa8, 0x4c, 0x79, 0x09, 0x1a, 0x29, 0xd6, 0xd3, 0x36,
-	0x68, 0xf7, 0x2f, 0xb8, 0x21, 0x1c, 0x60, 0xde, 0xe5, 0xe3, 0x01, 0x66, 0xf2, 0x84, 0x00, 0x47,
-	0x5a, 0xb5, 0xfa, 0x29, 0x2c, 0x85, 0xfb, 0x74, 0x39, 0x85, 0x08, 0x43, 0xb5, 0x37, 0x26, 0xa1,
-	0xe1, 0x76, 0x15, 0xe9, 0xc9, 0xeb, 0x69, 0x57, 0x9a, 0xc1, 0x09, 0xed, 0x2a, 0xa9, 0xb9, 0x6a,
-	0xf3, 0xdf, 0xbe, 0x7a, 0x7e, 0x47, 0x79, 0xf0, 0xd1, 0x8b, 0xd3, 0x8a, 0xf2, 0xf2, 0xb4, 0xa2,
-	0xfc, 0x75, 0x5a, 0x51, 0x9e, 0x9d, 0x55, 0x66, 0x5e, 0x9e, 0x55, 0x66, 0xfe, 0x38, 0xab, 0xcc,
-	0x7c, 0xfe, 0xb6, 0x69, 0xf9, 0xbd, 0x41, 0xa7, 0xde, 0xc5, 0xfd, 0x06, 0xb5, 0xc8, 0xfe, 0x63,
-	0xe8, 0x62, 0x9b, 0x2d, 0x1a, 0x27, 0xa3, 0xbf, 0x44, 0x86, 0x2e, 0x22, 0x9d, 0x2c, 0x83, 0xdf,
-	0xf9, 0x37, 0x00, 0x00, 0xff, 0xff, 0x63, 0x54, 0x5d, 0xfa, 0x2f, 0x11, 0x00, 0x00,
+	0x9a, 0x86, 0x48, 0x33, 0xcf, 0x14, 0xa8, 0x4e, 0x6d, 0x97, 0x5b, 0x29, 0x84, 0xd2, 0xb7, 0x68,
+	0xef, 0x5f, 0x78, 0x8b, 0xa4, 0xf4, 0x00, 0xb2, 0xe2, 0x0d, 0x5c, 0x8b, 0x17, 0x2c, 0x03, 0xb4,
+	0x1b, 0x29, 0x80, 0xb4, 0xf1, 0x83, 0x02, 0xe5, 0x89, 0x4f, 0xd6, 0xbd, 0xb4, 0x18, 0x27, 0xaa,
+	0x6b, 0xef, 0x5e, 0x48, 0x3d, 0x5c, 0x35, 0xfc, 0x57, 0xcf, 0x6a, 0x42, 0x29, 0xbb, 0x7a, 0x52,
+	0xd5, 0x44, 0x7e, 0xb0, 0xa8, 0x3f, 0x29, 0x50, 0x99, 0xf2, 0x12, 0x34, 0x52, 0xa8, 0xa5, 0x6d,
+	0xd0, 0xee, 0x5f, 0x70, 0x43, 0xf8, 0x34, 0xbc, 0xcb, 0xc7, 0x4f, 0xc3, 0xe4, 0x09, 0xa7, 0x89,
+	0xb4, 0x6a, 0xf5, 0x53, 0x58, 0x0a, 0xf7, 0xe9, 0x72, 0x0a, 0x11, 0x86, 0x6a, 0x6f, 0x4c, 0x42,
+	0xc3, 0xed, 0x2a, 0xd2, 0x93, 0xd7, 0xd3, 0xae, 0x34, 0x83, 0x13, 0xda, 0x55, 0x52, 0x73, 0xd5,
+	0xe6, 0xbf, 0x7d, 0xf5, 0xfc, 0x8e, 0xf2, 0xe0, 0xa3, 0x17, 0xa7, 0x15, 0xe5, 0xe5, 0x69, 0x45,
+	0xf9, 0xeb, 0xb4, 0xa2, 0x3c, 0x3b, 0xab, 0xcc, 0xbc, 0x3c, 0xab, 0xcc, 0xfc, 0x71, 0x56, 0x99,
+	0xf9, 0xfc, 0x6d, 0xd3, 0xf2, 0x7b, 0x83, 0x4e, 0xbd, 0x8b, 0xfb, 0x0d, 0x6a, 0x91, 0xfd, 0xc7,
+	0xd0, 0xc5, 0x36, 0x5b, 0x34, 0x4e, 0x46, 0x7f, 0x89, 0x0c, 0x5d, 0x44, 0x3a, 0x59, 0x06, 0xbf,
+	0xf3, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x9f, 0xf0, 0x13, 0x0e, 0x2f, 0x11, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1702,10 +1702,10 @@ type MsgClient interface {
 	Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error)
 	SubmitCets(ctx context.Context, in *MsgSubmitCets, opts ...grpc.CallOption) (*MsgSubmitCetsResponse, error)
 	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
+	SubmitRepaymentAdaptorSignatures(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignatures, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
 	Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error)
 	SubmitCancellationSignatures(ctx context.Context, in *MsgSubmitCancellationSignatures, opts ...grpc.CallOption) (*MsgSubmitCancellationSignaturesResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
-	SubmitRepaymentAdaptorSignatures(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignatures, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
 	SubmitLiquidationCetSignatures(ctx context.Context, in *MsgSubmitLiquidationCetSignatures, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetSignaturesResponse, error)
 	Close(ctx context.Context, in *MsgClose, opts ...grpc.CallOption) (*MsgCloseResponse, error)
 	// SubmitPrice submits the price for testing
@@ -1788,6 +1788,15 @@ func (c *msgClient) Approve(ctx context.Context, in *MsgApprove, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *msgClient) SubmitRepaymentAdaptorSignatures(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignatures, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
+	out := new(MsgSubmitRepaymentAdaptorSignaturesResponse)
+	err := c.cc.Invoke(ctx, "/side.lending.Msg/SubmitRepaymentAdaptorSignatures", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error) {
 	out := new(MsgCancelResponse)
 	err := c.cc.Invoke(ctx, "/side.lending.Msg/Cancel", in, out, opts...)
@@ -1809,15 +1818,6 @@ func (c *msgClient) SubmitCancellationSignatures(ctx context.Context, in *MsgSub
 func (c *msgClient) Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error) {
 	out := new(MsgRepayResponse)
 	err := c.cc.Invoke(ctx, "/side.lending.Msg/Repay", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) SubmitRepaymentAdaptorSignatures(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignatures, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
-	out := new(MsgSubmitRepaymentAdaptorSignaturesResponse)
-	err := c.cc.Invoke(ctx, "/side.lending.Msg/SubmitRepaymentAdaptorSignatures", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1869,10 +1869,10 @@ type MsgServer interface {
 	Apply(context.Context, *MsgApply) (*MsgApplyResponse, error)
 	SubmitCets(context.Context, *MsgSubmitCets) (*MsgSubmitCetsResponse, error)
 	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
+	SubmitRepaymentAdaptorSignatures(context.Context, *MsgSubmitRepaymentAdaptorSignatures) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
 	Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error)
 	SubmitCancellationSignatures(context.Context, *MsgSubmitCancellationSignatures) (*MsgSubmitCancellationSignaturesResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
-	SubmitRepaymentAdaptorSignatures(context.Context, *MsgSubmitRepaymentAdaptorSignatures) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
 	SubmitLiquidationCetSignatures(context.Context, *MsgSubmitLiquidationCetSignatures) (*MsgSubmitLiquidationCetSignaturesResponse, error)
 	Close(context.Context, *MsgClose) (*MsgCloseResponse, error)
 	// SubmitPrice submits the price for testing
@@ -1909,6 +1909,9 @@ func (*UnimplementedMsgServer) SubmitCets(ctx context.Context, req *MsgSubmitCet
 func (*UnimplementedMsgServer) Approve(ctx context.Context, req *MsgApprove) (*MsgApproveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Approve not implemented")
 }
+func (*UnimplementedMsgServer) SubmitRepaymentAdaptorSignatures(ctx context.Context, req *MsgSubmitRepaymentAdaptorSignatures) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitRepaymentAdaptorSignatures not implemented")
+}
 func (*UnimplementedMsgServer) Cancel(ctx context.Context, req *MsgCancel) (*MsgCancelResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Cancel not implemented")
 }
@@ -1917,9 +1920,6 @@ func (*UnimplementedMsgServer) SubmitCancellationSignatures(ctx context.Context,
 }
 func (*UnimplementedMsgServer) Repay(ctx context.Context, req *MsgRepay) (*MsgRepayResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Repay not implemented")
-}
-func (*UnimplementedMsgServer) SubmitRepaymentAdaptorSignatures(ctx context.Context, req *MsgSubmitRepaymentAdaptorSignatures) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitRepaymentAdaptorSignatures not implemented")
 }
 func (*UnimplementedMsgServer) SubmitLiquidationCetSignatures(ctx context.Context, req *MsgSubmitLiquidationCetSignatures) (*MsgSubmitLiquidationCetSignaturesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitLiquidationCetSignatures not implemented")
@@ -2064,6 +2064,24 @@ func _Msg_Approve_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SubmitRepaymentAdaptorSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitRepaymentAdaptorSignatures)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitRepaymentAdaptorSignatures(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.lending.Msg/SubmitRepaymentAdaptorSignatures",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitRepaymentAdaptorSignatures(ctx, req.(*MsgSubmitRepaymentAdaptorSignatures))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgCancel)
 	if err := dec(in); err != nil {
@@ -2114,24 +2132,6 @@ func _Msg_Repay_Handler(srv interface{}, ctx context.Context, dec func(interface
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).Repay(ctx, req.(*MsgRepay))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_SubmitRepaymentAdaptorSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitRepaymentAdaptorSignatures)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitRepaymentAdaptorSignatures(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/side.lending.Msg/SubmitRepaymentAdaptorSignatures",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitRepaymentAdaptorSignatures(ctx, req.(*MsgSubmitRepaymentAdaptorSignatures))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2242,6 +2242,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_Approve_Handler,
 		},
 		{
+			MethodName: "SubmitRepaymentAdaptorSignatures",
+			Handler:    _Msg_SubmitRepaymentAdaptorSignatures_Handler,
+		},
+		{
 			MethodName: "Cancel",
 			Handler:    _Msg_Cancel_Handler,
 		},
@@ -2252,10 +2256,6 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Repay",
 			Handler:    _Msg_Repay_Handler,
-		},
-		{
-			MethodName: "SubmitRepaymentAdaptorSignatures",
-			Handler:    _Msg_SubmitRepaymentAdaptorSignatures_Handler,
 		},
 		{
 			MethodName: "SubmitLiquidationCetSignatures",

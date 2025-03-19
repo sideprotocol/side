@@ -20,10 +20,10 @@ service Msg {
     rpc Apply(MsgApply) returns (MsgApplyResponse);
     rpc SubmitCets(MsgSubmitCets) returns (MsgSubmitCetsResponse);
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
+    rpc SubmitRepaymentAdaptorSignatures(MsgSubmitRepaymentAdaptorSignatures) returns (MsgSubmitRepaymentAdaptorSignaturesResponse);
     rpc Cancel(MsgCancel) returns (MsgCancelResponse);
     rpc SubmitCancellationSignatures(MsgSubmitCancellationSignatures) returns (MsgSubmitCancellationSignaturesResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
-    rpc SubmitRepaymentAdaptorSignatures(MsgSubmitRepaymentAdaptorSignatures) returns (MsgSubmitRepaymentAdaptorSignaturesResponse);
     rpc SubmitLiquidationCetSignatures(MsgSubmitLiquidationCetSignatures) returns (MsgSubmitLiquidationCetSignaturesResponse);
     rpc Close(MsgClose) returns (MsgCloseResponse);
 
