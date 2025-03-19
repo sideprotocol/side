@@ -244,6 +244,11 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	loan.Status = types.LoanStatus_Open
 	m.SetLoan(ctx, loan)
 
+	// initiate signing request for repayment cet adaptor signatures from agency
+	if err := m.InitiateRepaymentCetSigningRequest(ctx, loan.VaultAddress); err != nil {
+		return nil, err
+	}
+
 	m.EmitEvent(ctx, msg.Relayer,
 		sdk.NewAttribute("vault", loan.VaultAddress),
 		sdk.NewAttribute("deposit_tx", msg.DepositTxId),

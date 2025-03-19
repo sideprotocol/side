@@ -7,6 +7,7 @@ const (
 	EventTypeRepay                                 = "repay"
 	EventTypeDefault                               = "default"
 	EventTypeLiquidate                             = "liquidate"
+	EventTypeSignRepaymentCet                      = "sign_repayment_cet"
 	EventTypeGenerateSignedLiquidationCet          = "generate_signed_liquidation_cet"
 	EventTypeGenerateSignedCancellationTransaction = "generate_signed_cancellation_transaction"
 
