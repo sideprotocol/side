@@ -61,6 +61,18 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
+	defaultLiquidationDate := types.GetDefaultLiquidationDate(msg.MaturityTime)
+	if !m.dlcKeeper.HasEventByDate(ctx, defaultLiquidationDate) {
+		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "default liquidation event does not exist")
+	}
+
+	defaultLiquidationEvent := m.dlcKeeper.GetEventByDate(ctx, defaultLiquidationDate)
+
+	repaymentEvent := m.dlcKeeper.GetAvailableLendingEvent(ctx)
+	if repaymentEvent == nil {
+		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "no available event for repayment")
+	}
+
 	poolConfig := m.GetPool(ctx, msg.PoolId).Config
 
 	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.BorrowRate))).Quo(types.Permille)
@@ -71,19 +83,21 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	}
 
 	loan := &types.Loan{
-		VaultAddress:   vault,
-		Borrower:       msg.Borrower,
-		BorrowerPubKey: msg.BorrowerPubkey,
-		Agency:         agency.Pubkey,
-		MaturityTime:   msg.MaturityTime,
-		FinalTimeout:   msg.MaturityTime + m.FinalTimeoutDuration(ctx),
-		BorrowAmount:   msg.BorrowAmount,
-		OriginationFee: poolConfig.OriginationFee,
-		Interest:       interest,
-		ProtocolFee:    protocolFee,
-		PoolId:         msg.PoolId,
-		CreateAt:       ctx.BlockTime(),
-		Status:         types.LoanStatus_Requested,
+		VaultAddress:              vault,
+		Borrower:                  msg.Borrower,
+		BorrowerPubKey:            msg.BorrowerPubkey,
+		Agency:                    agency.Pubkey,
+		MaturityTime:              msg.MaturityTime,
+		FinalTimeout:              msg.MaturityTime + m.FinalTimeoutDuration(ctx),
+		BorrowAmount:              msg.BorrowAmount,
+		OriginationFee:            poolConfig.OriginationFee,
+		Interest:                  interest,
+		ProtocolFee:               protocolFee,
+		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
+		RepaymentEventId:          repaymentEvent.Id,
+		PoolId:                    msg.PoolId,
+		CreateAt:                  ctx.BlockTime(),
+		Status:                    types.LoanStatus_Requested,
 	}
 
 	m.SetLoan(ctx, loan)
@@ -131,12 +145,12 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(poolConfig.LiquidationThreshold)))
 	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
-		return nil, errorsmod.Wrap(types.ErrInvalidPriceEvent, "liquidation event does not exist")
+		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 	}
 
 	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	if liquidationEvent.HasTriggered {
-		return nil, errorsmod.Wrap(types.ErrInvalidPriceEvent, "liquidation event has triggered")
+		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event has triggered")
 	}
 
 	defaultLiquidationEvent := m.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)

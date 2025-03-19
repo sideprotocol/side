@@ -61,6 +61,10 @@ type DLCKeeper interface {
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCEvent
 	HasEventByPrice(ctx sdk.Context, price sdkmath.Int) bool
 	GetEventByPrice(ctx sdk.Context, price sdkmath.Int) *dlctypes.DLCEvent
+	HasEventByDate(ctx sdk.Context, date int64) bool
+	GetEventByDate(ctx sdk.Context, date int64) *dlctypes.DLCEvent
+	GetAvailableLendingEvent(ctx sdk.Context) *dlctypes.DLCEvent
+
 	GetAttestationByEvent(ctx sdk.Context, eventId uint64) *dlctypes.DLCAttestation
 
 	HasAgency(ctx sdk.Context, id uint64) bool

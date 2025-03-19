@@ -3,6 +3,7 @@ package keeper
 import (
 	"encoding/hex"
 	"fmt"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
@@ -53,9 +54,8 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 	case types.DlcEventType_PRICE:
 		pair := "BTC-USD"
 		currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
-		priceInterval := k.GetPriceInterval(ctx, pair)
 
-		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(priceInterval))
+		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(k.GetPriceInterval(ctx, pair)))
 
 		dlcEvent.Description = fmt.Sprintf("price event at price %s", triggerPrice.String())
 		dlcEvent.Outcomes = append(dlcEvent.Outcomes, triggerPrice.String())
@@ -65,9 +65,11 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 
 	case types.DlcEventType_DATE:
 		currentEventDate := k.GetCurrentEventDate(ctx)
-		dateInterval := k.GetDateInterval(ctx)
+		if currentEventDate == 0 {
+			currentEventDate = ctx.BlockTime().Truncate(24 * time.Hour).Unix()
+		}
 
-		triggerDate := currentEventDate + dateInterval
+		triggerDate := currentEventDate + k.GetDateInterval(ctx)
 
 		dlcEvent.Description = fmt.Sprintf("date event at date %d", triggerDate)
 		dlcEvent.Outcomes = append(dlcEvent.Outcomes, fmt.Sprintf("%d", triggerDate))

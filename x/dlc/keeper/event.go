@@ -198,7 +198,7 @@ func (k Keeper) RemoveLendingEventFromPendingQueue(ctx sdk.Context, event *types
 	k.DecreasePendingLendingEventCount(ctx)
 }
 
-// GetAvailableLendingEvent gets an available lending event
+// GetAvailableLendingEvent gets an available lending event and removes it from the pending queue if any
 func (k Keeper) GetAvailableLendingEvent(ctx sdk.Context) *types.DLCEvent {
 	var lendingEvent *types.DLCEvent
 
@@ -206,6 +206,10 @@ func (k Keeper) GetAvailableLendingEvent(ctx sdk.Context) *types.DLCEvent {
 		lendingEvent = event
 		return true
 	})
+
+	if lendingEvent != nil {
+		k.RemoveLendingEventFromPendingQueue(ctx, lendingEvent)
+	}
 
 	return lendingEvent
 }

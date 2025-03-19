@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/hex"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
@@ -18,6 +19,15 @@ func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowedAmount sdkmath.In
 	precision := sdkmath.NewInt(100)
 
 	return liquidationPrice.Quo(precision).Mul(precision)
+}
+
+// GetDefaultLiquidationDate gets the date at which the loan will be liquidated due to default
+func GetDefaultLiquidationDate(maturityTime int64) int64 {
+	if maturityTime%(24*int64(time.Hour)) == 0 {
+		return maturityTime
+	}
+
+	return time.Unix(maturityTime, 0).Truncate(24 * time.Hour).Add(24 * time.Hour).Unix()
 }
 
 // AdaptorPointFromSecret gets the corresponding adaptor point from the given secret

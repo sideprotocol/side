@@ -27,7 +27,7 @@ var (
 	ErrLoanDoesNotExist       = errorsmod.Register(ModuleName, 3006, "loan does not exist")
 	ErrInvalidDepositTx       = errorsmod.Register(ModuleName, 3007, "invalid deposit tx")
 	ErrInvalidCET             = errorsmod.Register(ModuleName, 3008, "invalid cet")
-	ErrInvalidPriceEvent      = errorsmod.Register(ModuleName, 3009, "invalid price event")
+	ErrInvalidEvent           = errorsmod.Register(ModuleName, 3009, "invalid event")
 	ErrInsufficientCollateral = errorsmod.Register(ModuleName, 3010, "insufficient collateral")
 	ErrFailedToBuildTx        = errorsmod.Register(ModuleName, 3011, "failed to build tx")
 
