@@ -70,6 +70,7 @@ type DLCKeeper interface {
 	HasAgency(ctx sdk.Context, id uint64) bool
 	GetAgency(ctx sdk.Context, id uint64) *dlctypes.Agency
 
+	SetEvent(ctx sdk.Context, event *dlctypes.DLCEvent)
 	TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int)
 
 	SetPrice(ctx sdk.Context, pair string, price string)

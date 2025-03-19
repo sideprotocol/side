@@ -73,6 +73,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "no available event for repayment")
 	}
 
+	// update repayment event
+	repaymentEvent.Description = fmt.Sprintf("repayment event for loan %s", vault)
+	repaymentEvent.Outcomes = []string{vault}
+	m.dlcKeeper.SetEvent(ctx, repaymentEvent)
+
 	poolConfig := m.GetPool(ctx, msg.PoolId).Config
 
 	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.BorrowRate))).Quo(types.Permille)
