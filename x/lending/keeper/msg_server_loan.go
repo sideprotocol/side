@@ -520,6 +520,12 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	loan.Status = types.LoanStatus_Repaid
 	m.SetLoan(ctx, loan)
 
+	repayment := &types.Repayment{
+		LoanId: msg.LoanId,
+		Amount: amount,
+	}
+	m.SetRepayment(ctx, repayment)
+
 	// trigger the corresponding dlc event
 	m.dlcKeeper.TriggerDLCEvent(ctx, loan.RepaymentEventId, 0)
 

@@ -180,12 +180,8 @@ message DepositLog {
 
 message Repayment {
     string loan_id = 1;
-    string txid = 2;
-    string tx = 3;
-    string adaptor_point = 4;
-    repeated string dca_adaptor_signatures = 5;
-    string dca_adapted_signature = 6;
-    google.protobuf.Timestamp create_at = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+    google.protobuf.Timestamp create_at = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 message Cancellation {

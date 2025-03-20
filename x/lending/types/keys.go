@@ -25,7 +25,7 @@ var (
 	PoolStorePrefix       = []byte{0x2}
 	LoanStorePrefix       = []byte{0x3}
 	DepositLogPrefix      = []byte{0x4}
-	RepaymentPrefix       = []byte{0x5}
+	RepaymentKeyPrefix    = []byte{0x5}
 	LoanDLCMetaKeyPrefix  = []byte{0x06}
 	CancellationKeyPrefix = []byte{0x07}
 
@@ -53,5 +53,5 @@ func CancellationKey(loanId string) []byte {
 }
 
 func RepaymentKey(loanId string) []byte {
-	return append(RepaymentPrefix, []byte(loanId)...)
+	return append(RepaymentKeyPrefix, []byte(loanId)...)
 }
