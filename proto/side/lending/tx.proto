@@ -25,7 +25,6 @@ service Msg {
     rpc SubmitCancellationSignatures(MsgSubmitCancellationSignatures) returns (MsgSubmitCancellationSignaturesResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
     rpc SubmitLiquidationCetSignatures(MsgSubmitLiquidationCetSignatures) returns (MsgSubmitLiquidationCetSignaturesResponse);
-    rpc Close(MsgClose) returns (MsgCloseResponse);
 
     // SubmitPrice submits the price for testing 
     rpc SubmitPrice(MsgSubmitPrice) returns (MsgSubmitPriceResponse);
@@ -184,16 +183,6 @@ message MsgSubmitLiquidationCetSignatures {
 message MsgSubmitLiquidationCetSignaturesResponse {
 
 }
-
-message MsgClose {
-    option (cosmos.msg.v1.signer) = "relayer";
-    
-    string relayer = 1;
-    string loan_id =2;
-    string signature = 3;
-}
-
-message MsgCloseResponse{}
 
 message MsgSubmitPrice {
     option (cosmos.msg.v1.signer) = "sender";
