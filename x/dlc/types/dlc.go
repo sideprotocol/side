@@ -19,7 +19,7 @@ func GetEventOutcomeHash(event *DLCEvent, outcomeIndex int) []byte {
 // GetSignaturePointFromEvent gets the signature point from the given event and outcome index
 // Assume that the outcome index is valid
 func GetSignaturePointFromEvent(event *DLCEvent, outcomeIndex int) ([]byte, error) {
-	oralcePubKey, err := hex.DecodeString(event.Pubkey)
+	oraclePubKey, err := hex.DecodeString(event.Pubkey)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func GetSignaturePointFromEvent(event *DLCEvent, outcomeIndex int) ([]byte, erro
 		return nil, err
 	}
 
-	return GetSignaturePoint(oralcePubKey, nonce, GetEventOutcomeHash(event, outcomeIndex))
+	return GetSignaturePoint(oraclePubKey, nonce, GetEventOutcomeHash(event, outcomeIndex))
 }
 
 // GetSignaturePoint gets the signature point from the given params

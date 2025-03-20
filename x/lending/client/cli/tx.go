@@ -274,12 +274,10 @@ func CmdSubmitCancellationSignatures() *cobra.Command {
 				return err
 			}
 
-			signatures := strings.Split(args[1], listSeparator)
-
 			msg := types.NewMsgSubmitCancellationSignatures(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				signatures,
+				strings.Split(args[1], listSeparator),
 			)
 
 			if err := msg.ValidateBasic(); err != nil {
@@ -335,12 +333,10 @@ func CmdSubmitRepaymentAdaptorSignatures() *cobra.Command {
 				return err
 			}
 
-			signatures := strings.Split(args[1], listSeparator)
-
 			msg := types.NewMsgSubmitRepaymentAdaptorSignatures(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				signatures,
+				strings.Split(args[1], listSeparator),
 			)
 
 			if err := msg.ValidateBasic(); err != nil {
@@ -367,12 +363,10 @@ func CmdSubmitLiquidationSignatures() *cobra.Command {
 				return err
 			}
 
-			signatures := strings.Split(args[1], listSeparator)
-
 			msg := types.NewMsgSubmitLiquidationSignatures(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				signatures,
+				strings.Split(args[1], listSeparator),
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

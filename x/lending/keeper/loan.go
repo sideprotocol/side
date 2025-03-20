@@ -159,6 +159,7 @@ func (k Keeper) SetCancellation(ctx sdk.Context, cancellation *types.Cancellatio
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(cancellation)
+
 	store.Set(types.CancellationKey(cancellation.LoanId), bz)
 }
 

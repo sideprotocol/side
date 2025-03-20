@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"encoding/hex"
 
-	errorsmod "cosmossdk.io/errors"
 	"github.com/btcsuite/btcd/btcutil/psbt"
+
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sideprotocol/side/crypto/schnorr"
 	"github.com/sideprotocol/side/x/lending/types"
 )
