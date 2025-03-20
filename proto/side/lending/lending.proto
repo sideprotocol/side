@@ -133,6 +133,12 @@ message Loan {
     LoanStatus status = 21;
 }
 
+enum CetType {
+  LIQUIDATION = 0;
+  DEFAULT_LIQUIDATION = 1;
+  REPAYMENT = 2;
+}
+
 message CetInfo {
   uint64 event_id = 1;
   uint32 outcome_index = 2;

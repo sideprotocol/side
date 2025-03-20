@@ -8,8 +8,7 @@ const (
 	EventTypeDefault                               = "default"
 	EventTypeLiquidate                             = "liquidate"
 	EventTypeSignRepaymentCet                      = "sign_repayment_cet"
-	EventTypeGenerateSignedRepaymentCet            = "generate_signed_repayment_cet"
-	EventTypeGenerateSignedLiquidationCet          = "generate_signed_liquidation_cet"
+	EventTypeGenerateSignedCet                     = "generate_signed_cet"
 	EventTypeGenerateSignedCancellationTransaction = "generate_signed_cancellation_transaction"
 
 	AttributeKeyVault            = "vault"
@@ -31,6 +30,8 @@ const (
 	AttributeKeySigHashes = "sig_hashes"
 
 	AttributeKeyTxHash = "tx_hash"
+
+	AttributeKeyCetType = "cet_type"
 )
 
 const (

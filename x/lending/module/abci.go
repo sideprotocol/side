@@ -155,8 +155,9 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 
 				// emit event
 				ctx.EventManager().EmitEvent(
-					sdk.NewEvent(types.EventTypeGenerateSignedLiquidationCet,
+					sdk.NewEvent(types.EventTypeGenerateSignedCet,
 						sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+						sdk.NewAttribute(types.AttributeKeyCetType, fmt.Sprintf("%d", types.CetType_LIQUIDATION)),
 						sdk.NewAttribute(types.AttributeKeyTxHash, txHash.String()),
 					),
 				)
@@ -210,8 +211,9 @@ func handleDefaultedLoans(ctx sdk.Context, k keeper.Keeper) {
 
 				// emit event
 				ctx.EventManager().EmitEvent(
-					sdk.NewEvent(types.EventTypeGenerateSignedLiquidationCet,
+					sdk.NewEvent(types.EventTypeGenerateSignedCet,
 						sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+						sdk.NewAttribute(types.AttributeKeyCetType, fmt.Sprintf("%d", types.CetType_DEFAULT_LIQUIDATION)),
 						sdk.NewAttribute(types.AttributeKeyTxHash, txHash.String()),
 					),
 				)
@@ -272,8 +274,9 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 
 			// emit event
 			ctx.EventManager().EmitEvent(
-				sdk.NewEvent(types.EventTypeGenerateSignedRepaymentCet,
+				sdk.NewEvent(types.EventTypeGenerateSignedCet,
 					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+					sdk.NewAttribute(types.AttributeKeyCetType, fmt.Sprintf("%d", types.CetType_REPAYMENT)),
 					sdk.NewAttribute(types.AttributeKeyTxHash, txHash.String()),
 				),
 			)
