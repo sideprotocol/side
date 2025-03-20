@@ -17,7 +17,10 @@ import (
 // EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handleActiveLoans(ctx, k)
+
 	handleLiquidatedLoans(ctx, k)
+	handleDefaultedLoans(ctx, k)
+
 	handleRepayments(ctx, k)
 }
 
@@ -27,64 +30,79 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 	loans := k.GetLoans(ctx, types.LoanStatus_Open)
 
 	for _, loan := range loans {
-		// check if the loan has defaulted
-		if ctx.BlockTime().Unix() >= loan.MaturityTime {
-			loan.Status = types.LoanStatus_Defaulted
-			k.SetLoan(ctx, loan)
+		var liquidatedPrice sdkmath.Int
+		var liquidationCet string
+		var triggeredEventId uint64
 
-			// emit event
+		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
+
+		// check if the loan has defaulted
+		if ctx.BlockTime().Unix() >= types.GetDefaultLiquidationDate(loan.MaturityTime) {
+			loan.Status = types.LoanStatus_Defaulted
+
+			liquidationCet = dlcMeta.DefaultLiquidationCet.Tx
+			triggeredEventId = loan.DefaultLiquidationEventId
+
+			// get default liquidation cet sig hashes; no error
+			defaultLiquidationCetSigHashes, _ := types.GetDefaultLiquidationCetSigHashes(dlcMeta)
+
+			// emit default event
 			ctx.EventManager().EmitEvent(
 				sdk.NewEvent(
 					types.EventTypeDefault,
 					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
 					sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+					sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(defaultLiquidationCetSigHashes, types.AttributeValueSeparator)),
 				),
 			)
+		} else {
+			liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.LiquidationThreshold)))
 
-			continue
+			price, err := k.GetPrice(ctx, fmt.Sprintf("BTC-%s", loan.BorrowAmount.Denom))
+			if err != nil {
+				k.Logger(ctx).Info("failed to get oracle price", "err", err)
+				continue
+			}
+
+			// check if the loan is to be liquidated
+			if price.LTE(liquidationPrice) {
+				loan.Status = types.LoanStatus_Liquidated
+
+				liquidationCet = dlcMeta.LiquidationCet.Tx
+				triggeredEventId = loan.LiquidationEventId
+
+				// get liquidation cet sig hashes; no error
+				liquidationCetSigHashes, _ := types.GetLiquidationCetSigHashes(dlcMeta)
+
+				// emit liquidation event
+				ctx.EventManager().EmitEvent(
+					sdk.NewEvent(
+						types.EventTypeLiquidate,
+						sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+						sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+						sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(liquidationCetSigHashes, types.AttributeValueSeparator)),
+					),
+				)
+			}
 		}
 
-		liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.LiquidationThreshold)))
-
-		price, err := k.GetPrice(ctx, fmt.Sprintf("BTC-%s", loan.BorrowAmount.Denom))
-		if err != nil {
-			k.Logger(ctx).Info("failed to get oracle price", "err", err)
-			continue
-		}
-
-		// check if the loan is to be liquidated
-		if price.LTE(liquidationPrice) {
-			loan.Status = types.LoanStatus_Liquidated
-
-			// get liquidation cet sig hashes; no error
-			liquidationCetSigHashes, _ := types.GetLiquidationCetSigHashes(k.GetDLCMeta(ctx, loan.VaultAddress))
-
-			// emit liquidation event
-			ctx.EventManager().EmitEvent(
-				sdk.NewEvent(
-					types.EventTypeLiquidate,
-					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-					sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
-					sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(liquidationCetSigHashes, types.AttributeValueSeparator)),
-				),
-			)
-
-			// create auction
+		// create auction if defaulted or liquidated
+		if loan.Status == types.LoanStatus_Defaulted || loan.Status == types.LoanStatus_Liquidated {
 			auction := k.AuctionKeeper().CreateAuction(ctx, &auctiontypes.Auction{
 				LoanId:             loan.VaultAddress,
 				Borrower:           loan.Borrower,
 				Agency:             loan.Agency,
 				DepositedAsset:     sdk.NewCoin("sat", loan.CollateralAmount),
-				LiquidatedPrice:    liquidationPrice.Int64(),
+				LiquidatedPrice:    liquidatedPrice.Int64(),
 				LiquidatedTime:     ctx.BlockTime(),
 				ExpectedValue:      sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(loan.Interest)),
 				LiquidationPenalty: k.GetPool(ctx, loan.PoolId).Config.LiquidationPenalty,
-				LiquidationCet:     k.GetDLCMeta(ctx, loan.VaultAddress).LiquidationCet.Tx,
+				LiquidationCet:     liquidationCet,
 			})
 			loan.AuctionId = auction.Id
 
-			// trigger price event
-			k.DLCKeeper().TriggerDLCEvent(ctx, loan.LiquidationEventId, 0)
+			// trigger dlc event
+			k.DLCKeeper().TriggerDLCEvent(ctx, triggeredEventId, 0)
 
 			// update loan
 			k.SetLoan(ctx, loan)
@@ -132,6 +150,61 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 				k.Logger(ctx).Info("failed to build signed liquidation cet", "loan id", loan.VaultAddress, "err", err)
 			} else {
 				dlcMeta.LiquidationCet.SignedTxHex = hex.EncodeToString(signedTx)
+
+				// emit event
+				ctx.EventManager().EmitEvent(
+					sdk.NewEvent(types.EventTypeGenerateSignedLiquidationCet,
+						sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+						sdk.NewAttribute(types.AttributeKeyTxHash, txHash.String()),
+					),
+				)
+			}
+		}
+
+		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
+	}
+}
+
+// handleDefaultedLoans handles defaulted loans
+func handleDefaultedLoans(ctx sdk.Context, k keeper.Keeper) {
+	// get all defaulted loans
+	loans := k.GetLoans(ctx, types.LoanStatus_Defaulted)
+
+	for _, loan := range loans {
+		// check if the default liquidation cet has been signed
+		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
+		if len(dlcMeta.DefaultLiquidationCet.SignedTxHex) != 0 {
+			continue
+		}
+
+		// check if the borrower adapted signatures already exist
+		if len(dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures) == 0 {
+			// check if the event attestation has been submitted
+			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.DefaultLiquidationEventId)
+			if attestation == nil {
+				continue
+			}
+
+			// decrypt the adaptor signatures
+			for _, adaptorSignature := range dlcMeta.DefaultLiquidationCet.BorrowerAdaptorSignatures {
+				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
+				adaptorSecret, _ := hex.DecodeString(attestation.Signature)
+				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
+
+				// update the adapted signatures
+				dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures = append(
+					dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures,
+					hex.EncodeToString(adaptedSignature))
+			}
+		}
+
+		// build signed default liquidation cet if both borrower adapted signatures(obviously exist) and agency signatures already exist
+		if len(dlcMeta.DefaultLiquidationCet.AgencySignatures) != 0 {
+			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.DefaultLiquidationCet.Tx, loan.BorrowerPubKey, dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures, loan.Agency, dlcMeta.DefaultLiquidationCet.AgencySignatures)
+			if err != nil {
+				k.Logger(ctx).Info("failed to build signed default liquidation cet", "loan id", loan.VaultAddress, "err", err)
+			} else {
+				dlcMeta.DefaultLiquidationCet.SignedTxHex = hex.EncodeToString(signedTx)
 
 				// emit event
 				ctx.EventManager().EmitEvent(

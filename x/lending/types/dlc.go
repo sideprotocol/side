@@ -488,6 +488,32 @@ func GetLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 	return sigHashes, nil
 }
 
+// GetDefaultLiquidationCetSigHashes gets the sig hashes of the default liquidation cet
+func GetDefaultLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.DefaultLiquidationCet.Tx)), true)
+	if err != nil {
+		return nil, err
+	}
+
+	script, err := hex.DecodeString(dlcMeta.MultisigScript)
+	if err != nil {
+		return nil, err
+	}
+
+	sigHashes := []string{}
+
+	for i, input := range p.Inputs {
+		sigHash, err := CalcTapscriptSigHash(p, i, input.SighashType, script)
+		if err != nil {
+			return nil, err
+		}
+
+		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
+	}
+
+	return sigHashes, nil
+}
+
 // GetRepaymentCetSigHashes gets the sig hashes of the repayment cet
 func GetRepaymentCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.RepaymentCet.Tx)), true)
