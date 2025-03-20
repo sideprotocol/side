@@ -512,77 +512,23 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	}
 
 	// escrow repaid amount
-	amount := loan.BorrowAmount.Amount.Add(loan.Interest)
-	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), types.RepaymentEscrowAccount, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
+	amount := loan.BorrowAmount.AddAmount(loan.Interest)
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), types.RepaymentEscrowAccount, sdk.NewCoins(amount)); err != nil {
 		return nil, err
 	}
 
 	loan.Status = types.LoanStatus_Repaid
 	m.SetLoan(ctx, loan)
 
-	dls := []string{}
-	for _, txid := range loan.DepositTxs {
-		dl := m.GetDepositLog(ctx, txid)
-		dls = append(dls, dl.DepositTx)
-	}
-
-	depositTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dls[0])), true)
-
-	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
-
-	internalKey, _ := hex.DecodeString(dlcMeta.InternalKey)
-	tapscripts := types.GetDLCTapscripts(dlcMeta)
-
-	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
-	borrowerPkScript, _ := types.GetPkScriptFromAddress(loan.Borrower)
-
-	feeRate := m.btcbridgeKeeper.GetFeeRate(ctx).Value
-	if feeRate == 0 {
-		// use default fee rate for now
-		feeRate = 10
-	}
-
-	repaymentTx, err := types.CreateRepaymentCet(
-		depositTx,
-		vaultPkScript,
-		borrowerPkScript,
-		internalKey,
-		tapscripts,
-		feeRate,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	repaymentTxPsbt, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentTx)), true)
-	if err != nil {
-		return nil, err
-	}
-
-	repayment := &types.Repayment{
-		LoanId:       msg.LoanId,
-		Txid:         repaymentTxPsbt.UnsignedTx.TxHash().String(),
-		Tx:           repaymentTx,
-		AdaptorPoint: msg.AdaptorPoint,
-		CreateAt:     ctx.BlockTime(),
-	}
-
-	m.SetRepayment(ctx, repayment)
-
-	// get sig hashes
-	sigHashes, err := types.GetRepaymentCetSigHashes(dlcMeta)
-	if err != nil {
-		return nil, err
-	}
+	// trigger the corresponding dlc event
+	m.dlcKeeper.TriggerDLCEvent(ctx, loan.RepaymentEventId, 0)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeRepay,
-			sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, msg.AdaptorPoint),
-			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
-			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
-			sdk.NewAttribute(types.AtrtibuteKeyRepaymentTxHash, repaymentTxPsbt.UnsignedTx.TxHash().String()),
+			sdk.NewAttribute(types.AttributeKeyBorrower, msg.Borrower),
+			sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
+			sdk.NewAttribute(types.AttributeKeyAmount, amount.String()),
 		),
 	)
 

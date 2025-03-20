@@ -1,9 +1,6 @@
 package keeper
 
 import (
-	"encoding/hex"
-	"strings"
-
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -58,39 +55,4 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 		defaultLiquidationCetInfo,
 		repaymentCetInfo,
 	}, nil
-}
-
-// GetRepaymentCetAdaptorPoint gets the adaptor point of the repayment cet
-// Assume that the loan exists
-func (k Keeper) GetRepaymentCetAdaptorPoint(ctx sdk.Context, loanId string) ([]byte, error) {
-	loan := k.GetLoan(ctx, loanId)
-	repaymentEvent := k.dlcKeeper.GetEvent(ctx, loan.RepaymentEventId)
-
-	return dlctypes.GetSignaturePointFromEvent(repaymentEvent, 0)
-}
-
-// InitiateRepaymentCetSigningRequest initiates the signing request for the repayment cet
-// Assume that both the loan and repayment cet exist
-func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId string) error {
-	signaturePoint, err := k.GetRepaymentCetAdaptorPoint(ctx, loanId)
-	if err != nil {
-		return err
-	}
-
-	sigHashes, err := types.GetRepaymentCetSigHashes(k.GetDLCMeta(ctx, loanId))
-	if err != nil {
-		return err
-	}
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeSignRepaymentCet,
-			sdk.NewAttribute(types.AttributeKeyLoanId, loanId),
-			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, k.GetLoan(ctx, loanId).Agency),
-			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, hex.EncodeToString(signaturePoint)),
-			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
-		),
-	)
-
-	return nil
 }

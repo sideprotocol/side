@@ -70,7 +70,6 @@ message MsgRepay{
 
     string borrower = 1;
     string loan_id = 2;
-    string adaptor_point = 3;
 }
 
 message MsgRepayResponse{}

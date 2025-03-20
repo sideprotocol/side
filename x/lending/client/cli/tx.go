@@ -38,10 +38,10 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdApply())
 	cmd.AddCommand(CmdSubmitCets())
 	cmd.AddCommand(CmdApprove())
+	cmd.AddCommand(CmdSubmitRepaymentAdaptorSignatures())
 	cmd.AddCommand(CmdCancel())
 	cmd.AddCommand(CmdSubmitCancellationSignatures())
 	cmd.AddCommand(CmdRepay())
-	cmd.AddCommand(CmdSubmitRepaymentAdaptorSignatures())
 	cmd.AddCommand(CmdSubmitLiquidationCetSignatures())
 	cmd.AddCommand(CmdClose())
 	cmd.AddCommand(CmdSubmitPrice())
@@ -298,9 +298,9 @@ func CmdSubmitCancellationSignatures() *cobra.Command {
 
 func CmdRepay() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "repay [loan id] [adaptor point]",
-		Short: "Repay loan with the adaptor point",
-		Args:  cobra.ExactArgs(2),
+		Use:   "repay [loan id]",
+		Short: "Repay the given loan",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -310,7 +310,6 @@ func CmdRepay() *cobra.Command {
 			msg := types.NewMsgRepay(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				args[1],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

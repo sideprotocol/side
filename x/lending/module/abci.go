@@ -18,6 +18,7 @@ import (
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handleActiveLoans(ctx, k)
 	handleLiquidatedLoans(ctx, k)
+	handleRepayments(ctx, k)
 }
 
 // handleActiveLoans handles active loans
@@ -140,6 +141,67 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 					),
 				)
 			}
+		}
+
+		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
+	}
+}
+
+// handleRepayments handles repayments
+func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
+	// get all repaid loans
+	loans := k.GetLoans(ctx, types.LoanStatus_Repaid)
+
+	for _, loan := range loans {
+		// check if the repayment cet has been signed in the dlc meta
+		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
+		if len(dlcMeta.RepaymentCet.SignedTxHex) != 0 {
+			continue
+		}
+
+		// check if the agency adaptor signatures has been submitted
+		if len(dlcMeta.RepaymentCet.AgencyAdaptorSignatures) == 0 {
+			continue
+		}
+
+		if len(dlcMeta.RepaymentCet.AgencyAdaptedSignatures) == 0 {
+			// check if the event attestation has been submitted
+			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.RepaymentEventId)
+			if attestation == nil {
+				continue
+			}
+
+			// decrypt the agency adaptor signatures
+			for _, adaptorSignature := range dlcMeta.RepaymentCet.AgencyAdaptorSignatures {
+				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
+				adaptorSecret, _ := hex.DecodeString(attestation.Signature)
+				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
+
+				// update the adapted signatures
+				dlcMeta.RepaymentCet.AgencyAdaptedSignatures = append(
+					dlcMeta.RepaymentCet.AgencyAdaptedSignatures,
+					hex.EncodeToString(adaptedSignature))
+			}
+		}
+
+		// build signed repayment cet
+		signedTx, txHash, err := types.BuildSignedCet(dlcMeta.RepaymentCet.Tx, loan.BorrowerPubKey, dlcMeta.RepaymentCet.BorrowerSignatures, loan.Agency, dlcMeta.RepaymentCet.AgencyAdaptedSignatures)
+		if err != nil {
+			k.Logger(ctx).Info("failed to build signed repayment cet", "loan id", loan.VaultAddress, "err", err)
+		} else {
+			dlcMeta.RepaymentCet.SignedTxHex = hex.EncodeToString(signedTx)
+
+			if err := k.CompleteRepayment(ctx, loan); err != nil {
+				k.Logger(ctx).Info("failed to complete repayment", "loan id", loan.VaultAddress, "err", err)
+			}
+
+			// emit event
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(types.EventTypeGenerateSignedRepaymentCet,
+					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+					sdk.NewAttribute(types.AttributeKeyTxHash, txHash.String()),
+				),
+			)
 		}
 
 		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
