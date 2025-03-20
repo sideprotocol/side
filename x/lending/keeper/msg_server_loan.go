@@ -535,8 +535,8 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	return &types.MsgRepayResponse{}, nil
 }
 
-// SubmitLiquidationCetSignatures implements types.MsgServer.
-func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *types.MsgSubmitLiquidationCetSignatures) (*types.MsgSubmitLiquidationCetSignaturesResponse, error) {
+// SubmitLiquidationSignatures implements types.MsgServer.
+func (m msgServer) SubmitLiquidationSignatures(goCtx context.Context, msg *types.MsgSubmitLiquidationSignatures) (*types.MsgSubmitLiquidationSignaturesResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
@@ -548,38 +548,21 @@ func (m msgServer) SubmitLiquidationCetSignatures(goCtx context.Context, msg *ty
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
-	if loan.Status != types.LoanStatus_Liquidated {
-		return nil, types.ErrLoanNotLiquidated
-	}
 
-	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
-	if len(dlcMeta.LiquidationCet.AgencySignatures) > 0 {
-		return nil, types.ErrLiquidationSignaturesAlreadyExist
-	}
-
-	liquidationCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet.Tx)), true)
-	if len(msg.Signatures) != len(liquidationCet.Inputs) {
-		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
-	}
-
-	script, _ := hex.DecodeString(dlcMeta.MultisigScript)
-	agencyPubKey, _ := hex.DecodeString(loan.Agency)
-
-	for i, input := range liquidationCet.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(liquidationCet, i, input.SighashType, script)
-		if err != nil {
+	switch loan.Status {
+	case types.LoanStatus_Liquidated:
+		if err := m.handleLiquidationSignatures(ctx, loan, msg.Signatures); err != nil {
 			return nil, err
 		}
 
-		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
-
-		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
-			return nil, types.ErrInvalidSignature
+	case types.LoanStatus_Defaulted:
+		if err := m.handleDefaultLiquidationSignatures(ctx, loan, msg.Signatures); err != nil {
+			return nil, err
 		}
+
+	default:
+		return nil, types.ErrLoanNotLiquidated
 	}
 
-	dlcMeta.LiquidationCet.AgencySignatures = msg.Signatures
-	m.SetDLCMeta(ctx, msg.LoanId, dlcMeta)
-
-	return &types.MsgSubmitLiquidationCetSignaturesResponse{}, nil
+	return &types.MsgSubmitLiquidationSignaturesResponse{}, nil
 }

@@ -30,7 +30,7 @@ const (
 	Msg_Cancel_FullMethodName                           = "/side.lending.Msg/Cancel"
 	Msg_SubmitCancellationSignatures_FullMethodName     = "/side.lending.Msg/SubmitCancellationSignatures"
 	Msg_Repay_FullMethodName                            = "/side.lending.Msg/Repay"
-	Msg_SubmitLiquidationCetSignatures_FullMethodName   = "/side.lending.Msg/SubmitLiquidationCetSignatures"
+	Msg_SubmitLiquidationSignatures_FullMethodName      = "/side.lending.Msg/SubmitLiquidationSignatures"
 	Msg_SubmitPrice_FullMethodName                      = "/side.lending.Msg/SubmitPrice"
 	Msg_UpdateParams_FullMethodName                     = "/side.lending.Msg/UpdateParams"
 )
@@ -50,7 +50,7 @@ type MsgClient interface {
 	Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error)
 	SubmitCancellationSignatures(ctx context.Context, in *MsgSubmitCancellationSignatures, opts ...grpc.CallOption) (*MsgSubmitCancellationSignaturesResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
-	SubmitLiquidationCetSignatures(ctx context.Context, in *MsgSubmitLiquidationCetSignatures, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetSignaturesResponse, error)
+	SubmitLiquidationSignatures(ctx context.Context, in *MsgSubmitLiquidationSignatures, opts ...grpc.CallOption) (*MsgSubmitLiquidationSignaturesResponse, error)
 	// SubmitPrice submits the price for testing
 	SubmitPrice(ctx context.Context, in *MsgSubmitPrice, opts ...grpc.CallOption) (*MsgSubmitPriceResponse, error)
 	// UpdateParams defines a governance operation for updating the x/lending module
@@ -167,9 +167,9 @@ func (c *msgClient) Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOp
 	return out, nil
 }
 
-func (c *msgClient) SubmitLiquidationCetSignatures(ctx context.Context, in *MsgSubmitLiquidationCetSignatures, opts ...grpc.CallOption) (*MsgSubmitLiquidationCetSignaturesResponse, error) {
-	out := new(MsgSubmitLiquidationCetSignaturesResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitLiquidationCetSignatures_FullMethodName, in, out, opts...)
+func (c *msgClient) SubmitLiquidationSignatures(ctx context.Context, in *MsgSubmitLiquidationSignatures, opts ...grpc.CallOption) (*MsgSubmitLiquidationSignaturesResponse, error) {
+	out := new(MsgSubmitLiquidationSignaturesResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitLiquidationSignatures_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -209,7 +209,7 @@ type MsgServer interface {
 	Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error)
 	SubmitCancellationSignatures(context.Context, *MsgSubmitCancellationSignatures) (*MsgSubmitCancellationSignaturesResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
-	SubmitLiquidationCetSignatures(context.Context, *MsgSubmitLiquidationCetSignatures) (*MsgSubmitLiquidationCetSignaturesResponse, error)
+	SubmitLiquidationSignatures(context.Context, *MsgSubmitLiquidationSignatures) (*MsgSubmitLiquidationSignaturesResponse, error)
 	// SubmitPrice submits the price for testing
 	SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error)
 	// UpdateParams defines a governance operation for updating the x/lending module
@@ -257,8 +257,8 @@ func (UnimplementedMsgServer) SubmitCancellationSignatures(context.Context, *Msg
 func (UnimplementedMsgServer) Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Repay not implemented")
 }
-func (UnimplementedMsgServer) SubmitLiquidationCetSignatures(context.Context, *MsgSubmitLiquidationCetSignatures) (*MsgSubmitLiquidationCetSignaturesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitLiquidationCetSignatures not implemented")
+func (UnimplementedMsgServer) SubmitLiquidationSignatures(context.Context, *MsgSubmitLiquidationSignatures) (*MsgSubmitLiquidationSignaturesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitLiquidationSignatures not implemented")
 }
 func (UnimplementedMsgServer) SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitPrice not implemented")
@@ -477,20 +477,20 @@ func _Msg_Repay_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitLiquidationCetSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitLiquidationCetSignatures)
+func _Msg_SubmitLiquidationSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitLiquidationSignatures)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitLiquidationCetSignatures(ctx, in)
+		return srv.(MsgServer).SubmitLiquidationSignatures(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_SubmitLiquidationCetSignatures_FullMethodName,
+		FullMethod: Msg_SubmitLiquidationSignatures_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitLiquidationCetSignatures(ctx, req.(*MsgSubmitLiquidationCetSignatures))
+		return srv.(MsgServer).SubmitLiquidationSignatures(ctx, req.(*MsgSubmitLiquidationSignatures))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -583,8 +583,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_Repay_Handler,
 		},
 		{
-			MethodName: "SubmitLiquidationCetSignatures",
-			Handler:    _Msg_SubmitLiquidationCetSignatures_Handler,
+			MethodName: "SubmitLiquidationSignatures",
+			Handler:    _Msg_SubmitLiquidationSignatures_Handler,
 		},
 		{
 			MethodName: "SubmitPrice",

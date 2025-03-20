@@ -24,7 +24,7 @@ service Msg {
     rpc Cancel(MsgCancel) returns (MsgCancelResponse);
     rpc SubmitCancellationSignatures(MsgSubmitCancellationSignatures) returns (MsgSubmitCancellationSignaturesResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
-    rpc SubmitLiquidationCetSignatures(MsgSubmitLiquidationCetSignatures) returns (MsgSubmitLiquidationCetSignaturesResponse);
+    rpc SubmitLiquidationSignatures(MsgSubmitLiquidationSignatures) returns (MsgSubmitLiquidationSignaturesResponse);
 
     // SubmitPrice submits the price for testing 
     rpc SubmitPrice(MsgSubmitPrice) returns (MsgSubmitPriceResponse);
@@ -172,7 +172,7 @@ message MsgSubmitRepaymentAdaptorSignaturesResponse {
 
 }
 
-message MsgSubmitLiquidationCetSignatures {
+message MsgSubmitLiquidationSignatures {
     option (cosmos.msg.v1.signer) = "sender";
     
     string sender = 1;
@@ -180,7 +180,7 @@ message MsgSubmitLiquidationCetSignatures {
     repeated string signatures = 3;
 }
 
-message MsgSubmitLiquidationCetSignaturesResponse {
+message MsgSubmitLiquidationSignaturesResponse {
 
 }
 

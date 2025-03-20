@@ -9,10 +9,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgSubmitLiquidationCetSignatures{}
+var _ sdk.Msg = &MsgSubmitLiquidationSignatures{}
 
-func NewMsgSubmitLiquidationCetSignatures(sender string, loanId string, signatures []string) *MsgSubmitLiquidationCetSignatures {
-	return &MsgSubmitLiquidationCetSignatures{
+func NewMsgSubmitLiquidationSignatures(sender string, loanId string, signatures []string) *MsgSubmitLiquidationSignatures {
+	return &MsgSubmitLiquidationSignatures{
 		Sender:     sender,
 		LoanId:     loanId,
 		Signatures: signatures,
@@ -20,7 +20,7 @@ func NewMsgSubmitLiquidationCetSignatures(sender string, loanId string, signatur
 }
 
 // ValidateBasic performs basic message validation.
-func (m *MsgSubmitLiquidationCetSignatures) ValidateBasic() error {
+func (m *MsgSubmitLiquidationSignatures) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Sender); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}

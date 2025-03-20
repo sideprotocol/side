@@ -98,13 +98,13 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 	loans := k.GetLoans(ctx, types.LoanStatus_Liquidated)
 
 	for _, loan := range loans {
-		// check if the signed liquidation cet has been generated in the dlc meta
+		// check if the liquidation cet has been signed
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 		if len(dlcMeta.LiquidationCet.SignedTxHex) != 0 {
 			continue
 		}
 
-		// check if the adapted signature has been set in the dlc meta
+		// check if the borrower adapted signatures already exist
 		if len(dlcMeta.LiquidationCet.BorrowerAdaptedSignatures) == 0 {
 			// check if the event attestation has been submitted
 			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.LiquidationEventId)
@@ -112,8 +112,8 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 				continue
 			}
 
+			// decrypt the adaptor signatures
 			for _, adaptorSignature := range dlcMeta.LiquidationCet.BorrowerAdaptorSignatures {
-				// decrypt the adaptor signature
 				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
 				adaptorSecret, _ := hex.DecodeString(attestation.Signature)
 				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
@@ -125,11 +125,11 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 			}
 		}
 
-		// build signed liquidation cet if both adapted signatures(obviously exist) and agency signatures already exist
+		// build signed liquidation cet if both borrower adapted signatures(obviously exist) and agency signatures already exist
 		if len(dlcMeta.LiquidationCet.AgencySignatures) != 0 {
 			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.LiquidationCet.Tx, loan.BorrowerPubKey, dlcMeta.LiquidationCet.BorrowerAdaptedSignatures, loan.Agency, dlcMeta.LiquidationCet.AgencySignatures)
 			if err != nil {
-				k.Logger(ctx).Info("failed to build signed liquidation cet", "err", err)
+				k.Logger(ctx).Info("failed to build signed liquidation cet", "loan id", loan.VaultAddress, "err", err)
 			} else {
 				dlcMeta.LiquidationCet.SignedTxHex = hex.EncodeToString(signedTx)
 
@@ -153,13 +153,13 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 	loans := k.GetLoans(ctx, types.LoanStatus_Repaid)
 
 	for _, loan := range loans {
-		// check if the repayment cet has been signed in the dlc meta
+		// check if the repayment cet has been signed
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 		if len(dlcMeta.RepaymentCet.SignedTxHex) != 0 {
 			continue
 		}
 
-		// check if the agency adaptor signatures has been submitted
+		// check if the agency adaptor signatures have been submitted
 		if len(dlcMeta.RepaymentCet.AgencyAdaptorSignatures) == 0 {
 			continue
 		}

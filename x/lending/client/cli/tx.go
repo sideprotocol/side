@@ -42,7 +42,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdCancel())
 	cmd.AddCommand(CmdSubmitCancellationSignatures())
 	cmd.AddCommand(CmdRepay())
-	cmd.AddCommand(CmdSubmitLiquidationCetSignatures())
+	cmd.AddCommand(CmdSubmitLiquidationSignatures())
 	cmd.AddCommand(CmdSubmitPrice())
 
 	return cmd
@@ -356,7 +356,7 @@ func CmdSubmitRepaymentAdaptorSignatures() *cobra.Command {
 	return cmd
 }
 
-func CmdSubmitLiquidationCetSignatures() *cobra.Command {
+func CmdSubmitLiquidationSignatures() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "submit-liquidation-signatures [loan id] [DCA signatures]",
 		Short: "Submit the DCA liquidation signatures for the loan to be liquidated",
@@ -369,7 +369,7 @@ func CmdSubmitLiquidationCetSignatures() *cobra.Command {
 
 			signatures := strings.Split(args[1], listSeparator)
 
-			msg := types.NewMsgSubmitLiquidationCetSignatures(
+			msg := types.NewMsgSubmitLiquidationSignatures(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				signatures,
