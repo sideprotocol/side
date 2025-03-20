@@ -72,13 +72,13 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&params)
-	store.Set(types.ParamsStoreKey, bz)
+	store.Set(types.ParamsKey, bz)
 }
 
 func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	store := ctx.KVStore(k.storeKey)
 	var params types.Params
-	bz := store.Get(types.ParamsStoreKey)
+	bz := store.Get(types.ParamsKey)
 	k.cdc.MustUnmarshal(bz, &params)
 	return params
 }

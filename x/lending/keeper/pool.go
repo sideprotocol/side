@@ -14,14 +14,14 @@ func (k Keeper) SetPool(ctx sdk.Context, pool *types.LendingPool) {
 
 	bz := k.cdc.MustMarshal(pool)
 
-	store.Set(types.PoolStoreKey(pool.Id), bz)
+	store.Set(types.PoolKey(pool.Id), bz)
 }
 
 // HasPool returns true if the given pool exists, false otherwise
 func (k Keeper) HasPool(ctx sdk.Context, id string) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.PoolStoreKey(id))
+	return store.Has(types.PoolKey(id))
 }
 
 // GetPool gets the given pool
@@ -29,7 +29,7 @@ func (k Keeper) GetPool(ctx sdk.Context, id string) *types.LendingPool {
 	store := ctx.KVStore(k.storeKey)
 
 	var pool types.LendingPool
-	bz := store.Get(types.PoolStoreKey(id))
+	bz := store.Get(types.PoolKey(id))
 	k.cdc.MustUnmarshal(bz, &pool)
 
 	return &pool
@@ -51,7 +51,7 @@ func (k Keeper) GetAllPools(ctx sdk.Context) []*types.LendingPool {
 func (k Keeper) IteratePools(ctx sdk.Context, cb func(pool *types.LendingPool) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := storetypes.KVStorePrefixIterator(store, types.PoolStorePrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.PoolKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {

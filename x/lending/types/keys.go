@@ -18,40 +18,40 @@ const (
 )
 
 var (
-	Percent        = math.NewInt(100)
-	Permille       = math.NewInt(1000)
-	ParamsStoreKey = []byte{0x1}
+	Percent  = math.NewInt(100)
+	Permille = math.NewInt(1000)
 
-	PoolStorePrefix       = []byte{0x2}
-	LoanStorePrefix       = []byte{0x3}
-	DepositLogPrefix      = []byte{0x4}
-	RepaymentKeyPrefix    = []byte{0x5}
-	LoanDLCMetaKeyPrefix  = []byte{0x06}
-	CancellationKeyPrefix = []byte{0x07}
+	ParamsKey = []byte{0x01}
+	PriceKey  = []byte{0x02}
 
-	PriceKey = []byte{0x07}
+	PoolKeyPrefix         = []byte{0x10}
+	LoanKeyPrefix         = []byte{0x11}
+	DepositLogKeyPrefix   = []byte{0x12}
+	RepaymentKeyPrefix    = []byte{0x13}
+	DLCMetaKeyPrefix      = []byte{0x14}
+	CancellationKeyPrefix = []byte{0x15}
 )
 
-func PoolStoreKey(pool_id string) []byte {
-	return append(PoolStorePrefix, []byte(pool_id)...)
+func PoolKey(id string) []byte {
+	return append(PoolKeyPrefix, []byte(id)...)
 }
 
-func LoanStoreKey(vault string) []byte {
-	return append(LoanStorePrefix, []byte(vault)...)
+func LoanKey(id string) []byte {
+	return append(LoanKeyPrefix, []byte(id)...)
 }
 
 func DepositLogKey(txid string) []byte {
-	return append(DepositLogPrefix, []byte(txid)...)
+	return append(DepositLogKeyPrefix, []byte(txid)...)
 }
 
-func LoanDLCMetaKey(loanId string) []byte {
-	return append(LoanDLCMetaKeyPrefix, []byte(loanId)...)
-}
-
-func CancellationKey(loanId string) []byte {
-	return append(CancellationKeyPrefix, []byte(loanId)...)
+func DLCMetaKey(loanId string) []byte {
+	return append(DLCMetaKeyPrefix, []byte(loanId)...)
 }
 
 func RepaymentKey(loanId string) []byte {
 	return append(RepaymentKeyPrefix, []byte(loanId)...)
+}
+
+func CancellationKey(loanId string) []byte {
+	return append(CancellationKeyPrefix, []byte(loanId)...)
 }

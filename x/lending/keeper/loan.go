@@ -13,14 +13,14 @@ func (k Keeper) SetLoan(ctx sdk.Context, loan *types.Loan) {
 
 	bz := k.cdc.MustMarshal(loan)
 
-	store.Set(types.LoanStoreKey(loan.VaultAddress), bz)
+	store.Set(types.LoanKey(loan.VaultAddress), bz)
 }
 
 // HasLoan returns true if the given loan exists, false otherwise
 func (k Keeper) HasLoan(ctx sdk.Context, vault string) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.LoanStoreKey(vault))
+	return store.Has(types.LoanKey(vault))
 }
 
 // GetLoan gets the given loan
@@ -28,7 +28,7 @@ func (k Keeper) GetLoan(ctx sdk.Context, vault string) *types.Loan {
 	store := ctx.KVStore(k.storeKey)
 
 	var loan types.Loan
-	bz := store.Get(types.LoanStoreKey(vault))
+	bz := store.Get(types.LoanKey(vault))
 	k.cdc.MustUnmarshal(bz, &loan)
 
 	return &loan
@@ -38,7 +38,7 @@ func (k Keeper) GetLoan(ctx sdk.Context, vault string) *types.Loan {
 func (k Keeper) IterateLoans(ctx sdk.Context, cb func(loan *types.Loan) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := storetypes.KVStorePrefixIterator(store, types.LoanStorePrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.LoanKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
