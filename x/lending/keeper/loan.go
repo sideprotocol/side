@@ -17,18 +17,18 @@ func (k Keeper) SetLoan(ctx sdk.Context, loan *types.Loan) {
 }
 
 // HasLoan returns true if the given loan exists, false otherwise
-func (k Keeper) HasLoan(ctx sdk.Context, vault string) bool {
+func (k Keeper) HasLoan(ctx sdk.Context, id string) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.LoanKey(vault))
+	return store.Has(types.LoanKey(id))
 }
 
 // GetLoan gets the given loan
-func (k Keeper) GetLoan(ctx sdk.Context, vault string) *types.Loan {
+func (k Keeper) GetLoan(ctx sdk.Context, id string) *types.Loan {
 	store := ctx.KVStore(k.storeKey)
 
 	var loan types.Loan
-	bz := store.Get(types.LoanKey(vault))
+	bz := store.Get(types.LoanKey(id))
 	k.cdc.MustUnmarshal(bz, &loan)
 
 	return &loan

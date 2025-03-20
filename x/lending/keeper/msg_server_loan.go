@@ -174,20 +174,14 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, err
 	}
 
-	// TODO: retrieve from params
+	// TODO
 	collateralDecimal := sdkmath.NewInt(100000000)
 	borrowedDecimal := sdkmath.NewInt(1000000)
 
-	// verify LTV
-	// collateral value * ltv > borrow amount
+	// check LTV
 	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(sdkmath.NewInt(int64(poolConfig.Ltv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
 		return nil, types.ErrInsufficientCollateral
 	}
-
-	// verify liquidation events. TODO improve price interval
-	// if collateralAmount.Mul(event.TriggerPrice).Mul(borrowedDecimal).Quo(event.PriceDecimal).Mul(params.LiquidationThresholdPercent).Quo(types.Percent).LT(msg.BorrowAmount.Amount) {
-	// 	return nil, types.ErrInvalidPriceEvent
-	// }
 
 	loan.CollateralAmount = collateralAmount
 	loan.LiquidationEventId = liquidationEvent.Id
