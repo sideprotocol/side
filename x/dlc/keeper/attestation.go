@@ -25,6 +25,10 @@ func (k Keeper) HandleAttestation(ctx sdk.Context, sender string, eventId uint64
 		return types.ErrEventNotTriggered
 	}
 
+	if k.HasAttestationByEvent(ctx, eventId) {
+		return types.ErrAttestationAlreadyExists
+	}
+
 	pubKeyBytes, _ := hex.DecodeString(event.Pubkey)
 	sigBytes, _ := hex.DecodeString(signature)
 	msg := types.GetEventOutcomeHash(event, int(event.OutcomeIndex))
@@ -95,6 +99,13 @@ func (k Keeper) SetAttestation(ctx sdk.Context, attestation *types.DLCAttestatio
 	store.Set(types.AttestationKey(attestation.Id), bz)
 
 	store.Set(types.AttestationByEventKey(attestation.EventId), sdk.Uint64ToBigEndian(attestation.Id))
+}
+
+// HasAttestationByEvent returns true if the attestation of the given event exists, false otherwise
+func (k Keeper) HasAttestationByEvent(ctx sdk.Context, eventId uint64) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.AttestationByEventKey(eventId))
 }
 
 // GetAttestationByEvent gets the attestation by the given event
