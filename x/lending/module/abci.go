@@ -101,8 +101,10 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			})
 			loan.AuctionId = auction.Id
 
-			// trigger dlc event
-			k.DLCKeeper().TriggerDLCEvent(ctx, triggeredEventId, 0)
+			// trigger dlc event if not triggered yet
+			if !k.DLCKeeper().GetEvent(ctx, triggeredEventId).HasTriggered {
+				k.DLCKeeper().TriggerDLCEvent(ctx, triggeredEventId, 0)
+			}
 
 			// update loan
 			k.SetLoan(ctx, loan)
