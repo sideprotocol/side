@@ -123,7 +123,7 @@ import (
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	"github.com/sideprotocol/side/docs"
+	docs "github.com/sideprotocol/side/swagger"
 	auctionkeeper "github.com/sideprotocol/side/x/auction/keeper"
 	auctionmodule "github.com/sideprotocol/side/x/auction/module"
 	auctiontypes "github.com/sideprotocol/side/x/auction/types"
