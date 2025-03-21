@@ -42,7 +42,7 @@ func CreateMultisigScript(pubKeys []string) ([]byte, error) {
 	return builder.Script()
 }
 
-// Branch 2/3: PubKey with Time lock script for DCA/Borrower
+// Branch 2: PubKey with Time lock script for Borrower
 func CreatePubKeyTimeLockScript(pubKeyHex string, lockTime int64) ([]byte, error) {
 	pubKey, err := hex.DecodeString(pubKeyHex)
 	if err != nil {
@@ -78,14 +78,8 @@ func CreateTaprootAddress(internalKey *secp256k1.PublicKey, branches [][]byte, p
 func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, muturityTime int64, finalTimeout int64) (string, error) {
 	params := bitcoin.Network
 
-	// multisig script for liquidation cet and repayment
+	// multisig script for liquidation and repayment
 	multisigScript, err := CreateMultisigScript([]string{borrowerPubkey, dcaPubkey})
-	if err != nil {
-		return "", err
-	}
-
-	// forced liquidation script on loan defaulted for DCA
-	forcedRepaymentScript, err := CreatePubKeyTimeLockScript(dcaPubkey, muturityTime)
 	if err != nil {
 		return "", err
 	}
@@ -97,7 +91,7 @@ func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, muturityTime in
 	}
 
 	// Combine branches
-	branches := [][]byte{multisigScript, forcedRepaymentScript, timeoutRefundScript}
+	branches := [][]byte{multisigScript, timeoutRefundScript}
 
 	// Generate Taproot address
 	taprootAddress, err := CreateTaprootAddress(GetInternalKey(), branches, params)
