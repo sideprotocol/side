@@ -44,6 +44,25 @@ func (k Keeper) Pools(goCtx context.Context, req *types.QueryPoolsRequest) (*typ
 	return &types.QueryPoolsResponse{Pools: k.GetAllPools(ctx)}, nil
 }
 
+// PoolExchangeRate implements types.QueryServer.
+func (k Keeper) PoolExchangeRate(goCtx context.Context, req *types.QueryPoolExchangeRateRequest) (*types.QueryPoolExchangeRateResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasPool(ctx, req.PoolId) {
+		return nil, status.Error(codes.InvalidArgument, "pool does not exist")
+	}
+
+	pool := k.GetPool(ctx, req.PoolId)
+
+	exchangeRate := types.GetExchangeRate(pool.AvailableAmount, pool.TotalBorrowed, pool.TotalSTokens.Amount)
+
+	return &types.QueryPoolExchangeRateResponse{ExchangeRate: exchangeRate.String()}, nil
+}
+
 // CollateralAddress implements types.QueryServer.
 func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollateralAddressRequest) (*types.QueryCollateralAddressResponse, error) {
 	if req == nil {

@@ -85,8 +85,8 @@ func CmdAddLiquidity() *cobra.Command {
 
 func CmdRemoveLiquidity() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "remove-liquidity [shares]",
-		Short: "Remove liquidity by the specified shares",
+		Use:   "remove-liquidity [sToken amount]",
+		Short: "Remove liquidity by the specified sToken amount",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -94,14 +94,14 @@ func CmdRemoveLiquidity() *cobra.Command {
 				return err
 			}
 
-			shares, err := sdk.ParseCoinNormalized(args[0])
+			sTokens, err := sdk.ParseCoinNormalized(args[0])
 			if err != nil {
 				return err
 			}
 
 			msg := types.NewMsgRemoveLiquidity(
 				clientCtx.GetFromAddress().String(),
-				shares,
+				sTokens,
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

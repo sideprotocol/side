@@ -25,6 +25,10 @@ service Query {
         option (google.api.http).get = "/side/lending/pools";
     }
 
+    rpc PoolExchangeRate(QueryPoolExchangeRateRequest) returns (QueryPoolExchangeRateResponse) {
+        option (google.api.http).get = "/side/lending/pool/exchange_rate";
+    }
+
     rpc CollateralAddress(QueryCollateralAddressRequest) returns (QueryCollateralAddressResponse) {
         option (google.api.http).get = "/side/lending/collateral/address";
     }
@@ -81,6 +85,16 @@ message QueryPoolsRequest {
 message QueryPoolsResponse {
     repeated LendingPool pools = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryPoolExchangeRateRequest is request type for the Query/PoolExchangeRate RPC method.
+message QueryPoolExchangeRateRequest {
+    string pool_id = 1;
+}
+
+// QueryPoolExchangeRateResponse is response type for the Query/PoolExchangeRate RPC method.
+message QueryPoolExchangeRateResponse {
+    string exchange_rate = 1;
 }
 
 message QueryLiquidationEventRequest {

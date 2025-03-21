@@ -22,6 +22,7 @@ const (
 	Query_Params_FullMethodName            = "/side.lending.Query/Params"
 	Query_Pool_FullMethodName              = "/side.lending.Query/Pool"
 	Query_Pools_FullMethodName             = "/side.lending.Query/Pools"
+	Query_PoolExchangeRate_FullMethodName  = "/side.lending.Query/PoolExchangeRate"
 	Query_CollateralAddress_FullMethodName = "/side.lending.Query/CollateralAddress"
 	Query_LiquidationEvent_FullMethodName  = "/side.lending.Query/LiquidationEvent"
 	Query_Loan_FullMethodName              = "/side.lending.Query/Loan"
@@ -41,6 +42,7 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	Pool(ctx context.Context, in *QueryPoolRequest, opts ...grpc.CallOption) (*QueryPoolResponse, error)
 	Pools(ctx context.Context, in *QueryPoolsRequest, opts ...grpc.CallOption) (*QueryPoolsResponse, error)
+	PoolExchangeRate(ctx context.Context, in *QueryPoolExchangeRateRequest, opts ...grpc.CallOption) (*QueryPoolExchangeRateResponse, error)
 	CollateralAddress(ctx context.Context, in *QueryCollateralAddressRequest, opts ...grpc.CallOption) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(ctx context.Context, in *QueryLiquidationEventRequest, opts ...grpc.CallOption) (*QueryLiquidationEventResponse, error)
 	Loan(ctx context.Context, in *QueryLoanRequest, opts ...grpc.CallOption) (*QueryLoanResponse, error)
@@ -81,6 +83,15 @@ func (c *queryClient) Pool(ctx context.Context, in *QueryPoolRequest, opts ...gr
 func (c *queryClient) Pools(ctx context.Context, in *QueryPoolsRequest, opts ...grpc.CallOption) (*QueryPoolsResponse, error) {
 	out := new(QueryPoolsResponse)
 	err := c.cc.Invoke(ctx, Query_Pools_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) PoolExchangeRate(ctx context.Context, in *QueryPoolExchangeRateRequest, opts ...grpc.CallOption) (*QueryPoolExchangeRateResponse, error) {
+	out := new(QueryPoolExchangeRateResponse)
+	err := c.cc.Invoke(ctx, Query_PoolExchangeRate_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -176,6 +187,7 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	Pool(context.Context, *QueryPoolRequest) (*QueryPoolResponse, error)
 	Pools(context.Context, *QueryPoolsRequest) (*QueryPoolsResponse, error)
+	PoolExchangeRate(context.Context, *QueryPoolExchangeRateRequest) (*QueryPoolExchangeRateResponse, error)
 	CollateralAddress(context.Context, *QueryCollateralAddressRequest) (*QueryCollateralAddressResponse, error)
 	LiquidationEvent(context.Context, *QueryLiquidationEventRequest) (*QueryLiquidationEventResponse, error)
 	Loan(context.Context, *QueryLoanRequest) (*QueryLoanResponse, error)
@@ -200,6 +212,9 @@ func (UnimplementedQueryServer) Pool(context.Context, *QueryPoolRequest) (*Query
 }
 func (UnimplementedQueryServer) Pools(context.Context, *QueryPoolsRequest) (*QueryPoolsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Pools not implemented")
+}
+func (UnimplementedQueryServer) PoolExchangeRate(context.Context, *QueryPoolExchangeRateRequest) (*QueryPoolExchangeRateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolExchangeRate not implemented")
 }
 func (UnimplementedQueryServer) CollateralAddress(context.Context, *QueryCollateralAddressRequest) (*QueryCollateralAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CollateralAddress not implemented")
@@ -291,6 +306,24 @@ func _Query_Pools_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Pools(ctx, req.(*QueryPoolsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_PoolExchangeRate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolExchangeRateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolExchangeRate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PoolExchangeRate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolExchangeRate(ctx, req.(*QueryPoolExchangeRateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -475,6 +508,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Pools",
 			Handler:    _Query_Pools_Handler,
+		},
+		{
+			MethodName: "PoolExchangeRate",
+			Handler:    _Query_PoolExchangeRate_Handler,
 		},
 		{
 			MethodName: "CollateralAddress",

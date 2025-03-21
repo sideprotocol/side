@@ -125,6 +125,35 @@ func CmdQueryPools() *cobra.Command {
 	return cmd
 }
 
+func CmdQueryPoolExchangeRate() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "exchange-rate [pool id]",
+		Short: "Query the current exchange rate of the given lending pool",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.PoolExchangeRate(cmd.Context(), &types.QueryPoolExchangeRateRequest{
+				PoolId: args[0],
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
 func CmdQueryCollateralAddress() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "collateral-address [borrower public key] [agency public key] [maturity time]",

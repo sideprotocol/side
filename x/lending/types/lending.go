@@ -10,9 +10,13 @@ import (
 	"github.com/sideprotocol/side/crypto/adaptor"
 )
 
-// GetExchangeRate gets the sToken exchange rate
+// GetExchangeRate calculates the sToken exchange rate according to the given params
 func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalSTokens sdkmath.Int) sdkmath.LegacyDec {
-	return sdkmath.LegacyNewDecFromBigInt(totalAvailable.Add(totalBorrowed).BigInt()).QuoInt(totalSTokens)
+	if totalSTokens.IsZero() {
+		return sdkmath.LegacyOneDec()
+	}
+
+	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed)).Quo(totalSTokens.ToLegacyDec())
 }
 
 // GetLiquidationPrice gets the liquidation price according to the liquidation LTV
