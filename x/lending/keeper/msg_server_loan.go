@@ -35,7 +35,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	pool := m.GetPool(ctx, msg.PoolId)
 	if pool.Status != types.PoolStatus_ACTIVE {
-		return nil, types.ErrInactivePool
+		return nil, types.ErrPoolNotActive
 	}
 
 	if msg.BorrowAmount.Denom != pool.Supply.Denom {

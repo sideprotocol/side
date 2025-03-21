@@ -59,6 +59,10 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	}
 
 	pool := m.GetPool(ctx, msg.PoolId)
+	if pool.Status == types.PoolStatus_PAUSED {
+		return nil, types.ErrPoolPaused
+	}
+
 	if msg.Amount.Denom != pool.Supply.Denom {
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
 	}
@@ -116,7 +120,7 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 
 	pool := m.GetPool(ctx, msg.STokens.Denom)
 	if pool.Status != types.PoolStatus_ACTIVE {
-		return nil, types.ErrInactivePool
+		return nil, types.ErrPoolNotActive
 	}
 
 	var withdrawAmount = m.GetUnderlyingAssetAmount(ctx, pool, msg.STokens.Amount)
@@ -170,8 +174,9 @@ func (m msgServer) UpdatePoolConfig(goCtx context.Context, msg *types.MsgUpdateP
 	}
 
 	pool := m.GetPool(ctx, msg.PoolId)
-	pool.Config = msg.Config
+	m.UpdatePoolStatus(ctx, pool, &msg.Config)
 
+	pool.Config = msg.Config
 	m.SetPool(ctx, pool)
 
 	return &types.MsgUpdatePoolConfigResponse{}, nil

@@ -16,8 +16,9 @@ var (
 	ErrInvalidPoolConfig     = errorsmod.Register(ModuleName, 2002, "invalid pool config")
 	ErrPoolAlreadyExists     = errorsmod.Register(ModuleName, 2003, "pool already exists")
 	ErrPoolDoesNotExist      = errorsmod.Register(ModuleName, 2004, "pool does not exist")
-	ErrInactivePool          = errorsmod.Register(ModuleName, 2005, "inactive pool")
-	ErrInsufficientLiquidity = errorsmod.Register(ModuleName, 2006, "insufficient liquidity")
+	ErrPoolPaused            = errorsmod.Register(ModuleName, 2005, "pool paused")
+	ErrPoolNotActive         = errorsmod.Register(ModuleName, 2006, "pool not active")
+	ErrInsufficientLiquidity = errorsmod.Register(ModuleName, 2007, "insufficient liquidity")
 
 	ErrInvalidPubKey          = errorsmod.Register(ModuleName, 3001, "invalid pubkey")
 	ErrInvalidMaturityTime    = errorsmod.Register(ModuleName, 3002, "maturity time great than 0")

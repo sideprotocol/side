@@ -101,6 +101,26 @@ func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, amount sdk.Coin,
 	k.SetPool(ctx, pool)
 }
 
+// UpdatePoolStatus updates the pool status with the given new config
+func (k Keeper) UpdatePoolStatus(ctx sdk.Context, pool *types.LendingPool, newConfig *types.PoolConfig) {
+	switch {
+	case newConfig.Paused && !pool.Config.Paused:
+		pool.Status = types.PoolStatus_PAUSED
+
+	case !newConfig.Paused && pool.Config.Paused:
+		if pool.Supply.IsZero() {
+			pool.Status = types.PoolStatus_INACTIVE
+		} else {
+			pool.Status = types.PoolStatus_ACTIVE
+		}
+
+	default:
+		return
+	}
+
+	k.SetPool(ctx, pool)
+}
+
 // GetSTokenAmount calculates the sToken amount from the given deposit amount
 func (k Keeper) GetSTokenAmount(ctx sdk.Context, pool *types.LendingPool, depositAmount sdkmath.Int) sdkmath.Int {
 	return depositAmount.Mul(pool.TotalSTokens.Amount).Quo(pool.AvailableAmount.Add(pool.TotalBorrowed))

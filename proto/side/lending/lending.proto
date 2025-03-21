@@ -12,6 +12,7 @@ option go_package = "github.com/sideprotocol/side/x/lending/types";
 enum PoolStatus {
     INACTIVE = 0;
     ACTIVE = 1;
+    PAUSED = 2;
 }
 
 // Lending pool config
@@ -46,6 +47,8 @@ message PoolConfig {
     uint32 liquidation_threshold = 8;
     // liquidation penalty permille
     uint32 liquidation_penalty = 9;
+    // indicates if the pool is paused
+    bool paused = 10;
 }
 
 message LendingPool {
