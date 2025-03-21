@@ -663,6 +663,7 @@ func New(
 		keys[lendingtypes.MemStoreKey],
 		app.AccountKeeper,
 		app.BankKeeper,
+		app.MintKeeper,
 		nil,
 		app.AuctionKeeper,
 		app.DLCKeeper,

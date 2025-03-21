@@ -80,7 +80,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	poolConfig := m.GetPool(ctx, msg.PoolId).Config
 
-	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.BorrowRate))).Quo(types.Permille)
+	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.BorrowAPR))).Quo(types.Permille)
 	protocolFee := interest.Mul(sdkmath.NewInt(int64(poolConfig.ReserveFactor))).Quo(types.Permille)
 
 	if msg.BorrowAmount.Amount.LTE(poolConfig.OriginationFee) {
@@ -94,13 +94,13 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Agency:                    agency.Pubkey,
 		MaturityTime:              msg.MaturityTime,
 		FinalTimeout:              msg.MaturityTime + m.FinalTimeoutDuration(ctx),
+		PoolId:                    msg.PoolId,
 		BorrowAmount:              msg.BorrowAmount,
 		OriginationFee:            poolConfig.OriginationFee,
 		Interest:                  interest,
 		ProtocolFee:               protocolFee,
 		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
 		RepaymentEventId:          repaymentEvent.Id,
-		PoolId:                    msg.PoolId,
 		CreateAt:                  ctx.BlockTime(),
 		Status:                    types.LoanStatus_Requested,
 	}
@@ -114,8 +114,8 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
 			sdk.NewAttribute(types.AttributeKeyMuturityTime, fmt.Sprint(loan.MaturityTime)),
 			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
-			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
 			sdk.NewAttribute(types.AttributeKeyPoolId, loan.PoolId),
+			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
 		))
 
 	return &types.MsgApplyResponse{}, nil
@@ -179,7 +179,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	borrowedDecimal := sdkmath.NewInt(1000000)
 
 	// check LTV
-	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(sdkmath.NewInt(int64(poolConfig.Ltv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
+	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
 		return nil, types.ErrInsufficientCollateral
 	}
 

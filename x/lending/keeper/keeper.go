@@ -7,6 +7,7 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -19,6 +20,7 @@ type (
 
 		authKeeper      types.AccountKeeper
 		bankKeeper      types.BankKeeper
+		mintKeeper      mintkeeper.Keeper
 		oracleKeeper    types.OracleKeeper
 		auctionKeeper   types.AuctionKeeper
 		dlcKeeper       types.DLCKeeper
@@ -34,6 +36,7 @@ func NewKeeper(
 	memKey storetypes.StoreKey,
 	ak types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	mintKeeper mintkeeper.Keeper,
 	oracleKeeper types.OracleKeeper,
 	auctionKeeper types.AuctionKeeper,
 	dlcKeeper types.DLCKeeper,
@@ -51,6 +54,7 @@ func NewKeeper(
 		memKey:          memKey,
 		authKeeper:      ak,
 		bankKeeper:      bankKeeper,
+		mintKeeper:      mintKeeper,
 		oracleKeeper:    oracleKeeper,
 		auctionKeeper:   auctionKeeper,
 		dlcKeeper:       dlcKeeper,
@@ -85,6 +89,15 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	k.cdc.MustUnmarshal(bz, &params)
 
 	return params
+}
+
+func (k Keeper) GetBlocksPerYear(ctx sdk.Context) uint64 {
+	params, err := k.mintKeeper.Params.Get(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	return params.BlocksPerYear
 }
 
 func (k Keeper) OracleKeeper() types.OracleKeeper {

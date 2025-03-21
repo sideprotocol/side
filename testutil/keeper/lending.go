@@ -47,6 +47,7 @@ func LendingKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		memStoreKey,
 		app.AccountKeeper,
 		app.BankKeeper,
+		app.MintKeeper,
 		nil,
 		app.AuctionKeeper,
 		app.DLCKeeper,

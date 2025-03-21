@@ -10,6 +10,11 @@ import (
 	"github.com/sideprotocol/side/crypto/adaptor"
 )
 
+// GetExchangeRate gets the sToken exchange rate
+func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalSTokens sdkmath.Int) sdkmath.LegacyDec {
+	return sdkmath.LegacyNewDecFromBigInt(totalAvailable.Add(totalBorrowed).BigInt()).QuoInt(totalSTokens)
+}
+
 // GetLiquidationPrice gets the liquidation price according to the liquidation LTV
 func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowedAmount sdkmath.Int, lltv sdkmath.Int) sdkmath.Int {
 	// liquidation price = borrowed amount / (lltv/100) / collateral amount
@@ -37,8 +42,8 @@ func AdaptorPointFromSecret(secret []byte) string {
 
 // ValidatePoolConfig validates the given pool config
 func ValidatePoolConfig(config PoolConfig) error {
-	if config.BorrowRate <= config.SupplyRate {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow rate must be greater than supply rate")
+	if config.BorrowAPR == 0 || config.BorrowAPR <= 1000 {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1000)")
 	}
 
 	if config.SupplyCap.IsNil() || config.SupplyCap.IsNegative() {
@@ -61,8 +66,8 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid liquidation threshold")
 	}
 
-	if config.Ltv == 0 || config.Ltv >= 100 || config.Ltv > config.LiquidationThreshold {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid ltv")
+	if config.MaxLtv == 0 || config.MaxLtv >= 100 || config.MaxLtv > config.LiquidationThreshold {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid max ltv")
 	}
 
 	return nil

@@ -32,13 +32,11 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	}
 
 	pool := &types.LendingPool{
-		Id:              msg.Id,
-		Supply:          sdk.NewCoin(msg.LendingAsset, sdkmath.ZeroInt()),
-		AvailableAmount: sdkmath.ZeroInt(),
-		BorrowedAmount:  sdkmath.ZeroInt(),
-		TotalShares:     sdkmath.ZeroInt(),
-		Config:          msg.Config,
-		Status:          types.PoolStatus_INACTIVE,
+		Id:           msg.Id,
+		Supply:       sdk.NewCoin(msg.LendingAsset, sdkmath.ZeroInt()),
+		TotalSTokens: sdk.NewCoin(msg.Id, sdkmath.ZeroInt()),
+		Config:       msg.Config,
+		Status:       types.PoolStatus_INACTIVE,
 	}
 
 	m.SetPool(ctx, pool)
@@ -65,40 +63,40 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
 	}
 
-	var sharesAmount sdkmath.Int
+	var sTokenAmount sdkmath.Int
 
 	if pool.Supply.IsZero() {
-		// active pool on first deposit
+		// activate pool on first deposit
 		pool.Status = types.PoolStatus_ACTIVE
-		sharesAmount = msg.Amount.Amount
+		sTokenAmount = msg.Amount.Amount
 	} else {
-		sharesAmount = msg.Amount.Amount.Mul(pool.TotalShares).Quo(pool.Supply.Amount)
+		sTokenAmount = m.GetSTokenAmount(ctx, pool, msg.Amount.Amount)
 	}
 
 	pool.Supply = pool.Supply.Add(msg.Amount)
 	pool.AvailableAmount = pool.AvailableAmount.Add(msg.Amount.Amount)
-	pool.TotalShares = pool.TotalShares.Add(sharesAmount)
+	pool.TotalSTokens = pool.TotalSTokens.AddAmount(sTokenAmount)
 
 	m.SetPool(ctx, pool)
 
-	shares := sdk.NewCoin(pool.Id, sharesAmount)
+	sTokens := sdk.NewCoin(pool.Id, sTokenAmount)
 
 	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Lender), types.ModuleName, sdk.NewCoins(msg.Amount)); err != nil {
 		return nil, err
 	}
 
-	if err := m.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(shares)); err != nil {
+	if err := m.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sTokens)); err != nil {
 		return nil, err
 	}
 
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Lender), sdk.NewCoins(shares)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Lender), sdk.NewCoins(sTokens)); err != nil {
 		return nil, err
 	}
 
 	// Emit Events
 	m.EmitEvent(ctx, msg.Lender,
 		sdk.NewAttribute("deposit", msg.Amount.String()),
-		sdk.NewAttribute("shares", shares.String()),
+		sdk.NewAttribute("shares", sTokens.String()),
 	)
 
 	return &types.MsgAddLiquidityResponse{}, nil
@@ -112,33 +110,33 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasPool(ctx, msg.Shares.Denom) {
+	if !m.HasPool(ctx, msg.STokens.Denom) {
 		return nil, types.ErrPoolDoesNotExist
 	}
 
-	pool := m.GetPool(ctx, msg.Shares.Denom)
+	pool := m.GetPool(ctx, msg.STokens.Denom)
 	if pool.Status != types.PoolStatus_ACTIVE {
 		return nil, types.ErrInactivePool
 	}
 
-	var withdrawAmount = msg.Shares.Amount.Mul(pool.Supply.Amount).Quo(pool.TotalShares)
+	var withdrawAmount = m.GetUnderlyingAssetAmount(ctx, pool, msg.STokens.Amount)
 	if withdrawAmount.GT(pool.AvailableAmount) {
 		return nil, types.ErrInsufficientLiquidity
 	}
 
 	pool.Supply = pool.Supply.SubAmount(withdrawAmount)
 	pool.AvailableAmount = pool.AvailableAmount.Sub(withdrawAmount)
-	pool.TotalShares = pool.TotalShares.Sub(msg.Shares.Amount)
+	pool.TotalSTokens = pool.TotalSTokens.Sub(msg.STokens)
 
 	m.SetPool(ctx, pool)
 
 	withdrawAsset := sdk.NewCoin(pool.Supply.Denom, withdrawAmount)
 
-	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Lender), types.ModuleName, sdk.NewCoins(msg.Shares)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Lender), types.ModuleName, sdk.NewCoins(msg.STokens)); err != nil {
 		return nil, err
 	}
 
-	if err := m.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(msg.Shares)); err != nil {
+	if err := m.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(msg.STokens)); err != nil {
 		return nil, err
 	}
 
@@ -148,7 +146,7 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 
 	// Emit Events
 	m.EmitEvent(ctx, msg.Lender,
-		sdk.NewAttribute("burn", msg.Shares.String()),
+		sdk.NewAttribute("burn", msg.STokens.String()),
 		sdk.NewAttribute("withdraw", withdrawAsset.String()),
 	)
 

@@ -49,7 +49,7 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 	}
 
 	// update pool
-	k.AfterPoolRepaid(ctx, loan.PoolId, loan.BorrowAmount, loan.Interest.Sub(loan.ProtocolFee))
+	k.AfterPoolRepaid(ctx, loan.PoolId, loan.BorrowAmount, loan.Interest, loan.ProtocolFee)
 
 	loan.Status = types.LoanStatus_Closed
 	k.SetLoan(ctx, loan)

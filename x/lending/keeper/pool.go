@@ -35,7 +35,22 @@ func (k Keeper) GetPool(ctx sdk.Context, id string) *types.LendingPool {
 	return &pool
 }
 
-// GetAllPools returns all pools
+// GetPools gets pools by the given status
+func (k Keeper) GetPools(ctx sdk.Context, status types.PoolStatus) []*types.LendingPool {
+	var pools []*types.LendingPool
+
+	k.IteratePools(ctx, func(pool *types.LendingPool) (stop bool) {
+		if pool.Status == status {
+			pools = append(pools, pool)
+		}
+
+		return false
+	})
+
+	return pools
+}
+
+// GetAllPools gets all pools
 func (k Keeper) GetAllPools(ctx sdk.Context) []*types.LendingPool {
 	var pools []*types.LendingPool
 
@@ -69,18 +84,29 @@ func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, amount sdk.Coi
 	pool := k.GetPool(ctx, poolId)
 
 	pool.AvailableAmount = pool.AvailableAmount.Sub(amount.Amount)
-	pool.BorrowedAmount = pool.BorrowedAmount.Add(amount.Amount)
+	pool.TotalBorrowed = pool.TotalBorrowed.Add(amount.Amount)
 
 	k.SetPool(ctx, pool)
 }
 
 // AfterPoolRepaid is the hook which is invoked after the loan is repaid
-func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, amount sdk.Coin, extraFees sdkmath.Int) {
+func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, amount sdk.Coin, interest sdkmath.Int, protocolFee sdkmath.Int) {
 	pool := k.GetPool(ctx, poolId)
 
-	pool.Supply = pool.Supply.AddAmount(extraFees)
-	pool.AvailableAmount = pool.AvailableAmount.Add(amount.Amount).Add(extraFees)
-	pool.BorrowedAmount = pool.BorrowedAmount.Sub(amount.Amount)
+	pool.Supply = pool.Supply.AddAmount(interest).SubAmount(protocolFee)
+	pool.AvailableAmount = pool.AvailableAmount.Add(amount.Amount).Add(interest).Sub(protocolFee)
+	pool.TotalBorrowed = pool.TotalBorrowed.Sub(amount.Amount)
+	pool.TotalReserves = pool.TotalReserves.Add(protocolFee)
 
 	k.SetPool(ctx, pool)
+}
+
+// GetSTokenAmount calculates the sToken amount from the given deposit amount
+func (k Keeper) GetSTokenAmount(ctx sdk.Context, pool *types.LendingPool, depositAmount sdkmath.Int) sdkmath.Int {
+	return depositAmount.Mul(pool.TotalSTokens.Amount).Quo(pool.AvailableAmount.Add(pool.TotalBorrowed))
+}
+
+// GetUnderlyingAssetAmount calculates the underlying asset amount from the given sToken amount
+func (k Keeper) GetUnderlyingAssetAmount(ctx sdk.Context, pool *types.LendingPool, sTokenAmount sdkmath.Int) sdkmath.Int {
+	return sTokenAmount.Mul(pool.AvailableAmount.Add(pool.TotalBorrowed)).Quo(pool.TotalSTokens.Amount)
 }

@@ -7,10 +7,10 @@ import (
 
 var _ sdk.Msg = &MsgRemoveLiquidity{}
 
-func NewMsgRemoveLiquidity(lender string, shares sdk.Coin) *MsgRemoveLiquidity {
+func NewMsgRemoveLiquidity(lender string, sTokens sdk.Coin) *MsgRemoveLiquidity {
 	return &MsgRemoveLiquidity{
-		Lender: lender,
-		Shares: shares,
+		Lender:  lender,
+		STokens: sTokens,
 	}
 }
 
@@ -20,8 +20,8 @@ func (m *MsgRemoveLiquidity) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	if !m.Shares.IsValid() || !m.Shares.IsPositive() {
-		return errorsmod.Wrap(ErrInvalidAmount, "shares must be positive")
+	if !m.STokens.IsValid() || !m.STokens.IsPositive() {
+		return errorsmod.Wrap(ErrInvalidAmount, "sTokens must be positive")
 	}
 
 	return nil

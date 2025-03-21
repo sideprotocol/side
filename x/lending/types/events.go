@@ -16,10 +16,9 @@ const (
 	AttributeKeyAgencyPubKey     = "agency_pub_key"
 	AttributeKeyMuturityTime     = "muturity_time"
 	AttributeKeyFinalTimeout     = "final_timeout"
+	AttributeKeyPoolId           = "pool_id"
 	AttributeKeyCollateralAmount = "collateral_amount"
 	AttributeKeyBorrowAmount     = "borrow_amount"
-	AttributeKeyPoolId           = "pool_id"
-	AttributeKeyEventId          = "event_id"
 
 	AttributeKeyLoanId = "loan_id"
 

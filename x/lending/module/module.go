@@ -144,7 +144,10 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block
-func (am AppModule) BeginBlock(_ context.Context) error {
+func (am AppModule) BeginBlock(ctx context.Context) error {
+	c := sdk.UnwrapSDKContext(ctx)
+	BeginBlocker(c, am.keeper)
+
 	return nil
 }
 

@@ -87,7 +87,7 @@ message MsgRemoveLiquidity {
     option (cosmos.msg.v1.signer) = "lender";
 
     string lender = 1;
-    cosmos.base.v1beta1.Coin shares = 2 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin stokens = 2 [(gogoproto.nullable) = false, (gogoproto.customname) = "STokens"];
 }
 
 message MsgRemoveLiquidityResponse {}

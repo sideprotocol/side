@@ -25,7 +25,7 @@ func (k Keeper) HandleBiddedAsset(ctx sdk.Context, loanId string, moduleAccount 
 		return err
 	}
 
-	k.AfterPoolRepaid(ctx, loan.PoolId, asset.SubAmount(loan.Interest), loan.Interest.Sub(loan.ProtocolFee))
+	k.AfterPoolRepaid(ctx, loan.PoolId, asset.SubAmount(loan.Interest), loan.Interest, loan.ProtocolFee)
 
 	return nil
 }

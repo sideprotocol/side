@@ -14,7 +14,12 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
-// EndBlocker called at every block
+// BeginBlocker called at the beginning of each block
+func BeginBlocker(ctx sdk.Context, k keeper.Keeper) {
+	updatePools(ctx, k)
+}
+
+// EndBlocker called at the end of each block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handleActiveLoans(ctx, k)
 
@@ -281,5 +286,28 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 		}
 
 		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
+	}
+}
+
+// updatePools updates all active pools
+func updatePools(ctx sdk.Context, k keeper.Keeper) {
+	// get all active pools
+	pools := k.GetPools(ctx, types.PoolStatus_ACTIVE)
+
+	// get blocks per year
+	blocksPerYear := k.GetBlocksPerYear(ctx)
+
+	for _, pool := range pools {
+		// update total borrowed amount every block
+		//
+		// Formula:
+		//
+		// borrowIndex_new = borrowIndex_old * (1 + borrowAPR/blocksPerYear)
+		// totalBorrowed_new = totalBorrowed_old * borrowIndex_new/borrowIndex_old
+
+		borrowIndexRatioNumerator := int64(1000*blocksPerYear) + int64(pool.Config.BorrowAPR)
+		borrowIndexRatioDenominator := int64(1000 * blocksPerYear)
+
+		pool.TotalBorrowed = pool.TotalBorrowed.Mul(sdkmath.NewInt(borrowIndexRatioNumerator).Quo(sdkmath.NewInt(borrowIndexRatioDenominator)))
 	}
 }
