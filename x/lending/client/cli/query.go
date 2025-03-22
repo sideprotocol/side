@@ -192,8 +192,8 @@ func CmdQueryCollateralAddress() *cobra.Command {
 
 func CmdQueryLiquidationEvent() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "liquidation-event [pool id] [collateral amount] [borrowed amount]",
-		Short: "Query the corresponding liquidation event according to the collateral amount and borrowed amount",
+		Use:   "liquidation-event [pool id] [collateral amount] [borrow amount]",
+		Short: "Query the corresponding liquidation event according to the collateral and borrow amounts",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -320,7 +320,7 @@ func CmdQueryLoansByAddress() *cobra.Command {
 func CmdQueryLoanCetInfos() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "cet-infos [loan id] [collateral amount]",
-		Short: "Query the liquidation CET info according to the given loan id or public keys",
+		Short: "Query the liquidation CET info according to the given loan id or collateral amount",
 		Args:  cobra.RangeArgs(1, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)

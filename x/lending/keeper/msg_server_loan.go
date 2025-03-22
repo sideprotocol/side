@@ -148,7 +148,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		}
 	}
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(poolConfig.LiquidationThreshold)))
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
 	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
 		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 	}

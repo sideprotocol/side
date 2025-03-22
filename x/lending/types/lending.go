@@ -11,6 +11,8 @@ import (
 )
 
 // GetExchangeRate calculates the sToken exchange rate according to the given params
+// Formula:
+// exchange rate = (totalAvailable + total borrowed) / totalSTokens
 func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalSTokens sdkmath.Int) sdkmath.LegacyDec {
 	if totalSTokens.IsZero() {
 		return sdkmath.LegacyOneDec()
@@ -19,10 +21,12 @@ func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, tota
 	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed)).Quo(totalSTokens.ToLegacyDec())
 }
 
-// GetLiquidationPrice gets the liquidation price according to the liquidation LTV
-func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowedAmount sdkmath.Int, lltv sdkmath.Int) sdkmath.Int {
-	// liquidation price = borrowed amount / (lltv/100) / collateral amount
-	liquidationPrice := borrowedAmount.Mul(sdkmath.NewInt(100000000)).Mul(Percent).Quo(lltv).Quo(collateralAmount).Quo(sdkmath.NewInt(1000000))
+// GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
+// Formula:
+// liquidation price = (borrow amount + interest) / lltv / collateral amount
+func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int, borrowAPR uint32, lltv uint32) sdkmath.Int {
+	interest := borrowAmount.Mul(sdkmath.NewInt(int64(borrowAPR))).Quo(Permille)
+	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewInt(100000000)).Mul(Percent).Quo(sdkmath.NewInt(int64(lltv))).Quo(collateralAmount).Quo(sdkmath.NewInt(1000000))
 
 	// price precision
 	precision := sdkmath.NewInt(100)

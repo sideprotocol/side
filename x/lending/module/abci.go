@@ -43,6 +43,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			k.Logger(ctx).Info("failed to get price", "err", err)
 		}
 
+		poolConfig := k.GetPool(ctx, loan.VaultAddress).Config
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 
 		// check if the loan has defaulted
@@ -65,7 +66,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				),
 			)
 		} else if !currentPrice.IsZero() {
-			liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.LiquidationThreshold)))
+			liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
 
 			// check if the loan is to be liquidated
 			if currentPrice.LTE(liquidationPrice) {

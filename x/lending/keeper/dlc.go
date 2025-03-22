@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
@@ -32,7 +31,7 @@ func (k Keeper) GetDLCMeta(ctx sdk.Context, loanId string) *types.DLCMeta {
 // Assume that the loan exists
 func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk.Coin) ([]*types.CetInfo, error) {
 	loan := k.GetLoan(ctx, loanId)
-	pool := k.GetPool(ctx, loan.PoolId)
+	poolConfig := k.GetPool(ctx, loan.PoolId).Config
 
 	multisigScript, _ := types.CreateMultisigScript([]string{loan.BorrowerPubKey, loan.Agency})
 
@@ -40,7 +39,7 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	if loan.LiquidationEventId != 0 {
 		liquidationEvent = k.dlcKeeper.GetEvent(ctx, loan.LiquidationEventId)
 	} else if collateralAmount.Amount.IsPositive() {
-		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, loan.BorrowAmount.Amount, sdkmath.NewInt(int64(pool.Config.LiquidationThreshold)))
+		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, loan.BorrowAmount.Amount, poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
 		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	}
 
