@@ -13,9 +13,12 @@ This document presents a decentralized financial protocol that enables native Bi
   - Support SPV (Simple Payment Verfication)
   - 6 Confirmations
 
-### 2.2 Decentralized Oracle System
+### 2.2 Trustless Relayer
+Trustless Relayer is a tool that automated relay transactions between Bitcoin and Sidechain. which is trustless, can be run by anyone. 
 
-#### 2.2.1 Data Provider Network
+### 2.3 Decentralized Oracle System
+
+#### 2.3.1 Data Provider Network
 
   The data provider network comprises all validators (n=100). `Vote Extensions` provide an elegant framework for validators to submit arbitrary off-chain data and achieve on-chain consensus through ABCI++ enhancements. Refer to the [Vote Extensions documentation](https://docs.cosmos.network/main/build/abci/vote-extensions) for implementation details.
   - **BTC Header Synchronization**
@@ -24,7 +27,7 @@ This document presents a decentralized financial protocol that enables native Bi
   - **Price Feed Mechanism**
     - The price feed aggregates data from the top five cryptocurrency exchanges (Binance, Coinbase, Bybit, OKX, Bitget) utilizing a Time-Weighted Average Price (TWAP) algorithm
 
-#### 2.2.2 Event Signer Network
+#### 2.3.2 Event Signer Network
 
 - **Architecture Overview**  
 The Event Signer Network(ESN) implements a decentralized oracle solution for Discreet Log Contracts (DLC) through:  
@@ -91,6 +94,21 @@ While DLC's security fundamentally relies on oracle trustworthiness ([Multi-Orac
   - Vault withdrawal limits:
     - 1 BTC daily threshold
     - Emergency freeze via governance proposal
+
+#### 3.3 Process Flow  
+  - **Peg In (Cross-chain Deposit)**  
+    - User sends BTC from a self-custodied wallet (CEX withdrawals are not supported) to the designated vault address 
+    - Relayers continuously scan the Bitcoin mempool, filtering transactions based on predefined vault address patterns  
+    - Relayers generate cryptographic Merkle inclusion proofs and submit both raw transaction and proofs to the Sidechain Bridge module 
+    - **After verifying 6-block confirmations and proof validity**, the bridge issues corresponding wrapped tokens (1:1 sBTC or sat tokens) to the originator's sidechain address
+
+  - **Peg Out (Cross-chain Withdrawal)**  
+    - Initiated by users transferring sBTC to the bridge module 
+    - Bridge automatically constructs a Partially Signed Bitcoin Transaction (PSBT) with vault withdrawal parameters 
+    - FROST threshold network monitors the sidechain state for pending withdrawal requests, verifies multisig authorization thresholds  
+    - Authorized signers collectively sign the PSBT through distributed key generation  
+    - Relayers broadcast finalized PSBTs to the Bitcoin network 
+    - Upon Bitcoin network confirmation, the bridge executes sBTC burning corresponding to processed withdrawals
 
 ### 4. Bitcoin Collateralized Lending
 
