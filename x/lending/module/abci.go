@@ -93,15 +93,14 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 		// create auction if defaulted or liquidated
 		if loan.Status == types.LoanStatus_Defaulted || loan.Status == types.LoanStatus_Liquidated {
 			auction := k.AuctionKeeper().CreateAuction(ctx, &auctiontypes.Auction{
-				LoanId:             loan.VaultAddress,
-				Borrower:           loan.Borrower,
-				Agency:             loan.Agency,
-				DepositedAsset:     sdk.NewCoin("sat", loan.CollateralAmount),
-				LiquidatedPrice:    currentPrice.Int64(),
-				LiquidatedTime:     ctx.BlockTime(),
-				ExpectedValue:      sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(loan.Interest)),
-				LiquidationPenalty: k.GetPool(ctx, loan.PoolId).Config.LiquidationPenalty,
-				LiquidationCet:     liquidationCet,
+				LoanId:          loan.VaultAddress,
+				Borrower:        loan.Borrower,
+				Agency:          loan.Agency,
+				DepositedAsset:  sdk.NewCoin("sat", loan.CollateralAmount),
+				LiquidatedPrice: currentPrice.Int64(),
+				LiquidatedTime:  ctx.BlockTime(),
+				ExpectedValue:   sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(loan.Interest)),
+				LiquidationCet:  liquidationCet,
 			})
 			loan.AuctionId = auction.Id
 

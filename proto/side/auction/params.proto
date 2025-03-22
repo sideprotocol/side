@@ -11,4 +11,10 @@ message Params {
     google.protobuf.Duration price_drop_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
     uint32 initial_discount = 2;
     uint64 min_bid_amount = 3;
+    // liquidation bonus permille
+    uint32 liquidation_bonus = 4;
+    // protocol liquidation fee permille
+    uint32 protocol_liquidation_fee = 5;
+    // protocol liquidation fee collector
+    string protocol_liquidation_fee_collector = 6;
 }

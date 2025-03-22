@@ -15,10 +15,13 @@ import (
 )
 
 var (
-	md_Params                   protoreflect.MessageDescriptor
-	fd_Params_price_drop_period protoreflect.FieldDescriptor
-	fd_Params_initial_discount  protoreflect.FieldDescriptor
-	fd_Params_min_bid_amount    protoreflect.FieldDescriptor
+	md_Params                                    protoreflect.MessageDescriptor
+	fd_Params_price_drop_period                  protoreflect.FieldDescriptor
+	fd_Params_initial_discount                   protoreflect.FieldDescriptor
+	fd_Params_min_bid_amount                     protoreflect.FieldDescriptor
+	fd_Params_liquidation_bonus                  protoreflect.FieldDescriptor
+	fd_Params_protocol_liquidation_fee           protoreflect.FieldDescriptor
+	fd_Params_protocol_liquidation_fee_collector protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -27,6 +30,9 @@ func init() {
 	fd_Params_price_drop_period = md_Params.Fields().ByName("price_drop_period")
 	fd_Params_initial_discount = md_Params.Fields().ByName("initial_discount")
 	fd_Params_min_bid_amount = md_Params.Fields().ByName("min_bid_amount")
+	fd_Params_liquidation_bonus = md_Params.Fields().ByName("liquidation_bonus")
+	fd_Params_protocol_liquidation_fee = md_Params.Fields().ByName("protocol_liquidation_fee")
+	fd_Params_protocol_liquidation_fee_collector = md_Params.Fields().ByName("protocol_liquidation_fee_collector")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -112,6 +118,24 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
+	if x.LiquidationBonus != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.LiquidationBonus)
+		if !f(fd_Params_liquidation_bonus, value) {
+			return
+		}
+	}
+	if x.ProtocolLiquidationFee != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ProtocolLiquidationFee)
+		if !f(fd_Params_protocol_liquidation_fee, value) {
+			return
+		}
+	}
+	if x.ProtocolLiquidationFeeCollector != "" {
+		value := protoreflect.ValueOfString(x.ProtocolLiquidationFeeCollector)
+		if !f(fd_Params_protocol_liquidation_fee_collector, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -133,6 +157,12 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.InitialDiscount != uint32(0)
 	case "side.auction.Params.min_bid_amount":
 		return x.MinBidAmount != uint64(0)
+	case "side.auction.Params.liquidation_bonus":
+		return x.LiquidationBonus != uint32(0)
+	case "side.auction.Params.protocol_liquidation_fee":
+		return x.ProtocolLiquidationFee != uint32(0)
+	case "side.auction.Params.protocol_liquidation_fee_collector":
+		return x.ProtocolLiquidationFeeCollector != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.auction.Params"))
@@ -155,6 +185,12 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.InitialDiscount = uint32(0)
 	case "side.auction.Params.min_bid_amount":
 		x.MinBidAmount = uint64(0)
+	case "side.auction.Params.liquidation_bonus":
+		x.LiquidationBonus = uint32(0)
+	case "side.auction.Params.protocol_liquidation_fee":
+		x.ProtocolLiquidationFee = uint32(0)
+	case "side.auction.Params.protocol_liquidation_fee_collector":
+		x.ProtocolLiquidationFeeCollector = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.auction.Params"))
@@ -180,6 +216,15 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "side.auction.Params.min_bid_amount":
 		value := x.MinBidAmount
 		return protoreflect.ValueOfUint64(value)
+	case "side.auction.Params.liquidation_bonus":
+		value := x.LiquidationBonus
+		return protoreflect.ValueOfUint32(value)
+	case "side.auction.Params.protocol_liquidation_fee":
+		value := x.ProtocolLiquidationFee
+		return protoreflect.ValueOfUint32(value)
+	case "side.auction.Params.protocol_liquidation_fee_collector":
+		value := x.ProtocolLiquidationFeeCollector
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.auction.Params"))
@@ -206,6 +251,12 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.InitialDiscount = uint32(value.Uint())
 	case "side.auction.Params.min_bid_amount":
 		x.MinBidAmount = value.Uint()
+	case "side.auction.Params.liquidation_bonus":
+		x.LiquidationBonus = uint32(value.Uint())
+	case "side.auction.Params.protocol_liquidation_fee":
+		x.ProtocolLiquidationFee = uint32(value.Uint())
+	case "side.auction.Params.protocol_liquidation_fee_collector":
+		x.ProtocolLiquidationFeeCollector = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.auction.Params"))
@@ -235,6 +286,12 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		panic(fmt.Errorf("field initial_discount of message side.auction.Params is not mutable"))
 	case "side.auction.Params.min_bid_amount":
 		panic(fmt.Errorf("field min_bid_amount of message side.auction.Params is not mutable"))
+	case "side.auction.Params.liquidation_bonus":
+		panic(fmt.Errorf("field liquidation_bonus of message side.auction.Params is not mutable"))
+	case "side.auction.Params.protocol_liquidation_fee":
+		panic(fmt.Errorf("field protocol_liquidation_fee of message side.auction.Params is not mutable"))
+	case "side.auction.Params.protocol_liquidation_fee_collector":
+		panic(fmt.Errorf("field protocol_liquidation_fee_collector of message side.auction.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.auction.Params"))
@@ -255,6 +312,12 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "side.auction.Params.min_bid_amount":
 		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.auction.Params.liquidation_bonus":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.auction.Params.protocol_liquidation_fee":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.auction.Params.protocol_liquidation_fee_collector":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.auction.Params"))
@@ -334,6 +397,16 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.MinBidAmount != 0 {
 			n += 1 + runtime.Sov(uint64(x.MinBidAmount))
 		}
+		if x.LiquidationBonus != 0 {
+			n += 1 + runtime.Sov(uint64(x.LiquidationBonus))
+		}
+		if x.ProtocolLiquidationFee != 0 {
+			n += 1 + runtime.Sov(uint64(x.ProtocolLiquidationFee))
+		}
+		l = len(x.ProtocolLiquidationFeeCollector)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -362,6 +435,23 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.ProtocolLiquidationFeeCollector) > 0 {
+			i -= len(x.ProtocolLiquidationFeeCollector)
+			copy(dAtA[i:], x.ProtocolLiquidationFeeCollector)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ProtocolLiquidationFeeCollector)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if x.ProtocolLiquidationFee != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ProtocolLiquidationFee))
+			i--
+			dAtA[i] = 0x28
+		}
+		if x.LiquidationBonus != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.LiquidationBonus))
+			i--
+			dAtA[i] = 0x20
 		}
 		if x.MinBidAmount != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.MinBidAmount))
@@ -510,6 +600,76 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationBonus", wireType)
+				}
+				x.LiquidationBonus = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.LiquidationBonus |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFee", wireType)
+				}
+				x.ProtocolLiquidationFee = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ProtocolLiquidationFee |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeCollector", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ProtocolLiquidationFeeCollector = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -567,6 +727,12 @@ type Params struct {
 	PriceDropPeriod *durationpb.Duration `protobuf:"bytes,1,opt,name=price_drop_period,json=priceDropPeriod,proto3" json:"price_drop_period,omitempty"`
 	InitialDiscount uint32               `protobuf:"varint,2,opt,name=initial_discount,json=initialDiscount,proto3" json:"initial_discount,omitempty"`
 	MinBidAmount    uint64               `protobuf:"varint,3,opt,name=min_bid_amount,json=minBidAmount,proto3" json:"min_bid_amount,omitempty"`
+	// liquidation bonus permille
+	LiquidationBonus uint32 `protobuf:"varint,4,opt,name=liquidation_bonus,json=liquidationBonus,proto3" json:"liquidation_bonus,omitempty"`
+	// protocol liquidation fee permille
+	ProtocolLiquidationFee uint32 `protobuf:"varint,5,opt,name=protocol_liquidation_fee,json=protocolLiquidationFee,proto3" json:"protocol_liquidation_fee,omitempty"`
+	// protocol liquidation fee collector
+	ProtocolLiquidationFeeCollector string `protobuf:"bytes,6,opt,name=protocol_liquidation_fee_collector,json=protocolLiquidationFeeCollector,proto3" json:"protocol_liquidation_fee_collector,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -610,6 +776,27 @@ func (x *Params) GetMinBidAmount() uint64 {
 	return 0
 }
 
+func (x *Params) GetLiquidationBonus() uint32 {
+	if x != nil {
+		return x.LiquidationBonus
+	}
+	return 0
+}
+
+func (x *Params) GetProtocolLiquidationFee() uint32 {
+	if x != nil {
+		return x.ProtocolLiquidationFee
+	}
+	return 0
+}
+
+func (x *Params) GetProtocolLiquidationFeeCollector() string {
+	if x != nil {
+		return x.ProtocolLiquidationFeeCollector
+	}
+	return ""
+}
+
 var File_side_auction_params_proto protoreflect.FileDescriptor
 
 var file_side_auction_params_proto_rawDesc = []byte{
@@ -619,7 +806,7 @@ var file_side_auction_params_proto_rawDesc = []byte{
 	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
 	0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
 	0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
-	0xaa, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4f, 0x0a, 0x11, 0x70, 0x72,
+	0xde, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4f, 0x0a, 0x11, 0x70, 0x72,
 	0x69, 0x63, 0x65, 0x5f, 0x64, 0x72, 0x6f, 0x70, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
@@ -629,18 +816,29 @@ var file_side_auction_params_proto_rawDesc = []byte{
 	0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0f, 0x69, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x44, 0x69,
 	0x73, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x24, 0x0a, 0x0e, 0x6d, 0x69, 0x6e, 0x5f, 0x62, 0x69,
 	0x64, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0c,
-	0x6d, 0x69, 0x6e, 0x42, 0x69, 0x64, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x9f, 0x01, 0x0a,
-	0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f,
-	0x6e, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
-	0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64,
-	0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0xa2,
-	0x02, 0x03, 0x53, 0x41, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x41, 0x75, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x41, 0x75, 0x63, 0x74,
-	0x69, 0x6f, 0x6e, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x41, 0x75, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
-	0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x41, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6d, 0x69, 0x6e, 0x42, 0x69, 0x64, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x2b, 0x0a, 0x11,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x62, 0x6f, 0x6e, 0x75,
+	0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x10, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12, 0x38, 0x0a, 0x18, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x66, 0x65, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x16, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x46, 0x65, 0x65, 0x12, 0x4b, 0x0a, 0x22, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f,
+	0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x1f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72,
+	0x42, 0x9f, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x61, 0x75,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f,
+	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69,
+	0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x75, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0xa2, 0x02, 0x03, 0x53, 0x41, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65,
+	0x2e, 0x41, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c,
+	0x41, 0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x41,
+	0x75, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x41, 0x75, 0x63, 0x74, 0x69,
+	0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

@@ -45,10 +45,8 @@ message PoolConfig {
     uint32 max_ltv = 7;
     // liquidation ltv percent
     uint32 liquidation_threshold = 8;
-    // liquidation penalty permille
-    uint32 liquidation_penalty = 9;
     // indicates if the pool is paused
-    bool paused = 10;
+    bool paused = 9;
 }
 
 message LendingPool {

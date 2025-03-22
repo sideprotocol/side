@@ -43,11 +43,10 @@ message Auction {
         (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"
     ];
     int64 bidded_amount = 10;
-    uint32 liquidation_penalty = 11;
-    string liquidation_cet = 12;
-    string payment_tx = 13;
-    string payment_tx_id = 14;
-    AuctionStatus status = 15;
+    string liquidation_cet = 11;
+    string payment_tx = 12;
+    string payment_tx_id = 13;
+    AuctionStatus status = 14;
 }
 
 enum AssetType {
