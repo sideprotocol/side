@@ -100,7 +100,7 @@ While DLC's security fundamentally relies on oracle trustworthiness ([Multi-Orac
     - User sends BTC from a self-custodied wallet (CEX withdrawals are not supported) to the designated vault address 
     - Relayers continuously scan the Bitcoin mempool, filtering transactions based on predefined vault address patterns  
     - Relayers generate cryptographic Merkle inclusion proofs and submit both raw transaction and proofs to the Sidechain Bridge module 
-    - **After verifying 6-block confirmations and proof validity**, the bridge issues corresponding wrapped tokens (1:1 sBTC or sat tokens) to the originator's sidechain address
+    - **After verifying 6-block confirmations and proof validity**, the bridge issues corresponding wrapped tokens (1:1 sat = 10^8:1 sBTC) to the originator's sidechain address
 
   - **Peg Out (Cross-chain Withdrawal)**  
     - Initiated by users transferring sBTC to the bridge module 
