@@ -7,7 +7,7 @@ import (
 
 	keepertest "github.com/sideprotocol/side/testutil/keeper"
 	"github.com/sideprotocol/side/testutil/nullify"
-	auction "github.com/sideprotocol/side/x/liquidation/module"
+	liquidation "github.com/sideprotocol/side/x/liquidation/module"
 	"github.com/sideprotocol/side/x/liquidation/types"
 )
 
@@ -22,8 +22,8 @@ func TestGenesis(t *testing.T) {
 	}
 
 	k, ctx := keepertest.LiquidationKeeper(t)
-	auction.InitGenesis(ctx, k, genesisState)
-	got := auction.ExportGenesis(ctx, k)
+	liquidation.InitGenesis(ctx, k, genesisState)
+	got := liquidation.ExportGenesis(ctx, k)
 	require.NotNil(t, got)
 
 	nullify.Fill(&genesisState)

@@ -98,7 +98,7 @@ func (k Keeper) IterateLiquidationRecords(ctx sdk.Context, cb func(record *types
 	}
 }
 
-// IterateBidsByAuction iterates through bids by the specified auction and status
+// IterateLiquidationRecordsByLiquidation iterates through liquidation records by the specified liquidation id
 func (k Keeper) IterateLiquidationRecordsByLiquidation(ctx sdk.Context, liquidationId uint64, cb func(record *types.LiquidationRecord) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
