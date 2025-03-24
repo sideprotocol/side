@@ -62,8 +62,8 @@ func NewKeeper(
 		authority:         authority,
 	}
 
-	// set bidded asset handler for liquidation
-	liquidationKeeper.SetBiddedAssetHandler(k.HandleBiddedAsset)
+	// set liquidated debt handler for liquidation
+	liquidationKeeper.SetLiquidatedDebtHandler(k.HandleLiquidatedDebt)
 
 	return k
 }

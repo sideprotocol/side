@@ -80,3 +80,28 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.
 
 	return nil
 }
+
+// HandleLiquidatedDebt handles the liquidated debt for the liquidated loan
+func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, loanId string, moduleAccount string, debtAmount sdk.Coin) error {
+	loan := k.GetLoan(ctx, loanId)
+
+	if debtAmount.Amount.LTE(loan.Interest) {
+		// TODO
+		return nil
+	}
+
+	poolAmount := debtAmount.SubAmount(loan.ProtocolFee)
+	protocolFee := sdk.NewCoin(debtAmount.Denom, loan.ProtocolFee)
+
+	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, moduleAccount, types.ModuleName, sdk.NewCoins(poolAmount)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.GetParams(ctx).ProtocolFeeCollector), sdk.NewCoins(protocolFee)); err != nil {
+		return err
+	}
+
+	k.AfterPoolRepaid(ctx, loan.PoolId, debtAmount.SubAmount(loan.Interest), loan.Interest, loan.ProtocolFee)
+
+	return nil
+}

@@ -48,7 +48,7 @@ type OracleKeeper interface {
 
 // LiquidationKeeper defines the expected liquidation keeper interface
 type LiquidationKeeper interface {
-	SetBiddedAssetHandler(handler liquidationtypes.BiddedAssetHandler)
+	SetLiquidatedDebtHandler(handler liquidationtypes.LiquidatedDebtHandler)
 
 	CreateLiquidation(ctx sdk.Context, liquidation *liquidationtypes.Liquidation) *liquidationtypes.Liquidation
 

@@ -17,7 +17,7 @@ type Keeper struct {
 	bankKeeper   types.BankKeeper
 	oracleKeeper types.OracleKeeper
 
-	biddedAssetHandler types.BiddedAssetHandler
+	liquidatedDebtHandler types.LiquidatedDebtHandler
 
 	authority string
 }
@@ -69,10 +69,10 @@ func (k Keeper) OracleKeeper() types.OracleKeeper {
 	return k.oracleKeeper
 }
 
-func (k Keeper) BiddedAssetHandler() types.BiddedAssetHandler {
-	return k.biddedAssetHandler
+func (k Keeper) LiquidatedDebtHandler() types.LiquidatedDebtHandler {
+	return k.liquidatedDebtHandler
 }
 
-func (k *Keeper) SetBiddedAssetHandler(handler types.BiddedAssetHandler) {
-	k.biddedAssetHandler = handler
+func (k *Keeper) SetLiquidatedDebtHandler(handler types.LiquidatedDebtHandler) {
+	k.liquidatedDebtHandler = handler
 }
