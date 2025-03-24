@@ -19,11 +19,11 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	"github.com/sideprotocol/side/app"
-	"github.com/sideprotocol/side/x/auction/keeper"
-	"github.com/sideprotocol/side/x/auction/types"
+	"github.com/sideprotocol/side/x/liquidation/keeper"
+	"github.com/sideprotocol/side/x/liquidation/types"
 )
 
-func AuctionKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
+func LiquidationKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	db := dbm.NewMemDB()
 
 	app := app.New(log.NewNopLogger(), db, nil, true, simtestutil.EmptyAppOptions{})

@@ -1,0 +1,49 @@
+package types
+
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
+const (
+	// ModuleName defines the module name
+	ModuleName = "auction"
+
+	// StoreKey defines the primary module store key
+	StoreKey = ModuleName
+
+	// RouterKey defines the module's message routing key
+	RouterKey = ModuleName
+
+	// MemStoreKey defines the in-memory store key
+	MemStoreKey = "mem_auction"
+)
+
+var (
+	ParamsKey              = []byte{0x01} // key for params
+	LiquidationIdKey       = []byte{0x02} // key for liquidation id
+	LiquidationRecordIdKey = []byte{0x03} // key for liquidation record id
+
+	LiquidationKeyPrefix                    = []byte{0x10} // prefix for each key to a liquidation
+	LiquidationRecordKeyPrefix              = []byte{0x11} // prefix for each key to a liquidation record
+	LiquidationRecordByLiquidationKeyPrefix = []byte{0x12} // prefix for each key to a liquidation record by liquidation
+
+	PriceKeyPrefix = []byte{0x20} // key prefix for the price
+)
+
+func LiquidationKey(id uint64) []byte {
+	return append(LiquidationKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+}
+
+func LiquidationRecordKey(id uint64) []byte {
+	return append(LiquidationRecordKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+}
+
+func LiquidationRecordByLiquidationKey(liquidationId uint64, recordId uint64) []byte {
+	key := append(LiquidationRecordByLiquidationKeyPrefix, sdk.Uint64ToBigEndian(liquidationId)...)
+
+	return append(key, sdk.Uint64ToBigEndian(recordId)...)
+}
+
+func PriceKey(pair string) []byte {
+	return append(PriceKeyPrefix, []byte(pair)...)
+}

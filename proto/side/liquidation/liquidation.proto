@@ -1,0 +1,45 @@
+syntax = "proto3";
+package side.liquidation;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/sideprotocol/side/x/liquidation/types";
+
+enum AssetType {
+    ASSET_TYPE_BITCOIN = 0;
+}
+
+enum LiquidationStatus {
+    LIQUIDATION_STATUS_UNSPECIFIED = 0;
+    LIQUIDATION_STATUS_LIQUIDATING = 1;
+    LIQUIDATION_STATUS_LIQUIDATED = 2;
+    LIQUIDATION_STATUS_SETTLED = 3;
+}
+
+message Liquidation {
+    uint64 id = 1;
+    string loan_id = 2;
+    string borrower = 3;
+    string agency = 4;
+    cosmos.base.v1beta1.Coin liquidated_collateral = 5 [(gogoproto.nullable) = false];
+    int64 liquidated_price = 6;
+    google.protobuf.Timestamp liquidated_time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    cosmos.base.v1beta1.Coin debt_amount = 8 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin liquidated_debt_amount = 9 [(gogoproto.nullable) = false];
+    uint32 liquidation_bonus = 10;
+    string liquidation_cet = 11;
+    string settlement_tx = 12;
+    string settlement_tx_id = 13;
+    LiquidationStatus status = 14;
+}
+
+message LiquidationRecord {
+    uint64 id = 1;
+    uint64 liquidation_id = 2;
+    string liquidator = 3;
+    cosmos.base.v1beta1.Coin debt_amount = 4 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin collateral_amount = 5 [(gogoproto.nullable) = false];
+    google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}

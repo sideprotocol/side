@@ -18,13 +18,13 @@ type (
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
 
-		authKeeper      types.AccountKeeper
-		bankKeeper      types.BankKeeper
-		mintKeeper      mintkeeper.Keeper
-		oracleKeeper    types.OracleKeeper
-		auctionKeeper   types.AuctionKeeper
-		dlcKeeper       types.DLCKeeper
-		btcbridgeKeeper types.BtcBridgeKeeper
+		authKeeper        types.AccountKeeper
+		bankKeeper        types.BankKeeper
+		mintKeeper        mintkeeper.Keeper
+		oracleKeeper      types.OracleKeeper
+		liquidationKeeper types.LiquidationKeeper
+		dlcKeeper         types.DLCKeeper
+		btcbridgeKeeper   types.BtcBridgeKeeper
 
 		authority string
 	}
@@ -38,7 +38,7 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	mintKeeper mintkeeper.Keeper,
 	oracleKeeper types.OracleKeeper,
-	auctionKeeper types.AuctionKeeper,
+	liquidationKeeper types.LiquidationKeeper,
 	dlcKeeper types.DLCKeeper,
 	btcbridgeKeeper types.BtcBridgeKeeper,
 	authority string,
@@ -49,21 +49,21 @@ func NewKeeper(
 	}
 
 	k := Keeper{
-		cdc:             cdc,
-		storeKey:        storeKey,
-		memKey:          memKey,
-		authKeeper:      ak,
-		bankKeeper:      bankKeeper,
-		mintKeeper:      mintKeeper,
-		oracleKeeper:    oracleKeeper,
-		auctionKeeper:   auctionKeeper,
-		dlcKeeper:       dlcKeeper,
-		btcbridgeKeeper: btcbridgeKeeper,
-		authority:       authority,
+		cdc:               cdc,
+		storeKey:          storeKey,
+		memKey:            memKey,
+		authKeeper:        ak,
+		bankKeeper:        bankKeeper,
+		mintKeeper:        mintKeeper,
+		oracleKeeper:      oracleKeeper,
+		liquidationKeeper: liquidationKeeper,
+		dlcKeeper:         dlcKeeper,
+		btcbridgeKeeper:   btcbridgeKeeper,
+		authority:         authority,
 	}
 
-	// set bidded asset handler for auction
-	auctionKeeper.SetBiddedAssetHandler(k.HandleBiddedAsset)
+	// set bidded asset handler for liquidation
+	liquidationKeeper.SetBiddedAssetHandler(k.HandleBiddedAsset)
 
 	return k
 }
@@ -104,8 +104,8 @@ func (k Keeper) OracleKeeper() types.OracleKeeper {
 	return k.oracleKeeper
 }
 
-func (k Keeper) AuctionKeeper() types.AuctionKeeper {
-	return k.auctionKeeper
+func (k Keeper) LiquidationKeeper() types.LiquidationKeeper {
+	return k.liquidationKeeper
 }
 
 func (k Keeper) DLCKeeper() types.DLCKeeper {

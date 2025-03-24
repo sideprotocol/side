@@ -1,0 +1,70 @@
+syntax = "proto3";
+package side.liquidation;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "side/liquidation/params.proto";
+
+option go_package = "github.com/sideprotocol/side/x/liquidation/types";
+
+// Msg defines the Msg service.
+service Msg {
+    option (cosmos.msg.v1.service) = true;
+
+    // Liquidate the specified debt amount by liquidators.
+    rpc Liquidate(MsgLiquidate) returns (MsgLiquidateResponse);
+
+    // Submit settlement transaction signatures for the specified liquidation.
+    rpc SubmitSettlementSignatures(MsgSubmitSettlementSignatures) returns (MsgSubmitSettlementSignaturesResponse);
+
+    // UpdateParams defines a governance operation for updating the x/btcbridge module
+    // parameters. The authority defaults to the x/gov module account.
+    //
+    // Since: cosmos-sdk 0.47
+    rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+// MsgLiquidate defines the Msg/Liquidate request type.
+message MsgLiquidate {
+    option (cosmos.msg.v1.signer) = "liquidator";
+
+    string liquidator = 1;
+    uint64 liquidation_id = 2;
+    cosmos.base.v1beta1.Coin debt_amount = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgLiquidateResponse defines the Msg/Liquidate response type.
+message MsgLiquidateResponse {}
+
+// MsgSubmitSettlementSignatures defines the Msg/SubmitSettlementSignatures request type.
+message MsgSubmitSettlementSignatures {
+    option (cosmos.msg.v1.signer) = "sender";
+
+    string sender = 1;
+    uint64 liquidation_id = 2;
+    repeated string signatures = 3;
+}
+
+// MsgSubmitSettlementSignaturesResponse defines the Msg/SubmitSettlementSignatures response type.
+message MsgSubmitSettlementSignaturesResponse {}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+
+  // params defines the x/btcbridge parameters to be updated.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsResponse {}

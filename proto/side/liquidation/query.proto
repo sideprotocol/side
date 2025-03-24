@@ -1,0 +1,87 @@
+syntax = "proto3";
+package side.liquidation;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "side/liquidation/liquidation.proto";
+import "side/liquidation/params.proto";
+
+option go_package = "github.com/sideprotocol/side/x/liquidation/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Params queries the parameters of the module.
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+      option (google.api.http).get = "/side/liquidation/params";
+    }
+    // Liquidation queries the specified liquidation by id.
+    rpc Liquidation(QueryLiquidationRequest) returns (QueryLiquidationResponse) {
+        option (google.api.http).get = "/side/liquidation/liquidations/{id}";
+    }
+    // Liquidations queries the liquidations by the given status.
+    rpc Liquidations(QueryLiquidationsRequest) returns (QueryLiquidationsResponse) {
+        option (google.api.http).get = "/side/liquidation/liquidations";
+    }
+    // LiquidationRecord queries the specified liquidation record.
+    rpc LiquidationRecord(QueryLiquidationRecordRequest) returns (QueryLiquidationRecordResponse) {
+        option (google.api.http).get = "/side/liquidation/records/{id}";
+    }
+    // LiquidationRecords queries the liquidation records of the given liquidation.
+    rpc LiquidationRecords(QueryLiquidationRecordsRequest) returns (QueryLiquidationRecordsResponse) {
+        option (google.api.http).get = "/side/liquidation/records";
+    }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+    Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryLiquidationRequest is request type for the Query/Liquidation RPC method.
+message QueryLiquidationRequest {
+    uint64 id = 1;
+}
+
+// QueryLiquidationResponse is response type for the Query/Liquidation RPC method.
+message QueryLiquidationResponse {
+    Liquidation liquidation = 1;
+}
+
+// QueryLiquidationsRequest is request type for the Query/Liquidations RPC method.
+message QueryLiquidationsRequest {
+    LiquidationStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryLiquidationsResponse is response type for the Query/Liquidations RPC method.
+message QueryLiquidationsResponse {
+    repeated Liquidation liquidations = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryLiquidationRecordRequest is request type for the Query/LiquidationRecord RPC method.
+message QueryLiquidationRecordRequest {
+    uint64 id = 1;
+}
+
+// QueryLiquidationRecordResponse is response type for the Query/LiquidationRecord RPC method.
+message QueryLiquidationRecordResponse {
+    LiquidationRecord liquidation_record = 1;
+}
+
+// QueryLiquidationRecordsRequest is request type for the Query/LiquidationRecords RPC method.
+message QueryLiquidationRecordsRequest {
+    uint64 liquidation_id = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryLiquidationRecordsResponse is response type for the Query/LiquidationRecords RPC method.
+message QueryLiquidationRecordsResponse {
+    repeated LiquidationRecord liquidation_records = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

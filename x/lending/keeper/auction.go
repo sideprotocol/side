@@ -2,7 +2,7 @@ package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sideprotocol/side/x/auction/types"
+	"github.com/sideprotocol/side/x/liquidation/types"
 )
 
 // HandleBiddedAsset handles the bidded asset for the liquidated loan

@@ -49,7 +49,7 @@ func LendingKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		app.BankKeeper,
 		app.MintKeeper,
 		nil,
-		app.AuctionKeeper,
+		app.LiquidationKeeper,
 		app.DLCKeeper,
 		app.BtcBridgeKeeper,
 		authority,

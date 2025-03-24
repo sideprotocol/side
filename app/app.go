@@ -124,9 +124,6 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	"github.com/sideprotocol/side/docs"
-	auctionkeeper "github.com/sideprotocol/side/x/auction/keeper"
-	auctionmodule "github.com/sideprotocol/side/x/auction/module"
-	auctiontypes "github.com/sideprotocol/side/x/auction/types"
 	btcbridgecodec "github.com/sideprotocol/side/x/btcbridge/codec"
 	btcbridgekeeper "github.com/sideprotocol/side/x/btcbridge/keeper"
 	btcbridgemodule "github.com/sideprotocol/side/x/btcbridge/module"
@@ -137,6 +134,9 @@ import (
 	lendingkeeper "github.com/sideprotocol/side/x/lending/keeper"
 	lendingmodule "github.com/sideprotocol/side/x/lending/module"
 	lendingtypes "github.com/sideprotocol/side/x/lending/types"
+	liquidationkeeper "github.com/sideprotocol/side/x/liquidation/keeper"
+	liquidationmodule "github.com/sideprotocol/side/x/liquidation/module"
+	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
 	oracleabci "github.com/sideprotocol/side/x/oracle/abci"
 
 	oraclekeeper "github.com/sideprotocol/side/x/oracle/keeper"
@@ -200,7 +200,7 @@ var (
 		consensus.AppModuleBasic{},
 		wasm.AppModuleBasic{},
 		btcbridgemodule.AppModuleBasic{},
-		auctionmodule.AppModuleBasic{},
+		liquidationmodule.AppModuleBasic{},
 		dlcmodule.AppModuleBasic{},
 		lendingmodule.AppModuleBasic{},
 		oraclemodule.AppModuleBasic{},
@@ -220,7 +220,7 @@ var (
 		ibctransfertypes.ModuleName:         {authtypes.Minter, authtypes.Burner},
 		wasmtypes.ModuleName:                {authtypes.Burner},
 		btcbridgetypes.ModuleName:           {authtypes.Minter, authtypes.Burner},
-		auctiontypes.ModuleName:             nil,
+		liquidationtypes.ModuleName:         nil,
 		dlctypes.ModuleName:                 nil,
 		lendingtypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
 		lendingtypes.RepaymentEscrowAccount: nil,
@@ -291,11 +291,11 @@ type App struct {
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 	ScopedWasmKeeper     capabilitykeeper.ScopedKeeper
 
-	BtcBridgeKeeper btcbridgekeeper.Keeper
-	AuctionKeeper   *auctionkeeper.Keeper
-	DLCKeeper       dlckeeper.Keeper
-	LendingKeeper   lendingkeeper.Keeper
-	OracleKeeper    oraclekeeper.Keeper
+	BtcBridgeKeeper   btcbridgekeeper.Keeper
+	LiquidationKeeper *liquidationkeeper.Keeper
+	DLCKeeper         dlckeeper.Keeper
+	LendingKeeper     lendingkeeper.Keeper
+	OracleKeeper      oraclekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -365,7 +365,7 @@ func New(
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey,
-		btcbridgetypes.StoreKey, auctiontypes.StoreKey,
+		btcbridgetypes.StoreKey, liquidationtypes.StoreKey,
 		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
@@ -641,10 +641,10 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
-	app.AuctionKeeper = auctionkeeper.NewKeeper(
+	app.LiquidationKeeper = liquidationkeeper.NewKeeper(
 		appCodec,
-		keys[auctiontypes.StoreKey],
-		keys[auctiontypes.MemStoreKey],
+		keys[liquidationtypes.StoreKey],
+		keys[liquidationtypes.MemStoreKey],
 		app.BankKeeper,
 		nil,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
@@ -665,7 +665,7 @@ func New(
 		app.BankKeeper,
 		app.MintKeeper,
 		nil,
-		app.AuctionKeeper,
+		app.LiquidationKeeper,
 		app.DLCKeeper,
 		app.BtcBridgeKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
@@ -787,7 +787,7 @@ func New(
 		wasmModule,
 
 		btcbridgemodule.NewAppModule(appCodec, app.BtcBridgeKeeper),
-		auctionmodule.NewAppModule(appCodec, *app.AuctionKeeper),
+		liquidationmodule.NewAppModule(appCodec, *app.LiquidationKeeper),
 		dlcmodule.NewAppModule(appCodec, app.DLCKeeper),
 		lendingmodule.NewAppModule(appCodec, app.LendingKeeper),
 		oraclemodule.NewAppModule(appCodec, app.OracleKeeper),
@@ -846,7 +846,7 @@ func New(
 		ibcfeetypes.ModuleName,
 		wasmtypes.ModuleName,
 		btcbridgetypes.ModuleName,
-		auctiontypes.ModuleName,
+		liquidationtypes.ModuleName,
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
@@ -878,7 +878,7 @@ func New(
 		ibcfeetypes.ModuleName,
 		wasmtypes.ModuleName,
 		btcbridgetypes.ModuleName,
-		auctiontypes.ModuleName,
+		liquidationtypes.ModuleName,
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
@@ -915,7 +915,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		wasmtypes.ModuleName,
 		btcbridgetypes.ModuleName,
-		auctiontypes.ModuleName,
+		liquidationtypes.ModuleName,
 		dlctypes.ModuleName,
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
@@ -1194,7 +1194,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(btcbridgetypes.ModuleName)
-	paramsKeeper.Subspace(auctiontypes.ModuleName)
+	paramsKeeper.Subspace(liquidationtypes.ModuleName)
 	paramsKeeper.Subspace(dlctypes.ModuleName)
 	paramsKeeper.Subspace(lendingtypes.ModuleName)
 	paramsKeeper.Subspace(oracletypes.ModuleName)

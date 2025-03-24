@@ -1,0 +1,142 @@
+package keeper
+
+import (
+	errorsmod "cosmossdk.io/errors"
+	storetypes "cosmossdk.io/store/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/sideprotocol/side/x/liquidation/types"
+)
+
+// HandleLiquidation performs the liquidation handling
+func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidationId uint64, debtAmount sdk.Coin) (*types.LiquidationRecord, error) {
+	if !k.HasLiquidation(ctx, liquidationId) {
+		return nil, types.ErrLiquidationDoesNotExist
+	}
+
+	liquidation := k.GetLiquidation(ctx, liquidationId)
+	if liquidation.Status != types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATING {
+		return nil, errorsmod.Wrap(types.ErrInvalidLiquidationStatus, "non liquidating status")
+	}
+
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(liquidator), types.ModuleName, sdk.NewCoins(debtAmount)); err != nil {
+		return nil, err
+	}
+
+	record := &types.LiquidationRecord{
+		Id:            k.IncrementLiquidationRecordId(ctx),
+		LiquidationId: liquidationId,
+		Liquidator:    liquidator,
+		DebtAmount:    debtAmount,
+		Time:          ctx.BlockTime(),
+	}
+
+	k.SetLiquidationRecord(ctx, record)
+
+	return record, nil
+}
+
+// GetLiquidationId gets the current liquidation id
+func (k Keeper) GetLiquidationId(ctx sdk.Context) uint64 {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.LiquidationIdKey)
+	if bz == nil {
+		return 0
+	}
+
+	return sdk.BigEndianToUint64(bz)
+}
+
+// IncrementLiquidationId increments the liquidation id and returns the new id
+func (k Keeper) IncrementLiquidationId(ctx sdk.Context) uint64 {
+	store := ctx.KVStore(k.storeKey)
+
+	id := k.GetLiquidationId(ctx) + 1
+	store.Set(types.LiquidationIdKey, sdk.Uint64ToBigEndian(id))
+
+	return id
+}
+
+// HasLiquidation returns true if the given liquidation exists, false otherwise
+func (k Keeper) HasLiquidation(ctx sdk.Context, id uint64) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.LiquidationKey(id))
+}
+
+// GetLiquidation gets the liquidation by the given id
+func (k Keeper) GetLiquidation(ctx sdk.Context, id uint64) *types.Liquidation {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.LiquidationKey(id))
+	var liquidation types.Liquidation
+	k.cdc.MustUnmarshal(bz, &liquidation)
+
+	return &liquidation
+}
+
+// SetLiquidation sets the given liquidation
+func (k Keeper) SetLiquidation(ctx sdk.Context, liquidation *types.Liquidation) {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := k.cdc.MustMarshal(liquidation)
+	store.Set(types.LiquidationKey(liquidation.Id), bz)
+}
+
+// CreateLiquidation creates and returns the newly created liquidation
+func (k Keeper) CreateLiquidation(ctx sdk.Context, liquidation *types.Liquidation) *types.Liquidation {
+	// set the id
+	liquidation.Id = k.IncrementLiquidationId(ctx)
+
+	// set the status to liquidating
+	liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATING
+
+	k.SetLiquidation(ctx, liquidation)
+
+	return liquidation
+}
+
+// GetAllLiquidations gets all liquidations
+func (k Keeper) GetAllLiquidations(ctx sdk.Context) []*types.Liquidation {
+	liquidations := make([]*types.Liquidation, 0)
+
+	k.IterateLiquidations(ctx, func(liquidation *types.Liquidation) (stop bool) {
+		liquidations = append(liquidations, liquidation)
+		return false
+	})
+
+	return liquidations
+}
+
+// GetLiquidations gets liquidations by the given status
+func (k Keeper) GetLiquidations(ctx sdk.Context, status types.LiquidationStatus) []*types.Liquidation {
+	liquidations := make([]*types.Liquidation, 0)
+
+	k.IterateLiquidations(ctx, func(liquidation *types.Liquidation) (stop bool) {
+		if liquidation.Status == status {
+			liquidations = append(liquidations, liquidation)
+		}
+
+		return false
+	})
+
+	return liquidations
+}
+
+// IterateLiquidations iterates through all liquidations
+func (k Keeper) IterateLiquidations(ctx sdk.Context, cb func(liquidation *types.Liquidation) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.LiquidationKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var liquidation types.Liquidation
+		k.cdc.MustUnmarshal(iterator.Value(), &liquidation)
+
+		if cb(&liquidation) {
+			break
+		}
+	}
+}

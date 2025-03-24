@@ -1,0 +1,15 @@
+syntax = "proto3";
+package side.liquidation;
+
+import "gogoproto/gogo.proto";
+import "side/liquidation/liquidation.proto";
+import "side/liquidation/params.proto";
+
+option go_package = "github.com/sideprotocol/side/x/liquidation/types";
+
+// GenesisState defines the liquidation module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
+    repeated Liquidation liquidations = 2;
+    repeated LiquidationRecord liquidationRecords = 3;
+}

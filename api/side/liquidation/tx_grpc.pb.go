@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: side/auction/tx.proto
+// source: side/liquidation/tx.proto
 
-package auction
+package liquidation
 
 import (
 	context "context"
@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_Liquidate_FullMethodName               = "/side.auction.Msg/Liquidate"
-	Msg_SubmitPaymentSignatures_FullMethodName = "/side.auction.Msg/SubmitPaymentSignatures"
-	Msg_UpdateParams_FullMethodName            = "/side.auction.Msg/UpdateParams"
+	Msg_Liquidate_FullMethodName                  = "/side.liquidation.Msg/Liquidate"
+	Msg_SubmitSettlementSignatures_FullMethodName = "/side.liquidation.Msg/SubmitSettlementSignatures"
+	Msg_UpdateParams_FullMethodName               = "/side.liquidation.Msg/UpdateParams"
 )
 
 // MsgClient is the client API for Msg service.
@@ -30,8 +30,8 @@ const (
 type MsgClient interface {
 	// Liquidate the specified debt amount by liquidators.
 	Liquidate(ctx context.Context, in *MsgLiquidate, opts ...grpc.CallOption) (*MsgLiquidateResponse, error)
-	// Submit payment transaction signatures for the specified auction.
-	SubmitPaymentSignatures(ctx context.Context, in *MsgSubmitPaymentSignatures, opts ...grpc.CallOption) (*MsgSubmitPaymentSignaturesResponse, error)
+	// Submit settlement transaction signatures for the specified liquidation.
+	SubmitSettlementSignatures(ctx context.Context, in *MsgSubmitSettlementSignatures, opts ...grpc.CallOption) (*MsgSubmitSettlementSignaturesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -56,9 +56,9 @@ func (c *msgClient) Liquidate(ctx context.Context, in *MsgLiquidate, opts ...grp
 	return out, nil
 }
 
-func (c *msgClient) SubmitPaymentSignatures(ctx context.Context, in *MsgSubmitPaymentSignatures, opts ...grpc.CallOption) (*MsgSubmitPaymentSignaturesResponse, error) {
-	out := new(MsgSubmitPaymentSignaturesResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitPaymentSignatures_FullMethodName, in, out, opts...)
+func (c *msgClient) SubmitSettlementSignatures(ctx context.Context, in *MsgSubmitSettlementSignatures, opts ...grpc.CallOption) (*MsgSubmitSettlementSignaturesResponse, error) {
+	out := new(MsgSubmitSettlementSignaturesResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitSettlementSignatures_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,8 +80,8 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 type MsgServer interface {
 	// Liquidate the specified debt amount by liquidators.
 	Liquidate(context.Context, *MsgLiquidate) (*MsgLiquidateResponse, error)
-	// Submit payment transaction signatures for the specified auction.
-	SubmitPaymentSignatures(context.Context, *MsgSubmitPaymentSignatures) (*MsgSubmitPaymentSignaturesResponse, error)
+	// Submit settlement transaction signatures for the specified liquidation.
+	SubmitSettlementSignatures(context.Context, *MsgSubmitSettlementSignatures) (*MsgSubmitSettlementSignaturesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -97,8 +97,8 @@ type UnimplementedMsgServer struct {
 func (UnimplementedMsgServer) Liquidate(context.Context, *MsgLiquidate) (*MsgLiquidateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Liquidate not implemented")
 }
-func (UnimplementedMsgServer) SubmitPaymentSignatures(context.Context, *MsgSubmitPaymentSignatures) (*MsgSubmitPaymentSignaturesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitPaymentSignatures not implemented")
+func (UnimplementedMsgServer) SubmitSettlementSignatures(context.Context, *MsgSubmitSettlementSignatures) (*MsgSubmitSettlementSignaturesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitSettlementSignatures not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -134,20 +134,20 @@ func _Msg_Liquidate_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitPaymentSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitPaymentSignatures)
+func _Msg_SubmitSettlementSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitSettlementSignatures)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitPaymentSignatures(ctx, in)
+		return srv.(MsgServer).SubmitSettlementSignatures(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_SubmitPaymentSignatures_FullMethodName,
+		FullMethod: Msg_SubmitSettlementSignatures_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitPaymentSignatures(ctx, req.(*MsgSubmitPaymentSignatures))
+		return srv.(MsgServer).SubmitSettlementSignatures(ctx, req.(*MsgSubmitSettlementSignatures))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -174,7 +174,7 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Msg_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "side.auction.Msg",
+	ServiceName: "side.liquidation.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -182,8 +182,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_Liquidate_Handler,
 		},
 		{
-			MethodName: "SubmitPaymentSignatures",
-			Handler:    _Msg_SubmitPaymentSignatures_Handler,
+			MethodName: "SubmitSettlementSignatures",
+			Handler:    _Msg_SubmitSettlementSignatures_Handler,
 		},
 		{
 			MethodName: "UpdateParams",
@@ -191,5 +191,5 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "side/auction/tx.proto",
+	Metadata: "side/liquidation/tx.proto",
 }

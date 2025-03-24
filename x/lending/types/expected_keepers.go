@@ -9,9 +9,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	auctiontypes "github.com/sideprotocol/side/x/auction/types"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
+	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
@@ -46,11 +46,11 @@ type OracleKeeper interface {
 	GetPrice(ctx sdk.Context, pair string) (sdkmath.Int, error)
 }
 
-// AuctionKeeper defines the expected auction keeper interface
-type AuctionKeeper interface {
-	SetBiddedAssetHandler(handler auctiontypes.BiddedAssetHandler)
+// LiquidationKeeper defines the expected liquidation keeper interface
+type LiquidationKeeper interface {
+	SetBiddedAssetHandler(handler liquidationtypes.BiddedAssetHandler)
 
-	CreateAuction(ctx sdk.Context, auction *auctiontypes.Auction) *auctiontypes.Auction
+	CreateLiquidation(ctx sdk.Context, liquidation *liquidationtypes.Liquidation) *liquidationtypes.Liquidation
 
 	SetPrice(ctx sdk.Context, pair string, price string)
 }

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package side.liquidation;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sideprotocol/side/x/liquidation/types";
+
+// Params defines the parameters for the module.
+message Params {
+    // liquidation bonus permille
+    uint32 liquidation_bonus = 1;
+    // protocol liquidation fee permille
+    uint32 protocol_liquidation_fee = 2;
+    // protocol liquidation fee collector
+    string protocol_liquidation_fee_collector = 3;
+}

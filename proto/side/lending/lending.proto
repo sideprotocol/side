@@ -133,7 +133,7 @@ message Loan {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 auction_id = 19;
+    uint64 liquidation_id = 19;
     google.protobuf.Timestamp create_at = 20 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     LoanStatus status = 21;
 }
