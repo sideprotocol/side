@@ -10,6 +10,11 @@ import (
 	"github.com/sideprotocol/side/crypto/adaptor"
 )
 
+const (
+	// OneYear represents the seconds in one year
+	OneYear = 365 * 24 * time.Hour
+)
+
 // GetExchangeRate calculates the sToken exchange rate according to the given params
 // Formula:
 // exchange rate = (totalAvailable + total borrowed) / totalSTokens
