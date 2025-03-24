@@ -6,7 +6,7 @@ import (
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "auction"
+	ModuleName = "liquidation"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
@@ -15,7 +15,7 @@ const (
 	RouterKey = ModuleName
 
 	// MemStoreKey defines the in-memory store key
-	MemStoreKey = "mem_auction"
+	MemStoreKey = "mem_liquidation"
 )
 
 var (

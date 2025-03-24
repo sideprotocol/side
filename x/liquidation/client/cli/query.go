@@ -26,11 +26,10 @@ func GetQueryCmd(_ string) *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdQueryParams())
-	cmd.AddCommand(CmdQueryAuction())
-	cmd.AddCommand(CmdQueryAuctions())
-	cmd.AddCommand(CmdQueryBid())
-	cmd.AddCommand(CmdQueryBids())
-	cmd.AddCommand(CmdQueryAuctionPrice())
+	cmd.AddCommand(CmdQueryLiquidation())
+	cmd.AddCommand(CmdQueryLiquidations())
+	cmd.AddCommand(CmdQueryLiquidationRecord())
+	cmd.AddCommand(CmdQueryLiquidationRecords())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -63,10 +62,10 @@ func CmdQueryParams() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryAuction() *cobra.Command {
+func CmdQueryLiquidation() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "auction",
-		Short: "Query auction by the given id",
+		Use:   "liquidation [id]",
+		Short: "Query liquidation by the given id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -81,7 +80,7 @@ func CmdQueryAuction() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.Auction(cmd.Context(), &types.QueryAuctionRequest{Id: id})
+			res, err := queryClient.Liquidation(cmd.Context(), &types.QueryLiquidationRequest{Id: id})
 			if err != nil {
 				return err
 			}
@@ -95,10 +94,10 @@ func CmdQueryAuction() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryAuctions() *cobra.Command {
+func CmdQueryLiquidations() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "auctions [status]",
-		Short: "Query auctions by the given status",
+		Use:   "liquidations [status]",
+		Short: "Query liquidations by the given status",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -113,7 +112,7 @@ func CmdQueryAuctions() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.Auctions(cmd.Context(), &types.QueryAuctionsRequest{Status: types.AuctionStatus(status)})
+			res, err := queryClient.Liquidations(cmd.Context(), &types.QueryLiquidationsRequest{Status: types.LiquidationStatus(status)})
 			if err != nil {
 				return err
 			}
@@ -127,10 +126,10 @@ func CmdQueryAuctions() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryBid() *cobra.Command {
+func CmdQueryLiquidationRecord() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "bid",
-		Short: "Query bid by the given id",
+		Use:   "record [id]",
+		Short: "Query the liquidation record by the given id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -145,7 +144,7 @@ func CmdQueryBid() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.Bid(cmd.Context(), &types.QueryBidRequest{Id: id})
+			res, err := queryClient.LiquidationRecord(cmd.Context(), &types.QueryLiquidationRecordRequest{Id: id})
 			if err != nil {
 				return err
 			}
@@ -159,50 +158,10 @@ func CmdQueryBid() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryBids() *cobra.Command {
+func CmdQueryLiquidationRecords() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "bids [status]",
-		Short: "Query bids by the optional auction and status",
-		Args:  cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-
-			auctionId, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			status, err := strconv.ParseUint(args[1], 10, 32)
-			if err != nil {
-				return err
-			}
-
-			res, err := queryClient.Bids(cmd.Context(), &types.QueryBidsRequest{
-				AuctionId: auctionId,
-				Status:    types.BidStatus(status),
-			})
-			if err != nil {
-				return err
-			}
-
-			return clientCtx.PrintProto(res)
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdQueryAuctionPrice() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "auction-price",
-		Short: "Query the current price of the given auction",
+		Use:   "records [liquidation id]",
+		Short: "Query liquidation records of the specified liquidation",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -212,12 +171,14 @@ func CmdQueryAuctionPrice() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			auctionId, err := strconv.ParseUint(args[0], 10, 64)
+			liquidationId, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			res, err := queryClient.AuctionPrice(cmd.Context(), &types.QueryAuctionPriceRequest{AuctionId: auctionId})
+			res, err := queryClient.LiquidationRecords(cmd.Context(), &types.QueryLiquidationRecordsRequest{
+				LiquidationId: liquidationId,
+			})
 			if err != nil {
 				return err
 			}
