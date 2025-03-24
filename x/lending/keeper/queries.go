@@ -257,6 +257,30 @@ func (k Keeper) Repayment(goCtx context.Context, req *types.QueryRepaymentReques
 	return &types.QueryRepaymentResponse{Repayment: k.GetRepayment(ctx, req.LoanId)}, nil
 }
 
+// CurrentInterest implements types.QueryServer.
+func (k Keeper) CurrentInterest(goCtx context.Context, req *types.QueryCurrentInterestRequest) (*types.QueryCurrentInterestResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasLoan(ctx, req.LoanId) {
+		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
+	}
+
+	loan := k.GetLoan(ctx, req.LoanId)
+	if loan.Status != types.LoanStatus_Open {
+		return nil, status.Error(codes.InvalidArgument, "loan not open")
+	}
+
+	currentInterest := k.GetCurrentInterest(ctx, loan)
+
+	return &types.QueryCurrentInterestResponse{
+		Interest: currentInterest,
+	}, nil
+}
+
 // Params implements types.QueryServer.
 func (k Keeper) Params(goCtx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	if req == nil {

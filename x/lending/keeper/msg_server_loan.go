@@ -505,8 +505,10 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not open")
 	}
 
+	interest := m.GetCurrentInterest(ctx, loan)
+	amount := loan.BorrowAmount.Add(interest)
+
 	// escrow repaid amount
-	amount := loan.BorrowAmount.AddAmount(loan.Interest)
 	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), types.RepaymentEscrowAccount, sdk.NewCoins(amount)); err != nil {
 		return nil, err
 	}

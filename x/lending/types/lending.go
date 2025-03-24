@@ -21,6 +21,13 @@ func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, tota
 	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed)).Quo(totalSTokens.ToLegacyDec())
 }
 
+// GetCurrentInterest calculates the current interest based on the given params
+func GetCurrentInterest(totalInterest sdkmath.Int, term time.Duration, startTime time.Time, currentTime time.Time) sdkmath.Int {
+	elapsed := currentTime.Sub(startTime)
+
+	return totalInterest.Mul(sdkmath.NewInt(int64(elapsed))).Quo(sdkmath.NewInt(int64(term)))
+}
+
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount

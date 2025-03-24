@@ -32,6 +32,7 @@ const (
 	Query_LoanDlcMeta_FullMethodName       = "/side.lending.Query/LoanDlcMeta"
 	Query_LoanCancellation_FullMethodName  = "/side.lending.Query/LoanCancellation"
 	Query_Repayment_FullMethodName         = "/side.lending.Query/Repayment"
+	Query_CurrentInterest_FullMethodName   = "/side.lending.Query/CurrentInterest"
 )
 
 // QueryClient is the client API for Query service.
@@ -52,6 +53,7 @@ type QueryClient interface {
 	LoanDlcMeta(ctx context.Context, in *QueryLoanDlcMetaRequest, opts ...grpc.CallOption) (*QueryLoanDlcMetaResponse, error)
 	LoanCancellation(ctx context.Context, in *QueryLoanCancellationRequest, opts ...grpc.CallOption) (*QueryLoanCancellationResponse, error)
 	Repayment(ctx context.Context, in *QueryRepaymentRequest, opts ...grpc.CallOption) (*QueryRepaymentResponse, error)
+	CurrentInterest(ctx context.Context, in *QueryCurrentInterestRequest, opts ...grpc.CallOption) (*QueryCurrentInterestResponse, error)
 }
 
 type queryClient struct {
@@ -179,6 +181,15 @@ func (c *queryClient) Repayment(ctx context.Context, in *QueryRepaymentRequest, 
 	return out, nil
 }
 
+func (c *queryClient) CurrentInterest(ctx context.Context, in *QueryCurrentInterestRequest, opts ...grpc.CallOption) (*QueryCurrentInterestResponse, error) {
+	out := new(QueryCurrentInterestResponse)
+	err := c.cc.Invoke(ctx, Query_CurrentInterest_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -197,6 +208,7 @@ type QueryServer interface {
 	LoanDlcMeta(context.Context, *QueryLoanDlcMetaRequest) (*QueryLoanDlcMetaResponse, error)
 	LoanCancellation(context.Context, *QueryLoanCancellationRequest) (*QueryLoanCancellationResponse, error)
 	Repayment(context.Context, *QueryRepaymentRequest) (*QueryRepaymentResponse, error)
+	CurrentInterest(context.Context, *QueryCurrentInterestRequest) (*QueryCurrentInterestResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -242,6 +254,9 @@ func (UnimplementedQueryServer) LoanCancellation(context.Context, *QueryLoanCanc
 }
 func (UnimplementedQueryServer) Repayment(context.Context, *QueryRepaymentRequest) (*QueryRepaymentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Repayment not implemented")
+}
+func (UnimplementedQueryServer) CurrentInterest(context.Context, *QueryCurrentInterestRequest) (*QueryCurrentInterestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CurrentInterest not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -490,6 +505,24 @@ func _Query_Repayment_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_CurrentInterest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCurrentInterestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CurrentInterest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_CurrentInterest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CurrentInterest(ctx, req.(*QueryCurrentInterestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -548,6 +581,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Repayment",
 			Handler:    _Query_Repayment_Handler,
+		},
+		{
+			MethodName: "CurrentInterest",
+			Handler:    _Query_CurrentInterest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

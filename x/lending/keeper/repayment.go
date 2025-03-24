@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"strings"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
@@ -38,18 +39,23 @@ func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId strin
 
 // CompleteRepayment completes the repayment of the given loan
 func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
-	amount := loan.BorrowAmount.Amount.Add(loan.Interest).Sub(loan.ProtocolFee)
-	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, types.RepaymentEscrowAccount, types.ModuleName, sdk.NewCoins(sdk.NewCoin(loan.BorrowAmount.Denom, amount))); err != nil {
+	pool := k.GetPool(ctx, loan.PoolId)
+	repayment := k.GetRepayment(ctx, loan.VaultAddress)
+
+	interest := repayment.Amount.Sub(loan.BorrowAmount)
+	protocolFee := sdk.NewCoin(loan.BorrowAmount.Denom, interest.Amount.Mul(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).Quo(types.Permille))
+
+	amount := repayment.Amount.Sub(protocolFee)
+	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, types.RepaymentEscrowAccount, types.ModuleName, sdk.NewCoins(amount)); err != nil {
 		return err
 	}
 
-	protocolFee := sdk.NewCoin(loan.BorrowAmount.Denom, loan.ProtocolFee)
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(k.GetParams(ctx).ProtocolFeeCollector), sdk.NewCoins(protocolFee)); err != nil {
 		return err
 	}
 
 	// update pool
-	k.AfterPoolRepaid(ctx, loan.PoolId, loan.BorrowAmount, loan.Interest, loan.ProtocolFee)
+	k.AfterPoolRepaid(ctx, loan.PoolId, loan.BorrowAmount, interest.Amount, protocolFee.Amount)
 
 	loan.Status = types.LoanStatus_Closed
 	k.SetLoan(ctx, loan)

@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -172,4 +174,11 @@ func (k Keeper) GetCancellation(ctx sdk.Context, loanId string) *types.Cancellat
 	k.cdc.MustUnmarshal(bz, &cancellation)
 
 	return &cancellation
+}
+
+// GetCurrentInterest gets the current interest of the given loan
+func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
+	currentInterest := types.GetCurrentInterest(loan.Interest, time.Duration(loan.MaturityTime-loan.CreateAt.Unix()), loan.CreateAt, ctx.BlockTime())
+
+	return sdk.NewCoin(loan.BorrowAmount.Denom, currentInterest)
 }

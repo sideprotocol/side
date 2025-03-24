@@ -64,6 +64,10 @@ service Query {
     rpc Repayment(QueryRepaymentRequest) returns (QueryRepaymentResponse) {
         option (google.api.http).get = "/side/lending/loan/repayment";
     }
+
+    rpc CurrentInterest(QueryCurrentInterestRequest) returns (QueryCurrentInterestResponse) {
+        option (google.api.http).get = "/side/lending/loan/current_interest";
+    }
 }
 
 // QueryPoolRequest is request type for the Query/Pool RPC method.
@@ -202,4 +206,12 @@ message QueryRepaymentRequest {
 
 message QueryRepaymentResponse {
     Repayment repayment = 1;
+}
+
+message QueryCurrentInterestRequest {
+    string loan_id = 1;
+}
+
+message QueryCurrentInterestResponse {
+    cosmos.base.v1beta1.Coin interest = 1 [(gogoproto.nullable) = false];
 }
