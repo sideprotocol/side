@@ -57,7 +57,7 @@ func (m msgServer) SubmitSettlementSignatures(goCtx context.Context, msg *types.
 	// emit event
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.EventTypeGenerateSignedPaymentTransaction,
+			types.EventTypeGenerateSignedSettlementTransaction,
 			sdk.NewAttribute(types.AttributeKeyLiquidationId, fmt.Sprintf("%d", msg.LiquidationId)),
 			sdk.NewAttribute(types.AttributeKeyTxHash, m.GetLiquidation(ctx, msg.LiquidationId).SettlementTxId),
 		),

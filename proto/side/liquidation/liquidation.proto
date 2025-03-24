@@ -29,10 +29,12 @@ message Liquidation {
     cosmos.base.v1beta1.Coin debt_amount = 8 [(gogoproto.nullable) = false];
     cosmos.base.v1beta1.Coin liquidated_debt_amount = 9 [(gogoproto.nullable) = false];
     uint32 liquidation_bonus = 10;
-    string liquidation_cet = 11;
-    string settlement_tx = 12;
-    string settlement_tx_id = 13;
-    LiquidationStatus status = 14;
+    cosmos.base.v1beta1.Coin liquidation_bonus_amount = 11 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin protocol_liquidation_fee = 12 [(gogoproto.nullable) = false];
+    string liquidation_cet = 13;
+    string settlement_tx = 14;
+    string settlement_tx_id = 15;
+    LiquidationStatus status = 16;
 }
 
 message LiquidationRecord {

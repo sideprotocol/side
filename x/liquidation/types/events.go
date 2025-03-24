@@ -2,9 +2,9 @@ package types
 
 // Auctioin module event types
 const (
-	EventTypeLiquidate                        = "liquidate"
-	EventTypeSignPaymentTransaction           = "sign_payment_transaction"
-	EventTypeGenerateSignedPaymentTransaction = "generate_signed_payment_transaction"
+	EventTypeLiquidate                           = "liquidate"
+	EventTypeSignSettlementTransaction           = "sign_settlement_transaction"
+	EventTypeGenerateSignedSettlementTransaction = "generate_signed_settlement_transaction"
 
 	AttributeKeyLiquidator          = "liquidator"
 	AttributeKeyLiquidationId       = "liquidation_id"

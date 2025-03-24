@@ -38,20 +38,27 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, err
 	}
 
-	bonusInDebt := liquidation.DebtAmount.Amount.Mul(sdkmath.NewInt(int64(k.LiquidationBonus(ctx)))).Mul(debtAmount.Amount).Quo(liquidation.DebtAmount.Amount).Quo(sdkmath.NewInt(1000))
+	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(10 ^ 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
 
-	collateralAmount := debtAmount.Amount.Add(bonusInDebt).Mul(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(10 ^ 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+	bonusAmountInDebt := debtAmount.Amount.Mul(sdkmath.NewInt(int64(k.LiquidationBonus(ctx)))).Quo(sdkmath.NewInt(1000))
+	bonusAmount := bonusAmountInDebt.Mul(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(10 ^ 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+
+	protocolLiquidationFee := bonusAmount.Mul(sdkmath.NewInt(int64(k.ProtocolLiquidationFee(ctx)))).Quo(sdkmath.NewInt(1000))
+	bonusAmount = bonusAmount.Sub(protocolLiquidationFee)
 
 	record := &types.LiquidationRecord{
 		Id:               k.IncrementLiquidationRecordId(ctx),
 		LiquidationId:    liquidationId,
 		Liquidator:       liquidator,
 		DebtAmount:       debtAmount,
-		CollateralAmount: sdk.NewCoin(liquidation.LiquidatedCollateral.Denom, collateralAmount),
+		CollateralAmount: sdk.NewCoin(liquidation.LiquidatedCollateral.Denom, collateralAmount.Add(bonusAmount)),
 		Time:             ctx.BlockTime(),
 	}
 
 	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)
+	liquidation.LiquidationBonusAmount = liquidation.LiquidationBonusAmount.AddAmount(bonusAmount)
+	liquidation.ProtocolLiquidationFee = liquidation.ProtocolLiquidationFee.AddAmount(protocolLiquidationFee)
+
 	if liquidation.LiquidatedDebtAmount.Amount.Equal(liquidation.DebtAmount.Amount) {
 		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED
 	}
