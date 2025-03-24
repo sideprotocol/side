@@ -1,4 +1,4 @@
-package auction
+package liquidation
 
 import (
 	"context"

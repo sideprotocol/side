@@ -1,4 +1,4 @@
-package auction_test
+package liquidation_test
 
 import (
 	"testing"
