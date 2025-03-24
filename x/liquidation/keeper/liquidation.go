@@ -2,6 +2,7 @@ package keeper
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -19,19 +20,44 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, errorsmod.Wrap(types.ErrInvalidLiquidationStatus, "non liquidating status")
 	}
 
+	if debtAmount.Denom != liquidation.DebtAmount.Denom {
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched debt amount denom")
+	}
+
+	currentPrice := k.GetPrice(ctx, "BTC-USD")
+	if currentPrice.IsZero() {
+		return nil, types.ErrInvalidPrice
+	}
+
+	remainingDebtAmount := liquidation.DebtAmount.Sub(liquidation.LiquidatedDebtAmount)
+	if remainingDebtAmount.IsLT(debtAmount) {
+		debtAmount = remainingDebtAmount
+	}
+
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(liquidator), types.ModuleName, sdk.NewCoins(debtAmount)); err != nil {
 		return nil, err
 	}
 
+	bonusInDebt := liquidation.DebtAmount.Amount.Mul(sdkmath.NewInt(int64(k.LiquidationBonus(ctx)))).Mul(debtAmount.Amount).Quo(liquidation.DebtAmount.Amount).Quo(sdkmath.NewInt(1000))
+
+	collateralAmount := debtAmount.Amount.Add(bonusInDebt).Mul(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(10 ^ 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+
 	record := &types.LiquidationRecord{
-		Id:            k.IncrementLiquidationRecordId(ctx),
-		LiquidationId: liquidationId,
-		Liquidator:    liquidator,
-		DebtAmount:    debtAmount,
-		Time:          ctx.BlockTime(),
+		Id:               k.IncrementLiquidationRecordId(ctx),
+		LiquidationId:    liquidationId,
+		Liquidator:       liquidator,
+		DebtAmount:       debtAmount,
+		CollateralAmount: sdk.NewCoin(liquidation.LiquidatedCollateral.Denom, collateralAmount),
+		Time:             ctx.BlockTime(),
+	}
+
+	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)
+	if liquidation.LiquidatedDebtAmount.Amount.Equal(liquidation.DebtAmount.Amount) {
+		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED
 	}
 
 	k.SetLiquidationRecord(ctx, record)
+	k.SetLiquidation(ctx, liquidation)
 
 	return record, nil
 }

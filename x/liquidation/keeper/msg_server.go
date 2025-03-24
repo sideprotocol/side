@@ -23,10 +23,21 @@ func (m msgServer) Liquidate(goCtx context.Context, msg *types.MsgLiquidate) (*t
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	_, err := m.Keeper.HandleLiquidation(ctx, msg.Liquidator, msg.LiquidationId, msg.DebtAmount)
+	record, err := m.Keeper.HandleLiquidation(ctx, msg.Liquidator, msg.LiquidationId, msg.DebtAmount)
 	if err != nil {
 		return nil, err
 	}
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeLiquidate,
+			sdk.NewAttribute(types.AttributeKeyLiquidator, msg.Liquidator),
+			sdk.NewAttribute(types.AttributeKeyLiquidationId, fmt.Sprintf("%d", msg.LiquidationId)),
+			sdk.NewAttribute(types.AttributeKeyLiquidationRecordId, fmt.Sprintf("%d", record.Id)),
+			sdk.NewAttribute(types.AttributeKeyDebtAmount, record.DebtAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyCollateralAmount, record.CollateralAmount.String()),
+		),
+	)
 
 	return &types.MsgLiquidateResponse{}, nil
 }
@@ -47,7 +58,7 @@ func (m msgServer) SubmitSettlementSignatures(goCtx context.Context, msg *types.
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeGenerateSignedPaymentTransaction,
-			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprintf("%d", msg.LiquidationId)),
+			sdk.NewAttribute(types.AttributeKeyLiquidationId, fmt.Sprintf("%d", msg.LiquidationId)),
 			sdk.NewAttribute(types.AttributeKeyTxHash, m.GetLiquidation(ctx, msg.LiquidationId).SettlementTxId),
 		),
 	)
