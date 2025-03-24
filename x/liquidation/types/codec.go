@@ -8,9 +8,9 @@ import (
 )
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgLiquidate{}, "auction/MsgLiquidate", nil)
-	cdc.RegisterConcrete(&MsgSubmitSettlementSignatures{}, "auction/MsgSubmitSettlementSignatures", nil)
-	cdc.RegisterConcrete(&MsgUpdateParams{}, "auction/MsgUpdateParams", nil)
+	cdc.RegisterConcrete(&MsgLiquidate{}, "liquidation/MsgLiquidate", nil)
+	cdc.RegisterConcrete(&MsgSubmitSettlementSignatures{}, "liquidation/MsgSubmitSettlementSignatures", nil)
+	cdc.RegisterConcrete(&MsgUpdateParams{}, "liquidation/MsgUpdateParams", nil)
 	// this line is used by starport scaffolding # 2
 }
 
