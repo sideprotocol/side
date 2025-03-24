@@ -49,7 +49,7 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 
 		liquidation.SettlementTx = settlementTx
 		liquidation.SettlementTxId = txHash.String()
-		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_SETTLED
+		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_SETTLING
 
 		// update liquidation
 		k.SetLiquidation(ctx, liquidation)

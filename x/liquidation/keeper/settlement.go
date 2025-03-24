@@ -19,8 +19,8 @@ func (k Keeper) HandleSettlementTransactionSignatures(ctx sdk.Context, sender st
 	}
 
 	liquidation := k.GetLiquidation(ctx, liquidationId)
-	if liquidation.Status != types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED {
-		return errorsmod.Wrap(types.ErrInvalidLiquidationStatus, "non liquidated status")
+	if liquidation.Status != types.LiquidationStatus_LIQUIDATION_STATUS_SETTLING {
+		return errorsmod.Wrap(types.ErrInvalidLiquidationStatus, "non settling status")
 	}
 
 	settlementTxPsbt, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidation.SettlementTx)), true)
@@ -60,6 +60,7 @@ func (k Keeper) HandleSettlementTransactionSignatures(ctx sdk.Context, sender st
 
 	// update liquidation
 	liquidation.SettlementTx = settlementTxPsbtB64
+	liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_SETTLED
 	k.SetLiquidation(ctx, liquidation)
 
 	return nil
