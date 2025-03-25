@@ -62,7 +62,7 @@ func AdaptorPointFromSecret(secret []byte) string {
 
 // ValidatePoolConfig validates the given pool config
 func ValidatePoolConfig(config PoolConfig) error {
-	if config.BorrowAPR == 0 || config.BorrowAPR <= 1000 {
+	if config.BorrowAPR == 0 || config.BorrowAPR >= 1000 {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1000)")
 	}
 
