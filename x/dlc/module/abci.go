@@ -146,7 +146,7 @@ func generateDateEventNonces(ctx sdk.Context, k keeper.Keeper) {
 
 	// check if date event nonces need to be generated
 	currentEventDate := k.GetCurrentEventDate(ctx)
-	if currentEventDate-ctx.BlockTime().Unix() >= int64(k.GetDateEventNonceQueueSize(ctx)) {
+	if (currentEventDate-ctx.BlockTime().Unix())/k.GetDateInterval(ctx) >= int64(k.GetDateEventNonceQueueSize(ctx)) {
 		return
 	}
 

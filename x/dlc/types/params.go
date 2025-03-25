@@ -22,7 +22,7 @@ var (
 	DefaultDateEventNonceQueueSize = uint32(180)
 
 	// default date interval
-	DefaultDateInterval = time.Duration(86400) * time.Second // 1 day
+	DefaultDateInterval = time.Duration(86400) // 1 day
 
 	// default nonce queue size for lending events
 	DefaultLendingEventNonceQueueSize = uint32(1000)
