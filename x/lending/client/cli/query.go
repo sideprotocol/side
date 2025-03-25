@@ -28,6 +28,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdQueryPool())
 	cmd.AddCommand(CmdQueryPools())
+	cmd.AddCommand(CmdQueryPoolExchangeRate())
 	cmd.AddCommand(CmdQueryCollateralAddress())
 	cmd.AddCommand(CmdQueryLiquidationEvent())
 	cmd.AddCommand(CmdQueryLoan())
