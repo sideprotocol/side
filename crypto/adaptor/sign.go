@@ -47,7 +47,7 @@ func Sign(privKey *btcec.PrivateKey, hash []byte, adaptorPointBytes []byte) (*Si
 	// 9. Fail if k' = 0
 	// 10. R = 'k*G
 	// 11. Negate k if R.y id odd
-	// 12. e = tagged_hash("BIP0340/challenge", bytes(R) || bytes(P) || mod) mod n
+	// 12. e = tagged_hash("BIP0340/challenge", bytes(AR) || bytes(P) || m) mod n
 	// 13. sig = bytes(R) || bytes((k + e*d)) mod n
 	// 14. If Verify(bytes(P), m, sig) fails, abort.
 	// 15. return sig.
@@ -147,7 +147,7 @@ func schnorrAdaptorSign(privKey, nonce *btcec.ModNScalar, pubKey *btcec.PublicKe
 	// 9. Fail if k' = 0
 	// 10. R = 'k*G
 	// 11. Negate k if R.y id odd
-	// 12. e = tagged_hash("BIP0340/challenge", bytes(R) || bytes(P) || m) mod n
+	// 12. e = tagged_hash("BIP0340/challenge", bytes(AR) || bytes(P) || m) mod n
 	// 13. sig = bytes(R) || bytes((k + e*d)) mod n
 	// 14. If Verify(bytes(P), m, sig) fails, abort.
 	// 15. return sig.
@@ -173,9 +173,9 @@ func schnorrAdaptorSign(privKey, nonce *btcec.ModNScalar, pubKey *btcec.PublicKe
 
 	// Step 11.
 	//
-	// Negate nonce k if R.y is odd (R.y is the y coordinate of the point R)
+	// Negate nonce k if AR.y is odd (AR.y is the y coordinate of the point AR)
 	//
-	// Note that R must be in affine coordinates for this check.
+	// Note that AR must be in affine coordinates for this check.
 	AR.ToAffine()
 	if AR.Y.IsOdd() {
 		k.Negate()
@@ -183,7 +183,7 @@ func schnorrAdaptorSign(privKey, nonce *btcec.ModNScalar, pubKey *btcec.PublicKe
 
 	// Step 12.
 	//
-	// e = tagged_hash("BIP0340/challenge", bytes(R) || bytes(P) || m) mod n
+	// e = tagged_hash("BIP0340/challenge", bytes(AR) || bytes(P) || m) mod n
 	var rBytes [32]byte
 	r := &AR.X
 	r.PutBytesUnchecked(rBytes[:])
@@ -206,16 +206,20 @@ func schnorrAdaptorSign(privKey, nonce *btcec.ModNScalar, pubKey *btcec.PublicKe
 	s := new(btcec.ModNScalar).Mul2(&e, privKey).Add(&k)
 	k.Zero()
 
-	R.ToAffine()
+	rParity := byte(2)
+	if AR.Y.IsOdd() {
+		rParity = byte(3)
+	}
 
 	sig := &Signature{
-		r: R.X,
-		s: *s,
+		rParity: rParity,
+		r:       AR.X,
+		s:       *s,
 	}
 
 	// Step 14.
 
-	// If Verify(bytes(P), m, sig) fails, abort.
+	// If Verify(sig, hash, bytes(P), AP) fails, abort.
 	if err := verifySchnorrAdaptorSignature(sig, hash, pubKey, adaptorPoint); err != nil {
 		return nil, err
 	}

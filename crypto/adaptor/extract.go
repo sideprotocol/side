@@ -7,47 +7,24 @@ import (
 
 // Extract extracts the secret from the given adaptor signature and adapted signature
 func Extract(adaptorSigBytes []byte, adaptedSigBytes []byte) []byte {
-	adaptorR, err := schnorr.ParsePubKey(adaptorSigBytes[0:32])
+	adaptorSig, err := ParseSignature(adaptorSigBytes)
 	if err != nil {
 		return nil
 	}
 
-	adaptedR, err := schnorr.ParsePubKey(adaptedSigBytes[0:32])
+	_, err = schnorr.ParseSignature(adaptedSigBytes)
 	if err != nil {
 		return nil
 	}
 
-	var adaptorRPoint, adaptedRPoint secp256k1.JacobianPoint
-	adaptorR.AsJacobian(&adaptorRPoint)
-	adaptedR.AsJacobian(&adaptedRPoint)
+	var adaptedS secp256k1.ModNScalar
+	adaptedS.SetByteSlice(adaptedSigBytes[32:])
 
-	adaptorSig := NewSignature(adaptorSigBytes)
-	adaptedSig := NewSignature(adaptedSigBytes)
+	t := adaptedS.Add(adaptorSig.s.Negate())
 
-	t := adaptedSig.s.Add(adaptorSig.s.Negate())
-
-	switch {
-	case verifySecret(t, false, adaptorRPoint, adaptedRPoint):
-		return SerializeScalar(t)
-
-	case verifySecret(t.Negate(), true, adaptorRPoint, adaptedRPoint):
-		return SerializeScalar(t)
-
-	default:
-		return nil
+	if adaptorSig.IsROdd() {
+		t.Negate()
 	}
-}
 
-// verifySecret returns true if the computed R is correct according to the given secret and parity, false otherwise
-func verifySecret(t *secp256k1.ModNScalar, expectOdd bool, adaptorRPoint secp256k1.JacobianPoint, adaptedRPoint secp256k1.JacobianPoint) bool {
-	var T secp256k1.JacobianPoint
-	secp256k1.ScalarBaseMultNonConst(t, &T)
-
-	var computedAdaptedRPoint secp256k1.JacobianPoint
-	secp256k1.AddNonConst(&adaptorRPoint, &T, &computedAdaptedRPoint)
-
-	adaptedRPoint.ToAffine()
-	computedAdaptedRPoint.ToAffine()
-
-	return computedAdaptedRPoint.Y.IsOdd() == expectOdd && computedAdaptedRPoint.X.Equals(&adaptedRPoint.X)
+	return SerializeScalar(t)
 }

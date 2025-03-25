@@ -11,7 +11,7 @@ import (
 
 // Verify verifies the provided schnorr adaptor signature against the given adaptor point
 func Verify(sigBytes []byte, msg []byte, pubKeyBytes []byte, adaptorPointBytes []byte) bool {
-	_, err := schnorr.ParseSignature(sigBytes)
+	signature, err := ParseSignature(sigBytes)
 	if err != nil {
 		return false
 	}
@@ -26,29 +26,29 @@ func Verify(sigBytes []byte, msg []byte, pubKeyBytes []byte, adaptorPointBytes [
 		return false
 	}
 
-	return verifySchnorrAdaptorSignature(NewSignature(sigBytes), msg, pubKey, adaptorPoint) == nil
+	return verifySchnorrAdaptorSignature(signature, msg, pubKey, adaptorPoint) == nil
 }
 
 // verifySchnorrAdaptorSignature verifies the given schnorr adaptor signature
 //
-// The algorithm is based on the verifier for schnorr signature
-// Specifically, step 3 and 6 are added, step 7 and 10 are modified
+// # The algorithm is based on the verifier for schnorr signature
 //
 // Annotation:
 // AP: adaptor point
 // AR: adapted R
+// EAP: effective adaptor point
 func verifySchnorrAdaptorSignature(sig *Signature, hash []byte, pubKey *secp256k1.PublicKey, adaptorPoint *secp256k1.PublicKey) error {
 	// 1. Fail if m is not 32 bytes
 	// 2. P = lift_x(int(pk)).
 	// 3. AP = lift_x(int(ap)).
 	// 4. r = int(sig[0:32]); fail is r >= p.
 	// 5. s = int(sig[32:64]); fail if s >= n.
-	// 6. AR = R + AP.
+	// 6. AR = lift_x(int(rParity || r)).
 	// 7. e = int(tagged_hash("BIP0340/challenge", bytes(AR) || bytes(P) || M)) mod n.
-	// 8. ER = s*G - e*P
-	// 9. Fail if is_infinite(ER)
-	// 10. Fail if not is_infinite(R+ER) in case not has_even_y(R+AP)
-	// 11. Fail if x(ER) != r in case has_even_y(R+AP)
+	// 8. R = s*G - e*P
+	// 9. Fail if is_infinite(R)
+	// 10. EAP = AR - R if has_even_y(AR) else AR + R; Fail if is_infinite(EAP)
+	// 11. Fail if EAP != AP
 	// 12. Return success iff not failure occured before reaching this
 	// point.
 
@@ -81,6 +81,9 @@ func verifySchnorrAdaptorSignature(sig *Signature, hash []byte, pubKey *secp256k
 		return fmt.Errorf("invalid adaptor point: %s", str)
 	}
 
+	var AP btcec.JacobianPoint
+	adaptorPoint.AsJacobian(&AP)
+
 	// Step 4.
 	//
 	// Fail if r >= p
@@ -95,32 +98,27 @@ func verifySchnorrAdaptorSignature(sig *Signature, hash []byte, pubKey *secp256k
 
 	// Step 6.
 	//
-	// AR = R + AP
-	var rBytes [32]byte
-	sig.r.PutBytesUnchecked(rBytes[:])
+	// AR = lift_x(int(ar))
+	var arBytes [33]byte
+	arBytes[0] = sig.rParity
+	sig.r.PutBytesUnchecked(arBytes[1:])
 
-	rPoint, err := schnorr.ParsePubKey(rBytes[:])
+	adaptedRPoint, err := btcec.ParsePubKey(arBytes[:])
 	if err != nil {
 		str := "failed to parse r"
 		return fmt.Errorf("invalid r: %s", str)
 	}
 
-	var R, AP, AR btcec.JacobianPoint
-	rPoint.AsJacobian(&R)
-	adaptorPoint.AsJacobian(&AP)
-	btcec.AddNonConst(&R, &AP, &AR)
+	var AR btcec.JacobianPoint
+	adaptedRPoint.AsJacobian(&AR)
 
 	// Step 7.
 	//
 	// e = int(tagged_hash("BIP0340/challenge", bytes(ar) || bytes(P) || M)) mod n.
-	AR.ToAffine()
-	var arBytes [32]byte
-	AR.X.PutBytesUnchecked(arBytes[:])
-
 	pBytes := schnorr.SerializePubKey(pubKey)
 
 	commitment := chainhash.TaggedHash(
-		chainhash.TagBIP0340Challenge, arBytes[:], pBytes, hash,
+		chainhash.TagBIP0340Challenge, arBytes[1:], pBytes, hash,
 	)
 
 	var e btcec.ModNScalar
@@ -135,45 +133,50 @@ func verifySchnorrAdaptorSignature(sig *Signature, hash []byte, pubKey *secp256k
 
 	// Step 8.
 	//
-	// ER = s*G - e*P
-	var P, sG, eP, ER btcec.JacobianPoint
+	// R = s*G - e*P
+	var P, sG, eP, R btcec.JacobianPoint
 	pubKey.AsJacobian(&P)
 	btcec.ScalarBaseMultNonConst(&sig.s, &sG)
 	btcec.ScalarMultNonConst(&e, &P, &eP)
-	btcec.AddNonConst(&sG, &eP, &ER)
+	btcec.AddNonConst(&sG, &eP, &R)
 
 	// Step 9.
 	//
-	// Fail if ER is the point at infinity
-	if (ER.X.IsZero() && ER.Y.IsZero()) || ER.Z.IsZero() {
+	// Fail if R is the point at infinity
+	if (R.X.IsZero() && R.Y.IsZero()) || R.Z.IsZero() {
 		str := "calculated R point is the point at infinity"
 		return fmt.Errorf("invalid signature: %s", str)
 	}
 
 	// Step 10.
 	//
-	// Fail if not is_infinite(R+ER) in case (R+AP).y is odd
+	// effective AP = AR - R if AR.y is even else AR + R
 	//
-	// Note that R+AP must be in affine coordinates for this check.
-	if AR.Y.IsOdd() {
-		var Check btcec.JacobianPoint
-		btcec.AddNonConst(&R, &ER, &Check)
+	// Fail if is_infinite(EAP)
+	var EAP btcec.JacobianPoint
 
-		if !((Check.X.IsZero() && Check.Y.IsZero()) || Check.Z.IsZero()) {
-			str := "effective R point is not negated R"
-			return fmt.Errorf("invalid signature: %s", str)
-		}
+	if sig.IsROdd() {
+		btcec.AddNonConst(&AR, &R, &EAP)
 	} else {
-		// Step 11.
-		//
-		// Verified if ER.x == r in case (R+AP).y is even
-		//
-		// Note that ER must be in affine coordinates for this check.
-		ER.ToAffine()
-		if ER.X != sig.r {
-			str := "effective R point was not given R"
-			return fmt.Errorf("invalid signature: %s", str)
-		}
+		btcec.AddNonConst(&AR, NegatePoint(&R), &EAP)
+	}
+
+	if (EAP.X.IsZero() && EAP.Y.IsZero()) || EAP.Z.IsZero() {
+		str := "calculated adaptor point is the point at infinity"
+		return fmt.Errorf("invalid signature: %s", str)
+	}
+
+	// Step 11.
+	//
+	// Fail if EAP != AP
+	//
+	// Note that EAP and AP must be in affine coordinates for this check.
+	EAP.ToAffine()
+	AP.ToAffine()
+
+	if !EAP.X.Equals(&AP.X) || !EAP.Y.Equals(&AP.Y) {
+		str := "calculated adaptor point is not the given adaptor point"
+		return fmt.Errorf("invalid signature: %s", str)
 	}
 
 	// Step 12.

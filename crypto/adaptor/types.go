@@ -1,44 +1,79 @@
 package adaptor
 
 import (
+	"errors"
+
 	"github.com/btcsuite/btcd/btcec/v2"
 )
 
-// scalarSize is the size of an encoded big endian scalar
-const scalarSize = 32
+const (
+	// SignatureSize is the size of the adaptor signature
+	SignatureSize = 65
 
-// Signature represents the signature
+	// scalarSize is the size of an encoded big endian scalar
+	scalarSize = 32
+)
+
+var (
+	ErrInvalidSignatureSize = errors.New("invalid adaptor signature size")
+)
+
+// Signature represents the adaptor signature
 type Signature struct {
-	r btcec.FieldVal
-	s btcec.ModNScalar
+	rParity byte
+	r       btcec.FieldVal
+	s       btcec.ModNScalar
 }
 
 // NewSignature creates a new Signature from bytes
 // Assume that the given signature is valid
 func NewSignature(sigBytes []byte) *Signature {
+	rParity := sigBytes[0]
+
 	var r btcec.FieldVal
-	r.SetByteSlice(sigBytes[0:32])
+	r.SetByteSlice(sigBytes[1:33])
 
 	var s btcec.ModNScalar
-	s.SetByteSlice(sigBytes[32:])
+	s.SetByteSlice(sigBytes[33:])
 
 	return &Signature{
+		rParity,
 		r,
 		s,
 	}
 }
 
-// Serialize serializes the signature
-func (s *Signature) Serialize() []byte {
-	sig := make([]byte, 64)
+// IsROdd returns true if the r point is odd, false otherwise
+func (s Signature) IsROdd() bool {
+	return s.rParity == byte(3)
+}
 
-	rBytes := *s.r.Bytes()
+// Serialize serializes the signature
+func (s Signature) Serialize() []byte {
+	sig := make([]byte, 65)
+
+	rBytes := s.r.Bytes()
 	sBytes := s.s.Bytes()
 
-	copy(sig[0:32], rBytes[:])
-	copy(sig[32:64], sBytes[:])
+	sig[0] = s.rParity
+	copy(sig[1:33], rBytes[:])
+	copy(sig[33:], sBytes[:])
 
 	return sig
+}
+
+// ParseSignature parses the signature
+func ParseSignature(sigBytes []byte) (*Signature, error) {
+	if len(sigBytes) != SignatureSize {
+		return nil, ErrInvalidSignatureSize
+	}
+
+	_, err := btcec.ParsePubKey(sigBytes[0:33])
+	if err != nil {
+		return nil, err
+	}
+
+	return NewSignature(sigBytes), nil
 }
 
 // SerializeScalar serializes the given scalar
@@ -60,8 +95,11 @@ func SecretToPubKey(secretBytes []byte) []byte {
 
 // NegatePoint negates the given point
 func NegatePoint(point *btcec.JacobianPoint) *btcec.JacobianPoint {
-	result := *point
-	result.Y.Negate(1).Normalize()
+	result := new(btcec.JacobianPoint)
 
-	return &result
+	result.X = point.X
+	result.Y = *point.Y.Negate(1).Normalize()
+	result.Z = point.Z
+
+	return result
 }

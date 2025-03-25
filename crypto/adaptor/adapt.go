@@ -8,34 +8,20 @@ import (
 // Adapt adapts the given adaptor signature with the specified secret
 // Asume that the given adaptor signature is valid
 func Adapt(sigBytes []byte, secretBytes []byte) []byte {
-	rPoint, _ := schnorr.ParsePubKey(sigBytes[0:32])
-	var R secp256k1.JacobianPoint
-	rPoint.AsJacobian(&R)
-
-	var s secp256k1.ModNScalar
-	s.SetByteSlice(sigBytes[32:64])
+	sig, _ := ParseSignature(sigBytes)
 
 	var secret secp256k1.ModNScalar
 	secret.SetByteSlice(secretBytes)
 
-	var adaptorPoint secp256k1.JacobianPoint
-	secp256k1.ScalarBaseMultNonConst(&secret, &adaptorPoint)
-
-	var adaptedR secp256k1.JacobianPoint
-	secp256k1.AddNonConst(&R, &adaptorPoint, &adaptedR)
-	adaptedR.ToAffine()
-
 	var adaptedS secp256k1.ModNScalar
-	if !adaptedR.Y.IsOdd() {
-		adaptedS = *s.Add(&secret)
+
+	if sig.IsROdd() {
+		adaptedS = *sig.s.Add(secret.Negate())
 	} else {
-		adaptedS = *s.Add(secret.Negate())
+		adaptedS = *sig.s.Add(&secret)
 	}
 
-	adaptedSig := Signature{
-		r: adaptedR.X,
-		s: adaptedS,
-	}
+	adaptedSig := schnorr.NewSignature(&sig.r, &adaptedS)
 
 	return adaptedSig.Serialize()
 }

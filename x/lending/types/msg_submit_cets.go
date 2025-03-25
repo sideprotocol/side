@@ -6,6 +6,7 @@ import (
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
+	"github.com/sideprotocol/side/crypto/adaptor"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -59,7 +60,7 @@ func (m *MsgSubmitCets) ValidateBasic() error {
 			return errorsmod.Wrap(ErrInvalidAdaptorSignature, "failed to decode adaptor signature")
 		}
 
-		if _, err := schnorr.ParseSignature(adaptorSigBytes); err != nil {
+		if _, err := adaptor.ParseSignature(adaptorSigBytes); err != nil {
 			return ErrInvalidAdaptorSignature
 		}
 	}
@@ -70,7 +71,7 @@ func (m *MsgSubmitCets) ValidateBasic() error {
 			return errorsmod.Wrap(ErrInvalidAdaptorSignature, "failed to decode adaptor signature")
 		}
 
-		if _, err := schnorr.ParseSignature(adaptorSigBytes); err != nil {
+		if _, err := adaptor.ParseSignature(adaptorSigBytes); err != nil {
 			return ErrInvalidAdaptorSignature
 		}
 	}
