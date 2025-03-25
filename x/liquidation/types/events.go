@@ -1,6 +1,6 @@
 package types
 
-// Auctioin module event types
+// Liquidation module event types
 const (
 	EventTypeLiquidate                           = "liquidate"
 	EventTypeSignSettlementTransaction           = "sign_settlement_transaction"

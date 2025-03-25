@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/hex"
 
-	errorsmod "cosmossdk.io/errors"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
+
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

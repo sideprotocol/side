@@ -6,10 +6,11 @@ import (
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
-	"github.com/sideprotocol/side/crypto/adaptor"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/sideprotocol/side/crypto/adaptor"
 )
 
 var _ sdk.Msg = &MsgSubmitCets{}

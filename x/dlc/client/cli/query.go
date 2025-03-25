@@ -105,8 +105,8 @@ func CmdQueryOracles() *cobra.Command {
 
 func CmdQueryDCMs() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "agencies [status]",
-		Short: "Query agencies by the given status",
+		Use:   "dcms [status]",
+		Short: "Query DCMs by the given status",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)

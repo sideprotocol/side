@@ -11,9 +11,6 @@ import (
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
-// LiquidatioinOutcome represents the dlc outcome string for liquidation
-const LiquidatioinOutcome = "Liquidated"
-
 // HandleAttestation performs the attestation handling
 func (k Keeper) HandleAttestation(ctx sdk.Context, sender string, eventId uint64, signature string) error {
 	if !k.HasEvent(ctx, eventId) {

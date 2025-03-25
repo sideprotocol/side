@@ -3,10 +3,10 @@ package types
 import (
 	"encoding/hex"
 
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
+
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 )
 
 var _ sdk.Msg = &MsgSubmitSettlementSignatures{}

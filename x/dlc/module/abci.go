@@ -59,7 +59,7 @@ func handlePendingOracles(ctx sdk.Context, k keeper.Keeper) {
 	}
 }
 
-// handlePendingDCMs handles the pending agencies
+// handlePendingDCMs handles the pending DCMs
 func handlePendingDCMs(ctx sdk.Context, k keeper.Keeper) {
 	pendingDCMs := k.GetDCMs(ctx, types.DCMStatus_DCM_Status_Pending)
 
