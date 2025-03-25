@@ -166,7 +166,7 @@ func GetPkScriptFromAddress(address string) ([]byte, error) {
 	return txscript.PayToAddrScript(addr)
 }
 
-// GetPkScriptFromPubKey gets the pk script from the given agency pubkey
+// GetPkScriptFromPubKey gets the pk script from the given taproot pubkey
 // Assume that the given pubkey is 32 bytes w/o 0x prefix
 func GetPkScriptFromPubKey(pubKeyHex string) ([]byte, error) {
 	pubKey, err := hex.DecodeString(fmt.Sprintf("02%s", pubKeyHex))

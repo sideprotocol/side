@@ -29,7 +29,7 @@ const (
 	Query_Nonces_FullMethodName       = "/side.dlc.Query/Nonces"
 	Query_CountNonces_FullMethodName  = "/side.dlc.Query/CountNonces"
 	Query_Oracles_FullMethodName      = "/side.dlc.Query/Oracles"
-	Query_Agencies_FullMethodName     = "/side.dlc.Query/Agencies"
+	Query_DCMs_FullMethodName         = "/side.dlc.Query/DCMs"
 )
 
 // QueryClient is the client API for Query service.
@@ -56,8 +56,8 @@ type QueryClient interface {
 	CountNonces(ctx context.Context, in *QueryCountNoncesRequest, opts ...grpc.CallOption) (*QueryCountNoncesResponse, error)
 	// Oracles query oracles by the given status.
 	Oracles(ctx context.Context, in *QueryOraclesRequest, opts ...grpc.CallOption) (*QueryOraclesResponse, error)
-	// Agencies query agencies by the given status.
-	Agencies(ctx context.Context, in *QueryAgenciesRequest, opts ...grpc.CallOption) (*QueryAgenciesResponse, error)
+	// DCMs query DCMs by the given status.
+	DCMs(ctx context.Context, in *QueryDCMsRequest, opts ...grpc.CallOption) (*QueryDCMsResponse, error)
 }
 
 type queryClient struct {
@@ -158,9 +158,9 @@ func (c *queryClient) Oracles(ctx context.Context, in *QueryOraclesRequest, opts
 	return out, nil
 }
 
-func (c *queryClient) Agencies(ctx context.Context, in *QueryAgenciesRequest, opts ...grpc.CallOption) (*QueryAgenciesResponse, error) {
-	out := new(QueryAgenciesResponse)
-	err := c.cc.Invoke(ctx, Query_Agencies_FullMethodName, in, out, opts...)
+func (c *queryClient) DCMs(ctx context.Context, in *QueryDCMsRequest, opts ...grpc.CallOption) (*QueryDCMsResponse, error) {
+	out := new(QueryDCMsResponse)
+	err := c.cc.Invoke(ctx, Query_DCMs_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -191,8 +191,8 @@ type QueryServer interface {
 	CountNonces(context.Context, *QueryCountNoncesRequest) (*QueryCountNoncesResponse, error)
 	// Oracles query oracles by the given status.
 	Oracles(context.Context, *QueryOraclesRequest) (*QueryOraclesResponse, error)
-	// Agencies query agencies by the given status.
-	Agencies(context.Context, *QueryAgenciesRequest) (*QueryAgenciesResponse, error)
+	// DCMs query DCMs by the given status.
+	DCMs(context.Context, *QueryDCMsRequest) (*QueryDCMsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -230,8 +230,8 @@ func (UnimplementedQueryServer) CountNonces(context.Context, *QueryCountNoncesRe
 func (UnimplementedQueryServer) Oracles(context.Context, *QueryOraclesRequest) (*QueryOraclesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Oracles not implemented")
 }
-func (UnimplementedQueryServer) Agencies(context.Context, *QueryAgenciesRequest) (*QueryAgenciesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Agencies not implemented")
+func (UnimplementedQueryServer) DCMs(context.Context, *QueryDCMsRequest) (*QueryDCMsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DCMs not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -426,20 +426,20 @@ func _Query_Oracles_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Agencies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryAgenciesRequest)
+func _Query_DCMs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDCMsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Agencies(ctx, in)
+		return srv.(QueryServer).DCMs(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_Agencies_FullMethodName,
+		FullMethod: Query_DCMs_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Agencies(ctx, req.(*QueryAgenciesRequest))
+		return srv.(QueryServer).DCMs(ctx, req.(*QueryDCMsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -492,8 +492,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Oracles_Handler,
 		},
 		{
-			MethodName: "Agencies",
-			Handler:    _Query_Agencies_Handler,
+			MethodName: "DCMs",
+			Handler:    _Query_DCMs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

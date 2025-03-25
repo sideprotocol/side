@@ -31,7 +31,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 
 	cmd.AddCommand(CmdQueryParams())
 	cmd.AddCommand(CmdQueryOracles())
-	cmd.AddCommand(CmdQueryAgencies())
+	cmd.AddCommand(CmdQueryDCMs())
 	cmd.AddCommand(CmdQueryNonce())
 	cmd.AddCommand(CmdQueryNonces())
 	cmd.AddCommand(CmdQueryEvent())
@@ -103,7 +103,7 @@ func CmdQueryOracles() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryAgencies() *cobra.Command {
+func CmdQueryDCMs() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "agencies [status]",
 		Short: "Query agencies by the given status",
@@ -121,7 +121,7 @@ func CmdQueryAgencies() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.Agencies(cmd.Context(), &types.QueryAgenciesRequest{Status: types.AgencyStatus(status)})
+			res, err := queryClient.DCMs(cmd.Context(), &types.QueryDCMsRequest{Status: types.DCMStatus(status)})
 			if err != nil {
 				return err
 			}

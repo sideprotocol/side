@@ -33,7 +33,7 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	loan := k.GetLoan(ctx, loanId)
 	poolConfig := k.GetPool(ctx, loan.PoolId).Config
 
-	multisigScript, _ := types.CreateMultisigScript([]string{loan.BorrowerPubKey, loan.Agency})
+	multisigScript, _ := types.CreateMultisigScript([]string{loan.BorrowerPubKey, loan.DCM})
 
 	var liquidationEvent *dlctypes.DLCEvent
 	if loan.LiquidationEventId != 0 {

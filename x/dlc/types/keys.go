@@ -22,7 +22,7 @@ const (
 var (
 	ParamsKey                   = []byte{0x01} // key for params
 	OracleIdKey                 = []byte{0x02} // key for oracle id
-	AgencyIdKey                 = []byte{0x03} // key for agency id
+	DCMIdKey                    = []byte{0x03} // key for DCM id
 	EventIdKey                  = []byte{0x04} // key for event id
 	PendingLendingEventCountKey = []byte{0x05} // key for pending lending event count
 	AttestationIdKey            = []byte{0x06} // key for attestation id
@@ -30,8 +30,8 @@ var (
 	OracleKeyPrefix              = []byte{0x10} // prefix for each key to an oracle
 	OracleByPubKeyKeyPrefix      = []byte{0x11} // prefix for each key to an oracle by public key
 	PendingOraclePubKeyKeyPrefix = []byte{0x12} // key prefix for the pending oracle public key
-	AgencyKeyPrefix              = []byte{0x13} // prefix for each key to an agency
-	PendingAgencyPubKeyKeyPrefix = []byte{0x14} // key prefix for the pending agency public key
+	DCMKeyPrefix                 = []byte{0x13} // prefix for each key to a DCM
+	PendingDCMPubKeyKeyPrefix    = []byte{0x14} // key prefix for the pending DCM public key
 	NonceIndexKeyPrefix          = []byte{0x15} // key prefix for the nonce index
 	NonceKeyPrefix               = []byte{0x16} // prefix for each key to a nonce
 	NonceByValueKeyPrefix        = []byte{0x17} // key prefix for the nonce value
@@ -62,12 +62,12 @@ func PendingOraclePubKeyKey(oracleId uint64, pubKey []byte) []byte {
 	return key
 }
 
-func AgencyKey(id uint64) []byte {
-	return append(AgencyKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+func DCMKey(id uint64) []byte {
+	return append(DCMKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
-func PendingAgencyPubKeyKey(agencyId uint64, pubKey []byte) []byte {
-	key := append(PendingAgencyPubKeyKeyPrefix, sdk.Uint64ToBigEndian(agencyId)...)
+func PendingDCMPubKeyKey(dcmId uint64, pubKey []byte) []byte {
+	key := append(PendingDCMPubKeyKeyPrefix, sdk.Uint64ToBigEndian(dcmId)...)
 	key = append(key, pubKey...)
 
 	return key

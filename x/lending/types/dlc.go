@@ -20,7 +20,7 @@ import (
 )
 
 // BuildDLCMeta creates the dlc meta from the given params
-func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string, borrowerPubKey string, agencyPubKey string, muturityTime int64, finalTimeout int64) (*DLCMeta, error) {
+func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string, borrowerPubKey string, dcmPubKey string, muturityTime int64, finalTimeout int64) (*DLCMeta, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet s
 		return nil, err
 	}
 
-	multisigScript, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
+	multisigScript, err := CreateMultisigScript([]string{borrowerPubKey, dcmPubKey})
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet s
 }
 
 // VerifyCets verifies the given cets
-func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, agencyPubKey string, liquidationEvent *dlctypes.DLCEvent, defaultLiquidationEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
+func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey string, liquidationEvent *dlctypes.DLCEvent, defaultLiquidationEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
 	liquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(liquidationEvent, 0)
 	if err != nil {
 		return err
@@ -124,15 +124,15 @@ func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, agencyPubKey stri
 		return err
 	}
 
-	if err := VerifyLiquidationCet(depositTx, borrowerPubKey, agencyPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint); err != nil {
+	if err := VerifyLiquidationCet(depositTx, borrowerPubKey, dcmPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint); err != nil {
 		return err
 	}
 
-	if err := VerifyLiquidationCet(depositTx, borrowerPubKey, agencyPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint); err != nil {
+	if err := VerifyLiquidationCet(depositTx, borrowerPubKey, dcmPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint); err != nil {
 		return err
 	}
 
-	if err := VerifyRepaymentCet(depositTx, borrowerPubKey, agencyPubKey, repaymentCet, repaymentSignatures); err != nil {
+	if err := VerifyRepaymentCet(depositTx, borrowerPubKey, dcmPubKey, repaymentCet, repaymentSignatures); err != nil {
 		return err
 	}
 
@@ -140,7 +140,7 @@ func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, agencyPubKey stri
 }
 
 // VerifyLiquidationCet verifies the given liquidation cet and corresponding adaptor signatures
-func VerifyLiquidationCet(depositTx *psbt.Packet, borrowerPubKey string, agencyPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte) error {
+func VerifyLiquidationCet(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte) error {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCET)), true)
 	if err != nil {
 		return ErrInvalidCET
@@ -167,7 +167,7 @@ func VerifyLiquidationCet(depositTx *psbt.Packet, borrowerPubKey string, agencyP
 		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower public key")
 	}
 
-	script, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
+	script, err := CreateMultisigScript([]string{borrowerPubKey, dcmPubKey})
 	if err != nil {
 		return err
 	}
@@ -192,7 +192,7 @@ func VerifyLiquidationCet(depositTx *psbt.Packet, borrowerPubKey string, agencyP
 }
 
 // VerifyRepaymentCet verifies the given repayment cet and corresponding signatures
-func VerifyRepaymentCet(depositTx *psbt.Packet, borrowerPubKey string, agencyPubKey string, repaymentCet string, signatures []string) error {
+func VerifyRepaymentCet(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey string, repaymentCet string, signatures []string) error {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet)), true)
 	if err != nil {
 		return ErrInvalidCET
@@ -219,7 +219,7 @@ func VerifyRepaymentCet(depositTx *psbt.Packet, borrowerPubKey string, agencyPub
 		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower public key")
 	}
 
-	script, err := CreateMultisigScript([]string{borrowerPubKey, agencyPubKey})
+	script, err := CreateMultisigScript([]string{borrowerPubKey, dcmPubKey})
 	if err != nil {
 		return err
 	}
@@ -244,13 +244,13 @@ func VerifyRepaymentCet(depositTx *psbt.Packet, borrowerPubKey string, agencyPub
 }
 
 // CreateLiquidationCET creates the liquidation cet
-func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, agencyPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
 	if err != nil {
 		return "", err
 	}
 
-	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, agencyPkScript, feeRate)
+	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, dcmPkScript, feeRate)
 	if err != nil {
 		return "", err
 	}
@@ -332,13 +332,13 @@ func CreateRepaymentCet(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPk
 }
 
 // CreateDefaultLiquidationCet creates the default liquidation cet
-func CreateDefaultLiquidationCet(depositTx *psbt.Packet, vaultPkScript []byte, agencyPkScript []byte, internalKey []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+func CreateDefaultLiquidationCet(depositTx *psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKey []byte, tapscripts [][]byte, feeRate int64) (string, error) {
 	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
 	if err != nil {
 		return "", err
 	}
 
-	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, agencyPkScript, feeRate)
+	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, dcmPkScript, feeRate)
 	if err != nil {
 		return "", err
 	}
@@ -379,7 +379,7 @@ func CreateTimeoutRefundTransaction(depositTx *psbt.Packet, vaultPkScript []byte
 
 // BuildSignedCet builds the signed cet from the given signatures
 // Assume that the cet is valid and signatures match
-func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []string, agencyPubKey string, agencySignatures []string) ([]byte, *chainhash.Hash, error) {
+func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []string, dcmPubKey string, dcmSignatures []string) ([]byte, *chainhash.Hash, error) {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(cet)), true)
 	if err != nil {
 		return nil, nil, err
@@ -390,7 +390,7 @@ func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []stri
 		return nil, nil, err
 	}
 
-	agencyPubKeyBytes, err := hex.DecodeString(agencyPubKey)
+	dcmPubKeyBytes, err := hex.DecodeString(dcmPubKey)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -401,7 +401,7 @@ func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []stri
 			return nil, nil, err
 		}
 
-		agencySig, err := hex.DecodeString(agencySignatures[i])
+		dcmSig, err := hex.DecodeString(dcmSignatures[i])
 		if err != nil {
 			return nil, nil, err
 		}
@@ -410,9 +410,9 @@ func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []stri
 
 		p.Inputs[i].TaprootScriptSpendSig = []*psbt.TaprootScriptSpendSig{
 			{
-				XOnlyPubKey: agencyPubKeyBytes,
+				XOnlyPubKey: dcmPubKeyBytes,
 				LeafHash:    leafHash[:],
-				Signature:   agencySig,
+				Signature:   dcmSig,
 				SigHash:     txscript.SigHashDefault,
 			},
 			{

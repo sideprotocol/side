@@ -23,7 +23,7 @@ var (
 	ErrInvalidPubKey          = errorsmod.Register(ModuleName, 3001, "invalid pubkey")
 	ErrInvalidMaturityTime    = errorsmod.Register(ModuleName, 3002, "maturity time great than 0")
 	ErrDuplicatedVault        = errorsmod.Register(ModuleName, 3003, "duplicated vault address")
-	ErrInvalidAgency          = errorsmod.Register(ModuleName, 3004, "invalid agency")
+	ErrInvalidDCM             = errorsmod.Register(ModuleName, 3004, "invalid dcm")
 	ErrEmptyLoanId            = errorsmod.Register(ModuleName, 3005, "empty loan id")
 	ErrLoanDoesNotExist       = errorsmod.Register(ModuleName, 3006, "loan does not exist")
 	ErrInvalidDepositTx       = errorsmod.Register(ModuleName, 3007, "invalid deposit tx")
@@ -48,7 +48,7 @@ var (
 	ErrInvalidAdaptorSignature          = errorsmod.Register(ModuleName, 6004, "invalid adaptor signature")
 
 	ErrLoanNotLiquidated                 = errorsmod.Register(ModuleName, 7001, "loan not liquidated yet")
-	ErrLiquidationSignaturesAlreadyExist = errorsmod.Register(ModuleName, 7002, "agency liquidation signatures already exist")
+	ErrLiquidationSignaturesAlreadyExist = errorsmod.Register(ModuleName, 7002, "dcm liquidation signatures already exist")
 
 	ErrInvalidLoanStatus = errorsmod.Register(ModuleName, 8001, "invalid loan status")
 	ErrInvalidSignatures = errorsmod.Register(ModuleName, 8002, "invalid signatures")

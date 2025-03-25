@@ -13,7 +13,7 @@ const (
 
 	AttributeKeyVault            = "vault"
 	AttributeKeyBorrower         = "borrower"
-	AttributeKeyAgencyPubKey     = "agency_pub_key"
+	AttributeKeyDCMPubKey        = "dcm_pub_key"
 	AttributeKeyMuturityTime     = "muturity_time"
 	AttributeKeyFinalTimeout     = "final_timeout"
 	AttributeKeyPoolId           = "pool_id"

@@ -15,9 +15,9 @@ service Msg {
     rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
     rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
     rpc SubmitOraclePubKey(MsgSubmitOraclePubKey) returns (MsgSubmitOraclePubKeyResponse);
-    rpc SubmitAgencyPubKey(MsgSubmitAgencyPubKey) returns (MsgSubmitAgencyPubKeyResponse);
+    rpc SubmitDCMPubKey(MsgSubmitDCMPubKey) returns (MsgSubmitDCMPubKeyResponse);
     rpc CreateOracle(MsgCreateOracle) returns (MsgCreateOracleResponse);
-    rpc CreateAgency(MsgCreateAgency) returns (MsgCreateAgencyResponse);
+    rpc CreateDCM(MsgCreateDCM) returns (MsgCreateDCMResponse);
 
     // UpdateParams defines a governance operation for updating the x/dlc module
     // parameters. The authority defaults to the x/gov module account.
@@ -26,17 +26,17 @@ service Msg {
     rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
-message MsgSubmitAgencyPubKey {
+message MsgSubmitDCMPubKey {
     option (cosmos.msg.v1.signer) = "sender";
 
     string sender = 1;
     string pub_key = 2;
-    uint64 agency_id = 3;
-    string agency_pubkey = 4;
+    uint64 dcm_id = 3 [(gogoproto.customname) = "DCMId"];
+    string dcm_pubkey = 4 [(gogoproto.customname) = "DCMPubKey"];
     string signature = 5;
 }
 
-message MsgSubmitAgencyPubKeyResponse {}
+message MsgSubmitDCMPubKeyResponse {}
 
 message MsgSubmitOraclePubKey {
     option (cosmos.msg.v1.signer) = "sender";
@@ -83,7 +83,7 @@ message MsgCreateOracle {
 
 message MsgCreateOracleResponse {}
 
-message MsgCreateAgency {
+message MsgCreateDCM {
     option (cosmos.msg.v1.signer) = "authority";
 
     // authority is the address that controls the module (defaults to x/gov unless overwritten).
@@ -92,7 +92,7 @@ message MsgCreateAgency {
     uint32 threshold = 3;
 }
 
-message MsgCreateAgencyResponse {}
+message MsgCreateDCMResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

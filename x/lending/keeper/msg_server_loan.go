@@ -46,13 +46,13 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrInsufficientLiquidity
 	}
 
-	if !m.dlcKeeper.HasAgency(ctx, msg.AgencyId) {
-		return nil, errorsmod.Wrap(types.ErrInvalidAgency, "agency does not exist")
+	if !m.dlcKeeper.HasDCM(ctx, msg.DCMId) {
+		return nil, errorsmod.Wrap(types.ErrInvalidDCM, "dcm does not exist")
 	}
 
-	agency := m.dlcKeeper.GetAgency(ctx, msg.AgencyId)
+	dcm := m.dlcKeeper.GetDCM(ctx, msg.DCMId)
 
-	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, agency.Pubkey, msg.MaturityTime, msg.MaturityTime+m.FinalTimeoutDuration(ctx))
+	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, msg.MaturityTime, msg.MaturityTime+m.FinalTimeoutDuration(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		VaultAddress:              vault,
 		Borrower:                  msg.Borrower,
 		BorrowerPubKey:            msg.BorrowerPubkey,
-		Agency:                    agency.Pubkey,
+		DCM:                       dcm.Pubkey,
 		MaturityTime:              msg.MaturityTime,
 		FinalTimeout:              msg.MaturityTime + m.FinalTimeoutDuration(ctx),
 		PoolId:                    msg.PoolId,
@@ -111,7 +111,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		sdk.NewEvent(types.EventTypeApply,
 			sdk.NewAttribute(types.AttributeKeyVault, loan.VaultAddress),
 			sdk.NewAttribute(types.AttributeKeyBorrower, loan.Borrower),
-			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+			sdk.NewAttribute(types.AttributeKeyDCMPubKey, loan.DCM),
 			sdk.NewAttribute(types.AttributeKeyMuturityTime, fmt.Sprint(loan.MaturityTime)),
 			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
 			sdk.NewAttribute(types.AttributeKeyPoolId, loan.PoolId),
@@ -160,11 +160,11 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	defaultLiquidationEvent := m.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
 
-	if err := types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.Agency, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+	if err := types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
 		return nil, err
 	}
 
-	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.Agency, loan.MaturityTime, loan.FinalTimeout)
+	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -238,7 +238,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	loan.Status = types.LoanStatus_Open
 	m.SetLoan(ctx, loan)
 
-	// initiate signing request for repayment cet adaptor signatures from agency
+	// initiate signing request for repayment cet adaptor signatures from DCM
 	if err := m.InitiateRepaymentCetSigningRequest(ctx, loan.VaultAddress); err != nil {
 		return nil, err
 	}
@@ -273,7 +273,7 @@ func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *
 	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
 
 	repaymentCet := dlcMeta.RepaymentCet
-	if len(repaymentCet.AgencyAdaptorSignatures) != 0 {
+	if len(repaymentCet.DCMAdaptorSignatures) != 0 {
 		return nil, types.ErrRepaymentAdaptorSigsAlreadyExist
 	}
 
@@ -284,7 +284,7 @@ func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *
 
 	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
 	adaptorPoint, _ := m.GetRepaymentCetAdaptorPoint(ctx, msg.LoanId)
-	agencyPubKey, _ := hex.DecodeString(m.GetLoan(ctx, msg.LoanId).Agency)
+	dcmPubKey, _ := hex.DecodeString(m.GetLoan(ctx, msg.LoanId).DCM)
 
 	for i, input := range p.Inputs {
 		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
@@ -294,12 +294,12 @@ func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *
 
 		adaptorSigBytes, _ := hex.DecodeString(msg.AdaptorSignatures[i])
 
-		if !adaptor.Verify(adaptorSigBytes, sigHash, agencyPubKey, adaptorPoint) {
+		if !adaptor.Verify(adaptorSigBytes, sigHash, dcmPubKey, adaptorPoint) {
 			return nil, types.ErrInvalidAdaptorSignature
 		}
 	}
 
-	dlcMeta.RepaymentCet.AgencyAdaptorSignatures = msg.AdaptorSignatures
+	dlcMeta.RepaymentCet.DCMAdaptorSignatures = msg.AdaptorSignatures
 	m.SetDLCMeta(ctx, msg.LoanId, dlcMeta)
 
 	return &types.MsgSubmitRepaymentAdaptorSignaturesResponse{}, nil
@@ -396,7 +396,7 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 			types.EventTypeCancel,
 			sdk.NewAttribute(types.AttributeKeyBorrower, msg.Borrower),
 			sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
-			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, loan.Agency),
+			sdk.NewAttribute(types.AttributeKeyDCMPubKey, loan.DCM),
 			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
 		),
 	)
@@ -429,7 +429,7 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 	}
 
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
-	agencyPubKey, _ := hex.DecodeString(loan.Agency)
+	dcmPubKey, _ := hex.DecodeString(loan.DCM)
 
 	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
 	leafHash := txscript.NewBaseTapLeaf(script).TapHash()
@@ -442,7 +442,7 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 
 		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
 
-		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
+		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
 			return nil, types.ErrInvalidSignature
 		}
 
@@ -450,7 +450,7 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 
 		p.Inputs[i].TaprootScriptSpendSig = []*psbt.TaprootScriptSpendSig{
 			{
-				XOnlyPubKey: agencyPubKey,
+				XOnlyPubKey: dcmPubKey,
 				LeafHash:    leafHash[:],
 				Signature:   sigBytes,
 				SigHash:     txscript.SigHashDefault,

@@ -12,8 +12,8 @@ const (
 	AttributeKeyDebtAmount          = "debt_amount"
 	AttributeKeyCollateralAmount    = "collateral_amount"
 
-	AttributeKeyAgencyPubKey = "agency_pub_key"
-	AttributeKeySigHashes    = "sig_hashes"
+	AttributeKeyDCMPubKey = "dcm_pub_key"
+	AttributeKeySigHashes = "sig_hashes"
 
 	AttributeKeyTxHash = "tx_hash"
 )

@@ -32,7 +32,7 @@ func (k Keeper) HandleSettlementTransactionSignatures(ctx sdk.Context, sender st
 		return errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
 	}
 
-	agencyPubKey, _ := hex.DecodeString(liquidation.Agency)
+	dcmPubKey, _ := hex.DecodeString(liquidation.DCM)
 
 	for i, input := range settlementTxPsbt.Inputs {
 		sigHash, err := types.CalcTaprootSigHash(settlementTxPsbt, i, input.SighashType)
@@ -42,7 +42,7 @@ func (k Keeper) HandleSettlementTransactionSignatures(ctx sdk.Context, sender st
 
 		sigBytes, _ := hex.DecodeString(signatures[i])
 
-		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
+		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
 			return types.ErrInvalidSignature
 		}
 

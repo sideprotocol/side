@@ -14,7 +14,7 @@ import (
 // EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handlePendingOracles(ctx, k)
-	handlePendingAgencies(ctx, k)
+	handlePendingDCMs(ctx, k)
 
 	generatePriceEventNonces(ctx, k)
 	generateDateEventNonces(ctx, k)
@@ -59,40 +59,40 @@ func handlePendingOracles(ctx sdk.Context, k keeper.Keeper) {
 	}
 }
 
-// handlePendingAgencies handles the pending agencies
-func handlePendingAgencies(ctx sdk.Context, k keeper.Keeper) {
-	pendingAgencies := k.GetAgencies(ctx, types.AgencyStatus_Agency_Status_Pending)
+// handlePendingDCMs handles the pending agencies
+func handlePendingDCMs(ctx sdk.Context, k keeper.Keeper) {
+	pendingDCMs := k.GetDCMs(ctx, types.DCMStatus_DCM_Status_Pending)
 
-	for _, agency := range pendingAgencies {
-		// check if the pending agency expired
-		if !ctx.BlockTime().Before(agency.Time.Add(k.GetDKGTimeoutPeriod(ctx))) {
-			agency.Status = types.AgencyStatus_Agency_Status_Timedout
-			k.SetAgency(ctx, agency)
+	for _, dcm := range pendingDCMs {
+		// check if the pending DCM expired
+		if !ctx.BlockTime().Before(dcm.Time.Add(k.GetDKGTimeoutPeriod(ctx))) {
+			dcm.Status = types.DCMStatus_DCM_Status_Timedout
+			k.SetDCM(ctx, dcm)
 
 			continue
 		}
 
 		// handle pending pub keys
-		pubKeys := k.GetPendingAgencyPubKeys(ctx, agency.Id)
-		if len(pubKeys) != len(agency.Participants) {
+		pubKeys := k.GetPendingDCMPubKeys(ctx, dcm.Id)
+		if len(pubKeys) != len(dcm.Participants) {
 			continue
 		}
 
 		// check if the pending pub keys are valid
 		if !types.CheckPendingPubKeys(pubKeys) {
-			agency.Status = types.AgencyStatus_Agency_Status_Failed
-			k.SetAgency(ctx, agency)
+			dcm.Status = types.DCMStatus_DCM_Status_Failed
+			k.SetDCM(ctx, dcm)
 
 			continue
 		}
 
 		// set pub key
-		agency.Pubkey = hex.EncodeToString(pubKeys[0])
+		dcm.Pubkey = hex.EncodeToString(pubKeys[0])
 
 		// update status
-		agency.Status = types.AgencyStatus_Agency_status_Enable
+		dcm.Status = types.DCMStatus_DCM_status_Enable
 
-		k.SetAgency(ctx, agency)
+		k.SetDCM(ctx, dcm)
 	}
 }
 

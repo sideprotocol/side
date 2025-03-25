@@ -61,9 +61,9 @@ service Query {
         option (google.api.http).get = "/side/dlc/oracles";
     }
 
-    // Agencies query agencies by the given status.
-    rpc Agencies(QueryAgenciesRequest) returns (QueryAgenciesResponse) {
-        option (google.api.http).get = "/side/dlc/agencies";
+    // DCMs query DCMs by the given status.
+    rpc DCMs(QueryDCMsRequest) returns (QueryDCMsResponse) {
+        option (google.api.http).get = "/side/dlc/dcms";
     }
 }
 
@@ -84,13 +84,13 @@ message QueryAttestationsResponse {
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryAgenciesRequest {
-    AgencyStatus status = 1;
+message QueryDCMsRequest {
+    DCMStatus status = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-message QueryAgenciesResponse {
-    repeated Agency agencies = 1;
+message QueryDCMsResponse {
+    repeated DCM dcms = 1 [(gogoproto.customname) = "DCMs"];
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

@@ -33,14 +33,14 @@ func (k Keeper) Oracles(goCtx context.Context, req *types.QueryOraclesRequest) (
 	return &types.QueryOraclesResponse{Oracles: k.GetOracles(ctx, req.Status)}, nil
 }
 
-func (k Keeper) Agencies(goCtx context.Context, req *types.QueryAgenciesRequest) (*types.QueryAgenciesResponse, error) {
+func (k Keeper) DCMs(goCtx context.Context, req *types.QueryDCMsRequest) (*types.QueryDCMsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryAgenciesResponse{Agencies: k.GetAgencies(ctx, req.Status)}, nil
+	return &types.QueryDCMsResponse{DCMs: k.GetDCMs(ctx, req.Status)}, nil
 }
 
 func (k Keeper) Nonce(goCtx context.Context, req *types.QueryNonceRequest) (*types.QueryNonceResponse, error) {

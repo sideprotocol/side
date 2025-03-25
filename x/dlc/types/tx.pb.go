@@ -29,26 +29,26 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type MsgSubmitAgencyPubKey struct {
-	Sender       string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	PubKey       string `protobuf:"bytes,2,opt,name=pub_key,json=pubKey,proto3" json:"pub_key,omitempty"`
-	AgencyId     uint64 `protobuf:"varint,3,opt,name=agency_id,json=agencyId,proto3" json:"agency_id,omitempty"`
-	AgencyPubkey string `protobuf:"bytes,4,opt,name=agency_pubkey,json=agencyPubkey,proto3" json:"agency_pubkey,omitempty"`
-	Signature    string `protobuf:"bytes,5,opt,name=signature,proto3" json:"signature,omitempty"`
+type MsgSubmitDCMPubKey struct {
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	PubKey    string `protobuf:"bytes,2,opt,name=pub_key,json=pubKey,proto3" json:"pub_key,omitempty"`
+	DCMId     uint64 `protobuf:"varint,3,opt,name=dcm_id,json=dcmId,proto3" json:"dcm_id,omitempty"`
+	DCMPubKey string `protobuf:"bytes,4,opt,name=dcm_pubkey,json=dcmPubkey,proto3" json:"dcm_pubkey,omitempty"`
+	Signature string `protobuf:"bytes,5,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
-func (m *MsgSubmitAgencyPubKey) Reset()         { *m = MsgSubmitAgencyPubKey{} }
-func (m *MsgSubmitAgencyPubKey) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitAgencyPubKey) ProtoMessage()    {}
-func (*MsgSubmitAgencyPubKey) Descriptor() ([]byte, []int) {
+func (m *MsgSubmitDCMPubKey) Reset()         { *m = MsgSubmitDCMPubKey{} }
+func (m *MsgSubmitDCMPubKey) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitDCMPubKey) ProtoMessage()    {}
+func (*MsgSubmitDCMPubKey) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a140082caa5fa150, []int{0}
 }
-func (m *MsgSubmitAgencyPubKey) XXX_Unmarshal(b []byte) error {
+func (m *MsgSubmitDCMPubKey) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSubmitAgencyPubKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgSubmitDCMPubKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSubmitAgencyPubKey.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgSubmitDCMPubKey.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -58,68 +58,68 @@ func (m *MsgSubmitAgencyPubKey) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *MsgSubmitAgencyPubKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitAgencyPubKey.Merge(m, src)
+func (m *MsgSubmitDCMPubKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitDCMPubKey.Merge(m, src)
 }
-func (m *MsgSubmitAgencyPubKey) XXX_Size() int {
+func (m *MsgSubmitDCMPubKey) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSubmitAgencyPubKey) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitAgencyPubKey.DiscardUnknown(m)
+func (m *MsgSubmitDCMPubKey) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitDCMPubKey.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSubmitAgencyPubKey proto.InternalMessageInfo
+var xxx_messageInfo_MsgSubmitDCMPubKey proto.InternalMessageInfo
 
-func (m *MsgSubmitAgencyPubKey) GetSender() string {
+func (m *MsgSubmitDCMPubKey) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgSubmitAgencyPubKey) GetPubKey() string {
+func (m *MsgSubmitDCMPubKey) GetPubKey() string {
 	if m != nil {
 		return m.PubKey
 	}
 	return ""
 }
 
-func (m *MsgSubmitAgencyPubKey) GetAgencyId() uint64 {
+func (m *MsgSubmitDCMPubKey) GetDCMId() uint64 {
 	if m != nil {
-		return m.AgencyId
+		return m.DCMId
 	}
 	return 0
 }
 
-func (m *MsgSubmitAgencyPubKey) GetAgencyPubkey() string {
+func (m *MsgSubmitDCMPubKey) GetDCMPubKey() string {
 	if m != nil {
-		return m.AgencyPubkey
+		return m.DCMPubKey
 	}
 	return ""
 }
 
-func (m *MsgSubmitAgencyPubKey) GetSignature() string {
+func (m *MsgSubmitDCMPubKey) GetSignature() string {
 	if m != nil {
 		return m.Signature
 	}
 	return ""
 }
 
-type MsgSubmitAgencyPubKeyResponse struct {
+type MsgSubmitDCMPubKeyResponse struct {
 }
 
-func (m *MsgSubmitAgencyPubKeyResponse) Reset()         { *m = MsgSubmitAgencyPubKeyResponse{} }
-func (m *MsgSubmitAgencyPubKeyResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitAgencyPubKeyResponse) ProtoMessage()    {}
-func (*MsgSubmitAgencyPubKeyResponse) Descriptor() ([]byte, []int) {
+func (m *MsgSubmitDCMPubKeyResponse) Reset()         { *m = MsgSubmitDCMPubKeyResponse{} }
+func (m *MsgSubmitDCMPubKeyResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitDCMPubKeyResponse) ProtoMessage()    {}
+func (*MsgSubmitDCMPubKeyResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a140082caa5fa150, []int{1}
 }
-func (m *MsgSubmitAgencyPubKeyResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgSubmitDCMPubKeyResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSubmitAgencyPubKeyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgSubmitDCMPubKeyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSubmitAgencyPubKeyResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgSubmitDCMPubKeyResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -129,17 +129,17 @@ func (m *MsgSubmitAgencyPubKeyResponse) XXX_Marshal(b []byte, deterministic bool
 		return b[:n], nil
 	}
 }
-func (m *MsgSubmitAgencyPubKeyResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitAgencyPubKeyResponse.Merge(m, src)
+func (m *MsgSubmitDCMPubKeyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitDCMPubKeyResponse.Merge(m, src)
 }
-func (m *MsgSubmitAgencyPubKeyResponse) XXX_Size() int {
+func (m *MsgSubmitDCMPubKeyResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSubmitAgencyPubKeyResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitAgencyPubKeyResponse.DiscardUnknown(m)
+func (m *MsgSubmitDCMPubKeyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitDCMPubKeyResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSubmitAgencyPubKeyResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgSubmitDCMPubKeyResponse proto.InternalMessageInfo
 
 type MsgSubmitOraclePubKey struct {
 	Sender       string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
@@ -558,25 +558,25 @@ func (m *MsgCreateOracleResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCreateOracleResponse proto.InternalMessageInfo
 
-type MsgCreateAgency struct {
+type MsgCreateDCM struct {
 	// authority is the address that controls the module (defaults to x/gov unless overwritten).
 	Authority    string   `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
 	Participants []string `protobuf:"bytes,2,rep,name=participants,proto3" json:"participants,omitempty"`
 	Threshold    uint32   `protobuf:"varint,3,opt,name=threshold,proto3" json:"threshold,omitempty"`
 }
 
-func (m *MsgCreateAgency) Reset()         { *m = MsgCreateAgency{} }
-func (m *MsgCreateAgency) String() string { return proto.CompactTextString(m) }
-func (*MsgCreateAgency) ProtoMessage()    {}
-func (*MsgCreateAgency) Descriptor() ([]byte, []int) {
+func (m *MsgCreateDCM) Reset()         { *m = MsgCreateDCM{} }
+func (m *MsgCreateDCM) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateDCM) ProtoMessage()    {}
+func (*MsgCreateDCM) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a140082caa5fa150, []int{10}
 }
-func (m *MsgCreateAgency) XXX_Unmarshal(b []byte) error {
+func (m *MsgCreateDCM) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgCreateAgency) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCreateDCM) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgCreateAgency.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCreateDCM.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -586,54 +586,54 @@ func (m *MsgCreateAgency) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-func (m *MsgCreateAgency) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCreateAgency.Merge(m, src)
+func (m *MsgCreateDCM) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateDCM.Merge(m, src)
 }
-func (m *MsgCreateAgency) XXX_Size() int {
+func (m *MsgCreateDCM) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgCreateAgency) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCreateAgency.DiscardUnknown(m)
+func (m *MsgCreateDCM) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateDCM.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgCreateAgency proto.InternalMessageInfo
+var xxx_messageInfo_MsgCreateDCM proto.InternalMessageInfo
 
-func (m *MsgCreateAgency) GetAuthority() string {
+func (m *MsgCreateDCM) GetAuthority() string {
 	if m != nil {
 		return m.Authority
 	}
 	return ""
 }
 
-func (m *MsgCreateAgency) GetParticipants() []string {
+func (m *MsgCreateDCM) GetParticipants() []string {
 	if m != nil {
 		return m.Participants
 	}
 	return nil
 }
 
-func (m *MsgCreateAgency) GetThreshold() uint32 {
+func (m *MsgCreateDCM) GetThreshold() uint32 {
 	if m != nil {
 		return m.Threshold
 	}
 	return 0
 }
 
-type MsgCreateAgencyResponse struct {
+type MsgCreateDCMResponse struct {
 }
 
-func (m *MsgCreateAgencyResponse) Reset()         { *m = MsgCreateAgencyResponse{} }
-func (m *MsgCreateAgencyResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgCreateAgencyResponse) ProtoMessage()    {}
-func (*MsgCreateAgencyResponse) Descriptor() ([]byte, []int) {
+func (m *MsgCreateDCMResponse) Reset()         { *m = MsgCreateDCMResponse{} }
+func (m *MsgCreateDCMResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateDCMResponse) ProtoMessage()    {}
+func (*MsgCreateDCMResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a140082caa5fa150, []int{11}
 }
-func (m *MsgCreateAgencyResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgCreateDCMResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgCreateAgencyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCreateDCMResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgCreateAgencyResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCreateDCMResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -643,17 +643,17 @@ func (m *MsgCreateAgencyResponse) XXX_Marshal(b []byte, deterministic bool) ([]b
 		return b[:n], nil
 	}
 }
-func (m *MsgCreateAgencyResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCreateAgencyResponse.Merge(m, src)
+func (m *MsgCreateDCMResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateDCMResponse.Merge(m, src)
 }
-func (m *MsgCreateAgencyResponse) XXX_Size() int {
+func (m *MsgCreateDCMResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgCreateAgencyResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCreateAgencyResponse.DiscardUnknown(m)
+func (m *MsgCreateDCMResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateDCMResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgCreateAgencyResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgCreateDCMResponse proto.InternalMessageInfo
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //
@@ -754,8 +754,8 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgSubmitAgencyPubKey)(nil), "side.dlc.MsgSubmitAgencyPubKey")
-	proto.RegisterType((*MsgSubmitAgencyPubKeyResponse)(nil), "side.dlc.MsgSubmitAgencyPubKeyResponse")
+	proto.RegisterType((*MsgSubmitDCMPubKey)(nil), "side.dlc.MsgSubmitDCMPubKey")
+	proto.RegisterType((*MsgSubmitDCMPubKeyResponse)(nil), "side.dlc.MsgSubmitDCMPubKeyResponse")
 	proto.RegisterType((*MsgSubmitOraclePubKey)(nil), "side.dlc.MsgSubmitOraclePubKey")
 	proto.RegisterType((*MsgSubmitOraclePubKeyResponse)(nil), "side.dlc.MsgSubmitOraclePubKeyResponse")
 	proto.RegisterType((*MsgSubmitNonce)(nil), "side.dlc.MsgSubmitNonce")
@@ -764,8 +764,8 @@ func init() {
 	proto.RegisterType((*MsgSubmitAttestationResponse)(nil), "side.dlc.MsgSubmitAttestationResponse")
 	proto.RegisterType((*MsgCreateOracle)(nil), "side.dlc.MsgCreateOracle")
 	proto.RegisterType((*MsgCreateOracleResponse)(nil), "side.dlc.MsgCreateOracleResponse")
-	proto.RegisterType((*MsgCreateAgency)(nil), "side.dlc.MsgCreateAgency")
-	proto.RegisterType((*MsgCreateAgencyResponse)(nil), "side.dlc.MsgCreateAgencyResponse")
+	proto.RegisterType((*MsgCreateDCM)(nil), "side.dlc.MsgCreateDCM")
+	proto.RegisterType((*MsgCreateDCMResponse)(nil), "side.dlc.MsgCreateDCMResponse")
 	proto.RegisterType((*MsgUpdateParams)(nil), "side.dlc.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "side.dlc.MsgUpdateParamsResponse")
 }
@@ -773,51 +773,54 @@ func init() {
 func init() { proto.RegisterFile("side/dlc/tx.proto", fileDescriptor_a140082caa5fa150) }
 
 var fileDescriptor_a140082caa5fa150 = []byte{
-	// 697 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x55, 0xcb, 0x6e, 0xd3, 0x40,
-	0x14, 0x8d, 0x9b, 0xf4, 0x91, 0xdb, 0x07, 0xd4, 0xea, 0xc3, 0x35, 0xc5, 0x0d, 0x41, 0x82, 0xaa,
-	0x8b, 0x58, 0x14, 0xb1, 0xe9, 0x8e, 0x02, 0x8b, 0x0a, 0x0a, 0x95, 0x81, 0x0d, 0x48, 0x54, 0x8e,
-	0x3d, 0x72, 0xac, 0x3a, 0x1e, 0xcb, 0x33, 0xae, 0xea, 0x1d, 0xf0, 0x05, 0x7c, 0x4a, 0x37, 0x7c,
-	0x02, 0x52, 0x97, 0x5d, 0xb2, 0xaa, 0x50, 0xbb, 0xe8, 0x6f, 0xa0, 0x99, 0x71, 0xfc, 0x68, 0x26,
-	0xed, 0xa2, 0x48, 0xac, 0xe2, 0x39, 0xe7, 0xde, 0x33, 0xe7, 0xc4, 0x77, 0xc6, 0x30, 0x4f, 0x7c,
-	0x17, 0x99, 0x6e, 0xe0, 0x98, 0xf4, 0xa8, 0x13, 0xc5, 0x98, 0x62, 0x75, 0x8a, 0x41, 0x1d, 0x37,
-	0x70, 0xf4, 0x05, 0x0f, 0x7b, 0x98, 0x83, 0x26, 0x7b, 0x12, 0xbc, 0xbe, 0xec, 0x60, 0xd2, 0xc7,
-	0xc4, 0xec, 0x13, 0xcf, 0x3c, 0x7c, 0xc2, 0x7e, 0x32, 0x62, 0x31, 0xd7, 0x8a, 0xec, 0xd8, 0xee,
-	0x93, 0x0c, 0x56, 0x73, 0xd8, 0x0d, 0x1c, 0x81, 0xb5, 0x7f, 0x2a, 0xb0, 0xb8, 0x4b, 0xbc, 0xf7,
-	0x49, 0xb7, 0xef, 0xd3, 0xe7, 0x1e, 0x0a, 0x9d, 0x74, 0x2f, 0xe9, 0xbe, 0x46, 0xa9, 0xba, 0x04,
-	0x13, 0x04, 0x85, 0x2e, 0x8a, 0x35, 0xa5, 0xa5, 0xac, 0x37, 0xad, 0x6c, 0xa5, 0x2e, 0xc3, 0x64,
-	0x94, 0x74, 0xf7, 0x0f, 0x50, 0xaa, 0x8d, 0x09, 0x22, 0x12, 0x0d, 0xf7, 0xa0, 0x69, 0x73, 0x81,
-	0x7d, 0xdf, 0xd5, 0xea, 0x2d, 0x65, 0xbd, 0x61, 0x4d, 0x09, 0x60, 0xc7, 0x55, 0x1f, 0xc2, 0x6c,
-	0x46, 0x46, 0x49, 0x97, 0xf5, 0x36, 0x78, 0xef, 0x8c, 0x3d, 0xd8, 0xf2, 0x00, 0xa5, 0xea, 0x2a,
-	0x34, 0x89, 0xef, 0x85, 0x36, 0x4d, 0x62, 0xa4, 0x8d, 0xf3, 0x82, 0x02, 0xd8, 0x9a, 0xfe, 0x7e,
-	0x79, 0xbc, 0x91, 0xb9, 0x68, 0xaf, 0xc1, 0x7d, 0xa9, 0x6d, 0x0b, 0x91, 0x08, 0x87, 0x04, 0x55,
-	0x83, 0xbd, 0x8b, 0x6d, 0x27, 0x40, 0xb7, 0x08, 0x86, 0xb9, 0x40, 0x29, 0x98, 0x00, 0x44, 0xb0,
-	0x8c, 0xac, 0x06, 0xc3, 0x83, 0x2d, 0x6f, 0x11, 0xac, 0x6c, 0x3b, 0x0f, 0xf6, 0x4b, 0x81, 0xb9,
-	0xbc, 0xe2, 0x2d, 0x0e, 0x1d, 0x34, 0x32, 0xd1, 0x33, 0x00, 0x74, 0x88, 0x42, 0xba, 0x4f, 0xd3,
-	0x08, 0xf1, 0x50, 0x73, 0x9b, 0x4b, 0x9d, 0xc1, 0x54, 0x75, 0x5e, 0x06, 0xce, 0x2b, 0x46, 0x7f,
-	0x48, 0x23, 0x64, 0x35, 0xd1, 0xe0, 0x51, 0x5d, 0x80, 0xf1, 0x90, 0xe9, 0xf2, 0xac, 0x4d, 0x4b,
-	0x2c, 0xfe, 0x79, 0x50, 0x0d, 0x96, 0xaa, 0x31, 0xf2, 0x84, 0x14, 0x16, 0x8a, 0x77, 0x4b, 0x29,
-	0x22, 0xd4, 0xa6, 0x3e, 0x0e, 0x47, 0xc6, 0x5c, 0x81, 0x29, 0x11, 0xd3, 0x77, 0x79, 0xc8, 0x86,
-	0x35, 0xc9, 0xd7, 0x3b, 0x6e, 0xd5, 0x4f, 0xfd, 0x5a, 0x3f, 0x06, 0xac, 0xca, 0x76, 0xcd, 0x5d,
-	0x7d, 0x53, 0xe0, 0xce, 0x2e, 0xf1, 0x5e, 0xc4, 0xc8, 0xa6, 0x48, 0xbc, 0x19, 0x26, 0x6f, 0x27,
-	0xb4, 0x87, 0x63, 0x9f, 0xa6, 0x99, 0xa9, 0x02, 0x50, 0xdb, 0x30, 0x13, 0xd9, 0x31, 0xf5, 0x1d,
-	0x3f, 0xb2, 0x43, 0x4a, 0xb4, 0xb1, 0x56, 0x9d, 0xfd, 0x61, 0x65, 0x8c, 0x29, 0xd0, 0x5e, 0x8c,
-	0x48, 0x0f, 0x07, 0x62, 0xb6, 0x66, 0xad, 0x02, 0xd8, 0x9a, 0x63, 0x06, 0x0b, 0xc5, 0xf6, 0x0a,
-	0x2c, 0x5f, 0xb1, 0x20, 0xb7, 0x27, 0x4e, 0xc4, 0x7f, 0xb5, 0x27, 0x2c, 0xe4, 0xf6, 0x30, 0x77,
-	0xf7, 0x31, 0x72, 0x6d, 0x8a, 0xf6, 0xf8, 0xa5, 0x74, 0x83, 0xbb, 0x0e, 0x4c, 0x88, 0xcb, 0x8b,
-	0xbf, 0xd2, 0xe9, 0xcd, 0xbb, 0xc5, 0xdc, 0x8a, 0xfe, 0xed, 0xc6, 0xc9, 0xd9, 0x5a, 0xcd, 0xca,
-	0xaa, 0x46, 0x78, 0x29, 0x6f, 0x38, 0xf0, 0xb2, 0x79, 0xd6, 0x80, 0xfa, 0x2e, 0xf1, 0xd4, 0x1d,
-	0x98, 0x2e, 0x9f, 0x22, 0xad, 0xd8, 0xa1, 0x3a, 0x98, 0x7a, 0x6b, 0x14, 0x33, 0x90, 0x54, 0x3f,
-	0xc3, 0xfc, 0xf0, 0xbc, 0x1a, 0x92, 0xb6, 0x12, 0xaf, 0x3f, 0xba, 0x9e, 0xcf, 0xc5, 0xbf, 0x80,
-	0x2a, 0xb9, 0xc6, 0xd6, 0x24, 0xdd, 0xe5, 0x02, 0xfd, 0xf1, 0x0d, 0x05, 0xc3, 0xfa, 0x95, 0xfb,
-	0x5f, 0xa6, 0x5f, 0x2e, 0x90, 0xea, 0xcb, 0xae, 0x62, 0xf5, 0x0d, 0xcc, 0x54, 0x4e, 0xcd, 0x4a,
-	0xa5, 0xb1, 0x4c, 0xe9, 0x0f, 0x46, 0x52, 0xc3, 0x6a, 0xd9, 0x90, 0xcb, 0xd4, 0x04, 0x25, 0x55,
-	0xab, 0xce, 0x25, 0x53, 0xab, 0x0c, 0x65, 0x55, 0xad, 0x4c, 0x5d, 0x51, 0x93, 0x4d, 0x96, 0x3e,
-	0xfe, 0xf5, 0xf2, 0x78, 0x43, 0xd9, 0xde, 0x3e, 0x39, 0x37, 0x94, 0xd3, 0x73, 0x43, 0xf9, 0x73,
-	0x6e, 0x28, 0x3f, 0x2e, 0x8c, 0xda, 0xe9, 0x85, 0x51, 0xfb, 0x7d, 0x61, 0xd4, 0x3e, 0xad, 0x7b,
-	0x3e, 0xed, 0x25, 0xdd, 0x8e, 0x83, 0xfb, 0x26, 0x53, 0xe3, 0x1f, 0x61, 0x07, 0x07, 0x7c, 0x61,
-	0x1e, 0x89, 0xef, 0x7f, 0x1a, 0x21, 0xd2, 0x9d, 0xe0, 0xd4, 0xd3, 0xbf, 0x01, 0x00, 0x00, 0xff,
-	0xff, 0xe2, 0x57, 0xb2, 0x60, 0x18, 0x08, 0x00, 0x00,
+	// 749 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x55, 0x4d, 0x6f, 0xd3, 0x4a,
+	0x14, 0x8d, 0x9b, 0x8f, 0xd6, 0xb7, 0x69, 0xfb, 0x6a, 0xb5, 0x69, 0xea, 0x97, 0xe7, 0xe4, 0x05,
+	0x04, 0x55, 0x85, 0x12, 0x51, 0xc4, 0xa6, 0x3b, 0x92, 0xb0, 0x88, 0x20, 0x50, 0x19, 0xba, 0x01,
+	0x89, 0xca, 0xf1, 0x8c, 0x1c, 0x8b, 0xd8, 0x63, 0x79, 0x26, 0x55, 0xb3, 0x41, 0xc0, 0x2f, 0xe0,
+	0xa7, 0x74, 0xc3, 0x9e, 0x0d, 0x52, 0x17, 0x2c, 0xba, 0x64, 0x55, 0xa1, 0x74, 0xd1, 0xbf, 0x81,
+	0x3c, 0x4e, 0x26, 0x76, 0xeb, 0xb4, 0x02, 0x21, 0x56, 0xc9, 0xdc, 0x73, 0xef, 0xb9, 0xe7, 0xcc,
+	0x5c, 0xcf, 0xc0, 0x2a, 0xb5, 0x11, 0xae, 0xa3, 0xbe, 0x59, 0x67, 0x47, 0x35, 0xcf, 0x27, 0x8c,
+	0x28, 0x0b, 0x41, 0xa8, 0x86, 0xfa, 0xa6, 0xba, 0x66, 0x11, 0x8b, 0xf0, 0x60, 0x3d, 0xf8, 0x17,
+	0xe2, 0xea, 0x86, 0x49, 0xa8, 0x43, 0x68, 0xdd, 0xa1, 0x56, 0xfd, 0xf0, 0x7e, 0xf0, 0x33, 0x06,
+	0xd6, 0x05, 0x97, 0x67, 0xf8, 0x86, 0x43, 0xc7, 0x61, 0x45, 0x84, 0x51, 0xdf, 0x0c, 0x63, 0xd5,
+	0x2f, 0x12, 0x28, 0x1d, 0x6a, 0xbd, 0x18, 0x74, 0x1d, 0x9b, 0xb5, 0x9a, 0x9d, 0xbd, 0x41, 0xf7,
+	0x09, 0x1e, 0x2a, 0x05, 0xc8, 0x51, 0xec, 0x22, 0xec, 0x17, 0xa5, 0x8a, 0xb4, 0x25, 0xeb, 0xe3,
+	0x95, 0xb2, 0x01, 0xf3, 0xde, 0xa0, 0x7b, 0xf0, 0x16, 0x0f, 0x8b, 0x73, 0x21, 0xe0, 0x85, 0x05,
+	0x15, 0xc8, 0x21, 0xd3, 0x39, 0xb0, 0x51, 0x31, 0x5d, 0x91, 0xb6, 0x32, 0x0d, 0x79, 0x74, 0x56,
+	0xce, 0xb6, 0x9a, 0x9d, 0x36, 0xd2, 0xb3, 0xc8, 0x74, 0xda, 0x48, 0xb9, 0x07, 0x10, 0x64, 0x78,
+	0x83, 0x6e, 0x50, 0x9d, 0x09, 0xaa, 0x1b, 0x4b, 0xa3, 0xb3, 0xb2, 0x2c, 0xba, 0xea, 0x32, 0x32,
+	0x9d, 0x3d, 0x8e, 0x2b, 0x25, 0x90, 0xa9, 0x6d, 0xb9, 0x06, 0x1b, 0xf8, 0xb8, 0x98, 0xe5, 0xad,
+	0xa6, 0x81, 0xdd, 0xc5, 0x8f, 0x17, 0xc7, 0xdb, 0x63, 0x4d, 0xd5, 0x12, 0xa8, 0x57, 0x1d, 0xe8,
+	0x98, 0x7a, 0xc4, 0xa5, 0xb8, 0xfa, 0x59, 0x82, 0x75, 0x01, 0x3f, 0xf7, 0x0d, 0xb3, 0x8f, 0x7f,
+	0xd7, 0xe3, 0xbf, 0x20, 0x13, 0x4e, 0x20, 0x6c, 0xea, 0x0b, 0x61, 0xa0, 0x8d, 0x94, 0x5b, 0xb0,
+	0x34, 0x06, 0xa3, 0x0e, 0xf5, 0x3c, 0x99, 0xb4, 0xfc, 0x45, 0x57, 0x65, 0xf8, 0x2f, 0x51, 0xb6,
+	0x30, 0xf6, 0x55, 0x82, 0x65, 0x91, 0xf1, 0x8c, 0xb8, 0x26, 0x9e, 0xe9, 0xe8, 0x21, 0x00, 0x3e,
+	0xc4, 0x2e, 0x3b, 0x60, 0x43, 0x0f, 0x73, 0x53, 0xcb, 0x3b, 0x85, 0xda, 0x64, 0xba, 0x6a, 0xad,
+	0xbe, 0xf9, 0x38, 0x80, 0x5f, 0x0e, 0x3d, 0xac, 0xcb, 0x78, 0xf2, 0x57, 0x59, 0x83, 0xac, 0x1b,
+	0xf0, 0x72, 0xaf, 0xb2, 0x1e, 0x2e, 0xfe, 0xb8, 0xd1, 0x22, 0x14, 0xe2, 0x36, 0x84, 0x43, 0x06,
+	0x6b, 0x02, 0x79, 0xc4, 0x18, 0xa6, 0xcc, 0x60, 0x36, 0x71, 0x67, 0xda, 0xdc, 0x84, 0x85, 0xd0,
+	0xa6, 0x8d, 0xb8, 0xc9, 0x8c, 0x3e, 0xcf, 0xd7, 0x6d, 0x14, 0xd7, 0x93, 0xbe, 0x56, 0x8f, 0x06,
+	0xa5, 0xa4, 0xae, 0x42, 0xd5, 0x07, 0x09, 0x56, 0x3a, 0xd4, 0x6a, 0xfa, 0xd8, 0x60, 0x38, 0x3c,
+	0x99, 0x80, 0xde, 0x18, 0xb0, 0x1e, 0xf1, 0x6d, 0x36, 0x1c, 0x8b, 0x9a, 0x06, 0x94, 0x2a, 0xe4,
+	0x3d, 0xc3, 0x67, 0xb6, 0x69, 0x7b, 0x86, 0xcb, 0x68, 0x71, 0xae, 0x92, 0x0e, 0x36, 0x2c, 0x1a,
+	0x0b, 0x18, 0x58, 0xcf, 0xc7, 0xb4, 0x47, 0xfa, 0xe1, 0x6c, 0x2d, 0xe9, 0xd3, 0xc0, 0xee, 0x72,
+	0x20, 0x70, 0xca, 0x58, 0xdd, 0x84, 0x8d, 0x4b, 0x12, 0x84, 0xbc, 0x77, 0x90, 0x17, 0x50, 0xab,
+	0xd9, 0xf9, 0xeb, 0xd2, 0x0a, 0xfc, 0xd0, 0x44, 0x7f, 0xa1, 0x8b, 0xf0, 0x5d, 0xdb, 0xf7, 0x90,
+	0xc1, 0xf0, 0x1e, 0xbf, 0x95, 0x6e, 0x90, 0x56, 0x83, 0x5c, 0x78, 0x7b, 0xf1, 0xb3, 0x5c, 0xdc,
+	0xf9, 0x67, 0x3a, 0xb0, 0x61, 0x7d, 0x23, 0x73, 0x72, 0x56, 0x4e, 0xe9, 0xe3, 0xac, 0x19, 0x7b,
+	0x14, 0x6d, 0x38, 0xd1, 0xb2, 0xf3, 0x2d, 0x03, 0xe9, 0x0e, 0xb5, 0x94, 0x36, 0x2c, 0x46, 0x3f,
+	0x9f, 0xe2, 0xb4, 0x43, 0x7c, 0x22, 0xd5, 0xca, 0x2c, 0x64, 0x42, 0xa9, 0xbc, 0x86, 0xd5, 0xab,
+	0x83, 0xaa, 0x25, 0x94, 0x45, 0x70, 0xf5, 0xce, 0xf5, 0xb8, 0x20, 0x7f, 0x03, 0x4a, 0xc2, 0xfd,
+	0x55, 0x4e, 0xa8, 0x8e, 0x26, 0xa8, 0x77, 0x6f, 0x48, 0x10, 0xfc, 0xfb, 0xb0, 0x72, 0xf9, 0x01,
+	0x28, 0x25, 0xd4, 0x0a, 0x54, 0xbd, 0x7d, 0x1d, 0x2a, 0x68, 0x9f, 0x42, 0x3e, 0xf6, 0x95, 0x6c,
+	0xc6, 0xaa, 0xa2, 0x90, 0xfa, 0xff, 0x4c, 0x48, 0xb0, 0x35, 0x41, 0x9e, 0x4e, 0x75, 0x21, 0x21,
+	0xbf, 0xd5, 0xec, 0xa8, 0x5a, 0x72, 0x3c, 0x2a, 0x29, 0x36, 0x82, 0x71, 0x49, 0x51, 0xe8, 0x92,
+	0xa4, 0xa4, 0x39, 0x52, 0xb3, 0xef, 0x2f, 0x8e, 0xb7, 0xa5, 0x46, 0xe3, 0x64, 0xa4, 0x49, 0xa7,
+	0x23, 0x4d, 0xfa, 0x31, 0xd2, 0xa4, 0x4f, 0xe7, 0x5a, 0xea, 0xf4, 0x5c, 0x4b, 0x7d, 0x3f, 0xd7,
+	0x52, 0xaf, 0xb6, 0x2c, 0x9b, 0xf5, 0x06, 0xdd, 0x9a, 0x49, 0x9c, 0x7a, 0xc0, 0xc6, 0xdf, 0x5c,
+	0x93, 0xf4, 0xf9, 0xa2, 0x7e, 0x14, 0x3e, 0xf7, 0x43, 0x0f, 0xd3, 0x6e, 0x8e, 0x43, 0x0f, 0x7e,
+	0x06, 0x00, 0x00, 0xff, 0xff, 0xa5, 0xce, 0xd8, 0x06, 0x07, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -835,9 +838,9 @@ type MsgClient interface {
 	SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ...grpc.CallOption) (*MsgSubmitNonceResponse, error)
 	SubmitAttestation(ctx context.Context, in *MsgSubmitAttestation, opts ...grpc.CallOption) (*MsgSubmitAttestationResponse, error)
 	SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOraclePubKey, opts ...grpc.CallOption) (*MsgSubmitOraclePubKeyResponse, error)
-	SubmitAgencyPubKey(ctx context.Context, in *MsgSubmitAgencyPubKey, opts ...grpc.CallOption) (*MsgSubmitAgencyPubKeyResponse, error)
+	SubmitDCMPubKey(ctx context.Context, in *MsgSubmitDCMPubKey, opts ...grpc.CallOption) (*MsgSubmitDCMPubKeyResponse, error)
 	CreateOracle(ctx context.Context, in *MsgCreateOracle, opts ...grpc.CallOption) (*MsgCreateOracleResponse, error)
-	CreateAgency(ctx context.Context, in *MsgCreateAgency, opts ...grpc.CallOption) (*MsgCreateAgencyResponse, error)
+	CreateDCM(ctx context.Context, in *MsgCreateDCM, opts ...grpc.CallOption) (*MsgCreateDCMResponse, error)
 	// UpdateParams defines a governance operation for updating the x/dlc module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -880,9 +883,9 @@ func (c *msgClient) SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOracleP
 	return out, nil
 }
 
-func (c *msgClient) SubmitAgencyPubKey(ctx context.Context, in *MsgSubmitAgencyPubKey, opts ...grpc.CallOption) (*MsgSubmitAgencyPubKeyResponse, error) {
-	out := new(MsgSubmitAgencyPubKeyResponse)
-	err := c.cc.Invoke(ctx, "/side.dlc.Msg/SubmitAgencyPubKey", in, out, opts...)
+func (c *msgClient) SubmitDCMPubKey(ctx context.Context, in *MsgSubmitDCMPubKey, opts ...grpc.CallOption) (*MsgSubmitDCMPubKeyResponse, error) {
+	out := new(MsgSubmitDCMPubKeyResponse)
+	err := c.cc.Invoke(ctx, "/side.dlc.Msg/SubmitDCMPubKey", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -898,9 +901,9 @@ func (c *msgClient) CreateOracle(ctx context.Context, in *MsgCreateOracle, opts 
 	return out, nil
 }
 
-func (c *msgClient) CreateAgency(ctx context.Context, in *MsgCreateAgency, opts ...grpc.CallOption) (*MsgCreateAgencyResponse, error) {
-	out := new(MsgCreateAgencyResponse)
-	err := c.cc.Invoke(ctx, "/side.dlc.Msg/CreateAgency", in, out, opts...)
+func (c *msgClient) CreateDCM(ctx context.Context, in *MsgCreateDCM, opts ...grpc.CallOption) (*MsgCreateDCMResponse, error) {
+	out := new(MsgCreateDCMResponse)
+	err := c.cc.Invoke(ctx, "/side.dlc.Msg/CreateDCM", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -921,9 +924,9 @@ type MsgServer interface {
 	SubmitNonce(context.Context, *MsgSubmitNonce) (*MsgSubmitNonceResponse, error)
 	SubmitAttestation(context.Context, *MsgSubmitAttestation) (*MsgSubmitAttestationResponse, error)
 	SubmitOraclePubKey(context.Context, *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error)
-	SubmitAgencyPubKey(context.Context, *MsgSubmitAgencyPubKey) (*MsgSubmitAgencyPubKeyResponse, error)
+	SubmitDCMPubKey(context.Context, *MsgSubmitDCMPubKey) (*MsgSubmitDCMPubKeyResponse, error)
 	CreateOracle(context.Context, *MsgCreateOracle) (*MsgCreateOracleResponse, error)
-	CreateAgency(context.Context, *MsgCreateAgency) (*MsgCreateAgencyResponse, error)
+	CreateDCM(context.Context, *MsgCreateDCM) (*MsgCreateDCMResponse, error)
 	// UpdateParams defines a governance operation for updating the x/dlc module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -944,14 +947,14 @@ func (*UnimplementedMsgServer) SubmitAttestation(ctx context.Context, req *MsgSu
 func (*UnimplementedMsgServer) SubmitOraclePubKey(ctx context.Context, req *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitOraclePubKey not implemented")
 }
-func (*UnimplementedMsgServer) SubmitAgencyPubKey(ctx context.Context, req *MsgSubmitAgencyPubKey) (*MsgSubmitAgencyPubKeyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitAgencyPubKey not implemented")
+func (*UnimplementedMsgServer) SubmitDCMPubKey(ctx context.Context, req *MsgSubmitDCMPubKey) (*MsgSubmitDCMPubKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitDCMPubKey not implemented")
 }
 func (*UnimplementedMsgServer) CreateOracle(ctx context.Context, req *MsgCreateOracle) (*MsgCreateOracleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOracle not implemented")
 }
-func (*UnimplementedMsgServer) CreateAgency(ctx context.Context, req *MsgCreateAgency) (*MsgCreateAgencyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateAgency not implemented")
+func (*UnimplementedMsgServer) CreateDCM(ctx context.Context, req *MsgCreateDCM) (*MsgCreateDCMResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateDCM not implemented")
 }
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -1015,20 +1018,20 @@ func _Msg_SubmitOraclePubKey_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitAgencyPubKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitAgencyPubKey)
+func _Msg_SubmitDCMPubKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitDCMPubKey)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitAgencyPubKey(ctx, in)
+		return srv.(MsgServer).SubmitDCMPubKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.dlc.Msg/SubmitAgencyPubKey",
+		FullMethod: "/side.dlc.Msg/SubmitDCMPubKey",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitAgencyPubKey(ctx, req.(*MsgSubmitAgencyPubKey))
+		return srv.(MsgServer).SubmitDCMPubKey(ctx, req.(*MsgSubmitDCMPubKey))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1051,20 +1054,20 @@ func _Msg_CreateOracle_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_CreateAgency_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCreateAgency)
+func _Msg_CreateDCM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateDCM)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).CreateAgency(ctx, in)
+		return srv.(MsgServer).CreateDCM(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.dlc.Msg/CreateAgency",
+		FullMethod: "/side.dlc.Msg/CreateDCM",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).CreateAgency(ctx, req.(*MsgCreateAgency))
+		return srv.(MsgServer).CreateDCM(ctx, req.(*MsgCreateDCM))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1105,16 +1108,16 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitOraclePubKey_Handler,
 		},
 		{
-			MethodName: "SubmitAgencyPubKey",
-			Handler:    _Msg_SubmitAgencyPubKey_Handler,
+			MethodName: "SubmitDCMPubKey",
+			Handler:    _Msg_SubmitDCMPubKey_Handler,
 		},
 		{
 			MethodName: "CreateOracle",
 			Handler:    _Msg_CreateOracle_Handler,
 		},
 		{
-			MethodName: "CreateAgency",
-			Handler:    _Msg_CreateAgency_Handler,
+			MethodName: "CreateDCM",
+			Handler:    _Msg_CreateDCM_Handler,
 		},
 		{
 			MethodName: "UpdateParams",
@@ -1125,7 +1128,7 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	Metadata: "side/dlc/tx.proto",
 }
 
-func (m *MsgSubmitAgencyPubKey) Marshal() (dAtA []byte, err error) {
+func (m *MsgSubmitDCMPubKey) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1135,12 +1138,12 @@ func (m *MsgSubmitAgencyPubKey) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSubmitAgencyPubKey) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgSubmitDCMPubKey) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSubmitAgencyPubKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgSubmitDCMPubKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1152,15 +1155,15 @@ func (m *MsgSubmitAgencyPubKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x2a
 	}
-	if len(m.AgencyPubkey) > 0 {
-		i -= len(m.AgencyPubkey)
-		copy(dAtA[i:], m.AgencyPubkey)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.AgencyPubkey)))
+	if len(m.DCMPubKey) > 0 {
+		i -= len(m.DCMPubKey)
+		copy(dAtA[i:], m.DCMPubKey)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.DCMPubKey)))
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.AgencyId != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.AgencyId))
+	if m.DCMId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.DCMId))
 		i--
 		dAtA[i] = 0x18
 	}
@@ -1181,7 +1184,7 @@ func (m *MsgSubmitAgencyPubKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSubmitAgencyPubKeyResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgSubmitDCMPubKeyResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1191,12 +1194,12 @@ func (m *MsgSubmitAgencyPubKeyResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSubmitAgencyPubKeyResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgSubmitDCMPubKeyResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSubmitAgencyPubKeyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgSubmitDCMPubKeyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1494,7 +1497,7 @@ func (m *MsgCreateOracleResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgCreateAgency) Marshal() (dAtA []byte, err error) {
+func (m *MsgCreateDCM) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1504,12 +1507,12 @@ func (m *MsgCreateAgency) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgCreateAgency) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCreateDCM) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgCreateAgency) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCreateDCM) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1538,7 +1541,7 @@ func (m *MsgCreateAgency) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgCreateAgencyResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgCreateDCMResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1548,12 +1551,12 @@ func (m *MsgCreateAgencyResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgCreateAgencyResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCreateDCMResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgCreateAgencyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCreateDCMResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1635,7 +1638,7 @@ func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgSubmitAgencyPubKey) Size() (n int) {
+func (m *MsgSubmitDCMPubKey) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1649,10 +1652,10 @@ func (m *MsgSubmitAgencyPubKey) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	if m.AgencyId != 0 {
-		n += 1 + sovTx(uint64(m.AgencyId))
+	if m.DCMId != 0 {
+		n += 1 + sovTx(uint64(m.DCMId))
 	}
-	l = len(m.AgencyPubkey)
+	l = len(m.DCMPubKey)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1663,7 +1666,7 @@ func (m *MsgSubmitAgencyPubKey) Size() (n int) {
 	return n
 }
 
-func (m *MsgSubmitAgencyPubKeyResponse) Size() (n int) {
+func (m *MsgSubmitDCMPubKeyResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1806,7 +1809,7 @@ func (m *MsgCreateOracleResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgCreateAgency) Size() (n int) {
+func (m *MsgCreateDCM) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1828,7 +1831,7 @@ func (m *MsgCreateAgency) Size() (n int) {
 	return n
 }
 
-func (m *MsgCreateAgencyResponse) Size() (n int) {
+func (m *MsgCreateDCMResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1867,7 +1870,7 @@ func sovTx(x uint64) (n int) {
 func sozTx(x uint64) (n int) {
 	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgSubmitAgencyPubKey) Unmarshal(dAtA []byte) error {
+func (m *MsgSubmitDCMPubKey) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1890,10 +1893,10 @@ func (m *MsgSubmitAgencyPubKey) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitAgencyPubKey: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgSubmitDCMPubKey: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitAgencyPubKey: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgSubmitDCMPubKey: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1962,9 +1965,9 @@ func (m *MsgSubmitAgencyPubKey) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AgencyId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DCMId", wireType)
 			}
-			m.AgencyId = 0
+			m.DCMId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1974,14 +1977,14 @@ func (m *MsgSubmitAgencyPubKey) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AgencyId |= uint64(b&0x7F) << shift
+				m.DCMId |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AgencyPubkey", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DCMPubKey", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2009,7 +2012,7 @@ func (m *MsgSubmitAgencyPubKey) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AgencyPubkey = string(dAtA[iNdEx:postIndex])
+			m.DCMPubKey = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
@@ -2064,7 +2067,7 @@ func (m *MsgSubmitAgencyPubKey) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgSubmitAgencyPubKeyResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgSubmitDCMPubKeyResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2087,10 +2090,10 @@ func (m *MsgSubmitAgencyPubKeyResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitAgencyPubKeyResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgSubmitDCMPubKeyResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitAgencyPubKeyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgSubmitDCMPubKeyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -2974,7 +2977,7 @@ func (m *MsgCreateOracleResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgCreateAgency) Unmarshal(dAtA []byte) error {
+func (m *MsgCreateDCM) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2997,10 +3000,10 @@ func (m *MsgCreateAgency) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCreateAgency: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCreateDCM: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCreateAgency: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCreateDCM: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3107,7 +3110,7 @@ func (m *MsgCreateAgency) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgCreateAgencyResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgCreateDCMResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3130,10 +3133,10 @@ func (m *MsgCreateAgencyResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCreateAgencyResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCreateDCMResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCreateAgencyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCreateDCMResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

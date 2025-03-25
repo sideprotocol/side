@@ -11,26 +11,26 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgSubmitAgencyPubKey{}
+var _ sdk.Msg = &MsgSubmitDCMPubKey{}
 
-func NewMsgSubmitAgencyPubKey(
+func NewMsgSubmitDCMPubKey(
 	sender string,
 	pubKey string,
-	agencyId uint64,
-	agencyPubKey string,
+	dcmId uint64,
+	dcmPubKey string,
 	signature string,
-) *MsgSubmitAgencyPubKey {
-	return &MsgSubmitAgencyPubKey{
-		Sender:       sender,
-		PubKey:       pubKey,
-		AgencyId:     agencyId,
-		AgencyPubkey: agencyPubKey,
-		Signature:    signature,
+) *MsgSubmitDCMPubKey {
+	return &MsgSubmitDCMPubKey{
+		Sender:    sender,
+		PubKey:    pubKey,
+		DCMId:     dcmId,
+		DCMPubKey: dcmPubKey,
+		Signature: signature,
 	}
 }
 
-// ValidateBasic performs basic MsgSubmitAgencyPubKey message validation.
-func (m *MsgSubmitAgencyPubKey) ValidateBasic() error {
+// ValidateBasic performs basic MsgSubmitDCMPubKey message validation.
+func (m *MsgSubmitDCMPubKey) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Sender); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
@@ -44,12 +44,12 @@ func (m *MsgSubmitAgencyPubKey) ValidateBasic() error {
 		return ErrInvalidPubKey
 	}
 
-	agencyPubKey, err := hex.DecodeString(m.AgencyPubkey)
+	dcmPubKey, err := hex.DecodeString(m.DCMPubKey)
 	if err != nil {
 		return ErrInvalidPubKey
 	}
 
-	if _, err := schnorr.ParsePubKey(agencyPubKey); err != nil {
+	if _, err := schnorr.ParsePubKey(dcmPubKey); err != nil {
 		return ErrInvalidPubKey
 	}
 

@@ -157,7 +157,7 @@ func CmdQueryPoolExchangeRate() *cobra.Command {
 
 func CmdQueryCollateralAddress() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "collateral-address [borrower public key] [agency public key] [maturity time]",
+		Use:   "collateral-address [borrower public key] [dcm public key] [maturity time]",
 		Short: "Query the collateral address by the specified loan params",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -175,7 +175,7 @@ func CmdQueryCollateralAddress() *cobra.Command {
 
 			res, err := queryClient.CollateralAddress(cmd.Context(), &types.QueryCollateralAddressRequest{
 				BorrowerPubkey: args[0],
-				AgencyPubkey:   args[1],
+				DCMPubKey:      args[1],
 				MaturityTime:   maturityTime,
 			})
 			if err != nil {

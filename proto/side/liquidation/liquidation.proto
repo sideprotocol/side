@@ -23,7 +23,7 @@ message Liquidation {
     uint64 id = 1;
     string loan_id = 2;
     string borrower = 3;
-    string agency = 4;
+    string dcm = 4 [(gogoproto.customname) = "DCM"];
     cosmos.base.v1beta1.Coin liquidated_collateral = 5 [(gogoproto.nullable) = false];
     int64 liquidated_price = 6;
     google.protobuf.Timestamp liquidated_time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];

@@ -67,8 +67,8 @@ type DLCKeeper interface {
 
 	GetAttestationByEvent(ctx sdk.Context, eventId uint64) *dlctypes.DLCAttestation
 
-	HasAgency(ctx sdk.Context, id uint64) bool
-	GetAgency(ctx sdk.Context, id uint64) *dlctypes.Agency
+	HasDCM(ctx sdk.Context, id uint64) bool
+	GetDCM(ctx sdk.Context, id uint64) *dlctypes.DCM
 
 	SetEvent(ctx sdk.Context, event *dlctypes.DLCEvent)
 	TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int)

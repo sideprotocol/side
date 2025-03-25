@@ -16,7 +16,7 @@ import (
 // handleLiquidationSignatures handles the liquidation signatures
 func (k Keeper) handleLiquidationSignatures(ctx sdk.Context, loan *types.Loan, signatures []string) error {
 	dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
-	if len(dlcMeta.LiquidationCet.AgencySignatures) > 0 {
+	if len(dlcMeta.LiquidationCet.DCMSignatures) > 0 {
 		return types.ErrLiquidationSignaturesAlreadyExist
 	}
 
@@ -26,7 +26,7 @@ func (k Keeper) handleLiquidationSignatures(ctx sdk.Context, loan *types.Loan, s
 	}
 
 	script, _ := hex.DecodeString(dlcMeta.MultisigScript)
-	agencyPubKey, _ := hex.DecodeString(loan.Agency)
+	dcmPubKey, _ := hex.DecodeString(loan.DCM)
 
 	for i, input := range p.Inputs {
 		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
@@ -36,12 +36,12 @@ func (k Keeper) handleLiquidationSignatures(ctx sdk.Context, loan *types.Loan, s
 
 		sigBytes, _ := hex.DecodeString(signatures[i])
 
-		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
+		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
 			return types.ErrInvalidSignature
 		}
 	}
 
-	dlcMeta.LiquidationCet.AgencySignatures = signatures
+	dlcMeta.LiquidationCet.DCMSignatures = signatures
 	k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
 	return nil
@@ -50,7 +50,7 @@ func (k Keeper) handleLiquidationSignatures(ctx sdk.Context, loan *types.Loan, s
 // handleDefaultLiquidationSignatures handles the default liquidation signatures
 func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.Loan, signatures []string) error {
 	dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
-	if len(dlcMeta.DefaultLiquidationCet.AgencySignatures) > 0 {
+	if len(dlcMeta.DefaultLiquidationCet.DCMSignatures) > 0 {
 		return types.ErrLiquidationSignaturesAlreadyExist
 	}
 
@@ -60,7 +60,7 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.
 	}
 
 	script, _ := hex.DecodeString(dlcMeta.MultisigScript)
-	agencyPubKey, _ := hex.DecodeString(loan.Agency)
+	dcmPubKey, _ := hex.DecodeString(loan.DCM)
 
 	for i, input := range p.Inputs {
 		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
@@ -70,12 +70,12 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.
 
 		sigBytes, _ := hex.DecodeString(signatures[i])
 
-		if !schnorr.Verify(sigBytes, sigHash, agencyPubKey) {
+		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
 			return types.ErrInvalidSignature
 		}
 	}
 
-	dlcMeta.DefaultLiquidationCet.AgencySignatures = signatures
+	dlcMeta.DefaultLiquidationCet.DCMSignatures = signatures
 	k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
 	return nil

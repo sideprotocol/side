@@ -28,7 +28,7 @@ func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId strin
 		sdk.NewEvent(
 			types.EventTypeSignRepaymentCet,
 			sdk.NewAttribute(types.AttributeKeyLoanId, loanId),
-			sdk.NewAttribute(types.AttributeKeyAgencyPubKey, k.GetLoan(ctx, loanId).Agency),
+			sdk.NewAttribute(types.AttributeKeyDCMPubKey, k.GetLoan(ctx, loanId).DCM),
 			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, hex.EncodeToString(signaturePoint)),
 			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
 		),

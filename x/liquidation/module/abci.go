@@ -42,7 +42,7 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 			sdk.NewEvent(
 				types.EventTypeSignSettlementTransaction,
 				sdk.NewAttribute(types.AttributeKeyLiquidationId, fmt.Sprintf("%d", liquidation.Id)),
-				sdk.NewAttribute(types.AttributeKeyAgencyPubKey, liquidation.Agency),
+				sdk.NewAttribute(types.AttributeKeyDCMPubKey, liquidation.DCM),
 				sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
 			),
 		)

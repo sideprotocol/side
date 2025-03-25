@@ -100,7 +100,7 @@ message Loan {
     string vault_address = 1; // id
     string borrower = 2;
     string borrowerPubKey = 3;
-    string agency = 4;
+    string dcm = 4 [(gogoproto.customname) = "DCM"];
     int64 maturity_time = 5;
     int64 final_timeout = 6;
     string pool_id = 7;
@@ -155,14 +155,14 @@ message LiquidationCet {
   string tx = 1;
   repeated string borrower_adaptor_signatures = 2;
   repeated string borrower_adapted_signatures = 3;
-  repeated string agency_signatures = 4;
+  repeated string dcm_signatures = 4 [(gogoproto.customname) = "DCMSignatures"];
   string signed_tx_hex = 5;
 }
 
 message RepaymentCet {
   string tx = 1;
-  repeated string agency_adaptor_signatures = 2;
-  repeated string agency_adapted_signatures = 3;
+  repeated string dcm_adaptor_signatures = 2 [(gogoproto.customname) = "DCMAdaptorSignatures"];
+  repeated string dcm_adapted_signatures = 3 [(gogoproto.customname) = "DCMAdaptedSignatures"];
   repeated string borrower_signatures = 4;
   string signed_tx_hex = 5;
 }

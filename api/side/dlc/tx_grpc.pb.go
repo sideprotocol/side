@@ -22,9 +22,9 @@ const (
 	Msg_SubmitNonce_FullMethodName        = "/side.dlc.Msg/SubmitNonce"
 	Msg_SubmitAttestation_FullMethodName  = "/side.dlc.Msg/SubmitAttestation"
 	Msg_SubmitOraclePubKey_FullMethodName = "/side.dlc.Msg/SubmitOraclePubKey"
-	Msg_SubmitAgencyPubKey_FullMethodName = "/side.dlc.Msg/SubmitAgencyPubKey"
+	Msg_SubmitDCMPubKey_FullMethodName    = "/side.dlc.Msg/SubmitDCMPubKey"
 	Msg_CreateOracle_FullMethodName       = "/side.dlc.Msg/CreateOracle"
-	Msg_CreateAgency_FullMethodName       = "/side.dlc.Msg/CreateAgency"
+	Msg_CreateDCM_FullMethodName          = "/side.dlc.Msg/CreateDCM"
 	Msg_UpdateParams_FullMethodName       = "/side.dlc.Msg/UpdateParams"
 )
 
@@ -35,9 +35,9 @@ type MsgClient interface {
 	SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ...grpc.CallOption) (*MsgSubmitNonceResponse, error)
 	SubmitAttestation(ctx context.Context, in *MsgSubmitAttestation, opts ...grpc.CallOption) (*MsgSubmitAttestationResponse, error)
 	SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOraclePubKey, opts ...grpc.CallOption) (*MsgSubmitOraclePubKeyResponse, error)
-	SubmitAgencyPubKey(ctx context.Context, in *MsgSubmitAgencyPubKey, opts ...grpc.CallOption) (*MsgSubmitAgencyPubKeyResponse, error)
+	SubmitDCMPubKey(ctx context.Context, in *MsgSubmitDCMPubKey, opts ...grpc.CallOption) (*MsgSubmitDCMPubKeyResponse, error)
 	CreateOracle(ctx context.Context, in *MsgCreateOracle, opts ...grpc.CallOption) (*MsgCreateOracleResponse, error)
-	CreateAgency(ctx context.Context, in *MsgCreateAgency, opts ...grpc.CallOption) (*MsgCreateAgencyResponse, error)
+	CreateDCM(ctx context.Context, in *MsgCreateDCM, opts ...grpc.CallOption) (*MsgCreateDCMResponse, error)
 	// UpdateParams defines a governance operation for updating the x/dlc module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -80,9 +80,9 @@ func (c *msgClient) SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOracleP
 	return out, nil
 }
 
-func (c *msgClient) SubmitAgencyPubKey(ctx context.Context, in *MsgSubmitAgencyPubKey, opts ...grpc.CallOption) (*MsgSubmitAgencyPubKeyResponse, error) {
-	out := new(MsgSubmitAgencyPubKeyResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitAgencyPubKey_FullMethodName, in, out, opts...)
+func (c *msgClient) SubmitDCMPubKey(ctx context.Context, in *MsgSubmitDCMPubKey, opts ...grpc.CallOption) (*MsgSubmitDCMPubKeyResponse, error) {
+	out := new(MsgSubmitDCMPubKeyResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitDCMPubKey_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,9 +98,9 @@ func (c *msgClient) CreateOracle(ctx context.Context, in *MsgCreateOracle, opts 
 	return out, nil
 }
 
-func (c *msgClient) CreateAgency(ctx context.Context, in *MsgCreateAgency, opts ...grpc.CallOption) (*MsgCreateAgencyResponse, error) {
-	out := new(MsgCreateAgencyResponse)
-	err := c.cc.Invoke(ctx, Msg_CreateAgency_FullMethodName, in, out, opts...)
+func (c *msgClient) CreateDCM(ctx context.Context, in *MsgCreateDCM, opts ...grpc.CallOption) (*MsgCreateDCMResponse, error) {
+	out := new(MsgCreateDCMResponse)
+	err := c.cc.Invoke(ctx, Msg_CreateDCM_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -123,9 +123,9 @@ type MsgServer interface {
 	SubmitNonce(context.Context, *MsgSubmitNonce) (*MsgSubmitNonceResponse, error)
 	SubmitAttestation(context.Context, *MsgSubmitAttestation) (*MsgSubmitAttestationResponse, error)
 	SubmitOraclePubKey(context.Context, *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error)
-	SubmitAgencyPubKey(context.Context, *MsgSubmitAgencyPubKey) (*MsgSubmitAgencyPubKeyResponse, error)
+	SubmitDCMPubKey(context.Context, *MsgSubmitDCMPubKey) (*MsgSubmitDCMPubKeyResponse, error)
 	CreateOracle(context.Context, *MsgCreateOracle) (*MsgCreateOracleResponse, error)
-	CreateAgency(context.Context, *MsgCreateAgency) (*MsgCreateAgencyResponse, error)
+	CreateDCM(context.Context, *MsgCreateDCM) (*MsgCreateDCMResponse, error)
 	// UpdateParams defines a governance operation for updating the x/dlc module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -147,14 +147,14 @@ func (UnimplementedMsgServer) SubmitAttestation(context.Context, *MsgSubmitAttes
 func (UnimplementedMsgServer) SubmitOraclePubKey(context.Context, *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitOraclePubKey not implemented")
 }
-func (UnimplementedMsgServer) SubmitAgencyPubKey(context.Context, *MsgSubmitAgencyPubKey) (*MsgSubmitAgencyPubKeyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitAgencyPubKey not implemented")
+func (UnimplementedMsgServer) SubmitDCMPubKey(context.Context, *MsgSubmitDCMPubKey) (*MsgSubmitDCMPubKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitDCMPubKey not implemented")
 }
 func (UnimplementedMsgServer) CreateOracle(context.Context, *MsgCreateOracle) (*MsgCreateOracleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOracle not implemented")
 }
-func (UnimplementedMsgServer) CreateAgency(context.Context, *MsgCreateAgency) (*MsgCreateAgencyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateAgency not implemented")
+func (UnimplementedMsgServer) CreateDCM(context.Context, *MsgCreateDCM) (*MsgCreateDCMResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateDCM not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -226,20 +226,20 @@ func _Msg_SubmitOraclePubKey_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitAgencyPubKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitAgencyPubKey)
+func _Msg_SubmitDCMPubKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitDCMPubKey)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SubmitAgencyPubKey(ctx, in)
+		return srv.(MsgServer).SubmitDCMPubKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_SubmitAgencyPubKey_FullMethodName,
+		FullMethod: Msg_SubmitDCMPubKey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitAgencyPubKey(ctx, req.(*MsgSubmitAgencyPubKey))
+		return srv.(MsgServer).SubmitDCMPubKey(ctx, req.(*MsgSubmitDCMPubKey))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -262,20 +262,20 @@ func _Msg_CreateOracle_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_CreateAgency_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCreateAgency)
+func _Msg_CreateDCM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateDCM)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).CreateAgency(ctx, in)
+		return srv.(MsgServer).CreateDCM(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_CreateAgency_FullMethodName,
+		FullMethod: Msg_CreateDCM_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).CreateAgency(ctx, req.(*MsgCreateAgency))
+		return srv.(MsgServer).CreateDCM(ctx, req.(*MsgCreateDCM))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -318,16 +318,16 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitOraclePubKey_Handler,
 		},
 		{
-			MethodName: "SubmitAgencyPubKey",
-			Handler:    _Msg_SubmitAgencyPubKey_Handler,
+			MethodName: "SubmitDCMPubKey",
+			Handler:    _Msg_SubmitDCMPubKey_Handler,
 		},
 		{
 			MethodName: "CreateOracle",
 			Handler:    _Msg_CreateOracle_Handler,
 		},
 		{
-			MethodName: "CreateAgency",
-			Handler:    _Msg_CreateAgency_Handler,
+			MethodName: "CreateDCM",
+			Handler:    _Msg_CreateDCM_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

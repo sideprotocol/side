@@ -32,7 +32,7 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdSubmitOraclePubKey())
-	cmd.AddCommand(CmdSubmitAgencyPubKey())
+	cmd.AddCommand(CmdSubmitDCMPubKey())
 	cmd.AddCommand(CmdSubmitNonce())
 	cmd.AddCommand(CmdSubmitAttestation())
 
@@ -76,10 +76,10 @@ func CmdSubmitOraclePubKey() *cobra.Command {
 	return cmd
 }
 
-func CmdSubmitAgencyPubKey() *cobra.Command {
+func CmdSubmitDCMPubKey() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-agency-pubkey [pub key] [agency id] [agency pub key] [signature]",
-		Short: "Submit the agency public key",
+		Use:   "submit-dcm-pubkey [pub key] [dcm id] [dcm pub key] [signature]",
+		Short: "Submit the DCM public key",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -87,15 +87,15 @@ func CmdSubmitAgencyPubKey() *cobra.Command {
 				return err
 			}
 
-			agencyId, err := strconv.ParseUint(args[1], 10, 64)
+			dcmId, err := strconv.ParseUint(args[1], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgSubmitAgencyPubKey(
+			msg := types.NewMsgSubmitDCMPubKey(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				agencyId,
+				dcmId,
 				args[2],
 				args[3],
 			)

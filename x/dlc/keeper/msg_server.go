@@ -61,19 +61,19 @@ func (m msgServer) SubmitOraclePubKey(goCtx context.Context, msg *types.MsgSubmi
 	return &types.MsgSubmitOraclePubKeyResponse{}, nil
 }
 
-// SubmitAgencyPubKey implements types.MsgServer.
-func (m msgServer) SubmitAgencyPubKey(goCtx context.Context, msg *types.MsgSubmitAgencyPubKey) (*types.MsgSubmitAgencyPubKeyResponse, error) {
+// SubmitDCMPubKey implements types.MsgServer.
+func (m msgServer) SubmitDCMPubKey(goCtx context.Context, msg *types.MsgSubmitDCMPubKey) (*types.MsgSubmitDCMPubKeyResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.SubmitAgencyPubKey(ctx, msg.Sender, msg.PubKey, msg.AgencyId, msg.AgencyPubkey, msg.Signature); err != nil {
+	if err := m.Keeper.SubmitDCMPubKey(ctx, msg.Sender, msg.PubKey, msg.DCMId, msg.DCMPubKey, msg.Signature); err != nil {
 		return nil, err
 	}
 
-	return &types.MsgSubmitAgencyPubKeyResponse{}, nil
+	return &types.MsgSubmitDCMPubKeyResponse{}, nil
 }
 
 // CreateOracle implements types.MsgServer.
@@ -102,30 +102,30 @@ func (m msgServer) CreateOracle(goCtx context.Context, msg *types.MsgCreateOracl
 	return &types.MsgCreateOracleResponse{}, nil
 }
 
-// CreateAgency implements types.MsgServer.
-func (m msgServer) CreateAgency(goCtx context.Context, msg *types.MsgCreateAgency) (*types.MsgCreateAgencyResponse, error) {
+// CreateDCM implements types.MsgServer.
+func (m msgServer) CreateDCM(goCtx context.Context, msg *types.MsgCreateDCM) (*types.MsgCreateDCMResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	agency, err := m.Keeper.CreateAgency(ctx, msg.Participants, msg.Threshold)
+	dcm, err := m.Keeper.CreateDCM(ctx, msg.Participants, msg.Threshold)
 	if err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.EventTypeCreateAgency,
-			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", agency.Id)),
-			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(agency.Participants, types.AttributeValueSeparator)),
-			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", agency.Threshold)),
-			sdk.NewAttribute(types.AttributeKeyExpirationTime, agency.Time.Add(m.GetDKGTimeoutPeriod(ctx)).String()),
+			types.EventTypeCreateDCM,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", dcm.Id)),
+			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(dcm.Participants, types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", dcm.Threshold)),
+			sdk.NewAttribute(types.AttributeKeyExpirationTime, dcm.Time.Add(m.GetDKGTimeoutPeriod(ctx)).String()),
 		),
 	)
 
-	return &types.MsgCreateAgencyResponse{}, nil
+	return &types.MsgCreateDCMResponse{}, nil
 }
 
 // UpdateParams updates the module params.

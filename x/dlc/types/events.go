@@ -3,7 +3,7 @@ package types
 // DLC module event types
 const (
 	EventTypeCreateOracle    = "create_oracle"
-	EventTypeCreateAgency    = "create_agency"
+	EventTypeCreateDCM       = "create_dcm"
 	EventTypeGenerateNonce   = "generate_nonce"
 	EventTypeTriggerDLCEvent = "trigger_dlc_event"
 

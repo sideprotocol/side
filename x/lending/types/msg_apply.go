@@ -11,14 +11,14 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgApply(borrower string, borrowerPubkey string, maturityTime int64, poolId string, borrowAmount sdk.Coin, agencyId uint64) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, maturityTime int64, poolId string, borrowAmount sdk.Coin, dcmId uint64) *MsgApply {
 	return &MsgApply{
 		Borrower:       borrower,
 		BorrowerPubkey: borrowerPubkey,
 		MaturityTime:   maturityTime,
 		PoolId:         poolId,
 		BorrowAmount:   borrowAmount,
-		AgencyId:       agencyId,
+		DCMId:          dcmId,
 	}
 }
 

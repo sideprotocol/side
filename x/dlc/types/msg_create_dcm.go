@@ -8,22 +8,22 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgCreateAgency{}
+var _ sdk.Msg = &MsgCreateDCM{}
 
-func NewMsgCreateAgency(
+func NewMsgCreateDCM(
 	authority string,
 	participants []string,
 	threshold uint32,
-) *MsgCreateAgency {
-	return &MsgCreateAgency{
+) *MsgCreateDCM {
+	return &MsgCreateDCM{
 		Authority:    authority,
 		Participants: participants,
 		Threshold:    threshold,
 	}
 }
 
-// ValidateBasic performs basic MsgCreateAgency message validation.
-func (m *MsgCreateAgency) ValidateBasic() error {
+// ValidateBasic performs basic MsgCreateDCM message validation.
+func (m *MsgCreateDCM) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
 		return errorsmod.Wrap(err, "invalid authority address")
 	}
