@@ -115,10 +115,8 @@ While DLC's security fundamentally relies on oracle trustworthiness ([Multi-Orac
 #### 4.1 Cryptographic Primitives
 - **Discreet Log Contracts (DLC)**  
   - Oracle-signed attestations for price conditions
-  - CET (Contract Execution Transaction) structure:
-    ```
-    CET = (Payouts || OracleSignature || TimeLock)
-    ```
+  - Oracle-signed attestations for date conditions
+
 - **Adaptor Signatures**  
   - Encrypted signature format: σ' = (s', R, T)
   - Key derivation: t = H(R||T)
