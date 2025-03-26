@@ -3,6 +3,7 @@ package types
 // Lending module event types
 const (
 	EventTypeApply                                 = "apply"
+	EventTypeApprove                               = "approve"
 	EventTypeCancel                                = "cancel"
 	EventTypeRepay                                 = "repay"
 	EventTypeDefault                               = "default"
@@ -22,9 +23,12 @@ const (
 
 	AttributeKeyLoanId = "loan_id"
 
-	AttributeKeyAdaptorPoint = "adaptor_point"
+	AttributeKeyRelayer       = "relayer"
+	AttributeKeyAmount        = "amount"
+	AttributeKeyDepositTxHash = "deposit_tx_hash"
+	AttributeKeyBlockHash     = "block_hash"
 
-	AttributeKeyAmount = "amount"
+	AttributeKeyAdaptorPoint = "adaptor_point"
 
 	AttributeKeySigHashes = "sig_hashes"
 

@@ -248,11 +248,15 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, err
 	}
 
-	m.EmitEvent(ctx, msg.Relayer,
-		sdk.NewAttribute("vault", loan.VaultAddress),
-		sdk.NewAttribute("deposit_tx", msg.DepositTxId),
-		sdk.NewAttribute("proof", fmt.Sprintf("%s", msg.Proof)),
-		sdk.NewAttribute("block_hash", msg.BlockHash),
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeApprove,
+			sdk.NewAttribute(types.AttributeKeyRelayer, msg.Relayer),
+			sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+			sdk.NewAttribute(types.AttributeKeyAmount, amount.String()),
+			sdk.NewAttribute(types.AttributeKeyDepositTxHash, msg.DepositTxId),
+			sdk.NewAttribute(types.AttributeKeyBlockHash, msg.BlockHash),
+		),
 	)
 
 	return &types.MsgApproveResponse{}, nil
