@@ -48,11 +48,13 @@ DLCs provide a secure, trustless method to execute conditional payments and smar
 
 **Liquidity Provider:** Users supplying the loan through the Lending Contract
 
-**DCM (Distributed Collateral Manager)**: A decentralized network of operators organized into a threshold adaptor signature scheme. DCM operators sign Bitcoin 2-of-2 multi-sig transactions on behalf of the Lending Contract, with the counterparty being the Borrower. Additionally, the DCM manages Liquidated Assets in the event of a liquidation.
+**DCM (Distributed Collateral Manager):**: A decentralized network of operators organized into a threshold adaptor signature scheme. DCM operators sign Bitcoin 2-of-2 multi-sig transactions on behalf of the Lending Contract, with the counterparty being the Borrower. Additionally, the DCM manages Liquidated Assets in the event of a liquidation.
 
 **Lending Contract:** A smart contract deployed on the Side Chain that automates the operations of the lending pool. This contract enables liquidity providers to supply assets for lending and earn rewards in return. While the Lending Contract itself does not have the capability to sign transactions, it delegates this function to the DCM, which signs transactions on behalf of the contract and in collaboration with the borrower.
 
-**Oracle Operators:** Monitor the price of BTC from cryptographically signed upstream sources, signing attestations at predetermined intervals. To maintain system integrity, Side Finance implements a mechanism that discards prices falling outside a pre-established variance level. This approach ensures that in the case of problems with a specific oracle, the safety of the system is maintained. Side Finance utilizes multiple independent cryptographically signed price sources to provide outcome attestations for its DLCs. 
+**Validator:** The Side Chain is based on [CometBFT](https://docs.cometbft.com/v0.38/) that relies on a set of validators that are responsible for committing new blocks in the blockchain. These validators participate in the consensus protocol by broadcasting votes that contain cryptographic signatures signed by each validator's private key. These validators also provides off-chain data such as BTC price and Bitcoin Headers through [Vote Extension](https://docs.cosmos.network/v0.52/build/abci/vote-extensions)
+
+**Oracle Event Signer:** Monitor the price of BTC from cryptographically signed upstream sources, signing attestations at predetermined intervals. To maintain system integrity, Side Finance implements a mechanism that discards prices falling outside a pre-established variance level. This approach ensures that in the case of problems with a specific oracle, the safety of the system is maintained. Side Finance utilizes multiple independent cryptographically signed price sources to provide outcome attestations for its DLCs. 
 
 ### 3.1.2 Glossary
 
@@ -252,12 +254,10 @@ Side Finance operates as a non-custodial solution, meaning no third party holds 
 
 ## 5.1 BTC Collateral Security
 
-The Collateral Vault is secured using a 2-of-2 multi-sig combined with a Hash Time-Locked Contract (HTLC), ensuring that BTC collateral cannot be moved without the Borrower’s authorization. There are four methods to spend UTXOs associated with this address, all of which adhere to Bitcoin-native security principles:
+The Collateral Vault is secured using a 2-of-2 multi-sig, ensuring that BTC collateral cannot be moved without the Borrower’s authorization. There are four methods to spend UTXOs associated with this address, all of which adhere to Bitcoin-native security principles:
 
 1. using CETs of a Discreet Log Contract (DLC) in the event of collateral value depreciation, relying on Schnorr adaptor signatures
-2. through a Borrower-generated `repayment_secret` and a counter-signed adapted signature from the DCM that accepts loan repayment
-3. a hash timelock that activates in the case of loan default (when repayment is not made before the Maturity Time), allowing the DCM to spend the collateral
-4. a final hash timelock that allows the Borrower to reclaim all collateral in the event that Side Finance stops responding
+2. a final hash timelock that allows the Borrower to reclaim all collateral in the event that Side Finance stops responding
 
 In no case does any single entity have discretion over a Borrower’s BTC collateral outside the terms specified in the “contract” encoded within the DLC.
 
@@ -267,39 +267,29 @@ The Lending Contract, a smart contract deployed on the Side Chain, governs the m
 
 ## 5.3 Oracle Security
 
-In a Bitcoin DLC-based DeFi system like Side Finance, oracles must cryptographically sign periodic price attestations, enabling the liquidation of BTC when necessary. Oracle operations need to be decentralized, run by operators who have an economic stake in the system that can be slashed if they act maliciously.
+In a Bitcoin DLC-based DeFi system like Side Protocol, oracles must cryptographically sign periodic price attestations, enabling the liquidation of BTC when necessary. Oracle operations need to be decentralized, run by operators who have an economic stake in the system that can be slashed if they act maliciously.
 
-21 well-known Side Chain validators, chosen through on-chain governance by stakers, also serve as Oracle Operators. These validators are selected due to their vested interest in the system's success and their role in securing value across multiple chains. Should any validator provide incorrect price outputs, a cryptographically signed proof of misbehavior is generated. This proof automatically affects their stake holdings on Side and damages their reputation on other chains they secure.
+To reducing risk, we divide oracle into two parts: Data Provider and Event Signer, 
 
-It’s important to note that Oracle Operators cannot benefit directly from any price liquidation events they sign, that they cannot make up arbitrary prices, and that a threshold set of operators must agree in order for a price to be signed.
+### 5.3.1 Data Provider Security
 
-Each Oracle Operator independently monitors Bitcoin prices from multiple cryptographically secure upstream sources. The public keys of these approved upstream price sources, selected by on-chain governance, are stored within the Oracle smart contract on the Side Chain. 
+Data provider are all validators, who fetch prices from top exchanges and aggregated with TWAP algorithm and sync Bitcoin header through a Weighted Majority Decision mechanism, 2/3 of total voting prower is required to submited a new price on chain.
 
-The Oracle Operators collectively produce a stream of DLC signatures for potential future price events. Later, they sign an attestation of the real BTCUSD price for each time period as it occurs. These DLC signature streams and attestations are then used by the DCM to liquidate loans that fall below the Liquidation Price.
+So every valdiator can impace the final result(price or header) according to their voting power.
 
-Price attestations proceed as follows:
+### 5.3.2 Event Signer Security
 
-1. An Oracle operator proposes a price to the Oracle smart contract for a recently passed time period and signs the proposal. The Oracle smart contract verifies the validity of the upstream source’s signature. If the signature is invalid, the proposing operator’s stake is automatically slashed, and the operator is flagged for investigation.
-2. Other Oracle operators independently monitor BTC prices by retrieving data from approved sources. As prices may differ slightly at any given time, if the proposed price falls within a specified tolerance (e.g., 0.5%) of an operator’s verified price, the operator signs the proposed price. If the proposed price falls outside this tolerance, the operator does not sign and instead re-proposes a new price, which is again checked for validity.
-3. This process repeats until all Oracle operators reach a consensus on the price. If consensus cannot be achieved, the system halts price attestations until the issue is resolved through human intervention. A small minority of honest operators is enough to prevent the Oracle from signing an incorrect price.
+Event Signer are frost network, 7 well-known Side Chain validators, chosen through on-chain governance by stakers, also serve as Event Signer. These validators are selected due to their vested interest in the system's success and their role in securing value across multiple chains. Should any validator provide incorrect price outputs, a cryptographically signed proof of misbehavior is generated. This proof automatically affects their stake holdings on Side and damages their reputation on other chains they secure.
 
-### 5.3.1 Oracle Operator Slashing
+It’s important to note that Event Signer cannot benefit directly from any price liquidation events they sign, that they cannot make up arbitrary prices, and that a threshold set of operators must agree on the current price provided by all validators to be signed. not individual signer would able to fraud to the protoccol.
 
-Oracle operators should monitor the complete set of approved upstream oracles and base their price proposals on the median price. If a proposed price deviates significantly from the median price attested by upstream sources, anyone can initiate a slashing challenge.
+The Lending contract collectively produce a stream of DLC announcements for potential future price events. Later, they sign an attestation of the real BTCUSD price for each time period as it occurs. These DLC announcement streams and attestations are then used by the DCM to liquidate loans that fall below the Liquidation Price.
 
-Since all upstream prices are cryptographically signed and the public keys of approved upstream oracles are stored in the Oracle smart contract on Side Chain, a challenger can collect the signed price data from these sources and submit it to the contract.
+The Lending contract collectively produce a stream of DLC announcements for future date events. Later, they sign an attestation of the date as it comes. These DLC announcement streams and attestations are then used by the DCM to liquidate loans that is defaulted.
 
-The contract then checks whether the proposed price falls outside a pre-set deviation from the average of all upstream price sources.
+## 5.4 DCM Security
 
-If the proposed price exceeds the allowable range, the Oracle operator’s validator stake is slashed.
-
-### 5.3.2 Upstream Price Source Security
-
-If, for any reason, multiple upstream price sources begin to deviate significantly from established BTC prices available from other reliable sources, Oracle operators should temporarily halt price signings. This pause will give the governance system time to remove faulty upstream sources and propose new, reliable ones for the Oracle system.
-
-## **5.4 DCM Security**
-
-The Distributed Collateral Agent (DCM) acts on behalf of the Lending Contract to sign necessary transactions; however, it’s important to clarify that it doesn’t have control over the Lending Contract or the Collateral Vault. The funds supplied by lenders remain non-custodial and securely held within the smart contract. The DCM’s role is limited to temporarily holding liquidated assets (BTC collateral) for auction purposes. To reduce risk, these liquidated assets must be sold as quickly as possible.
+The Distributed Collateral Manager (DCM) acts on behalf of the Lending Contract to sign necessary transactions; however, it’s important to clarify that it doesn’t have control over the Lending Contract or the Collateral Vault. The funds supplied by lenders remain non-custodial and securely held within the smart contract. The DCM’s role is limited to temporarily holding liquidated assets (BTC collateral) for auction purposes. To reduce risk, these liquidated assets must be sold as quickly as possible.
 
 The DCM essentially functions as an agent managing the bad debt of liquidity providers. Allowing liquidity providers to nominate the DCM aligns interests and fosters trust. This nomination and selection process occurs periodically, with voting power weighted by the amount and type of LP tokens held. Crucially, the DCM and the Oracle (managed by 21 Side Chain validators) must remain separate entities.
 

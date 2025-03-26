@@ -5,16 +5,45 @@ This document presents a decentralized financial protocol that enables native Bi
 
 ## 2. Core Architecture
 
-### 2.1 Bitcoin Extension Layer
+### 2.1 Bitcoin Compatible Layer
 - **BTC Address Compatibility**  
   - Supports native Bech32/Bech32m addresses 
-  - Supports mainstream wallet integrations (OKX, Unisat, Ledger, Trezor)
+  - Supports mainstream wallet integrations (OKX, Unisat, Ledger)
 - **On-chain Bitcoin Light Client**
   - Support SPV (Simple Payment Verfication)
   - 6 Confirmations
 
 ### 2.2 Trustless Relayer
-Trustless Relayer is a tool that automated relay transactions between Bitcoin and Sidechain. which is trustless, can be run by anyone. 
+
+Automated cross-chain transaction relay with cryptographic state verification between Bitcoin and Sidechain through:
+
+ - Merkle Inclusion Proof generation/verification
+ - Stateless transaction validity checks
+
+**Key Attributes**
+
+| Property | Technical Implementation |
+|----------|------------|
+|Permissionless|	Open-source client with standardized proof generation rules    |
+|Verifiable    |	All relays require SPV (Simplified Payment Verification) proofs|
+
+**Operational Workflow**
+
+- **Bitcoin Layer Monitoring**
+  - Continuously scans Bitcoin blocks (post 6-confirmation)
+  - Indexes transactions matching predefined vault address patterns
+
+- **Proof Construction**
+
+  Generates compact proofs containing:
+  ```protobuf
+  message RelayProof {
+    bytes tx_hash = 1;  
+    bytes merkle_path = 2;  // SHA-256 compression path
+    uint32 block_height = 3;  
+    bytes coinbase_commitment = 4;  // Block commitment binding
+  }
+  ```
 
 ### 2.3 Decentralized Oracle System
 
@@ -22,7 +51,7 @@ Trustless Relayer is a tool that automated relay transactions between Bitcoin an
 
   The data provider network comprises all validators (n=100). `Vote Extensions` provide an elegant framework for validators to submit arbitrary off-chain data and achieve on-chain consensus through ABCI++ enhancements. Refer to the [Vote Extensions documentation](https://docs.cosmos.network/main/build/abci/vote-extensions) for implementation details.
   - **BTC Header Synchronization**
-    - Implements bitcoin block height synchronization through a Weighted Majority Decision mechanism
+    - Implements bitcoin block header synchronization through a Weighted Majority Decision mechanism
     - Requires consensus from validators representing ≥2/3 of total network voting power
   - **Price Feed Mechanism**
     - The price feed aggregates data from the top five cryptocurrency exchanges (Binance, Coinbase, Bybit, OKX, Bitget) utilizing a Time-Weighted Average Price (TWAP) algorithm
@@ -75,44 +104,9 @@ While DLC's security fundamentally relies on oracle trustworthiness ([Multi-Orac
     }
     ```
 
-### 3. Trust-Minimized Bitcoin Bridge
+### 3. Bitcoin Collateralized Lending
 
-#### 3.1 Light Client Verification
-- SPV proofs validated through:
-  - Bitcoin block header Merkle proofs
-  - Transaction inclusion verification via:
-    ```rust
-    fn verify_spv(tx: Transaction, header: BlockHeader, proof: MerkleProof) -> bool {
-      // Implementation logic
-    }
-    ```
-
-#### 3.2 Frost Protocol Vault
-- 15-of-21 multisig using FROST (Flexible Round-Optimized Schnorr Threshold)  
-  - Distributed key generation
-  - 2 round signature aggregation protocols
-  - Vault withdrawal limits:
-    - 1 BTC daily threshold
-    - Emergency freeze via governance proposal
-
-#### 3.3 Process Flow  
-  - **Peg In (Cross-chain Deposit)**  
-    - User sends BTC from a self-custodied wallet (CEX withdrawals are not supported) to the designated vault address 
-    - Relayers continuously scan the Bitcoin mempool, filtering transactions based on predefined vault address patterns  
-    - Relayers generate cryptographic Merkle inclusion proofs and submit both raw transaction and proofs to the Sidechain Bridge module 
-    - **After verifying 6-block confirmations and proof validity**, the bridge issues corresponding wrapped tokens (1:1 sat = 10^8:1 sBTC) to the originator's sidechain address
-
-  - **Peg Out (Cross-chain Withdrawal)**  
-    - Initiated by users transferring sBTC to the bridge module 
-    - Bridge automatically constructs a Partially Signed Bitcoin Transaction (PSBT) with vault withdrawal parameters 
-    - FROST threshold network monitors the sidechain state for pending withdrawal requests, verifies multisig authorization thresholds  
-    - Authorized signers collectively sign the PSBT through distributed key generation  
-    - Relayers broadcast finalized PSBTs to the Bitcoin network 
-    - Upon Bitcoin network confirmation, the bridge executes sBTC burning corresponding to processed withdrawals
-
-### 4. Bitcoin Collateralized Lending
-
-#### 4.1 Cryptographic Primitives
+#### 3.1 Cryptographic Primitives
 - **Discreet Log Contracts (DLC)**  
   - Oracle-signed attestations for price conditions
   - Oracle-signed attestations for date conditions
@@ -121,7 +115,7 @@ While DLC's security fundamentally relies on oracle trustworthiness ([Multi-Orac
   - Encrypted signature format: σ' = (s', R, T)
   - Key derivation: t = H(R||T)
 
-#### 4.2 Lending Flow Implementation
+#### 3.2 Lending Flow Implementation
 
 1. **Vault Creation**  
    - 2-of-2 MuSig address (Borrower + DCM)
@@ -138,6 +132,41 @@ While DLC's security fundamentally relies on oracle trustworthiness ([Multi-Orac
      - Price < Maintenance Margin (120% LTV)
      - Time expiration
    - Collateral auction via Dutch auction model
+
+### 4. Trust-Minimized Bitcoin Bridge
+
+#### 4.1 Light Client Verification
+- SPV proofs validated through:
+  - Bitcoin block header Merkle proofs
+  - Transaction inclusion verification via:
+    ```rust
+    fn verify_spv(tx: Transaction, header: BlockHeader, proof: MerkleProof) -> bool {
+      // Implementation logic
+    }
+    ```
+
+#### 4.2 Frost Protocol Vault
+- 15-of-21 multisig using FROST (Flexible Round-Optimized Schnorr Threshold)  
+  - Distributed key generation
+  - 2 round signature aggregation protocols
+  - Vault withdrawal limits:
+    - 1 BTC daily threshold
+    - Emergency freeze via governance proposal
+
+#### 4.3 Process Flow  
+  - **Peg In (Cross-chain Deposit)**  
+    - User sends BTC from a self-custodied wallet (CEX withdrawals are not supported) to the designated vault address 
+    - Relayers continuously scan the Bitcoin mempool, filtering transactions based on predefined vault address patterns  
+    - Relayers generate cryptographic Merkle inclusion proofs and submit both raw transaction and proofs to the Sidechain Bridge module 
+    - **After verifying 6-block confirmations and proof validity**, the bridge issues corresponding wrapped tokens (1:1 sat = 10^8:1 sBTC) to the originator's sidechain address
+
+  - **Peg Out (Cross-chain Withdrawal)**  
+    - Initiated by users transferring sBTC to the bridge module 
+    - Bridge automatically constructs a Partially Signed Bitcoin Transaction (PSBT) with vault withdrawal parameters 
+    - FROST threshold network monitors the sidechain state for pending withdrawal requests, verifies multisig authorization thresholds  
+    - Authorized signers collectively sign the PSBT through distributed key generation  
+    - Relayers broadcast finalized PSBTs to the Bitcoin network 
+    - Upon Bitcoin network confirmation, the bridge executes sBTC burning corresponding to processed withdrawals
 
 ## 5. Security Model
 
