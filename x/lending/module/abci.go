@@ -230,10 +230,12 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 	loans := k.GetLoans(ctx, types.LoanStatus_Repaid)
 
 	for _, loan := range loans {
-		// // trigger dlc event if not triggered yet
-		// if !k.DLCKeeper().GetEvent(ctx, triggeredEventId).HasTriggered {
-		// 	k.DLCKeeper().TriggerDLCEvent(ctx, triggeredEventId, 0)
-		// }
+		// trigger dlc repayment event if not triggered yet
+		if !k.DLCKeeper().GetEvent(ctx, loan.RepaymentEventId).HasTriggered {
+			k.DLCKeeper().TriggerDLCEvent(ctx, loan.RepaymentEventId, 0)
+			continue
+		}
+
 		// check if the repayment cet has been signed
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 		if len(dlcMeta.RepaymentCet.SignedTxHex) != 0 {

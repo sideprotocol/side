@@ -523,9 +523,6 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	}
 	m.SetRepayment(ctx, repayment)
 
-	// trigger the corresponding dlc event
-	m.dlcKeeper.TriggerDLCEvent(ctx, loan.RepaymentEventId, 0)
-
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeRepay,
