@@ -29,7 +29,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, types.ErrInvalidPrice
 	}
 
-	remainingDebtAmount := liquidation.DebtAmount.Sub(liquidation.LiquidatedDebtAmount)
+	remainingDebtAmount := liquidation.DebtAmount.SubAmount(liquidation.LiquidatedDebtAmount.Amount)
 	if remainingDebtAmount.IsLT(debtAmount) {
 		debtAmount = remainingDebtAmount
 	}
@@ -55,7 +55,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		Time:             ctx.BlockTime(),
 	}
 
-	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)
+	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.AddAmount(debtAmount.Amount)
 	liquidation.LiquidationBonusAmount = liquidation.LiquidationBonusAmount.AddAmount(bonusAmount)
 	liquidation.ProtocolLiquidationFee = liquidation.ProtocolLiquidationFee.AddAmount(protocolLiquidationFee)
 
