@@ -29,7 +29,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, types.ErrInvalidPrice
 	}
 
-	remainingDebtAmount := liquidation.DebtAmount.SubAmount(liquidation.LiquidatedDebtAmount.Amount)
+	remainingDebtAmount := liquidation.DebtAmount.Sub(liquidation.LiquidatedDebtAmount)
 	if remainingDebtAmount.IsLT(debtAmount) {
 		debtAmount = remainingDebtAmount
 	}
@@ -38,10 +38,10 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, err
 	}
 
-	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(10 ^ 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
 
 	bonusAmountInDebt := debtAmount.Amount.Mul(sdkmath.NewInt(int64(k.LiquidationBonus(ctx)))).Quo(sdkmath.NewInt(1000))
-	bonusAmount := bonusAmountInDebt.Mul(sdkmath.NewInt(10 ^ 8)).Quo(sdkmath.NewInt(10 ^ 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+	bonusAmount := bonusAmountInDebt.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
 
 	protocolLiquidationFee := bonusAmount.Mul(sdkmath.NewInt(int64(k.ProtocolLiquidationFee(ctx)))).Quo(sdkmath.NewInt(1000))
 	bonusAmount = bonusAmount.Sub(protocolLiquidationFee)
@@ -55,7 +55,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		Time:             ctx.BlockTime(),
 	}
 
-	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.AddAmount(debtAmount.Amount)
+	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)
 	liquidation.LiquidationBonusAmount = liquidation.LiquidationBonusAmount.AddAmount(bonusAmount)
 	liquidation.ProtocolLiquidationFee = liquidation.ProtocolLiquidationFee.AddAmount(protocolLiquidationFee)
 

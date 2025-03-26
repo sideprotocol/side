@@ -90,14 +90,17 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 		// create liquidation if defaulted or liquidated
 		if loan.Status == types.LoanStatus_Defaulted || loan.Status == types.LoanStatus_Liquidated {
 			liquidation := k.LiquidationKeeper().CreateLiquidation(ctx, &liquidationtypes.Liquidation{
-				LoanId:               loan.VaultAddress,
-				Borrower:             loan.Borrower,
-				DCM:                  loan.DCM,
-				LiquidatedCollateral: sdk.NewCoin("sat", loan.CollateralAmount),
-				LiquidatedPrice:      currentPrice.Int64(),
-				LiquidatedTime:       ctx.BlockTime(),
-				DebtAmount:           sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(loan.Interest)),
-				LiquidationCet:       liquidationCet,
+				LoanId:                 loan.VaultAddress,
+				Borrower:               loan.Borrower,
+				DCM:                    loan.DCM,
+				LiquidatedCollateral:   sdk.NewCoin("sat", loan.CollateralAmount),
+				LiquidatedPrice:        currentPrice.Int64(),
+				LiquidatedTime:         ctx.BlockTime(),
+				DebtAmount:             sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(loan.Interest)),
+				LiquidatedDebtAmount:   sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, sdkmath.ZeroInt()),
+				LiquidationBonusAmount: sdk.NewCoin("sat", sdkmath.ZeroInt()),
+				ProtocolLiquidationFee: sdk.NewCoin("sat", sdkmath.ZeroInt()),
+				LiquidationCet:         liquidationCet,
 			})
 			loan.LiquidationId = liquidation.Id
 
