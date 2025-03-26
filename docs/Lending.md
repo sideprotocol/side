@@ -269,7 +269,7 @@ The Lending Contract, a smart contract deployed on the Side Chain, governs the m
 
 In a Bitcoin DLC-based DeFi system like Side Protocol, oracles must cryptographically sign periodic price attestations, enabling the liquidation of BTC when necessary. Oracle operations need to be decentralized, run by operators who have an economic stake in the system that can be slashed if they act maliciously.
 
-To reducing risk, we divide oracle into two parts: Data Provider and Event Signer, 
+To reducing risk, we divide oracle implementation into two parts: Data Provider and Event Signer, 
 
 ### 5.3.1 Data Provider Security
 
