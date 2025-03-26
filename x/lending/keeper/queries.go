@@ -102,7 +102,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 
 	poolConfig := k.GetPool(ctx, req.PoolId).Config
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, req.Term, poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
 
 	event := k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	if event == nil {

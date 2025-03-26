@@ -12,7 +12,7 @@ import (
 
 const (
 	// OneYear represents the seconds in one year
-	OneYear = 365 * 24 * time.Hour
+	OneYear = 365 * 24 * 3600
 )
 
 // GetExchangeRate calculates the sToken exchange rate according to the given params
@@ -36,8 +36,8 @@ func GetCurrentInterest(totalInterest sdkmath.Int, term time.Duration, startTime
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
-func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int, borrowAPR uint32, lltv uint32) sdkmath.Int {
-	interest := borrowAmount.Mul(sdkmath.NewInt(int64(borrowAPR))).Quo(Permille)
+func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int, term int64, borrowAPR uint32, lltv uint32) sdkmath.Int {
+	interest := borrowAmount.Mul(sdkmath.NewInt(int64(borrowAPR))).Mul(sdkmath.NewInt(term)).Quo(sdkmath.NewInt(OneYear)).Quo(Permille)
 	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewInt(100000000)).Mul(Percent).Quo(sdkmath.NewInt(int64(lltv))).Quo(collateralAmount).Quo(sdkmath.NewInt(1000000))
 
 	// price precision

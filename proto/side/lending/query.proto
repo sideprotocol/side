@@ -105,6 +105,7 @@ message QueryLiquidationEventRequest {
     string pool_id = 1;
     string collateral_amount = 2;
     string borrow_amount = 3;
+    int64 term = 4;
 }
 
 message QueryLiquidationEventResponse {

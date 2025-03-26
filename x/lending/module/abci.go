@@ -66,7 +66,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				),
 			)
 		} else if !currentPrice.IsZero() {
-			liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
+			liquidationPrice := types.GetLiquidationPrice(loan.CollateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
 
 			// check if the loan is to be liquidated
 			if currentPrice.LTE(liquidationPrice) {
@@ -233,6 +233,10 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 	loans := k.GetLoans(ctx, types.LoanStatus_Repaid)
 
 	for _, loan := range loans {
+		// // trigger dlc event if not triggered yet
+		// if !k.DLCKeeper().GetEvent(ctx, triggeredEventId).HasTriggered {
+		// 	k.DLCKeeper().TriggerDLCEvent(ctx, triggeredEventId, 0)
+		// }
 		// check if the repayment cet has been signed
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 		if len(dlcMeta.RepaymentCet.SignedTxHex) != 0 {
