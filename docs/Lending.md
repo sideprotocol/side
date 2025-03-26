@@ -175,7 +175,7 @@ let adaptor_point = secret.base_point_mul();
 let message = sig_hash(psbt);
 let adaptor_signature = sign_adaptor(seckey, message, adaptor_point);
 ...
-// Later, reveal CET's signature of PSBT
+// Later, reveal CET's signature by oracle's signature
 let redeem_signature = adaptor_signature.adapt(signature_of_attestation);
 ```
 
