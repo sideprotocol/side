@@ -134,7 +134,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
-	poolConfig := m.GetPool(ctx, msg.LoanId).Config
+	poolConfig := m.GetPool(ctx, loan.PoolId).Config
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
@@ -146,6 +146,10 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		if bytes.Equal(out.PkScript, vaultPkScript) {
 			collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
 		}
+	}
+
+	if collateralAmount.IsZero() {
+		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount can not be zero")
 	}
 
 	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
