@@ -170,10 +170,9 @@ If the Borrower agrees to the terms, they can send the BTC collateral to the Col
 In code, the adapter signature generation process is as follows: 
 
 ```rust
-// hide CET's signature with adaptor point
-let adaptor_point = secret.base_point_mul();
+// hide CET's signature with adaptor point in pre-announced event
 let message = sig_hash(psbt);
-let adaptor_signature = sign_adaptor(seckey, message, adaptor_point);
+let adaptor_signature = sign_adaptor(seckey, message, event.adaptor_point);
 ...
 // Later, reveal CET's signature by oracle's signature
 let redeem_signature = adaptor_signature.adapt(signature_of_attestation);
