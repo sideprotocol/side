@@ -184,6 +184,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	loan.CollateralAmount = collateralAmount
+	loan.LiquidationPrice = liquidationPrice
 	loan.LiquidationEventId = liquidationEvent.Id
 	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
 
