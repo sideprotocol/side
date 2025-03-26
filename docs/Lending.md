@@ -170,10 +170,13 @@ If the Borrower agrees to the terms, they can send the BTC collateral to the Col
 In code, the adapter signature generation process is as follows: 
 
 ```rust
+// hide CET's signature with adaptor point
 let adaptor_point = secret.base_point_mul();
-let message = sha265(lr_json);
-let adaptor_signature = sign_adaptor(seckey, message, nonce_seed, adaptor_point);
-let redeem_signature = adaptor_signature.adapt(b"loan_secret");
+let message = sig_hash(psbt);
+let adaptor_signature = sign_adaptor(seckey, message, adaptor_point);
+...
+// Later, reveal CET's signature of PSBT
+let redeem_signature = adaptor_signature.adapt(signature_of_attestation);
 ```
 
 The Borrower then submits the CETs and adaptor signatures to the Lending Contract on the Side Chain to claim loan assets, such as USDC.
