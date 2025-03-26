@@ -18,7 +18,7 @@ service Query {
     }
 
     rpc Pool(QueryPoolRequest) returns (QueryPoolResponse) {
-        option (google.api.http).get = "/side/lending/pool/{id}";
+        option (google.api.http).get = "/side/lending/pools/{id}";
     }
 
     rpc Pools(QueryPoolsRequest) returns (QueryPoolsResponse) {
@@ -38,7 +38,7 @@ service Query {
     }
 
     rpc Loan(QueryLoanRequest) returns (QueryLoanResponse) {
-        option (google.api.http).get = "/side/lending/loans/{loan_id}";
+        option (google.api.http).get = "/side/lending/loans/{id}";
     }
 
     rpc Loans(QueryLoansRequest) returns (QueryLoansResponse) {
@@ -147,7 +147,7 @@ message QueryParamsResponse {
 
 // QueryLoanRequest is request type for the Query/Loan RPC method.
 message QueryLoanRequest {
-    string loan_id = 1;
+    string id = 1;
 }
 
 // QueryLoanResponse is response type for the Query/Loan RPC method.

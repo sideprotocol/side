@@ -225,7 +225,7 @@ func CmdQueryLiquidationEvent() *cobra.Command {
 
 func CmdQueryLoan() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "loan [loan id]",
+		Use:   "loan [id]",
 		Short: "Query the given loan",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -236,7 +236,7 @@ func CmdQueryLoan() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.Loan(cmd.Context(), &types.QueryLoanRequest{LoanId: args[0]})
+			res, err := queryClient.Loan(cmd.Context(), &types.QueryLoanRequest{Id: args[0]})
 			if err != nil {
 				return err
 			}

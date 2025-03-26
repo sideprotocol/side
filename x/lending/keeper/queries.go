@@ -131,11 +131,11 @@ func (k Keeper) Loan(goCtx context.Context, req *types.QueryLoanRequest) (*types
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !k.HasLoan(ctx, req.LoanId) {
+	if !k.HasLoan(ctx, req.Id) {
 		return nil, status.Error(codes.NotFound, "loan does not exist")
 	}
 
-	loan := k.GetLoan(ctx, req.LoanId)
+	loan := k.GetLoan(ctx, req.Id)
 
 	return &types.QueryLoanResponse{Loan: loan}, nil
 }
