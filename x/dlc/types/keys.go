@@ -20,29 +20,31 @@ const (
 )
 
 var (
-	ParamsKey                   = []byte{0x01} // key for params
-	OracleIdKey                 = []byte{0x02} // key for oracle id
-	DCMIdKey                    = []byte{0x03} // key for DCM id
-	EventIdKey                  = []byte{0x04} // key for event id
-	PendingLendingEventCountKey = []byte{0x05} // key for pending lending event count
-	AttestationIdKey            = []byte{0x06} // key for attestation id
+	ParamsKey                        = []byte{0x01} // key for params
+	OracleIdKey                      = []byte{0x02} // key for oracle id
+	DCMIdKey                         = []byte{0x03} // key for DCM id
+	EventIdKey                       = []byte{0x04} // key for event id
+	PendingLendingEventCountKey      = []byte{0x05} // key for pending lending event count
+	AttestationIdKey                 = []byte{0x06} // key for attestation id
+	TriggeredPriceEventQueueCountKey = []byte{0x07} // key for triggered price event queue count
 
-	OracleKeyPrefix              = []byte{0x10} // prefix for each key to an oracle
-	OracleByPubKeyKeyPrefix      = []byte{0x11} // prefix for each key to an oracle by public key
-	PendingOraclePubKeyKeyPrefix = []byte{0x12} // key prefix for the pending oracle public key
-	DCMKeyPrefix                 = []byte{0x13} // prefix for each key to a DCM
-	PendingDCMPubKeyKeyPrefix    = []byte{0x14} // key prefix for the pending DCM public key
-	NonceIndexKeyPrefix          = []byte{0x15} // key prefix for the nonce index
-	NonceKeyPrefix               = []byte{0x16} // prefix for each key to a nonce
-	NonceByValueKeyPrefix        = []byte{0x17} // key prefix for the nonce value
-	EventKeyPrefix               = []byte{0x18} // prefix for each key to an event
-	EventByPriceKeyPrefix        = []byte{0x19} // prefix for each key to an event by triggering price
-	CurrentEventPriceKeyPrefix   = []byte{0x20} // key prefix for the current event price
-	EventByDateKeyPrefix         = []byte{0x21} // prefix for each key to an event by date
-	CurrentEventDateKey          = []byte{0x22} // key for the current event date
-	PendingLendingEventKeyPrefix = []byte{0x23} // key prefix for the pending lending event
-	AttestationKeyPrefix         = []byte{0x24} // prefix for each key to an attestation
-	AttestationByEventKeyPrefix  = []byte{0x25} // prefix for each key to an attestation by event
+	OracleKeyPrefix                   = []byte{0x10} // prefix for each key to an oracle
+	OracleByPubKeyKeyPrefix           = []byte{0x11} // prefix for each key to an oracle by public key
+	PendingOraclePubKeyKeyPrefix      = []byte{0x12} // key prefix for the pending oracle public key
+	DCMKeyPrefix                      = []byte{0x13} // prefix for each key to a DCM
+	PendingDCMPubKeyKeyPrefix         = []byte{0x14} // key prefix for the pending DCM public key
+	NonceIndexKeyPrefix               = []byte{0x15} // key prefix for the nonce index
+	NonceKeyPrefix                    = []byte{0x16} // prefix for each key to a nonce
+	NonceByValueKeyPrefix             = []byte{0x17} // key prefix for the nonce value
+	EventKeyPrefix                    = []byte{0x18} // prefix for each key to an event
+	EventByPriceKeyPrefix             = []byte{0x19} // prefix for each key to an event by triggering price
+	CurrentEventPriceKeyPrefix        = []byte{0x20} // key prefix for the current event price
+	EventByDateKeyPrefix              = []byte{0x21} // prefix for each key to an event by date
+	CurrentEventDateKey               = []byte{0x22} // key for the current event date
+	PendingLendingEventKeyPrefix      = []byte{0x23} // key prefix for the pending lending event
+	AttestationKeyPrefix              = []byte{0x24} // prefix for each key to an attestation
+	AttestationByEventKeyPrefix       = []byte{0x25} // prefix for each key to an attestation by event
+	TriggeredPriceEventQueueKeyPrefix = []byte{0x26} // key prefix for triggered price event queue
 
 	PriceKeyPrefix = []byte{0x30} // key prefix for the price
 )
@@ -111,6 +113,10 @@ func AttestationKey(id uint64) []byte {
 
 func AttestationByEventKey(eventId uint64) []byte {
 	return append(AttestationByEventKeyPrefix, sdk.Uint64ToBigEndian(eventId)...)
+}
+
+func TriggeredPriceEventQueueKey(eventId uint64) []byte {
+	return append(TriggeredPriceEventQueueKeyPrefix, sdk.Uint64ToBigEndian(eventId)...)
 }
 
 func PriceKey(pair string) []byte {

@@ -214,6 +214,70 @@ func (k Keeper) GetAvailableLendingEvent(ctx sdk.Context) *types.DLCEvent {
 	return lendingEvent
 }
 
+// GetTriggeredPriceEventQueueCount gets the triggered price event queue count
+func (k Keeper) GetTriggeredPriceEventQueueCount(ctx sdk.Context) uint32 {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.TriggeredPriceEventQueueCountKey)
+
+	return uint32(sdk.BigEndianToUint64(bz))
+}
+
+// IncreaseTriggeredPriceEventQueueCount increases the triggered price event queue count by 1
+func (k Keeper) IncreaseTriggeredPriceEventQueueCount(ctx sdk.Context) {
+	store := ctx.KVStore(k.storeKey)
+
+	count := k.GetTriggeredPriceEventQueueCount(ctx)
+
+	store.Set(types.TriggeredPriceEventQueueCountKey, sdk.Uint64ToBigEndian(uint64(count+1)))
+}
+
+// DecreaseTriggeredPriceEventQueueCount decreases the triggered price event queue count by 1
+func (k Keeper) DecreaseTriggeredPriceEventQueueCount(ctx sdk.Context) {
+	store := ctx.KVStore(k.storeKey)
+
+	count := k.GetTriggeredPriceEventQueueCount(ctx)
+	if count == 0 {
+		return
+	}
+
+	store.Set(types.TriggeredPriceEventQueueCountKey, sdk.Uint64ToBigEndian(uint64(count-1)))
+}
+
+// AddPriceEventToTriggeredQueue adds the specified price event to the triggered queue
+func (k Keeper) AddPriceEventToTriggeredQueue(ctx sdk.Context, event *types.DLCEvent) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.TriggeredPriceEventQueueKey(event.Id), []byte{})
+
+	k.IncreaseTriggeredPriceEventQueueCount(ctx)
+}
+
+// RemovePriceEventFromTriggeredQueue removes the specified price event from the triggered queue
+func (k Keeper) RemovePriceEventFromTriggeredQueue(ctx sdk.Context, event *types.DLCEvent) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Delete(types.TriggeredPriceEventQueueKey(event.Id))
+
+	k.DecreaseTriggeredPriceEventQueueCount(ctx)
+}
+
+// GetTriggeredPriceEventFromQueue gets a triggered price event and removes it from the queue if any
+func (k Keeper) GetTriggeredPriceEventFromQueue(ctx sdk.Context) *types.DLCEvent {
+	var priceEvent *types.DLCEvent
+
+	k.IterateTriggeredPriceEventQueue(ctx, func(event *types.DLCEvent) (stop bool) {
+		priceEvent = event
+		return true
+	})
+
+	if priceEvent != nil {
+		k.RemovePriceEventFromTriggeredQueue(ctx, priceEvent)
+	}
+
+	return priceEvent
+}
+
 // TriggerDLCEvent triggers the given event
 func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 	event := k.GetEvent(ctx, id)
@@ -222,6 +286,10 @@ func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 	event.OutcomeIndex = uint32(outcomeIndex)
 
 	k.SetEvent(ctx, event)
+
+	if event.Type == types.DlcEventType_PRICE {
+		k.AddPriceEventToTriggeredQueue(ctx, event)
+	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
@@ -297,6 +365,24 @@ func (k Keeper) IteratePendingLendingEvents(ctx sdk.Context, cb func(event *type
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := storetypes.KVStorePrefixIterator(store, types.PendingLendingEventKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		key := iterator.Key()
+
+		event := k.GetEvent(ctx, sdk.BigEndianToUint64(key[1:]))
+
+		if cb(event) {
+			break
+		}
+	}
+}
+
+// IterateTriggeredPriceEventQueue iterates through the triggered price event queue
+func (k Keeper) IterateTriggeredPriceEventQueue(ctx sdk.Context, cb func(event *types.DLCEvent) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.TriggeredPriceEventQueueKeyPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {

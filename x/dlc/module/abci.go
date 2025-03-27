@@ -115,7 +115,7 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 	// check if price event nonces need to be generated
 	currentPrice := k.GetPrice(ctx, "BTC-USD")
 	currentEventPrice := k.GetCurrentEventPrice(ctx, "BTC-USD")
-	if currentEventPrice > 0 && currentEventPrice >= currentPrice.Int64() && nonceIndex >= nonceQueueSize {
+	if currentEventPrice > 0 && currentEventPrice >= currentPrice.Int64() && nonceIndex >= nonceQueueSize && k.GetTriggeredPriceEventQueueCount(ctx) == 0 {
 		return
 	}
 

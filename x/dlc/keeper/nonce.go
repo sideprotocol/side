@@ -52,6 +52,18 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 
 	switch eventType {
 	case types.DlcEventType_PRICE:
+		if k.GetTriggeredPriceEventQueueCount(ctx) > 0 {
+			triggeredPriceEvent := k.GetTriggeredPriceEventFromQueue(ctx)
+
+			dlcEvent.Description = triggeredPriceEvent.Description
+			dlcEvent.Outcomes = triggeredPriceEvent.Outcomes
+
+			triggerPrice, _ := sdkmath.NewIntFromString(triggeredPriceEvent.Outcomes[triggeredPriceEvent.OutcomeIndex])
+			k.SetEventByPrice(ctx, triggerPrice, dlcEvent)
+
+			break
+		}
+
 		pair := "BTC-USD"
 		currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
 
