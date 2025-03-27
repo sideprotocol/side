@@ -8,18 +8,18 @@ import (
 )
 
 var (
-	// default liquidation bonus
-	DefaultLiquidationBonus = uint32(50) // 5%
+	// default liquidation bonus factor
+	DefaultLiquidationBonusFactor = uint32(50) // 5%
 
-	// default protocol liquidation fee
-	DefaultProtocolLiquidationFee = uint32(100) // 10%
+	// default protocol liquidation fee factor
+	DefaultProtocolLiquidationFeeFactor = uint32(100) // 10%
 )
 
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		LiquidationBonus:                DefaultLiquidationBonus,
-		ProtocolLiquidationFee:          DefaultProtocolLiquidationFee,
+		LiquidationBonusFactor:          DefaultLiquidationBonusFactor,
+		ProtocolLiquidationFeeFactor:    DefaultProtocolLiquidationFeeFactor,
 		ProtocolLiquidationFeeCollector: authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	}
 }
@@ -31,12 +31,12 @@ func DefaultParams() Params {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if p.LiquidationBonus == 0 || p.LiquidationBonus >= 1000 {
-		return errorsmod.Wrap(ErrInvalidParams, "invalid liquidation bonus")
+	if p.LiquidationBonusFactor == 0 || p.LiquidationBonusFactor >= 1000 {
+		return errorsmod.Wrap(ErrInvalidParams, "invalid liquidation bonus factor")
 	}
 
-	if p.ProtocolLiquidationFee >= 1000 {
-		return errorsmod.Wrap(ErrInvalidParams, "invalid protocol liquidation fee")
+	if p.ProtocolLiquidationFeeFactor >= 1000 {
+		return errorsmod.Wrap(ErrInvalidParams, "invalid protocol liquidation fee factor")
 	}
 
 	if _, err := sdk.AccAddressFromBech32(p.ProtocolLiquidationFeeCollector); err != nil {

@@ -40,7 +40,7 @@ func BuildSettlementTransaction(liquidation *Liquidation, records []*Liquidation
 		PubKeyScript: txOut.PkScript,
 	}
 
-	settlementTxPsbt, err := BuildBatchTransferPsbt([]*btcbridgetypes.UTXO{utxo}, records, protocolFeeCollector, liquidation.ProtocolLiquidationFee.Amount.Int64(), feeRate, liquidation.Borrower)
+	settlementTxPsbt, err := BuildBatchTransferPsbt([]*btcbridgetypes.UTXO{utxo}, records, protocolFeeCollector, liquidation.ProtocolLiquidationFee.Amount.Int64(), feeRate, liquidation.Debtor)
 	if err != nil {
 		return "", nil, nil, err
 	}
@@ -66,7 +66,7 @@ func BuildSettlementTransaction(liquidation *Liquidation, records []*Liquidation
 	return settlementTxPsbtB64, &txHash, sigHashes, nil
 }
 
-// BuildBatchTransferPsbt builds the psbt to perform batch transfer to liquidators, protocol fee collector and borrower(if left)
+// BuildBatchTransferPsbt builds the psbt to perform batch transfer to liquidators, protocol fee collector and debtor(if remaining)
 func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*LiquidationRecord, protocolFeeCollector string, protocolFee int64, feeRate int64, change string) (*psbt.Packet, error) {
 	chainCfg := bitcoin.Network
 

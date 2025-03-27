@@ -15,16 +15,16 @@ import (
 
 var (
 	md_Params                                    protoreflect.MessageDescriptor
-	fd_Params_liquidation_bonus                  protoreflect.FieldDescriptor
-	fd_Params_protocol_liquidation_fee           protoreflect.FieldDescriptor
+	fd_Params_liquidation_bonus_factor           protoreflect.FieldDescriptor
+	fd_Params_protocol_liquidation_fee_factor    protoreflect.FieldDescriptor
 	fd_Params_protocol_liquidation_fee_collector protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_liquidation_params_proto_init()
 	md_Params = File_side_liquidation_params_proto.Messages().ByName("Params")
-	fd_Params_liquidation_bonus = md_Params.Fields().ByName("liquidation_bonus")
-	fd_Params_protocol_liquidation_fee = md_Params.Fields().ByName("protocol_liquidation_fee")
+	fd_Params_liquidation_bonus_factor = md_Params.Fields().ByName("liquidation_bonus_factor")
+	fd_Params_protocol_liquidation_fee_factor = md_Params.Fields().ByName("protocol_liquidation_fee_factor")
 	fd_Params_protocol_liquidation_fee_collector = md_Params.Fields().ByName("protocol_liquidation_fee_collector")
 }
 
@@ -93,15 +93,15 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.LiquidationBonus != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.LiquidationBonus)
-		if !f(fd_Params_liquidation_bonus, value) {
+	if x.LiquidationBonusFactor != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.LiquidationBonusFactor)
+		if !f(fd_Params_liquidation_bonus_factor, value) {
 			return
 		}
 	}
-	if x.ProtocolLiquidationFee != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.ProtocolLiquidationFee)
-		if !f(fd_Params_protocol_liquidation_fee, value) {
+	if x.ProtocolLiquidationFeeFactor != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ProtocolLiquidationFeeFactor)
+		if !f(fd_Params_protocol_liquidation_fee_factor, value) {
 			return
 		}
 	}
@@ -126,10 +126,10 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.liquidation.Params.liquidation_bonus":
-		return x.LiquidationBonus != uint32(0)
-	case "side.liquidation.Params.protocol_liquidation_fee":
-		return x.ProtocolLiquidationFee != uint32(0)
+	case "side.liquidation.Params.liquidation_bonus_factor":
+		return x.LiquidationBonusFactor != uint32(0)
+	case "side.liquidation.Params.protocol_liquidation_fee_factor":
+		return x.ProtocolLiquidationFeeFactor != uint32(0)
 	case "side.liquidation.Params.protocol_liquidation_fee_collector":
 		return x.ProtocolLiquidationFeeCollector != ""
 	default:
@@ -148,10 +148,10 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.liquidation.Params.liquidation_bonus":
-		x.LiquidationBonus = uint32(0)
-	case "side.liquidation.Params.protocol_liquidation_fee":
-		x.ProtocolLiquidationFee = uint32(0)
+	case "side.liquidation.Params.liquidation_bonus_factor":
+		x.LiquidationBonusFactor = uint32(0)
+	case "side.liquidation.Params.protocol_liquidation_fee_factor":
+		x.ProtocolLiquidationFeeFactor = uint32(0)
 	case "side.liquidation.Params.protocol_liquidation_fee_collector":
 		x.ProtocolLiquidationFeeCollector = ""
 	default:
@@ -170,11 +170,11 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.liquidation.Params.liquidation_bonus":
-		value := x.LiquidationBonus
+	case "side.liquidation.Params.liquidation_bonus_factor":
+		value := x.LiquidationBonusFactor
 		return protoreflect.ValueOfUint32(value)
-	case "side.liquidation.Params.protocol_liquidation_fee":
-		value := x.ProtocolLiquidationFee
+	case "side.liquidation.Params.protocol_liquidation_fee_factor":
+		value := x.ProtocolLiquidationFeeFactor
 		return protoreflect.ValueOfUint32(value)
 	case "side.liquidation.Params.protocol_liquidation_fee_collector":
 		value := x.ProtocolLiquidationFeeCollector
@@ -199,10 +199,10 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.liquidation.Params.liquidation_bonus":
-		x.LiquidationBonus = uint32(value.Uint())
-	case "side.liquidation.Params.protocol_liquidation_fee":
-		x.ProtocolLiquidationFee = uint32(value.Uint())
+	case "side.liquidation.Params.liquidation_bonus_factor":
+		x.LiquidationBonusFactor = uint32(value.Uint())
+	case "side.liquidation.Params.protocol_liquidation_fee_factor":
+		x.ProtocolLiquidationFeeFactor = uint32(value.Uint())
 	case "side.liquidation.Params.protocol_liquidation_fee_collector":
 		x.ProtocolLiquidationFeeCollector = value.Interface().(string)
 	default:
@@ -225,10 +225,10 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.liquidation.Params.liquidation_bonus":
-		panic(fmt.Errorf("field liquidation_bonus of message side.liquidation.Params is not mutable"))
-	case "side.liquidation.Params.protocol_liquidation_fee":
-		panic(fmt.Errorf("field protocol_liquidation_fee of message side.liquidation.Params is not mutable"))
+	case "side.liquidation.Params.liquidation_bonus_factor":
+		panic(fmt.Errorf("field liquidation_bonus_factor of message side.liquidation.Params is not mutable"))
+	case "side.liquidation.Params.protocol_liquidation_fee_factor":
+		panic(fmt.Errorf("field protocol_liquidation_fee_factor of message side.liquidation.Params is not mutable"))
 	case "side.liquidation.Params.protocol_liquidation_fee_collector":
 		panic(fmt.Errorf("field protocol_liquidation_fee_collector of message side.liquidation.Params is not mutable"))
 	default:
@@ -244,9 +244,9 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.liquidation.Params.liquidation_bonus":
+	case "side.liquidation.Params.liquidation_bonus_factor":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "side.liquidation.Params.protocol_liquidation_fee":
+	case "side.liquidation.Params.protocol_liquidation_fee_factor":
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "side.liquidation.Params.protocol_liquidation_fee_collector":
 		return protoreflect.ValueOfString("")
@@ -319,11 +319,11 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		if x.LiquidationBonus != 0 {
-			n += 1 + runtime.Sov(uint64(x.LiquidationBonus))
+		if x.LiquidationBonusFactor != 0 {
+			n += 1 + runtime.Sov(uint64(x.LiquidationBonusFactor))
 		}
-		if x.ProtocolLiquidationFee != 0 {
-			n += 1 + runtime.Sov(uint64(x.ProtocolLiquidationFee))
+		if x.ProtocolLiquidationFeeFactor != 0 {
+			n += 1 + runtime.Sov(uint64(x.ProtocolLiquidationFeeFactor))
 		}
 		l = len(x.ProtocolLiquidationFeeCollector)
 		if l > 0 {
@@ -365,13 +365,13 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1a
 		}
-		if x.ProtocolLiquidationFee != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ProtocolLiquidationFee))
+		if x.ProtocolLiquidationFeeFactor != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ProtocolLiquidationFeeFactor))
 			i--
 			dAtA[i] = 0x10
 		}
-		if x.LiquidationBonus != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.LiquidationBonus))
+		if x.LiquidationBonusFactor != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.LiquidationBonusFactor))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -426,9 +426,9 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationBonus", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationBonusFactor", wireType)
 				}
-				x.LiquidationBonus = 0
+				x.LiquidationBonusFactor = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -438,16 +438,16 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.LiquidationBonus |= uint32(b&0x7F) << shift
+					x.LiquidationBonusFactor |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
 			case 2:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFee", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeFactor", wireType)
 				}
-				x.ProtocolLiquidationFee = 0
+				x.ProtocolLiquidationFeeFactor = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -457,7 +457,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.ProtocolLiquidationFee |= uint32(b&0x7F) << shift
+					x.ProtocolLiquidationFeeFactor |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -548,10 +548,10 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// liquidation bonus permille
-	LiquidationBonus uint32 `protobuf:"varint,1,opt,name=liquidation_bonus,json=liquidationBonus,proto3" json:"liquidation_bonus,omitempty"`
-	// protocol liquidation fee permille
-	ProtocolLiquidationFee uint32 `protobuf:"varint,2,opt,name=protocol_liquidation_fee,json=protocolLiquidationFee,proto3" json:"protocol_liquidation_fee,omitempty"`
+	// liquidation bonus factor permille
+	LiquidationBonusFactor uint32 `protobuf:"varint,1,opt,name=liquidation_bonus_factor,json=liquidationBonusFactor,proto3" json:"liquidation_bonus_factor,omitempty"`
+	// protocol liquidation fee factor permille
+	ProtocolLiquidationFeeFactor uint32 `protobuf:"varint,2,opt,name=protocol_liquidation_fee_factor,json=protocolLiquidationFeeFactor,proto3" json:"protocol_liquidation_fee_factor,omitempty"`
 	// protocol liquidation fee collector
 	ProtocolLiquidationFeeCollector string `protobuf:"bytes,3,opt,name=protocol_liquidation_fee_collector,json=protocolLiquidationFeeCollector,proto3" json:"protocol_liquidation_fee_collector,omitempty"`
 }
@@ -576,16 +576,16 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_side_liquidation_params_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Params) GetLiquidationBonus() uint32 {
+func (x *Params) GetLiquidationBonusFactor() uint32 {
 	if x != nil {
-		return x.LiquidationBonus
+		return x.LiquidationBonusFactor
 	}
 	return 0
 }
 
-func (x *Params) GetProtocolLiquidationFee() uint32 {
+func (x *Params) GetProtocolLiquidationFeeFactor() uint32 {
 	if x != nil {
-		return x.ProtocolLiquidationFee
+		return x.ProtocolLiquidationFeeFactor
 	}
 	return 0
 }
@@ -604,31 +604,33 @@ var file_side_liquidation_params_proto_rawDesc = []byte{
 	0x6f, 0x6e, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
 	0x10, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
 	0x6e, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67,
-	0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xbc, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x12, 0x2b, 0x0a, 0x11, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x5f, 0x62, 0x6f, 0x6e, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x10, 0x6c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12,
-	0x38, 0x0a, 0x18, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x0d, 0x52, 0x16, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x4c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x12, 0x4b, 0x0a, 0x22, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x1f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x4c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x43, 0x6f, 0x6c,
-	0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x42, 0xb7, 0x01, 0x0a, 0x14, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42,
-	0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x31,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x10, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0xca, 0x02, 0x10, 0x53, 0x69, 0x64,
-	0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0xe2, 0x02, 0x1c,
-	0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x53,
-	0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xd6, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x12, 0x38, 0x0a, 0x18, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x62, 0x6f, 0x6e, 0x75, 0x73, 0x5f, 0x66, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x16, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x46, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x12, 0x45, 0x0a, 0x1f,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x66, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1c, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x46, 0x61, 0x63,
+	0x74, 0x6f, 0x72, 0x12, 0x4b, 0x0a, 0x22, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f,
+	0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x1f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72,
+	0x42, 0xb7, 0x01, 0x0a, 0x14, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f,
+	0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0xa2, 0x02, 0x03, 0x53, 0x4c,
+	0x58, 0xaa, 0x02, 0x10, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0xca, 0x02, 0x10, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0xe2, 0x02, 0x1c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x11, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (

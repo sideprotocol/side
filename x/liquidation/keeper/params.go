@@ -4,14 +4,14 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// LiquidationBonus returns the liquidation bonus
-func (k Keeper) LiquidationBonus(ctx sdk.Context) uint32 {
-	return k.GetParams(ctx).LiquidationBonus
+// LiquidationBonusFactor returns the liquidation bonus factor
+func (k Keeper) LiquidationBonusFactor(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).LiquidationBonusFactor
 }
 
-// ProtocolLiquidationFee returns the protocol liquidation fee
-func (k Keeper) ProtocolLiquidationFee(ctx sdk.Context) uint32 {
-	return k.GetParams(ctx).ProtocolLiquidationFee
+// ProtocolLiquidationFeeFactor returns the protocol liquidation fee factor
+func (k Keeper) ProtocolLiquidationFeeFactor(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).ProtocolLiquidationFeeFactor
 }
 
 // ProtocolLiquidationFeeCollector returns the protocol liquidation fee collector
