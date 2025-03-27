@@ -50,7 +50,7 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(k.GetParams(ctx).ProtocolFeeCollector), sdk.NewCoins(protocolFee)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(protocolFee)); err != nil {
 		return err
 	}
 

@@ -97,7 +97,7 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, loanId string, moduleAccou
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.GetParams(ctx).ProtocolFeeCollector), sdk.NewCoins(protocolFee)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(protocolFee)); err != nil {
 		return err
 	}
 

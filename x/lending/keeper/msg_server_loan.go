@@ -233,7 +233,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	}
 
 	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.OriginationFee.Int64())
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.GetParams(ctx).OriginationFeeCollector), sdk.NewCoins(originationFee)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.OriginationFeeCollector(ctx)), sdk.NewCoins(originationFee)); err != nil {
 		return nil, err
 	}
 
