@@ -56,6 +56,15 @@ DLCs provide a secure, trustless method to execute conditional payments and smar
 
 **Oracle Event Signer:** Monitor the price of BTC from cryptographically signed upstream sources, signing attestations at predetermined intervals. To maintain system integrity, Side Finance implements a mechanism that discards prices falling outside a pre-established variance level. This approach ensures that in the case of problems with a specific oracle, the safety of the system is maintained. Side Finance utilizes multiple independent cryptographically signed price sources to provide outcome attestations for its DLCs. 
 
+**Oracle++**
+Oracle++ introduces a robust security architecture that mitigates reliance on any single oracle. The foundation lies in the FROST framework, which enables threshold-optimized Schnorr signatures and provides Byzantine fault tolerance with a 15-of-21 signing threshold. 
+
+Unlike traditional DLC oracle, Oracle++ dese not have fixed（固定的）oracle keys, it generate 2 one-time-use keypairs for an event announcement through 15-of-21 dkg approach where 21 participants are randomly selected from top 50 active validators, one of the keypairs used as One-time-use Oracle pubkey and anothor used as adaptor point. Oracle++ use these key pairs to sign attestation of event. and DLC signer can use the nonce as adaptor point to sign CET, and reveal CET's signature with the attestation signature of event.
+
+This approach ensure that only active validators are selected during the generation, and 1/3 participants liveness tolerent during the attestation. 
+
+
+
 ### 3.1.2 Glossary
 
 **Collateral Vault:** A Bitcoin Taproot address where borrowers send their BTC as collateral for lending. Each loan has its own unique vault address designated for its collateral.
@@ -170,7 +179,7 @@ If the Borrower agrees to the terms, they can send the BTC collateral to the Col
 In code, the adapter signature generation process is as follows: 
 
 ```rust
-// hide CET's signature with adaptor point in pre-announced event
+// hide CET's signature with adaptor point in the event announcement
 let message = sig_hash(psbt);
 let adaptor_signature = sign_adaptor(seckey, message, event.adaptor_point);
 ...
@@ -279,15 +288,16 @@ Data provider are all validators, who fetch prices from top exchanges and aggreg
 
 So every valdiator can impace the final result(price or header) according to their voting power.
 
-### 5.3.2 Event Signer Security
+### 5.3.2 Oracle Security
 
-Event Signer are frost network, 7 well-known Side Chain validators, chosen through on-chain governance by stakers, also serve as Event Signer. These validators are selected due to their vested interest in the system's success and their role in securing value across multiple chains. Should any validator provide incorrect price outputs, a cryptographically signed proof of misbehavior is generated. This proof automatically affects their stake holdings on Side and damages their reputation on other chains they secure.
+Side Protocol’s Oracle ++ architecture separates the traditional role of a Bitcoin DLC oracle into two distinct components: Data Providers and Event Signers. This architecture increase fraud difficulty because Oracle++ create/attest events for data provided by data providers and Event Signer can only sign these events.
 
-It’s important to note that Event Signer cannot benefit directly from any price liquidation events they sign, that they cannot make up arbitrary prices, and that a threshold set of operators must agree on the current price provided by all validators to be signed. not individual signer would able to fraud to the protoccol.
+Importantly, Event Signers cannot directly benefit from any price liquidation events, as only the borrower or the DCM can receive collateral. They cannot fabricate arbitrary prices, and all valid price attestations must be collectively signed by a threshold of operators. No single Event Signer can act unilaterally to defraud the protocol.
 
-The Lending contract collectively produce a stream of DLC announcements for potential future price events. Later, they sign an attestation of the real BTCUSD price for each time period as it occurs. These DLC announcement streams and attestations are then used by the DCM to liquidate loans that fall below the Liquidation Price.
+Unlike traditional DLC Oracle, oracle operators knows both oracle's private key and `λ` of adaptor point, Oracle++ generate these two keys by DKG, that means no single party knows private keys and `λ`, so there's no risk at abuse or leak.
 
-The Lending contract collectively produce a stream of DLC announcements for future date events. Later, they sign an attestation of the date as it comes. These DLC announcement streams and attestations are then used by the DCM to liquidate loans that is defaulted.
+Liveness tolerence, Oracle++ ensure livness for event announcement for by randomly selection from active candadiates who has been qualified by KYC. and FROST provides tolerence for signing.
+
 
 ## 5.4 DCM Security
 
