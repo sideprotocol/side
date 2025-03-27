@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,7 +16,7 @@ func (k Keeper) ProtocolFeeCollector(ctx sdk.Context) string {
 	return k.GetParams(ctx).ProtocolFeeCollector
 }
 
-// FinalTimeoutDuration gets the final timeout duration
+// FinalTimeoutDuration gets the final timeout duration in seconds
 func (k Keeper) FinalTimeoutDuration(ctx sdk.Context) int64 {
-	return int64(k.GetParams(ctx).FinalTimeoutDuration)
+	return int64(k.GetParams(ctx).FinalTimeoutDuration / time.Second)
 }

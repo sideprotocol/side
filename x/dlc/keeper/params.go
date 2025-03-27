@@ -31,9 +31,9 @@ func (k Keeper) GetDateEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).DateEventNonceQueueSize
 }
 
-// GetDateInterval gets the date interval for the date events
+// GetDateInterval gets the date interval for the date events in seconds
 func (k Keeper) GetDateInterval(ctx sdk.Context) int64 {
-	return int64(k.GetParams(ctx).DateInterval)
+	return int64(k.GetParams(ctx).DateInterval / time.Second)
 }
 
 // GetLendingEventNonceQueueSize gets the nonce queue size for the lending events
