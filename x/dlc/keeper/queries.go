@@ -111,6 +111,20 @@ func (k Keeper) Attestation(goCtx context.Context, req *types.QueryAttestationRe
 	return &types.QueryAttestationResponse{Attestation: k.GetAttestation(ctx, req.Id)}, nil
 }
 
+func (k Keeper) AttestationByEvent(goCtx context.Context, req *types.QueryAttestationByEventRequest) (*types.QueryAttestationByEventResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasAttestationByEvent(ctx, req.EventId) {
+		return nil, status.Error(codes.NotFound, "attestation does not exist")
+	}
+
+	return &types.QueryAttestationByEventResponse{Attestation: k.GetAttestationByEvent(ctx, req.EventId)}, nil
+}
+
 func (k Keeper) Attestations(goCtx context.Context, req *types.QueryAttestationsRequest) (*types.QueryAttestationsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")

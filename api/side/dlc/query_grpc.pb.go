@@ -19,17 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName       = "/side.dlc.Query/Params"
-	Query_Event_FullMethodName        = "/side.dlc.Query/Event"
-	Query_Events_FullMethodName       = "/side.dlc.Query/Events"
-	Query_Attestation_FullMethodName  = "/side.dlc.Query/Attestation"
-	Query_Attestations_FullMethodName = "/side.dlc.Query/Attestations"
-	Query_Price_FullMethodName        = "/side.dlc.Query/Price"
-	Query_Nonce_FullMethodName        = "/side.dlc.Query/Nonce"
-	Query_Nonces_FullMethodName       = "/side.dlc.Query/Nonces"
-	Query_CountNonces_FullMethodName  = "/side.dlc.Query/CountNonces"
-	Query_Oracles_FullMethodName      = "/side.dlc.Query/Oracles"
-	Query_DCMs_FullMethodName         = "/side.dlc.Query/DCMs"
+	Query_Params_FullMethodName             = "/side.dlc.Query/Params"
+	Query_Event_FullMethodName              = "/side.dlc.Query/Event"
+	Query_Events_FullMethodName             = "/side.dlc.Query/Events"
+	Query_Attestation_FullMethodName        = "/side.dlc.Query/Attestation"
+	Query_AttestationByEvent_FullMethodName = "/side.dlc.Query/AttestationByEvent"
+	Query_Attestations_FullMethodName       = "/side.dlc.Query/Attestations"
+	Query_Price_FullMethodName              = "/side.dlc.Query/Price"
+	Query_Nonce_FullMethodName              = "/side.dlc.Query/Nonce"
+	Query_Nonces_FullMethodName             = "/side.dlc.Query/Nonces"
+	Query_CountNonces_FullMethodName        = "/side.dlc.Query/CountNonces"
+	Query_Oracles_FullMethodName            = "/side.dlc.Query/Oracles"
+	Query_DCMs_FullMethodName               = "/side.dlc.Query/DCMs"
 )
 
 // QueryClient is the client API for Query service.
@@ -44,6 +45,8 @@ type QueryClient interface {
 	Events(ctx context.Context, in *QueryEventsRequest, opts ...grpc.CallOption) (*QueryEventsResponse, error)
 	// Attestation queries the attestation by the given id.
 	Attestation(ctx context.Context, in *QueryAttestationRequest, opts ...grpc.CallOption) (*QueryAttestationResponse, error)
+	// AttestationByEvent queries the attestation by the given event id.
+	AttestationByEvent(ctx context.Context, in *QueryAttestationByEventRequest, opts ...grpc.CallOption) (*QueryAttestationByEventResponse, error)
 	// Attestations queries all attestations.
 	Attestations(ctx context.Context, in *QueryAttestationsRequest, opts ...grpc.CallOption) (*QueryAttestationsResponse, error)
 	// Price queries the current price by the given symbol.
@@ -98,6 +101,15 @@ func (c *queryClient) Events(ctx context.Context, in *QueryEventsRequest, opts .
 func (c *queryClient) Attestation(ctx context.Context, in *QueryAttestationRequest, opts ...grpc.CallOption) (*QueryAttestationResponse, error) {
 	out := new(QueryAttestationResponse)
 	err := c.cc.Invoke(ctx, Query_Attestation_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) AttestationByEvent(ctx context.Context, in *QueryAttestationByEventRequest, opts ...grpc.CallOption) (*QueryAttestationByEventResponse, error) {
+	out := new(QueryAttestationByEventResponse)
+	err := c.cc.Invoke(ctx, Query_AttestationByEvent_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -179,6 +191,8 @@ type QueryServer interface {
 	Events(context.Context, *QueryEventsRequest) (*QueryEventsResponse, error)
 	// Attestation queries the attestation by the given id.
 	Attestation(context.Context, *QueryAttestationRequest) (*QueryAttestationResponse, error)
+	// AttestationByEvent queries the attestation by the given event id.
+	AttestationByEvent(context.Context, *QueryAttestationByEventRequest) (*QueryAttestationByEventResponse, error)
 	// Attestations queries all attestations.
 	Attestations(context.Context, *QueryAttestationsRequest) (*QueryAttestationsResponse, error)
 	// Price queries the current price by the given symbol.
@@ -211,6 +225,9 @@ func (UnimplementedQueryServer) Events(context.Context, *QueryEventsRequest) (*Q
 }
 func (UnimplementedQueryServer) Attestation(context.Context, *QueryAttestationRequest) (*QueryAttestationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Attestation not implemented")
+}
+func (UnimplementedQueryServer) AttestationByEvent(context.Context, *QueryAttestationByEventRequest) (*QueryAttestationByEventResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AttestationByEvent not implemented")
 }
 func (UnimplementedQueryServer) Attestations(context.Context, *QueryAttestationsRequest) (*QueryAttestationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Attestations not implemented")
@@ -314,6 +331,24 @@ func _Query_Attestation_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Attestation(ctx, req.(*QueryAttestationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_AttestationByEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAttestationByEventRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).AttestationByEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_AttestationByEvent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).AttestationByEvent(ctx, req.(*QueryAttestationByEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -466,6 +501,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Attestation",
 			Handler:    _Query_Attestation_Handler,
+		},
+		{
+			MethodName: "AttestationByEvent",
+			Handler:    _Query_AttestationByEvent_Handler,
 		},
 		{
 			MethodName: "Attestations",

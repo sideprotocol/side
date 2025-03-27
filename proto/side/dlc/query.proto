@@ -31,6 +31,11 @@ service Query {
         option (google.api.http).get = "/side/dlc/attestations/{id}";
     }
 
+    // AttestationByEvent queries the attestation by the given event id.
+    rpc AttestationByEvent(QueryAttestationByEventRequest) returns (QueryAttestationByEventResponse) {
+        option (google.api.http).get = "/side/dlc/attestations/event";
+    }
+
     // Attestations queries all attestations.
     rpc Attestations(QueryAttestationsRequest) returns (QueryAttestationsResponse) {
         option (google.api.http).get = "/side/dlc/attestations";
@@ -72,6 +77,14 @@ message QueryAttestationRequest {
 }
 
 message QueryAttestationResponse {
+    DLCAttestation attestation = 1;
+}
+
+message QueryAttestationByEventRequest {
+    uint64 event_id = 1;
+}
+
+message QueryAttestationByEventResponse {
     DLCAttestation attestation = 1;
 }
 
