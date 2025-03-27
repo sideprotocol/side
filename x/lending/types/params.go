@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	DefaultFinalTimeoutDuration = time.Duration(15*24*3600) * time.Second // 15days
+	DefaultFinalTimeoutDuration = time.Duration(15 * 24 * 3600) // 15 days
 )
 
 // DefaultParams returns a default set of parameters
