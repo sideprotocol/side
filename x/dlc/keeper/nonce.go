@@ -67,7 +67,7 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 		pair := "BTC-USD"
 		currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
 
-		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(k.GetPriceInterval(ctx, pair)))
+		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(k.PriceInterval(ctx, pair)))
 
 		dlcEvent.Description = fmt.Sprintf("price event at price %s", triggerPrice.String())
 		dlcEvent.Outcomes = append(dlcEvent.Outcomes, triggerPrice.String())
@@ -81,7 +81,7 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 			currentEventDate = ctx.BlockTime().Truncate(24 * time.Hour).Unix()
 		}
 
-		triggerDate := currentEventDate + k.GetDateInterval(ctx)
+		triggerDate := currentEventDate + k.DateInterval(ctx)
 
 		dlcEvent.Description = fmt.Sprintf("date event at date %d", triggerDate)
 		dlcEvent.Outcomes = append(dlcEvent.Outcomes, fmt.Sprintf("%d", triggerDate))

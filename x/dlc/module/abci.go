@@ -27,7 +27,7 @@ func handlePendingOracles(ctx sdk.Context, k keeper.Keeper) {
 
 	for _, oracle := range pendingOracles {
 		// check if the pending oracle expired
-		if !ctx.BlockTime().Before(oracle.Time.Add(k.GetDKGTimeoutPeriod(ctx))) {
+		if !ctx.BlockTime().Before(oracle.Time.Add(k.DKGTimeoutPeriod(ctx))) {
 			oracle.Status = types.DLCOracleStatus_Oracle_Status_Timedout
 			k.SetOracle(ctx, oracle)
 
@@ -65,7 +65,7 @@ func handlePendingDCMs(ctx sdk.Context, k keeper.Keeper) {
 
 	for _, dcm := range pendingDCMs {
 		// check if the pending DCM expired
-		if !ctx.BlockTime().Before(dcm.Time.Add(k.GetDKGTimeoutPeriod(ctx))) {
+		if !ctx.BlockTime().Before(dcm.Time.Add(k.DKGTimeoutPeriod(ctx))) {
 			dcm.Status = types.DCMStatus_DCM_Status_Timedout
 			k.SetDCM(ctx, dcm)
 
@@ -109,8 +109,8 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 	oracle := oracles[selectedOracleId]
 
 	// get price interval and nonce queue size
-	priceInterval := int64(k.GetPriceInterval(ctx, "BTC-USD"))
-	nonceQueueSize := int64(k.GetPriceEventNonceQueueSize(ctx))
+	priceInterval := int64(k.PriceInterval(ctx, "BTC-USD"))
+	nonceQueueSize := int64(k.PriceEventNonceQueueSize(ctx))
 
 	// check if price event nonces need to be generated
 	currentPrice := k.GetPrice(ctx, "BTC-USD")
@@ -146,7 +146,7 @@ func generateDateEventNonces(ctx sdk.Context, k keeper.Keeper) {
 
 	// check if date event nonces need to be generated
 	currentEventDate := k.GetCurrentEventDate(ctx)
-	if (currentEventDate-ctx.BlockTime().Unix())/k.GetDateInterval(ctx) >= int64(k.GetDateEventNonceQueueSize(ctx)) {
+	if (currentEventDate-ctx.BlockTime().Unix())/k.DateInterval(ctx) >= int64(k.DateEventNonceQueueSize(ctx)) {
 		return
 	}
 
@@ -177,7 +177,7 @@ func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
 
 	// check if lending event nonces need to be generated
 	pendingLendingEventCount := k.GetPendingLendingEventCount(ctx)
-	if pendingLendingEventCount >= k.GetLendingEventNonceQueueSize(ctx) {
+	if pendingLendingEventCount >= k.LendingEventNonceQueueSize(ctx) {
 		return
 	}
 

@@ -95,7 +95,7 @@ func (m msgServer) CreateOracle(goCtx context.Context, msg *types.MsgCreateOracl
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", oracle.Id)),
 			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(oracle.Participants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
-			sdk.NewAttribute(types.AttributeKeyExpirationTime, oracle.Time.Add(m.GetDKGTimeoutPeriod(ctx)).String()),
+			sdk.NewAttribute(types.AttributeKeyExpirationTime, oracle.Time.Add(m.DKGTimeoutPeriod(ctx)).String()),
 		),
 	)
 
@@ -121,7 +121,7 @@ func (m msgServer) CreateDCM(goCtx context.Context, msg *types.MsgCreateDCM) (*t
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", dcm.Id)),
 			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(dcm.Participants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", dcm.Threshold)),
-			sdk.NewAttribute(types.AttributeKeyExpirationTime, dcm.Time.Add(m.GetDKGTimeoutPeriod(ctx)).String()),
+			sdk.NewAttribute(types.AttributeKeyExpirationTime, dcm.Time.Add(m.DKGTimeoutPeriod(ctx)).String()),
 		),
 	)
 

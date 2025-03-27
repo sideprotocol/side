@@ -47,7 +47,7 @@ func (k Keeper) SubmitOraclePubKey(ctx sdk.Context, sender string, pubKey string
 		return types.ErrInvalidOracleStatus
 	}
 
-	if !ctx.BlockTime().Before(oracle.Time.Add(k.GetDKGTimeoutPeriod(ctx))) {
+	if !ctx.BlockTime().Before(oracle.Time.Add(k.DKGTimeoutPeriod(ctx))) {
 		return errorsmod.Wrap(types.ErrDKGTimedOut, "oracle dkg timed out")
 	}
 

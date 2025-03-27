@@ -47,7 +47,7 @@ func (k Keeper) SubmitDCMPubKey(ctx sdk.Context, sender string, pubKey string, d
 		return types.ErrInvalidDCMStatus
 	}
 
-	if !ctx.BlockTime().Before(dcm.Time.Add(k.GetDKGTimeoutPeriod(ctx))) {
+	if !ctx.BlockTime().Before(dcm.Time.Add(k.DKGTimeoutPeriod(ctx))) {
 		return errorsmod.Wrap(types.ErrDKGTimedOut, "dcm dkg timed out")
 	}
 
