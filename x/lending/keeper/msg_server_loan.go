@@ -232,7 +232,11 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	}
 
 	depositLog := m.GetDepositLog(ctx, msg.DepositTxId)
+
 	loan := m.GetLoan(ctx, depositLog.VaultAddress)
+	if loan.Status != types.LoanStatus_Requested {
+		return nil, types.ErrInvalidLoanStatus
+	}
 
 	// Do not validate tx for now
 	// if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, depositLog.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
