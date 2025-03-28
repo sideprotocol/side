@@ -29,19 +29,36 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, types.ErrInvalidPrice
 	}
 
+	// check remaining debt amount
 	remainingDebtAmount := liquidation.DebtAmount.Sub(liquidation.LiquidatedDebtAmount)
 	if remainingDebtAmount.IsLT(debtAmount) {
 		debtAmount = remainingDebtAmount
+	}
+
+	// calculate collateral amount
+	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+
+	// check remaining collateral amount
+	remainingCollateralAmount := liquidation.CollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
+	if remainingCollateralAmount.Amount.LT(collateralAmount) {
+		collateralAmount = remainingCollateralAmount.Amount
+		debtAmount.Amount = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Mul(currentPrice).Quo(sdkmath.LegacyDec(sdkmath.NewIntWithDecimal(1, 8))).TruncateInt()
 	}
 
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(liquidator), types.ModuleName, sdk.NewCoins(debtAmount)); err != nil {
 		return nil, err
 	}
 
-	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+	remainingCollateralAmount = remainingCollateralAmount.SubAmount(collateralAmount)
 
+	// calculate bonus
 	bonusAmountInDebt := debtAmount.Amount.Mul(sdkmath.NewInt(int64(k.LiquidationBonusFactor(ctx)))).Quo(sdkmath.NewInt(1000))
 	bonusAmount := bonusAmountInDebt.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+
+	// check if there is left collateral for bonus
+	if bonusAmount.GT(remainingCollateralAmount.Amount) {
+		bonusAmount = remainingCollateralAmount.Amount
+	}
 
 	protocolLiquidationFee := bonusAmount.Mul(sdkmath.NewInt(int64(k.ProtocolLiquidationFeeFactor(ctx)))).Quo(sdkmath.NewInt(1000))
 
@@ -59,7 +76,8 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 	liquidation.LiquidationBonusAmount = liquidation.LiquidationBonusAmount.AddAmount(bonusAmount)
 	liquidation.ProtocolLiquidationFee = liquidation.ProtocolLiquidationFee.AddAmount(protocolLiquidationFee)
 
-	if liquidation.LiquidatedDebtAmount.Amount.Equal(liquidation.DebtAmount.Amount) {
+	remainingCollateralAmount = liquidation.CollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
+	if remainingCollateralAmount.Amount.IsZero() || liquidation.LiquidatedDebtAmount.Amount.Equal(liquidation.DebtAmount.Amount) {
 		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED
 	}
 
