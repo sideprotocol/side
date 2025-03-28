@@ -34,7 +34,7 @@ var (
 	ErrMaturityTimeReached     = errorsmod.Register(ModuleName, 3012, "maturity time reached")
 	ErrFailedToBuildTx         = errorsmod.Register(ModuleName, 3013, "failed to build tx")
 
-	ErrInvalidDepositTxHash  = errorsmod.Register(ModuleName, 4001, "invalid deposit tx hash")
+	ErrInvalidVault          = errorsmod.Register(ModuleName, 4001, "invalid vault")
 	ErrInvalidBlockHash      = errorsmod.Register(ModuleName, 4002, "invalid block hash")
 	ErrInvalidProof          = errorsmod.Register(ModuleName, 4003, "invalid proof")
 	ErrDepositTxDoesNotExist = errorsmod.Register(ModuleName, 4004, "deposit tx does not exist")

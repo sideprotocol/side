@@ -203,9 +203,9 @@ func CmdSubmitCets() *cobra.Command {
 
 func CmdApprove() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "approve [deposit tx id] [block hash] [proof]",
+		Use:   "approve [vault] [deposit tx] [block hash] [proof]",
 		Short: "Approve loan with the deposit tx",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -216,7 +216,8 @@ func CmdApprove() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				args[1],
-				strings.Split(args[2], listSeparator),
+				args[2],
+				strings.Split(args[3], listSeparator),
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

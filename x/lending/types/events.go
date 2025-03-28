@@ -24,10 +24,9 @@ const (
 
 	AttributeKeyLoanId = "loan_id"
 
-	AttributeKeyRelayer       = "relayer"
+	AttributeKeySender        = "sender"
 	AttributeKeyAmount        = "amount"
 	AttributeKeyDepositTxHash = "deposit_tx_hash"
-	AttributeKeyBlockHash     = "block_hash"
 
 	AttributeKeyAdaptorPoint = "adaptor_point"
 

@@ -139,7 +139,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
 	fundTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
-	depositTxid := fundTx.UnsignedTx.TxHash().String()
+	depositTxHash := fundTx.UnsignedTx.TxHash().String()
 
 	collateralAmount := sdkmath.ZeroInt()
 	for _, out := range fundTx.UnsignedTx.TxOut {
@@ -157,17 +157,20 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, err
 	}
 
-	depositLog := &types.DepositLog{
-		Txid:         depositTxid,
-		VaultAddress: loan.VaultAddress,
-		DepositTx:    msg.DepositTx,
-	}
-
-	m.SetDepositLog(ctx, depositLog)
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
+	if !m.HasDepositLog(ctx, depositTxHash) {
+		depositLog := &types.DepositLog{
+			Txid:         depositTxHash,
+			VaultAddress: loan.VaultAddress,
+			DepositTx:    msg.DepositTx,
+		}
+
+		m.SetDepositLog(ctx, depositLog)
+	}
+
 	loan.CollateralAmount = collateralAmount
-	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
+	loan.DepositTxs = append(loan.DepositTxs, depositTxHash)
 
 	var errRejected error
 
@@ -182,7 +185,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 				sdk.NewEvent(
 					types.EventTypeReject,
 					sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
-					sdk.NewAttribute(types.AttributeKeyDepositTxHash, depositTxid),
+					sdk.NewAttribute(types.AttributeKeyDepositTxHash, depositTxHash),
 				),
 			)
 		}
@@ -231,6 +234,14 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
+	// if deposit tx already verified, approve the loan
+	if m.GetDepositLog(ctx, depositTxHash).Verified {
+		if err := m.HandleApproval(ctx, msg.Borrower, depositTxHash, loan); err != nil {
+			errRejected = err
+			return nil, nil
+		}
+	}
+
 	loan.LiquidationPrice = liquidationPrice
 	loan.LiquidationEventId = liquidationEvent.Id
 
@@ -247,14 +258,12 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasDepositLog(ctx, msg.DepositTxId) {
-		return nil, types.ErrDepositTxDoesNotExist
+	if !m.HasLoan(ctx, msg.Vault) {
+		return nil, errorsmod.Wrap(types.ErrInvalidVault, "vault does not match any loan")
 	}
 
-	depositLog := m.GetDepositLog(ctx, msg.DepositTxId)
-
-	loan := m.GetLoan(ctx, depositLog.VaultAddress)
-	if loan.Status != types.LoanStatus_Requested {
+	loan := m.GetLoan(ctx, msg.Vault)
+	if loan.Status != types.LoanStatus_Requested && loan.Status != types.LoanStatus_Rejected {
 		return nil, types.ErrInvalidLoanStatus
 	}
 
@@ -263,8 +272,31 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	// 	return nil, types.ErrInvalidProof
 	// }
 
+	depositTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
+	depositTxHash := depositTx.UnsignedTx.TxHash().String()
+
+	depositTxAlreadyExists := true
+	if !m.HasDepositLog(ctx, depositTxHash) {
+		depositTxAlreadyExists = false
+
+		depositLog := &types.DepositLog{
+			Txid:         depositTxHash,
+			VaultAddress: msg.Vault,
+			DepositTx:    msg.DepositTx,
+		}
+
+		m.SetDepositLog(ctx, depositLog)
+	}
+
+	depositLog := m.GetDepositLog(ctx, depositTxHash)
+
 	depositLog.Verified = true
 	m.SetDepositLog(ctx, depositLog)
+
+	// cets submission rejected
+	if loan.Status == types.LoanStatus_Rejected {
+		return nil, nil
+	}
 
 	var errRejected error
 
@@ -279,7 +311,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 				sdk.NewEvent(
 					types.EventTypeReject,
 					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-					sdk.NewAttribute(types.AttributeKeyDepositTxHash, msg.DepositTxId),
+					sdk.NewAttribute(types.AttributeKeyDepositTxHash, depositTxHash),
 				),
 			)
 		}
@@ -290,56 +322,43 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, nil
 	}
 
+	liquidationPrice := sdkmath.ZeroInt()
+
+	// loan requested
+	if !depositTxAlreadyExists {
+		vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
+
+		collateralAmount := sdkmath.ZeroInt()
+		for _, out := range depositTx.UnsignedTx.TxOut {
+			if bytes.Equal(out.PkScript, vaultPkScript) {
+				collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
+			}
+
+			poolConfig := m.GetPool(ctx, loan.PoolId).Config
+			liquidationPrice = types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
+		}
+	} else {
+		liquidationPrice = loan.LiquidationPrice
+	}
+
 	currentPrice, err := m.GetPrice(ctx, "BTC-USD")
 	if err != nil {
 		return nil, err
 	}
 
 	// check if liquidation price reached
-	if currentPrice.LTE(loan.LiquidationPrice) {
+	if currentPrice.LTE(liquidationPrice) {
 		errRejected = types.ErrLiquidationPriceReached
 		return nil, nil
 	}
 
-	if m.GetPool(ctx, loan.PoolId).AvailableAmount.LT(loan.BorrowAmount.Amount) {
-		errRejected = types.ErrInsufficientLiquidity
-		return nil, nil
+	// cets submitted
+	if depositTxAlreadyExists {
+		if err := m.HandleApproval(ctx, msg.Relayer, depositTxHash, loan); err != nil {
+			errRejected = err
+			return nil, nil
+		}
 	}
-
-	amount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-loan.OriginationFee.Int64())
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(loan.Borrower), sdk.NewCoins(amount)); err != nil {
-		errRejected = err
-		return nil, nil
-	}
-
-	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.OriginationFee.Int64())
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.OriginationFeeCollector(ctx)), sdk.NewCoins(originationFee)); err != nil {
-		errRejected = err
-		return nil, nil
-	}
-
-	// initiate signing request for repayment cet adaptor signatures from DCM
-	if err := m.InitiateRepaymentCetSigningRequest(ctx, loan.VaultAddress); err != nil {
-		errRejected = err
-		return nil, nil
-	}
-
-	// update pool
-	m.AfterPoolBorrowed(ctx, loan.PoolId, loan.BorrowAmount)
-
-	loan.Status = types.LoanStatus_Open
-	m.SetLoan(ctx, loan)
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeApprove,
-			sdk.NewAttribute(types.AttributeKeyRelayer, msg.Relayer),
-			sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-			sdk.NewAttribute(types.AttributeKeyAmount, amount.String()),
-			sdk.NewAttribute(types.AttributeKeyDepositTxHash, msg.DepositTxId),
-			sdk.NewAttribute(types.AttributeKeyBlockHash, msg.BlockHash),
-		),
-	)
 
 	return &types.MsgApproveResponse{}, nil
 }

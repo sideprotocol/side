@@ -126,9 +126,10 @@ message MsgApprove {
     option (cosmos.msg.v1.signer) = "relayer";
     
     string relayer = 1;
-    string deposit_tx_id =2;
-    string block_hash = 3;
-    repeated string proof = 4;
+    string vault = 2;
+    string deposit_tx = 3;
+    string block_hash = 4;
+    repeated string proof = 5;
 }
 
 message MsgApproveResponse {
