@@ -289,6 +289,9 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	}
 
 	depositLog := m.GetDepositLog(ctx, depositTxHash)
+	if depositLog.Verified {
+		return nil, errorsmod.Wrap(types.ErrInvalidDepositTx, "deposit tx already verified")
+	}
 
 	depositLog.Verified = true
 	m.SetDepositLog(ctx, depositLog)
