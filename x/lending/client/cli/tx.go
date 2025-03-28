@@ -266,8 +266,8 @@ func CmdCancel() *cobra.Command {
 
 func CmdSubmitCancellationSignatures() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-cancellation-signatures [loan id] [DCA signatures]",
-		Short: "Submit the DCA signatures for the loan to be cancelled",
+		Use:   "submit-cancellation-signatures [loan id] [DCM signatures]",
+		Short: "Submit the DCM signatures for the loan to be cancelled",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -325,8 +325,8 @@ func CmdRepay() *cobra.Command {
 
 func CmdSubmitRepaymentAdaptorSignatures() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-repay-adaptor-signatures [loan id] [DCA adaptor signatures]",
-		Short: "Submit the DCA adaptor signatures for loan repayment",
+		Use:   "submit-repay-adaptor-signatures [loan id] [DCM adaptor signatures]",
+		Short: "Submit the DCM adaptor signatures for loan repayment",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -355,8 +355,8 @@ func CmdSubmitRepaymentAdaptorSignatures() *cobra.Command {
 
 func CmdSubmitLiquidationSignatures() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-liquidation-signatures [loan id] [DCA signatures]",
-		Short: "Submit the DCA liquidation signatures for the loan to be liquidated",
+		Use:   "submit-liquidation-signatures [loan id] [DCM signatures]",
+		Short: "Submit the DCM liquidation signatures for the loan to be liquidated",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)

@@ -22,7 +22,7 @@ func NewMsgApprove(relayer string, vault string, depositTx string, blockHash str
 	}
 }
 
-// ValidateBasic performs basic MsgAddLiquidity message validation.
+// ValidateBasic performs basic MsgApprove message validation.
 func (m *MsgApprove) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Relayer); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")

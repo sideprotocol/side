@@ -527,7 +527,7 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 
 	cancellation := m.GetCancellation(ctx, msg.LoanId)
 	if len(cancellation.DcaSignatures) != 0 {
-		return nil, types.ErrDcaSignaturesAlreadyExist
+		return nil, types.ErrDCMSignaturesAlreadyExist
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)

@@ -42,7 +42,7 @@ var (
 	ErrMismatchedBorrower        = errorsmod.Register(ModuleName, 5001, "mismatched borrower")
 	ErrInvalidTx                 = errorsmod.Register(ModuleName, 5002, "invalid tx")
 	ErrCancellationDoesNotExist  = errorsmod.Register(ModuleName, 5003, "cancellation does not exist")
-	ErrDcaSignaturesAlreadyExist = errorsmod.Register(ModuleName, 5004, "dca signatures already exist")
+	ErrDCMSignaturesAlreadyExist = errorsmod.Register(ModuleName, 5004, "dcm signatures already exist")
 
 	ErrRepaymentAdaptorSigsAlreadyExist = errorsmod.Register(ModuleName, 6001, "repayment adaptor signatures already exist")
 	ErrRepaymentAdaptorSigsDoNotExist   = errorsmod.Register(ModuleName, 6002, "repayment adaptor signatures do not exist")

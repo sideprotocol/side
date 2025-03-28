@@ -26,7 +26,7 @@ func (m msgServer) SubmitPrice(goCtx context.Context, msg *types.MsgSubmitPrice)
 	m.dlcKeeper.SetPrice(ctx, "BTC-USD", msg.Price)
 	m.liquidationKeeper.SetPrice(ctx, "BTC-USD", msg.Price)
 
-	return nil, nil
+	return &types.MsgSubmitPriceResponse{}, nil
 }
 
 // UpdateParams updates the module params.
