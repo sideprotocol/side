@@ -417,12 +417,6 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 		return nil, types.ErrInvalidLoanStatus
 	}
 
-	if len(loan.DepositTxs) == 0 {
-		return nil, types.ErrDepositTxDoesNotExist
-	}
-
-	depositTxId := loan.DepositTxs[0]
-
 	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Tx)), true)
 
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
@@ -437,12 +431,17 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 		return nil, err
 	}
 
-	for i, signature := range msg.Signatures {
-		if p.UnsignedTx.TxIn[i].PreviousOutPoint.Hash.String() != depositTxId {
-			return nil, errorsmod.Wrap(types.ErrDepositTxDoesNotExist, "mismatched deposit tx hash")
+	for i, ti := range p.UnsignedTx.TxIn {
+		prevTxHash := ti.PreviousOutPoint.Hash.String()
+		if !m.HasDepositLog(ctx, prevTxHash) {
+			return nil, types.ErrDepositTxDoesNotExist
 		}
 
-		sigBytes, _ := hex.DecodeString(signature)
+		if !m.GetDepositLog(ctx, prevTxHash).Verified {
+			return nil, errorsmod.Wrap(types.ErrInvalidDepositTx, "deposit tx not verified")
+		}
+
+		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
 
 		sigHash, err := types.CalcTapscriptSigHash(p, i, types.DefaultSigHashType, script)
 		if err != nil {
