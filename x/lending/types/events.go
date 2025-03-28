@@ -4,6 +4,7 @@ package types
 const (
 	EventTypeApply                                 = "apply"
 	EventTypeApprove                               = "approve"
+	EventTypeReject                                = "reject"
 	EventTypeCancel                                = "cancel"
 	EventTypeRepay                                 = "repay"
 	EventTypeDefault                               = "default"

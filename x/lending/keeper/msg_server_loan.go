@@ -166,37 +166,59 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	m.SetDepositLog(ctx, depositLog)
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
+	loan.CollateralAmount = collateralAmount
+	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
+
+	var errRejected error
+
 	defer func() {
-		if err != nil {
-			m.Logger(ctx).Info("loan rejected", "reason", err)
+		if errRejected != nil {
+			m.Logger(ctx).Info("loan rejected", "reason", errRejected)
 
 			loan.Status = types.LoanStatus_Rejected
 			m.SetLoan(ctx, loan)
+
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeReject,
+					sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
+					sdk.NewAttribute(types.AttributeKeyDepositTxHash, depositTxid),
+				),
+			)
 		}
 	}()
 
+	if ctx.BlockTime().Unix() >= loan.MaturityTime {
+		errRejected = types.ErrMaturityTimeReached
+		return nil, nil
+	}
+
+	if m.GetPool(ctx, loan.PoolId).AvailableAmount.LT(loan.BorrowAmount.Amount) {
+		errRejected = types.ErrInsufficientLiquidity
+		return nil, nil
+	}
+
 	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
 	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
-		err = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
+		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 		return nil, nil
 	}
 
 	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	if liquidationEvent.HasTriggered {
-		err = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event has triggered")
+		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event has triggered")
 		return nil, nil
 	}
 
 	defaultLiquidationEvent := m.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
 
-	err = types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures)
-	if err != nil {
-		return nil, nil
+	if err := types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+		return nil, err
 	}
 
 	currentPrice, err := m.GetPrice(ctx, "")
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	// TODO
@@ -205,14 +227,12 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	// check LTV
 	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
-		err = types.ErrInsufficientCollateral
+		errRejected = types.ErrInsufficientCollateral
 		return nil, nil
 	}
 
-	loan.CollateralAmount = collateralAmount
 	loan.LiquidationPrice = liquidationPrice
 	loan.LiquidationEventId = liquidationEvent.Id
-	loan.DepositTxs = append(loan.DepositTxs, depositTxid)
 
 	m.SetLoan(ctx, loan)
 
@@ -243,38 +263,64 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	// 	return nil, types.ErrInvalidProof
 	// }
 
-	var err error
+	depositLog.Verified = true
+	m.SetDepositLog(ctx, depositLog)
+
+	var errRejected error
 
 	defer func() {
-		if err != nil {
-			m.Logger(ctx).Info("loan rejected", "reason", err)
+		if errRejected != nil {
+			m.Logger(ctx).Info("loan rejected", "reason", errRejected)
 
 			loan.Status = types.LoanStatus_Rejected
 			m.SetLoan(ctx, loan)
+
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeReject,
+					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+					sdk.NewAttribute(types.AttributeKeyDepositTxHash, msg.DepositTxId),
+				),
+			)
 		}
 	}()
 
-	currentPrice, err := m.GetPrice(ctx, "BTC-USD")
-	if err != nil {
+	if ctx.BlockTime().Unix() >= loan.MaturityTime {
+		errRejected = types.ErrMaturityTimeReached
 		return nil, nil
 	}
 
-	collateralDecimal := sdkmath.NewIntWithDecimal(1, 8)
-	borrowedDecimal := sdkmath.NewIntWithDecimal(1, 6)
+	currentPrice, err := m.GetPrice(ctx, "BTC-USD")
+	if err != nil {
+		return nil, err
+	}
 
-	// check LTV
-	if loan.CollateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(sdkmath.NewInt(int64(m.GetPool(ctx, loan.PoolId).Config.MaxLtv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
-		err = types.ErrInsufficientCollateral
+	// check if liquidation price reached
+	if currentPrice.LTE(loan.LiquidationPrice) {
+		errRejected = types.ErrLiquidationPriceReached
+		return nil, nil
+	}
+
+	if m.GetPool(ctx, loan.PoolId).AvailableAmount.LT(loan.BorrowAmount.Amount) {
+		errRejected = types.ErrInsufficientLiquidity
 		return nil, nil
 	}
 
 	amount := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Int64()-loan.OriginationFee.Int64())
-	if err = m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(loan.Borrower), sdk.NewCoins(amount)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(loan.Borrower), sdk.NewCoins(amount)); err != nil {
+		errRejected = err
 		return nil, nil
 	}
 
 	originationFee := sdk.NewInt64Coin(loan.BorrowAmount.Denom, loan.OriginationFee.Int64())
-	if err = m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.OriginationFeeCollector(ctx)), sdk.NewCoins(originationFee)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(m.OriginationFeeCollector(ctx)), sdk.NewCoins(originationFee)); err != nil {
+		errRejected = err
+		return nil, nil
+	}
+
+	// initiate signing request for repayment cet adaptor signatures from DCM
+	if err := m.InitiateRepaymentCetSigningRequest(ctx, loan.VaultAddress); err != nil {
+		errRejected = err
 		return nil, nil
 	}
 
@@ -283,11 +329,6 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 
 	loan.Status = types.LoanStatus_Open
 	m.SetLoan(ctx, loan)
-
-	// initiate signing request for repayment cet adaptor signatures from DCM
-	if err = m.InitiateRepaymentCetSigningRequest(ctx, loan.VaultAddress); err != nil {
-		return nil, nil
-	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(

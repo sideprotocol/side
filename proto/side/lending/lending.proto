@@ -178,10 +178,11 @@ message DLCMeta {
 }
 
 message DepositLog {
-    string txid = 2;
-    string vault_address = 1;
+    string txid = 1;
+    string vault_address = 2;
     string deposit_tx = 3;
-} 
+    bool verified = 4;
+}
 
 message Repayment {
     string loan_id = 1;
