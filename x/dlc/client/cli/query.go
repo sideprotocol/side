@@ -37,6 +37,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryEvent())
 	cmd.AddCommand(CmdQueryEvents())
 	cmd.AddCommand(CmdQueryAttestation())
+	cmd.AddCommand(CmdQueryAttestationByEvent())
 	cmd.AddCommand(CmdQueryAttestations())
 	cmd.AddCommand(CmdQueryPrice())
 	// this line is used by starport scaffolding # 1
@@ -289,6 +290,38 @@ func CmdQueryAttestation() *cobra.Command {
 			}
 
 			res, err := queryClient.Attestation(cmd.Context(), &types.QueryAttestationRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryAttestationByEvent() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "attestation-by-event [event id]",
+		Short: "Query the attestation by the given event id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			eventId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.AttestationByEvent(cmd.Context(), &types.QueryAttestationByEventRequest{EventId: eventId})
 			if err != nil {
 				return err
 			}
