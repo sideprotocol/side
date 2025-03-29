@@ -136,10 +136,12 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 				continue
 			}
 
+			eventSignature, _ := hex.DecodeString(attestation.Signature)
+			adaptorSecret := eventSignature[32:]
+
 			// decrypt the adaptor signatures
 			for _, adaptorSignature := range dlcMeta.LiquidationCet.BorrowerAdaptorSignatures {
 				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
-				adaptorSecret, _ := hex.DecodeString(attestation.Signature)
 				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
 
 				// update the adapted signatures
@@ -192,10 +194,12 @@ func handleDefaultedLoans(ctx sdk.Context, k keeper.Keeper) {
 				continue
 			}
 
+			eventSignature, _ := hex.DecodeString(attestation.Signature)
+			adaptorSecret := eventSignature[32:]
+
 			// decrypt the adaptor signatures
 			for _, adaptorSignature := range dlcMeta.DefaultLiquidationCet.BorrowerAdaptorSignatures {
 				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
-				adaptorSecret, _ := hex.DecodeString(attestation.Signature)
 				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
 
 				// update the adapted signatures
@@ -258,10 +262,12 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 				continue
 			}
 
+			eventSignature, _ := hex.DecodeString(attestation.Signature)
+			adaptorSecret := eventSignature[32:]
+
 			// decrypt the DCM adaptor signatures
 			for _, adaptorSignature := range dlcMeta.RepaymentCet.DCMAdaptorSignatures {
 				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
-				adaptorSecret, _ := hex.DecodeString(attestation.Signature)
 				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
 
 				// update the adapted signatures
