@@ -194,7 +194,7 @@ message Cancellation {
     string loan_id = 1;
     string txid = 2;
     string tx = 3;
-    repeated string signatures = 4; 
-    repeated string dca_signatures = 5;
+    repeated string signatures = 4;
+    repeated string dcm_signatures = 5 [(gogoproto.customname) = "DCMSignatures"];
     google.protobuf.Timestamp create_at = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }

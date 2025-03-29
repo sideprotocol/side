@@ -529,7 +529,7 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 	}
 
 	cancellation := m.GetCancellation(ctx, msg.LoanId)
-	if len(cancellation.DcaSignatures) != 0 {
+	if len(cancellation.DCMSignatures) != 0 {
 		return nil, types.ErrDCMSignaturesAlreadyExist
 	}
 
@@ -586,7 +586,7 @@ func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *type
 	}
 
 	cancellation.Tx = serializedTx
-	cancellation.DcaSignatures = msg.Signatures
+	cancellation.DCMSignatures = msg.Signatures
 	m.SetCancellation(ctx, cancellation)
 
 	ctx.EventManager().EmitEvent(

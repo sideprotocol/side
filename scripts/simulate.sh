@@ -48,7 +48,7 @@ fi
 AVAILABLE_ORACLE=$($BINARY q dlc oracles 3 --output json | jq -r ".oracles | length")
 
 if (($AVAILABLE_ORACLE > 0)); then
-	echo "Create a new Oracle and Agency? [y/n]"
+	echo "Create a new Oracle and DCM? [y/n]"
 	read -r overwrite
 else
 	overwrite="y"
@@ -83,10 +83,10 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
   echo $ORACLE_PROPOSAL > ../build/oracle.json
   cat ../build/oracle.json
 
-  DCA_PROPOSAL="{
+  DCM_PROPOSAL="{
   \"messages\": [
   {
-    \"@type\": \"/side.dlc.MsgCreateAgency\",
+    \"@type\": \"/side.dlc.MsgCreateDCM\",
     \"authority\": \"side10d07y265gmmuvt4z0w9aw880jnsr700jwrwlg5\",
     \"participants\": [ ${PARTICIPANTS%?} ],
     \"threshold\": $T
@@ -94,16 +94,16 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
   ],
   \"metadata\": \"\",
   \"deposit\": \"10000000uside\",
-  \"title\": \"Initial dkg for agency\",
-  \"summary\": \"Initiate DKG for agency\",
+  \"title\": \"Initial dkg for DCM\",
+  \"summary\": \"Initiate DKG for DCM\",
   \"expedited\": false
   }"
 
   $BINARY tx gov submit-proposal ../build/oracle.json --from validator --fees 1000uside --chain-id $CHAINID --keyring-backend $KEYRING -y
   sleep 6
-  echo $DCA_PROPOSAL > ../build/dca.json
-  cat ../build/dca.json
-  $BINARY tx gov submit-proposal ../build/dca.json --from validator --fees 1000uside --chain-id $CHAINID --keyring-backend $KEYRING -y
+  echo $DCM_PROPOSAL > ../build/dcm.json
+  cat ../build/dcm.json
+  $BINARY tx gov submit-proposal ../build/dcm.json --from validator --fees 1000uside --chain-id $CHAINID --keyring-backend $KEYRING -y
 
   sleep 6
 

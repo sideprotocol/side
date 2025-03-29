@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/cosmos/btcutil/bech32"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sideprotocol/side/bitcoin"
 )
 

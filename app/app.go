@@ -116,13 +116,13 @@ import (
 	solomachine "github.com/cosmos/ibc-go/v8/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/sideprotocol/side/bitcoin"
 	"github.com/spf13/cast"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
+	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/docs"
 	btcbridgecodec "github.com/sideprotocol/side/x/btcbridge/codec"
 	btcbridgekeeper "github.com/sideprotocol/side/x/btcbridge/keeper"
@@ -144,7 +144,6 @@ import (
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
-
 	btccodec "github.com/sideprotocol/side/crypto/codec"
 )
 

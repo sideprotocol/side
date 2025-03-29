@@ -75,11 +75,11 @@ func CreateTaprootAddress(internalKey *secp256k1.PublicKey, branches [][]byte, p
 	return address.EncodeAddress(), nil
 }
 
-func CreateVaultAddress(borrowerPubkey string, dcaPubkey string, muturityTime int64, finalTimeout int64) (string, error) {
+func CreateVaultAddress(borrowerPubkey string, dcmPubkey string, muturityTime int64, finalTimeout int64) (string, error) {
 	params := bitcoin.Network
 
 	// multisig script for liquidation and repayment
-	multisigScript, err := CreateMultisigScript([]string{borrowerPubkey, dcaPubkey})
+	multisigScript, err := CreateMultisigScript([]string{borrowerPubkey, dcmPubkey})
 	if err != nil {
 		return "", err
 	}
