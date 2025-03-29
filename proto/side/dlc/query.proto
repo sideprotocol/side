@@ -33,7 +33,7 @@ service Query {
 
     // AttestationByEvent queries the attestation by the given event id.
     rpc AttestationByEvent(QueryAttestationByEventRequest) returns (QueryAttestationByEventResponse) {
-        option (google.api.http).get = "/side/dlc/attestations/event";
+        option (google.api.http).get = "/side/dlc/attestation/event";
     }
 
     // Attestations queries all attestations.

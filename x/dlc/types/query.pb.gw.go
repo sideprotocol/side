@@ -1116,7 +1116,7 @@ var (
 
 	pattern_Query_Attestation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"side", "dlc", "attestations", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AttestationByEvent_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"side", "dlc", "attestations", "event"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AttestationByEvent_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"side", "dlc", "attestation", "event"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_Attestations_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"side", "dlc", "attestations"}, "", runtime.AssumeColonVerbOpt(false)))
 
