@@ -38,7 +38,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 		var liquidationCet string
 		var triggeredEventId uint64
 
-		currentPrice, err := k.GetPrice(ctx, "BTC-USD")
+		currentPrice, err := k.GetPrice(ctx, "BTCUSD")
 		if err != nil {
 			k.Logger(ctx).Info("failed to get price", "err", err)
 		}
@@ -66,7 +66,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			)
 		} else if !currentPrice.IsZero() {
 			// check if the loan is to be liquidated
-			if currentPrice.LTE(loan.LiquidationPrice) {
+			if currentPrice.LTE(loan.LiquidationPrice.ToLegacyDec()) {
 				loan.Status = types.LoanStatus_Liquidated
 
 				liquidationCet = dlcMeta.LiquidationCet.Tx
@@ -95,7 +95,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				DCM:                        loan.DCM,
 				CollateralAmount:           sdk.NewCoin("sat", loan.CollateralAmount),
 				DebtAmount:                 sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(loan.Interest)),
-				LiquidatedPrice:            currentPrice.Int64(),
+				LiquidatedPrice:            currentPrice.TruncateInt64(),
 				LiquidatedTime:             ctx.BlockTime(),
 				LiquidatedCollateralAmount: sdk.NewCoin("sat", sdkmath.ZeroInt()),
 				LiquidatedDebtAmount:       sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, sdkmath.ZeroInt()),

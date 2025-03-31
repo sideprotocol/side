@@ -68,6 +68,11 @@ service Query {
     rpc CurrentInterest(QueryCurrentInterestRequest) returns (QueryCurrentInterestResponse) {
         option (google.api.http).get = "/side/lending/loan/current_interest";
     }
+
+    // Price queries the current price by the given pair.
+    rpc Price(QueryPriceRequest) returns (QueryPriceResponse) {
+        option (google.api.http).get = "/side/lending/price";
+    }
 }
 
 // QueryPoolRequest is request type for the Query/Pool RPC method.
@@ -215,4 +220,14 @@ message QueryCurrentInterestRequest {
 
 message QueryCurrentInterestResponse {
     cosmos.base.v1beta1.Coin interest = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryPriceRequest is request type for the Query/Price RPC method.
+message QueryPriceRequest {
+    string pair = 1;
+}
+
+// QueryPriceResponse is response type for the Query/Price RPC method.
+message QueryPriceResponse {
+    string price = 1;
 }

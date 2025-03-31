@@ -24,8 +24,8 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched debt amount denom")
 	}
 
-	currentPrice := k.GetPrice(ctx, "BTC-USD")
-	if currentPrice.IsZero() {
+	currentPrice, err := k.GetPrice(ctx, "BTCUSD")
+	if err != nil {
 		return nil, types.ErrInvalidPrice
 	}
 

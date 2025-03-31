@@ -386,7 +386,7 @@ func CmdSubmitLiquidationSignatures() *cobra.Command {
 func CmdSubmitPrice() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "submit-price [price]",
-		Short: "Submit btc-usd price for testing",
+		Short: "Submit BTCUSD price for testing",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)

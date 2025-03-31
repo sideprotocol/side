@@ -14,6 +14,8 @@ type Keeper struct {
 	storeKey storetypes.StoreKey
 	memKey   storetypes.StoreKey
 
+	oracleKeeper types.OracleKeeper
+
 	authority string
 }
 
@@ -21,13 +23,15 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey,
 	memKey storetypes.StoreKey,
+	oracleKeeper types.OracleKeeper,
 	authority string,
 ) Keeper {
 	return Keeper{
-		cdc:       cdc,
-		storeKey:  storeKey,
-		memKey:    memKey,
-		authority: authority,
+		cdc:          cdc,
+		storeKey:     storeKey,
+		memKey:       memKey,
+		oracleKeeper: oracleKeeper,
+		authority:    authority,
 	}
 }
 

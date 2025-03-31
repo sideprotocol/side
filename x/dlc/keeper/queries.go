@@ -134,13 +134,3 @@ func (k Keeper) Attestations(goCtx context.Context, req *types.QueryAttestations
 
 	return &types.QueryAttestationsResponse{Attestations: k.GetAttestations(ctx)}, nil
 }
-
-func (k Keeper) Price(goCtx context.Context, req *types.QueryPriceRequest) (*types.QueryPriceResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	return &types.QueryPriceResponse{Price: k.GetPrice(ctx, req.Symbol).Uint64()}, nil
-}

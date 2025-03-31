@@ -281,6 +281,21 @@ func (k Keeper) CurrentInterest(goCtx context.Context, req *types.QueryCurrentIn
 	}, nil
 }
 
+func (k Keeper) Price(goCtx context.Context, req *types.QueryPriceRequest) (*types.QueryPriceResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	price, err := k.GetPrice(ctx, req.Pair)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryPriceResponse{Price: price.String()}, nil
+}
+
 // Params implements types.QueryServer.
 func (k Keeper) Params(goCtx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	if req == nil {

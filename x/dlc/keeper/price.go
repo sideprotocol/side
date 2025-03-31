@@ -8,21 +8,25 @@ import (
 )
 
 // GetPrice gets the current price for the specified pair
-func (k Keeper) GetPrice(ctx sdk.Context, pair string) sdkmath.Int {
+func (k Keeper) GetPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.PriceKey(pair))
-	price, ok := sdkmath.NewIntFromString(string(bz))
-	if !ok {
-		price = sdkmath.ZeroInt()
+	if bz == nil {
+		return k.oracleKeeper.GetPrice(ctx, pair)
 	}
 
-	return price
+	return sdkmath.LegacyNewDecFromStr(string(bz))
 }
 
 // SetPrice sets the price for the specified pair
 func (k Keeper) SetPrice(ctx sdk.Context, pair string, price string) {
 	store := ctx.KVStore(k.storeKey)
+
+	if sdkmath.LegacyMustNewDecFromStr(price).IsZero() {
+		store.Delete(types.PriceKey(pair))
+		return
+	}
 
 	store.Set(types.PriceKey(pair), []byte(price))
 }

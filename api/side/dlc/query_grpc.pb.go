@@ -25,7 +25,6 @@ const (
 	Query_Attestation_FullMethodName        = "/side.dlc.Query/Attestation"
 	Query_AttestationByEvent_FullMethodName = "/side.dlc.Query/AttestationByEvent"
 	Query_Attestations_FullMethodName       = "/side.dlc.Query/Attestations"
-	Query_Price_FullMethodName              = "/side.dlc.Query/Price"
 	Query_Nonce_FullMethodName              = "/side.dlc.Query/Nonce"
 	Query_Nonces_FullMethodName             = "/side.dlc.Query/Nonces"
 	Query_CountNonces_FullMethodName        = "/side.dlc.Query/CountNonces"
@@ -49,8 +48,6 @@ type QueryClient interface {
 	AttestationByEvent(ctx context.Context, in *QueryAttestationByEventRequest, opts ...grpc.CallOption) (*QueryAttestationByEventResponse, error)
 	// Attestations queries all attestations.
 	Attestations(ctx context.Context, in *QueryAttestationsRequest, opts ...grpc.CallOption) (*QueryAttestationsResponse, error)
-	// Price queries the current price by the given symbol.
-	Price(ctx context.Context, in *QueryPriceRequest, opts ...grpc.CallOption) (*QueryPriceResponse, error)
 	// Nonce queries the nonce by the given oracle id and index
 	Nonce(ctx context.Context, in *QueryNonceRequest, opts ...grpc.CallOption) (*QueryNonceResponse, error)
 	// Nonces queries all nonces of the given oracle
@@ -125,15 +122,6 @@ func (c *queryClient) Attestations(ctx context.Context, in *QueryAttestationsReq
 	return out, nil
 }
 
-func (c *queryClient) Price(ctx context.Context, in *QueryPriceRequest, opts ...grpc.CallOption) (*QueryPriceResponse, error) {
-	out := new(QueryPriceResponse)
-	err := c.cc.Invoke(ctx, Query_Price_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *queryClient) Nonce(ctx context.Context, in *QueryNonceRequest, opts ...grpc.CallOption) (*QueryNonceResponse, error) {
 	out := new(QueryNonceResponse)
 	err := c.cc.Invoke(ctx, Query_Nonce_FullMethodName, in, out, opts...)
@@ -195,8 +183,6 @@ type QueryServer interface {
 	AttestationByEvent(context.Context, *QueryAttestationByEventRequest) (*QueryAttestationByEventResponse, error)
 	// Attestations queries all attestations.
 	Attestations(context.Context, *QueryAttestationsRequest) (*QueryAttestationsResponse, error)
-	// Price queries the current price by the given symbol.
-	Price(context.Context, *QueryPriceRequest) (*QueryPriceResponse, error)
 	// Nonce queries the nonce by the given oracle id and index
 	Nonce(context.Context, *QueryNonceRequest) (*QueryNonceResponse, error)
 	// Nonces queries all nonces of the given oracle
@@ -231,9 +217,6 @@ func (UnimplementedQueryServer) AttestationByEvent(context.Context, *QueryAttest
 }
 func (UnimplementedQueryServer) Attestations(context.Context, *QueryAttestationsRequest) (*QueryAttestationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Attestations not implemented")
-}
-func (UnimplementedQueryServer) Price(context.Context, *QueryPriceRequest) (*QueryPriceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Price not implemented")
 }
 func (UnimplementedQueryServer) Nonce(context.Context, *QueryNonceRequest) (*QueryNonceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Nonce not implemented")
@@ -371,24 +354,6 @@ func _Query_Attestations_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Price_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryPriceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Price(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_Price_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Price(ctx, req.(*QueryPriceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Query_Nonce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryNonceRequest)
 	if err := dec(in); err != nil {
@@ -509,10 +474,6 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Attestations",
 			Handler:    _Query_Attestations_Handler,
-		},
-		{
-			MethodName: "Price",
-			Handler:    _Query_Price_Handler,
 		},
 		{
 			MethodName: "Nonce",

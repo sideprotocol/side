@@ -12,25 +12,30 @@ import (
 func (k Keeper) SetPrice(ctx sdk.Context, price string) {
 	store := ctx.KVStore(k.storeKey)
 
+	if sdkmath.LegacyMustNewDecFromStr(price).IsZero() {
+		store.Delete(types.PriceKey)
+		return
+	}
+
 	store.Set(types.PriceKey, []byte(price))
 }
 
-func (k Keeper) GetPrice(ctx sdk.Context, pair string) (sdkmath.Int, error) {
-	if k.oracleKeeper == nil {
-		return k.GetLocalPrice(ctx, pair)
+func (k Keeper) GetPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error) {
+	price, err := k.GetLocalPrice(ctx, pair)
+	if err == nil {
+		return price, nil
 	}
 
 	return k.oracleKeeper.GetPrice(ctx, pair)
 }
 
-func (k Keeper) GetLocalPrice(ctx sdk.Context, pair string) (sdkmath.Int, error) {
+func (k Keeper) GetLocalPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.PriceKey)
 	if bz == nil {
-		return sdkmath.Int{}, fmt.Errorf("no price set")
+		return sdkmath.LegacyDec{}, fmt.Errorf("no price set")
 	}
 
-	price, _ := sdkmath.NewIntFromString(string(bz))
-	return price, nil
+	return sdkmath.LegacyNewDecFromStr(string(bz))
 }

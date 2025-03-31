@@ -23,8 +23,8 @@ func (m *MsgSubmitPrice) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	_, ok := sdkmath.NewIntFromString(m.Price)
-	if !ok {
+	_, err := sdkmath.LegacyNewDecFromStr(m.Price)
+	if err != nil {
 		return fmt.Errorf("invalid price")
 	}
 

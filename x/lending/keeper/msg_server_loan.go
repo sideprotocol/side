@@ -219,7 +219,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, err
 	}
 
-	currentPrice, err := m.GetPrice(ctx, "")
+	currentPrice, err := m.GetPrice(ctx, "BTCUSD")
 	if err != nil {
 		return nil, err
 	}
@@ -229,7 +229,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	borrowedDecimal := sdkmath.NewInt(1000000)
 
 	// check LTV
-	if collateralAmount.Mul(currentPrice).Mul(borrowedDecimal).Quo(collateralDecimal).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).Quo(types.Percent).LT(loan.BorrowAmount.Amount) {
+	if collateralAmount.Mul(borrowedDecimal).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).ToLegacyDec().Mul(currentPrice).Quo(collateralDecimal.Mul(types.Percent).ToLegacyDec()).TruncateInt().LT(loan.BorrowAmount.Amount) {
 		errRejected = types.ErrInsufficientCollateral
 		return nil, nil
 	}
@@ -344,13 +344,13 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		liquidationPrice = loan.LiquidationPrice
 	}
 
-	currentPrice, err := m.GetPrice(ctx, "BTC-USD")
+	currentPrice, err := m.GetPrice(ctx, "BTCUSD")
 	if err != nil {
 		return nil, err
 	}
 
 	// check if liquidation price reached
-	if currentPrice.LTE(liquidationPrice) {
+	if currentPrice.LTE(liquidationPrice.ToLegacyDec()) {
 		errRejected = types.ErrLiquidationPriceReached
 		return nil, nil
 	}

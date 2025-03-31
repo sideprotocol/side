@@ -108,14 +108,20 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 	selectedOracleId := ctx.BlockHeight() % int64(len(oracles))
 	oracle := oracles[selectedOracleId]
 
+	// get current price
+	currentPrice, err := k.GetPrice(ctx, "BTCUSD")
+	if err != nil {
+		k.Logger(ctx).Info("failed to get price", "err", err)
+		return
+	}
+
 	// get price interval and nonce queue size
 	priceInterval := int64(k.PriceInterval(ctx, "BTC-USD"))
 	nonceQueueSize := int64(k.PriceEventNonceQueueSize(ctx))
 
 	// check if price event nonces need to be generated
-	currentPrice := k.GetPrice(ctx, "BTC-USD")
 	currentEventPrice := k.GetCurrentEventPrice(ctx, "BTC-USD")
-	if currentEventPrice >= currentPrice.Int64()+nonceQueueSize*priceInterval && k.GetTriggeredPriceEventQueueCount(ctx) == 0 {
+	if currentEventPrice >= currentPrice.TruncateInt64()+nonceQueueSize*priceInterval && k.GetTriggeredPriceEventQueueCount(ctx) == 0 {
 		return
 	}
 

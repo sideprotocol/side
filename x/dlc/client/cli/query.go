@@ -39,7 +39,6 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryAttestation())
 	cmd.AddCommand(CmdQueryAttestationByEvent())
 	cmd.AddCommand(CmdQueryAttestations())
-	cmd.AddCommand(CmdQueryPrice())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -349,33 +348,6 @@ func CmdQueryAttestations() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.Attestations(cmd.Context(), &types.QueryAttestationsRequest{})
-			if err != nil {
-				return err
-			}
-
-			return clientCtx.PrintProto(res)
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdQueryPrice() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "price [symbol]",
-		Short: "Query the current price of the given symbol",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-
-			res, err := queryClient.Price(cmd.Context(), &types.QueryPriceRequest{Symbol: args[0]})
 			if err != nil {
 				return err
 			}

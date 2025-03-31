@@ -41,11 +41,6 @@ service Query {
         option (google.api.http).get = "/side/dlc/attestations";
     }
 
-    // Price queries the current price by the given symbol.
-    rpc Price(QueryPriceRequest) returns (QueryPriceResponse) {
-        option (google.api.http).get = "/side/dlc/price";
-    }
-
     // Nonce queries the nonce by the given oracle id and index
     rpc Nonce(QueryNonceRequest) returns (QueryNonceResponse) {
         option (google.api.http).get = "/side/dlc/nonces/{oracle_id}/{index}";
@@ -164,16 +159,6 @@ message QueryEventsRequest {
 message QueryEventsResponse {
     repeated DLCEvent events = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-// QueryPriceRequest is request type for the Query/Price RPC method.
-message QueryPriceRequest {
-    string symbol = 1;
-}
-
-// QueryPriceResponse is response type for the Query/Price RPC method.
-message QueryPriceResponse {
-    uint64 price = 1;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.

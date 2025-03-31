@@ -631,6 +631,13 @@ func New(
 		),
 	)
 
+	app.OracleKeeper = oraclekeeper.NewKeeper(
+		appCodec,
+		keys[oracletypes.StoreKey],
+		keys[oracletypes.MemStoreKey],
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+
 	app.BtcBridgeKeeper = *btcbridgekeeper.NewKeeper(
 		appCodec,
 		keys[btcbridgetypes.StoreKey],
@@ -640,19 +647,20 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
+	app.DLCKeeper = dlckeeper.NewKeeper(
+		appCodec,
+		keys[dlctypes.StoreKey],
+		keys[dlctypes.MemStoreKey],
+		app.OracleKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+
 	app.LiquidationKeeper = liquidationkeeper.NewKeeper(
 		appCodec,
 		keys[liquidationtypes.StoreKey],
 		keys[liquidationtypes.MemStoreKey],
 		app.BankKeeper,
-		nil,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-	)
-
-	app.DLCKeeper = dlckeeper.NewKeeper(
-		appCodec,
-		keys[dlctypes.StoreKey],
-		keys[dlctypes.MemStoreKey],
+		app.OracleKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
@@ -663,17 +671,10 @@ func New(
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.MintKeeper,
-		nil,
+		app.OracleKeeper,
 		app.LiquidationKeeper,
 		app.DLCKeeper,
 		app.BtcBridgeKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-	)
-
-	app.OracleKeeper = oraclekeeper.NewKeeper(
-		appCodec,
-		keys[oracletypes.StoreKey],
-		keys[oracletypes.MemStoreKey],
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 

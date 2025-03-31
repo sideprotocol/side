@@ -43,7 +43,7 @@ type BankKeeper interface {
 
 // OracleKeeper defines the expected oracle keeper interface
 type OracleKeeper interface {
-	GetPrice(ctx sdk.Context, pair string) (sdkmath.Int, error)
+	GetPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error)
 }
 
 // LiquidationKeeper defines the expected liquidation keeper interface
