@@ -8,6 +8,9 @@ import (
 )
 
 var (
+	// default minimum liquidation factor
+	DefaultMinLiquidationFactor = uint32(20) // 2%
+
 	// default liquidation bonus factor
 	DefaultLiquidationBonusFactor = uint32(50) // 5%
 
@@ -18,6 +21,7 @@ var (
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
+		MinLiquidationFactor:            DefaultMinLiquidationFactor,
 		LiquidationBonusFactor:          DefaultLiquidationBonusFactor,
 		ProtocolLiquidationFeeFactor:    DefaultProtocolLiquidationFeeFactor,
 		ProtocolLiquidationFeeCollector: authtypes.NewModuleAddress(govtypes.ModuleName).String(),
@@ -31,6 +35,10 @@ func DefaultParams() Params {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
+	if p.MinLiquidationFactor == 0 || p.MinLiquidationFactor >= 1000 {
+		return errorsmod.Wrap(ErrInvalidParams, "invalid minimum liquidation factor")
+	}
+
 	if p.LiquidationBonusFactor == 0 || p.LiquidationBonusFactor >= 1000 {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid liquidation bonus factor")
 	}

@@ -25,10 +25,10 @@ const (
 )
 
 // BuildSettlementTransaction builds the settlement tx for the given liquidation and records
-func BuildSettlementTransaction(liquidation *Liquidation, records []*LiquidationRecord, protocolFeeCollector string, feeRate int64) (string, *chainhash.Hash, []string, error) {
+func BuildSettlementTransaction(liquidation *Liquidation, records []*LiquidationRecord, protocolFeeCollector string, feeRate int64) (string, *chainhash.Hash, []string, int64, error) {
 	liquidationCet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidation.LiquidationCet)), true)
 	if err != nil {
-		return "", nil, nil, err
+		return "", nil, nil, 0, err
 	}
 
 	txOut := liquidationCet.UnsignedTx.TxOut[0]
@@ -40,14 +40,14 @@ func BuildSettlementTransaction(liquidation *Liquidation, records []*Liquidation
 		PubKeyScript: txOut.PkScript,
 	}
 
-	settlementTxPsbt, err := BuildBatchTransferPsbt([]*btcbridgetypes.UTXO{utxo}, records, protocolFeeCollector, liquidation.ProtocolLiquidationFee.Amount.Int64(), feeRate, liquidation.Debtor)
+	settlementTxPsbt, changeAmount, err := BuildBatchTransferPsbt([]*btcbridgetypes.UTXO{utxo}, records, protocolFeeCollector, liquidation.ProtocolLiquidationFee.Amount.Int64(), feeRate, liquidation.Debtor)
 	if err != nil {
-		return "", nil, nil, err
+		return "", nil, nil, 0, err
 	}
 
 	settlementTxPsbtB64, err := settlementTxPsbt.B64Encode()
 	if err != nil {
-		return "", nil, nil, err
+		return "", nil, nil, 0, err
 	}
 
 	sigHashes := make([]string, 0)
@@ -55,7 +55,7 @@ func BuildSettlementTransaction(liquidation *Liquidation, records []*Liquidation
 	for i := range settlementTxPsbt.Inputs {
 		sigHash, err := CalcTaprootSigHash(settlementTxPsbt, i, DefaultSigHashType)
 		if err != nil {
-			return "", nil, nil, err
+			return "", nil, nil, 0, err
 		}
 
 		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
@@ -63,11 +63,11 @@ func BuildSettlementTransaction(liquidation *Liquidation, records []*Liquidation
 
 	txHash := settlementTxPsbt.UnsignedTx.TxHash()
 
-	return settlementTxPsbtB64, &txHash, sigHashes, nil
+	return settlementTxPsbtB64, &txHash, sigHashes, changeAmount, nil
 }
 
 // BuildBatchTransferPsbt builds the psbt to perform batch transfer to liquidators, protocol fee collector and debtor(if remaining)
-func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*LiquidationRecord, protocolFeeCollector string, protocolFee int64, feeRate int64, change string) (*psbt.Packet, error) {
+func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*LiquidationRecord, protocolFeeCollector string, protocolFee int64, feeRate int64, change string) (*psbt.Packet, int64, error) {
 	chainCfg := bitcoin.Network
 
 	txOuts := make([]*wire.TxOut, 0)
@@ -75,12 +75,12 @@ func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*Liquidation
 	for _, record := range records {
 		address, err := btcutil.DecodeAddress(record.Liquidator, chainCfg)
 		if err != nil {
-			return nil, err
+			return nil, 0, err
 		}
 
 		pkScript, err := txscript.PayToAddrScript(address)
 		if err != nil {
-			return nil, err
+			return nil, 0, err
 		}
 
 		txOuts = append(txOuts, wire.NewTxOut(record.CollateralAmount.Amount.Int64(), pkScript))
@@ -88,12 +88,12 @@ func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*Liquidation
 
 	protocolFeeCollectorAddr, err := btcutil.DecodeAddress(protocolFeeCollector, chainCfg)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	protocolFeeCollectorPkScript, err := txscript.PayToAddrScript(protocolFeeCollectorAddr)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	protocolFeeOut := wire.NewTxOut(protocolFee, protocolFeeCollectorPkScript)
@@ -103,22 +103,22 @@ func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*Liquidation
 
 	changeAddress, err := btcutil.DecodeAddress(change, chainCfg)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	changePkScript, err := txscript.PayToAddrScript(changeAddress)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	unsignedTx, err := BuildUnsignedTransaction(utxos, txOuts, feeRate, changePkScript)
+	unsignedTx, changeAmount, err := BuildUnsignedTransaction(utxos, txOuts, feeRate, changePkScript)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	p, err := psbt.NewFromUnsignedTx(unsignedTx)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	for i, utxo := range utxos {
@@ -126,11 +126,11 @@ func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*Liquidation
 		p.Inputs[i].WitnessUtxo = wire.NewTxOut(int64(utxo.Amount), utxo.PubKeyScript)
 	}
 
-	return p, nil
+	return p, changeAmount, nil
 }
 
 // BuildUnsignedTransaction builds an unsigned tx from the given params
-func BuildUnsignedTransaction(utxos []*btcbridgetypes.UTXO, txOuts []*wire.TxOut, feeRate int64, changePkScript []byte) (*wire.MsgTx, error) {
+func BuildUnsignedTransaction(utxos []*btcbridgetypes.UTXO, txOuts []*wire.TxOut, feeRate int64, changePkScript []byte) (*wire.MsgTx, int64, error) {
 	tx := wire.NewMsgTx(TxVersion)
 
 	inAmount := int64(0)
@@ -150,28 +150,31 @@ func BuildUnsignedTransaction(utxos []*btcbridgetypes.UTXO, txOuts []*wire.TxOut
 
 	fee := btcbridgetypes.GetTxVirtualSize(tx, utxos) * feeRate
 
-	changeValue := inAmount - outAmount - fee
-	if changeValue > 0 {
-		tx.TxOut[len(tx.TxOut)-1].Value = changeValue
+	changeAmount := inAmount - outAmount - fee
+	if changeAmount > 0 {
+		tx.TxOut[len(tx.TxOut)-1].Value = changeAmount
 		if btcbridgetypes.IsDustOut(tx.TxOut[len(tx.TxOut)-1]) {
 			tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
+			changeAmount = 0
 		}
 	} else {
 		tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
 
-		if changeValue < 0 {
+		if changeAmount < 0 {
 			feeWithoutChange := btcbridgetypes.GetTxVirtualSize(tx, utxos) * feeRate
 			if inAmount-outAmount-feeWithoutChange < 0 {
-				return nil, errorsmod.Wrap(ErrFailedToBuildTx, "insufficient utxos")
+				return nil, 0, errorsmod.Wrap(ErrFailedToBuildTx, "insufficient utxos")
 			}
 		}
+
+		changeAmount = 0
 	}
 
 	if err := btcbridgetypes.CheckTransactionWeight(tx, utxos); err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return tx, nil
+	return tx, changeAmount, nil
 }
 
 // AddUTXOToTx adds the given utxo to the specified tx

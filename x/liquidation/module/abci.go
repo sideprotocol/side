@@ -30,12 +30,20 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 		}
 
 		// build settlement tx
-		settlementTx, txHash, sigHashes, err := types.BuildSettlementTransaction(liquidation, k.GetLiquidationRecords(ctx, liquidation.Id), k.ProtocolLiquidationFeeCollector(ctx), 10)
+		settlementTx, txHash, sigHashes, changeAmount, err := types.BuildSettlementTransaction(liquidation, k.GetLiquidationRecords(ctx, liquidation.Id), k.ProtocolLiquidationFeeCollector(ctx), 5)
 		if err != nil {
 			k.Logger(ctx).Info("Failed to build settlement transaction", "liquidation id", liquidation.Id, "err", err)
 
 			continue
 		}
+
+		liquidation.UnliquidatedCollateralAmount = sdk.NewInt64Coin(liquidation.CollateralAmount.Denom, changeAmount)
+		liquidation.SettlementTx = settlementTx
+		liquidation.SettlementTxId = txHash.String()
+		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_SETTLING
+
+		// update liquidation
+		k.SetLiquidation(ctx, liquidation)
 
 		// emit event
 		ctx.EventManager().EmitEvent(
@@ -46,12 +54,5 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 				sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
 			),
 		)
-
-		liquidation.SettlementTx = settlementTx
-		liquidation.SettlementTxId = txHash.String()
-		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_SETTLING
-
-		// update liquidation
-		k.SetLiquidation(ctx, liquidation)
 	}
 }

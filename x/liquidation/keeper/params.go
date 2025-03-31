@@ -4,6 +4,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// MinLiquidationFactor returns the minimum liquidation factor
+func (k Keeper) MinLiquidationFactor(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).MinLiquidationFactor
+}
+
 // LiquidationBonusFactor returns the liquidation bonus factor
 func (k Keeper) LiquidationBonusFactor(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).LiquidationBonusFactor

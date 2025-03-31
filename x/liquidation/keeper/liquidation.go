@@ -24,6 +24,10 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched debt amount denom")
 	}
 
+	if debtAmount.Amount.LT(liquidation.DebtAmount.Amount.Mul(sdkmath.NewInt(int64(k.MinLiquidationFactor(ctx)))).Quo(sdkmath.NewInt(1000))) {
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "liquidation debt amount must be greater or equal than minimum liquidation factor")
+	}
+
 	currentPrice, err := k.GetPrice(ctx, "BTCUSD")
 	if err != nil {
 		return nil, types.ErrInvalidPrice
@@ -75,6 +79,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)
 	liquidation.LiquidationBonusAmount = liquidation.LiquidationBonusAmount.AddAmount(bonusAmount)
 	liquidation.ProtocolLiquidationFee = liquidation.ProtocolLiquidationFee.AddAmount(protocolLiquidationFee)
+	liquidation.UnliquidatedCollateralAmount = liquidation.CollateralAmount.Sub(liquidation.LiquidatedCollateralAmount)
 
 	remainingCollateralAmount = liquidation.CollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
 	if remainingCollateralAmount.Amount.IsZero() || liquidation.LiquidatedDebtAmount.Amount.Equal(liquidation.DebtAmount.Amount) {
