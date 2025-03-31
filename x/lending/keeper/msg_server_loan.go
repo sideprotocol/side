@@ -104,6 +104,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		OriginationFee:            poolConfig.OriginationFee,
 		Interest:                  interest,
 		ProtocolFee:               protocolFee,
+		Term:                      duration,
 		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
 		RepaymentEventId:          repaymentEvent.Id,
 		CreateAt:                  ctx.BlockTime(),

@@ -122,10 +122,7 @@ message Loan {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string term = 12 [
-      (gogoproto.customtype) = "cosmossdk.io/math.Int",
-      (gogoproto.nullable) = false
-    ];
+    int64 term = 12;
     string liquidation_price = 13 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
