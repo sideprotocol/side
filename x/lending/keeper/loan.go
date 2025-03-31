@@ -178,7 +178,7 @@ func (k Keeper) GetCancellation(ctx sdk.Context, loanId string) *types.Cancellat
 
 // GetCurrentInterest gets the current interest of the given loan
 func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
-	currentInterest := types.GetCurrentInterest(loan.Interest, time.Duration(loan.MaturityTime-loan.CreateAt.Unix()), loan.CreateAt.Unix(), ctx.BlockTime().Unix())
+	currentInterest := types.GetCurrentInterest(loan.Interest, time.Duration(loan.Term), loan.CreateAt.Unix(), ctx.BlockTime().Unix())
 
 	return sdk.NewCoin(loan.BorrowAmount.Denom, currentInterest)
 }

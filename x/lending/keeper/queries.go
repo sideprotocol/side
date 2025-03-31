@@ -269,12 +269,7 @@ func (k Keeper) CurrentInterest(goCtx context.Context, req *types.QueryCurrentIn
 		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
 	}
 
-	loan := k.GetLoan(ctx, req.LoanId)
-	if loan.Status != types.LoanStatus_Open {
-		return nil, status.Error(codes.InvalidArgument, "loan not open")
-	}
-
-	currentInterest := k.GetCurrentInterest(ctx, loan)
+	currentInterest := k.GetCurrentInterest(ctx, k.GetLoan(ctx, req.LoanId))
 
 	return &types.QueryCurrentInterestResponse{
 		Interest: currentInterest,
