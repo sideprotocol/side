@@ -38,8 +38,14 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrPoolNotActive
 	}
 
+	poolConfig := m.GetPool(ctx, msg.PoolId).Config
+
 	if msg.BorrowAmount.Denom != pool.Supply.Denom {
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
+	}
+
+	if msg.BorrowAmount.Amount.LT(poolConfig.MinBorrowAmount) {
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrow amount can not be less than min borrow amount")
 	}
 
 	if msg.BorrowAmount.Amount.GT(pool.AvailableAmount) {
@@ -83,14 +89,8 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	repaymentEvent.Outcomes = []string{vault}
 	m.dlcKeeper.SetEvent(ctx, repaymentEvent)
 
-	poolConfig := m.GetPool(ctx, msg.PoolId).Config
-
 	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.BorrowAPR))).Mul(sdkmath.NewInt(int64(msg.MaturityTime - ctx.BlockTime().Unix()))).Quo(sdkmath.NewInt(int64(types.OneYear))).Quo(types.Permille)
 	protocolFee := interest.Mul(sdkmath.NewInt(int64(poolConfig.ReserveFactor))).Quo(types.Permille)
-
-	if msg.BorrowAmount.Amount.LTE(poolConfig.OriginationFee) {
-		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrowed amount must be greater than origination fee")
-	}
 
 	loan := &types.Loan{
 		VaultAddress:              vault,

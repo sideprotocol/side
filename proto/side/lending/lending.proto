@@ -36,17 +36,22 @@ message PoolConfig {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
+    // minimum amount to be borrowed
+    string min_borrow_amount = 6 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
     // origination fee
-    string origination_fee = 6 [
+    string origination_fee = 7 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // maximum ltv percent
-    uint32 max_ltv = 7;
+    uint32 max_ltv = 8;
     // liquidation ltv percent
-    uint32 liquidation_threshold = 8;
+    uint32 liquidation_threshold = 9;
     // indicates if the pool is paused
-    bool paused = 9;
+    bool paused = 10;
 }
 
 message LendingPool {

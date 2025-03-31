@@ -78,15 +78,27 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "debt ceiling can not be nil or negative")
 	}
 
+	if config.MinBorrowAmount.IsNil() || config.MinBorrowAmount.IsZero() {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount must be positive")
+	}
+
+	if config.DebtCeiling.IsPositive() && config.MinBorrowAmount.GT(config.DebtCeiling) {
+		errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount must be less or equal than debt ceiling")
+	}
+
 	if config.OriginationFee.IsNil() || config.OriginationFee.IsNegative() {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee can not be nil or negative")
+	}
+
+	if config.OriginationFee.GTE(config.MinBorrowAmount) {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee must be less than min borrow amount")
 	}
 
 	if config.LiquidationThreshold == 0 || config.LiquidationThreshold >= 100 {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid liquidation threshold")
 	}
 
-	if config.MaxLtv == 0 || config.MaxLtv >= 100 || config.MaxLtv > config.LiquidationThreshold {
+	if config.MaxLtv == 0 || config.MaxLtv >= 100 || config.MaxLtv >= config.LiquidationThreshold {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid max ltv")
 	}
 
