@@ -10,30 +10,42 @@ import (
 )
 
 var (
-	DefaultFinalTimeoutDuration = 30 * 24 * time.Hour // 30 days
+	DefaultMinLoanDuration      = 7 * 24 * time.Hour   // 7 days
+	DefaultMaxLoanDuration      = 365 * 24 * time.Hour // 365 days
+	DefaultFinalTimeoutDuration = 30 * 24 * time.Hour  // 30 days
 )
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
 	return Params{
+		MinLoanDuration:         DefaultMinLoanDuration,
+		MaxLoanDuration:         DefaultMaxLoanDuration,
+		FinalTimeoutDuration:    DefaultFinalTimeoutDuration,
 		OriginationFeeCollector: authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		ProtocolFeeCollector:    authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-		FinalTimeoutDuration:    DefaultFinalTimeoutDuration,
 	}
 }
 
 // Validate validates the set of params
 func (p Params) Validate() error {
+	if p.MinLoanDuration <= 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "minimum loan duration must be greater than 0")
+	}
+
+	if p.MaxLoanDuration < p.MinLoanDuration {
+		return errorsmod.Wrap(ErrInvalidParams, "maximum loan duration can not be less than minimum loan duration")
+	}
+
+	if p.FinalTimeoutDuration <= 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "final timeout duration must be greater than 0")
+	}
+
 	if _, err := sdk.AccAddressFromBech32(p.OriginationFeeCollector); err != nil {
 		return errorsmod.Wrapf(ErrInvalidParams, "invalid origination fee collector: %v", err)
 	}
 
 	if _, err := sdk.AccAddressFromBech32(p.ProtocolFeeCollector); err != nil {
 		return errorsmod.Wrapf(ErrInvalidParams, "invalid protocol fee collector: %v", err)
-	}
-
-	if p.FinalTimeoutDuration <= 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "final timeout duration must be greater than 0")
 	}
 
 	return nil

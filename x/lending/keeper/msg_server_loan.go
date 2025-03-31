@@ -46,6 +46,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrInsufficientLiquidity
 	}
 
+	duration := msg.MaturityTime - ctx.BlockTime().Unix()
+	if duration < m.MinLoanDuration(ctx) || duration > m.MaxLoanDuration(ctx) {
+		return nil, types.ErrInvalidLoanDuration
+	}
+
 	if !m.dlcKeeper.HasDCM(ctx, msg.DCMId) {
 		return nil, errorsmod.Wrap(types.ErrInvalidDCM, "dcm does not exist")
 	}
