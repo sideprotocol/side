@@ -1,0 +1,16 @@
+syntax = "proto3";
+package side.tss;
+
+import "gogoproto/gogo.proto";
+import "side/tss/params.proto";
+import "side/tss/tss.proto";
+
+option go_package = "github.com/sideprotocol/side/x/tss/types";
+
+// GenesisState defines the module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
+
+    repeated DKGRequest dkg_requests = 2;
+    repeated SigningRequest signing_requests = 3;
+}
