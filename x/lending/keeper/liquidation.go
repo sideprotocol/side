@@ -3,10 +3,12 @@ package keeper
 import (
 	"bytes"
 	"encoding/hex"
+	"time"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/crypto/schnorr"
@@ -82,26 +84,33 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.
 }
 
 // HandleLiquidatedDebt handles the liquidated debt for the liquidated loan
-func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, loanId string, moduleAccount string, debtAmount sdk.Coin) error {
+func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin) error {
 	loan := k.GetLoan(ctx, loanId)
 
-	if debtAmount.Amount.LTE(loan.Interest) {
+	interest := loan.Interest
+	protocolFee := loan.ProtocolFee
+
+	if loan.Status == types.LoanStatus_Liquidated {
+		liquidation := k.liquidationKeeper.GetLiquidation(ctx, liquidationId)
+
+		interest = types.GetCurrentInterest(loan.Interest, time.Duration(loan.Term), loan.CreateAt.Unix(), liquidation.LiquidatedTime.Unix())
+		protocolFee = interest.Mul(sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.ReserveFactor))).Quo(sdkmath.NewInt(1000))
+	}
+
+	if debtAmount.Amount.LTE(interest) {
 		// TODO
 		return nil
 	}
 
-	poolAmount := debtAmount.SubAmount(loan.ProtocolFee)
-	protocolFee := sdk.NewCoin(debtAmount.Denom, loan.ProtocolFee)
-
-	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, moduleAccount, types.ModuleName, sdk.NewCoins(poolAmount)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, moduleAccount, types.ModuleName, sdk.NewCoins(debtAmount.SubAmount(protocolFee))); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(protocolFee)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, protocolFee))); err != nil {
 		return err
 	}
 
-	k.AfterPoolRepaid(ctx, loan.PoolId, debtAmount.SubAmount(loan.Interest), loan.Interest, loan.ProtocolFee)
+	k.AfterPoolRepaid(ctx, loan.PoolId, debtAmount.SubAmount(interest), interest, protocolFee)
 
 	return nil
 }

@@ -48,11 +48,13 @@ type OracleKeeper interface {
 
 // LiquidationKeeper defines the expected liquidation keeper interface
 type LiquidationKeeper interface {
-	SetLiquidatedDebtHandler(handler liquidationtypes.LiquidatedDebtHandler)
+	GetLiquidation(ctx sdk.Context, id uint64) *liquidationtypes.Liquidation
 
 	CreateLiquidation(ctx sdk.Context, liquidation *liquidationtypes.Liquidation) *liquidationtypes.Liquidation
 
 	SetPrice(ctx sdk.Context, pair string, price string)
+
+	SetLiquidatedDebtHandler(handler liquidationtypes.LiquidatedDebtHandler)
 }
 
 // DLCKeeper defines the expected DLC keeper interface

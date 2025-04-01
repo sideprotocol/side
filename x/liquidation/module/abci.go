@@ -23,7 +23,7 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 	for _, liquidation := range liquidations {
 		// handle liquidated debt(repay the lending pool)
 		liquidatedDebtAmount := liquidation.LiquidatedDebtAmount
-		if err := k.LiquidatedDebtHandler()(ctx, liquidation.LoanId, types.ModuleName, liquidatedDebtAmount); err != nil {
+		if err := k.LiquidatedDebtHandler()(ctx, liquidation.Id, liquidation.LoanId, types.ModuleName, liquidatedDebtAmount); err != nil {
 			k.Logger(ctx).Info("Failed to call LiquidatedDebtHandler", "liquidation id", liquidation.Id, "debt amount", liquidatedDebtAmount, "err", err)
 
 			continue
