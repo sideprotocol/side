@@ -137,7 +137,8 @@ message Loan {
     ];
     uint64 liquidation_id = 19;
     google.protobuf.Timestamp create_at = 20 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 21;
+    google.protobuf.Timestamp disburse_at = 21 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 22;
 }
 
 enum CetType {

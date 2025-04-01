@@ -30,6 +30,7 @@ func (k Keeper) HandleApproval(ctx sdk.Context, sender string, depositTxHash str
 	// update pool
 	k.AfterPoolBorrowed(ctx, loan.PoolId, loan.BorrowAmount)
 
+	loan.DisburseAt = ctx.BlockTime()
 	loan.Status = types.LoanStatus_Open
 	k.SetLoan(ctx, loan)
 
