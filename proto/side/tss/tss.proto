@@ -78,6 +78,14 @@ enum SigningType {
     SIGNING_TYPE_SCHNORR_ADAPTOR = 2;
 }
 
+// Signing Options
+message SigningOptions {
+    // optional public nonce, i.e. commitment
+    string nonce = 1;
+    // optional adaptor point
+    string adaptor_point = 2;
+}
+
 // Signing Request
 message SigningRequest {
   // request id
@@ -90,14 +98,12 @@ message SigningRequest {
   int32 intent = 4;
   // signing pub key
   string pub_key = 5;
-  // optional public signing nonce, i.e. commitment
-  string nonce = 6;
-  // optional adaptor point
-  string adaptor_point = 7;
   // hashes to be signed
   repeated string sig_hashes = 8;
+  // signing options
+  SigningOptions options = 9;
   // creation time
-  google.protobuf.Timestamp creation_time = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp creation_time = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   // status
-  SigningStatus status = 10;
+  SigningStatus status = 11;
 }

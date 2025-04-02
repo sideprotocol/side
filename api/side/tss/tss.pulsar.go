@@ -1661,6 +1661,490 @@ func (x *fastReflection_DKGCompletion) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var (
+	md_SigningOptions               protoreflect.MessageDescriptor
+	fd_SigningOptions_nonce         protoreflect.FieldDescriptor
+	fd_SigningOptions_adaptor_point protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_tss_tss_proto_init()
+	md_SigningOptions = File_side_tss_tss_proto.Messages().ByName("SigningOptions")
+	fd_SigningOptions_nonce = md_SigningOptions.Fields().ByName("nonce")
+	fd_SigningOptions_adaptor_point = md_SigningOptions.Fields().ByName("adaptor_point")
+}
+
+var _ protoreflect.Message = (*fastReflection_SigningOptions)(nil)
+
+type fastReflection_SigningOptions SigningOptions
+
+func (x *SigningOptions) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_SigningOptions)(x)
+}
+
+func (x *SigningOptions) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_tss_tss_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_SigningOptions_messageType fastReflection_SigningOptions_messageType
+var _ protoreflect.MessageType = fastReflection_SigningOptions_messageType{}
+
+type fastReflection_SigningOptions_messageType struct{}
+
+func (x fastReflection_SigningOptions_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_SigningOptions)(nil)
+}
+func (x fastReflection_SigningOptions_messageType) New() protoreflect.Message {
+	return new(fastReflection_SigningOptions)
+}
+func (x fastReflection_SigningOptions_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_SigningOptions
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_SigningOptions) Descriptor() protoreflect.MessageDescriptor {
+	return md_SigningOptions
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_SigningOptions) Type() protoreflect.MessageType {
+	return _fastReflection_SigningOptions_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_SigningOptions) New() protoreflect.Message {
+	return new(fastReflection_SigningOptions)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_SigningOptions) Interface() protoreflect.ProtoMessage {
+	return (*SigningOptions)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_SigningOptions) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Nonce != "" {
+		value := protoreflect.ValueOfString(x.Nonce)
+		if !f(fd_SigningOptions_nonce, value) {
+			return
+		}
+	}
+	if x.AdaptorPoint != "" {
+		value := protoreflect.ValueOfString(x.AdaptorPoint)
+		if !f(fd_SigningOptions_adaptor_point, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_SigningOptions) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.tss.SigningOptions.nonce":
+		return x.Nonce != ""
+	case "side.tss.SigningOptions.adaptor_point":
+		return x.AdaptorPoint != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.SigningOptions"))
+		}
+		panic(fmt.Errorf("message side.tss.SigningOptions does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SigningOptions) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.tss.SigningOptions.nonce":
+		x.Nonce = ""
+	case "side.tss.SigningOptions.adaptor_point":
+		x.AdaptorPoint = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.SigningOptions"))
+		}
+		panic(fmt.Errorf("message side.tss.SigningOptions does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_SigningOptions) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.tss.SigningOptions.nonce":
+		value := x.Nonce
+		return protoreflect.ValueOfString(value)
+	case "side.tss.SigningOptions.adaptor_point":
+		value := x.AdaptorPoint
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.SigningOptions"))
+		}
+		panic(fmt.Errorf("message side.tss.SigningOptions does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SigningOptions) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.tss.SigningOptions.nonce":
+		x.Nonce = value.Interface().(string)
+	case "side.tss.SigningOptions.adaptor_point":
+		x.AdaptorPoint = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.SigningOptions"))
+		}
+		panic(fmt.Errorf("message side.tss.SigningOptions does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SigningOptions) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.tss.SigningOptions.nonce":
+		panic(fmt.Errorf("field nonce of message side.tss.SigningOptions is not mutable"))
+	case "side.tss.SigningOptions.adaptor_point":
+		panic(fmt.Errorf("field adaptor_point of message side.tss.SigningOptions is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.SigningOptions"))
+		}
+		panic(fmt.Errorf("message side.tss.SigningOptions does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_SigningOptions) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.tss.SigningOptions.nonce":
+		return protoreflect.ValueOfString("")
+	case "side.tss.SigningOptions.adaptor_point":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.SigningOptions"))
+		}
+		panic(fmt.Errorf("message side.tss.SigningOptions does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_SigningOptions) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.tss.SigningOptions", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_SigningOptions) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SigningOptions) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_SigningOptions) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_SigningOptions) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*SigningOptions)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Nonce)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AdaptorPoint)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*SigningOptions)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.AdaptorPoint) > 0 {
+			i -= len(x.AdaptorPoint)
+			copy(dAtA[i:], x.AdaptorPoint)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AdaptorPoint)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Nonce) > 0 {
+			i -= len(x.Nonce)
+			copy(dAtA[i:], x.Nonce)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Nonce)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*SigningOptions)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SigningOptions: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SigningOptions: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Nonce", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Nonce = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AdaptorPoint", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AdaptorPoint = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 var _ protoreflect.List = (*_SigningRequest_8_list)(nil)
 
 type _SigningRequest_8_list struct {
@@ -1714,9 +2198,8 @@ var (
 	fd_SigningRequest_type          protoreflect.FieldDescriptor
 	fd_SigningRequest_intent        protoreflect.FieldDescriptor
 	fd_SigningRequest_pub_key       protoreflect.FieldDescriptor
-	fd_SigningRequest_nonce         protoreflect.FieldDescriptor
-	fd_SigningRequest_adaptor_point protoreflect.FieldDescriptor
 	fd_SigningRequest_sig_hashes    protoreflect.FieldDescriptor
+	fd_SigningRequest_options       protoreflect.FieldDescriptor
 	fd_SigningRequest_creation_time protoreflect.FieldDescriptor
 	fd_SigningRequest_status        protoreflect.FieldDescriptor
 )
@@ -1729,9 +2212,8 @@ func init() {
 	fd_SigningRequest_type = md_SigningRequest.Fields().ByName("type")
 	fd_SigningRequest_intent = md_SigningRequest.Fields().ByName("intent")
 	fd_SigningRequest_pub_key = md_SigningRequest.Fields().ByName("pub_key")
-	fd_SigningRequest_nonce = md_SigningRequest.Fields().ByName("nonce")
-	fd_SigningRequest_adaptor_point = md_SigningRequest.Fields().ByName("adaptor_point")
 	fd_SigningRequest_sig_hashes = md_SigningRequest.Fields().ByName("sig_hashes")
+	fd_SigningRequest_options = md_SigningRequest.Fields().ByName("options")
 	fd_SigningRequest_creation_time = md_SigningRequest.Fields().ByName("creation_time")
 	fd_SigningRequest_status = md_SigningRequest.Fields().ByName("status")
 }
@@ -1745,7 +2227,7 @@ func (x *SigningRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *SigningRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_tss_tss_proto_msgTypes[2]
+	mi := &file_side_tss_tss_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1831,21 +2313,15 @@ func (x *fastReflection_SigningRequest) Range(f func(protoreflect.FieldDescripto
 			return
 		}
 	}
-	if x.Nonce != "" {
-		value := protoreflect.ValueOfString(x.Nonce)
-		if !f(fd_SigningRequest_nonce, value) {
-			return
-		}
-	}
-	if x.AdaptorPoint != "" {
-		value := protoreflect.ValueOfString(x.AdaptorPoint)
-		if !f(fd_SigningRequest_adaptor_point, value) {
-			return
-		}
-	}
 	if len(x.SigHashes) != 0 {
 		value := protoreflect.ValueOfList(&_SigningRequest_8_list{list: &x.SigHashes})
 		if !f(fd_SigningRequest_sig_hashes, value) {
+			return
+		}
+	}
+	if x.Options != nil {
+		value := protoreflect.ValueOfMessage(x.Options.ProtoReflect())
+		if !f(fd_SigningRequest_options, value) {
 			return
 		}
 	}
@@ -1886,12 +2362,10 @@ func (x *fastReflection_SigningRequest) Has(fd protoreflect.FieldDescriptor) boo
 		return x.Intent != int32(0)
 	case "side.tss.SigningRequest.pub_key":
 		return x.PubKey != ""
-	case "side.tss.SigningRequest.nonce":
-		return x.Nonce != ""
-	case "side.tss.SigningRequest.adaptor_point":
-		return x.AdaptorPoint != ""
 	case "side.tss.SigningRequest.sig_hashes":
 		return len(x.SigHashes) != 0
+	case "side.tss.SigningRequest.options":
+		return x.Options != nil
 	case "side.tss.SigningRequest.creation_time":
 		return x.CreationTime != nil
 	case "side.tss.SigningRequest.status":
@@ -1922,12 +2396,10 @@ func (x *fastReflection_SigningRequest) Clear(fd protoreflect.FieldDescriptor) {
 		x.Intent = int32(0)
 	case "side.tss.SigningRequest.pub_key":
 		x.PubKey = ""
-	case "side.tss.SigningRequest.nonce":
-		x.Nonce = ""
-	case "side.tss.SigningRequest.adaptor_point":
-		x.AdaptorPoint = ""
 	case "side.tss.SigningRequest.sig_hashes":
 		x.SigHashes = nil
+	case "side.tss.SigningRequest.options":
+		x.Options = nil
 	case "side.tss.SigningRequest.creation_time":
 		x.CreationTime = nil
 	case "side.tss.SigningRequest.status":
@@ -1963,18 +2435,15 @@ func (x *fastReflection_SigningRequest) Get(descriptor protoreflect.FieldDescrip
 	case "side.tss.SigningRequest.pub_key":
 		value := x.PubKey
 		return protoreflect.ValueOfString(value)
-	case "side.tss.SigningRequest.nonce":
-		value := x.Nonce
-		return protoreflect.ValueOfString(value)
-	case "side.tss.SigningRequest.adaptor_point":
-		value := x.AdaptorPoint
-		return protoreflect.ValueOfString(value)
 	case "side.tss.SigningRequest.sig_hashes":
 		if len(x.SigHashes) == 0 {
 			return protoreflect.ValueOfList(&_SigningRequest_8_list{})
 		}
 		listValue := &_SigningRequest_8_list{list: &x.SigHashes}
 		return protoreflect.ValueOfList(listValue)
+	case "side.tss.SigningRequest.options":
+		value := x.Options
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "side.tss.SigningRequest.creation_time":
 		value := x.CreationTime
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -2011,14 +2480,12 @@ func (x *fastReflection_SigningRequest) Set(fd protoreflect.FieldDescriptor, val
 		x.Intent = int32(value.Int())
 	case "side.tss.SigningRequest.pub_key":
 		x.PubKey = value.Interface().(string)
-	case "side.tss.SigningRequest.nonce":
-		x.Nonce = value.Interface().(string)
-	case "side.tss.SigningRequest.adaptor_point":
-		x.AdaptorPoint = value.Interface().(string)
 	case "side.tss.SigningRequest.sig_hashes":
 		lv := value.List()
 		clv := lv.(*_SigningRequest_8_list)
 		x.SigHashes = *clv.list
+	case "side.tss.SigningRequest.options":
+		x.Options = value.Message().Interface().(*SigningOptions)
 	case "side.tss.SigningRequest.creation_time":
 		x.CreationTime = value.Message().Interface().(*timestamppb.Timestamp)
 	case "side.tss.SigningRequest.status":
@@ -2049,6 +2516,11 @@ func (x *fastReflection_SigningRequest) Mutable(fd protoreflect.FieldDescriptor)
 		}
 		value := &_SigningRequest_8_list{list: &x.SigHashes}
 		return protoreflect.ValueOfList(value)
+	case "side.tss.SigningRequest.options":
+		if x.Options == nil {
+			x.Options = new(SigningOptions)
+		}
+		return protoreflect.ValueOfMessage(x.Options.ProtoReflect())
 	case "side.tss.SigningRequest.creation_time":
 		if x.CreationTime == nil {
 			x.CreationTime = new(timestamppb.Timestamp)
@@ -2064,10 +2536,6 @@ func (x *fastReflection_SigningRequest) Mutable(fd protoreflect.FieldDescriptor)
 		panic(fmt.Errorf("field intent of message side.tss.SigningRequest is not mutable"))
 	case "side.tss.SigningRequest.pub_key":
 		panic(fmt.Errorf("field pub_key of message side.tss.SigningRequest is not mutable"))
-	case "side.tss.SigningRequest.nonce":
-		panic(fmt.Errorf("field nonce of message side.tss.SigningRequest is not mutable"))
-	case "side.tss.SigningRequest.adaptor_point":
-		panic(fmt.Errorf("field adaptor_point of message side.tss.SigningRequest is not mutable"))
 	case "side.tss.SigningRequest.status":
 		panic(fmt.Errorf("field status of message side.tss.SigningRequest is not mutable"))
 	default:
@@ -2093,13 +2561,12 @@ func (x *fastReflection_SigningRequest) NewField(fd protoreflect.FieldDescriptor
 		return protoreflect.ValueOfInt32(int32(0))
 	case "side.tss.SigningRequest.pub_key":
 		return protoreflect.ValueOfString("")
-	case "side.tss.SigningRequest.nonce":
-		return protoreflect.ValueOfString("")
-	case "side.tss.SigningRequest.adaptor_point":
-		return protoreflect.ValueOfString("")
 	case "side.tss.SigningRequest.sig_hashes":
 		list := []string{}
 		return protoreflect.ValueOfList(&_SigningRequest_8_list{list: &list})
+	case "side.tss.SigningRequest.options":
+		m := new(SigningOptions)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.tss.SigningRequest.creation_time":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -2191,19 +2658,15 @@ func (x *fastReflection_SigningRequest) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Nonce)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.AdaptorPoint)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
 		if len(x.SigHashes) > 0 {
 			for _, s := range x.SigHashes {
 				l = len(s)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
+		}
+		if x.Options != nil {
+			l = options.Size(x.Options)
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.CreationTime != nil {
 			l = options.Size(x.CreationTime)
@@ -2244,10 +2707,24 @@ func (x *fastReflection_SigningRequest) ProtoMethods() *protoiface.Methods {
 		if x.Status != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
 			i--
-			dAtA[i] = 0x50
+			dAtA[i] = 0x58
 		}
 		if x.CreationTime != nil {
 			encoded, err := options.Marshal(x.CreationTime)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x52
+		}
+		if x.Options != nil {
+			encoded, err := options.Marshal(x.Options)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2268,20 +2745,6 @@ func (x *fastReflection_SigningRequest) ProtoMethods() *protoiface.Methods {
 				i--
 				dAtA[i] = 0x42
 			}
-		}
-		if len(x.AdaptorPoint) > 0 {
-			i -= len(x.AdaptorPoint)
-			copy(dAtA[i:], x.AdaptorPoint)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AdaptorPoint)))
-			i--
-			dAtA[i] = 0x3a
-		}
-		if len(x.Nonce) > 0 {
-			i -= len(x.Nonce)
-			copy(dAtA[i:], x.Nonce)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Nonce)))
-			i--
-			dAtA[i] = 0x32
 		}
 		if len(x.PubKey) > 0 {
 			i -= len(x.PubKey)
@@ -2482,70 +2945,6 @@ func (x *fastReflection_SigningRequest) ProtoMethods() *protoiface.Methods {
 				}
 				x.PubKey = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 6:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Nonce", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Nonce = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 7:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AdaptorPoint", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AdaptorPoint = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 8:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SigHashes", wireType)
@@ -2579,6 +2978,42 @@ func (x *fastReflection_SigningRequest) ProtoMethods() *protoiface.Methods {
 				x.SigHashes = append(x.SigHashes, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
 			case 9:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Options == nil {
+					x.Options = &SigningOptions{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Options); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 10:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CreationTime", wireType)
 				}
@@ -2614,7 +3049,7 @@ func (x *fastReflection_SigningRequest) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 10:
+			case 11:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 				}
@@ -3034,6 +3469,52 @@ func (x *DKGCompletion) GetSignature() string {
 	return ""
 }
 
+// Signing Options
+type SigningOptions struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// optional public nonce, i.e. commitment
+	Nonce string `protobuf:"bytes,1,opt,name=nonce,proto3" json:"nonce,omitempty"`
+	// optional adaptor point
+	AdaptorPoint string `protobuf:"bytes,2,opt,name=adaptor_point,json=adaptorPoint,proto3" json:"adaptor_point,omitempty"`
+}
+
+func (x *SigningOptions) Reset() {
+	*x = SigningOptions{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_tss_tss_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SigningOptions) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SigningOptions) ProtoMessage() {}
+
+// Deprecated: Use SigningOptions.ProtoReflect.Descriptor instead.
+func (*SigningOptions) Descriptor() ([]byte, []int) {
+	return file_side_tss_tss_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SigningOptions) GetNonce() string {
+	if x != nil {
+		return x.Nonce
+	}
+	return ""
+}
+
+func (x *SigningOptions) GetAdaptorPoint() string {
+	if x != nil {
+		return x.AdaptorPoint
+	}
+	return ""
+}
+
 // Signing Request
 type SigningRequest struct {
 	state         protoimpl.MessageState
@@ -3050,22 +3531,20 @@ type SigningRequest struct {
 	Intent int32 `protobuf:"varint,4,opt,name=intent,proto3" json:"intent,omitempty"`
 	// signing pub key
 	PubKey string `protobuf:"bytes,5,opt,name=pub_key,json=pubKey,proto3" json:"pub_key,omitempty"`
-	// optional signing nonce
-	Nonce string `protobuf:"bytes,6,opt,name=nonce,proto3" json:"nonce,omitempty"`
-	// optional adaptor point
-	AdaptorPoint string `protobuf:"bytes,7,opt,name=adaptor_point,json=adaptorPoint,proto3" json:"adaptor_point,omitempty"`
 	// hashes to be signed
 	SigHashes []string `protobuf:"bytes,8,rep,name=sig_hashes,json=sigHashes,proto3" json:"sig_hashes,omitempty"`
+	// signing options
+	Options *SigningOptions `protobuf:"bytes,9,opt,name=options,proto3" json:"options,omitempty"`
 	// creation time
-	CreationTime *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=creation_time,json=creationTime,proto3" json:"creation_time,omitempty"`
+	CreationTime *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=creation_time,json=creationTime,proto3" json:"creation_time,omitempty"`
 	// status
-	Status SigningStatus `protobuf:"varint,10,opt,name=status,proto3,enum=side.tss.SigningStatus" json:"status,omitempty"`
+	Status SigningStatus `protobuf:"varint,11,opt,name=status,proto3,enum=side.tss.SigningStatus" json:"status,omitempty"`
 }
 
 func (x *SigningRequest) Reset() {
 	*x = SigningRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_tss_tss_proto_msgTypes[2]
+		mi := &file_side_tss_tss_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3079,7 +3558,7 @@ func (*SigningRequest) ProtoMessage() {}
 
 // Deprecated: Use SigningRequest.ProtoReflect.Descriptor instead.
 func (*SigningRequest) Descriptor() ([]byte, []int) {
-	return file_side_tss_tss_proto_rawDescGZIP(), []int{2}
+	return file_side_tss_tss_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SigningRequest) GetId() uint64 {
@@ -3117,23 +3596,16 @@ func (x *SigningRequest) GetPubKey() string {
 	return ""
 }
 
-func (x *SigningRequest) GetNonce() string {
-	if x != nil {
-		return x.Nonce
-	}
-	return ""
-}
-
-func (x *SigningRequest) GetAdaptorPoint() string {
-	if x != nil {
-		return x.AdaptorPoint
-	}
-	return ""
-}
-
 func (x *SigningRequest) GetSigHashes() []string {
 	if x != nil {
 		return x.SigHashes
+	}
+	return nil
+}
+
+func (x *SigningRequest) GetOptions() *SigningOptions {
+	if x != nil {
+		return x.Options
 	}
 	return nil
 }
@@ -3190,63 +3662,67 @@ var file_side_tss_tss_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x50,
 	0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
 	0x72, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x22, 0xea, 0x02, 0x0a, 0x0e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x12, 0x29,
-	0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x15, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x54,
-	0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x69, 0x6e, 0x74,
-	0x65, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x69, 0x6e, 0x74, 0x65, 0x6e,
-	0x74, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x75, 0x62, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x05, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x06, 0x70, 0x75, 0x62, 0x4b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x6e, 0x6f,
-	0x6e, 0x63, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65,
-	0x12, 0x23, 0x0a, 0x0d, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x70, 0x6f, 0x69, 0x6e,
-	0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72,
-	0x50, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x5f, 0x68, 0x61, 0x73,
-	0x68, 0x65, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x48, 0x61,
-	0x73, 0x68, 0x65, 0x73, 0x12, 0x49, 0x0a, 0x0d, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f,
-	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69,
-	0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f,
-	0x01, 0x52, 0x0c, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d, 0x65, 0x12,
-	0x2f, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0e, 0x32,
-	0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x53, 0x69, 0x67, 0x6e, 0x69,
-	0x6e, 0x67, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
-	0x2a, 0x89, 0x01, 0x0a, 0x09, 0x44, 0x4b, 0x47, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1a,
-	0x0a, 0x16, 0x44, 0x4b, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53,
-	0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x16, 0x0a, 0x12, 0x44, 0x4b,
-	0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47,
-	0x10, 0x01, 0x12, 0x18, 0x0a, 0x14, 0x44, 0x4b, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53,
-	0x5f, 0x43, 0x4f, 0x4d, 0x50, 0x4c, 0x45, 0x54, 0x45, 0x44, 0x10, 0x02, 0x12, 0x15, 0x0a, 0x11,
-	0x44, 0x4b, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x46, 0x41, 0x49, 0x4c, 0x45,
-	0x44, 0x10, 0x03, 0x12, 0x17, 0x0a, 0x13, 0x44, 0x4b, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55,
-	0x53, 0x5f, 0x54, 0x49, 0x4d, 0x45, 0x44, 0x4f, 0x55, 0x54, 0x10, 0x04, 0x2a, 0x81, 0x01, 0x0a,
-	0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1e,
-	0x0a, 0x1a, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53,
-	0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x1a,
-	0x0a, 0x16, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53,
-	0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12, 0x19, 0x0a, 0x15, 0x53, 0x49,
-	0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x53, 0x49, 0x47,
-	0x4e, 0x45, 0x44, 0x10, 0x02, 0x12, 0x19, 0x0a, 0x15, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47,
-	0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x46, 0x41, 0x49, 0x4c, 0x45, 0x44, 0x10, 0x03,
-	0x2a, 0x73, 0x0a, 0x0b, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x54, 0x79, 0x70, 0x65, 0x12,
-	0x18, 0x0a, 0x14, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f,
-	0x53, 0x43, 0x48, 0x4e, 0x4f, 0x52, 0x52, 0x10, 0x00, 0x12, 0x28, 0x0a, 0x24, 0x53, 0x49, 0x47,
+	0x75, 0x72, 0x65, 0x22, 0x4b, 0x0a, 0x0e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x4f, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x61,
+	0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0c, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x69, 0x6e, 0x74,
+	0x22, 0xe3, 0x02, 0x0a, 0x0e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x12, 0x29, 0x0a, 0x04, 0x74,
+	0x79, 0x70, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x15, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x74, 0x73, 0x73, 0x2e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x54, 0x79, 0x70, 0x65,
+	0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x69, 0x6e, 0x74, 0x65, 0x6e, 0x74,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x69, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x17,
+	0x0a, 0x07, 0x70, 0x75, 0x62, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x06, 0x70, 0x75, 0x62, 0x4b, 0x65, 0x79, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x5f, 0x68,
+	0x61, 0x73, 0x68, 0x65, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67,
+	0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x12, 0x32, 0x0a, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74,
+	0x73, 0x73, 0x2e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x52, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x49, 0x0a, 0x0d, 0x63, 0x72,
+	0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x0a, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8,
+	0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0c, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x2f, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18,
+	0x0b, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73,
+	0x2e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x2a, 0x89, 0x01, 0x0a, 0x09, 0x44, 0x4b, 0x47, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x12, 0x1a, 0x0a, 0x16, 0x44, 0x4b, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54,
+	0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00,
+	0x12, 0x16, 0x0a, 0x12, 0x44, 0x4b, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50,
+	0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12, 0x18, 0x0a, 0x14, 0x44, 0x4b, 0x47, 0x5f,
+	0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x43, 0x4f, 0x4d, 0x50, 0x4c, 0x45, 0x54, 0x45, 0x44,
+	0x10, 0x02, 0x12, 0x15, 0x0a, 0x11, 0x44, 0x4b, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53,
+	0x5f, 0x46, 0x41, 0x49, 0x4c, 0x45, 0x44, 0x10, 0x03, 0x12, 0x17, 0x0a, 0x13, 0x44, 0x4b, 0x47,
+	0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x54, 0x49, 0x4d, 0x45, 0x44, 0x4f, 0x55, 0x54,
+	0x10, 0x04, 0x2a, 0x81, 0x01, 0x0a, 0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x12, 0x1e, 0x0a, 0x1a, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f,
+	0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49,
+	0x45, 0x44, 0x10, 0x00, 0x12, 0x1a, 0x0a, 0x16, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f,
+	0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x01,
+	0x12, 0x19, 0x0a, 0x15, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54,
+	0x55, 0x53, 0x5f, 0x53, 0x49, 0x47, 0x4e, 0x45, 0x44, 0x10, 0x02, 0x12, 0x19, 0x0a, 0x15, 0x53,
+	0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x46, 0x41,
+	0x49, 0x4c, 0x45, 0x44, 0x10, 0x03, 0x2a, 0x73, 0x0a, 0x0b, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e,
+	0x67, 0x54, 0x79, 0x70, 0x65, 0x12, 0x18, 0x0a, 0x14, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47,
+	0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x53, 0x43, 0x48, 0x4e, 0x4f, 0x52, 0x52, 0x10, 0x00, 0x12,
+	0x28, 0x0a, 0x24, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f,
+	0x53, 0x43, 0x48, 0x4e, 0x4f, 0x52, 0x52, 0x5f, 0x57, 0x49, 0x54, 0x48, 0x5f, 0x43, 0x4f, 0x4d,
+	0x4d, 0x49, 0x54, 0x4d, 0x45, 0x4e, 0x54, 0x10, 0x01, 0x12, 0x20, 0x0a, 0x1c, 0x53, 0x49, 0x47,
 	0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x53, 0x43, 0x48, 0x4e, 0x4f, 0x52,
-	0x52, 0x5f, 0x57, 0x49, 0x54, 0x48, 0x5f, 0x43, 0x4f, 0x4d, 0x4d, 0x49, 0x54, 0x4d, 0x45, 0x4e,
-	0x54, 0x10, 0x01, 0x12, 0x20, 0x0a, 0x1c, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x54,
-	0x59, 0x50, 0x45, 0x5f, 0x53, 0x43, 0x48, 0x4e, 0x4f, 0x52, 0x52, 0x5f, 0x41, 0x44, 0x41, 0x50,
-	0x54, 0x4f, 0x52, 0x10, 0x02, 0x42, 0x84, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x42, 0x08, 0x54, 0x73, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73,
-	0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0xa2, 0x02, 0x03,
-	0x53, 0x54, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x54, 0x73, 0x73, 0xca, 0x02,
-	0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x54, 0x73, 0x73, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65,
-	0x5c, 0x54, 0x73, 0x73, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
-	0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x54, 0x73, 0x73, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x52, 0x5f, 0x41, 0x44, 0x41, 0x50, 0x54, 0x4f, 0x52, 0x10, 0x02, 0x42, 0x84, 0x01, 0x0a, 0x0c,
+	0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x42, 0x08, 0x54, 0x73,
+	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f,
+	0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
+	0x74, 0x73, 0x73, 0xa2, 0x02, 0x03, 0x53, 0x54, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65,
+	0x2e, 0x54, 0x73, 0x73, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x54, 0x73, 0x73, 0xe2,
+	0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x54, 0x73, 0x73, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x54,
+	0x73, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3262,27 +3738,29 @@ func file_side_tss_tss_proto_rawDescGZIP() []byte {
 }
 
 var file_side_tss_tss_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_side_tss_tss_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_side_tss_tss_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_side_tss_tss_proto_goTypes = []interface{}{
 	(DKGStatus)(0),                // 0: side.tss.DKGStatus
 	(SigningStatus)(0),            // 1: side.tss.SigningStatus
 	(SigningType)(0),              // 2: side.tss.SigningType
 	(*DKGRequest)(nil),            // 3: side.tss.DKGRequest
 	(*DKGCompletion)(nil),         // 4: side.tss.DKGCompletion
-	(*SigningRequest)(nil),        // 5: side.tss.SigningRequest
-	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
+	(*SigningOptions)(nil),        // 5: side.tss.SigningOptions
+	(*SigningRequest)(nil),        // 6: side.tss.SigningRequest
+	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
 }
 var file_side_tss_tss_proto_depIdxs = []int32{
-	6, // 0: side.tss.DKGRequest.expiration_time:type_name -> google.protobuf.Timestamp
+	7, // 0: side.tss.DKGRequest.expiration_time:type_name -> google.protobuf.Timestamp
 	0, // 1: side.tss.DKGRequest.status:type_name -> side.tss.DKGStatus
 	2, // 2: side.tss.SigningRequest.type:type_name -> side.tss.SigningType
-	6, // 3: side.tss.SigningRequest.creation_time:type_name -> google.protobuf.Timestamp
-	1, // 4: side.tss.SigningRequest.status:type_name -> side.tss.SigningStatus
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	5, // 3: side.tss.SigningRequest.options:type_name -> side.tss.SigningOptions
+	7, // 4: side.tss.SigningRequest.creation_time:type_name -> google.protobuf.Timestamp
+	1, // 5: side.tss.SigningRequest.status:type_name -> side.tss.SigningStatus
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_side_tss_tss_proto_init() }
@@ -3316,6 +3794,18 @@ func file_side_tss_tss_proto_init() {
 			}
 		}
 		file_side_tss_tss_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SigningOptions); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_tss_tss_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*SigningRequest); i {
 			case 0:
 				return &v.state
@@ -3334,7 +3824,7 @@ func file_side_tss_tss_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_tss_tss_proto_rawDesc,
 			NumEnums:      3,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
