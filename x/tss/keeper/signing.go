@@ -29,9 +29,19 @@ func (k Keeper) IncrementSigningRequestId(ctx sdk.Context) uint64 {
 	return id
 }
 
+// SetSigningRequest sets the signing request
+func (k Keeper) SetSigningRequest(ctx sdk.Context, signingRequest *types.SigningRequest) {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := k.cdc.MustMarshal(signingRequest)
+
+	store.Set(types.SigningRequestKey(signingRequest.Id), bz)
+}
+
 // HasSigningRequest returns true if the given signing request exists, false otherwise
 func (k Keeper) HasSigningRequest(ctx sdk.Context, id uint64) bool {
 	store := ctx.KVStore(k.storeKey)
+
 	return store.Has(types.SigningRequestKey(id))
 }
 
@@ -46,13 +56,19 @@ func (k Keeper) GetSigningRequest(ctx sdk.Context, id uint64) *types.SigningRequ
 	return &signingRequest
 }
 
-// SetSigningRequest sets the signing request
-func (k Keeper) SetSigningRequest(ctx sdk.Context, signingRequest *types.SigningRequest) {
-	store := ctx.KVStore(k.storeKey)
+// GetSigningRequests gets the signing requests by the given status
+func (k Keeper) GetSigningRequests(ctx sdk.Context, status types.SigningStatus) []*types.SigningRequest {
+	requests := make([]*types.SigningRequest, 0)
 
-	bz := k.cdc.MustMarshal(signingRequest)
+	k.IterateSigningRequests(ctx, func(req *types.SigningRequest) (stop bool) {
+		if req.Status == status {
+			requests = append(requests, req)
+		}
 
-	store.Set(types.SigningRequestKey(signingRequest.Id), bz)
+		return false
+	})
+
+	return requests
 }
 
 // IterateSigningRequests iterates through all signing requests
