@@ -40,6 +40,14 @@ func handleDKGRequests(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
+		// callback the corresponding module handler
+		if err := k.GetDKGRequestCompletedHandler(req.Module)(req.Id, req.Type, req.Intent, completions[0].PubKeys); err != nil {
+			req.Status = types.DKGStatus_DKG_STATUS_FAILED
+			k.SetDKGRequest(ctx, req)
+
+			continue
+		}
+
 		// update status
 		req.Status = types.DKGStatus_DKG_STATUS_COMPLETED
 		k.SetDKGRequest(ctx, req)

@@ -18,6 +18,9 @@ const (
 	SchnorrAdaptorSignatureSize = 65
 )
 
+// DKGRequestCompletedHandler defines the callback handler on the DKG request completed
+type DKGRequestCompletedHandler func(id uint64, ty string, intent int32, pubKeys []string) error
+
 // ParticipantExists returns true if the given participant is included in the authorized participants, false otherwise
 func ParticipantExists(participants []string, participant string) bool {
 	return slices.Contains(participants, participant)

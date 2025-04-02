@@ -16,6 +16,8 @@ type Keeper struct {
 
 	stakingKeeper types.StakingKeeper
 
+	dkgRequestCompletedHandlers map[string]types.DKGRequestCompletedHandler
+
 	authority string
 }
 
@@ -25,8 +27,8 @@ func NewKeeper(
 	memKey storetypes.StoreKey,
 	stakingKeeper types.StakingKeeper,
 	authority string,
-) Keeper {
-	return Keeper{
+) *Keeper {
+	return &Keeper{
 		cdc:           cdc,
 		storeKey:      storeKey,
 		memKey:        memKey,
@@ -56,4 +58,12 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	k.cdc.MustUnmarshal(bz, &params)
 
 	return params
+}
+
+func (k *Keeper) RegisterDKGRequestCompletedHandler(module string, handler types.DKGRequestCompletedHandler) {
+	k.dkgRequestCompletedHandlers[module] = handler
+}
+
+func (k Keeper) GetDKGRequestCompletedHandler(module string) types.DKGRequestCompletedHandler {
+	return k.dkgRequestCompletedHandlers[module]
 }
