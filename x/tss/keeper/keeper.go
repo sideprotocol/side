@@ -16,7 +16,8 @@ type Keeper struct {
 
 	stakingKeeper types.StakingKeeper
 
-	dkgRequestCompletedHandlers map[string]types.DKGRequestCompletedHandler
+	dkgRequestCompletedHandlers     map[string]types.DKGRequestCompletedHandler
+	signingRequestCompletedHandlers map[string]types.SigningRequestCompletedHandler
 
 	authority string
 }
@@ -64,6 +65,14 @@ func (k *Keeper) RegisterDKGRequestCompletedHandler(module string, handler types
 	k.dkgRequestCompletedHandlers[module] = handler
 }
 
+func (k *Keeper) RegisterSigningRequestCompletedHandler(module string, handler types.SigningRequestCompletedHandler) {
+	k.signingRequestCompletedHandlers[module] = handler
+}
+
 func (k Keeper) GetDKGRequestCompletedHandler(module string) types.DKGRequestCompletedHandler {
 	return k.dkgRequestCompletedHandlers[module]
+}
+
+func (k Keeper) GetSigningRequestCompletedHandler(module string) types.SigningRequestCompletedHandler {
+	return k.signingRequestCompletedHandlers[module]
 }
