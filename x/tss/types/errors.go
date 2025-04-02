@@ -20,5 +20,8 @@ var (
 	ErrDKGCompletionAlreadyExists = errorsmod.Register(ModuleName, 2005, "dkg completion already exists")
 	ErrInvalidDKGCompletion       = errorsmod.Register(ModuleName, 2006, "invalid dkg completion")
 
-	ErrInvalidParams = errorsmod.Register(ModuleName, 3000, "invalid params")
+	ErrSigningRequestDoesNotExist = errorsmod.Register(ModuleName, 3000, "signing request does not exist")
+	ErrInvalidSigningStatus       = errorsmod.Register(ModuleName, 3001, "invalid signing status")
+
+	ErrInvalidParams = errorsmod.Register(ModuleName, 4000, "invalid params")
 )

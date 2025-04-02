@@ -42,6 +42,32 @@ func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG)
 
 // SubmitSignatures submits the signatures for the specified signing request
 func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitSignatures) (*types.MsgSubmitSignaturesResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasSigningRequest(ctx, msg.Id) {
+		return nil, types.ErrSigningRequestDoesNotExist
+	}
+
+	req := m.GetSigningRequest(ctx, msg.Id)
+	if req.Status != types.SigningStatus_SIGNING_STATUS_PENDING {
+		return nil, errorsmod.Wrap(types.ErrInvalidSigningStatus, "signing request non pending")
+	}
+
+	req.Status = types.SigningStatus_SIGNING_STATUS_SIGNED
+	m.SetSigningRequest(ctx, req)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCompleteSigning,
+			sdk.NewAttribute(types.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", msg.Id)),
+		),
+	)
+
 	return &types.MsgSubmitSignaturesResponse{}, nil
 }
 

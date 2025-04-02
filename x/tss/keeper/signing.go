@@ -90,7 +90,7 @@ func (k Keeper) InitiateSigningRequest(ctx sdk.Context, module string, ty types.
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.EventTypeSign,
+			types.EventTypeInitiateSigning,
 			types.GetSigningRequestEventAttributes(req.Id, module, ty, intent, pubKey, sigHashes, options)...),
 	)
 

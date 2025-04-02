@@ -9,9 +9,10 @@ import (
 
 // TSS module event types
 const (
-	EventTypeInitiateDKG = "initiate_dkg"
-	EventTypeCompleteDKG = "complete_dkg"
-	EventTypeSign        = "sign"
+	EventTypeInitiateDKG     = "initiate_dkg"
+	EventTypeCompleteDKG     = "complete_dkg"
+	EventTypeInitiateSigning = "initiate_signing"
+	EventTypeCompleteSigning = "complete_signing"
 
 	AttributeKeySender = "sender"
 
