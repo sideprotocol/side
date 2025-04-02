@@ -15,9 +15,6 @@ service Msg {
     // Liquidate the specified debt amount by liquidators.
     rpc Liquidate(MsgLiquidate) returns (MsgLiquidateResponse);
 
-    // Submit settlement transaction signatures for the specified liquidation.
-    rpc SubmitSettlementSignatures(MsgSubmitSettlementSignatures) returns (MsgSubmitSettlementSignaturesResponse);
-
     // UpdateParams defines a governance operation for updating the x/btcbridge module
     // parameters. The authority defaults to the x/gov module account.
     //
@@ -36,18 +33,6 @@ message MsgLiquidate {
 
 // MsgLiquidateResponse defines the Msg/Liquidate response type.
 message MsgLiquidateResponse {}
-
-// MsgSubmitSettlementSignatures defines the Msg/SubmitSettlementSignatures request type.
-message MsgSubmitSettlementSignatures {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    uint64 liquidation_id = 2;
-    repeated string signatures = 3;
-}
-
-// MsgSubmitSettlementSignaturesResponse defines the Msg/SubmitSettlementSignatures response type.
-message MsgSubmitSettlementSignaturesResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

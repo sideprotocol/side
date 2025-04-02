@@ -1,13 +1,11 @@
 package liquidation
 
 import (
-	"fmt"
-	"strings"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/liquidation/keeper"
 	"github.com/sideprotocol/side/x/liquidation/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // EndBlocker called at the end of every block
@@ -45,14 +43,7 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 		// update liquidation
 		k.SetLiquidation(ctx, liquidation)
 
-		// emit event
-		ctx.EventManager().EmitEvent(
-			sdk.NewEvent(
-				types.EventTypeSignSettlementTransaction,
-				sdk.NewAttribute(types.AttributeKeyLiquidationId, fmt.Sprintf("%d", liquidation.Id)),
-				sdk.NewAttribute(types.AttributeKeyDCMPubKey, liquidation.DCM),
-				sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
-			),
-		)
+		// initiate signing request via TSS
+		k.TSSKeeper().InitiateSigningRequest(ctx, types.ModuleName, types.ToScopedId(liquidation.Id), tsstypes.SigningType_SIGNING_TYPE_SCHNORR, 0, liquidation.DCM, sigHashes, nil)
 	}
 }

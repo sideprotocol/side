@@ -47,6 +47,7 @@ func LiquidationKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		memStoreKey,
 		app.BankKeeper,
 		app.OracleKeeper,
+		app.TSSKeeper,
 		authority,
 	)
 

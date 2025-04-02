@@ -2,7 +2,6 @@ package cli
 
 import (
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -34,7 +33,6 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdLiquidate())
-	cmd.AddCommand(CmdSubmitSettlementSignatures())
 
 	return cmd
 }
@@ -64,41 +62,6 @@ func CmdLiquidate() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				liquidationId,
 				debtAmount,
-			)
-
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdSubmitSettlementSignatures() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "submit-settlement-signatures [liquidation id] [signatures]",
-		Short: "Submit the settlement signatures for the specified liquidation",
-		Args:  cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			liquidationId, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgSubmitSettlementSignatures(
-				clientCtx.GetFromAddress().String(),
-				liquidationId,
-				strings.Split(args[1], listSeparator),
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

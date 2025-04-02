@@ -42,30 +42,6 @@ func (m msgServer) Liquidate(goCtx context.Context, msg *types.MsgLiquidate) (*t
 	return &types.MsgLiquidateResponse{}, nil
 }
 
-// SubmitSettlementSignatures implements types.MsgServer.
-func (m msgServer) SubmitSettlementSignatures(goCtx context.Context, msg *types.MsgSubmitSettlementSignatures) (*types.MsgSubmitSettlementSignaturesResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if err := m.Keeper.HandleSettlementTransactionSignatures(ctx, msg.Sender, msg.LiquidationId, msg.Signatures); err != nil {
-		return nil, err
-	}
-
-	// emit event
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeGenerateSignedSettlementTransaction,
-			sdk.NewAttribute(types.AttributeKeyLiquidationId, fmt.Sprintf("%d", msg.LiquidationId)),
-			sdk.NewAttribute(types.AttributeKeyTxHash, m.GetLiquidation(ctx, msg.LiquidationId).SettlementTxId),
-		),
-	)
-
-	return &types.MsgSubmitSettlementSignaturesResponse{}, nil
-}
-
 // UpdateParams updates the module params.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {

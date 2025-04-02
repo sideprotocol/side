@@ -675,6 +675,7 @@ func New(
 		keys[liquidationtypes.MemStoreKey],
 		app.BankKeeper,
 		app.OracleKeeper,
+		app.TSSKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
