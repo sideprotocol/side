@@ -16,10 +16,11 @@ const (
 
 	AttributeKeySender = "sender"
 
-	AttributeKeyId     = "id"
-	AttributeKeyModule = "module"
-	AttributeKeyType   = "type"
-	AttributeKeyIntent = "intent"
+	AttributeKeyId       = "id"
+	AttributeKeyModule   = "module"
+	AttributeKeyScopedId = "scoped_id"
+	AttributeKeyType     = "type"
+	AttributeKeyIntent   = "intent"
 
 	AttributeKeyParticipants   = "participants"
 	AttributeKeyThreshold      = "threshold"
@@ -39,11 +40,12 @@ const (
 )
 
 // GetSigningRequestEventAttributes gets the event attributes for the signing request
-func GetSigningRequestEventAttributes(id uint64, module string, ty SigningType, intent int32, pubKey string, sigHashes []string, options *SigningOptions) []sdk.Attribute {
+func GetSigningRequestEventAttributes(id uint64, module string, scopedId string, ty SigningType, intent int32, pubKey string, sigHashes []string, options *SigningOptions) []sdk.Attribute {
 	attributes := []sdk.Attribute{}
 
 	attributes = append(attributes, sdk.NewAttribute(AttributeKeyId, fmt.Sprintf("%d", id)))
 	attributes = append(attributes, sdk.NewAttribute(AttributeKeyModule, module))
+	attributes = append(attributes, sdk.NewAttribute(AttributeKeyScopedId, scopedId))
 	attributes = append(attributes, sdk.NewAttribute(AttributeKeyType, fmt.Sprintf("%d", ty)))
 	attributes = append(attributes, sdk.NewAttribute(AttributeKeyIntent, fmt.Sprintf("%d", intent)))
 	attributes = append(attributes, sdk.NewAttribute(AttributeKeyPubKey, pubKey))

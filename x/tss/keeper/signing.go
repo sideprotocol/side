@@ -73,10 +73,11 @@ func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *
 }
 
 // InitiateSigningRequest initiates the signing request with the specified params
-func (k Keeper) InitiateSigningRequest(ctx sdk.Context, module string, ty types.SigningType, intent int32, pubKey string, sigHashes []string, options *types.SigningOptions) *types.SigningRequest {
+func (k Keeper) InitiateSigningRequest(ctx sdk.Context, module string, scopedId string, ty types.SigningType, intent int32, pubKey string, sigHashes []string, options *types.SigningOptions) *types.SigningRequest {
 	req := &types.SigningRequest{
 		Id:           k.IncrementSigningRequestId(ctx),
 		Module:       module,
+		ScopedId:     scopedId,
 		Type:         ty,
 		Intent:       intent,
 		PubKey:       pubKey,
@@ -91,7 +92,7 @@ func (k Keeper) InitiateSigningRequest(ctx sdk.Context, module string, ty types.
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeInitiateSigning,
-			types.GetSigningRequestEventAttributes(req.Id, module, ty, intent, pubKey, sigHashes, options)...),
+			types.GetSigningRequestEventAttributes(req.Id, module, scopedId, ty, intent, pubKey, sigHashes, options)...),
 	)
 
 	return req

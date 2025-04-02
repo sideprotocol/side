@@ -92,18 +92,20 @@ message SigningRequest {
   uint64 id = 1;
   // initiator module
   string module = 2;
+  // module specific id
+  string scoped_id = 3;
   // signing type
-  SigningType type = 3;
+  SigningType type = 4;
   // signing intent
-  int32 intent = 4;
+  int32 intent = 5;
   // signing pub key
-  string pub_key = 5;
+  string pub_key = 6;
   // hashes to be signed
-  repeated string sig_hashes = 8;
+  repeated string sig_hashes = 7;
   // signing options
-  SigningOptions options = 9;
+  SigningOptions options = 8;
   // creation time
-  google.protobuf.Timestamp creation_time = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp creation_time = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   // status
-  SigningStatus status = 11;
+  SigningStatus status = 10;
 }
