@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"slices"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sideprotocol/side/crypto/hash"
 )
 
@@ -19,10 +21,10 @@ const (
 )
 
 // DKGRequestCompletedHandler defines the callback handler on the DKG request completed
-type DKGRequestCompletedHandler func(id uint64, ty string, intent int32, pubKeys []string) error
+type DKGRequestCompletedHandler func(ctx sdk.Context, id uint64, ty string, intent int32, pubKeys []string) error
 
 // SigningRequestCompletedHandler defines the callback handler on the signing request completed
-type SigningRequestCompletedHandler func(id uint64, scopedId string, ty SigningType, intent int32, pubKey string, signatures []string) error
+type SigningRequestCompletedHandler func(ctx sdk.Context, sender string, id uint64, scopedId string, ty SigningType, intent int32, pubKey string, signatures []string) error
 
 // ParticipantExists returns true if the given participant is included in the authorized participants, false otherwise
 func ParticipantExists(participants []string, participant string) bool {
