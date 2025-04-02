@@ -3,6 +3,7 @@ package types
 import (
 	"crypto/ed25519"
 	"encoding/binary"
+	"encoding/hex"
 	"reflect"
 	"slices"
 
@@ -17,13 +18,13 @@ const (
 	SchnorrAdaptorSignatureSize = 65
 )
 
-// ParticipantExists returns true if the given participant is an authorized participant, false otherwise
+// ParticipantExists returns true if the given participant is included in the authorized participants, false otherwise
 func ParticipantExists(participants []string, participant string) bool {
 	return slices.Contains(participants, participant)
 }
 
-// CheckDKGCompletions checks if public keys of all the DKG completion are same
-func CheckDKGCompletionRequests(completions []*DKGCompletion) bool {
+// CheckDKGCompletions checks if public keys of all DKG completions are same
+func CheckDKGCompletions(completions []*DKGCompletion) bool {
 	if len(completions) == 0 {
 		return false
 	}
@@ -39,19 +40,25 @@ func CheckDKGCompletionRequests(completions []*DKGCompletion) bool {
 	return true
 }
 
+// VerifySignature verifies the ed25519 signature against the given pub key and msg
+// Assume that the signature and pub key are hex encoded
+func VerifySignature(signature string, pubKey string, msg []byte) bool {
+	sigBytes, _ := hex.DecodeString(signature)
+	pubKeyBytes, _ := hex.DecodeString(pubKey)
+
+	return ed25519.Verify(pubKeyBytes, msg, sigBytes)
+}
+
 // GetSigMsg gets the msg to be signed from the given data
-func GetSigMsg(id uint64, pubKeys [][]byte) []byte {
+// Assume that the given pub keys are hex encoded
+func GetSigMsg(id uint64, pubKeys []string) []byte {
 	rawMsg := make([]byte, 8)
 	binary.BigEndian.PutUint64(rawMsg, id)
 
 	for _, pubKey := range pubKeys {
-		rawMsg = append(rawMsg, pubKey...)
+		pubKeyBytes, _ := hex.DecodeString(pubKey)
+		rawMsg = append(rawMsg, pubKeyBytes...)
 	}
 
 	return hash.Sha256(rawMsg)
-}
-
-// VerifySignature verifies the given signature
-func VerifySignature(signature []byte, pubKey []byte, msg []byte) bool {
-	return ed25519.Verify(pubKey, msg, signature)
 }

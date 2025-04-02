@@ -17,15 +17,15 @@ func NewMsgCompleteDKG(
 	sender string,
 	id uint64,
 	pubKeys []string,
-	participant string,
+	consensusPubKey string,
 	signature string,
 ) *MsgCompleteDKG {
 	return &MsgCompleteDKG{
-		Sender:      sender,
-		Id:          id,
-		PubKeys:     pubKeys,
-		Participant: participant,
-		Signature:   signature,
+		Sender:          sender,
+		Id:              id,
+		PubKeys:         pubKeys,
+		ConsensusPubkey: consensusPubKey,
+		Signature:       signature,
 	}
 }
 
@@ -50,7 +50,7 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 		}
 	}
 
-	consensusPubKey, err := base64.StdEncoding.DecodeString(m.Participant)
+	consensusPubKey, err := base64.StdEncoding.DecodeString(m.ConsensusPubkey)
 	if err != nil {
 		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode the consensus pub key")
 	}
@@ -65,7 +65,7 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 	}
 
 	if len(sigBytes) != ed25519.SignatureSize {
-		return errorsmod.Wrap(ErrInvalidSignature, "incorret signature size")
+		return errorsmod.Wrap(ErrInvalidSignature, "incorrect signature size")
 	}
 
 	return nil

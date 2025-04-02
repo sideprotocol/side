@@ -2,16 +2,24 @@ package types
 
 // TSS module event types
 const (
-	EventTypeInitiate = "initiate_dkg"
-	EventTypeSign     = "sign"
+	EventTypeInitiateDKG = "initiate_dkg"
+	EventTypeCompleteDKG = "complete_dkg"
+	EventTypeSign        = "sign"
 
-	AttributeKeyId = "id"
+	AttributeKeySender = "sender"
+
+	AttributeKeyId     = "id"
+	AttributeKeyModule = "module"
+	AttributeKeyType   = "type"
+	AttributeKeyIntent = "intent"
 
 	AttributeKeyParticipants   = "participants"
 	AttributeKeyThreshold      = "threshold"
+	AttributeKeyBatchSize      = "batch_size"
 	AttributeKeyExpirationTime = "expiration_time"
 
-	AttributeKeyType         = "type"
+	AttributeKeyParticipant = "participant"
+
 	AttributeKeyPubKey       = "pub_key"
 	AttributeKeyNonce        = "nonce"
 	AttributeKeyAdaptorPoint = "adaptor_point"

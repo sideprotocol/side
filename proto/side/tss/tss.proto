@@ -37,7 +37,7 @@ message DKGRequest {
   // batch size of keys to be generated
   uint32 batch_size = 7;
   // expiration time
-  google.protobuf.Timestamp expiration = 8 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  google.protobuf.Timestamp expiration_time = 8 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   // status
   DKGStatus status = 9;
 }
@@ -90,7 +90,7 @@ message SigningRequest {
   int32 intent = 4;
   // signing pub key
   string pub_key = 5;
-  // optional signing nonce
+  // optional public signing nonce, i.e. commitment
   string nonce = 6;
   // optional adaptor point
   string adaptor_point = 7;
