@@ -138,6 +138,9 @@ import (
 	liquidationmodule "github.com/sideprotocol/side/x/liquidation/module"
 	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
 	oracleabci "github.com/sideprotocol/side/x/oracle/abci"
+	tsskeeper "github.com/sideprotocol/side/x/tss/keeper"
+	tssmodule "github.com/sideprotocol/side/x/tss/module"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 
 	oraclekeeper "github.com/sideprotocol/side/x/oracle/keeper"
 	oraclemodule "github.com/sideprotocol/side/x/oracle/module"
@@ -198,6 +201,7 @@ var (
 		vesting.AppModuleBasic{},
 		consensus.AppModuleBasic{},
 		wasm.AppModuleBasic{},
+		tssmodule.AppModuleBasic{},
 		btcbridgemodule.AppModuleBasic{},
 		liquidationmodule.AppModuleBasic{},
 		dlcmodule.AppModuleBasic{},
@@ -218,6 +222,7 @@ var (
 		ibcfeetypes.ModuleName:              nil,
 		ibctransfertypes.ModuleName:         {authtypes.Minter, authtypes.Burner},
 		wasmtypes.ModuleName:                {authtypes.Burner},
+		tsstypes.ModuleName:                 nil,
 		btcbridgetypes.ModuleName:           {authtypes.Minter, authtypes.Burner},
 		liquidationtypes.ModuleName:         nil,
 		dlctypes.ModuleName:                 nil,
@@ -290,6 +295,7 @@ type App struct {
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 	ScopedWasmKeeper     capabilitykeeper.ScopedKeeper
 
+	TSSKeeper         *tsskeeper.Keeper
 	BtcBridgeKeeper   btcbridgekeeper.Keeper
 	LiquidationKeeper *liquidationkeeper.Keeper
 	DLCKeeper         dlckeeper.Keeper
@@ -363,7 +369,7 @@ func New(
 		govtypes.StoreKey, paramstypes.StoreKey, ibcexported.StoreKey, upgradetypes.StoreKey,
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
-		ibcfeetypes.StoreKey, wasmtypes.StoreKey,
+		ibcfeetypes.StoreKey, wasmtypes.StoreKey, tsstypes.StoreKey,
 		btcbridgetypes.StoreKey, liquidationtypes.StoreKey,
 		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
@@ -638,6 +644,14 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
+	app.TSSKeeper = tsskeeper.NewKeeper(
+		appCodec,
+		keys[tsstypes.StoreKey],
+		keys[tsstypes.MemStoreKey],
+		app.StakingKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+
 	app.BtcBridgeKeeper = *btcbridgekeeper.NewKeeper(
 		appCodec,
 		keys[btcbridgetypes.StoreKey],
@@ -786,6 +800,7 @@ func New(
 		icaModule,
 		wasmModule,
 
+		tssmodule.NewAppModule(appCodec, *app.TSSKeeper),
 		btcbridgemodule.NewAppModule(appCodec, app.BtcBridgeKeeper),
 		liquidationmodule.NewAppModule(appCodec, *app.LiquidationKeeper),
 		dlcmodule.NewAppModule(appCodec, app.DLCKeeper),
@@ -845,6 +860,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		wasmtypes.ModuleName,
+		tsstypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		liquidationtypes.ModuleName,
 		dlctypes.ModuleName,
@@ -877,6 +893,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		wasmtypes.ModuleName,
+		tsstypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		liquidationtypes.ModuleName,
 		dlctypes.ModuleName,
@@ -914,6 +931,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		wasmtypes.ModuleName,
+		tsstypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		liquidationtypes.ModuleName,
 		dlctypes.ModuleName,
@@ -1193,6 +1211,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibcexported.ModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
+	paramsKeeper.Subspace(tsstypes.ModuleName)
 	paramsKeeper.Subspace(btcbridgetypes.ModuleName)
 	paramsKeeper.Subspace(liquidationtypes.ModuleName)
 	paramsKeeper.Subspace(dlctypes.ModuleName)
