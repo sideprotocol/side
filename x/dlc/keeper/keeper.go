@@ -15,6 +15,7 @@ type Keeper struct {
 	memKey   storetypes.StoreKey
 
 	oracleKeeper types.OracleKeeper
+	tssKeeper    types.TSSKeeper
 
 	authority string
 }
@@ -24,15 +25,22 @@ func NewKeeper(
 	storeKey,
 	memKey storetypes.StoreKey,
 	oracleKeeper types.OracleKeeper,
+	tssKeeper types.TSSKeeper,
 	authority string,
 ) Keeper {
-	return Keeper{
+	k := Keeper{
 		cdc:          cdc,
 		storeKey:     storeKey,
 		memKey:       memKey,
 		oracleKeeper: oracleKeeper,
+		tssKeeper:    tssKeeper,
 		authority:    authority,
 	}
+
+	// register signing request completed handler
+	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
+
+	return k
 }
 
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {

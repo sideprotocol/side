@@ -31,21 +31,6 @@ func (m msgServer) SubmitNonce(goCtx context.Context, msg *types.MsgSubmitNonce)
 	return &types.MsgSubmitNonceResponse{}, nil
 }
 
-// SubmitAttestation implements types.MsgServer.
-func (m msgServer) SubmitAttestation(goCtx context.Context, msg *types.MsgSubmitAttestation) (*types.MsgSubmitAttestationResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if err := m.Keeper.HandleAttestation(ctx, msg.Sender, msg.EventId, msg.Signature); err != nil {
-		return nil, err
-	}
-
-	return &types.MsgSubmitAttestationResponse{}, nil
-}
-
 // SubmitOraclePubKey implements types.MsgServer.
 func (m msgServer) SubmitOraclePubKey(goCtx context.Context, msg *types.MsgSubmitOraclePubKey) (*types.MsgSubmitOraclePubKeyResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {

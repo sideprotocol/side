@@ -20,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Msg_SubmitNonce_FullMethodName        = "/side.dlc.Msg/SubmitNonce"
-	Msg_SubmitAttestation_FullMethodName  = "/side.dlc.Msg/SubmitAttestation"
 	Msg_SubmitOraclePubKey_FullMethodName = "/side.dlc.Msg/SubmitOraclePubKey"
 	Msg_SubmitDCMPubKey_FullMethodName    = "/side.dlc.Msg/SubmitDCMPubKey"
 	Msg_CreateOracle_FullMethodName       = "/side.dlc.Msg/CreateOracle"
@@ -33,7 +32,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MsgClient interface {
 	SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ...grpc.CallOption) (*MsgSubmitNonceResponse, error)
-	SubmitAttestation(ctx context.Context, in *MsgSubmitAttestation, opts ...grpc.CallOption) (*MsgSubmitAttestationResponse, error)
 	SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOraclePubKey, opts ...grpc.CallOption) (*MsgSubmitOraclePubKeyResponse, error)
 	SubmitDCMPubKey(ctx context.Context, in *MsgSubmitDCMPubKey, opts ...grpc.CallOption) (*MsgSubmitDCMPubKeyResponse, error)
 	CreateOracle(ctx context.Context, in *MsgCreateOracle, opts ...grpc.CallOption) (*MsgCreateOracleResponse, error)
@@ -56,15 +54,6 @@ func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 func (c *msgClient) SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ...grpc.CallOption) (*MsgSubmitNonceResponse, error) {
 	out := new(MsgSubmitNonceResponse)
 	err := c.cc.Invoke(ctx, Msg_SubmitNonce_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) SubmitAttestation(ctx context.Context, in *MsgSubmitAttestation, opts ...grpc.CallOption) (*MsgSubmitAttestationResponse, error) {
-	out := new(MsgSubmitAttestationResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitAttestation_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +110,6 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 // for forward compatibility
 type MsgServer interface {
 	SubmitNonce(context.Context, *MsgSubmitNonce) (*MsgSubmitNonceResponse, error)
-	SubmitAttestation(context.Context, *MsgSubmitAttestation) (*MsgSubmitAttestationResponse, error)
 	SubmitOraclePubKey(context.Context, *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error)
 	SubmitDCMPubKey(context.Context, *MsgSubmitDCMPubKey) (*MsgSubmitDCMPubKeyResponse, error)
 	CreateOracle(context.Context, *MsgCreateOracle) (*MsgCreateOracleResponse, error)
@@ -140,9 +128,6 @@ type UnimplementedMsgServer struct {
 
 func (UnimplementedMsgServer) SubmitNonce(context.Context, *MsgSubmitNonce) (*MsgSubmitNonceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitNonce not implemented")
-}
-func (UnimplementedMsgServer) SubmitAttestation(context.Context, *MsgSubmitAttestation) (*MsgSubmitAttestationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitAttestation not implemented")
 }
 func (UnimplementedMsgServer) SubmitOraclePubKey(context.Context, *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitOraclePubKey not implemented")
@@ -186,24 +171,6 @@ func _Msg_SubmitNonce_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).SubmitNonce(ctx, req.(*MsgSubmitNonce))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_SubmitAttestation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitAttestation)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitAttestation(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_SubmitAttestation_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitAttestation(ctx, req.(*MsgSubmitAttestation))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -308,10 +275,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SubmitNonce",
 			Handler:    _Msg_SubmitNonce_Handler,
-		},
-		{
-			MethodName: "SubmitAttestation",
-			Handler:    _Msg_SubmitAttestation_Handler,
 		},
 		{
 			MethodName: "SubmitOraclePubKey",

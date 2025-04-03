@@ -2,13 +2,13 @@ package keeper
 
 import (
 	"encoding/base64"
-	"fmt"
 
 	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/dlc/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // GetEventId gets the current event id
@@ -291,14 +291,14 @@ func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 		k.AddPriceEventToTriggeredQueue(ctx, event)
 	}
 
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeTriggerDLCEvent,
-			sdk.NewAttribute(types.AttributeKeyEventId, fmt.Sprintf("%d", id)),
-			sdk.NewAttribute(types.AttributeKeyPubKey, event.Pubkey),
-			sdk.NewAttribute(types.AttributeKeyNonce, event.Nonce),
-			sdk.NewAttribute(types.AttributeKeyOutcomeHash, base64.StdEncoding.EncodeToString(types.GetEventOutcomeHash(event, outcomeIndex))),
-		),
+	k.tssKeeper.InitiateSigningRequest(
+		ctx,
+		types.ModuleName, types.ToScopedId(event.Id),
+		tsstypes.SigningType_SIGNING_TYPE_SCHNORR_WITH_COMMITMENT,
+		0,
+		event.Pubkey,
+		[]string{base64.StdEncoding.EncodeToString(types.GetEventOutcomeHash(event, outcomeIndex))},
+		&tsstypes.SigningOptions{Nonce: event.Nonce},
 	)
 }
 

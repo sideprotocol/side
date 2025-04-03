@@ -12,13 +12,7 @@ import (
 
 	"github.com/sideprotocol/side/crypto/schnorr"
 	"github.com/sideprotocol/side/x/liquidation/types"
-	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
-
-// SettlementSignaturesCompletedHandler is callback handler when settlement signatures completed
-func (k Keeper) SettlementSignaturesCompletedHandler(ctx sdk.Context, sender string, signingRequestId uint64, scopedId string, ty tsstypes.SigningType, intent int32, pubKey string, signatures []string) error {
-	return k.HandleSettlementSignatures(ctx, sender, types.FromScopedId(scopedId), signatures)
-}
 
 // HandleSettlementSignatures handles the settlement tx signatures
 func (k Keeper) HandleSettlementSignatures(ctx sdk.Context, sender string, liquidationId uint64, signatures []string) error {

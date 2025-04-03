@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/hex"
 	fmt "fmt"
+	"strconv"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
@@ -61,4 +62,16 @@ func GetSignaturePoint(pubKeyBytes []byte, nonceBytes []byte, msg []byte) ([]byt
 	btcec.AddNonConst(&R, &eP, &sG)
 
 	return btcec.JacobianToByteSlice(sG), nil
+}
+
+// ToScopedId converts the given local id to the scoped id
+func ToScopedId(id uint64) string {
+	return fmt.Sprintf("%d", id)
+}
+
+// FromScopedId converts the scoped id to the local id
+// Assume that the scoped id is valid
+func FromScopedId(scopedId string) uint64 {
+	id, _ := strconv.ParseUint(scopedId, 10, 64)
+	return id
 }

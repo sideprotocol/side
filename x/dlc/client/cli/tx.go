@@ -34,7 +34,6 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdSubmitOraclePubKey())
 	cmd.AddCommand(CmdSubmitDCMPubKey())
 	cmd.AddCommand(CmdSubmitNonce())
-	cmd.AddCommand(CmdSubmitAttestation())
 
 	return cmd
 }
@@ -135,41 +134,6 @@ func CmdSubmitNonce() *cobra.Command {
 				args[1],
 				args[2],
 				args[3],
-			)
-
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdSubmitAttestation() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "submit-attestation [event id] [signature]",
-		Short: "Submit the attestation for the given event",
-		Args:  cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			eventId, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgSubmitAttestation(
-				clientCtx.GetFromAddress().String(),
-				eventId,
-				args[1],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

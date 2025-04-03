@@ -9,7 +9,6 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSubmitNonce{}, "dlc/MsgSubmitNonce", nil)
-	cdc.RegisterConcrete(&MsgSubmitAttestation{}, "dlc/MsgSubmitAttestation", nil)
 	cdc.RegisterConcrete(&MsgSubmitOraclePubKey{}, "dlc/MsgSubmitOraclePubKey", nil)
 	cdc.RegisterConcrete(&MsgSubmitDCMPubKey{}, "dlc/MsgSubmitDCMPubKey", nil)
 	cdc.RegisterConcrete(&MsgCreateOracle{}, "dlc/MsgCreateOracle", nil)
@@ -20,7 +19,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitNonce{})
-	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitAttestation{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitOraclePubKey{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitDCMPubKey{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgCreateOracle{})

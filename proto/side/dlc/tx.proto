@@ -13,7 +13,6 @@ service Msg {
     option (cosmos.msg.v1.service) = true;
 
     rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
-    rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
     rpc SubmitOraclePubKey(MsgSubmitOraclePubKey) returns (MsgSubmitOraclePubKeyResponse);
     rpc SubmitDCMPubKey(MsgSubmitDCMPubKey) returns (MsgSubmitDCMPubKeyResponse);
     rpc CreateOracle(MsgCreateOracle) returns (MsgCreateOracleResponse);
@@ -61,16 +60,6 @@ message MsgSubmitNonce {
 }
 
 message MsgSubmitNonceResponse {}
-
-message MsgSubmitAttestation {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    uint64 event_id = 2;
-    string signature = 3;
-}
-
-message MsgSubmitAttestationResponse {}
 
 message MsgCreateOracle {
     option (cosmos.msg.v1.signer) = "authority";

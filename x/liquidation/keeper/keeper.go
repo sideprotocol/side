@@ -43,7 +43,7 @@ func NewKeeper(
 	}
 
 	// register signing request completed handler
-	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SettlementSignaturesCompletedHandler)
+	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
 
 	return k
 }
