@@ -60,6 +60,48 @@ func AdaptorPointFromSecret(secret []byte) string {
 	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
 }
 
+// HasSupplyCap returns true if the supply cap set in the given pool, false otherwise
+func HasSupplyCap(pool *LendingPool) bool {
+	return pool.Config.SupplyCap.IsPositive()
+}
+
+// HasBorrowCap returns true if the borrow cap set in the given pool, false otherwise
+func HasBorrowCap(pool *LendingPool) bool {
+	return pool.Config.BorrowCap.IsPositive()
+}
+
+// HasDebtCeiling returns true if the debt ceiling set in the given pool, false otherwise
+func HasDebtCeiling(pool *LendingPool) bool {
+	return pool.Config.DebtCeiling.IsPositive()
+}
+
+// CheckSupplyCap checks if the supply cap will be exceeded for the given deposit amount
+func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
+	if HasSupplyCap(pool) && pool.Supply.Amount.Add(depositAmount).GT(pool.Config.SupplyCap) {
+		return ErrSupplyCapExceeded
+	}
+
+	return nil
+}
+
+// CheckBorrowCap checks if the borrow cap will be exceeded for the given borrow amount
+func CheckBorrowCap(pool *LendingPool, borrowAmount sdkmath.Int) error {
+	if HasBorrowCap(pool) && pool.TotalBorrowed.Add(borrowAmount).GT(pool.Config.BorrowCap) {
+		return ErrBorrowCapExceeded
+	}
+
+	return nil
+}
+
+// CheckDebtCeiling checks if the debt ceiling will be exceeded for the given borrow amount
+func CheckDebtCeiling(pool *LendingPool, borrowAmount sdkmath.Int) error {
+	if HasDebtCeiling(pool) && pool.TotalBorrowed.Add(borrowAmount).GT(pool.Config.DebtCeiling) {
+		return ErrDebtCeilingExceeded
+	}
+
+	return nil
+}
+
 // ValidatePoolConfig validates the given pool config
 func ValidatePoolConfig(config PoolConfig) error {
 	if config.BorrowAPR == 0 || config.BorrowAPR >= 1000 {

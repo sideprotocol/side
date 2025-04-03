@@ -52,6 +52,14 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrInsufficientLiquidity
 	}
 
+	if err := types.CheckBorrowCap(pool, msg.BorrowAmount.Amount); err != nil {
+		return nil, types.ErrBorrowCapExceeded
+	}
+
+	if err := types.CheckDebtCeiling(pool, msg.BorrowAmount.Amount); err != nil {
+		return nil, types.ErrDebtCeilingExceeded
+	}
+
 	duration := msg.MaturityTime - ctx.BlockTime().Unix()
 	if duration < m.MinLoanDuration(ctx) || duration > m.MaxLoanDuration(ctx) {
 		return nil, types.ErrInvalidLoanDuration
@@ -141,7 +149,8 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	loan := m.GetLoan(ctx, msg.LoanId)
-	poolConfig := m.GetPool(ctx, loan.PoolId).Config
+	pool := m.GetPool(ctx, loan.PoolId)
+	poolConfig := pool.Config
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
@@ -203,8 +212,18 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
-	if m.GetPool(ctx, loan.PoolId).AvailableAmount.LT(loan.BorrowAmount.Amount) {
+	if pool.AvailableAmount.LT(loan.BorrowAmount.Amount) {
 		errRejected = types.ErrInsufficientLiquidity
+		return nil, nil
+	}
+
+	if err := types.CheckBorrowCap(pool, loan.BorrowAmount.Amount); err != nil {
+		errRejected = types.ErrBorrowCapExceeded
+		return nil, nil
+	}
+
+	if err := types.CheckDebtCeiling(pool, loan.BorrowAmount.Amount); err != nil {
+		errRejected = types.ErrDebtCeilingExceeded
 		return nil, nil
 	}
 
@@ -325,6 +344,18 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 
 	if ctx.BlockTime().Unix() >= loan.MaturityTime {
 		errRejected = types.ErrMaturityTimeReached
+		return nil, nil
+	}
+
+	pool := m.GetPool(ctx, loan.PoolId)
+
+	if err := types.CheckBorrowCap(pool, loan.BorrowAmount.Amount); err != nil {
+		errRejected = types.ErrBorrowCapExceeded
+		return nil, nil
+	}
+
+	if err := types.CheckDebtCeiling(pool, loan.BorrowAmount.Amount); err != nil {
+		errRejected = types.ErrDebtCeilingExceeded
 		return nil, nil
 	}
 

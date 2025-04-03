@@ -67,6 +67,10 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
 	}
 
+	if err := types.CheckSupplyCap(pool, msg.Amount.Amount); err != nil {
+		return nil, types.ErrSupplyCapExceeded
+	}
+
 	var sTokenAmount sdkmath.Int
 
 	if pool.Supply.IsZero() {
