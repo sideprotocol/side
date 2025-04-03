@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"encoding/base64"
+	"fmt"
 
 	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
@@ -300,6 +301,15 @@ func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 		event.Pubkey,
 		[]string{base64.StdEncoding.EncodeToString(types.GetEventOutcomeHash(event, outcomeIndex))},
 		&tsstypes.SigningOptions{Nonce: event.Nonce},
+	)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeTriggerDLCEvent,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", event.Id)),
+			sdk.NewAttribute(types.AttributeKeyDLCEventType, fmt.Sprintf("%d", event.Type)),
+			sdk.NewAttribute(types.AttributeKeyOutcome, event.Outcomes[outcomeIndex]),
+		),
 	)
 }
 

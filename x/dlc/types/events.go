@@ -13,10 +13,7 @@ const (
 	AttributeKeyThreshold      = "threshold"
 	AttributeKeyExpirationTime = "expiration_time"
 
-	AttributeKeyEventId     = "event_id"
-	AttributeKeyPubKey      = "pub_key"
-	AttributeKeyNonce       = "nonce"
-	AttributeKeyOutcomeHash = "outcome_hash"
+	AttributeKeyOutcome = "outcome"
 
 	AttributeKeyOraclePubKey = "oracle_pub_key"
 )
