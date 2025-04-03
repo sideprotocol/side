@@ -37,6 +37,9 @@ func NewKeeper(
 		authority:    authority,
 	}
 
+	// register DKG request completed handler
+	tssKeeper.RegisterDKGRequestCompletedHandler(types.ModuleName, k.DKGCompletedHandler)
+
 	// register signing request completed handler
 	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
 

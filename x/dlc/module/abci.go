@@ -14,7 +14,6 @@ import (
 // EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handlePendingOracles(ctx, k)
-	handlePendingDCMs(ctx, k)
 
 	generatePriceEventNonces(ctx, k)
 	generateDateEventNonces(ctx, k)
@@ -56,43 +55,6 @@ func handlePendingOracles(ctx sdk.Context, k keeper.Keeper) {
 
 		k.SetOracle(ctx, oracle)
 		k.SetOracleByPubKey(ctx, oracle.Id, pubKeys[0])
-	}
-}
-
-// handlePendingDCMs handles the pending DCMs
-func handlePendingDCMs(ctx sdk.Context, k keeper.Keeper) {
-	pendingDCMs := k.GetDCMs(ctx, types.DCMStatus_DCM_Status_Pending)
-
-	for _, dcm := range pendingDCMs {
-		// check if the pending DCM expired
-		if !ctx.BlockTime().Before(dcm.Time.Add(k.DKGTimeoutPeriod(ctx))) {
-			dcm.Status = types.DCMStatus_DCM_Status_Timedout
-			k.SetDCM(ctx, dcm)
-
-			continue
-		}
-
-		// handle pending pub keys
-		pubKeys := k.GetPendingDCMPubKeys(ctx, dcm.Id)
-		if len(pubKeys) != len(dcm.Participants) {
-			continue
-		}
-
-		// check if the pending pub keys are valid
-		if !types.CheckPendingPubKeys(pubKeys) {
-			dcm.Status = types.DCMStatus_DCM_Status_Failed
-			k.SetDCM(ctx, dcm)
-
-			continue
-		}
-
-		// set pub key
-		dcm.Pubkey = hex.EncodeToString(pubKeys[0])
-
-		// update status
-		dcm.Status = types.DCMStatus_DCM_status_Enable
-
-		k.SetDCM(ctx, dcm)
 	}
 }
 

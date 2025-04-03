@@ -14,7 +14,6 @@ service Msg {
 
     rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
     rpc SubmitOraclePubKey(MsgSubmitOraclePubKey) returns (MsgSubmitOraclePubKeyResponse);
-    rpc SubmitDCMPubKey(MsgSubmitDCMPubKey) returns (MsgSubmitDCMPubKeyResponse);
     rpc CreateOracle(MsgCreateOracle) returns (MsgCreateOracleResponse);
     rpc CreateDCM(MsgCreateDCM) returns (MsgCreateDCMResponse);
 
@@ -24,18 +23,6 @@ service Msg {
     // Since: cosmos-sdk 0.47
     rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
-
-message MsgSubmitDCMPubKey {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    string pub_key = 2;
-    uint64 dcm_id = 3 [(gogoproto.customname) = "DCMId"];
-    string dcm_pubkey = 4 [(gogoproto.customname) = "DCMPubKey"];
-    string signature = 5;
-}
-
-message MsgSubmitDCMPubKeyResponse {}
 
 message MsgSubmitOraclePubKey {
     option (cosmos.msg.v1.signer) = "sender";

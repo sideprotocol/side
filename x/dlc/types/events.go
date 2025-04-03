@@ -7,6 +7,8 @@ const (
 	EventTypeGenerateNonce   = "generate_nonce"
 	EventTypeTriggerDLCEvent = "trigger_dlc_event"
 
+	AttributeKeyPubKey = "pub_key"
+
 	AttributeKeyId             = "id"
 	AttributeKeyDLCEventType   = "dlc_event_type"
 	AttributeKeyParticipants   = "participants"

@@ -12,6 +12,10 @@ import (
 	"github.com/sideprotocol/side/crypto/hash"
 )
 
+const (
+	DCM_TYPE = "dcm"
+)
+
 // GetEventOutcomeHash gets the event outcome hash by the given index
 // Assume that the outcome index is valid
 func GetEventOutcomeHash(event *DLCEvent, outcomeIndex int) []byte {

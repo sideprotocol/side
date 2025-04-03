@@ -1,67 +1,32 @@
 package keeper
 
 import (
-	"encoding/base64"
-	"encoding/hex"
+	"fmt"
 
-	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
-// CreateDCM initiates the DCM creation request
-func (k Keeper) CreateDCM(ctx sdk.Context, participants []string, threshold uint32) (*types.DCM, error) {
+// CreateDCM creates a new DCM with the given pub key
+func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) {
 	dcm := &types.DCM{
-		Id:           k.IncrementDCMId(ctx),
-		Participants: participants,
-		Threshold:    threshold,
-		Time:         ctx.BlockTime(),
-		Status:       types.DCMStatus_DCM_Status_Pending,
+		Id:     k.IncrementDCMId(ctx),
+		Pubkey: pubKey,
+		Time:   ctx.BlockTime(),
+		Status: types.DCMStatus_DCM_status_Enable,
 	}
 
 	k.SetDCM(ctx, dcm)
 
-	return dcm, nil
-}
-
-// SubmitDCMPubKey performs the DCM public key submission
-func (k Keeper) SubmitDCMPubKey(ctx sdk.Context, sender string, pubKey string, dcmId uint64, dcmPubKey string, signature string) error {
-	dcm := k.GetDCM(ctx, dcmId)
-	if dcm == nil {
-		return types.ErrDCMDoesNotExist
-	}
-
-	if !types.ParticipantExists(dcm.Participants, pubKey) {
-		return types.ErrUnauthorizedParticipant
-	}
-
-	pubKeyBytes, _ := base64.StdEncoding.DecodeString(pubKey)
-
-	if k.HasPendingDCMPubKey(ctx, dcmId, pubKeyBytes) {
-		return types.ErrPendingDCMPubKeyExists
-	}
-
-	if dcm.Status != types.DCMStatus_DCM_Status_Pending {
-		return types.ErrInvalidDCMStatus
-	}
-
-	if !ctx.BlockTime().Before(dcm.Time.Add(k.DKGTimeoutPeriod(ctx))) {
-		return errorsmod.Wrap(types.ErrDKGTimedOut, "dcm dkg timed out")
-	}
-
-	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
-	sigBytes, _ := hex.DecodeString(signature)
-	sigMsg := types.GetSigMsg(dcmId, dcmPubKeyBytes)
-
-	if !types.VerifySignature(sigBytes, pubKeyBytes, sigMsg) {
-		return errorsmod.Wrap(types.ErrInvalidSignature, "signature verification failed")
-	}
-
-	k.SetPendingDCMPubKey(ctx, dcmId, pubKeyBytes, dcmPubKeyBytes)
-
-	return nil
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCreateDCM,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", dcm.Id)),
+			sdk.NewAttribute(types.AttributeKeyPubKey, dcm.Pubkey),
+		),
+	)
 }
 
 // GetDCMId gets the current DCM id

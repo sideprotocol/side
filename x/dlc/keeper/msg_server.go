@@ -46,21 +46,6 @@ func (m msgServer) SubmitOraclePubKey(goCtx context.Context, msg *types.MsgSubmi
 	return &types.MsgSubmitOraclePubKeyResponse{}, nil
 }
 
-// SubmitDCMPubKey implements types.MsgServer.
-func (m msgServer) SubmitDCMPubKey(goCtx context.Context, msg *types.MsgSubmitDCMPubKey) (*types.MsgSubmitDCMPubKeyResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if err := m.Keeper.SubmitDCMPubKey(ctx, msg.Sender, msg.PubKey, msg.DCMId, msg.DCMPubKey, msg.Signature); err != nil {
-		return nil, err
-	}
-
-	return &types.MsgSubmitDCMPubKeyResponse{}, nil
-}
-
 // CreateOracle implements types.MsgServer.
 func (m msgServer) CreateOracle(goCtx context.Context, msg *types.MsgCreateOracle) (*types.MsgCreateOracleResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -95,20 +80,7 @@ func (m msgServer) CreateDCM(goCtx context.Context, msg *types.MsgCreateDCM) (*t
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	dcm, err := m.Keeper.CreateDCM(ctx, msg.Participants, msg.Threshold)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeCreateDCM,
-			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", dcm.Id)),
-			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(dcm.Participants, types.AttributeValueSeparator)),
-			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", dcm.Threshold)),
-			sdk.NewAttribute(types.AttributeKeyExpirationTime, dcm.Time.Add(m.DKGTimeoutPeriod(ctx)).String()),
-		),
-	)
+	m.tssKeeper.InitiateDKG(ctx, types.ModuleName, types.DCM_TYPE, int32(types.DKGIntent_DKG_INTENT_DCM), msg.Participants, msg.Threshold, 1)
 
 	return &types.MsgCreateDCMResponse{}, nil
 }

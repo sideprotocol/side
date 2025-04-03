@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_SubmitNonce_FullMethodName        = "/side.dlc.Msg/SubmitNonce"
 	Msg_SubmitOraclePubKey_FullMethodName = "/side.dlc.Msg/SubmitOraclePubKey"
-	Msg_SubmitDCMPubKey_FullMethodName    = "/side.dlc.Msg/SubmitDCMPubKey"
 	Msg_CreateOracle_FullMethodName       = "/side.dlc.Msg/CreateOracle"
 	Msg_CreateDCM_FullMethodName          = "/side.dlc.Msg/CreateDCM"
 	Msg_UpdateParams_FullMethodName       = "/side.dlc.Msg/UpdateParams"
@@ -33,7 +32,6 @@ const (
 type MsgClient interface {
 	SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ...grpc.CallOption) (*MsgSubmitNonceResponse, error)
 	SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOraclePubKey, opts ...grpc.CallOption) (*MsgSubmitOraclePubKeyResponse, error)
-	SubmitDCMPubKey(ctx context.Context, in *MsgSubmitDCMPubKey, opts ...grpc.CallOption) (*MsgSubmitDCMPubKeyResponse, error)
 	CreateOracle(ctx context.Context, in *MsgCreateOracle, opts ...grpc.CallOption) (*MsgCreateOracleResponse, error)
 	CreateDCM(ctx context.Context, in *MsgCreateDCM, opts ...grpc.CallOption) (*MsgCreateDCMResponse, error)
 	// UpdateParams defines a governance operation for updating the x/dlc module
@@ -63,15 +61,6 @@ func (c *msgClient) SubmitNonce(ctx context.Context, in *MsgSubmitNonce, opts ..
 func (c *msgClient) SubmitOraclePubKey(ctx context.Context, in *MsgSubmitOraclePubKey, opts ...grpc.CallOption) (*MsgSubmitOraclePubKeyResponse, error) {
 	out := new(MsgSubmitOraclePubKeyResponse)
 	err := c.cc.Invoke(ctx, Msg_SubmitOraclePubKey_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) SubmitDCMPubKey(ctx context.Context, in *MsgSubmitDCMPubKey, opts ...grpc.CallOption) (*MsgSubmitDCMPubKeyResponse, error) {
-	out := new(MsgSubmitDCMPubKeyResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitDCMPubKey_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +100,6 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 type MsgServer interface {
 	SubmitNonce(context.Context, *MsgSubmitNonce) (*MsgSubmitNonceResponse, error)
 	SubmitOraclePubKey(context.Context, *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error)
-	SubmitDCMPubKey(context.Context, *MsgSubmitDCMPubKey) (*MsgSubmitDCMPubKeyResponse, error)
 	CreateOracle(context.Context, *MsgCreateOracle) (*MsgCreateOracleResponse, error)
 	CreateDCM(context.Context, *MsgCreateDCM) (*MsgCreateDCMResponse, error)
 	// UpdateParams defines a governance operation for updating the x/dlc module
@@ -131,9 +119,6 @@ func (UnimplementedMsgServer) SubmitNonce(context.Context, *MsgSubmitNonce) (*Ms
 }
 func (UnimplementedMsgServer) SubmitOraclePubKey(context.Context, *MsgSubmitOraclePubKey) (*MsgSubmitOraclePubKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitOraclePubKey not implemented")
-}
-func (UnimplementedMsgServer) SubmitDCMPubKey(context.Context, *MsgSubmitDCMPubKey) (*MsgSubmitDCMPubKeyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitDCMPubKey not implemented")
 }
 func (UnimplementedMsgServer) CreateOracle(context.Context, *MsgCreateOracle) (*MsgCreateOracleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOracle not implemented")
@@ -189,24 +174,6 @@ func _Msg_SubmitOraclePubKey_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).SubmitOraclePubKey(ctx, req.(*MsgSubmitOraclePubKey))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_SubmitDCMPubKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitDCMPubKey)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitDCMPubKey(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_SubmitDCMPubKey_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitDCMPubKey(ctx, req.(*MsgSubmitDCMPubKey))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -279,10 +246,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SubmitOraclePubKey",
 			Handler:    _Msg_SubmitOraclePubKey_Handler,
-		},
-		{
-			MethodName: "SubmitDCMPubKey",
-			Handler:    _Msg_SubmitDCMPubKey_Handler,
 		},
 		{
 			MethodName: "CreateOracle",
