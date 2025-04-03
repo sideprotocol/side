@@ -21,7 +21,7 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
-// CreateLoan implements types.MsgServer.
+// Apply implements types.MsgServer.
 func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.MsgApplyResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
@@ -112,6 +112,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	}
 
 	m.SetLoan(ctx, loan)
+	m.SetLoanByAddress(ctx, loan)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventTypeApply,

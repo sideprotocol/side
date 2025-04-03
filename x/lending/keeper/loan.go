@@ -19,6 +19,13 @@ func (k Keeper) SetLoan(ctx sdk.Context, loan *types.Loan) {
 	store.Set(types.LoanKey(loan.VaultAddress), bz)
 }
 
+// SetLoanByAddress sets the given loan by address
+func (k Keeper) SetLoanByAddress(ctx sdk.Context, loan *types.Loan) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.LoanByAddressKey(loan.VaultAddress, loan.Borrower), []byte{})
+}
+
 // HasLoan returns true if the given loan exists, false otherwise
 func (k Keeper) HasLoan(ctx sdk.Context, id string) bool {
 	store := ctx.KVStore(k.storeKey)
@@ -35,23 +42,6 @@ func (k Keeper) GetLoan(ctx sdk.Context, id string) *types.Loan {
 	k.cdc.MustUnmarshal(bz, &loan)
 
 	return &loan
-}
-
-// IterateLoans iterates through all loans
-func (k Keeper) IterateLoans(ctx sdk.Context, cb func(loan *types.Loan) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-
-	iterator := storetypes.KVStorePrefixIterator(store, types.LoanKeyPrefix)
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var loan types.Loan
-		k.cdc.MustUnmarshal(iterator.Value(), &loan)
-
-		if cb(&loan) {
-			break
-		}
-	}
 }
 
 // GetLoans gets loans by the given status
@@ -85,8 +75,8 @@ func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 func (k Keeper) GetLoansByAddress(ctx sdk.Context, address string, status types.LoanStatus) []*types.Loan {
 	var loans []*types.Loan
 
-	k.IterateLoans(ctx, func(loan *types.Loan) (stop bool) {
-		if loan.Borrower == address && (status == types.LoanStatus_Unspecified || loan.Status == status) {
+	k.IterateLoansByAddress(ctx, address, func(loan *types.Loan) (stop bool) {
+		if status == types.LoanStatus_Unspecified || loan.Status == status {
 			loans = append(loans, loan)
 		}
 
@@ -94,6 +84,41 @@ func (k Keeper) GetLoansByAddress(ctx sdk.Context, address string, status types.
 	})
 
 	return loans
+}
+
+// IterateLoans iterates through all loans
+func (k Keeper) IterateLoans(ctx sdk.Context, cb func(loan *types.Loan) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.LoanKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var loan types.Loan
+		k.cdc.MustUnmarshal(iterator.Value(), &loan)
+
+		if cb(&loan) {
+			break
+		}
+	}
+}
+
+// IterateLoansByAddress iterates through loans by the given address
+func (k Keeper) IterateLoansByAddress(ctx sdk.Context, address string, cb func(loan *types.Loan) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, append(types.LoanByAddressKeyPrefix, []byte(address)...))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		key := iterator.Key()
+
+		loan := k.GetLoan(ctx, string(key[1+len(address):]))
+
+		if cb(loan) {
+			break
+		}
+	}
 }
 
 // SetDepositLog sets the given deposit log
