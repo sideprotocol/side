@@ -46,7 +46,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 	remainingCollateralAmount := liquidation.CollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
 	if remainingCollateralAmount.Amount.LT(collateralAmount) {
 		collateralAmount = remainingCollateralAmount.Amount
-		debtAmount.Amount = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Mul(currentPrice).Quo(sdkmath.LegacyDec(sdkmath.NewIntWithDecimal(1, 8))).TruncateInt()
+		debtAmount.Amount = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Mul(currentPrice).QuoInt(sdkmath.NewIntWithDecimal(1, 8)).TruncateInt()
 	}
 
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(liquidator), types.ModuleName, sdk.NewCoins(debtAmount)); err != nil {

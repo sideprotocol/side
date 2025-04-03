@@ -230,12 +230,8 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, err
 	}
 
-	// TODO
-	collateralDecimal := sdkmath.NewInt(100000000)
-	borrowedDecimal := sdkmath.NewInt(1000000)
-
 	// check LTV
-	if collateralAmount.Mul(borrowedDecimal).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).ToLegacyDec().Mul(currentPrice).Quo(collateralDecimal.Mul(types.Percent).ToLegacyDec()).TruncateInt().LT(loan.BorrowAmount.Amount) {
+	if collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).ToLegacyDec().Mul(currentPrice).Quo(sdkmath.NewIntWithDecimal(1, 8).Mul(types.Percent).ToLegacyDec()).TruncateInt().LT(loan.BorrowAmount.Amount) {
 		errRejected = types.ErrInsufficientCollateral
 		return nil, nil
 	}
