@@ -3,7 +3,6 @@ package keeper
 import (
 	"bytes"
 	"encoding/hex"
-	"time"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
@@ -87,15 +86,8 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.
 func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin) error {
 	loan := k.GetLoan(ctx, loanId)
 
-	interest := loan.Interest
-	protocolFee := loan.ProtocolFee
-
-	if loan.Status == types.LoanStatus_Liquidated {
-		liquidation := k.liquidationKeeper.GetLiquidation(ctx, liquidationId)
-
-		interest = types.GetCurrentInterest(loan.Interest, time.Duration(loan.Term), loan.CreateAt.Unix(), liquidation.LiquidatedTime.Unix())
-		protocolFee = interest.Mul(sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.ReserveFactor))).Quo(sdkmath.NewInt(1000))
-	}
+	interest := k.GetCurrentInterest(ctx, loan).Amount
+	protocolFee := interest.Mul(sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.ReserveFactor))).Quo(sdkmath.NewInt(1000))
 
 	if debtAmount.Amount.LTE(interest) {
 		// TODO

@@ -26,9 +26,9 @@ func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, tota
 	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed)).Quo(totalSTokens.ToLegacyDec())
 }
 
-// GetCurrentInterest calculates the current loan interest based on the given params
-func GetCurrentInterest(totalInterest sdkmath.Int, term time.Duration, startTime int64, currentTime int64) sdkmath.Int {
-	elapsed := currentTime - startTime
+// GetInterest calculates the loan interest based on the given params
+func GetInterest(totalInterest sdkmath.Int, term time.Duration, startTime int64, destTime int64) sdkmath.Int {
+	elapsed := destTime - startTime
 
 	return totalInterest.Mul(sdkmath.NewInt(elapsed)).Quo(sdkmath.NewInt(int64(term)))
 }

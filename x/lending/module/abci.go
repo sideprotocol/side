@@ -4,7 +4,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strings"
-	"time"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -90,17 +89,12 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		// create liquidation if defaulted or liquidated
 		if loan.Status == types.LoanStatus_Defaulted || loan.Status == types.LoanStatus_Liquidated {
-			interest := loan.Interest
-			if loan.Status == types.LoanStatus_Liquidated {
-				interest = types.GetCurrentInterest(loan.Interest, time.Duration(loan.Term), loan.CreateAt.Unix(), ctx.BlockTime().Unix())
-			}
-
 			liquidation := k.LiquidationKeeper().CreateLiquidation(ctx, &liquidationtypes.Liquidation{
 				LoanId:                       loan.VaultAddress,
 				Debtor:                       loan.Borrower,
 				DCM:                          loan.DCM,
 				CollateralAmount:             sdk.NewCoin("sat", loan.CollateralAmount),
-				DebtAmount:                   sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(interest)),
+				DebtAmount:                   sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(k.GetCurrentInterest(ctx, loan).Amount)),
 				LiquidatedPrice:              currentPrice,
 				LiquidatedTime:               ctx.BlockTime(),
 				LiquidatedCollateralAmount:   sdk.NewCoin("sat", sdkmath.ZeroInt()),
