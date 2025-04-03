@@ -691,6 +691,7 @@ func New(
 		app.LiquidationKeeper,
 		app.DLCKeeper,
 		app.BtcBridgeKeeper,
+		app.TSSKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 

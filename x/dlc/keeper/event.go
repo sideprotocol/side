@@ -293,7 +293,8 @@ func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 
 	k.tssKeeper.InitiateSigningRequest(
 		ctx,
-		types.ModuleName, types.ToScopedId(event.Id),
+		types.ModuleName,
+		types.ToScopedId(event.Id),
 		tsstypes.SigningType_SIGNING_TYPE_SCHNORR_WITH_COMMITMENT,
 		0,
 		event.Pubkey,

@@ -6,7 +6,6 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"strings"
 
 	btcschnorr "github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -16,9 +15,9 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/crypto/adaptor"
 	"github.com/sideprotocol/side/crypto/schnorr"
 	"github.com/sideprotocol/side/x/lending/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // CreateLoan implements types.MsgServer.
@@ -372,58 +371,6 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	return &types.MsgApproveResponse{}, nil
 }
 
-// SubmitRepaymentAdaptorSignatures implements types.MsgServer.
-func (m msgServer) SubmitRepaymentAdaptorSignatures(goCtx context.Context, msg *types.MsgSubmitRepaymentAdaptorSignatures) (*types.MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanDoesNotExist
-	}
-
-	loan := m.GetLoan(ctx, msg.LoanId)
-	if loan.Status != types.LoanStatus_Open && loan.Status != types.LoanStatus_Repaid {
-		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan neither open nor repaid")
-	}
-
-	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
-
-	repaymentCet := dlcMeta.RepaymentCet
-	if len(repaymentCet.DCMAdaptorSignatures) != 0 {
-		return nil, types.ErrRepaymentAdaptorSigsAlreadyExist
-	}
-
-	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet.Tx)), true)
-	if len(msg.AdaptorSignatures) != len(p.Inputs) {
-		return nil, errorsmod.Wrap(types.ErrInvalidAdaptorSignatures, "mismatched adaptor signature number")
-	}
-
-	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
-	adaptorPoint, _ := m.GetRepaymentCetAdaptorPoint(ctx, msg.LoanId)
-	dcmPubKey, _ := hex.DecodeString(m.GetLoan(ctx, msg.LoanId).DCM)
-
-	for i, input := range p.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
-		if err != nil {
-			return nil, err
-		}
-
-		adaptorSigBytes, _ := hex.DecodeString(msg.AdaptorSignatures[i])
-
-		if !adaptor.Verify(adaptorSigBytes, sigHash, dcmPubKey, adaptorPoint) {
-			return nil, types.ErrInvalidAdaptorSignature
-		}
-	}
-
-	dlcMeta.RepaymentCet.DCMAdaptorSignatures = msg.AdaptorSignatures
-	m.SetDLCMeta(ctx, msg.LoanId, dlcMeta)
-
-	return &types.MsgSubmitRepaymentAdaptorSignaturesResponse{}, nil
-}
-
 // Cancel implements types.MsgServer.
 func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.MsgCancelResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -509,101 +456,26 @@ func (m msgServer) Cancel(goCtx context.Context, msg *types.MsgCancel) (*types.M
 	}
 	m.SetCancellation(ctx, cancellation)
 
+	m.tssKeeper.InitiateSigningRequest(
+		ctx,
+		types.ModuleName,
+		msg.LoanId,
+		tsstypes.SigningType_SIGNING_TYPE_SCHNORR,
+		int32(types.SigningIntent_SIGNING_INTENT_CANCELLATION),
+		loan.DCM,
+		sigHashes,
+		nil,
+	)
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeCancel,
 			sdk.NewAttribute(types.AttributeKeyBorrower, msg.Borrower),
 			sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
-			sdk.NewAttribute(types.AttributeKeyDCMPubKey, loan.DCM),
-			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
 		),
 	)
 
 	return &types.MsgCancelResponse{}, nil
-}
-
-// SubmitCancellationSignatures implements types.MsgServer.
-func (m msgServer) SubmitCancellationSignatures(goCtx context.Context, msg *types.MsgSubmitCancellationSignatures) (*types.MsgSubmitCancellationSignaturesResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !m.HasCancellation(ctx, msg.LoanId) {
-		return nil, types.ErrCancellationDoesNotExist
-	}
-
-	cancellation := m.GetCancellation(ctx, msg.LoanId)
-	if len(cancellation.DCMSignatures) != 0 {
-		return nil, types.ErrDCMSignaturesAlreadyExist
-	}
-
-	loan := m.GetLoan(ctx, msg.LoanId)
-
-	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(cancellation.Tx)), true)
-	if len(msg.Signatures) != len(p.Inputs) {
-		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
-	}
-
-	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
-	dcmPubKey, _ := hex.DecodeString(loan.DCM)
-
-	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
-	leafHash := txscript.NewBaseTapLeaf(script).TapHash()
-
-	for i := range p.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(p, i, types.DefaultSigHashType, script)
-		if err != nil {
-			return nil, err
-		}
-
-		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
-
-		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
-			return nil, types.ErrInvalidSignature
-		}
-
-		borrowerSig, _ := hex.DecodeString(cancellation.Signatures[i])
-
-		p.Inputs[i].TaprootScriptSpendSig = []*psbt.TaprootScriptSpendSig{
-			{
-				XOnlyPubKey: dcmPubKey,
-				LeafHash:    leafHash[:],
-				Signature:   sigBytes,
-				SigHash:     txscript.SigHashDefault,
-			},
-			{
-				XOnlyPubKey: borrowerPubKey,
-				LeafHash:    leafHash[:],
-				Signature:   borrowerSig,
-				SigHash:     txscript.SigHashDefault,
-			},
-		}
-	}
-
-	if err := psbt.MaybeFinalizeAll(p); err != nil {
-		return nil, err
-	}
-
-	serializedTx, err := p.B64Encode()
-	if err != nil {
-		return nil, err
-	}
-
-	cancellation.Tx = serializedTx
-	cancellation.DCMSignatures = msg.Signatures
-	m.SetCancellation(ctx, cancellation)
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeGenerateSignedCancellationTransaction,
-			sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
-			sdk.NewAttribute(types.AttributeKeyTxHash, cancellation.Txid),
-		),
-	)
-
-	return &types.MsgSubmitCancellationSignaturesResponse{}, nil
 }
 
 // Repay implements types.MsgServer.
@@ -650,36 +522,4 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	)
 
 	return &types.MsgRepayResponse{}, nil
-}
-
-// SubmitLiquidationSignatures implements types.MsgServer.
-func (m msgServer) SubmitLiquidationSignatures(goCtx context.Context, msg *types.MsgSubmitLiquidationSignatures) (*types.MsgSubmitLiquidationSignaturesResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !m.HasLoan(ctx, msg.LoanId) {
-		return nil, types.ErrLoanDoesNotExist
-	}
-
-	loan := m.GetLoan(ctx, msg.LoanId)
-
-	switch loan.Status {
-	case types.LoanStatus_Liquidated:
-		if err := m.handleLiquidationSignatures(ctx, loan, msg.Signatures); err != nil {
-			return nil, err
-		}
-
-	case types.LoanStatus_Defaulted:
-		if err := m.handleDefaultLiquidationSignatures(ctx, loan, msg.Signatures); err != nil {
-			return nil, err
-		}
-
-	default:
-		return nil, types.ErrLoanNotLiquidated
-	}
-
-	return &types.MsgSubmitLiquidationSignaturesResponse{}, nil
 }

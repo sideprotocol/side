@@ -20,11 +20,8 @@ service Msg {
     rpc Apply(MsgApply) returns (MsgApplyResponse);
     rpc SubmitCets(MsgSubmitCets) returns (MsgSubmitCetsResponse);
     rpc Approve(MsgApprove) returns (MsgApproveResponse);
-    rpc SubmitRepaymentAdaptorSignatures(MsgSubmitRepaymentAdaptorSignatures) returns (MsgSubmitRepaymentAdaptorSignaturesResponse);
     rpc Cancel(MsgCancel) returns (MsgCancelResponse);
-    rpc SubmitCancellationSignatures(MsgSubmitCancellationSignatures) returns (MsgSubmitCancellationSignaturesResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
-    rpc SubmitLiquidationSignatures(MsgSubmitLiquidationSignatures) returns (MsgSubmitLiquidationSignaturesResponse);
 
     // SubmitPrice submits the price for testing 
     rpc SubmitPrice(MsgSubmitPrice) returns (MsgSubmitPriceResponse);
@@ -146,42 +143,6 @@ message MsgCancel {
 }
 
 message MsgCancelResponse {
-
-}
-
-message MsgSubmitCancellationSignatures {
-    option (cosmos.msg.v1.signer) = "sender";
-    
-    string sender = 1;
-    string loan_id = 2;
-    repeated string signatures = 3;
-}
-
-message MsgSubmitCancellationSignaturesResponse {
-
-}
-
-message MsgSubmitRepaymentAdaptorSignatures {
-    option (cosmos.msg.v1.signer) = "sender";
-    
-    string sender = 1;
-    string loan_id = 2;
-    repeated string adaptor_signatures = 3;
-}
-
-message MsgSubmitRepaymentAdaptorSignaturesResponse {
-
-}
-
-message MsgSubmitLiquidationSignatures {
-    option (cosmos.msg.v1.signer) = "sender";
-    
-    string sender = 1;
-    string loan_id = 2;
-    repeated string signatures = 3;
-}
-
-message MsgSubmitLiquidationSignaturesResponse {
 
 }
 

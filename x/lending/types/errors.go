@@ -53,7 +53,8 @@ var (
 	ErrLoanNotLiquidated                 = errorsmod.Register(ModuleName, 7001, "loan not liquidated yet")
 	ErrLiquidationSignaturesAlreadyExist = errorsmod.Register(ModuleName, 7002, "dcm liquidation signatures already exist")
 
-	ErrInvalidLoanStatus = errorsmod.Register(ModuleName, 8001, "invalid loan status")
-	ErrInvalidSignatures = errorsmod.Register(ModuleName, 8002, "invalid signatures")
-	ErrInvalidSignature  = errorsmod.Register(ModuleName, 8003, "invalid signature")
+	ErrInvalidLoanStatus    = errorsmod.Register(ModuleName, 8001, "invalid loan status")
+	ErrInvalidSignatures    = errorsmod.Register(ModuleName, 8002, "invalid signatures")
+	ErrInvalidSignature     = errorsmod.Register(ModuleName, 8003, "invalid signature")
+	ErrInvalidSigningIntent = errorsmod.Register(ModuleName, 8004, "invalid signing intent")
 )

@@ -25,6 +25,7 @@ type (
 		liquidationKeeper types.LiquidationKeeper
 		dlcKeeper         types.DLCKeeper
 		btcbridgeKeeper   types.BtcBridgeKeeper
+		tssKeeper         types.TSSKeeper
 
 		authority string
 	}
@@ -41,6 +42,7 @@ func NewKeeper(
 	liquidationKeeper types.LiquidationKeeper,
 	dlcKeeper types.DLCKeeper,
 	btcbridgeKeeper types.BtcBridgeKeeper,
+	tssKeeper types.TSSKeeper,
 	authority string,
 ) Keeper {
 	// ensure escrow module account is set
@@ -59,11 +61,15 @@ func NewKeeper(
 		liquidationKeeper: liquidationKeeper,
 		dlcKeeper:         dlcKeeper,
 		btcbridgeKeeper:   btcbridgeKeeper,
+		tssKeeper:         tssKeeper,
 		authority:         authority,
 	}
 
 	// set liquidated debt handler for liquidation
 	liquidationKeeper.SetLiquidatedDebtHandler(k.HandleLiquidatedDebt)
+
+	// register signing request completed handler
+	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
 
 	return k
 }
@@ -114,4 +120,8 @@ func (k Keeper) DLCKeeper() types.DLCKeeper {
 
 func (k Keeper) BtcBridgeKeeper() types.BtcBridgeKeeper {
 	return k.btcbridgeKeeper
+}
+
+func (k Keeper) TSSKeeper() types.TSSKeeper {
+	return k.tssKeeper
 }

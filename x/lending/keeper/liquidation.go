@@ -15,9 +15,18 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
-// handleLiquidationSignatures handles the liquidation signatures
-func (k Keeper) handleLiquidationSignatures(ctx sdk.Context, loan *types.Loan, signatures []string) error {
-	dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
+// HandleLiquidationSignatures handles the liquidation signatures
+func (k Keeper) HandleLiquidationSignatures(ctx sdk.Context, loanId string, signatures []string) error {
+	if !k.HasLoan(ctx, loanId) {
+		return types.ErrLoanDoesNotExist
+	}
+
+	loan := k.GetLoan(ctx, loanId)
+	if loan.Status != types.LoanStatus_Liquidated {
+		return errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not liquidated")
+	}
+
+	dlcMeta := k.GetDLCMeta(ctx, loanId)
 	if len(dlcMeta.LiquidationCet.DCMSignatures) > 0 {
 		return types.ErrLiquidationSignaturesAlreadyExist
 	}
@@ -44,13 +53,22 @@ func (k Keeper) handleLiquidationSignatures(ctx sdk.Context, loan *types.Loan, s
 	}
 
 	dlcMeta.LiquidationCet.DCMSignatures = signatures
-	k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
+	k.SetDLCMeta(ctx, loanId, dlcMeta)
 
 	return nil
 }
 
 // handleDefaultLiquidationSignatures handles the default liquidation signatures
-func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.Loan, signatures []string) error {
+func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loanId string, signatures []string) error {
+	if !k.HasLoan(ctx, loanId) {
+		return types.ErrLoanDoesNotExist
+	}
+
+	loan := k.GetLoan(ctx, loanId)
+	if loan.Status != types.LoanStatus_Defaulted {
+		return errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not defaulted")
+	}
+
 	dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 	if len(dlcMeta.DefaultLiquidationCet.DCMSignatures) > 0 {
 		return types.ErrLiquidationSignaturesAlreadyExist
@@ -78,7 +96,7 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.
 	}
 
 	dlcMeta.DefaultLiquidationCet.DCMSignatures = signatures
-	k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
+	k.SetDLCMeta(ctx, loanId, dlcMeta)
 
 	return nil
 }

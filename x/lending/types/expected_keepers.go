@@ -12,6 +12,7 @@ import (
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
@@ -82,4 +83,11 @@ type DLCKeeper interface {
 type BtcBridgeKeeper interface {
 	ValidateTransaction(ctx sdk.Context, tx string, prevTx string, blockHash string, proof []string) (*btcutil.Tx, *btcutil.Tx, error)
 	GetFeeRate(ctx sdk.Context) *btcbridgetypes.FeeRate
+}
+
+// TSSKeeper defines the expected TSS keeper interface
+type TSSKeeper interface {
+	InitiateSigningRequest(ctx sdk.Context, module string, scopedId string, ty tsstypes.SigningType, intent int32, pubKey string, sigHashes []string, options *tsstypes.SigningOptions) *tsstypes.SigningRequest
+
+	RegisterSigningRequestCompletedHandler(module string, handler tsstypes.SigningRequestCompletedHandler)
 }

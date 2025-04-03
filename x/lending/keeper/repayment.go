@@ -1,20 +1,24 @@
 package keeper
 
 import (
+	"bytes"
 	"encoding/hex"
-	"strings"
 
+	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
+	"github.com/btcsuite/btcd/btcutil/psbt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sideprotocol/side/crypto/adaptor"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // InitiateRepaymentCetSigningRequest initiates the signing request for the repayment cet
 // Assume that both the loan and repayment cet exist
 func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId string) error {
-	signaturePoint, err := k.GetRepaymentCetAdaptorPoint(ctx, loanId)
+	adaptorPoint, err := k.GetRepaymentCetAdaptorPoint(ctx, loanId)
 	if err != nil {
 		return err
 	}
@@ -24,15 +28,62 @@ func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId strin
 		return err
 	}
 
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeSignRepaymentCet,
-			sdk.NewAttribute(types.AttributeKeyLoanId, loanId),
-			sdk.NewAttribute(types.AttributeKeyDCMPubKey, k.GetLoan(ctx, loanId).DCM),
-			sdk.NewAttribute(types.AttributeKeyAdaptorPoint, hex.EncodeToString(signaturePoint)),
-			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
-		),
+	k.tssKeeper.InitiateSigningRequest(
+		ctx,
+		types.ModuleName,
+		loanId,
+		tsstypes.SigningType_SIGNING_TYPE_SCHNORR_ADAPTOR,
+		int32(types.SigningIntent_SIGNING_INTENT_REPAYMENT),
+		k.GetLoan(ctx, loanId).DCM,
+		sigHashes,
+		&tsstypes.SigningOptions{AdaptorPoint: hex.EncodeToString(adaptorPoint)},
 	)
+
+	return nil
+}
+
+// HandleRepaymentAdaptorSignatures handles repayment adaptor signatures
+func (k Keeper) HandleRepaymentAdaptorSignatures(ctx sdk.Context, loanId string, adaptorSignatures []string) error {
+	if !k.HasLoan(ctx, loanId) {
+		return types.ErrLoanDoesNotExist
+	}
+
+	loan := k.GetLoan(ctx, loanId)
+	if loan.Status != types.LoanStatus_Open && loan.Status != types.LoanStatus_Repaid {
+		return errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan neither open nor repaid")
+	}
+
+	dlcMeta := k.GetDLCMeta(ctx, loanId)
+
+	repaymentCet := dlcMeta.RepaymentCet
+	if len(repaymentCet.DCMAdaptorSignatures) != 0 {
+		return types.ErrRepaymentAdaptorSigsAlreadyExist
+	}
+
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet.Tx)), true)
+	if len(adaptorSignatures) != len(p.Inputs) {
+		return errorsmod.Wrap(types.ErrInvalidAdaptorSignatures, "mismatched adaptor signature number")
+	}
+
+	script, _ := hex.DecodeString(dlcMeta.MultisigScript)
+	adaptorPoint, _ := k.GetRepaymentCetAdaptorPoint(ctx, loanId)
+	dcmPubKey, _ := hex.DecodeString(loan.DCM)
+
+	for i, input := range p.Inputs {
+		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
+		if err != nil {
+			return err
+		}
+
+		adaptorSigBytes, _ := hex.DecodeString(adaptorSignatures[i])
+
+		if !adaptor.Verify(adaptorSigBytes, sigHash, dcmPubKey, adaptorPoint) {
+			return types.ErrInvalidAdaptorSignature
+		}
+	}
+
+	dlcMeta.RepaymentCet.DCMAdaptorSignatures = adaptorSignatures
+	k.SetDLCMeta(ctx, loanId, dlcMeta)
 
 	return nil
 }
