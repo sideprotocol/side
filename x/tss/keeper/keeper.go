@@ -30,11 +30,13 @@ func NewKeeper(
 	authority string,
 ) *Keeper {
 	return &Keeper{
-		cdc:           cdc,
-		storeKey:      storeKey,
-		memKey:        memKey,
-		stakingKeeper: stakingKeeper,
-		authority:     authority,
+		cdc:                             cdc,
+		storeKey:                        storeKey,
+		memKey:                          memKey,
+		stakingKeeper:                   stakingKeeper,
+		dkgRequestCompletedHandlers:     make(map[string]types.DKGRequestCompletedHandler),
+		signingRequestCompletedHandlers: make(map[string]types.SigningRequestCompletedHandler),
+		authority:                       authority,
 	}
 }
 
