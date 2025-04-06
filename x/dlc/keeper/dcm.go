@@ -77,20 +77,6 @@ func (k Keeper) SetDCM(ctx sdk.Context, dcm *types.DCM) {
 	store.Set(types.DCMKey(dcm.Id), bz)
 }
 
-// HasPendingDCMPubKey returns true if the given pending DCM pubkey exists, false otherwise
-func (k Keeper) HasPendingDCMPubKey(ctx sdk.Context, dcmId uint64, pubKey []byte) bool {
-	store := ctx.KVStore(k.storeKey)
-
-	return store.Has(types.PendingDCMPubKeyKey(dcmId, pubKey))
-}
-
-// SetPendingDCMPubKey sets the pending DCM public key
-func (k Keeper) SetPendingDCMPubKey(ctx sdk.Context, dcmId uint64, pubKey []byte, dcmPubKey []byte) {
-	store := ctx.KVStore(k.storeKey)
-
-	store.Set(types.PendingDCMPubKeyKey(dcmId, pubKey), dcmPubKey)
-}
-
 // GetDCMs gets DCMs by the given status
 func (k Keeper) GetDCMs(ctx sdk.Context, status types.DCMStatus) []*types.DCM {
 	dcms := make([]*types.DCM, 0)
@@ -106,19 +92,6 @@ func (k Keeper) GetDCMs(ctx sdk.Context, status types.DCMStatus) []*types.DCM {
 	return dcms
 }
 
-// GetPendingDCMPubKeys gets pending DCM pub keys by the given DCM id
-func (k Keeper) GetPendingDCMPubKeys(ctx sdk.Context, dcmId uint64) [][]byte {
-	pubKeys := make([][]byte, 0)
-
-	k.IteratePendingDCMPubKeys(ctx, dcmId, func(pubKey []byte) (stop bool) {
-		pubKeys = append(pubKeys, pubKey)
-
-		return false
-	})
-
-	return pubKeys
-}
-
 // IterateDCMs iterates through all DCMs
 func (k Keeper) IterateDCMs(ctx sdk.Context, cb func(dcm *types.DCM) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
@@ -131,20 +104,6 @@ func (k Keeper) IterateDCMs(ctx sdk.Context, cb func(dcm *types.DCM) (stop bool)
 		k.cdc.MustUnmarshal(iterator.Value(), &dcm)
 
 		if cb(&dcm) {
-			break
-		}
-	}
-}
-
-// IteratePendingDCMPubKeys iterates through all pending DCM pub keys by the given DCM id
-func (k Keeper) IteratePendingDCMPubKeys(ctx sdk.Context, dcmId uint64, cb func(pubKey []byte) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-
-	iterator := storetypes.KVStorePrefixIterator(store, append(types.PendingDCMPubKeyKeyPrefix, sdk.Uint64ToBigEndian(dcmId)...))
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		if cb(iterator.Value()) {
 			break
 		}
 	}
