@@ -9,6 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/dlc/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // GetEventId gets the current event id
@@ -291,13 +292,23 @@ func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 		k.AddPriceEventToTriggeredQueue(ctx, event)
 	}
 
+	k.tssKeeper.InitiateSigningRequest(
+		ctx,
+		types.ModuleName,
+		types.ToScopedId(event.Id),
+		tsstypes.SigningType_SIGNING_TYPE_SCHNORR_WITH_COMMITMENT,
+		int32(types.SigningIntent_SIGNING_INTENT_DEFAULT),
+		event.Pubkey,
+		[]string{base64.StdEncoding.EncodeToString(types.GetEventOutcomeHash(event, outcomeIndex))},
+		&tsstypes.SigningOptions{Nonce: event.Nonce},
+	)
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeTriggerDLCEvent,
-			sdk.NewAttribute(types.AttributeKeyEventId, fmt.Sprintf("%d", id)),
-			sdk.NewAttribute(types.AttributeKeyPubKey, event.Pubkey),
-			sdk.NewAttribute(types.AttributeKeyNonce, event.Nonce),
-			sdk.NewAttribute(types.AttributeKeyOutcomeHash, base64.StdEncoding.EncodeToString(types.GetEventOutcomeHash(event, outcomeIndex))),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", event.Id)),
+			sdk.NewAttribute(types.AttributeKeyDLCEventType, fmt.Sprintf("%d", event.Type)),
+			sdk.NewAttribute(types.AttributeKeyOutcome, event.Outcomes[outcomeIndex]),
 		),
 	)
 }

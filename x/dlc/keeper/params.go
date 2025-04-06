@@ -13,17 +13,9 @@ func (k Keeper) PriceEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).PriceEventNonceQueueSize
 }
 
-// PriceInterval gets the price interval for the given pair
-func (k Keeper) PriceInterval(ctx sdk.Context, pair string) int32 {
-	priceIntervals := k.GetParams(ctx).PriceIntervals
-
-	for _, pi := range priceIntervals {
-		if pi.PricePair == pair {
-			return pi.Interval
-		}
-	}
-
-	return types.DefaultPriceInterval
+// PriceIntervals gets all supported price intervals
+func (k Keeper) PriceIntervals(ctx sdk.Context) []types.PriceInterval {
+	return k.GetParams(ctx).PriceIntervals
 }
 
 // DateEventNonceQueueSize gets the nonce queue size for the date events
@@ -41,7 +33,12 @@ func (k Keeper) LendingEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).LendingEventNonceQueueSize
 }
 
-// DKGTimeoutPeriod gets the DKG timeout period
-func (k Keeper) DKGTimeoutPeriod(ctx sdk.Context) time.Duration {
-	return k.GetParams(ctx).DkgTimeoutPeriod
+// OracleParticipantNum gets the oracle participant number
+func (k Keeper) OracleParticipantNum(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).OracleParticipantNum
+}
+
+// NonceGenerationBatchSize gets the nonce generation batch size
+func (k Keeper) NonceGenerationBatchSize(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).NonceGenerationBatchSize
 }

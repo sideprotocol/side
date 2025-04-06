@@ -46,6 +46,8 @@ func DLCKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		storeKey,
 		memStoreKey,
 		app.OracleKeeper,
+		app.StakingKeeper,
+		app.TSSKeeper,
 		authority,
 	)
 

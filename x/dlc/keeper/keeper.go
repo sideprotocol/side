@@ -14,7 +14,9 @@ type Keeper struct {
 	storeKey storetypes.StoreKey
 	memKey   storetypes.StoreKey
 
-	oracleKeeper types.OracleKeeper
+	oracleKeeper  types.OracleKeeper
+	stakingKeeper types.StakingKeeper
+	tssKeeper     types.TSSKeeper
 
 	authority string
 }
@@ -24,15 +26,27 @@ func NewKeeper(
 	storeKey,
 	memKey storetypes.StoreKey,
 	oracleKeeper types.OracleKeeper,
+	stakingKeeper types.StakingKeeper,
+	tssKeeper types.TSSKeeper,
 	authority string,
 ) Keeper {
-	return Keeper{
-		cdc:          cdc,
-		storeKey:     storeKey,
-		memKey:       memKey,
-		oracleKeeper: oracleKeeper,
-		authority:    authority,
+	k := Keeper{
+		cdc:           cdc,
+		storeKey:      storeKey,
+		memKey:        memKey,
+		oracleKeeper:  oracleKeeper,
+		stakingKeeper: stakingKeeper,
+		tssKeeper:     tssKeeper,
+		authority:     authority,
 	}
+
+	// register DKG request completed handler
+	tssKeeper.RegisterDKGRequestCompletedHandler(types.ModuleName, k.DKGCompletedHandler)
+
+	// register signing request completed handler
+	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
+
+	return k
 }
 
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
@@ -56,4 +70,8 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	k.cdc.MustUnmarshal(bz, &params)
 
 	return params
+}
+
+func (k Keeper) TSSKeeper() types.TSSKeeper {
+	return k.tssKeeper
 }

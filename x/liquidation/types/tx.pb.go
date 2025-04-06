@@ -128,104 +128,6 @@ func (m *MsgLiquidateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgLiquidateResponse proto.InternalMessageInfo
 
-// MsgSubmitSettlementSignatures defines the Msg/SubmitSettlementSignatures request type.
-type MsgSubmitSettlementSignatures struct {
-	Sender        string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	LiquidationId uint64   `protobuf:"varint,2,opt,name=liquidation_id,json=liquidationId,proto3" json:"liquidation_id,omitempty"`
-	Signatures    []string `protobuf:"bytes,3,rep,name=signatures,proto3" json:"signatures,omitempty"`
-}
-
-func (m *MsgSubmitSettlementSignatures) Reset()         { *m = MsgSubmitSettlementSignatures{} }
-func (m *MsgSubmitSettlementSignatures) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitSettlementSignatures) ProtoMessage()    {}
-func (*MsgSubmitSettlementSignatures) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f02c39d8df123a3d, []int{2}
-}
-func (m *MsgSubmitSettlementSignatures) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgSubmitSettlementSignatures) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgSubmitSettlementSignatures.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgSubmitSettlementSignatures) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitSettlementSignatures.Merge(m, src)
-}
-func (m *MsgSubmitSettlementSignatures) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgSubmitSettlementSignatures) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitSettlementSignatures.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgSubmitSettlementSignatures proto.InternalMessageInfo
-
-func (m *MsgSubmitSettlementSignatures) GetSender() string {
-	if m != nil {
-		return m.Sender
-	}
-	return ""
-}
-
-func (m *MsgSubmitSettlementSignatures) GetLiquidationId() uint64 {
-	if m != nil {
-		return m.LiquidationId
-	}
-	return 0
-}
-
-func (m *MsgSubmitSettlementSignatures) GetSignatures() []string {
-	if m != nil {
-		return m.Signatures
-	}
-	return nil
-}
-
-// MsgSubmitSettlementSignaturesResponse defines the Msg/SubmitSettlementSignatures response type.
-type MsgSubmitSettlementSignaturesResponse struct {
-}
-
-func (m *MsgSubmitSettlementSignaturesResponse) Reset()         { *m = MsgSubmitSettlementSignaturesResponse{} }
-func (m *MsgSubmitSettlementSignaturesResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSubmitSettlementSignaturesResponse) ProtoMessage()    {}
-func (*MsgSubmitSettlementSignaturesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f02c39d8df123a3d, []int{3}
-}
-func (m *MsgSubmitSettlementSignaturesResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgSubmitSettlementSignaturesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgSubmitSettlementSignaturesResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgSubmitSettlementSignaturesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSubmitSettlementSignaturesResponse.Merge(m, src)
-}
-func (m *MsgSubmitSettlementSignaturesResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgSubmitSettlementSignaturesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSubmitSettlementSignaturesResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgSubmitSettlementSignaturesResponse proto.InternalMessageInfo
-
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //
 // Since: cosmos-sdk 0.47
@@ -242,7 +144,7 @@ func (m *MsgUpdateParams) Reset()         { *m = MsgUpdateParams{} }
 func (m *MsgUpdateParams) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParams) ProtoMessage()    {}
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f02c39d8df123a3d, []int{4}
+	return fileDescriptor_f02c39d8df123a3d, []int{2}
 }
 func (m *MsgUpdateParams) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -295,7 +197,7 @@ func (m *MsgUpdateParamsResponse) Reset()         { *m = MsgUpdateParamsResponse
 func (m *MsgUpdateParamsResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParamsResponse) ProtoMessage()    {}
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f02c39d8df123a3d, []int{5}
+	return fileDescriptor_f02c39d8df123a3d, []int{3}
 }
 func (m *MsgUpdateParamsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -327,8 +229,6 @@ var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 func init() {
 	proto.RegisterType((*MsgLiquidate)(nil), "side.liquidation.MsgLiquidate")
 	proto.RegisterType((*MsgLiquidateResponse)(nil), "side.liquidation.MsgLiquidateResponse")
-	proto.RegisterType((*MsgSubmitSettlementSignatures)(nil), "side.liquidation.MsgSubmitSettlementSignatures")
-	proto.RegisterType((*MsgSubmitSettlementSignaturesResponse)(nil), "side.liquidation.MsgSubmitSettlementSignaturesResponse")
 	proto.RegisterType((*MsgUpdateParams)(nil), "side.liquidation.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "side.liquidation.MsgUpdateParamsResponse")
 }
@@ -336,40 +236,34 @@ func init() {
 func init() { proto.RegisterFile("side/liquidation/tx.proto", fileDescriptor_f02c39d8df123a3d) }
 
 var fileDescriptor_f02c39d8df123a3d = []byte{
-	// 514 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x4d, 0x6f, 0xd3, 0x40,
-	0x10, 0xcd, 0x36, 0x25, 0x52, 0x26, 0xa5, 0x45, 0x56, 0xd5, 0x3a, 0x16, 0x35, 0xc1, 0x52, 0x21,
-	0xf4, 0xe0, 0x25, 0x41, 0x02, 0x29, 0x27, 0x28, 0x27, 0x10, 0x91, 0x50, 0x22, 0x2e, 0x08, 0xa9,
-	0xb2, 0xe3, 0x95, 0xbb, 0x52, 0xec, 0x35, 0xde, 0x75, 0x69, 0x6f, 0x88, 0x03, 0x17, 0x2e, 0xfc,
-	0x0c, 0x8e, 0xfd, 0x19, 0x39, 0xf6, 0xc8, 0x09, 0xa1, 0xe4, 0xd0, 0xbf, 0x81, 0xd6, 0x5e, 0x27,
-	0xdb, 0x0f, 0x02, 0x3d, 0xd9, 0x3b, 0xef, 0xcd, 0x9b, 0x37, 0x33, 0x6b, 0x43, 0x93, 0xd3, 0x80,
-	0xe0, 0x31, 0xfd, 0x98, 0xd1, 0xc0, 0x13, 0x94, 0xc5, 0x58, 0x1c, 0xbb, 0x49, 0xca, 0x04, 0x33,
-	0xee, 0x48, 0xc8, 0xd5, 0x20, 0x6b, 0x33, 0x64, 0x21, 0xcb, 0x41, 0x2c, 0xdf, 0x0a, 0x9e, 0x65,
-	0x8f, 0x18, 0x8f, 0x18, 0xc7, 0xbe, 0xc7, 0x09, 0x3e, 0xea, 0xf8, 0x44, 0x78, 0x1d, 0x3c, 0x62,
-	0x34, 0x56, 0xf8, 0xb6, 0xc2, 0x23, 0x1e, 0xe2, 0xa3, 0x8e, 0x7c, 0x28, 0x60, 0xe7, 0x4a, 0xed,
-	0xc4, 0x4b, 0xbd, 0x88, 0x17, 0xb0, 0xf3, 0x03, 0xc1, 0x5a, 0x9f, 0x87, 0x6f, 0x14, 0x4e, 0x0c,
-	0x1b, 0xa0, 0x24, 0xb3, 0xd4, 0x44, 0x2d, 0xd4, 0xae, 0x0f, 0xb4, 0x88, 0xb1, 0x0b, 0xeb, 0x9a,
-	0xd8, 0x01, 0x0d, 0xcc, 0x95, 0x16, 0x6a, 0xaf, 0x0e, 0x6e, 0x6b, 0xd1, 0x57, 0x81, 0xf1, 0x1c,
-	0x1a, 0x01, 0xf1, 0xc5, 0x81, 0x17, 0xb1, 0x2c, 0x16, 0x66, 0xb5, 0x85, 0xda, 0x8d, 0x6e, 0xd3,
-	0x2d, 0x5c, 0xba, 0xb2, 0x0b, 0x57, 0x75, 0xe1, 0xbe, 0x64, 0x34, 0xde, 0x5f, 0x9d, 0xfc, 0xba,
-	0x57, 0x19, 0x80, 0xcc, 0x79, 0x91, 0xa7, 0xf4, 0x36, 0xbe, 0x9c, 0x9f, 0xee, 0x69, 0x95, 0x9d,
-	0x2d, 0xd8, 0xd4, 0x9d, 0x0e, 0x08, 0x4f, 0x58, 0xcc, 0x89, 0xf3, 0x0d, 0xc1, 0x4e, 0x9f, 0x87,
-	0xc3, 0xcc, 0x8f, 0xa8, 0x18, 0x12, 0x21, 0xc6, 0x24, 0x22, 0xb1, 0x18, 0xd2, 0x30, 0xf6, 0x44,
-	0x96, 0x12, 0x6e, 0x6c, 0x41, 0x8d, 0x93, 0x38, 0x20, 0x65, 0x3f, 0xea, 0xf4, 0xbf, 0xbd, 0xd8,
-	0x00, 0x7c, 0x2e, 0x66, 0x56, 0x5b, 0x55, 0x39, 0x92, 0x45, 0xa4, 0xd7, 0x90, 0x4e, 0x95, 0xa6,
-	0xf3, 0x10, 0x76, 0x97, 0x9a, 0x99, 0xdb, 0xfe, 0x04, 0x1b, 0x7d, 0x1e, 0xbe, 0x4b, 0x64, 0x2f,
-	0x6f, 0xf3, 0x95, 0x18, 0x77, 0xa1, 0xee, 0x65, 0xe2, 0x90, 0xa5, 0x54, 0x9c, 0x28, 0xab, 0x8b,
-	0x80, 0xf1, 0x14, 0x6a, 0xc5, 0xea, 0x72, 0x97, 0x8d, 0xae, 0xe9, 0x5e, 0xbe, 0x3b, 0x6e, 0xa1,
-	0xa3, 0x86, 0xa9, 0xd8, 0xbd, 0x75, 0x69, 0x6f, 0xa1, 0xe3, 0x34, 0x61, 0xfb, 0x52, 0xe1, 0xd2,
-	0x53, 0x77, 0xb2, 0x02, 0xd5, 0x3e, 0x0f, 0x8d, 0x21, 0xd4, 0xb5, 0x1b, 0x71, 0xb5, 0x8e, 0xbe,
-	0x07, 0xeb, 0xc1, 0x72, 0xbc, 0x14, 0x37, 0xbe, 0x22, 0xb0, 0x96, 0x2c, 0x09, 0x5f, 0x2b, 0xf3,
-	0xf7, 0x04, 0xeb, 0xd9, 0x0d, 0x13, 0xe6, 0x46, 0x3e, 0xc0, 0xda, 0x85, 0xb1, 0xdf, 0xbf, 0x56,
-	0x48, 0xa7, 0x58, 0x8f, 0xfe, 0x49, 0x29, 0xd5, 0xad, 0x5b, 0x9f, 0xcf, 0x4f, 0xf7, 0xd0, 0xfe,
-	0xeb, 0xc9, 0xd4, 0x46, 0x67, 0x53, 0x1b, 0xfd, 0x9e, 0xda, 0xe8, 0xfb, 0xcc, 0xae, 0x9c, 0xcd,
-	0xec, 0xca, 0xcf, 0x99, 0x5d, 0x79, 0xff, 0x38, 0xa4, 0xe2, 0x30, 0xf3, 0xdd, 0x11, 0x8b, 0xb0,
-	0x54, 0xcd, 0x3f, 0xc4, 0x11, 0x1b, 0xe7, 0x07, 0x7c, 0x7c, 0xf1, 0x3f, 0x71, 0x92, 0x10, 0xee,
-	0xd7, 0x72, 0xca, 0x93, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x42, 0xd4, 0x45, 0x87, 0x48, 0x04,
-	0x00, 0x00,
+	// 427 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x52, 0xcf, 0x6e, 0xd3, 0x30,
+	0x1c, 0x8e, 0xd9, 0x98, 0x54, 0x77, 0x6c, 0xc8, 0x9a, 0x58, 0x1a, 0x81, 0x29, 0x91, 0x40, 0x65,
+	0x07, 0x9b, 0x16, 0x89, 0xc3, 0x4e, 0x30, 0x4e, 0x20, 0x2a, 0xa1, 0x20, 0x2e, 0x08, 0x69, 0xca,
+	0x1f, 0x2b, 0xb3, 0xb4, 0xc4, 0x21, 0x76, 0xc6, 0x76, 0x43, 0x3c, 0x01, 0x8f, 0xc1, 0x71, 0x6f,
+	0xc0, 0xb5, 0xc7, 0x1e, 0x39, 0x21, 0xd4, 0x1e, 0xfa, 0x1a, 0xc8, 0x89, 0xa3, 0xba, 0x2d, 0x82,
+	0x53, 0x92, 0xdf, 0xf7, 0xfd, 0xbe, 0x3f, 0x8e, 0x61, 0x4f, 0xf2, 0x84, 0xd1, 0x73, 0xfe, 0xa9,
+	0xe2, 0x49, 0xa8, 0xb8, 0xc8, 0xa9, 0xba, 0x24, 0x45, 0x29, 0x94, 0x40, 0xb7, 0x35, 0x44, 0x2c,
+	0xc8, 0x3b, 0x48, 0x45, 0x2a, 0x6a, 0x90, 0xea, 0xb7, 0x86, 0xe7, 0xe1, 0x58, 0xc8, 0x4c, 0x48,
+	0x1a, 0x85, 0x92, 0xd1, 0x8b, 0x61, 0xc4, 0x54, 0x38, 0xa4, 0xb1, 0xe0, 0xb9, 0xc1, 0x0f, 0x0d,
+	0x9e, 0xc9, 0x94, 0x5e, 0x0c, 0xf5, 0xc3, 0x00, 0xf7, 0x36, 0xbc, 0x8b, 0xb0, 0x0c, 0x33, 0xd9,
+	0xc0, 0xfe, 0x77, 0x00, 0x77, 0xc7, 0x32, 0x7d, 0x63, 0x70, 0x86, 0x30, 0x84, 0x2d, 0x59, 0x94,
+	0x2e, 0xe8, 0x83, 0x41, 0x27, 0xb0, 0x26, 0xe8, 0x21, 0xdc, 0xb3, 0xc4, 0x4e, 0x79, 0xe2, 0xde,
+	0xe8, 0x83, 0xc1, 0x76, 0x70, 0xcb, 0x9a, 0xbe, 0x4a, 0xd0, 0x73, 0xd8, 0x4d, 0x58, 0xa4, 0x4e,
+	0xc3, 0x4c, 0x54, 0xb9, 0x72, 0xb7, 0xfa, 0x60, 0xd0, 0x1d, 0xf5, 0x48, 0x93, 0x92, 0xe8, 0x16,
+	0xc4, 0xb4, 0x20, 0x2f, 0x05, 0xcf, 0x4f, 0xb6, 0x27, 0xbf, 0xee, 0x3b, 0x01, 0xd4, 0x3b, 0x2f,
+	0xea, 0x95, 0xe3, 0xfd, 0xaf, 0x8b, 0xeb, 0x23, 0xcb, 0xd9, 0xbf, 0x03, 0x0f, 0xec, 0xa4, 0x01,
+	0x93, 0x85, 0xc8, 0x25, 0xf3, 0x3f, 0xc3, 0xfd, 0xb1, 0x4c, 0xdf, 0x17, 0x7a, 0xf8, 0xb6, 0xee,
+	0x86, 0xee, 0xc2, 0x4e, 0x58, 0xa9, 0x33, 0x51, 0x72, 0x75, 0x65, 0x3a, 0x2c, 0x07, 0xe8, 0x19,
+	0xdc, 0x69, 0xce, 0xa0, 0x8e, 0xde, 0x1d, 0xb9, 0x64, 0xfd, 0x27, 0x90, 0x46, 0xc7, 0xa4, 0x32,
+	0xec, 0xe3, 0x3d, 0x9d, 0x68, 0xa9, 0xe3, 0xf7, 0xe0, 0xe1, 0x9a, 0x71, 0x9b, 0x69, 0xf4, 0x03,
+	0xc0, 0xad, 0xb1, 0x4c, 0xd1, 0x3b, 0xd8, 0xb1, 0x8e, 0x76, 0xd3, 0xc7, 0x2e, 0xe4, 0x3d, 0xfa,
+	0x37, 0xde, 0x8a, 0xa3, 0x8f, 0x70, 0x77, 0xa5, 0xed, 0x83, 0xbf, 0xee, 0xd9, 0x14, 0xef, 0xf1,
+	0x7f, 0x29, 0xad, 0xba, 0x77, 0xf3, 0xcb, 0xe2, 0xfa, 0x08, 0x9c, 0xbc, 0x9e, 0xcc, 0x30, 0x98,
+	0xce, 0x30, 0xf8, 0x3d, 0xc3, 0xe0, 0xdb, 0x1c, 0x3b, 0xd3, 0x39, 0x76, 0x7e, 0xce, 0xb1, 0xf3,
+	0xe1, 0x49, 0xca, 0xd5, 0x59, 0x15, 0x91, 0x58, 0x64, 0x54, 0xab, 0xd6, 0x17, 0x29, 0x16, 0xe7,
+	0xf5, 0x07, 0xbd, 0x5c, 0xbd, 0xe7, 0x57, 0x05, 0x93, 0xd1, 0x4e, 0x4d, 0x79, 0xfa, 0x27, 0x00,
+	0x00, 0xff, 0xff, 0xcb, 0x5d, 0x80, 0xbb, 0x08, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -386,8 +280,6 @@ const _ = grpc.SupportPackageIsVersion4
 type MsgClient interface {
 	// Liquidate the specified debt amount by liquidators.
 	Liquidate(ctx context.Context, in *MsgLiquidate, opts ...grpc.CallOption) (*MsgLiquidateResponse, error)
-	// Submit settlement transaction signatures for the specified liquidation.
-	SubmitSettlementSignatures(ctx context.Context, in *MsgSubmitSettlementSignatures, opts ...grpc.CallOption) (*MsgSubmitSettlementSignaturesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -412,15 +304,6 @@ func (c *msgClient) Liquidate(ctx context.Context, in *MsgLiquidate, opts ...grp
 	return out, nil
 }
 
-func (c *msgClient) SubmitSettlementSignatures(ctx context.Context, in *MsgSubmitSettlementSignatures, opts ...grpc.CallOption) (*MsgSubmitSettlementSignaturesResponse, error) {
-	out := new(MsgSubmitSettlementSignaturesResponse)
-	err := c.cc.Invoke(ctx, "/side.liquidation.Msg/SubmitSettlementSignatures", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	out := new(MsgUpdateParamsResponse)
 	err := c.cc.Invoke(ctx, "/side.liquidation.Msg/UpdateParams", in, out, opts...)
@@ -434,8 +317,6 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 type MsgServer interface {
 	// Liquidate the specified debt amount by liquidators.
 	Liquidate(context.Context, *MsgLiquidate) (*MsgLiquidateResponse, error)
-	// Submit settlement transaction signatures for the specified liquidation.
-	SubmitSettlementSignatures(context.Context, *MsgSubmitSettlementSignatures) (*MsgSubmitSettlementSignaturesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -449,9 +330,6 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) Liquidate(ctx context.Context, req *MsgLiquidate) (*MsgLiquidateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Liquidate not implemented")
-}
-func (*UnimplementedMsgServer) SubmitSettlementSignatures(ctx context.Context, req *MsgSubmitSettlementSignatures) (*MsgSubmitSettlementSignaturesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitSettlementSignatures not implemented")
 }
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -475,24 +353,6 @@ func _Msg_Liquidate_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).Liquidate(ctx, req.(*MsgLiquidate))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_SubmitSettlementSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitSettlementSignatures)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitSettlementSignatures(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/side.liquidation.Msg/SubmitSettlementSignatures",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitSettlementSignatures(ctx, req.(*MsgSubmitSettlementSignatures))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -523,10 +383,6 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Liquidate",
 			Handler:    _Msg_Liquidate_Handler,
-		},
-		{
-			MethodName: "SubmitSettlementSignatures",
-			Handler:    _Msg_SubmitSettlementSignatures_Handler,
 		},
 		{
 			MethodName: "UpdateParams",
@@ -598,73 +454,6 @@ func (m *MsgLiquidateResponse) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *MsgLiquidateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgSubmitSettlementSignatures) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgSubmitSettlementSignatures) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgSubmitSettlementSignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signatures) > 0 {
-		for iNdEx := len(m.Signatures) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Signatures[iNdEx])
-			copy(dAtA[i:], m.Signatures[iNdEx])
-			i = encodeVarintTx(dAtA, i, uint64(len(m.Signatures[iNdEx])))
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if m.LiquidationId != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.LiquidationId))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Sender) > 0 {
-		i -= len(m.Sender)
-		copy(dAtA[i:], m.Sender)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgSubmitSettlementSignaturesResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgSubmitSettlementSignaturesResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgSubmitSettlementSignaturesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -765,37 +554,6 @@ func (m *MsgLiquidate) Size() (n int) {
 }
 
 func (m *MsgLiquidateResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *MsgSubmitSettlementSignatures) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Sender)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	if m.LiquidationId != 0 {
-		n += 1 + sovTx(uint64(m.LiquidationId))
-	}
-	if len(m.Signatures) > 0 {
-		for _, s := range m.Signatures {
-			l = len(s)
-			n += 1 + l + sovTx(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *MsgSubmitSettlementSignaturesResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -995,189 +753,6 @@ func (m *MsgLiquidateResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgLiquidateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgSubmitSettlementSignatures) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitSettlementSignatures: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitSettlementSignatures: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LiquidationId", wireType)
-			}
-			m.LiquidationId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LiquidationId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signatures", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signatures = append(m.Signatures, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgSubmitSettlementSignaturesResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSubmitSettlementSignaturesResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSubmitSettlementSignaturesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

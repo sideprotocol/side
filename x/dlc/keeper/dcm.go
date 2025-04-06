@@ -1,65 +1,40 @@
 package keeper
 
 import (
-	"encoding/base64"
 	"encoding/hex"
+	"fmt"
 
-	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
-// CreateDCM initiates the DCM creation request
-func (k Keeper) CreateDCM(ctx sdk.Context, participants []string, threshold uint32) (*types.DCM, error) {
+// CreateDCM creates a new DCM with the given pub key
+// Assume that the pub key is valid
+func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) error {
+	pubKeyBz, _ := hex.DecodeString(pubKey)
+	if k.HasDCMByPubKey(ctx, pubKeyBz) {
+		return types.ErrDCMAlreadyExists
+	}
+
 	dcm := &types.DCM{
-		Id:           k.IncrementDCMId(ctx),
-		Participants: participants,
-		Threshold:    threshold,
-		Time:         ctx.BlockTime(),
-		Status:       types.DCMStatus_DCM_Status_Pending,
+		Id:     k.IncrementDCMId(ctx),
+		Pubkey: pubKey,
+		Time:   ctx.BlockTime(),
+		Status: types.DCMStatus_DCM_status_Enable,
 	}
 
 	k.SetDCM(ctx, dcm)
+	k.SetDCMByPubKey(ctx, dcm.Id, pubKeyBz)
 
-	return dcm, nil
-}
-
-// SubmitDCMPubKey performs the DCM public key submission
-func (k Keeper) SubmitDCMPubKey(ctx sdk.Context, sender string, pubKey string, dcmId uint64, dcmPubKey string, signature string) error {
-	dcm := k.GetDCM(ctx, dcmId)
-	if dcm == nil {
-		return types.ErrDCMDoesNotExist
-	}
-
-	if !types.ParticipantExists(dcm.Participants, pubKey) {
-		return types.ErrUnauthorizedParticipant
-	}
-
-	pubKeyBytes, _ := base64.StdEncoding.DecodeString(pubKey)
-
-	if k.HasPendingDCMPubKey(ctx, dcmId, pubKeyBytes) {
-		return types.ErrPendingDCMPubKeyExists
-	}
-
-	if dcm.Status != types.DCMStatus_DCM_Status_Pending {
-		return types.ErrInvalidDCMStatus
-	}
-
-	if !ctx.BlockTime().Before(dcm.Time.Add(k.DKGTimeoutPeriod(ctx))) {
-		return errorsmod.Wrap(types.ErrDKGTimedOut, "dcm dkg timed out")
-	}
-
-	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
-	sigBytes, _ := hex.DecodeString(signature)
-	sigMsg := types.GetSigMsg(dcmId, dcmPubKeyBytes)
-
-	if !types.VerifySignature(sigBytes, pubKeyBytes, sigMsg) {
-		return errorsmod.Wrap(types.ErrInvalidSignature, "signature verification failed")
-	}
-
-	k.SetPendingDCMPubKey(ctx, dcmId, pubKeyBytes, dcmPubKeyBytes)
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCreateDCM,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", dcm.Id)),
+			sdk.NewAttribute(types.AttributeKeyPubKey, dcm.Pubkey),
+		),
+	)
 
 	return nil
 }
@@ -112,18 +87,18 @@ func (k Keeper) SetDCM(ctx sdk.Context, dcm *types.DCM) {
 	store.Set(types.DCMKey(dcm.Id), bz)
 }
 
-// HasPendingDCMPubKey returns true if the given pending DCM pubkey exists, false otherwise
-func (k Keeper) HasPendingDCMPubKey(ctx sdk.Context, dcmId uint64, pubKey []byte) bool {
+// HasDCMByPubKey returns true if the given DCM exists, false otherwise
+func (k Keeper) HasDCMByPubKey(ctx sdk.Context, pubKey []byte) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.PendingDCMPubKeyKey(dcmId, pubKey))
+	return store.Has(types.DCMByPubKeyKey(pubKey))
 }
 
-// SetPendingDCMPubKey sets the pending DCM public key
-func (k Keeper) SetPendingDCMPubKey(ctx sdk.Context, dcmId uint64, pubKey []byte, dcmPubKey []byte) {
+// SetDCMByPubKey sets the given DCM by pub key
+func (k Keeper) SetDCMByPubKey(ctx sdk.Context, dcmId uint64, pubKey []byte) {
 	store := ctx.KVStore(k.storeKey)
 
-	store.Set(types.PendingDCMPubKeyKey(dcmId, pubKey), dcmPubKey)
+	store.Set(types.DCMByPubKeyKey(pubKey), sdk.Uint64ToBigEndian(dcmId))
 }
 
 // GetDCMs gets DCMs by the given status
@@ -141,19 +116,6 @@ func (k Keeper) GetDCMs(ctx sdk.Context, status types.DCMStatus) []*types.DCM {
 	return dcms
 }
 
-// GetPendingDCMPubKeys gets pending DCM pub keys by the given DCM id
-func (k Keeper) GetPendingDCMPubKeys(ctx sdk.Context, dcmId uint64) [][]byte {
-	pubKeys := make([][]byte, 0)
-
-	k.IteratePendingDCMPubKeys(ctx, dcmId, func(pubKey []byte) (stop bool) {
-		pubKeys = append(pubKeys, pubKey)
-
-		return false
-	})
-
-	return pubKeys
-}
-
 // IterateDCMs iterates through all DCMs
 func (k Keeper) IterateDCMs(ctx sdk.Context, cb func(dcm *types.DCM) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
@@ -166,20 +128,6 @@ func (k Keeper) IterateDCMs(ctx sdk.Context, cb func(dcm *types.DCM) (stop bool)
 		k.cdc.MustUnmarshal(iterator.Value(), &dcm)
 
 		if cb(&dcm) {
-			break
-		}
-	}
-}
-
-// IteratePendingDCMPubKeys iterates through all pending DCM pub keys by the given DCM id
-func (k Keeper) IteratePendingDCMPubKeys(ctx sdk.Context, dcmId uint64, cb func(pubKey []byte) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-
-	iterator := storetypes.KVStorePrefixIterator(store, append(types.PendingDCMPubKeyKeyPrefix, sdk.Uint64ToBigEndian(dcmId)...))
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		if cb(iterator.Value()) {
 			break
 		}
 	}

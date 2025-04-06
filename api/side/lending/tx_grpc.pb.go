@@ -19,20 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_CreatePool_FullMethodName                       = "/side.lending.Msg/CreatePool"
-	Msg_AddLiquidity_FullMethodName                     = "/side.lending.Msg/AddLiquidity"
-	Msg_RemoveLiquidity_FullMethodName                  = "/side.lending.Msg/RemoveLiquidity"
-	Msg_UpdatePoolConfig_FullMethodName                 = "/side.lending.Msg/UpdatePoolConfig"
-	Msg_Apply_FullMethodName                            = "/side.lending.Msg/Apply"
-	Msg_SubmitCets_FullMethodName                       = "/side.lending.Msg/SubmitCets"
-	Msg_Approve_FullMethodName                          = "/side.lending.Msg/Approve"
-	Msg_SubmitRepaymentAdaptorSignatures_FullMethodName = "/side.lending.Msg/SubmitRepaymentAdaptorSignatures"
-	Msg_Cancel_FullMethodName                           = "/side.lending.Msg/Cancel"
-	Msg_SubmitCancellationSignatures_FullMethodName     = "/side.lending.Msg/SubmitCancellationSignatures"
-	Msg_Repay_FullMethodName                            = "/side.lending.Msg/Repay"
-	Msg_SubmitLiquidationSignatures_FullMethodName      = "/side.lending.Msg/SubmitLiquidationSignatures"
-	Msg_SubmitPrice_FullMethodName                      = "/side.lending.Msg/SubmitPrice"
-	Msg_UpdateParams_FullMethodName                     = "/side.lending.Msg/UpdateParams"
+	Msg_CreatePool_FullMethodName       = "/side.lending.Msg/CreatePool"
+	Msg_AddLiquidity_FullMethodName     = "/side.lending.Msg/AddLiquidity"
+	Msg_RemoveLiquidity_FullMethodName  = "/side.lending.Msg/RemoveLiquidity"
+	Msg_UpdatePoolConfig_FullMethodName = "/side.lending.Msg/UpdatePoolConfig"
+	Msg_Apply_FullMethodName            = "/side.lending.Msg/Apply"
+	Msg_SubmitCets_FullMethodName       = "/side.lending.Msg/SubmitCets"
+	Msg_Approve_FullMethodName          = "/side.lending.Msg/Approve"
+	Msg_Cancel_FullMethodName           = "/side.lending.Msg/Cancel"
+	Msg_Repay_FullMethodName            = "/side.lending.Msg/Repay"
+	Msg_SubmitPrice_FullMethodName      = "/side.lending.Msg/SubmitPrice"
+	Msg_UpdateParams_FullMethodName     = "/side.lending.Msg/UpdateParams"
 )
 
 // MsgClient is the client API for Msg service.
@@ -46,11 +43,8 @@ type MsgClient interface {
 	Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error)
 	SubmitCets(ctx context.Context, in *MsgSubmitCets, opts ...grpc.CallOption) (*MsgSubmitCetsResponse, error)
 	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
-	SubmitRepaymentAdaptorSignatures(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignatures, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
 	Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error)
-	SubmitCancellationSignatures(ctx context.Context, in *MsgSubmitCancellationSignatures, opts ...grpc.CallOption) (*MsgSubmitCancellationSignaturesResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
-	SubmitLiquidationSignatures(ctx context.Context, in *MsgSubmitLiquidationSignatures, opts ...grpc.CallOption) (*MsgSubmitLiquidationSignaturesResponse, error)
 	// SubmitPrice submits the price for testing
 	SubmitPrice(ctx context.Context, in *MsgSubmitPrice, opts ...grpc.CallOption) (*MsgSubmitPriceResponse, error)
 	// UpdateParams defines a governance operation for updating the x/lending module
@@ -131,15 +125,6 @@ func (c *msgClient) Approve(ctx context.Context, in *MsgApprove, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *msgClient) SubmitRepaymentAdaptorSignatures(ctx context.Context, in *MsgSubmitRepaymentAdaptorSignatures, opts ...grpc.CallOption) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
-	out := new(MsgSubmitRepaymentAdaptorSignaturesResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitRepaymentAdaptorSignatures_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.CallOption) (*MsgCancelResponse, error) {
 	out := new(MsgCancelResponse)
 	err := c.cc.Invoke(ctx, Msg_Cancel_FullMethodName, in, out, opts...)
@@ -149,27 +134,9 @@ func (c *msgClient) Cancel(ctx context.Context, in *MsgCancel, opts ...grpc.Call
 	return out, nil
 }
 
-func (c *msgClient) SubmitCancellationSignatures(ctx context.Context, in *MsgSubmitCancellationSignatures, opts ...grpc.CallOption) (*MsgSubmitCancellationSignaturesResponse, error) {
-	out := new(MsgSubmitCancellationSignaturesResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitCancellationSignatures_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error) {
 	out := new(MsgRepayResponse)
 	err := c.cc.Invoke(ctx, Msg_Repay_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) SubmitLiquidationSignatures(ctx context.Context, in *MsgSubmitLiquidationSignatures, opts ...grpc.CallOption) (*MsgSubmitLiquidationSignaturesResponse, error) {
-	out := new(MsgSubmitLiquidationSignaturesResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitLiquidationSignatures_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -205,11 +172,8 @@ type MsgServer interface {
 	Apply(context.Context, *MsgApply) (*MsgApplyResponse, error)
 	SubmitCets(context.Context, *MsgSubmitCets) (*MsgSubmitCetsResponse, error)
 	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
-	SubmitRepaymentAdaptorSignatures(context.Context, *MsgSubmitRepaymentAdaptorSignatures) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error)
 	Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error)
-	SubmitCancellationSignatures(context.Context, *MsgSubmitCancellationSignatures) (*MsgSubmitCancellationSignaturesResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
-	SubmitLiquidationSignatures(context.Context, *MsgSubmitLiquidationSignatures) (*MsgSubmitLiquidationSignaturesResponse, error)
 	// SubmitPrice submits the price for testing
 	SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error)
 	// UpdateParams defines a governance operation for updating the x/lending module
@@ -245,20 +209,11 @@ func (UnimplementedMsgServer) SubmitCets(context.Context, *MsgSubmitCets) (*MsgS
 func (UnimplementedMsgServer) Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Approve not implemented")
 }
-func (UnimplementedMsgServer) SubmitRepaymentAdaptorSignatures(context.Context, *MsgSubmitRepaymentAdaptorSignatures) (*MsgSubmitRepaymentAdaptorSignaturesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitRepaymentAdaptorSignatures not implemented")
-}
 func (UnimplementedMsgServer) Cancel(context.Context, *MsgCancel) (*MsgCancelResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Cancel not implemented")
 }
-func (UnimplementedMsgServer) SubmitCancellationSignatures(context.Context, *MsgSubmitCancellationSignatures) (*MsgSubmitCancellationSignaturesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitCancellationSignatures not implemented")
-}
 func (UnimplementedMsgServer) Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Repay not implemented")
-}
-func (UnimplementedMsgServer) SubmitLiquidationSignatures(context.Context, *MsgSubmitLiquidationSignatures) (*MsgSubmitLiquidationSignaturesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitLiquidationSignatures not implemented")
 }
 func (UnimplementedMsgServer) SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitPrice not implemented")
@@ -405,24 +360,6 @@ func _Msg_Approve_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitRepaymentAdaptorSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitRepaymentAdaptorSignatures)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitRepaymentAdaptorSignatures(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_SubmitRepaymentAdaptorSignatures_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitRepaymentAdaptorSignatures(ctx, req.(*MsgSubmitRepaymentAdaptorSignatures))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Msg_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgCancel)
 	if err := dec(in); err != nil {
@@ -441,24 +378,6 @@ func _Msg_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitCancellationSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitCancellationSignatures)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitCancellationSignatures(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_SubmitCancellationSignatures_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitCancellationSignatures(ctx, req.(*MsgSubmitCancellationSignatures))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Msg_Repay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgRepay)
 	if err := dec(in); err != nil {
@@ -473,24 +392,6 @@ func _Msg_Repay_Handler(srv interface{}, ctx context.Context, dec func(interface
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).Repay(ctx, req.(*MsgRepay))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_SubmitLiquidationSignatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitLiquidationSignatures)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitLiquidationSignatures(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_SubmitLiquidationSignatures_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitLiquidationSignatures(ctx, req.(*MsgSubmitLiquidationSignatures))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -567,24 +468,12 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_Approve_Handler,
 		},
 		{
-			MethodName: "SubmitRepaymentAdaptorSignatures",
-			Handler:    _Msg_SubmitRepaymentAdaptorSignatures_Handler,
-		},
-		{
 			MethodName: "Cancel",
 			Handler:    _Msg_Cancel_Handler,
 		},
 		{
-			MethodName: "SubmitCancellationSignatures",
-			Handler:    _Msg_SubmitCancellationSignatures_Handler,
-		},
-		{
 			MethodName: "Repay",
 			Handler:    _Msg_Repay_Handler,
-		},
-		{
-			MethodName: "SubmitLiquidationSignatures",
-			Handler:    _Msg_SubmitLiquidationSignatures_Handler,
 		},
 		{
 			MethodName: "SubmitPrice",

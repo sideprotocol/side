@@ -18,5 +18,6 @@ message Params {
     uint32 date_event_nonce_queue_size = 3;
     google.protobuf.Duration date_interval = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
     uint32 lending_event_nonce_queue_size = 5;
-    google.protobuf.Duration dkg_timeout_period = 6 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    uint32 oracle_participant_num = 6;
+    uint32 nonce_generation_batch_size = 7;
 }

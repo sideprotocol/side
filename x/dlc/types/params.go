@@ -27,8 +27,14 @@ var (
 	// default nonce queue size for lending events
 	DefaultLendingEventNonceQueueSize = uint32(1000)
 
-	// default DKG timeout period
-	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
+	// default oracle participant number
+	DefaultOracleParticipantNum = uint32(21)
+
+	// minimum oracle participant number
+	MinOracleParticipantNum = uint32(3)
+
+	// default nonce generation batch size
+	DefaultNonceGenerationBatchSize = uint32(200)
 )
 
 // NewParams creates a new Params instance
@@ -37,14 +43,15 @@ func NewParams() Params {
 		PriceEventNonceQueueSize: DefaultPriceEventNonceQueueSize,
 		PriceIntervals: []PriceInterval{
 			{
-				PricePair: "BTC-USD",
+				PricePair: "BTCUSD",
 				Interval:  int32(DefaultPriceInterval),
 			},
 		},
 		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
 		DateInterval:               DefaultDateInterval,
 		LendingEventNonceQueueSize: DefaultLendingEventNonceQueueSize,
-		DkgTimeoutPeriod:           DefaultDKGTimeoutPeriod,
+		OracleParticipantNum:       DefaultOracleParticipantNum,
+		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
 	}
 }
 
@@ -77,8 +84,12 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(ErrInvalidParams, "lending event nonce queue size must be greater than 0")
 	}
 
-	if err := validateDKGTimeoutPeriod(p.DkgTimeoutPeriod); err != nil {
-		return err
+	if p.OracleParticipantNum < MinOracleParticipantNum {
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number can not be less than %d", MinOracleParticipantNum)
+	}
+
+	if p.NonceGenerationBatchSize < 2 {
+		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation batch size can not be less than 2")
 	}
 
 	return nil
@@ -108,15 +119,6 @@ func validatePricePair(pair string) error {
 		if err := sdk.ValidateDenom(denom); err != nil {
 			return err
 		}
-	}
-
-	return nil
-}
-
-// validateDKGTimeoutPeriod validates the given DKG timeout period
-func validateDKGTimeoutPeriod(timeoutPeriod time.Duration) error {
-	if timeoutPeriod == 0 {
-		return errorsmod.Wrapf(ErrInvalidParams, "invalid dkg timeout period")
 	}
 
 	return nil

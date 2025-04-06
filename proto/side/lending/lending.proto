@@ -201,3 +201,11 @@ message Cancellation {
     repeated string dcm_signatures = 5 [(gogoproto.customname) = "DCMSignatures"];
     google.protobuf.Timestamp create_at = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
+
+// Signing intent
+enum SigningIntent {
+  SIGNING_INTENT_REPAYMENT = 0;
+  SIGNING_INTENT_LIQUIDATION = 1;
+  SIGNING_INTENT_DEFAULT_LIQUIDATION = 2;
+  SIGNING_INTENT_CANCELLATION = 3;
+}

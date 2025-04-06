@@ -2,8 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
-	"strings"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -16,92 +14,6 @@ type msgServer struct {
 	Keeper
 }
 
-// SubmitNonce implements types.MsgServer.
-func (m msgServer) SubmitNonce(goCtx context.Context, msg *types.MsgSubmitNonce) (*types.MsgSubmitNonceResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if err := m.Keeper.HandleNonce(ctx, msg.Sender, msg.EventType, msg.Nonce, msg.OraclePubkey, msg.Signature); err != nil {
-		return nil, err
-	}
-
-	return &types.MsgSubmitNonceResponse{}, nil
-}
-
-// SubmitAttestation implements types.MsgServer.
-func (m msgServer) SubmitAttestation(goCtx context.Context, msg *types.MsgSubmitAttestation) (*types.MsgSubmitAttestationResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if err := m.Keeper.HandleAttestation(ctx, msg.Sender, msg.EventId, msg.Signature); err != nil {
-		return nil, err
-	}
-
-	return &types.MsgSubmitAttestationResponse{}, nil
-}
-
-// SubmitOraclePubKey implements types.MsgServer.
-func (m msgServer) SubmitOraclePubKey(goCtx context.Context, msg *types.MsgSubmitOraclePubKey) (*types.MsgSubmitOraclePubKeyResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if err := m.Keeper.SubmitOraclePubKey(ctx, msg.Sender, msg.PubKey, msg.OracleId, msg.OraclePubkey, msg.Signature); err != nil {
-		return nil, err
-	}
-
-	return &types.MsgSubmitOraclePubKeyResponse{}, nil
-}
-
-// SubmitDCMPubKey implements types.MsgServer.
-func (m msgServer) SubmitDCMPubKey(goCtx context.Context, msg *types.MsgSubmitDCMPubKey) (*types.MsgSubmitDCMPubKeyResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if err := m.Keeper.SubmitDCMPubKey(ctx, msg.Sender, msg.PubKey, msg.DCMId, msg.DCMPubKey, msg.Signature); err != nil {
-		return nil, err
-	}
-
-	return &types.MsgSubmitDCMPubKeyResponse{}, nil
-}
-
-// CreateOracle implements types.MsgServer.
-func (m msgServer) CreateOracle(goCtx context.Context, msg *types.MsgCreateOracle) (*types.MsgCreateOracleResponse, error) {
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	oracle, err := m.Keeper.CreateOracle(ctx, msg.Participants, msg.Threshold)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeCreateOracle,
-			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", oracle.Id)),
-			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(oracle.Participants, types.AttributeValueSeparator)),
-			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", oracle.Threshold)),
-			sdk.NewAttribute(types.AttributeKeyExpirationTime, oracle.Time.Add(m.DKGTimeoutPeriod(ctx)).String()),
-		),
-	)
-
-	return &types.MsgCreateOracleResponse{}, nil
-}
-
 // CreateDCM implements types.MsgServer.
 func (m msgServer) CreateDCM(goCtx context.Context, msg *types.MsgCreateDCM) (*types.MsgCreateDCMResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -110,20 +22,7 @@ func (m msgServer) CreateDCM(goCtx context.Context, msg *types.MsgCreateDCM) (*t
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	dcm, err := m.Keeper.CreateDCM(ctx, msg.Participants, msg.Threshold)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeCreateDCM,
-			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", dcm.Id)),
-			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(dcm.Participants, types.AttributeValueSeparator)),
-			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", dcm.Threshold)),
-			sdk.NewAttribute(types.AttributeKeyExpirationTime, dcm.Time.Add(m.DKGTimeoutPeriod(ctx)).String()),
-		),
-	)
+	m.tssKeeper.InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_DCM, int32(types.DKGIntent_DKG_INTENT_DEFAULT), msg.Participants, msg.Threshold, 1)
 
 	return &types.MsgCreateDCMResponse{}, nil
 }

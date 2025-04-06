@@ -344,7 +344,7 @@ func (m *QueryDCMsRequest) GetStatus() DCMStatus {
 	if m != nil {
 		return m.Status
 	}
-	return DCMStatus_DCM_Status_Pending
+	return DCMStatus_DCM_status_Enable
 }
 
 func (m *QueryDCMsRequest) GetPagination() *query.PageRequest {
@@ -448,7 +448,7 @@ func (m *QueryOraclesRequest) GetStatus() DLCOracleStatus {
 	if m != nil {
 		return m.Status
 	}
-	return DLCOracleStatus_Oracle_Status_Pending
+	return DLCOracleStatus_Oracle_status_Enable
 }
 
 func (m *QueryOraclesRequest) GetPagination() *query.PageRequest {

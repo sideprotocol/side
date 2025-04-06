@@ -4,8 +4,10 @@ package types
 const (
 	EventTypeCreateOracle    = "create_oracle"
 	EventTypeCreateDCM       = "create_dcm"
-	EventTypeGenerateNonce   = "generate_nonce"
+	EventTypeGenerateNonce   = "generate_nonces"
 	EventTypeTriggerDLCEvent = "trigger_dlc_event"
+
+	AttributeKeyPubKey = "pub_key"
 
 	AttributeKeyId             = "id"
 	AttributeKeyDLCEventType   = "dlc_event_type"
@@ -13,10 +15,7 @@ const (
 	AttributeKeyThreshold      = "threshold"
 	AttributeKeyExpirationTime = "expiration_time"
 
-	AttributeKeyEventId     = "event_id"
-	AttributeKeyPubKey      = "pub_key"
-	AttributeKeyNonce       = "nonce"
-	AttributeKeyOutcomeHash = "outcome_hash"
+	AttributeKeyOutcome = "outcome"
 
 	AttributeKeyOraclePubKey = "oracle_pub_key"
 )

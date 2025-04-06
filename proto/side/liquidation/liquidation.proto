@@ -52,3 +52,8 @@ message LiquidationRecord {
     cosmos.base.v1beta1.Coin collateral_amount = 5 [(gogoproto.nullable) = false];
     google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
+
+// Signing intent
+enum SigningIntent {
+    SIGNING_INTENT_DEFAULT = 0;
+}

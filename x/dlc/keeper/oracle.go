@@ -1,65 +1,40 @@
 package keeper
 
 import (
-	"encoding/base64"
 	"encoding/hex"
+	"fmt"
 
-	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
-// CreateOracle initiates the oracle creation request
-func (k Keeper) CreateOracle(ctx sdk.Context, participants []string, threshold uint32) (*types.DLCOracle, error) {
+// CreateOracle creates a new oracle with the given pub key
+// Assume that the pub key is valid
+func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) error {
+	pubKeyBz, _ := hex.DecodeString(pubKey)
+	if k.HasOracleByPubKey(ctx, pubKeyBz) {
+		return types.ErrOracleAlreadyExists
+	}
+
 	oracle := &types.DLCOracle{
-		Id:           k.IncrementOracleId(ctx),
-		Participants: participants,
-		Threshold:    threshold,
-		Time:         ctx.BlockTime(),
-		Status:       types.DLCOracleStatus_Oracle_Status_Pending,
+		Id:     k.IncrementDCMId(ctx),
+		Pubkey: pubKey,
+		Time:   ctx.BlockTime(),
+		Status: types.DLCOracleStatus_Oracle_status_Enable,
 	}
 
 	k.SetOracle(ctx, oracle)
+	k.SetOracleByPubKey(ctx, oracle.Id, pubKeyBz)
 
-	return oracle, nil
-}
-
-// SubmitOraclePubKey performs the oracle public key submission
-func (k Keeper) SubmitOraclePubKey(ctx sdk.Context, sender string, pubKey string, oracleId uint64, oraclePubKey string, signature string) error {
-	oracle := k.GetOracle(ctx, oracleId)
-	if oracle == nil {
-		return types.ErrOracleDoesNotExist
-	}
-
-	if !types.ParticipantExists(oracle.Participants, pubKey) {
-		return types.ErrUnauthorizedParticipant
-	}
-
-	pubKeyBytes, _ := base64.StdEncoding.DecodeString(pubKey)
-
-	if k.HasPendingOraclePubKey(ctx, oracleId, pubKeyBytes) {
-		return types.ErrPendingOraclePubKeyExists
-	}
-
-	if oracle.Status != types.DLCOracleStatus_Oracle_Status_Pending {
-		return types.ErrInvalidOracleStatus
-	}
-
-	if !ctx.BlockTime().Before(oracle.Time.Add(k.DKGTimeoutPeriod(ctx))) {
-		return errorsmod.Wrap(types.ErrDKGTimedOut, "oracle dkg timed out")
-	}
-
-	oraclePubKeyBytes, _ := hex.DecodeString(oraclePubKey)
-	sigBytes, _ := hex.DecodeString(signature)
-	sigMsg := types.GetSigMsg(oracleId, oraclePubKeyBytes)
-
-	if !types.VerifySignature(sigBytes, pubKeyBytes, sigMsg) {
-		return errorsmod.Wrap(types.ErrInvalidSignature, "signature verification failed")
-	}
-
-	k.SetPendingOraclePubKey(ctx, oracleId, pubKeyBytes, oraclePubKeyBytes)
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCreateOracle,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", oracle.Id)),
+			sdk.NewAttribute(types.AttributeKeyPubKey, oracle.Pubkey),
+		),
+	)
 
 	return nil
 }
@@ -131,20 +106,6 @@ func (k Keeper) SetOracleByPubKey(ctx sdk.Context, oracleId uint64, pubKey []byt
 	store.Set(types.OracleByPubKeyKey(pubKey), sdk.Uint64ToBigEndian(oracleId))
 }
 
-// HasPendingOraclePubKey returns true if the given pending oracle pubkey exists, false otherwise
-func (k Keeper) HasPendingOraclePubKey(ctx sdk.Context, oracleId uint64, pubKey []byte) bool {
-	store := ctx.KVStore(k.storeKey)
-
-	return store.Has(types.PendingOraclePubKeyKey(oracleId, pubKey))
-}
-
-// SetPendingOraclePubKey sets the pending oracle public key
-func (k Keeper) SetPendingOraclePubKey(ctx sdk.Context, oracleId uint64, pubKey []byte, oraclePubKey []byte) {
-	store := ctx.KVStore(k.storeKey)
-
-	store.Set(types.PendingOraclePubKeyKey(oracleId, pubKey), oraclePubKey)
-}
-
 // GetOracles gets oracles by the given status
 func (k Keeper) GetOracles(ctx sdk.Context, status types.DLCOracleStatus) []*types.DLCOracle {
 	oracles := make([]*types.DLCOracle, 0)
@@ -160,19 +121,6 @@ func (k Keeper) GetOracles(ctx sdk.Context, status types.DLCOracleStatus) []*typ
 	return oracles
 }
 
-// GetPendingOraclePubKeys gets pending oracle pub keys by the given oracle id
-func (k Keeper) GetPendingOraclePubKeys(ctx sdk.Context, oracleId uint64) [][]byte {
-	pubKeys := make([][]byte, 0)
-
-	k.IteratePendingOraclePubKeys(ctx, oracleId, func(pubKey []byte) (stop bool) {
-		pubKeys = append(pubKeys, pubKey)
-
-		return false
-	})
-
-	return pubKeys
-}
-
 // IterateOracles iterates through all oracles
 func (k Keeper) IterateOracles(ctx sdk.Context, cb func(oracle *types.DLCOracle) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
@@ -185,20 +133,6 @@ func (k Keeper) IterateOracles(ctx sdk.Context, cb func(oracle *types.DLCOracle)
 		k.cdc.MustUnmarshal(iterator.Value(), &oracle)
 
 		if cb(&oracle) {
-			break
-		}
-	}
-}
-
-// IteratePendingOraclePubKeys iterates through all pending oracle pub keys by the given oracle id
-func (k Keeper) IteratePendingOraclePubKeys(ctx sdk.Context, oracleId uint64, cb func(pubKey []byte) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-
-	iterator := storetypes.KVStorePrefixIterator(store, append(types.PendingOraclePubKeyKeyPrefix, sdk.Uint64ToBigEndian(oracleId)...))
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		if cb(iterator.Value()) {
 			break
 		}
 	}

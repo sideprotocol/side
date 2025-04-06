@@ -12,11 +12,6 @@ option go_package = "github.com/sideprotocol/side/x/dlc/types";
 service Msg {
     option (cosmos.msg.v1.service) = true;
 
-    rpc SubmitNonce(MsgSubmitNonce) returns (MsgSubmitNonceResponse);
-    rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
-    rpc SubmitOraclePubKey(MsgSubmitOraclePubKey) returns (MsgSubmitOraclePubKeyResponse);
-    rpc SubmitDCMPubKey(MsgSubmitDCMPubKey) returns (MsgSubmitDCMPubKeyResponse);
-    rpc CreateOracle(MsgCreateOracle) returns (MsgCreateOracleResponse);
     rpc CreateDCM(MsgCreateDCM) returns (MsgCreateDCMResponse);
 
     // UpdateParams defines a governance operation for updating the x/dlc module
@@ -25,63 +20,6 @@ service Msg {
     // Since: cosmos-sdk 0.47
     rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
-
-message MsgSubmitDCMPubKey {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    string pub_key = 2;
-    uint64 dcm_id = 3 [(gogoproto.customname) = "DCMId"];
-    string dcm_pubkey = 4 [(gogoproto.customname) = "DCMPubKey"];
-    string signature = 5;
-}
-
-message MsgSubmitDCMPubKeyResponse {}
-
-message MsgSubmitOraclePubKey {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    string pub_key = 2;
-    uint64 oracle_id = 3;
-    string oracle_pubkey = 4;
-    string signature = 5;
-}
-
-message MsgSubmitOraclePubKeyResponse {}
-
-message MsgSubmitNonce {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    DlcEventType event_type = 2;
-    string nonce = 3;
-    string oracle_pubkey = 4;
-    string signature = 5;
-}
-
-message MsgSubmitNonceResponse {}
-
-message MsgSubmitAttestation {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    uint64 event_id = 2;
-    string signature = 3;
-}
-
-message MsgSubmitAttestationResponse {}
-
-message MsgCreateOracle {
-    option (cosmos.msg.v1.signer) = "authority";
-
-    // authority is the address that controls the module (defaults to x/gov unless overwritten).
-    string authority = 1;
-    repeated string participants = 2;
-    uint32 threshold = 3;
-}
-
-message MsgCreateOracleResponse {}
 
 message MsgCreateDCM {
     option (cosmos.msg.v1.signer) = "authority";

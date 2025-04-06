@@ -1,0 +1,12 @@
+syntax = "proto3";
+package side.tss;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/sideprotocol/side/x/tss/types";
+
+// Params defines the parameters for the module.
+message Params {
+    google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}

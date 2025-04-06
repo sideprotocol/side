@@ -6,6 +6,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
+
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // BankKeeper defines the expected bank keeper interface
@@ -30,4 +32,11 @@ type BankKeeper interface {
 // OracleKeeper defines the expected oracle keeper interface
 type OracleKeeper interface {
 	GetPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error)
+}
+
+// TSSKeeper defines the expected TSS keeper interface
+type TSSKeeper interface {
+	InitiateSigningRequest(ctx sdk.Context, module string, scopedId string, ty tsstypes.SigningType, intent int32, pubKey string, sigHashes []string, options *tsstypes.SigningOptions) *tsstypes.SigningRequest
+
+	RegisterSigningRequestCompletedHandler(module string, handler tsstypes.SigningRequestCompletedHandler)
 }

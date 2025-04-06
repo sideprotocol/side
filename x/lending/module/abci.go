@@ -3,7 +3,6 @@ package lending
 import (
 	"encoding/hex"
 	"fmt"
-	"strings"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,6 +11,7 @@ import (
 	"github.com/sideprotocol/side/x/lending/keeper"
 	"github.com/sideprotocol/side/x/lending/types"
 	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // BeginBlocker called at the beginning of each block
@@ -36,6 +36,9 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 	for _, loan := range loans {
 		var liquidationCet string
+		var sigHashes []string
+		var signingIntent int32
+
 		var triggeredEventId uint64
 
 		currentPrice, err := k.GetPrice(ctx, "BTCUSD")
@@ -50,18 +53,17 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			loan.Status = types.LoanStatus_Defaulted
 
 			liquidationCet = dlcMeta.DefaultLiquidationCet.Tx
+			signingIntent = int32(types.SigningIntent_SIGNING_INTENT_DEFAULT_LIQUIDATION)
 			triggeredEventId = loan.DefaultLiquidationEventId
 
 			// get default liquidation cet sig hashes; no error
-			defaultLiquidationCetSigHashes, _ := types.GetDefaultLiquidationCetSigHashes(dlcMeta)
+			sigHashes, _ = types.GetDefaultLiquidationCetSigHashes(dlcMeta)
 
 			// emit default event
 			ctx.EventManager().EmitEvent(
 				sdk.NewEvent(
 					types.EventTypeDefault,
 					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-					sdk.NewAttribute(types.AttributeKeyDCMPubKey, loan.DCM),
-					sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(defaultLiquidationCetSigHashes, types.AttributeValueSeparator)),
 				),
 			)
 		} else if !currentPrice.IsZero() {
@@ -70,18 +72,17 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				loan.Status = types.LoanStatus_Liquidated
 
 				liquidationCet = dlcMeta.LiquidationCet.Tx
+				signingIntent = int32(types.SigningIntent_SIGNING_INTENT_LIQUIDATION)
 				triggeredEventId = loan.LiquidationEventId
 
 				// get liquidation cet sig hashes; no error
-				liquidationCetSigHashes, _ := types.GetLiquidationCetSigHashes(dlcMeta)
+				sigHashes, _ = types.GetLiquidationCetSigHashes(dlcMeta)
 
 				// emit liquidation event
 				ctx.EventManager().EmitEvent(
 					sdk.NewEvent(
 						types.EventTypeLiquidate,
 						sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-						sdk.NewAttribute(types.AttributeKeyDCMPubKey, loan.DCM),
-						sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(liquidationCetSigHashes, types.AttributeValueSeparator)),
 					),
 				)
 			}
@@ -104,15 +105,27 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				UnliquidatedCollateralAmount: sdk.NewCoin("sat", sdkmath.ZeroInt()),
 				LiquidationCet:               liquidationCet,
 			})
+
+			// update loan
 			loan.LiquidationId = liquidation.Id
+			k.SetLoan(ctx, loan)
 
 			// trigger dlc event if not triggered yet
 			if !k.DLCKeeper().GetEvent(ctx, triggeredEventId).HasTriggered {
 				k.DLCKeeper().TriggerDLCEvent(ctx, triggeredEventId, 0)
 			}
 
-			// update loan
-			k.SetLoan(ctx, loan)
+			// initiate signing request
+			k.TSSKeeper().InitiateSigningRequest(
+				ctx,
+				types.ModuleName,
+				loan.VaultAddress,
+				tsstypes.SigningType_SIGNING_TYPE_SCHNORR,
+				signingIntent,
+				loan.DCM,
+				sigHashes,
+				nil,
+			)
 		}
 	}
 }

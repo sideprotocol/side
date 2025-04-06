@@ -16,6 +16,7 @@ type Keeper struct {
 
 	bankKeeper   types.BankKeeper
 	oracleKeeper types.OracleKeeper
+	tssKeeper    types.TSSKeeper
 
 	liquidatedDebtHandler types.LiquidatedDebtHandler
 
@@ -28,16 +29,23 @@ func NewKeeper(
 	memKey storetypes.StoreKey,
 	bankKeeper types.BankKeeper,
 	oracleKeeper types.OracleKeeper,
+	tssKeeper types.TSSKeeper,
 	authority string,
 ) *Keeper {
-	return &Keeper{
+	k := &Keeper{
 		cdc:          cdc,
 		storeKey:     storeKey,
 		memKey:       memKey,
 		bankKeeper:   bankKeeper,
 		oracleKeeper: oracleKeeper,
+		tssKeeper:    tssKeeper,
 		authority:    authority,
 	}
+
+	// register signing request completed handler
+	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
+
+	return k
 }
 
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
@@ -67,6 +75,10 @@ func (k Keeper) BankKeeper() types.BankKeeper {
 
 func (k Keeper) OracleKeeper() types.OracleKeeper {
 	return k.oracleKeeper
+}
+
+func (k Keeper) TSSKeeper() types.TSSKeeper {
+	return k.tssKeeper
 }
 
 func (k Keeper) LiquidatedDebtHandler() types.LiquidatedDebtHandler {

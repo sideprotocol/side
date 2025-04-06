@@ -30,21 +30,20 @@ var (
 
 	OracleKeyPrefix                   = []byte{0x10} // prefix for each key to an oracle
 	OracleByPubKeyKeyPrefix           = []byte{0x11} // prefix for each key to an oracle by public key
-	PendingOraclePubKeyKeyPrefix      = []byte{0x12} // key prefix for the pending oracle public key
-	DCMKeyPrefix                      = []byte{0x13} // prefix for each key to a DCM
-	PendingDCMPubKeyKeyPrefix         = []byte{0x14} // key prefix for the pending DCM public key
-	NonceIndexKeyPrefix               = []byte{0x15} // key prefix for the nonce index
-	NonceKeyPrefix                    = []byte{0x16} // prefix for each key to a nonce
-	NonceByValueKeyPrefix             = []byte{0x17} // key prefix for the nonce value
-	EventKeyPrefix                    = []byte{0x18} // prefix for each key to an event
-	EventByPriceKeyPrefix             = []byte{0x19} // prefix for each key to an event by triggering price
-	CurrentEventPriceKeyPrefix        = []byte{0x20} // key prefix for the current event price
-	EventByDateKeyPrefix              = []byte{0x21} // prefix for each key to an event by date
-	CurrentEventDateKey               = []byte{0x22} // key for the current event date
-	PendingLendingEventKeyPrefix      = []byte{0x23} // key prefix for the pending lending event
-	AttestationKeyPrefix              = []byte{0x24} // prefix for each key to an attestation
-	AttestationByEventKeyPrefix       = []byte{0x25} // prefix for each key to an attestation by event
-	TriggeredPriceEventQueueKeyPrefix = []byte{0x26} // key prefix for triggered price event queue
+	DCMKeyPrefix                      = []byte{0x12} // prefix for each key to a DCM
+	DCMByPubKeyKeyPrefix              = []byte{0x13} // prefix for each key to a DCM by public key
+	NonceIndexKeyPrefix               = []byte{0x14} // key prefix for the nonce index
+	NonceKeyPrefix                    = []byte{0x15} // prefix for each key to a nonce
+	NonceByValueKeyPrefix             = []byte{0x16} // key prefix for the nonce value
+	EventKeyPrefix                    = []byte{0x17} // prefix for each key to an event
+	EventByPriceKeyPrefix             = []byte{0x18} // prefix for each key to an event by triggering price
+	CurrentEventPriceKeyPrefix        = []byte{0x19} // key prefix for the current event price
+	EventByDateKeyPrefix              = []byte{0x20} // prefix for each key to an event by date
+	CurrentEventDateKey               = []byte{0x21} // key for the current event date
+	PendingLendingEventKeyPrefix      = []byte{0x22} // key prefix for the pending lending event
+	AttestationKeyPrefix              = []byte{0x23} // prefix for each key to an attestation
+	AttestationByEventKeyPrefix       = []byte{0x24} // prefix for each key to an attestation by event
+	TriggeredPriceEventQueueKeyPrefix = []byte{0x25} // key prefix for triggered price event queue
 
 	PriceKeyPrefix = []byte{0x30} // key prefix for the price
 )
@@ -57,22 +56,12 @@ func OracleByPubKeyKey(pubKey []byte) []byte {
 	return append(OracleByPubKeyKeyPrefix, pubKey...)
 }
 
-func PendingOraclePubKeyKey(oracleId uint64, pubKey []byte) []byte {
-	key := append(PendingOraclePubKeyKeyPrefix, sdk.Uint64ToBigEndian(oracleId)...)
-	key = append(key, pubKey...)
-
-	return key
-}
-
 func DCMKey(id uint64) []byte {
 	return append(DCMKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
-func PendingDCMPubKeyKey(dcmId uint64, pubKey []byte) []byte {
-	key := append(PendingDCMPubKeyKeyPrefix, sdk.Uint64ToBigEndian(dcmId)...)
-	key = append(key, pubKey...)
-
-	return key
+func DCMByPubKeyKey(pubKey []byte) []byte {
+	return append(DCMByPubKeyKeyPrefix, pubKey...)
 }
 
 func NonceIndexKey(oracleId uint64) []byte {
