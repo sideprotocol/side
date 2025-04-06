@@ -7,22 +7,17 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
 enum DLCOracleStatus {
-    Oracle_Status_Pending = 0;
-    Oracle_Status_Failed = 1;
-    Oracle_Status_Timedout = 2;
-    Oracle_status_Enable = 3;
-    Oracle_status_Disable = 4;
+    Oracle_status_Enable = 0;
+    Oracle_status_Disable = 1;
 }
 
 message DLCOracle {
     uint64 id = 1;
     string desc = 2;
-    repeated string participants = 3;
-    uint32 threshold = 4;
-    string pubkey = 5;
-    uint64 nonce_index = 6;
-    google.protobuf.Timestamp time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    DLCOracleStatus status = 8;
+    string pubkey = 3;
+    uint64 nonce_index = 4;
+    google.protobuf.Timestamp time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    DLCOracleStatus status = 6;
 }
 
 enum DCMStatus {
@@ -71,6 +66,11 @@ message DLCAttestation {
     string pubkey = 4;
     string signature = 5;
     google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}
+
+// Signing intent
+enum SigningIntent {
+    SIGNING_INTENT_DEFAULT = 0;
 }
 
 // DKG intent

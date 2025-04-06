@@ -297,7 +297,7 @@ func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 		types.ModuleName,
 		types.ToScopedId(event.Id),
 		tsstypes.SigningType_SIGNING_TYPE_SCHNORR_WITH_COMMITMENT,
-		0,
+		int32(types.SigningIntent_SIGNING_INTENT_DEFAULT),
 		event.Pubkey,
 		[]string{base64.StdEncoding.EncodeToString(types.GetEventOutcomeHash(event, outcomeIndex))},
 		&tsstypes.SigningOptions{Nonce: event.Nonce},

@@ -10690,7 +10690,7 @@ func (x *QueryOraclesRequest) GetStatus() DLCOracleStatus {
 	if x != nil {
 		return x.Status
 	}
-	return DLCOracleStatus_Oracle_Status_Pending
+	return DLCOracleStatus_Oracle_status_Enable
 }
 
 func (x *QueryOraclesRequest) GetPagination() *v1beta1.PageRequest {
