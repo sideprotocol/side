@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	storetypes "cosmossdk.io/store/types"
@@ -10,7 +11,13 @@ import (
 )
 
 // CreateDCM creates a new DCM with the given pub key
-func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) {
+// Assume that the pub key is valid
+func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) error {
+	pubKeyBz, _ := hex.DecodeString(pubKey)
+	if k.HasDCMByPubKey(ctx, pubKeyBz) {
+		return types.ErrDCMAlreadyExists
+	}
+
 	dcm := &types.DCM{
 		Id:     k.IncrementDCMId(ctx),
 		Pubkey: pubKey,
@@ -19,6 +26,7 @@ func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) {
 	}
 
 	k.SetDCM(ctx, dcm)
+	k.SetDCMByPubKey(ctx, dcm.Id, pubKeyBz)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
@@ -27,6 +35,8 @@ func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) {
 			sdk.NewAttribute(types.AttributeKeyPubKey, dcm.Pubkey),
 		),
 	)
+
+	return nil
 }
 
 // GetDCMId gets the current DCM id
@@ -75,6 +85,20 @@ func (k Keeper) SetDCM(ctx sdk.Context, dcm *types.DCM) {
 
 	bz := k.cdc.MustMarshal(dcm)
 	store.Set(types.DCMKey(dcm.Id), bz)
+}
+
+// HasDCMByPubKey returns true if the given DCM exists, false otherwise
+func (k Keeper) HasDCMByPubKey(ctx sdk.Context, pubKey []byte) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.DCMByPubKeyKey(pubKey))
+}
+
+// SetDCMByPubKey sets the given DCM by pub key
+func (k Keeper) SetDCMByPubKey(ctx sdk.Context, dcmId uint64, pubKey []byte) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.DCMByPubKeyKey(pubKey), sdk.Uint64ToBigEndian(dcmId))
 }
 
 // GetDCMs gets DCMs by the given status

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	storetypes "cosmossdk.io/store/types"
@@ -10,7 +11,13 @@ import (
 )
 
 // CreateOracle creates a new oracle with the given pub key
-func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) {
+// Assume that the pub key is valid
+func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) error {
+	pubKeyBz, _ := hex.DecodeString(pubKey)
+	if k.HasOracleByPubKey(ctx, pubKeyBz) {
+		return types.ErrOracleAlreadyExists
+	}
+
 	oracle := &types.DLCOracle{
 		Id:     k.IncrementDCMId(ctx),
 		Pubkey: pubKey,
@@ -19,6 +26,7 @@ func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) {
 	}
 
 	k.SetOracle(ctx, oracle)
+	k.SetOracleByPubKey(ctx, oracle.Id, pubKeyBz)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
@@ -27,6 +35,8 @@ func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) {
 			sdk.NewAttribute(types.AttributeKeyPubKey, oracle.Pubkey),
 		),
 	)
+
+	return nil
 }
 
 // GetOracleId gets the current oracle id
