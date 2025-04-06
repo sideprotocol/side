@@ -666,6 +666,7 @@ func New(
 		keys[dlctypes.StoreKey],
 		keys[dlctypes.MemStoreKey],
 		app.OracleKeeper,
+		app.StakingKeeper,
 		app.TSSKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)

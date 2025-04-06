@@ -1,8 +1,11 @@
 package types
 
 import (
+	context "context"
+
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
@@ -10,6 +13,14 @@ import (
 // OracleKeeper defines the expected oracle keeper interface
 type OracleKeeper interface {
 	GetPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error)
+}
+
+// StakingKeeper defines the expected staking keeper used to retrieve validator (noalias)
+type StakingKeeper interface {
+	GetValidator(ctx context.Context, addr sdk.ValAddress) (stakingtypes.Validator, error)
+	GetValidatorByConsAddr(ctx context.Context, consAddr sdk.ConsAddress) (stakingtypes.Validator, error)
+
+	IterateBondedValidatorsByPower(context.Context, func(index int64, validator stakingtypes.ValidatorI) (stop bool)) error
 }
 
 // TSSKeeper defines the expected TSS keeper interface

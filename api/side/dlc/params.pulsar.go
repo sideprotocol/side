@@ -540,8 +540,8 @@ var (
 	fd_Params_date_event_nonce_queue_size    protoreflect.FieldDescriptor
 	fd_Params_date_interval                  protoreflect.FieldDescriptor
 	fd_Params_lending_event_nonce_queue_size protoreflect.FieldDescriptor
+	fd_Params_oracle_participant_num         protoreflect.FieldDescriptor
 	fd_Params_nonce_generation_batch_size    protoreflect.FieldDescriptor
-	fd_Params_dkg_timeout_period             protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -552,8 +552,8 @@ func init() {
 	fd_Params_date_event_nonce_queue_size = md_Params.Fields().ByName("date_event_nonce_queue_size")
 	fd_Params_date_interval = md_Params.Fields().ByName("date_interval")
 	fd_Params_lending_event_nonce_queue_size = md_Params.Fields().ByName("lending_event_nonce_queue_size")
+	fd_Params_oracle_participant_num = md_Params.Fields().ByName("oracle_participant_num")
 	fd_Params_nonce_generation_batch_size = md_Params.Fields().ByName("nonce_generation_batch_size")
-	fd_Params_dkg_timeout_period = md_Params.Fields().ByName("dkg_timeout_period")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -651,15 +651,15 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.NonceGenerationBatchSize != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.NonceGenerationBatchSize)
-		if !f(fd_Params_nonce_generation_batch_size, value) {
+	if x.OracleParticipantNum != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.OracleParticipantNum)
+		if !f(fd_Params_oracle_participant_num, value) {
 			return
 		}
 	}
-	if x.DkgTimeoutPeriod != nil {
-		value := protoreflect.ValueOfMessage(x.DkgTimeoutPeriod.ProtoReflect())
-		if !f(fd_Params_dkg_timeout_period, value) {
+	if x.NonceGenerationBatchSize != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.NonceGenerationBatchSize)
+		if !f(fd_Params_nonce_generation_batch_size, value) {
 			return
 		}
 	}
@@ -688,10 +688,10 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.DateInterval != nil
 	case "side.dlc.Params.lending_event_nonce_queue_size":
 		return x.LendingEventNonceQueueSize != uint32(0)
+	case "side.dlc.Params.oracle_participant_num":
+		return x.OracleParticipantNum != uint32(0)
 	case "side.dlc.Params.nonce_generation_batch_size":
 		return x.NonceGenerationBatchSize != uint32(0)
-	case "side.dlc.Params.dkg_timeout_period":
-		return x.DkgTimeoutPeriod != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -718,10 +718,10 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.DateInterval = nil
 	case "side.dlc.Params.lending_event_nonce_queue_size":
 		x.LendingEventNonceQueueSize = uint32(0)
+	case "side.dlc.Params.oracle_participant_num":
+		x.OracleParticipantNum = uint32(0)
 	case "side.dlc.Params.nonce_generation_batch_size":
 		x.NonceGenerationBatchSize = uint32(0)
-	case "side.dlc.Params.dkg_timeout_period":
-		x.DkgTimeoutPeriod = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -756,12 +756,12 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "side.dlc.Params.lending_event_nonce_queue_size":
 		value := x.LendingEventNonceQueueSize
 		return protoreflect.ValueOfUint32(value)
+	case "side.dlc.Params.oracle_participant_num":
+		value := x.OracleParticipantNum
+		return protoreflect.ValueOfUint32(value)
 	case "side.dlc.Params.nonce_generation_batch_size":
 		value := x.NonceGenerationBatchSize
 		return protoreflect.ValueOfUint32(value)
-	case "side.dlc.Params.dkg_timeout_period":
-		value := x.DkgTimeoutPeriod
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -794,10 +794,10 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.DateInterval = value.Message().Interface().(*durationpb.Duration)
 	case "side.dlc.Params.lending_event_nonce_queue_size":
 		x.LendingEventNonceQueueSize = uint32(value.Uint())
+	case "side.dlc.Params.oracle_participant_num":
+		x.OracleParticipantNum = uint32(value.Uint())
 	case "side.dlc.Params.nonce_generation_batch_size":
 		x.NonceGenerationBatchSize = uint32(value.Uint())
-	case "side.dlc.Params.dkg_timeout_period":
-		x.DkgTimeoutPeriod = value.Message().Interface().(*durationpb.Duration)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -829,17 +829,14 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 			x.DateInterval = new(durationpb.Duration)
 		}
 		return protoreflect.ValueOfMessage(x.DateInterval.ProtoReflect())
-	case "side.dlc.Params.dkg_timeout_period":
-		if x.DkgTimeoutPeriod == nil {
-			x.DkgTimeoutPeriod = new(durationpb.Duration)
-		}
-		return protoreflect.ValueOfMessage(x.DkgTimeoutPeriod.ProtoReflect())
 	case "side.dlc.Params.price_event_nonce_queue_size":
 		panic(fmt.Errorf("field price_event_nonce_queue_size of message side.dlc.Params is not mutable"))
 	case "side.dlc.Params.date_event_nonce_queue_size":
 		panic(fmt.Errorf("field date_event_nonce_queue_size of message side.dlc.Params is not mutable"))
 	case "side.dlc.Params.lending_event_nonce_queue_size":
 		panic(fmt.Errorf("field lending_event_nonce_queue_size of message side.dlc.Params is not mutable"))
+	case "side.dlc.Params.oracle_participant_num":
+		panic(fmt.Errorf("field oracle_participant_num of message side.dlc.Params is not mutable"))
 	case "side.dlc.Params.nonce_generation_batch_size":
 		panic(fmt.Errorf("field nonce_generation_batch_size of message side.dlc.Params is not mutable"))
 	default:
@@ -867,11 +864,10 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.dlc.Params.lending_event_nonce_queue_size":
 		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.dlc.Params.oracle_participant_num":
+		return protoreflect.ValueOfUint32(uint32(0))
 	case "side.dlc.Params.nonce_generation_batch_size":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "side.dlc.Params.dkg_timeout_period":
-		m := new(durationpb.Duration)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -960,12 +956,11 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.LendingEventNonceQueueSize != 0 {
 			n += 1 + runtime.Sov(uint64(x.LendingEventNonceQueueSize))
 		}
+		if x.OracleParticipantNum != 0 {
+			n += 1 + runtime.Sov(uint64(x.OracleParticipantNum))
+		}
 		if x.NonceGenerationBatchSize != 0 {
 			n += 1 + runtime.Sov(uint64(x.NonceGenerationBatchSize))
-		}
-		if x.DkgTimeoutPeriod != nil {
-			l = options.Size(x.DkgTimeoutPeriod)
-			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -996,22 +991,13 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.DkgTimeoutPeriod != nil {
-			encoded, err := options.Marshal(x.DkgTimeoutPeriod)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x3a
-		}
 		if x.NonceGenerationBatchSize != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.NonceGenerationBatchSize))
+			i--
+			dAtA[i] = 0x38
+		}
+		if x.OracleParticipantNum != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OracleParticipantNum))
 			i--
 			dAtA[i] = 0x30
 		}
@@ -1238,6 +1224,25 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 			case 6:
 				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OracleParticipantNum", wireType)
+				}
+				x.OracleParticipantNum = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.OracleParticipantNum |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 7:
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NonceGenerationBatchSize", wireType)
 				}
 				x.NonceGenerationBatchSize = 0
@@ -1255,42 +1260,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 7:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DkgTimeoutPeriod", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.DkgTimeoutPeriod == nil {
-					x.DkgTimeoutPeriod = &durationpb.Duration{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DkgTimeoutPeriod); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1393,8 +1362,8 @@ type Params struct {
 	DateEventNonceQueueSize    uint32               `protobuf:"varint,3,opt,name=date_event_nonce_queue_size,json=dateEventNonceQueueSize,proto3" json:"date_event_nonce_queue_size,omitempty"`
 	DateInterval               *durationpb.Duration `protobuf:"bytes,4,opt,name=date_interval,json=dateInterval,proto3" json:"date_interval,omitempty"`
 	LendingEventNonceQueueSize uint32               `protobuf:"varint,5,opt,name=lending_event_nonce_queue_size,json=lendingEventNonceQueueSize,proto3" json:"lending_event_nonce_queue_size,omitempty"`
-	NonceGenerationBatchSize   uint32               `protobuf:"varint,6,opt,name=nonce_generation_batch_size,json=nonceGenerationBatchSize,proto3" json:"nonce_generation_batch_size,omitempty"`
-	DkgTimeoutPeriod           *durationpb.Duration `protobuf:"bytes,7,opt,name=dkg_timeout_period,json=dkgTimeoutPeriod,proto3" json:"dkg_timeout_period,omitempty"`
+	OracleParticipantNum       uint32               `protobuf:"varint,6,opt,name=oracle_participant_num,json=oracleParticipantNum,proto3" json:"oracle_participant_num,omitempty"`
+	NonceGenerationBatchSize   uint32               `protobuf:"varint,7,opt,name=nonce_generation_batch_size,json=nonceGenerationBatchSize,proto3" json:"nonce_generation_batch_size,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -1452,18 +1421,18 @@ func (x *Params) GetLendingEventNonceQueueSize() uint32 {
 	return 0
 }
 
+func (x *Params) GetOracleParticipantNum() uint32 {
+	if x != nil {
+		return x.OracleParticipantNum
+	}
+	return 0
+}
+
 func (x *Params) GetNonceGenerationBatchSize() uint32 {
 	if x != nil {
 		return x.NonceGenerationBatchSize
 	}
 	return 0
-}
-
-func (x *Params) GetDkgTimeoutPeriod() *durationpb.Duration {
-	if x != nil {
-		return x.DkgTimeoutPeriod
-	}
-	return nil
 }
 
 var File_side_dlc_params_proto protoreflect.FileDescriptor
@@ -1479,7 +1448,7 @@ var file_side_dlc_params_proto_rawDesc = []byte{
 	0x65, 0x5f, 0x70, 0x61, 0x69, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x72,
 	0x69, 0x63, 0x65, 0x50, 0x61, 0x69, 0x72, 0x12, 0x1a, 0x0a, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72,
 	0x76, 0x61, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72,
-	0x76, 0x61, 0x6c, 0x22, 0xee, 0x03, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3e,
+	0x76, 0x61, 0x6c, 0x22, 0xd1, 0x03, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3e,
 	0x0a, 0x1c, 0x70, 0x72, 0x69, 0x63, 0x65, 0x5f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x6e, 0x6f,
 	0x6e, 0x63, 0x65, 0x5f, 0x71, 0x75, 0x65, 0x75, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0d, 0x52, 0x18, 0x70, 0x72, 0x69, 0x63, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74,
@@ -1501,25 +1470,23 @@ var file_side_dlc_params_proto_rawDesc = []byte{
 	0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f, 0x71, 0x75, 0x65, 0x75, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65,
 	0x18, 0x05, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1a, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x45,
 	0x76, 0x65, 0x6e, 0x74, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x51, 0x75, 0x65, 0x75, 0x65, 0x53, 0x69,
-	0x7a, 0x65, 0x12, 0x3d, 0x0a, 0x1b, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f, 0x67, 0x65, 0x6e, 0x65,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x73, 0x69, 0x7a,
-	0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x18, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x47, 0x65,
-	0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x61, 0x74, 0x63, 0x68, 0x53, 0x69, 0x7a,
-	0x65, 0x12, 0x51, 0x0a, 0x12, 0x64, 0x6b, 0x67, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74,
-	0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e,
-	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf,
-	0x1f, 0x01, 0x52, 0x10, 0x64, 0x6b, 0x67, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x50, 0x65,
-	0x72, 0x69, 0x6f, 0x64, 0x42, 0x87, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x64, 0x6c, 0x63, 0xa2,
-	0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x44, 0x6c, 0x63,
-	0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0xe2, 0x02, 0x14, 0x53, 0x69,
-	0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x44, 0x6c, 0x63, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x7a, 0x65, 0x12, 0x34, 0x0a, 0x16, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x5f, 0x70, 0x61, 0x72,
+	0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x5f, 0x6e, 0x75, 0x6d, 0x18, 0x06, 0x20, 0x01,
+	0x28, 0x0d, 0x52, 0x14, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x61, 0x72, 0x74, 0x69, 0x63,
+	0x69, 0x70, 0x61, 0x6e, 0x74, 0x4e, 0x75, 0x6d, 0x12, 0x3d, 0x0a, 0x1b, 0x6e, 0x6f, 0x6e, 0x63,
+	0x65, 0x5f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x62, 0x61, 0x74,
+	0x63, 0x68, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x18, 0x6e,
+	0x6f, 0x6e, 0x63, 0x65, 0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x61,
+	0x74, 0x63, 0x68, 0x53, 0x69, 0x7a, 0x65, 0x42, 0x87, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
+	0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x64,
+	0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e,
+	0x44, 0x6c, 0x63, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0xe2, 0x02,
+	0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
+	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x44, 0x6c,
+	0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1543,12 +1510,11 @@ var file_side_dlc_params_proto_goTypes = []interface{}{
 var file_side_dlc_params_proto_depIdxs = []int32{
 	0, // 0: side.dlc.Params.price_intervals:type_name -> side.dlc.PriceInterval
 	2, // 1: side.dlc.Params.date_interval:type_name -> google.protobuf.Duration
-	2, // 2: side.dlc.Params.dkg_timeout_period:type_name -> google.protobuf.Duration
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_side_dlc_params_proto_init() }

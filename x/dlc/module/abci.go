@@ -33,9 +33,14 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		// TODO: select from staking validators
-		participants := []string{}
-		threshold := 15
+		// get participants
+		participants, err := k.GetOracleParticipants(ctx)
+		if err != nil {
+			k.Logger(ctx).Info("failed to get oracle participants", "err", err)
+			return
+		}
+
+		threshold := len(participants) * 2 / 3
 
 		// initiate DKG
 		k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_PRICE_EVENT_NONCE)+int32(i), participants, uint32(threshold), k.NonceGenerationBatchSize(ctx))
@@ -50,9 +55,14 @@ func generateDateEventNonces(ctx sdk.Context, k keeper.Keeper) {
 		return
 	}
 
-	// TODO: select from staking validators
-	participants := []string{}
-	threshold := 15
+	// get participants
+	participants, err := k.GetOracleParticipants(ctx)
+	if err != nil {
+		k.Logger(ctx).Info("failed to get oracle participants", "err", err)
+		return
+	}
+
+	threshold := len(participants) * 2 / 3
 
 	// initiate DKG
 	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_DATE_EVENT_NONCE), participants, uint32(threshold), k.NonceGenerationBatchSize(ctx))
@@ -66,9 +76,14 @@ func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
 		return
 	}
 
-	// TODO: select from staking validators
-	participants := []string{}
-	threshold := 15
+	// get participants
+	participants, err := k.GetOracleParticipants(ctx)
+	if err != nil {
+		k.Logger(ctx).Info("failed to get oracle participants", "err", err)
+		return
+	}
+
+	threshold := len(participants) * 2 / 3
 
 	// initiate DKG
 	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_LENDING_EVENT_NONCE), participants, uint32(threshold), k.NonceGenerationBatchSize(ctx))

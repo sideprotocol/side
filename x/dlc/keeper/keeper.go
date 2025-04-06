@@ -14,8 +14,9 @@ type Keeper struct {
 	storeKey storetypes.StoreKey
 	memKey   storetypes.StoreKey
 
-	oracleKeeper types.OracleKeeper
-	tssKeeper    types.TSSKeeper
+	oracleKeeper  types.OracleKeeper
+	stakingKeeper types.StakingKeeper
+	tssKeeper     types.TSSKeeper
 
 	authority string
 }
@@ -25,16 +26,18 @@ func NewKeeper(
 	storeKey,
 	memKey storetypes.StoreKey,
 	oracleKeeper types.OracleKeeper,
+	stakingKeeper types.StakingKeeper,
 	tssKeeper types.TSSKeeper,
 	authority string,
 ) Keeper {
 	k := Keeper{
-		cdc:          cdc,
-		storeKey:     storeKey,
-		memKey:       memKey,
-		oracleKeeper: oracleKeeper,
-		tssKeeper:    tssKeeper,
-		authority:    authority,
+		cdc:           cdc,
+		storeKey:      storeKey,
+		memKey:        memKey,
+		oracleKeeper:  oracleKeeper,
+		stakingKeeper: stakingKeeper,
+		tssKeeper:     tssKeeper,
+		authority:     authority,
 	}
 
 	// register DKG request completed handler

@@ -33,12 +33,12 @@ func (k Keeper) LendingEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).LendingEventNonceQueueSize
 }
 
+// OracleParticipantNum gets the oracle participant number
+func (k Keeper) OracleParticipantNum(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).OracleParticipantNum
+}
+
 // NonceGenerationBatchSize gets the nonce generation batch size
 func (k Keeper) NonceGenerationBatchSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).NonceGenerationBatchSize
-}
-
-// DKGTimeoutPeriod gets the DKG timeout period
-func (k Keeper) DKGTimeoutPeriod(ctx sdk.Context) time.Duration {
-	return k.GetParams(ctx).DkgTimeoutPeriod
 }
