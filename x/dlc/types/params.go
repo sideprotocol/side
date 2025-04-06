@@ -27,6 +27,9 @@ var (
 	// default nonce queue size for lending events
 	DefaultLendingEventNonceQueueSize = uint32(1000)
 
+	// default nonce generation batch size
+	DefaultNonceGenerationBatchSize = uint32(200)
+
 	// default DKG timeout period
 	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
 )
@@ -37,13 +40,14 @@ func NewParams() Params {
 		PriceEventNonceQueueSize: DefaultPriceEventNonceQueueSize,
 		PriceIntervals: []PriceInterval{
 			{
-				PricePair: "BTC-USD",
+				PricePair: "BTCUSD",
 				Interval:  int32(DefaultPriceInterval),
 			},
 		},
 		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
 		DateInterval:               DefaultDateInterval,
 		LendingEventNonceQueueSize: DefaultLendingEventNonceQueueSize,
+		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
 		DkgTimeoutPeriod:           DefaultDKGTimeoutPeriod,
 	}
 }
@@ -75,6 +79,10 @@ func (p Params) Validate() error {
 
 	if p.LendingEventNonceQueueSize == 0 {
 		return errorsmod.Wrap(ErrInvalidParams, "lending event nonce queue size must be greater than 0")
+	}
+
+	if p.NonceGenerationBatchSize < 2 {
+		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation batch size can not be less than 2")
 	}
 
 	if err := validateDKGTimeoutPeriod(p.DkgTimeoutPeriod); err != nil {

@@ -3,6 +3,7 @@ package keeper
 import (
 	"encoding/base64"
 	"encoding/hex"
+	"fmt"
 
 	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
@@ -11,19 +12,24 @@ import (
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
-// CreateOracle initiates the oracle creation request
-func (k Keeper) CreateOracle(ctx sdk.Context, participants []string, threshold uint32) (*types.DLCOracle, error) {
+// CreateOracle creates a new oracle with the given pub key
+func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) {
 	oracle := &types.DLCOracle{
-		Id:           k.IncrementOracleId(ctx),
-		Participants: participants,
-		Threshold:    threshold,
-		Time:         ctx.BlockTime(),
-		Status:       types.DLCOracleStatus_Oracle_Status_Pending,
+		Id:     k.IncrementDCMId(ctx),
+		Pubkey: pubKey,
+		Time:   ctx.BlockTime(),
+		Status: types.DLCOracleStatus_Oracle_status_Enable,
 	}
 
 	k.SetOracle(ctx, oracle)
 
-	return oracle, nil
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCreateOracle,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", oracle.Id)),
+			sdk.NewAttribute(types.AttributeKeyPubKey, oracle.Pubkey),
+		),
+	)
 }
 
 // SubmitOraclePubKey performs the oracle public key submission

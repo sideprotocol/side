@@ -13,7 +13,11 @@ import (
 )
 
 const (
-	DCM_TYPE = "dcm"
+	// DKG type for DCM creation
+	DKG_TYPE_DCM = "dcm"
+
+	// DKG type for nonce generation along with oracle
+	DKG_TYPE_NONCE = "nonce"
 )
 
 // GetEventOutcomeHash gets the event outcome hash by the given index
@@ -66,6 +70,20 @@ func GetSignaturePoint(pubKeyBytes []byte, nonceBytes []byte, msg []byte) ([]byt
 	btcec.AddNonConst(&R, &eP, &sG)
 
 	return btcec.JacobianToByteSlice(sG), nil
+}
+
+// GetEventTypeFromIntent gets the event type from the given nonce DKG intent
+func GetEventTypeFromIntent(intent int32) DlcEventType {
+	switch intent {
+	case int32(DKGIntent_DKG_INTENT_DATE_EVENT_NONCE):
+		return DlcEventType_DATE
+
+	case int32(DKGIntent_DKG_INTENT_LENDING_EVENT_NONCE):
+		return DlcEventType_LENDING
+
+	default:
+		return DlcEventType_PRICE
+	}
 }
 
 // ToScopedId converts the given local id to the scoped id

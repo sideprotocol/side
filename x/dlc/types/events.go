@@ -4,7 +4,7 @@ package types
 const (
 	EventTypeCreateOracle    = "create_oracle"
 	EventTypeCreateDCM       = "create_dcm"
-	EventTypeGenerateNonce   = "generate_nonce"
+	EventTypeGenerateNonce   = "generate_nonces"
 	EventTypeTriggerDLCEvent = "trigger_dlc_event"
 
 	AttributeKeyPubKey = "pub_key"

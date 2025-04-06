@@ -10,13 +10,22 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/crypto/hash"
-	"github.com/sideprotocol/side/crypto/schnorr"
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
+// HandleNonces performs the nonces handling
+func (k Keeper) HandleNonces(ctx sdk.Context, oraclePubKey string, nonces []string, intent int32) error {
+	for _, nonce := range nonces {
+		if err := k.HandleNonce(ctx, oraclePubKey, nonce, intent); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // HandleNonce performs the nonce handling
-func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcEventType, nonce string, oraclePubKey string, signature string) error {
+func (k Keeper) HandleNonce(ctx sdk.Context, oraclePubKey string, nonce string, intent int32) error {
 	nonceBytes, _ := hex.DecodeString(nonce)
 	if k.HasNonce(ctx, nonceBytes) {
 		return errorsmod.Wrap(types.ErrInvalidNonce, "nonce already exists")
@@ -27,11 +36,6 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 		return types.ErrOracleDoesNotExist
 	}
 
-	sigBytes, _ := hex.DecodeString(signature)
-	if !schnorr.Verify(sigBytes, hash.Sha256(nonceBytes), oraclePKBytes) {
-		return errorsmod.Wrap(types.ErrInvalidSignature, "failed to verify the signature")
-	}
-
 	oracle := k.GetOracleByPubKey(ctx, oraclePKBytes)
 
 	dlcNonce := &types.DLCNonce{
@@ -40,6 +44,8 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 		OraclePubkey: oraclePubKey,
 		Time:         ctx.BlockTime(),
 	}
+
+	eventType := types.GetEventTypeFromIntent(intent)
 
 	dlcEvent := &types.DLCEvent{
 		Id:           k.IncrementEventId(ctx),
@@ -52,6 +58,14 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 
 	switch eventType {
 	case types.DlcEventType_PRICE:
+		pricePairIndex := int(intent) - int(types.DKGIntent_DKG_INTENT_PRICE_EVENT_NONCE)
+		priceIntervals := k.PriceIntervals(ctx)
+		if len(priceIntervals) < pricePairIndex+1 || len(priceIntervals[pricePairIndex].PricePair) == 0 {
+			return errorsmod.Wrap(types.ErrInvalidDKGIntent, "price pair does not exist")
+		}
+
+		priceInterval := priceIntervals[pricePairIndex]
+
 		if k.GetTriggeredPriceEventQueueCount(ctx) > 0 {
 			triggeredPriceEvent := k.GetTriggeredPriceEventFromQueue(ctx)
 
@@ -64,12 +78,12 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 			break
 		}
 
-		pair := "BTC-USD"
+		pair := priceInterval.PricePair
 		currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
 
-		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(k.PriceInterval(ctx, pair)))
+		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(priceInterval.Interval))
 
-		dlcEvent.Description = fmt.Sprintf("price event at price %s", triggerPrice.String())
+		dlcEvent.Description = fmt.Sprintf("price event at price %s for pair %s", triggerPrice.String(), pair)
 		dlcEvent.Outcomes = append(dlcEvent.Outcomes, triggerPrice.String())
 
 		k.SetEventByPrice(ctx, triggerPrice, dlcEvent)

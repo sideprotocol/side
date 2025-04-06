@@ -9,12 +9,14 @@ import (
 
 // DKGCompletedHandler is callback handler when the DKG request completed by TSS
 func (k Keeper) DKGCompletedHandler(ctx sdk.Context, dkgRequestId uint64, ty string, intent int32, pubKeys []string) error {
-	switch types.DKGIntent(intent) {
-	case types.DKGIntent_DKG_INTENT_DCM:
+	switch ty {
+	case types.DKG_TYPE_DCM:
 		k.CreateDCM(ctx, pubKeys[0])
 
-	default:
-		return nil
+	case types.DKG_TYPE_NONCE:
+		// the first pub key is oracle and the remaining are nonces
+		k.CreateOracle(ctx, pubKeys[0])
+		k.HandleNonces(ctx, pubKeys[0], pubKeys[1:], intent)
 	}
 
 	return nil

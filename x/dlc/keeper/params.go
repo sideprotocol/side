@@ -13,6 +13,11 @@ func (k Keeper) PriceEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).PriceEventNonceQueueSize
 }
 
+// PriceIntervals gets all supported price intervals
+func (k Keeper) PriceIntervals(ctx sdk.Context) []types.PriceInterval {
+	return k.GetParams(ctx).PriceIntervals
+}
+
 // PriceInterval gets the price interval for the given pair
 func (k Keeper) PriceInterval(ctx sdk.Context, pair string) int32 {
 	priceIntervals := k.GetParams(ctx).PriceIntervals
@@ -39,6 +44,11 @@ func (k Keeper) DateInterval(ctx sdk.Context) int64 {
 // LendingEventNonceQueueSize gets the nonce queue size for the lending events
 func (k Keeper) LendingEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).LendingEventNonceQueueSize
+}
+
+// NonceGenerationBatchSize gets the nonce generation batch size
+func (k Keeper) NonceGenerationBatchSize(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).NonceGenerationBatchSize
 }
 
 // DKGTimeoutPeriod gets the DKG timeout period

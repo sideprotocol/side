@@ -68,3 +68,7 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 
 	return params
 }
+
+func (k Keeper) TSSKeeper() types.TSSKeeper {
+	return k.tssKeeper
+}
