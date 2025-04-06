@@ -5,18 +5,17 @@ import (
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
-
-// PricePairSeparator defines the separator of the price pair
-const PricePairSeparator = "-"
 
 var (
 	// default nonce queue size for price events
-	DefaultPriceEventNonceQueueSize = uint32(50)
+	DefaultPriceEventNonceQueueSize = uint32(20)
 
-	// default price interval
-	DefaultPriceInterval = int32(100)
+	// BTCUSD price pair
+	BTCUSDPricePair = "BTCUSD"
+
+	// default price interval for BTCUSD
+	DefaultBTCUSDPriceInterval = int32(100)
 
 	// default nonce queue size for date events
 	DefaultDateEventNonceQueueSize = uint32(180)
@@ -43,8 +42,8 @@ func NewParams() Params {
 		PriceEventNonceQueueSize: DefaultPriceEventNonceQueueSize,
 		PriceIntervals: []PriceInterval{
 			{
-				PricePair: "BTCUSD",
-				Interval:  int32(DefaultPriceInterval),
+				PricePair: BTCUSDPricePair,
+				Interval:  int32(DefaultBTCUSDPriceInterval),
 			},
 		},
 		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
@@ -97,28 +96,16 @@ func (p Params) Validate() error {
 
 // validatePriceInterval validates the given price interval
 func validatePriceInterval(priceInterval PriceInterval) error {
-	if err := validatePricePair(priceInterval.PricePair); err != nil {
-		return err
+	if len(priceInterval.PricePair) == 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "empty price pair")
 	}
 
-	if priceInterval.Interval == 0 {
+	if priceInterval.PricePair != strings.ToUpper(priceInterval.PricePair) {
+		return errorsmod.Wrap(ErrInvalidParams, "price pair must be in uppercase")
+	}
+
+	if priceInterval.Interval <= 0 {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid price interval")
-	}
-
-	return nil
-}
-
-// validatePricePair validates the given price pair
-func validatePricePair(pair string) error {
-	denoms := strings.Split(pair, PricePairSeparator)
-	if len(denoms) != 2 {
-		return errorsmod.Wrap(ErrInvalidParams, "invalid price pair")
-	}
-
-	for _, denom := range denoms {
-		if err := sdk.ValidateDenom(denom); err != nil {
-			return err
-		}
 	}
 
 	return nil
