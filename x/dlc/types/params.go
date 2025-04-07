@@ -26,6 +26,12 @@ var (
 	// default nonce queue size for lending events
 	DefaultLendingEventNonceQueueSize = uint32(1000)
 
+	// default oracle participant base number
+	DefaultOracleParticipantBaseNum = uint32(50)
+
+	// maximum oracle participant base number
+	MaxOracleParticipantBaseNum = uint32(100)
+
 	// default oracle participant number
 	DefaultOracleParticipantNum = uint32(21)
 
@@ -49,6 +55,7 @@ func NewParams() Params {
 		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
 		DateInterval:               DefaultDateInterval,
 		LendingEventNonceQueueSize: DefaultLendingEventNonceQueueSize,
+		OracleParticipantBaseNum:   DefaultOracleParticipantBaseNum,
 		OracleParticipantNum:       DefaultOracleParticipantNum,
 		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
 	}
@@ -83,8 +90,12 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(ErrInvalidParams, "lending event nonce queue size must be greater than 0")
 	}
 
-	if p.OracleParticipantNum < MinOracleParticipantNum {
-		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number can not be less than %d", MinOracleParticipantNum)
+	if p.OracleParticipantBaseNum > MaxOracleParticipantBaseNum {
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant base number can not be greater than %d", MaxOracleParticipantBaseNum)
+	}
+
+	if p.OracleParticipantNum < MinOracleParticipantNum || p.OracleParticipantNum > p.OracleParticipantBaseNum {
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number must be between [%d, %d]", MinOracleParticipantNum, p.OracleParticipantBaseNum)
 	}
 
 	if p.NonceGenerationBatchSize < 2 {

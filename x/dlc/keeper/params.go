@@ -33,6 +33,11 @@ func (k Keeper) LendingEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).LendingEventNonceQueueSize
 }
 
+// OracleParticipantBaseNum gets the oracle participant base number
+func (k Keeper) OracleParticipantBaseNum(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).OracleParticipantBaseNum
+}
+
 // OracleParticipantNum gets the oracle participant number
 func (k Keeper) OracleParticipantNum(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).OracleParticipantNum

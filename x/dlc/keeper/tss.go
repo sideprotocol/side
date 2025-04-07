@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"encoding/base64"
+	"math/rand"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -34,14 +35,18 @@ func (k Keeper) SigningCompletedHandler(ctx sdk.Context, sender string, id uint6
 	return k.HandleAttestation(ctx, sender, types.FromScopedId(scopedId), signatures[0])
 }
 
-// GetOracleParticipants gets oracle participants by voting power
+// GetOracleParticipants gets oracle participants
 func (k Keeper) GetOracleParticipants(ctx sdk.Context) ([]string, error) {
-	consensusPubKeys := []string{}
+	baseParticipants := []string{}
+	participants := []string{}
+
+	baseParticipantNum := int(k.OracleParticipantBaseNum(ctx))
+	participantNum := int(k.OracleParticipantNum(ctx))
 
 	var errIterate error
 
 	k.stakingKeeper.IterateBondedValidatorsByPower(ctx, func(index int64, validator stakingtypes.ValidatorI) (stop bool) {
-		if len(consensusPubKeys) == int(k.OracleParticipantNum(ctx)) {
+		if len(baseParticipants) == baseParticipantNum {
 			return true
 		}
 
@@ -51,7 +56,7 @@ func (k Keeper) GetOracleParticipants(ctx sdk.Context) ([]string, error) {
 			return true
 		}
 
-		consensusPubKeys = append(consensusPubKeys, base64.StdEncoding.EncodeToString(pk.Bytes()))
+		baseParticipants = append(baseParticipants, base64.StdEncoding.EncodeToString(pk.Bytes()))
 
 		return false
 	})
@@ -60,9 +65,17 @@ func (k Keeper) GetOracleParticipants(ctx sdk.Context) ([]string, error) {
 		return nil, errIterate
 	}
 
-	if len(consensusPubKeys) < int(types.MinOracleParticipantNum) {
+	// check if the base participant count is less than the oracle participant base number
+	if len(baseParticipants) < baseParticipantNum {
 		return nil, types.ErrInsufficientOracleParticipants
 	}
 
-	return consensusPubKeys, nil
+	// select oracle participants randomly by the expected participant number
+	rand := rand.New(rand.NewSource(ctx.BlockTime().Unix()))
+	selectedIndices := rand.Perm(baseParticipantNum)[0:participantNum]
+	for _, index := range selectedIndices {
+		participants = append(participants, baseParticipants[index])
+	}
+
+	return participants, nil
 }
