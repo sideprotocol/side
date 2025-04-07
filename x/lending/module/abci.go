@@ -329,12 +329,14 @@ func updatePools(ctx sdk.Context, k keeper.Keeper) {
 		//
 		// Formula:
 		//
-		// borrowIndex_new = borrowIndex_old * (1 + borrowAPR/blocksPerYear)
+		// borrowIndex_new = borrowIndex_old * (1 + borrowAPR*(1-reserve factor)/blocksPerYear)
 		// totalBorrowed_new = totalBorrowed_old * borrowIndex_new/borrowIndex_old
 
-		borrowIndexRatioNumerator := int64(1000*blocksPerYear) + int64(pool.Config.BorrowAPR)
-		borrowIndexRatioDenominator := int64(1000 * blocksPerYear)
+		borrowIndexRatioNumerator := int64(1000*1000*blocksPerYear) + int64(pool.Config.BorrowAPR*(1000-pool.Config.ReserveFactor))
+		borrowIndexRatioDenominator := int64(1000 * 1000 * blocksPerYear)
 
 		pool.TotalBorrowed = pool.TotalBorrowed.Mul(sdkmath.NewInt(borrowIndexRatioNumerator).Quo(sdkmath.NewInt(borrowIndexRatioDenominator)))
+
+		k.SetPool(ctx, pool)
 	}
 }
