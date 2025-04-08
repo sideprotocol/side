@@ -179,10 +179,11 @@ message DLCMeta {
     LiquidationCet liquidation_cet = 1 [(gogoproto.nullable) = false]; 
     LiquidationCet default_liquidation_cet = 2 [(gogoproto.nullable) = false];
     RepaymentCet repayment_cet = 3 [(gogoproto.nullable) = false];
-    repeated side.btcbridge.UTXO vault_utxos = 4;
-    string internal_key = 5;
-    string multisig_script = 6;
-    string timeout_refund_script = 7;
+    string timeout_refund_tx = 4;
+    repeated side.btcbridge.UTXO vault_utxos = 5;
+    string internal_key = 6;
+    string multisig_script = 7;
+    string timeout_refund_script = 8;
 }
 
 message DepositLog {
