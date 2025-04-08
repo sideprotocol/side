@@ -178,6 +178,7 @@ message DLCMeta {
     string internal_key = 5;
     string multisig_script = 6;
     string timeout_refund_script = 7;
+    string timeout_refund_tx = 8;
 }
 
 message DepositLog {
