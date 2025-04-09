@@ -21,6 +21,7 @@ func DefaultParams() Params {
 		MinLoanDuration:         DefaultMinLoanDuration,
 		MaxLoanDuration:         DefaultMaxLoanDuration,
 		FinalTimeoutDuration:    DefaultFinalTimeoutDuration,
+		RequestFeeCollector:     authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		OriginationFeeCollector: authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		ProtocolFeeCollector:    authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	}
@@ -38,6 +39,10 @@ func (p Params) Validate() error {
 
 	if p.FinalTimeoutDuration <= 0 {
 		return errorsmod.Wrap(ErrInvalidParams, "final timeout duration must be greater than 0")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(p.RequestFeeCollector); err != nil {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid request fee collector: %v", err)
 	}
 
 	if _, err := sdk.AccAddressFromBech32(p.OriginationFeeCollector); err != nil {

@@ -41,17 +41,21 @@ message PoolConfig {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
+    // request fee
+    cosmos.base.v1beta1.Coin request_fee = 7 [
+      (gogoproto.nullable) = false
+    ];
     // origination fee
-    string origination_fee = 7 [
+    string origination_fee = 8 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // maximum ltv percent
-    uint32 max_ltv = 8;
+    uint32 max_ltv = 9;
     // liquidation ltv percent
-    uint32 liquidation_threshold = 9;
+    uint32 liquidation_threshold = 10;
     // indicates if the pool is paused
-    bool paused = 10;
+    bool paused = 11;
 }
 
 message LendingPool {
@@ -110,35 +114,36 @@ message Loan {
     int64 final_timeout = 6;
     string pool_id = 7;
     cosmos.base.v1beta1.Coin borrow_amount = 8 [(gogoproto.nullable) = false];
-    string origination_fee = 9 [
+    cosmos.base.v1beta1.Coin request_fee = 9 [(gogoproto.nullable) = false];
+    string origination_fee = 10 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string interest = 10 [
+    string interest = 11 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string protocol_fee = 11 [
+    string protocol_fee = 12 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    int64 term = 12;
-    string liquidation_price = 13 [
+    int64 term = 13;
+    string liquidation_price = 14 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_event_id = 14;
-    uint64 default_liquidation_event_id = 15;
-    uint64 repayment_event_id = 16;
-    repeated string deposit_txs = 17;
-    string collateral_amount = 18 [
+    uint64 liquidation_event_id = 15;
+    uint64 default_liquidation_event_id = 16;
+    uint64 repayment_event_id = 17;
+    repeated string deposit_txs = 18;
+    string collateral_amount = 19 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_id = 19;
-    google.protobuf.Timestamp create_at = 20 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 21 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 22;
+    uint64 liquidation_id = 20;
+    google.protobuf.Timestamp create_at = 21 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 22 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 23;
 }
 
 enum CetType {

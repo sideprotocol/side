@@ -14,8 +14,10 @@ message Params {
     google.protobuf.Duration max_loan_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
     // final timeout duration for loan
     google.protobuf.Duration final_timeout_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    // request fee collector address
+    string request_fee_collector = 4;
     // origination fee collector address
-    string origination_fee_collector = 4;
+    string origination_fee_collector = 5;
     // protocol fee collector address
-    string protocol_fee_collector = 5;
+    string protocol_fee_collector = 6;
 }

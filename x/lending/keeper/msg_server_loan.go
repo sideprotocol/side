@@ -56,6 +56,12 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrInsufficientLiquidity
 	}
 
+	if types.HasRequestFee(pool) {
+		if err := m.bankKeeper.SendCoins(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), sdk.MustAccAddressFromBech32(m.RequestFeeCollector(ctx)), sdk.NewCoins(poolConfig.RequestFee)); err != nil {
+			return nil, err
+		}
+	}
+
 	duration := msg.MaturityTime - ctx.BlockTime().Unix()
 	if duration < m.MinLoanDuration(ctx) || duration > m.MaxLoanDuration(ctx) {
 		return nil, types.ErrInvalidLoanDuration
@@ -106,6 +112,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		PoolId:                    msg.PoolId,
 		BorrowAmount:              msg.BorrowAmount,
 		OriginationFee:            poolConfig.OriginationFee,
+		RequestFee:                poolConfig.RequestFee,
 		Interest:                  interest,
 		ProtocolFee:               protocolFee,
 		Term:                      duration,

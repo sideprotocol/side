@@ -80,6 +80,11 @@ func HasMaxBorrowAmountLimit(pool *LendingPool) bool {
 	return pool.Config.MaxBorrowAmount.IsPositive()
 }
 
+// HasRequestFee returns true if the request fee set in the given pool, false otherwise
+func HasRequestFee(pool *LendingPool) bool {
+	return pool.Config.RequestFee.IsPositive()
+}
+
 // HasOriginationFee returns true if the origination fee set in the given pool, false otherwise
 func HasOriginationFee(pool *LendingPool) bool {
 	return pool.Config.OriginationFee.IsPositive()
@@ -140,6 +145,10 @@ func ValidatePoolConfig(config PoolConfig) error {
 
 	if config.MinBorrowAmount.IsPositive() && config.MaxBorrowAmount.IsPositive() && config.MaxBorrowAmount.LT(config.MinBorrowAmount) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount can not be less than min borrow amount")
+	}
+
+	if !config.RequestFee.IsValid() {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid request fee")
 	}
 
 	if config.OriginationFee.IsNil() || config.OriginationFee.IsNegative() {
