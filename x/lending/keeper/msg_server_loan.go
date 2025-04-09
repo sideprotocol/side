@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strings"
+	"time"
 
 	btcschnorr "github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -56,15 +57,17 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrInsufficientLiquidity
 	}
 
+	trancheConfig, found := types.GetTrancheConfig(poolConfig.Tranches, msg.Maturity)
+	if !found {
+		return nil, errorsmod.Wrap(types.ErrInvalidMaturity, "maturity does not exist")
+	}
+
+	maturityTime := ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity)).Unix()
+
 	if types.HasRequestFee(pool) {
 		if err := m.bankKeeper.SendCoins(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), sdk.MustAccAddressFromBech32(m.RequestFeeCollector(ctx)), sdk.NewCoins(poolConfig.RequestFee)); err != nil {
 			return nil, err
 		}
-	}
-
-	duration := msg.MaturityTime - ctx.BlockTime().Unix()
-	if duration < m.MinLoanDuration(ctx) || duration > m.MaxLoanDuration(ctx) {
-		return nil, types.ErrInvalidLoanDuration
 	}
 
 	if !m.dlcKeeper.HasDCM(ctx, msg.DCMId) {
@@ -73,7 +76,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	dcm := m.dlcKeeper.GetDCM(ctx, msg.DCMId)
 
-	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, msg.MaturityTime, msg.MaturityTime+m.FinalTimeoutDuration(ctx))
+	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, maturityTime, maturityTime+m.FinalTimeoutDuration(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +85,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
-	defaultLiquidationDate := types.GetDefaultLiquidationDate(msg.MaturityTime)
+	defaultLiquidationDate := types.GetDefaultLiquidationDate(maturityTime)
 	if !m.dlcKeeper.HasEventByDate(ctx, defaultLiquidationDate) {
 		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "default liquidation event does not exist")
 	}
@@ -99,7 +102,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	repaymentEvent.Outcomes = []string{vault}
 	m.dlcKeeper.SetEvent(ctx, repaymentEvent)
 
-	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.BorrowAPR))).Mul(sdkmath.NewInt(int64(msg.MaturityTime - ctx.BlockTime().Unix()))).Quo(sdkmath.NewInt(int64(types.OneYear))).Quo(types.Permille)
+	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(trancheConfig.BorrowAPR))).Mul(sdkmath.NewInt(trancheConfig.Maturity)).Quo(sdkmath.NewInt(int64(types.OneYear))).Quo(types.Permille)
 	protocolFee := interest.Mul(sdkmath.NewInt(int64(poolConfig.ReserveFactor))).Quo(types.Permille)
 
 	loan := &types.Loan{
@@ -107,15 +110,16 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Borrower:                  msg.Borrower,
 		BorrowerPubKey:            msg.BorrowerPubkey,
 		DCM:                       dcm.Pubkey,
-		MaturityTime:              msg.MaturityTime,
-		FinalTimeout:              msg.MaturityTime + m.FinalTimeoutDuration(ctx),
+		MaturityTime:              maturityTime,
+		FinalTimeout:              maturityTime + m.FinalTimeoutDuration(ctx),
 		PoolId:                    msg.PoolId,
 		BorrowAmount:              msg.BorrowAmount,
-		OriginationFee:            poolConfig.OriginationFee,
 		RequestFee:                poolConfig.RequestFee,
+		OriginationFee:            poolConfig.OriginationFee,
 		Interest:                  interest,
 		ProtocolFee:               protocolFee,
-		Term:                      duration,
+		Maturity:                  trancheConfig.Maturity,
+		BorrowAPR:                 trancheConfig.BorrowAPR,
 		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
 		RepaymentEventId:          repaymentEvent.Id,
 		CreateAt:                  ctx.BlockTime(),
@@ -225,7 +229,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, poolConfig.LiquidationThreshold)
 	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 		return nil, nil
@@ -365,7 +369,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 			}
 
 			poolConfig := m.GetPool(ctx, loan.PoolId).Config
-			liquidationPrice = types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
+			liquidationPrice = types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, poolConfig.LiquidationThreshold)
 		}
 	} else {
 		liquidationPrice = loan.LiquidationPrice

@@ -102,7 +102,7 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 		return err
 	}
 
-	k.AfterPoolRepaid(ctx, loan.PoolId, debtAmount.SubAmount(interest), interest, protocolFee)
+	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, debtAmount.SubAmount(interest), interest, protocolFee)
 
 	return nil
 }

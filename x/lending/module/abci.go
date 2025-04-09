@@ -307,26 +307,13 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 	}
 }
 
-// updatePools updates all active pools
+// updatePools updates all active pools at the beginning of each block
 func updatePools(ctx sdk.Context, k keeper.Keeper) {
 	// get all active pools
 	pools := k.GetPools(ctx, types.PoolStatus_ACTIVE)
 
-	// get blocks per year
-	blocksPerYear := k.GetBlocksPerYear(ctx)
-
 	for _, pool := range pools {
-		// update total borrowed amount every block
-		//
-		// Formula:
-		//
-		// borrowIndex_new = borrowIndex_old * (1 + borrowAPR*(1-reserve factor)/blocksPerYear)
-		// totalBorrowed_new = totalBorrowed_old * borrowIndex_new/borrowIndex_old
-
-		borrowIndexRatioNumerator := int64(1000*1000*blocksPerYear) + int64(pool.Config.BorrowAPR*(1000-pool.Config.ReserveFactor))
-		borrowIndexRatioDenominator := int64(1000 * 1000 * blocksPerYear)
-
-		pool.TotalBorrowed = pool.TotalBorrowed.Mul(sdkmath.NewInt(borrowIndexRatioNumerator).Quo(sdkmath.NewInt(borrowIndexRatioDenominator)))
+		k.UpdatePool(ctx, pool)
 
 		k.SetPool(ctx, pool)
 	}

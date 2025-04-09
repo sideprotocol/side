@@ -11,11 +11,11 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgApply(borrower string, borrowerPubkey string, maturityTime int64, poolId string, borrowAmount sdk.Coin, dcmId uint64) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, maturity int64, poolId string, borrowAmount sdk.Coin, dcmId uint64) *MsgApply {
 	return &MsgApply{
 		Borrower:       borrower,
 		BorrowerPubkey: borrowerPubkey,
-		MaturityTime:   maturityTime,
+		Maturity:       maturity,
 		PoolId:         poolId,
 		BorrowAmount:   borrowAmount,
 		DCMId:          dcmId,
@@ -37,8 +37,8 @@ func (m *MsgApply) ValidateBasic() error {
 		return errorsmod.Wrap(ErrInvalidPubKey, "invalid borrower public key")
 	}
 
-	if m.MaturityTime <= 0 {
-		return ErrInvalidMaturityTime
+	if m.Maturity <= 0 {
+		return errorsmod.Wrap(ErrInvalidMaturity, "maturity must be greater than 0")
 	}
 
 	if len(m.PoolId) == 0 {

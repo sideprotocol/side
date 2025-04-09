@@ -35,6 +35,7 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		Id:           msg.Id,
 		Supply:       sdk.NewCoin(msg.LendingAsset, sdkmath.ZeroInt()),
 		TotalSTokens: sdk.NewCoin(msg.Id, sdkmath.ZeroInt()),
+		Tranches:     types.NewTranches(msg.Config.Tranches),
 		Config:       msg.Config,
 		Status:       types.PoolStatus_INACTIVE,
 	}

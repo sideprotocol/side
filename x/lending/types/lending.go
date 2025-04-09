@@ -121,12 +121,30 @@ func CheckBorrowAmountLimit(pool *LendingPool, borrowAmount sdkmath.Int) error {
 	return nil
 }
 
-// ValidatePoolConfig validates the given pool config
-func ValidatePoolConfig(config PoolConfig) error {
-	if config.BorrowAPR == 0 || config.BorrowAPR >= 1000 {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1000)")
+// GetTrancheConfig gets the corresponding tranche config according to the given maturity
+func GetTrancheConfig(tranches []PoolTrancheConfig, maturity int64) (*PoolTrancheConfig, bool) {
+	for _, tranche := range tranches {
+		if tranche.Maturity == maturity {
+			return &tranche, true
+		}
 	}
 
+	return nil, false
+}
+
+// NewTranches initializes the pool tranches from the given tranche configs
+func NewTranches(trancheConfigs []PoolTrancheConfig) []PoolTranche {
+	tranches := make([]PoolTranche, len(trancheConfigs))
+
+	for i, config := range trancheConfigs {
+		tranches[i].Maturity = config.Maturity
+	}
+
+	return tranches
+}
+
+// ValidatePoolConfig validates the given pool config
+func ValidatePoolConfig(config PoolConfig) error {
 	if config.SupplyCap.IsNil() || config.SupplyCap.IsNegative() {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "supply cap can not be nil or negative")
 	}
@@ -147,6 +165,10 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount can not be less than min borrow amount")
 	}
 
+	if err := validatePoolTranches(config.Tranches); err != nil {
+		return err
+	}
+
 	if !config.RequestFee.IsValid() {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid request fee")
 	}
@@ -165,6 +187,29 @@ func ValidatePoolConfig(config PoolConfig) error {
 
 	if config.MaxLtv == 0 || config.MaxLtv >= 100 || config.MaxLtv >= config.LiquidationThreshold {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid max ltv")
+	}
+
+	return nil
+}
+
+// validatePoolTrancheConfig validates the given tranche config
+func validatePoolTranches(tranches []PoolTrancheConfig) error {
+	if len(tranches) == 0 {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "tranches can not be empty")
+	}
+
+	for _, tranche := range tranches {
+		if tranche.Maturity <= 0 {
+			return errorsmod.Wrap(ErrInvalidPoolConfig, "maturity must be greater than 0")
+		}
+
+		if tranche.BorrowAPR == 0 || tranche.BorrowAPR >= 1000 {
+			return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1000)")
+		}
+
+		if tranche.MinMaturityFactor == 0 || tranche.MinMaturityFactor > 1000 {
+			return errorsmod.Wrap(ErrInvalidPoolConfig, "min maturity factor must be between (0, 1000]")
+		}
 	}
 
 	return nil

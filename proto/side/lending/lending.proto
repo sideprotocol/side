@@ -15,47 +15,68 @@ enum PoolStatus {
     PAUSED = 2;
 }
 
-// Lending pool config
+// Pool tranche config
+message PoolTrancheConfig {
+  // maturity duration in seconds
+  int64 maturity = 1;
+  // borrow apr permille
+  uint32 borrow_apr = 2 [(gogoproto.customname) = "BorrowAPR"];
+  // minimum maturity factor permille
+  uint32 min_maturity_factor = 3;
+}
+
+// Pool config
 message PoolConfig {
-    // borrow apr permille
-    uint32 borrow_apr = 1 [(gogoproto.customname) = "BorrowAPR"];
-    // reserve factor permille
-    uint32 reserve_factor = 2;
     // supply cap
-    string supply_cap = 3 [
+    string supply_cap = 1 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // borrow cap
-    string borrow_cap = 4 [
+    string borrow_cap = 2 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // minimum amount to be borrowed
-    string min_borrow_amount = 5 [
+    string min_borrow_amount = 3 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // maximum amount to be borrowed
-    string max_borrow_amount = 6 [
+    string max_borrow_amount = 4 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
+    // tranches
+    repeated PoolTrancheConfig tranches = 5 [(gogoproto.nullable) = false];
     // request fee
-    cosmos.base.v1beta1.Coin request_fee = 7 [
+    cosmos.base.v1beta1.Coin request_fee = 6 [
       (gogoproto.nullable) = false
     ];
     // origination fee
-    string origination_fee = 8 [
+    string origination_fee = 7 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
+    // reserve factor permille
+    uint32 reserve_factor = 8;
     // maximum ltv percent
     uint32 max_ltv = 9;
     // liquidation ltv percent
     uint32 liquidation_threshold = 10;
     // indicates if the pool is paused
     bool paused = 11;
+}
+
+// Pool tranche
+message PoolTranche {
+    // maturity duration
+    int64 maturity = 1;
+    // total borrowed
+    string total_borrowed = 2 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
 }
 
 message LendingPool {
@@ -79,8 +100,9 @@ message LendingPool {
       (gogoproto.nullable) = false,
       (gogoproto.customname) = "TotalSTokens"
     ];
-    PoolConfig config = 7 [(gogoproto.nullable) = false];
-    PoolStatus status = 8;
+    repeated PoolTranche tranches = 7 [(gogoproto.nullable) = false];
+    PoolConfig config = 8 [(gogoproto.nullable) = false];
+    PoolStatus status = 9;
 }
 
 // Loan Status
@@ -127,23 +149,24 @@ message Loan {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    int64 term = 13;
-    string liquidation_price = 14 [
+    int64 maturity = 13;
+    uint32 borrow_apr = 14 [(gogoproto.customname) = "BorrowAPR"];
+    string liquidation_price = 15 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_event_id = 15;
-    uint64 default_liquidation_event_id = 16;
-    uint64 repayment_event_id = 17;
-    repeated string deposit_txs = 18;
-    string collateral_amount = 19 [
+    uint64 liquidation_event_id = 16;
+    uint64 default_liquidation_event_id = 17;
+    uint64 repayment_event_id = 18;
+    repeated string deposit_txs = 19;
+    string collateral_amount = 20 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_id = 20;
-    google.protobuf.Timestamp create_at = 21 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 22 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 23;
+    uint64 liquidation_id = 21;
+    google.protobuf.Timestamp create_at = 22 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 24;
 }
 
 enum CetType {

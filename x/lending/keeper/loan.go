@@ -216,10 +216,10 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 
 	case types.LoanStatus_Liquidated:
 		liquidation := k.liquidationKeeper.GetLiquidation(ctx, loan.LiquidationId)
-		interest = types.GetInterest(loan.Interest, time.Duration(loan.Term), loan.CreateAt.Unix(), liquidation.LiquidatedTime.Unix())
+		interest = types.GetInterest(loan.Interest, time.Duration(loan.Maturity), loan.CreateAt.Unix(), liquidation.LiquidatedTime.Unix())
 
 	default:
-		interest = types.GetInterest(loan.Interest, time.Duration(loan.Term), loan.CreateAt.Unix(), ctx.BlockTime().Unix())
+		interest = types.GetInterest(loan.Interest, time.Duration(loan.Maturity), loan.CreateAt.Unix(), ctx.BlockTime().Unix())
 	}
 
 	return sdk.NewCoin(loan.BorrowAmount.Denom, interest)

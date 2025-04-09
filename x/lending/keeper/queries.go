@@ -90,6 +90,13 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.InvalidArgument, "pool does not exist")
 	}
 
+	poolConfig := k.GetPool(ctx, req.PoolId).Config
+
+	trancheConfig, found := types.GetTrancheConfig(poolConfig.Tranches, req.Term)
+	if !found {
+		return nil, status.Error(codes.InvalidArgument, "maturity does not exit")
+	}
+
 	collateralAmount, err := sdk.ParseCoinNormalized(req.CollateralAmount)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -100,9 +107,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	poolConfig := k.GetPool(ctx, req.PoolId).Config
-
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, req.Term, poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, trancheConfig.Maturity, trancheConfig.BorrowAPR, poolConfig.LiquidationThreshold)
 
 	event := k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
 	if event == nil {

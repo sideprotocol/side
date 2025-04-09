@@ -22,7 +22,7 @@ var (
 	ErrSupplyCapExceeded     = errorsmod.Register(ModuleName, 2008, "supply cap exceeded")
 
 	ErrInvalidPubKey           = errorsmod.Register(ModuleName, 3001, "invalid pubkey")
-	ErrInvalidMaturityTime     = errorsmod.Register(ModuleName, 3002, "maturity time must be greater than 0")
+	ErrInvalidMaturity         = errorsmod.Register(ModuleName, 3002, "invalid maturity")
 	ErrInvalidLoanDuration     = errorsmod.Register(ModuleName, 3003, "invalid loan duration")
 	ErrDuplicatedVault         = errorsmod.Register(ModuleName, 3004, "duplicated vault address")
 	ErrBorrowCapExceeded       = errorsmod.Register(ModuleName, 3005, "borrow cap exceeded")

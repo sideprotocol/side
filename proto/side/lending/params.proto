@@ -8,16 +8,12 @@ option go_package = "github.com/sideprotocol/side/x/lending/types";
 
 // Params defines the parameters for the module.
 message Params {
-    // minimum loan duration
-    google.protobuf.Duration min_loan_duration = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-    // maximum loan duration
-    google.protobuf.Duration max_loan_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
     // final timeout duration for loan
-    google.protobuf.Duration final_timeout_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    google.protobuf.Duration final_timeout_duration = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
     // request fee collector address
-    string request_fee_collector = 4;
+    string request_fee_collector = 2;
     // origination fee collector address
-    string origination_fee_collector = 5;
+    string origination_fee_collector = 3;
     // protocol fee collector address
-    string protocol_fee_collector = 6;
+    string protocol_fee_collector = 4;
 }
