@@ -92,7 +92,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 
 	poolConfig := k.GetPool(ctx, req.PoolId).Config
 
-	trancheConfig, found := types.GetTrancheConfig(poolConfig.Tranches, req.Term)
+	trancheConfig, found := types.GetTrancheConfig(poolConfig.Tranches, req.Maturity)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "maturity does not exit")
 	}

@@ -4535,9 +4535,9 @@ var (
 	md_MsgApply                 protoreflect.MessageDescriptor
 	fd_MsgApply_borrower        protoreflect.FieldDescriptor
 	fd_MsgApply_borrower_pubkey protoreflect.FieldDescriptor
-	fd_MsgApply_maturity        protoreflect.FieldDescriptor
 	fd_MsgApply_pool_id         protoreflect.FieldDescriptor
 	fd_MsgApply_borrow_amount   protoreflect.FieldDescriptor
+	fd_MsgApply_maturity        protoreflect.FieldDescriptor
 	fd_MsgApply_dcm_id          protoreflect.FieldDescriptor
 	fd_MsgApply_referrer        protoreflect.FieldDescriptor
 )
@@ -4547,9 +4547,9 @@ func init() {
 	md_MsgApply = File_side_lending_tx_proto.Messages().ByName("MsgApply")
 	fd_MsgApply_borrower = md_MsgApply.Fields().ByName("borrower")
 	fd_MsgApply_borrower_pubkey = md_MsgApply.Fields().ByName("borrower_pubkey")
-	fd_MsgApply_maturity = md_MsgApply.Fields().ByName("maturity")
 	fd_MsgApply_pool_id = md_MsgApply.Fields().ByName("pool_id")
 	fd_MsgApply_borrow_amount = md_MsgApply.Fields().ByName("borrow_amount")
+	fd_MsgApply_maturity = md_MsgApply.Fields().ByName("maturity")
 	fd_MsgApply_dcm_id = md_MsgApply.Fields().ByName("dcm_id")
 	fd_MsgApply_referrer = md_MsgApply.Fields().ByName("referrer")
 }
@@ -4631,12 +4631,6 @@ func (x *fastReflection_MsgApply) Range(f func(protoreflect.FieldDescriptor, pro
 			return
 		}
 	}
-	if x.Maturity != int64(0) {
-		value := protoreflect.ValueOfInt64(x.Maturity)
-		if !f(fd_MsgApply_maturity, value) {
-			return
-		}
-	}
 	if x.PoolId != "" {
 		value := protoreflect.ValueOfString(x.PoolId)
 		if !f(fd_MsgApply_pool_id, value) {
@@ -4646,6 +4640,12 @@ func (x *fastReflection_MsgApply) Range(f func(protoreflect.FieldDescriptor, pro
 	if x.BorrowAmount != nil {
 		value := protoreflect.ValueOfMessage(x.BorrowAmount.ProtoReflect())
 		if !f(fd_MsgApply_borrow_amount, value) {
+			return
+		}
+	}
+	if x.Maturity != int64(0) {
+		value := protoreflect.ValueOfInt64(x.Maturity)
+		if !f(fd_MsgApply_maturity, value) {
 			return
 		}
 	}
@@ -4680,12 +4680,12 @@ func (x *fastReflection_MsgApply) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Borrower != ""
 	case "side.lending.MsgApply.borrower_pubkey":
 		return x.BorrowerPubkey != ""
-	case "side.lending.MsgApply.maturity":
-		return x.Maturity != int64(0)
 	case "side.lending.MsgApply.pool_id":
 		return x.PoolId != ""
 	case "side.lending.MsgApply.borrow_amount":
 		return x.BorrowAmount != nil
+	case "side.lending.MsgApply.maturity":
+		return x.Maturity != int64(0)
 	case "side.lending.MsgApply.dcm_id":
 		return x.DcmId != uint64(0)
 	case "side.lending.MsgApply.referrer":
@@ -4710,12 +4710,12 @@ func (x *fastReflection_MsgApply) Clear(fd protoreflect.FieldDescriptor) {
 		x.Borrower = ""
 	case "side.lending.MsgApply.borrower_pubkey":
 		x.BorrowerPubkey = ""
-	case "side.lending.MsgApply.maturity":
-		x.Maturity = int64(0)
 	case "side.lending.MsgApply.pool_id":
 		x.PoolId = ""
 	case "side.lending.MsgApply.borrow_amount":
 		x.BorrowAmount = nil
+	case "side.lending.MsgApply.maturity":
+		x.Maturity = int64(0)
 	case "side.lending.MsgApply.dcm_id":
 		x.DcmId = uint64(0)
 	case "side.lending.MsgApply.referrer":
@@ -4742,15 +4742,15 @@ func (x *fastReflection_MsgApply) Get(descriptor protoreflect.FieldDescriptor) p
 	case "side.lending.MsgApply.borrower_pubkey":
 		value := x.BorrowerPubkey
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgApply.maturity":
-		value := x.Maturity
-		return protoreflect.ValueOfInt64(value)
 	case "side.lending.MsgApply.pool_id":
 		value := x.PoolId
 		return protoreflect.ValueOfString(value)
 	case "side.lending.MsgApply.borrow_amount":
 		value := x.BorrowAmount
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.lending.MsgApply.maturity":
+		value := x.Maturity
+		return protoreflect.ValueOfInt64(value)
 	case "side.lending.MsgApply.dcm_id":
 		value := x.DcmId
 		return protoreflect.ValueOfUint64(value)
@@ -4781,12 +4781,12 @@ func (x *fastReflection_MsgApply) Set(fd protoreflect.FieldDescriptor, value pro
 		x.Borrower = value.Interface().(string)
 	case "side.lending.MsgApply.borrower_pubkey":
 		x.BorrowerPubkey = value.Interface().(string)
-	case "side.lending.MsgApply.maturity":
-		x.Maturity = value.Int()
 	case "side.lending.MsgApply.pool_id":
 		x.PoolId = value.Interface().(string)
 	case "side.lending.MsgApply.borrow_amount":
 		x.BorrowAmount = value.Message().Interface().(*v1beta1.Coin)
+	case "side.lending.MsgApply.maturity":
+		x.Maturity = value.Int()
 	case "side.lending.MsgApply.dcm_id":
 		x.DcmId = value.Uint()
 	case "side.lending.MsgApply.referrer":
@@ -4820,10 +4820,10 @@ func (x *fastReflection_MsgApply) Mutable(fd protoreflect.FieldDescriptor) proto
 		panic(fmt.Errorf("field borrower of message side.lending.MsgApply is not mutable"))
 	case "side.lending.MsgApply.borrower_pubkey":
 		panic(fmt.Errorf("field borrower_pubkey of message side.lending.MsgApply is not mutable"))
-	case "side.lending.MsgApply.maturity":
-		panic(fmt.Errorf("field maturity of message side.lending.MsgApply is not mutable"))
 	case "side.lending.MsgApply.pool_id":
 		panic(fmt.Errorf("field pool_id of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.maturity":
+		panic(fmt.Errorf("field maturity of message side.lending.MsgApply is not mutable"))
 	case "side.lending.MsgApply.dcm_id":
 		panic(fmt.Errorf("field dcm_id of message side.lending.MsgApply is not mutable"))
 	case "side.lending.MsgApply.referrer":
@@ -4845,13 +4845,13 @@ func (x *fastReflection_MsgApply) NewField(fd protoreflect.FieldDescriptor) prot
 		return protoreflect.ValueOfString("")
 	case "side.lending.MsgApply.borrower_pubkey":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgApply.maturity":
-		return protoreflect.ValueOfInt64(int64(0))
 	case "side.lending.MsgApply.pool_id":
 		return protoreflect.ValueOfString("")
 	case "side.lending.MsgApply.borrow_amount":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.lending.MsgApply.maturity":
+		return protoreflect.ValueOfInt64(int64(0))
 	case "side.lending.MsgApply.dcm_id":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.lending.MsgApply.referrer":
@@ -4933,9 +4933,6 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Maturity != 0 {
-			n += 1 + runtime.Sov(uint64(x.Maturity))
-		}
 		l = len(x.PoolId)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -4943,6 +4940,9 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 		if x.BorrowAmount != nil {
 			l = options.Size(x.BorrowAmount)
 			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Maturity != 0 {
+			n += 1 + runtime.Sov(uint64(x.Maturity))
 		}
 		if x.DcmId != 0 {
 			n += 1 + runtime.Sov(uint64(x.DcmId))
@@ -4992,6 +4992,11 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x30
 		}
+		if x.Maturity != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Maturity))
+			i--
+			dAtA[i] = 0x28
+		}
 		if x.BorrowAmount != nil {
 			encoded, err := options.Marshal(x.BorrowAmount)
 			if err != nil {
@@ -5004,19 +5009,14 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x22
 		}
 		if len(x.PoolId) > 0 {
 			i -= len(x.PoolId)
 			copy(dAtA[i:], x.PoolId)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PoolId)))
 			i--
-			dAtA[i] = 0x22
-		}
-		if x.Maturity != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Maturity))
-			i--
-			dAtA[i] = 0x18
+			dAtA[i] = 0x1a
 		}
 		if len(x.BorrowerPubkey) > 0 {
 			i -= len(x.BorrowerPubkey)
@@ -5146,25 +5146,6 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 				x.BorrowerPubkey = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 3:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Maturity", wireType)
-				}
-				x.Maturity = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Maturity |= int64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
 				}
@@ -5196,7 +5177,7 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 				}
 				x.PoolId = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 5:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BorrowAmount", wireType)
 				}
@@ -5232,6 +5213,25 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Maturity", wireType)
+				}
+				x.Maturity = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Maturity |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			case 6:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DcmId", wireType)
@@ -14189,9 +14189,9 @@ type MsgApply struct {
 
 	Borrower       string        `protobuf:"bytes,1,opt,name=borrower,proto3" json:"borrower,omitempty"`
 	BorrowerPubkey string        `protobuf:"bytes,2,opt,name=borrower_pubkey,json=borrowerPubkey,proto3" json:"borrower_pubkey,omitempty"`
-	Maturity       int64         `protobuf:"varint,3,opt,name=maturity,proto3" json:"maturity,omitempty"`
-	PoolId         string        `protobuf:"bytes,4,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	BorrowAmount   *v1beta1.Coin `protobuf:"bytes,5,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
+	PoolId         string        `protobuf:"bytes,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	BorrowAmount   *v1beta1.Coin `protobuf:"bytes,4,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
+	Maturity       int64         `protobuf:"varint,5,opt,name=maturity,proto3" json:"maturity,omitempty"`
 	DcmId          uint64        `protobuf:"varint,6,opt,name=dcm_id,json=dcmId,proto3" json:"dcm_id,omitempty"`
 	Referrer       string        `protobuf:"bytes,7,opt,name=referrer,proto3" json:"referrer,omitempty"`
 }
@@ -14230,13 +14230,6 @@ func (x *MsgApply) GetBorrowerPubkey() string {
 	return ""
 }
 
-func (x *MsgApply) GetMaturity() int64 {
-	if x != nil {
-		return x.Maturity
-	}
-	return 0
-}
-
 func (x *MsgApply) GetPoolId() string {
 	if x != nil {
 		return x.PoolId
@@ -14249,6 +14242,13 @@ func (x *MsgApply) GetBorrowAmount() *v1beta1.Coin {
 		return x.BorrowAmount
 	}
 	return nil
+}
+
+func (x *MsgApply) GetMaturity() int64 {
+	if x != nil {
+		return x.Maturity
+	}
+	return 0
 }
 
 func (x *MsgApply) GetDcmId() uint64 {
@@ -15034,14 +15034,14 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x27, 0x0a, 0x0f, 0x62, 0x6f, 0x72,
 	0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x02, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x0e, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x50, 0x75, 0x62, 0x6b,
-	0x65, 0x79, 0x12, 0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x12, 0x17,
-	0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x44, 0x0a, 0x0d, 0x62, 0x6f, 0x72, 0x72, 0x6f,
-	0x77, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19,
-	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62,
-	0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
-	0x0c, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x20, 0x0a,
+	0x65, 0x79, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x44, 0x0a, 0x0d, 0x62,
+	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
+	0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8,
+	0xde, 0x1f, 0x00, 0x52, 0x0c, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x12, 0x20, 0x0a,
 	0x06, 0x64, 0x63, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x04, 0x42, 0x09, 0xe2,
 	0xde, 0x1f, 0x05, 0x44, 0x43, 0x4d, 0x49, 0x64, 0x52, 0x05, 0x64, 0x63, 0x6d, 0x49, 0x64, 0x12,
 	0x1a, 0x0a, 0x08, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x18, 0x07, 0x20, 0x01, 0x28,

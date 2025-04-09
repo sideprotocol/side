@@ -11,13 +11,13 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgApply(borrower string, borrowerPubkey string, maturity int64, poolId string, borrowAmount sdk.Coin, dcmId uint64, referrer string) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, poolId string, borrowAmount sdk.Coin, maturity int64, dcmId uint64, referrer string) *MsgApply {
 	return &MsgApply{
 		Borrower:       borrower,
 		BorrowerPubkey: borrowerPubkey,
-		Maturity:       maturity,
 		PoolId:         poolId,
 		BorrowAmount:   borrowAmount,
+		Maturity:       maturity,
 		DCMId:          dcmId,
 		Referrer:       referrer,
 	}
@@ -38,16 +38,16 @@ func (m *MsgApply) ValidateBasic() error {
 		return errorsmod.Wrap(ErrInvalidPubKey, "invalid borrower public key")
 	}
 
-	if m.Maturity <= 0 {
-		return errorsmod.Wrap(ErrInvalidMaturity, "maturity must be greater than 0")
-	}
-
 	if len(m.PoolId) == 0 {
 		return errorsmod.Wrap(ErrInvalidPoolId, "empty pool id")
 	}
 
 	if !m.BorrowAmount.IsValid() || !m.BorrowAmount.IsPositive() {
-		return errorsmod.Wrap(ErrInvalidAmount, "borrowed amount must be positive")
+		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount must be positive")
+	}
+
+	if m.Maturity <= 0 {
+		return errorsmod.Wrap(ErrInvalidMaturity, "maturity must be greater than 0")
 	}
 
 	if len(m.Referrer) != 0 {
