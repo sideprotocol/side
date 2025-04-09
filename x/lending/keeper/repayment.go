@@ -43,19 +43,34 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 	repayment := k.GetRepayment(ctx, loan.VaultAddress)
 
 	interest := repayment.Amount.Sub(loan.BorrowAmount)
-	protocolFee := sdk.NewCoin(loan.BorrowAmount.Denom, interest.Amount.Mul(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).Quo(types.Permille))
+	protocolFee := sdk.NewCoin(interest.Denom, interest.Amount.Mul(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).Quo(types.Permille))
+
+	referralFee := sdkmath.ZeroInt()
+	actualProtocolFee := protocolFee
+	if protocolFee.IsPositive() && types.HasReferralFee(loan, pool) {
+		referralFee = protocolFee.Amount.Mul(sdkmath.NewInt(int64(pool.Config.ReferralFeeFactor))).Quo(types.Permille)
+		actualProtocolFee = protocolFee.SubAmount(referralFee)
+	}
 
 	amount := repayment.Amount.Sub(protocolFee)
 	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, types.RepaymentEscrowAccount, types.ModuleName, sdk.NewCoins(amount)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(protocolFee)); err != nil {
-		return err
+	if actualProtocolFee.IsPositive() {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(actualProtocolFee)); err != nil {
+			return err
+		}
+	}
+
+	if referralFee.IsPositive() {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(loan.Referrer), sdk.NewCoins(sdk.NewCoin(protocolFee.Denom, referralFee))); err != nil {
+			return err
+		}
 	}
 
 	// update pool
-	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, loan.BorrowAmount, interest.Amount, protocolFee.Amount)
+	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, loan.BorrowAmount, interest.Amount, protocolFee.Amount, actualProtocolFee.Amount)
 
 	loan.Status = types.LoanStatus_Closed
 	k.SetLoan(ctx, loan)

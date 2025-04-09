@@ -11,7 +11,7 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgApply(borrower string, borrowerPubkey string, maturity int64, poolId string, borrowAmount sdk.Coin, dcmId uint64) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, maturity int64, poolId string, borrowAmount sdk.Coin, dcmId uint64, referrer string) *MsgApply {
 	return &MsgApply{
 		Borrower:       borrower,
 		BorrowerPubkey: borrowerPubkey,
@@ -19,6 +19,7 @@ func NewMsgApply(borrower string, borrowerPubkey string, maturity int64, poolId 
 		PoolId:         poolId,
 		BorrowAmount:   borrowAmount,
 		DCMId:          dcmId,
+		Referrer:       referrer,
 	}
 }
 
@@ -47,6 +48,12 @@ func (m *MsgApply) ValidateBasic() error {
 
 	if !m.BorrowAmount.IsValid() || !m.BorrowAmount.IsPositive() {
 		return errorsmod.Wrap(ErrInvalidAmount, "borrowed amount must be positive")
+	}
+
+	if len(m.Referrer) != 0 {
+		if _, err := sdk.AccAddressFromBech32(m.Referrer); err != nil {
+			return errorsmod.Wrap(err, "invalid referrer address")
+		}
 	}
 
 	return nil

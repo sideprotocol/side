@@ -123,6 +123,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		MinMaturity:               trancheConfig.Maturity * int64(trancheConfig.MinMaturityFactor) / 1000,
 		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
 		RepaymentEventId:          repaymentEvent.Id,
+		Referrer:                  msg.Referrer,
 		CreateAt:                  ctx.BlockTime(),
 		Status:                    types.LoanStatus_Requested,
 	}
@@ -655,6 +656,7 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 
 	interest := m.GetCurrentInterest(ctx, loan)
 	amount := loan.BorrowAmount.Add(interest)
+	
 
 	// escrow repaid amount
 	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), types.RepaymentEscrowAccount, sdk.NewCoins(amount)); err != nil {

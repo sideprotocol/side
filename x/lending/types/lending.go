@@ -90,6 +90,11 @@ func HasOriginationFee(pool *LendingPool) bool {
 	return pool.Config.OriginationFee.IsPositive()
 }
 
+// HasReferralFee returns true if the referrer exists and the referral fee factor is not 0, false otherwise
+func HasReferralFee(loan *Loan, pool *LendingPool) bool {
+	return len(loan.Referrer) != 0 && pool.Config.ReferralFeeFactor > 0
+}
+
 // CheckSupplyCap checks if the supply cap will be exceeded for the given deposit amount
 func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
 	if HasSupplyCap(pool) && pool.Supply.Amount.Add(depositAmount).GT(pool.Config.SupplyCap) {
@@ -179,6 +184,10 @@ func ValidatePoolConfig(config PoolConfig) error {
 
 	if config.OriginationFee.IsPositive() && (!config.MinBorrowAmount.IsPositive() || config.OriginationFee.GTE(config.MinBorrowAmount)) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee must be less than min borrow amount")
+	}
+
+	if config.ReferralFeeFactor > 100 {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid referral fee factor")
 	}
 
 	if config.LiquidationThreshold == 0 || config.LiquidationThreshold >= 100 {

@@ -101,6 +101,7 @@ message MsgApply {
     string pool_id = 4;
     cosmos.base.v1beta1.Coin borrow_amount = 5 [(gogoproto.nullable) = false];
     uint64 dcm_id = 6 [(gogoproto.customname) = "DCMId"];
+    string referrer = 7;
 }
 
 message MsgApplyResponse {}

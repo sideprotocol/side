@@ -85,9 +85,17 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loan *types.
 // HandleLiquidatedDebt handles the liquidated debt for the liquidated loan
 func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin) error {
 	loan := k.GetLoan(ctx, loanId)
+	pool := k.GetPool(ctx, loan.PoolId)
 
 	interest := k.GetCurrentInterest(ctx, loan).Amount
-	protocolFee := interest.Mul(sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.ReserveFactor))).Quo(sdkmath.NewInt(1000))
+	protocolFee := interest.Mul(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).Quo(sdkmath.NewInt(1000))
+
+	referralFee := sdkmath.ZeroInt()
+	actualProtocolFee := protocolFee
+	if protocolFee.IsPositive() && types.HasReferralFee(loan, pool) {
+		referralFee = protocolFee.Mul(sdkmath.NewInt(int64(pool.Config.ReferralFeeFactor))).Quo(types.Permille)
+		actualProtocolFee = protocolFee.Sub(referralFee)
+	}
 
 	if debtAmount.Amount.LTE(interest) {
 		// TODO
@@ -98,11 +106,19 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, protocolFee))); err != nil {
-		return err
+	if actualProtocolFee.IsPositive() {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, actualProtocolFee))); err != nil {
+			return err
+		}
 	}
 
-	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, debtAmount.SubAmount(interest), interest, protocolFee)
+	if referralFee.IsPositive() {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(loan.Referrer), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, referralFee))); err != nil {
+			return err
+		}
+	}
+
+	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, debtAmount.SubAmount(interest), interest, protocolFee, actualProtocolFee)
 
 	return nil
 }

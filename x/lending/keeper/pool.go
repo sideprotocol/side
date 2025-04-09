@@ -97,7 +97,7 @@ func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, maturity int64
 }
 
 // AfterPoolRepaid is the hook which is invoked after the loan is repaid
-func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, amount sdk.Coin, interest sdkmath.Int, protocolFee sdkmath.Int) {
+func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, amount sdk.Coin, interest sdkmath.Int, protocolFee sdkmath.Int, actualProtocolFee sdkmath.Int) {
 	pool := k.GetPool(ctx, poolId)
 
 	totalRepaid := amount.Amount.Add(interest).Sub(protocolFee)
@@ -105,7 +105,7 @@ func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, 
 	pool.Supply = pool.Supply.AddAmount(interest).SubAmount(protocolFee)
 	pool.AvailableAmount = pool.AvailableAmount.Add(totalRepaid)
 	pool.TotalBorrowed = pool.TotalBorrowed.Sub(totalRepaid)
-	pool.TotalReserves = pool.TotalReserves.Add(protocolFee)
+	pool.TotalReserves = pool.TotalReserves.Add(actualProtocolFee)
 
 	for i, tranche := range pool.Tranches {
 		if tranche.Maturity == maturity {

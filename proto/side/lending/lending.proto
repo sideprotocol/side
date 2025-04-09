@@ -60,12 +60,14 @@ message PoolConfig {
     ];
     // reserve factor permille
     uint32 reserve_factor = 8;
+    // referral fee factor permille
+    uint32 referral_fee_factor = 9;
     // maximum ltv percent
-    uint32 max_ltv = 9;
+    uint32 max_ltv = 10;
     // liquidation ltv percent
-    uint32 liquidation_threshold = 10;
+    uint32 liquidation_threshold = 11;
     // indicates if the pool is paused
-    bool paused = 11;
+    bool paused = 12;
 }
 
 // Pool tranche
@@ -165,9 +167,10 @@ message Loan {
       (gogoproto.nullable) = false
     ];
     uint64 liquidation_id = 22;
-    google.protobuf.Timestamp create_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 25;
+    string referrer = 23;
+    google.protobuf.Timestamp create_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 25 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 26;
 }
 
 enum CetType {
