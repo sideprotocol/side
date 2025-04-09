@@ -80,6 +80,11 @@ func HasMaxBorrowAmountLimit(pool *LendingPool) bool {
 	return pool.Config.MaxBorrowAmount.IsPositive()
 }
 
+// HasOriginationFee returns true if the origination fee set in the given pool, false otherwise
+func HasOriginationFee(pool *LendingPool) bool {
+	return pool.Config.OriginationFee.IsPositive()
+}
+
 // CheckSupplyCap checks if the supply cap will be exceeded for the given deposit amount
 func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
 	if HasSupplyCap(pool) && pool.Supply.Amount.Add(depositAmount).GT(pool.Config.SupplyCap) {
@@ -141,7 +146,7 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee can not be nil or negative")
 	}
 
-	if config.OriginationFee.GTE(config.MinBorrowAmount) {
+	if config.OriginationFee.IsPositive() && (!config.MinBorrowAmount.IsPositive() || config.OriginationFee.GTE(config.MinBorrowAmount)) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee must be less than min borrow amount")
 	}
 
