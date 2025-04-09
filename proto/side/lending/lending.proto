@@ -32,7 +32,12 @@ message PoolConfig {
       (gogoproto.nullable) = false
     ];
     // minimum amount to be borrowed
-    string min_borrow_amount = 6 [
+    string min_borrow_amount = 5 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // maximum amount to be borrowed
+    string max_borrow_amount = 6 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];

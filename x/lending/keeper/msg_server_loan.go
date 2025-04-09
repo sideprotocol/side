@@ -44,16 +44,16 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
 	}
 
-	if msg.BorrowAmount.Amount.LT(poolConfig.MinBorrowAmount) {
-		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrow amount can not be less than min borrow amount")
+	if err := types.CheckBorrowAmountLimit(pool, msg.BorrowAmount.Amount); err != nil {
+		return nil, err
+	}
+
+	if err := types.CheckBorrowCap(pool, msg.BorrowAmount.Amount); err != nil {
+		return nil, err
 	}
 
 	if msg.BorrowAmount.Amount.GT(pool.AvailableAmount) {
 		return nil, types.ErrInsufficientLiquidity
-	}
-
-	if err := types.CheckBorrowCap(pool, msg.BorrowAmount.Amount); err != nil {
-		return nil, types.ErrBorrowCapExceeded
 	}
 
 	duration := msg.MaturityTime - ctx.BlockTime().Unix()

@@ -70,6 +70,16 @@ func HasBorrowCap(pool *LendingPool) bool {
 	return pool.Config.BorrowCap.IsPositive()
 }
 
+// HasMinBorrowAmountLimit returns true if the min borrow amount set in the given pool, false otherwise
+func HasMinBorrowAmountLimit(pool *LendingPool) bool {
+	return pool.Config.MinBorrowAmount.IsPositive()
+}
+
+// HasMaxBorrowAmountLimit returns true if the max borrow amount set in the given pool, false otherwise
+func HasMaxBorrowAmountLimit(pool *LendingPool) bool {
+	return pool.Config.MaxBorrowAmount.IsPositive()
+}
+
 // CheckSupplyCap checks if the supply cap will be exceeded for the given deposit amount
 func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
 	if HasSupplyCap(pool) && pool.Supply.Amount.Add(depositAmount).GT(pool.Config.SupplyCap) {
@@ -83,6 +93,19 @@ func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
 func CheckBorrowCap(pool *LendingPool, borrowAmount sdkmath.Int) error {
 	if HasBorrowCap(pool) && pool.TotalBorrowed.Add(borrowAmount).GT(pool.Config.BorrowCap) {
 		return ErrBorrowCapExceeded
+	}
+
+	return nil
+}
+
+// CheckBorrowAmountLimit checks if the borrow amount satisfies limits for the given pool
+func CheckBorrowAmountLimit(pool *LendingPool, borrowAmount sdkmath.Int) error {
+	if HasMinBorrowAmountLimit(pool) && borrowAmount.LT(pool.Config.MinBorrowAmount) {
+		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount can not be less than min borrow amount")
+	}
+
+	if HasMaxBorrowAmountLimit(pool) && borrowAmount.GT(pool.Config.MaxBorrowAmount) {
+		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount can not be greater than max borrow amount")
 	}
 
 	return nil
@@ -102,8 +125,16 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow cap can not be nil or negative")
 	}
 
-	if config.MinBorrowAmount.IsNil() || config.MinBorrowAmount.IsZero() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount must be positive")
+	if config.MinBorrowAmount.IsNil() || config.MinBorrowAmount.IsNegative() {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount can not be nil or negative")
+	}
+
+	if config.MaxBorrowAmount.IsNil() || config.MaxBorrowAmount.IsNegative() {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount can not be nil or negative")
+	}
+
+	if config.MinBorrowAmount.IsPositive() && config.MaxBorrowAmount.IsPositive() && config.MaxBorrowAmount.LT(config.MinBorrowAmount) {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount can not be less than min borrow amount")
 	}
 
 	if config.OriginationFee.IsNil() || config.OriginationFee.IsNegative() {
