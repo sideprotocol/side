@@ -151,22 +151,23 @@ message Loan {
     ];
     int64 maturity = 13;
     uint32 borrow_apr = 14 [(gogoproto.customname) = "BorrowAPR"];
-    string liquidation_price = 15 [
+    int64 min_maturity = 15;
+    string liquidation_price = 16 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_event_id = 16;
-    uint64 default_liquidation_event_id = 17;
-    uint64 repayment_event_id = 18;
-    repeated string deposit_txs = 19;
-    string collateral_amount = 20 [
+    uint64 liquidation_event_id = 17;
+    uint64 default_liquidation_event_id = 18;
+    uint64 repayment_event_id = 19;
+    repeated string deposit_txs = 20;
+    string collateral_amount = 21 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_id = 21;
-    google.protobuf.Timestamp create_at = 22 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 24;
+    uint64 liquidation_id = 22;
+    google.protobuf.Timestamp create_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 25;
 }
 
 enum CetType {

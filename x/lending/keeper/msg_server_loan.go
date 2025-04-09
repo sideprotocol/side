@@ -120,6 +120,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		ProtocolFee:               protocolFee,
 		Maturity:                  trancheConfig.Maturity,
 		BorrowAPR:                 trancheConfig.BorrowAPR,
+		MinMaturity:               trancheConfig.Maturity * int64(trancheConfig.MinMaturityFactor) / 1000,
 		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
 		RepaymentEventId:          repaymentEvent.Id,
 		CreateAt:                  ctx.BlockTime(),
@@ -646,6 +647,10 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	loan := m.GetLoan(ctx, msg.LoanId)
 	if loan.Status != types.LoanStatus_Open {
 		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not open")
+	}
+
+	if ctx.BlockTime().Unix()-loan.CreateAt.Unix() < loan.MinMaturity {
+		return nil, types.ErrMinMaturityNotReached
 	}
 
 	interest := m.GetCurrentInterest(ctx, loan)
