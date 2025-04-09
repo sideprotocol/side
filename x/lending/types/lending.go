@@ -70,11 +70,6 @@ func HasBorrowCap(pool *LendingPool) bool {
 	return pool.Config.BorrowCap.IsPositive()
 }
 
-// HasDebtCeiling returns true if the debt ceiling set in the given pool, false otherwise
-func HasDebtCeiling(pool *LendingPool) bool {
-	return pool.Config.DebtCeiling.IsPositive()
-}
-
 // CheckSupplyCap checks if the supply cap will be exceeded for the given deposit amount
 func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
 	if HasSupplyCap(pool) && pool.Supply.Amount.Add(depositAmount).GT(pool.Config.SupplyCap) {
@@ -88,15 +83,6 @@ func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
 func CheckBorrowCap(pool *LendingPool, borrowAmount sdkmath.Int) error {
 	if HasBorrowCap(pool) && pool.TotalBorrowed.Add(borrowAmount).GT(pool.Config.BorrowCap) {
 		return ErrBorrowCapExceeded
-	}
-
-	return nil
-}
-
-// CheckDebtCeiling checks if the debt ceiling will be exceeded for the given borrow amount
-func CheckDebtCeiling(pool *LendingPool, borrowAmount sdkmath.Int) error {
-	if HasDebtCeiling(pool) && pool.TotalBorrowed.Add(borrowAmount).GT(pool.Config.DebtCeiling) {
-		return ErrDebtCeilingExceeded
 	}
 
 	return nil
@@ -116,16 +102,8 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow cap can not be nil or negative")
 	}
 
-	if config.DebtCeiling.IsNil() || config.DebtCeiling.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "debt ceiling can not be nil or negative")
-	}
-
 	if config.MinBorrowAmount.IsNil() || config.MinBorrowAmount.IsZero() {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount must be positive")
-	}
-
-	if config.DebtCeiling.IsPositive() && config.MinBorrowAmount.GT(config.DebtCeiling) {
-		errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount must be less or equal than debt ceiling")
 	}
 
 	if config.OriginationFee.IsNil() || config.OriginationFee.IsNegative() {

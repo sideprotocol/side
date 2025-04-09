@@ -56,10 +56,6 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrBorrowCapExceeded
 	}
 
-	if err := types.CheckDebtCeiling(pool, msg.BorrowAmount.Amount); err != nil {
-		return nil, types.ErrDebtCeilingExceeded
-	}
-
 	duration := msg.MaturityTime - ctx.BlockTime().Unix()
 	if duration < m.MinLoanDuration(ctx) || duration > m.MaxLoanDuration(ctx) {
 		return nil, types.ErrInvalidLoanDuration
@@ -222,11 +218,6 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
-	if err := types.CheckDebtCeiling(pool, loan.BorrowAmount.Amount); err != nil {
-		errRejected = types.ErrDebtCeilingExceeded
-		return nil, nil
-	}
-
 	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
 	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
@@ -351,11 +342,6 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 
 	if err := types.CheckBorrowCap(pool, loan.BorrowAmount.Amount); err != nil {
 		errRejected = types.ErrBorrowCapExceeded
-		return nil, nil
-	}
-
-	if err := types.CheckDebtCeiling(pool, loan.BorrowAmount.Amount); err != nil {
-		errRejected = types.ErrDebtCeilingExceeded
 		return nil, nil
 	}
 

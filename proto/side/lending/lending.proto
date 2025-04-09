@@ -31,11 +31,6 @@ message PoolConfig {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    // debt ceiling
-    string debt_ceiling = 5 [
-      (gogoproto.customtype) = "cosmossdk.io/math.Int",
-      (gogoproto.nullable) = false
-    ];
     // minimum amount to be borrowed
     string min_borrow_amount = 6 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
