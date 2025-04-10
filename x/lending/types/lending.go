@@ -186,11 +186,11 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee must be less than min borrow amount")
 	}
 
-	if config.ReserveFactor >= 100 {
+	if config.ReserveFactor >= 1000 {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid reserve factor")
 	}
 
-	if config.ReferralFeeFactor > 100 {
+	if config.ReferralFeeFactor > 1000 {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid referral fee factor")
 	}
 
