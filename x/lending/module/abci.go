@@ -48,7 +48,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 
 		// check if the loan has defaulted
-		if ctx.BlockTime().Unix() >= types.GetDefaultLiquidationDate(loan.MaturityTime) {
+		if ctx.BlockTime().Unix() >= loan.MaturityTime {
 			liquidationInterest = loan.Interest
 			loan.Status = types.LoanStatus_Defaulted
 

@@ -62,7 +62,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidMaturity, "maturity does not exist")
 	}
 
-	maturityTime := ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity)).Unix()
+	maturityTime := types.GetDefaultLiquidationDate(ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity) * time.Second).Unix())
 
 	if types.HasRequestFee(pool) {
 		if err := m.bankKeeper.SendCoins(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), sdk.MustAccAddressFromBech32(m.RequestFeeCollector(ctx)), sdk.NewCoins(poolConfig.RequestFee)); err != nil {
@@ -85,12 +85,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
-	defaultLiquidationDate := types.GetDefaultLiquidationDate(maturityTime)
-	if !m.dlcKeeper.HasEventByDate(ctx, defaultLiquidationDate) {
+	if !m.dlcKeeper.HasEventByDate(ctx, maturityTime) {
 		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "default liquidation event does not exist")
 	}
 
-	defaultLiquidationEvent := m.dlcKeeper.GetEventByDate(ctx, defaultLiquidationDate)
+	defaultLiquidationEvent := m.dlcKeeper.GetEventByDate(ctx, maturityTime)
 
 	repaymentEvent := m.dlcKeeper.GetAvailableLendingEvent(ctx)
 	if repaymentEvent == nil {
