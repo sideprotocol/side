@@ -106,7 +106,7 @@ func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
 
 // CheckBorrowCap checks if the borrow cap will be exceeded for the given borrow amount
 func CheckBorrowCap(pool *LendingPool, borrowAmount sdkmath.Int) error {
-	if HasBorrowCap(pool) && pool.TotalBorrowed.Add(borrowAmount).GT(pool.Config.BorrowCap) {
+	if HasBorrowCap(pool) && pool.BorrowedAmount.Add(borrowAmount).GT(pool.Config.BorrowCap) {
 		return ErrBorrowCapExceeded
 	}
 

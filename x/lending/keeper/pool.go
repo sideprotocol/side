@@ -84,6 +84,7 @@ func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, maturity int64
 	pool := k.GetPool(ctx, poolId)
 
 	pool.AvailableAmount = pool.AvailableAmount.Sub(amount.Amount)
+	pool.BorrowedAmount = pool.BorrowedAmount.Add(amount.Amount)
 	pool.TotalBorrowed = pool.TotalBorrowed.Add(amount.Amount)
 
 	for i, tranche := range pool.Tranches {
@@ -104,8 +105,9 @@ func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, 
 
 	pool.Supply = pool.Supply.AddAmount(interest).SubAmount(protocolFee)
 	pool.AvailableAmount = pool.AvailableAmount.Add(totalRepaid)
+	pool.BorrowedAmount = pool.BorrowedAmount.Sub(amount.Amount)
 	pool.TotalBorrowed = pool.TotalBorrowed.Sub(totalRepaid)
-	pool.TotalReserves = pool.TotalReserves.Add(actualProtocolFee)
+	pool.ReserveAmount = pool.ReserveAmount.Add(actualProtocolFee)
 
 	for i, tranche := range pool.Tranches {
 		if tranche.Maturity == maturity {

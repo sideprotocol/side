@@ -90,21 +90,25 @@ message LendingPool {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string total_borrowed = 4 [
+    string borrowed_amount = 4 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string total_reserves = 5 [
+    string total_borrowed = 5 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    cosmos.base.v1beta1.Coin total_stokens = 6 [
+    string reserve_amount = 6 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    cosmos.base.v1beta1.Coin total_stokens = 7 [
       (gogoproto.nullable) = false,
       (gogoproto.customname) = "TotalSTokens"
     ];
-    repeated PoolTranche tranches = 7 [(gogoproto.nullable) = false];
-    PoolConfig config = 8 [(gogoproto.nullable) = false];
-    PoolStatus status = 9;
+    repeated PoolTranche tranches = 8 [(gogoproto.nullable) = false];
+    PoolConfig config = 9 [(gogoproto.nullable) = false];
+    PoolStatus status = 10;
 }
 
 // Loan Status

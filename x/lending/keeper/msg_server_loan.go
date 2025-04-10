@@ -656,7 +656,6 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 
 	interest := m.GetCurrentInterest(ctx, loan)
 	amount := loan.BorrowAmount.Add(interest)
-	
 
 	// escrow repaid amount
 	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), types.RepaymentEscrowAccount, sdk.NewCoins(amount)); err != nil {
