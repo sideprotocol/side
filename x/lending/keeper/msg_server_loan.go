@@ -76,9 +76,9 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	dcm := m.dlcKeeper.GetDCM(ctx, msg.DCMId)
 
-	rawMaturityTime := ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity) * time.Second).Unix()
-	maturityTime := types.GetDefaultLiquidationDate(rawMaturityTime)
-	finalTimeout := rawMaturityTime + m.FinalTimeoutDuration(ctx)
+	originMaturityTime := ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity) * time.Second).Unix()
+	maturityTime := types.GetMaturityTime(originMaturityTime)
+	finalTimeout := originMaturityTime + m.FinalTimeoutDuration(ctx)
 
 	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, finalTimeout)
 	if err != nil {
