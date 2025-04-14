@@ -137,12 +137,24 @@ func GetTrancheConfig(tranches []PoolTrancheConfig, maturity int64) (*PoolTranch
 	return nil, false
 }
 
+// GetTranche gets the corresponding tranche according to the given maturity
+func GetTranche(tranches []PoolTranche, maturity int64) (*PoolTranche, bool) {
+	for _, tranche := range tranches {
+		if tranche.Maturity == maturity {
+			return &tranche, true
+		}
+	}
+
+	return nil, false
+}
+
 // NewTranches initializes the pool tranches from the given tranche configs
 func NewTranches(trancheConfigs []PoolTrancheConfig) []PoolTranche {
 	tranches := make([]PoolTranche, len(trancheConfigs))
 
 	for i, config := range trancheConfigs {
 		tranches[i].Maturity = config.Maturity
+		tranches[i].BorrowIndex = sdkmath.LegacyOneDec()
 	}
 
 	return tranches

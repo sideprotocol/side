@@ -62,6 +62,8 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidMaturity, "maturity does not exist")
 	}
 
+	tranche, _ := types.GetTranche(pool.Tranches, msg.Maturity)
+
 	if types.HasRequestFee(pool) {
 		if err := m.bankKeeper.SendCoins(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), sdk.MustAccAddressFromBech32(m.RequestFeeCollector(ctx)), sdk.NewCoins(poolConfig.RequestFee)); err != nil {
 			return nil, err
@@ -122,6 +124,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Maturity:                  trancheConfig.Maturity,
 		BorrowAPR:                 trancheConfig.BorrowAPR,
 		MinMaturity:               trancheConfig.Maturity * int64(trancheConfig.MinMaturityFactor) / 1000,
+		StartBorrowIndex:          tranche.BorrowIndex,
 		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
 		RepaymentEventId:          repaymentEvent.Id,
 		Referrer:                  msg.Referrer,

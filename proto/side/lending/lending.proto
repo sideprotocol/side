@@ -4,6 +4,7 @@ package side.lending;
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "side/btcbridge/btcbridge.proto";
 
 option go_package = "github.com/sideprotocol/side/x/lending/types";
@@ -74,8 +75,14 @@ message PoolConfig {
 message PoolTranche {
     // maturity duration
     int64 maturity = 1;
+    // borrow index
+    string borrow_index = 2 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
     // total borrowed
-    string total_borrowed = 2 [
+    string total_borrowed = 3 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
@@ -158,23 +165,28 @@ message Loan {
     int64 maturity = 13;
     uint32 borrow_apr = 14 [(gogoproto.customname) = "BorrowAPR"];
     int64 min_maturity = 15;
-    string liquidation_price = 16 [
+    string start_borrow_index = 16 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    string liquidation_price = 17 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_event_id = 17;
-    uint64 default_liquidation_event_id = 18;
-    uint64 repayment_event_id = 19;
-    repeated string deposit_txs = 20;
-    string collateral_amount = 21 [
+    uint64 liquidation_event_id = 18;
+    uint64 default_liquidation_event_id = 19;
+    uint64 repayment_event_id = 20;
+    repeated string deposit_txs = 21;
+    string collateral_amount = 22 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_id = 22;
-    string referrer = 23;
-    google.protobuf.Timestamp create_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 25 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 26;
+    uint64 liquidation_id = 23;
+    string referrer = 24;
+    google.protobuf.Timestamp create_at = 25 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 26 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 27;
 }
 
 enum CetType {

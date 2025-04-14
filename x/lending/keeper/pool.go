@@ -136,6 +136,7 @@ func (k Keeper) UpdatePoolTranches(ctx sdk.Context, pool *types.LendingPool) {
 		borrowRate := sdkmath.LegacyNewDec(int64(trancheConfig.BorrowAPR)).Quo(sdkmath.LegacyNewDec(1000)).Quo(sdkmath.LegacyNewDec(int64(blocksPerYear))).Mul(sdkmath.LegacyNewDec(int64(1000 - pool.Config.ReserveFactor))).Quo(sdkmath.LegacyNewDec(1000))
 		borrowIndexRatio := sdkmath.LegacyOneDec().Add(borrowRate)
 
+		pool.Tranches[i].BorrowIndex = pool.Tranches[i].BorrowIndex.Mul(borrowIndexRatio)
 		pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.ToLegacyDec().Mul(borrowIndexRatio).TruncateInt()
 	}
 }
