@@ -62,8 +62,6 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidMaturity, "maturity does not exist")
 	}
 
-	maturityTime := types.GetDefaultLiquidationDate(ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity) * time.Second).Unix())
-
 	if types.HasRequestFee(pool) {
 		if err := m.bankKeeper.SendCoins(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), sdk.MustAccAddressFromBech32(m.RequestFeeCollector(ctx)), sdk.NewCoins(poolConfig.RequestFee)); err != nil {
 			return nil, err
@@ -76,7 +74,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	dcm := m.dlcKeeper.GetDCM(ctx, msg.DCMId)
 
-	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, maturityTime, maturityTime+m.FinalTimeoutDuration(ctx))
+	rawMaturityTime := ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity) * time.Second).Unix()
+	maturityTime := types.GetDefaultLiquidationDate(rawMaturityTime)
+	finalTimeout := rawMaturityTime + m.FinalTimeoutDuration(ctx)
+
+	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, finalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +112,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		BorrowerPubKey:            msg.BorrowerPubkey,
 		DCM:                       dcm.Pubkey,
 		MaturityTime:              maturityTime,
-		FinalTimeout:              maturityTime + m.FinalTimeoutDuration(ctx),
+		FinalTimeout:              finalTimeout,
 		PoolId:                    msg.PoolId,
 		BorrowAmount:              msg.BorrowAmount,
 		RequestFee:                poolConfig.RequestFee,
