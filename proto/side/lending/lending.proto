@@ -140,6 +140,11 @@ enum LoanStatus {
     Closed = 8;
 }
 
+// Deposits used for CET authorization
+message AuthorizationDeposits {
+  repeated string deposit_txs = 1;
+}
+
 message Loan {
     string vault_address = 1; // id
     string borrower = 2;
@@ -177,7 +182,7 @@ message Loan {
     uint64 liquidation_event_id = 18;
     uint64 default_liquidation_event_id = 19;
     uint64 repayment_event_id = 20;
-    repeated string deposit_txs = 21;
+    repeated AuthorizationDeposits authorization_deposits = 21 [(gogoproto.nullable) = false];
     string collateral_amount = 22 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false

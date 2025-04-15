@@ -167,13 +167,20 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
-	fundTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
-	depositTxHash := fundTx.UnsignedTx.TxHash().String()
-
+	depositTxs := []*psbt.Packet{}
+	depositTxHashes := []string{}
 	collateralAmount := sdkmath.ZeroInt()
-	for _, out := range fundTx.UnsignedTx.TxOut {
-		if bytes.Equal(out.PkScript, vaultPkScript) {
-			collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
+
+	for _, depositTx := range msg.DepositTxs {
+		p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(depositTx)), true)
+
+		depositTxs = append(depositTxs, p)
+		depositTxHashes = append(depositTxHashes, p.UnsignedTx.TxHash().String())
+
+		for _, out := range p.UnsignedTx.TxOut {
+			if bytes.Equal(out.PkScript, vaultPkScript) {
+				collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
+			}
 		}
 	}
 
@@ -181,25 +188,27 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount can not be zero")
 	}
 
-	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
+	dlcMeta, err := types.BuildDLCMeta(depositTxs, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
 
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
-	if !m.HasDepositLog(ctx, depositTxHash) {
-		depositLog := &types.DepositLog{
-			Txid:         depositTxHash,
-			VaultAddress: loan.VaultAddress,
-			DepositTx:    msg.DepositTx,
-		}
+	for i, depositTx := range msg.DepositTxs {
+		if !m.HasDepositLog(ctx, depositTxHashes[i]) {
+			depositLog := &types.DepositLog{
+				Txid:         depositTxHashes[i],
+				VaultAddress: loan.VaultAddress,
+				DepositTx:    depositTx,
+			}
 
-		m.SetDepositLog(ctx, depositLog)
+			m.SetDepositLog(ctx, depositLog)
+		}
 	}
 
 	loan.CollateralAmount = collateralAmount
-	loan.DepositTxs = append(loan.DepositTxs, depositTxHash)
+	loan.AuthorizationDeposits = append(loan.AuthorizationDeposits, types.AuthorizationDeposits{DepositTxs: depositTxHashes})
 
 	var errRejected error
 
@@ -214,7 +223,6 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 				sdk.NewEvent(
 					types.EventTypeReject,
 					sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
-					sdk.NewAttribute(types.AttributeKeyDepositTxHash, depositTxHash),
 				),
 			)
 		}
@@ -249,7 +257,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	defaultLiquidationEvent := m.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
 
-	if err := types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+	if err := types.VerifyCets(depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
 		return nil, err
 	}
 
@@ -264,9 +272,9 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
-	// if deposit tx already verified, approve the loan
-	if m.GetDepositLog(ctx, depositTxHash).Verified {
-		if err := m.HandleApproval(ctx, msg.Borrower, depositTxHash, loan); err != nil {
+	// if all deposit txs already verified, approve the loan
+	if m.DepositTxsVerified(ctx, depositTxHashes) {
+		if err := m.HandleApproval(ctx, msg.Borrower, loan); err != nil {
 			errRejected = err
 			return nil, nil
 		}
@@ -305,9 +313,9 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	depositTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
 	depositTxHash := depositTx.UnsignedTx.TxHash().String()
 
-	depositTxAlreadyExists := true
+	authorized := true
 	if !m.HasDepositLog(ctx, depositTxHash) {
-		depositTxAlreadyExists = false
+		authorized = false
 
 		depositLog := &types.DepositLog{
 			Txid:         depositTxHash,
@@ -326,7 +334,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	depositLog.Verified = true
 	m.SetDepositLog(ctx, depositLog)
 
-	// cets submission rejected
+	// cet authorization rejected
 	if loan.Status == types.LoanStatus_Rejected {
 		return nil, nil
 	}
@@ -362,39 +370,23 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, nil
 	}
 
-	liquidationPrice := sdkmath.ZeroInt()
-
-	// loan requested
-	if !depositTxAlreadyExists {
-		vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
-
-		collateralAmount := sdkmath.ZeroInt()
-		for _, out := range depositTx.UnsignedTx.TxOut {
-			if bytes.Equal(out.PkScript, vaultPkScript) {
-				collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
-			}
-
-			poolConfig := m.GetPool(ctx, loan.PoolId).Config
-			liquidationPrice = types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, poolConfig.LiquidationThreshold)
+	// check liquidation price if cet authorized
+	if authorized {
+		currentPrice, err := m.GetPrice(ctx, "BTCUSD")
+		if err != nil {
+			return nil, err
 		}
-	} else {
-		liquidationPrice = loan.LiquidationPrice
+
+		// check if liquidation price reached
+		if currentPrice.LTE(loan.LiquidationPrice.ToLegacyDec()) {
+			errRejected = types.ErrLiquidationPriceReached
+			return nil, nil
+		}
 	}
 
-	currentPrice, err := m.GetPrice(ctx, "BTCUSD")
-	if err != nil {
-		return nil, err
-	}
-
-	// check if liquidation price reached
-	if currentPrice.LTE(liquidationPrice.ToLegacyDec()) {
-		errRejected = types.ErrLiquidationPriceReached
-		return nil, nil
-	}
-
-	// cets submitted
-	if depositTxAlreadyExists {
-		if err := m.HandleApproval(ctx, msg.Relayer, depositTxHash, loan); err != nil {
+	// approve loan if cet authorized and all deposit txs verified
+	if authorized && m.DepositTxsVerified(ctx, loan.AuthorizationDeposits[len(loan.AuthorizationDeposits)-1].DepositTxs) {
+		if err := m.HandleApproval(ctx, msg.Relayer, loan); err != nil {
 			errRejected = err
 			return nil, nil
 		}

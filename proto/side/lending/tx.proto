@@ -111,7 +111,7 @@ message MsgSubmitCets {
 
     string borrower = 1;
     string loan_id = 2;
-    string deposit_tx = 3;
+    repeated string deposit_txs = 3;
     string liquidation_cet = 4;
     repeated string liquidation_adaptor_signatures = 5;
     repeated string default_liquidation_adaptor_signatures = 6;

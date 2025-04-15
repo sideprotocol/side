@@ -173,7 +173,7 @@ func CmdApply() *cobra.Command {
 
 func CmdSubmitCets() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: `submit-cets [loan id] [deposit tx] [liquidation cet] [liquidation adaptor signatures] 
+		Use: `submit-cets [loan id] [deposit txs] [liquidation cet] [liquidation adaptor signatures] 
 		[default liquidation adaptor signatures] [repayment cet] [repayment signatures]`,
 		Short: "Submit the related cets of the given loan",
 		Args:  cobra.ExactArgs(7),
@@ -186,7 +186,7 @@ func CmdSubmitCets() *cobra.Command {
 			msg := types.NewMsgSubmitCets(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				args[1],
+				strings.Split(args[1], listSeparator),
 				args[2],
 				strings.Split(args[3], listSeparator),
 				strings.Split(args[4], listSeparator),

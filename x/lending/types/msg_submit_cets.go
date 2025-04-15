@@ -3,6 +3,7 @@ package types
 import (
 	"bytes"
 	"encoding/hex"
+	"slices"
 
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -15,11 +16,11 @@ import (
 
 var _ sdk.Msg = &MsgSubmitCets{}
 
-func NewMsgSubmitCets(borrower string, loanId string, depositTx string, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) *MsgSubmitCets {
+func NewMsgSubmitCets(borrower string, loanId string, depositTxs []string, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) *MsgSubmitCets {
 	return &MsgSubmitCets{
 		Borrower:                            borrower,
 		LoanId:                              loanId,
-		DepositTx:                           depositTx,
+		DepositTxs:                          depositTxs,
 		LiquidationCet:                      liquidationCet,
 		LiquidationAdaptorSignatures:        liquidationAdaptorSignatures,
 		DefaultLiquidationAdaptorSignatures: defaultLiquidationAdaptorSignatures,
@@ -38,13 +39,29 @@ func (m *MsgSubmitCets) ValidateBasic() error {
 		return ErrEmptyLoanId
 	}
 
-	if _, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(m.DepositTx)), true); err != nil {
-		return ErrInvalidDepositTx
+	if len(m.DepositTxs) == 0 {
+		return errorsmod.Wrap(ErrInvalidDepositTxs, "deposit txs can not be empty")
+	}
+
+	depositTxHashes := []string{}
+
+	for _, depositTx := range m.DepositTxs {
+		if p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(depositTx)), true); err != nil {
+			return ErrInvalidDepositTx
+		} else {
+			depositTxHashes = append(depositTxHashes, p.UnsignedTx.TxHash().String())
+		}
 	}
 
 	liquidationCet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(m.LiquidationCet)), true)
 	if err != nil {
 		return errorsmod.Wrapf(ErrInvalidCET, "failed to deserialize liquidation cet: %v", err)
+	}
+
+	for _, txIn := range liquidationCet.UnsignedTx.TxIn {
+		if !slices.Contains(depositTxHashes, txIn.PreviousOutPoint.Hash.String()) {
+			return errorsmod.Wrapf(ErrInvalidCET, "invalid previous tx hash in liquidation cet")
+		}
 	}
 
 	if len(m.LiquidationAdaptorSignatures) != len(liquidationCet.Inputs) {
@@ -80,6 +97,12 @@ func (m *MsgSubmitCets) ValidateBasic() error {
 	repaymentCet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(m.RepaymentCet)), true)
 	if err != nil {
 		return errorsmod.Wrapf(ErrInvalidCET, "failed to deserialize repayment cet: %v", err)
+	}
+
+	for _, txIn := range repaymentCet.UnsignedTx.TxIn {
+		if !slices.Contains(depositTxHashes, txIn.PreviousOutPoint.Hash.String()) {
+			return errorsmod.Wrapf(ErrInvalidCET, "invalid previous tx hash in repayment cet")
+		}
 	}
 
 	if len(m.RepaymentSignatures) != len(repaymentCet.Inputs) {

@@ -146,6 +146,23 @@ func (k Keeper) GetDepositLog(ctx sdk.Context, txid string) *types.DepositLog {
 	return &depositLog
 }
 
+// DepositTxsVerified returns true if all deposit txs verified, false otherwise
+func (k Keeper) DepositTxsVerified(ctx sdk.Context, txids []string) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	for _, txid := range txids {
+		var depositLog types.DepositLog
+		bz := store.Get(types.DepositLogKey(txid))
+		k.cdc.MustUnmarshal(bz, &depositLog)
+
+		if !depositLog.Verified {
+			return false
+		}
+	}
+
+	return true
+}
+
 // SetRepayment sets the given repayment
 func (k Keeper) SetRepayment(ctx sdk.Context, repayment *types.Repayment) {
 	store := ctx.KVStore(k.storeKey)
