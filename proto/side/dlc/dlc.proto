@@ -67,6 +67,7 @@ message DLCEvent {
     bool has_triggered = 7;
     uint32 outcome_index = 8;
     google.protobuf.Timestamp publish_at = 9 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp trigger_at = 10 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 message DLCAttestation {
