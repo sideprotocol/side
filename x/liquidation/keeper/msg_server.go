@@ -36,6 +36,7 @@ func (m msgServer) Liquidate(goCtx context.Context, msg *types.MsgLiquidate) (*t
 			sdk.NewAttribute(types.AttributeKeyLiquidationRecordId, fmt.Sprintf("%d", record.Id)),
 			sdk.NewAttribute(types.AttributeKeyDebtAmount, record.DebtAmount.String()),
 			sdk.NewAttribute(types.AttributeKeyCollateralAmount, record.CollateralAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyBonusAmount, record.BonusAmount.String()),
 		),
 	)
 

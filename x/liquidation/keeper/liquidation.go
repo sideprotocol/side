@@ -71,7 +71,8 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		LiquidationId:    liquidationId,
 		Liquidator:       liquidator,
 		DebtAmount:       debtAmount,
-		CollateralAmount: sdk.NewCoin(liquidation.CollateralAmount.Denom, collateralAmount.Add(bonusAmount).Sub(protocolLiquidationFee)),
+		CollateralAmount: sdk.NewCoin(liquidation.CollateralAmount.Denom, collateralAmount),
+		BonusAmount:      sdk.NewCoin(liquidation.CollateralAmount.Denom, bonusAmount.Sub(protocolLiquidationFee)),
 		Time:             ctx.BlockTime(),
 	}
 

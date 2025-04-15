@@ -50,5 +50,6 @@ message LiquidationRecord {
     string liquidator = 3;
     cosmos.base.v1beta1.Coin debt_amount = 4 [(gogoproto.nullable) = false];
     cosmos.base.v1beta1.Coin collateral_amount = 5 [(gogoproto.nullable) = false];
-    google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    cosmos.base.v1beta1.Coin bonus_amount = 6 [(gogoproto.nullable) = false];
+    google.protobuf.Timestamp time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }

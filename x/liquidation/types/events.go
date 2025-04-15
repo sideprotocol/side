@@ -11,6 +11,7 @@ const (
 	AttributeKeyLiquidationRecordId = "liquidation_record_id"
 	AttributeKeyDebtAmount          = "debt_amount"
 	AttributeKeyCollateralAmount    = "collateral_amount"
+	AttributeKeyBonusAmount         = "bonus_amount"
 
 	AttributeKeyDCMPubKey = "dcm_pub_key"
 	AttributeKeySigHashes = "sig_hashes"
