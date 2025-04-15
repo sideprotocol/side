@@ -105,7 +105,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	repaymentEvent.Outcomes = []string{vault}
 	m.dlcKeeper.SetEvent(ctx, repaymentEvent)
 
-	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(trancheConfig.BorrowAPR))).Mul(sdkmath.NewInt(trancheConfig.Maturity)).Quo(sdkmath.NewInt(int64(types.OneYear))).Quo(types.Permille)
+	interest := types.GetTotalInterest(msg.BorrowAmount.Amount, tranche.BorrowIndex, trancheConfig.Maturity, trancheConfig.BorrowAPR, m.GetBlocksPerYear(ctx))
 	protocolFee := interest.Mul(sdkmath.NewInt(int64(poolConfig.ReserveFactor))).Quo(types.Permille)
 
 	loan := &types.Loan{

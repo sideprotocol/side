@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"time"
-
 	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -216,10 +214,11 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 
 	case types.LoanStatus_Liquidated:
 		liquidation := k.liquidationKeeper.GetLiquidation(ctx, loan.LiquidationId)
-		interest = types.GetInterest(loan.Interest, time.Duration(loan.Maturity), loan.CreateAt.Unix(), liquidation.LiquidatedTime.Unix())
+		interest = liquidation.DebtAmount.Amount.Sub(loan.BorrowAmount.Amount)
 
 	default:
-		interest = types.GetInterest(loan.Interest, time.Duration(loan.Maturity), loan.CreateAt.Unix(), ctx.BlockTime().Unix())
+		tranche, _ := types.GetTranche(k.GetPool(ctx, loan.PoolId).Tranches, loan.Maturity)
+		interest = types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, tranche.BorrowIndex)
 	}
 
 	return sdk.NewCoin(loan.BorrowAmount.Denom, interest)

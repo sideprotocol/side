@@ -26,11 +26,21 @@ func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, tota
 	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed)).Quo(totalSTokens.ToLegacyDec())
 }
 
-// GetInterest calculates the loan interest based on the given params
-func GetInterest(totalInterest sdkmath.Int, maturity time.Duration, startTime int64, destTime int64) sdkmath.Int {
-	elapsed := destTime - startTime
+// GetInterest calculates the loan interest based on the given borrow index
+func GetInterest(borrowAmount sdkmath.Int, startBorrowIndex sdkmath.LegacyDec, borrowIndex sdkmath.LegacyDec) sdkmath.Int {
+	return borrowAmount.ToLegacyDec().Mul(borrowIndex).Quo(startBorrowIndex).TruncateInt().Sub(borrowAmount)
+}
 
-	return totalInterest.Mul(sdkmath.NewInt(elapsed)).Quo(sdkmath.NewInt(int64(maturity)))
+// GetTotalInterest calculates the total loan interest based on the given params
+func GetTotalInterest(borrowAmount sdkmath.Int, startBorrowIndex sdkmath.LegacyDec, maturity int64, borrowAPR uint32, blocksPerYear uint64) sdkmath.Int {
+	totalBlocks := uint64(maturity) * blocksPerYear / OneYear
+
+	borrowRatePerBlock := sdkmath.LegacyNewDec(int64(borrowAPR)).Quo(sdkmath.LegacyNewDec(1000)).Quo(sdkmath.LegacyNewDec(int64(blocksPerYear)))
+	borrowIndexRatio := sdkmath.LegacyOneDec().Add(borrowRatePerBlock)
+
+	endBorrowIndex := startBorrowIndex.Mul(borrowIndexRatio.Power(totalBlocks))
+
+	return GetInterest(borrowAmount, startBorrowIndex, endBorrowIndex)
 }
 
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
