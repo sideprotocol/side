@@ -45,6 +45,8 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			k.Logger(ctx).Info("failed to get price", "err", err)
 		}
 
+		pool := k.GetPool(ctx, loan.PoolId)
+
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 
 		// check if the loan has defaulted
@@ -98,11 +100,11 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				Debtor:                       loan.Borrower,
 				DCM:                          loan.DCM,
 				CollateralAmount:             sdk.NewCoin("sat", loan.CollateralAmount),
-				DebtAmount:                   sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
+				DebtAmount:                   sdk.NewCoin(pool.Supply.Denom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
 				LiquidatedPrice:              currentPrice,
 				LiquidatedTime:               ctx.BlockTime(),
 				LiquidatedCollateralAmount:   sdk.NewCoin("sat", sdkmath.ZeroInt()),
-				LiquidatedDebtAmount:         sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, sdkmath.ZeroInt()),
+				LiquidatedDebtAmount:         sdk.NewCoin(pool.Supply.Denom, sdkmath.ZeroInt()),
 				LiquidationBonusAmount:       sdk.NewCoin("sat", sdkmath.ZeroInt()),
 				ProtocolLiquidationFee:       sdk.NewCoin("sat", sdkmath.ZeroInt()),
 				UnliquidatedCollateralAmount: sdk.NewCoin("sat", sdkmath.ZeroInt()),
@@ -117,6 +119,9 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 			// update loan
 			k.SetLoan(ctx, loan)
+
+			// update pool
+			k.DecreaseTotalBorrowed(ctx, loan.PoolId, loan.Maturity, liquidation.DebtAmount.Amount.Sub(types.GetProtocolFee(liquidationInterest, pool.Config.ReserveFactor)))
 		}
 	}
 }

@@ -43,6 +43,11 @@ func GetTotalInterest(borrowAmount sdkmath.Int, startBorrowIndex sdkmath.LegacyD
 	return GetInterest(borrowAmount, startBorrowIndex, endBorrowIndex)
 }
 
+// GetProtocolFee calculates the protocol fee based on the given interest and reserve factor
+func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
+	return interest.Mul(sdkmath.NewInt(int64(reserveFactor))).Quo(Permille)
+}
+
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
