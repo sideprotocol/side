@@ -100,6 +100,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				Debtor:                       loan.Borrower,
 				DCM:                          loan.DCM,
 				CollateralAmount:             sdk.NewCoin("sat", loan.CollateralAmount),
+				ActualCollateralAmount:       sdk.NewCoin("sat", sdkmath.NewInt(types.GetLiquidationCetOutput(liquidationCet))),
 				DebtAmount:                   sdk.NewCoin(pool.Supply.Denom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
 				LiquidatedPrice:              currentPrice,
 				LiquidatedTime:               ctx.BlockTime(),

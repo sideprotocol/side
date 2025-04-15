@@ -593,6 +593,14 @@ func GetRepaymentCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 	return sigHashes, nil
 }
 
+// GetLiquidationCetOutput gets the output value for the given liquidation cet
+// Assume that the given cet is valid
+func GetLiquidationCetOutput(liquidationCet string) int64 {
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCet)), true)
+
+	return p.UnsignedTx.TxOut[0].Value
+}
+
 // GetDLCTapscripts gets the tap scripts from the given dlc meta
 // Assume that the dlc meta is valid
 func GetDLCTapscripts(dlcMeta *DLCMeta) [][]byte {

@@ -43,7 +43,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
 
 	// check remaining collateral amount
-	remainingCollateralAmount := liquidation.CollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
+	remainingCollateralAmount := liquidation.ActualCollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
 	if remainingCollateralAmount.Amount.LT(collateralAmount) {
 		collateralAmount = remainingCollateralAmount.Amount
 		debtAmount.Amount = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Mul(currentPrice).QuoInt(sdkmath.NewIntWithDecimal(1, 8)).TruncateInt()
@@ -80,9 +80,9 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)
 	liquidation.LiquidationBonusAmount = liquidation.LiquidationBonusAmount.AddAmount(bonusAmount)
 	liquidation.ProtocolLiquidationFee = liquidation.ProtocolLiquidationFee.AddAmount(protocolLiquidationFee)
-	liquidation.UnliquidatedCollateralAmount = liquidation.CollateralAmount.Sub(liquidation.LiquidatedCollateralAmount)
+	liquidation.UnliquidatedCollateralAmount = liquidation.ActualCollateralAmount.Sub(liquidation.LiquidatedCollateralAmount)
 
-	remainingCollateralAmount = liquidation.CollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
+	remainingCollateralAmount = liquidation.ActualCollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
 	if remainingCollateralAmount.Amount.IsZero() || liquidation.LiquidatedDebtAmount.Amount.Equal(liquidation.DebtAmount.Amount) {
 		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED
 	}
