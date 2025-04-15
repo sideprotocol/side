@@ -105,7 +105,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	repaymentEvent.Outcomes = []string{vault}
 	m.dlcKeeper.SetEvent(ctx, repaymentEvent)
 
-	interest := types.GetTotalInterest(msg.BorrowAmount.Amount, tranche.BorrowIndex, trancheConfig.Maturity, trancheConfig.BorrowAPR, m.GetBlocksPerYear(ctx))
+	interest := types.GetTotalInterest(msg.BorrowAmount.Amount, trancheConfig.Maturity, trancheConfig.BorrowAPR, m.GetBlocksPerYear(ctx))
 	protocolFee := types.GetProtocolFee(interest, poolConfig.ReserveFactor)
 
 	loan := &types.Loan{
@@ -243,7 +243,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, poolConfig.LiquidationThreshold)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold)
 	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 		return nil, nil
