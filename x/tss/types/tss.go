@@ -70,3 +70,18 @@ func GetSigMsg(id uint64, pubKeys []string) []byte {
 
 	return hash.Sha256(rawMsg)
 }
+
+// GetSigningOption gets the signing option according to the given signing type and options
+// Assume that the options match the signing type
+func GetSigningOption(signingType SigningType, options *SigningOptions) string {
+	switch signingType {
+	case SigningType_SIGNING_TYPE_SCHNORR_WITH_COMMITMENT:
+		return options.Nonce
+
+	case SigningType_SIGNING_TYPE_SCHNORR_ADAPTOR:
+		return options.AdaptorPoint
+
+	default:
+		return ""
+	}
+}

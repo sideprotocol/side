@@ -1,6 +1,9 @@
 package keeper
 
 import (
+	"fmt"
+	"strings"
+
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -108,7 +111,15 @@ func (k Keeper) InitiateSigningRequest(ctx sdk.Context, module string, scopedId 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeInitiateSigning,
-			types.GetSigningRequestEventAttributes(req.Id, module, scopedId, ty, intent, pubKey, sigHashes, options)...),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", req.Id)),
+			sdk.NewAttribute(types.AttributeKeyModule, module),
+			sdk.NewAttribute(types.AttributeKeyScopedId, scopedId),
+			sdk.NewAttribute(types.AttributeKeyType, fmt.Sprintf("%d", ty)),
+			sdk.NewAttribute(types.AttributeKeyIntent, fmt.Sprintf("%d", intent)),
+			sdk.NewAttribute(types.AttributeKeyPubKey, pubKey),
+			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(sigHashes, types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeyOption, types.GetSigningOption(ty, options)),
+		),
 	)
 
 	return req
