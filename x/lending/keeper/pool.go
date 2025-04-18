@@ -121,6 +121,24 @@ func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, 
 	k.SetPool(ctx, pool)
 }
 
+// DecreaseTotalBorrowed decreases total borrowed by the given amount for the specified pool
+func (k Keeper) DecreaseTotalBorrowed(ctx sdk.Context, poolId string, maturity int64, amount sdkmath.Int) {
+	pool := k.GetPool(ctx, poolId)
+
+	pool.TotalBorrowed = pool.TotalBorrowed.Sub(amount)
+
+	for i, tranche := range pool.Tranches {
+		if tranche.Maturity == maturity {
+			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(amount)
+			break
+		}
+	}
+
+	k.NormalizePool(ctx, pool)
+
+	k.SetPool(ctx, pool)
+}
+
 // UpdatePoolTranches updates total borrowed amount for each tranche at the beginning of each block
 //
 // Formula:

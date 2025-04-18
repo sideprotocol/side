@@ -217,6 +217,14 @@ func (k Keeper) GetCancellation(ctx sdk.Context, loanId string) *types.Cancellat
 	return &cancellation
 }
 
+// GetCurrentBorrowIndex gets the current borrow index of the given loan
+// Assume that the loan maturity exists in the pool tranches
+func (k Keeper) GetCurrentBorrowIndex(ctx sdk.Context, loan *types.Loan) sdkmath.LegacyDec {
+	tranche, _ := types.GetTranche(k.GetPool(ctx, loan.PoolId).Tranches, loan.Maturity)
+
+	return tranche.BorrowIndex
+}
+
 // GetCurrentInterest gets the current interest of the given loan
 func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 	var interest sdkmath.Int
@@ -234,8 +242,7 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 		interest = liquidation.DebtAmount.Amount.Sub(loan.BorrowAmount.Amount)
 
 	default:
-		tranche, _ := types.GetTranche(k.GetPool(ctx, loan.PoolId).Tranches, loan.Maturity)
-		interest = types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, tranche.BorrowIndex)
+		interest = types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, k.GetCurrentBorrowIndex(ctx, loan))
 	}
 
 	return sdk.NewCoin(loan.BorrowAmount.Denom, interest)
