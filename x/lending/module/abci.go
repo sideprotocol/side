@@ -120,9 +120,6 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 			// update loan
 			k.SetLoan(ctx, loan)
-
-			// update pool
-			k.DecreaseTotalBorrowed(ctx, loan.PoolId, loan.Maturity, liquidation.DebtAmount.Amount.Sub(types.GetProtocolFee(liquidationInterest, pool.Config.ReserveFactor)))
 		}
 	}
 }

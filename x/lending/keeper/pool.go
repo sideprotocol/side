@@ -98,7 +98,7 @@ func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, maturity int64
 }
 
 // AfterPoolRepaid is the hook which is invoked after the loan is repaid
-func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, amount sdk.Coin, interest sdkmath.Int, protocolFee sdkmath.Int, actualProtocolFee sdkmath.Int, updateTotalBorrowed bool) {
+func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, amount sdk.Coin, interest sdkmath.Int, protocolFee sdkmath.Int, actualProtocolFee sdkmath.Int) {
 	pool := k.GetPool(ctx, poolId)
 
 	totalRepaid := amount.Amount.Add(interest).Sub(protocolFee)
@@ -106,33 +106,12 @@ func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, 
 	pool.Supply = pool.Supply.AddAmount(interest).SubAmount(protocolFee)
 	pool.AvailableAmount = pool.AvailableAmount.Add(totalRepaid)
 	pool.BorrowedAmount = pool.BorrowedAmount.Sub(amount.Amount)
+	pool.TotalBorrowed = pool.TotalBorrowed.Sub(totalRepaid)
 	pool.ReserveAmount = pool.ReserveAmount.Add(actualProtocolFee)
-
-	if updateTotalBorrowed {
-		pool.TotalBorrowed = pool.TotalBorrowed.Sub(totalRepaid)
-	}
 
 	for i, tranche := range pool.Tranches {
 		if tranche.Maturity == maturity {
 			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(totalRepaid)
-			break
-		}
-	}
-
-	k.NormalizePool(ctx, pool)
-
-	k.SetPool(ctx, pool)
-}
-
-// DecreaseTotalBorrowed decreases total borrowed by the given amount for the specified pool
-func (k Keeper) DecreaseTotalBorrowed(ctx sdk.Context, poolId string, maturity int64, amount sdkmath.Int) {
-	pool := k.GetPool(ctx, poolId)
-
-	pool.TotalBorrowed = pool.TotalBorrowed.Sub(amount)
-
-	for i, tranche := range pool.Tranches {
-		if tranche.Maturity == maturity {
-			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(amount)
 			break
 		}
 	}
