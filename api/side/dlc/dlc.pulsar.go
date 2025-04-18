@@ -2517,8 +2517,8 @@ func (x *fastReflection_DLCEvent) Range(f func(protoreflect.FieldDescriptor, pro
 			return
 		}
 	}
-	if x.OutcomeIndex != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.OutcomeIndex)
+	if x.OutcomeIndex != int32(0) {
+		value := protoreflect.ValueOfInt32(x.OutcomeIndex)
 		if !f(fd_DLCEvent_outcome_index, value) {
 			return
 		}
@@ -2565,7 +2565,7 @@ func (x *fastReflection_DLCEvent) Has(fd protoreflect.FieldDescriptor) bool {
 	case "side.dlc.DLCEvent.has_triggered":
 		return x.HasTriggered != false
 	case "side.dlc.DLCEvent.outcome_index":
-		return x.OutcomeIndex != uint32(0)
+		return x.OutcomeIndex != int32(0)
 	case "side.dlc.DLCEvent.publish_at":
 		return x.PublishAt != nil
 	case "side.dlc.DLCEvent.trigger_at":
@@ -2601,7 +2601,7 @@ func (x *fastReflection_DLCEvent) Clear(fd protoreflect.FieldDescriptor) {
 	case "side.dlc.DLCEvent.has_triggered":
 		x.HasTriggered = false
 	case "side.dlc.DLCEvent.outcome_index":
-		x.OutcomeIndex = uint32(0)
+		x.OutcomeIndex = int32(0)
 	case "side.dlc.DLCEvent.publish_at":
 		x.PublishAt = nil
 	case "side.dlc.DLCEvent.trigger_at":
@@ -2648,7 +2648,7 @@ func (x *fastReflection_DLCEvent) Get(descriptor protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfBool(value)
 	case "side.dlc.DLCEvent.outcome_index":
 		value := x.OutcomeIndex
-		return protoreflect.ValueOfUint32(value)
+		return protoreflect.ValueOfInt32(value)
 	case "side.dlc.DLCEvent.publish_at":
 		value := x.PublishAt
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -2692,7 +2692,7 @@ func (x *fastReflection_DLCEvent) Set(fd protoreflect.FieldDescriptor, value pro
 	case "side.dlc.DLCEvent.has_triggered":
 		x.HasTriggered = value.Bool()
 	case "side.dlc.DLCEvent.outcome_index":
-		x.OutcomeIndex = uint32(value.Uint())
+		x.OutcomeIndex = int32(value.Int())
 	case "side.dlc.DLCEvent.publish_at":
 		x.PublishAt = value.Message().Interface().(*timestamppb.Timestamp)
 	case "side.dlc.DLCEvent.trigger_at":
@@ -2776,7 +2776,7 @@ func (x *fastReflection_DLCEvent) NewField(fd protoreflect.FieldDescriptor) prot
 	case "side.dlc.DLCEvent.has_triggered":
 		return protoreflect.ValueOfBool(false)
 	case "side.dlc.DLCEvent.outcome_index":
-		return protoreflect.ValueOfUint32(uint32(0))
+		return protoreflect.ValueOfInt32(int32(0))
 	case "side.dlc.DLCEvent.publish_at":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -3251,7 +3251,7 @@ func (x *fastReflection_DLCEvent) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.OutcomeIndex |= uint32(b&0x7F) << shift
+					x.OutcomeIndex |= int32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -4506,7 +4506,7 @@ type DLCEvent struct {
 	Description  string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
 	Outcomes     []string               `protobuf:"bytes,6,rep,name=outcomes,proto3" json:"outcomes,omitempty"`
 	HasTriggered bool                   `protobuf:"varint,7,opt,name=has_triggered,json=hasTriggered,proto3" json:"has_triggered,omitempty"`
-	OutcomeIndex uint32                 `protobuf:"varint,8,opt,name=outcome_index,json=outcomeIndex,proto3" json:"outcome_index,omitempty"`
+	OutcomeIndex int32                  `protobuf:"varint,8,opt,name=outcome_index,json=outcomeIndex,proto3" json:"outcome_index,omitempty"`
 	PublishAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=publish_at,json=publishAt,proto3" json:"publish_at,omitempty"`
 	TriggerAt    *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=trigger_at,json=triggerAt,proto3" json:"trigger_at,omitempty"`
 }
@@ -4580,7 +4580,7 @@ func (x *DLCEvent) GetHasTriggered() bool {
 	return false
 }
 
-func (x *DLCEvent) GetOutcomeIndex() uint32 {
+func (x *DLCEvent) GetOutcomeIndex() int32 {
 	if x != nil {
 		return x.OutcomeIndex
 	}
@@ -4741,7 +4741,7 @@ var file_side_dlc_dlc_proto_rawDesc = []byte{
 	0x5f, 0x74, 0x72, 0x69, 0x67, 0x67, 0x65, 0x72, 0x65, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x08,
 	0x52, 0x0c, 0x68, 0x61, 0x73, 0x54, 0x72, 0x69, 0x67, 0x67, 0x65, 0x72, 0x65, 0x64, 0x12, 0x23,
 	0x0a, 0x0d, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18,
-	0x08, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x49, 0x6e,
+	0x08, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0c, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x49, 0x6e,
 	0x64, 0x65, 0x78, 0x12, 0x43, 0x0a, 0x0a, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x5f, 0x61,
 	0x74, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74,

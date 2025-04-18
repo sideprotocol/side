@@ -11,6 +11,11 @@ import (
 	"github.com/sideprotocol/side/crypto/hash"
 )
 
+const (
+	// default outcome index
+	DefaultOutcomeIndex = -1
+)
+
 // GetEventOutcomeHash gets the event outcome hash by the given index
 // Assume that the outcome index is valid
 func GetEventOutcomeHash(event *DLCEvent, outcomeIndex int) []byte {

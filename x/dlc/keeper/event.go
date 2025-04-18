@@ -283,7 +283,7 @@ func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 	event := k.GetEvent(ctx, id)
 
 	event.HasTriggered = true
-	event.OutcomeIndex = uint32(outcomeIndex)
+	event.OutcomeIndex = int32(outcomeIndex)
 	event.TriggerAt = ctx.BlockTime()
 
 	k.SetEvent(ctx, event)

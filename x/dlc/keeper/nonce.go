@@ -47,6 +47,7 @@ func (k Keeper) HandleNonce(ctx sdk.Context, sender string, eventType types.DlcE
 		Nonce:        nonce,
 		Pubkey:       oraclePubKey,
 		HasTriggered: false,
+		OutcomeIndex: types.DefaultOutcomeIndex,
 		PublishAt:    ctx.BlockTime(),
 	}
 
