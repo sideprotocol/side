@@ -10,9 +10,12 @@ import (
 	"github.com/sideprotocol/side/crypto/adaptor"
 )
 
-const (
+var (
 	// OneYear represents the seconds in one year
 	OneYear = 365 * 24 * 3600
+
+	// initial borrow index
+	InitialBorrowIndex = sdkmath.LegacyOneDec()
 )
 
 // GetExchangeRate calculates the sToken exchange rate according to the given params
@@ -33,7 +36,7 @@ func GetInterest(borrowAmount sdkmath.Int, startBorrowIndex sdkmath.LegacyDec, b
 
 // GetTotalInterest calculates the total loan interest based on the given params
 func GetTotalInterest(borrowAmount sdkmath.Int, maturity int64, borrowAPR uint32, blocksPerYear uint64) sdkmath.Int {
-	totalBlocks := uint64(maturity) * blocksPerYear / OneYear
+	totalBlocks := uint64(maturity) * blocksPerYear / uint64(OneYear)
 
 	borrowRatePerBlock := sdkmath.LegacyNewDec(int64(borrowAPR)).Quo(sdkmath.LegacyNewDec(1000)).Quo(sdkmath.LegacyNewDec(int64(blocksPerYear)))
 	borrowIndexRatio := sdkmath.LegacyOneDec().Add(borrowRatePerBlock)
@@ -167,7 +170,7 @@ func NewTranches(trancheConfigs []PoolTrancheConfig) []PoolTranche {
 
 	for i, config := range trancheConfigs {
 		tranches[i].Maturity = config.Maturity
-		tranches[i].BorrowIndex = sdkmath.LegacyOneDec()
+		tranches[i].BorrowIndex = InitialBorrowIndex
 	}
 
 	return tranches
