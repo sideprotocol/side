@@ -190,8 +190,6 @@ func (k Keeper) UpdatePoolStatus(ctx sdk.Context, pool *types.LendingPool, newCo
 	default:
 		return
 	}
-
-	k.SetPool(ctx, pool)
 }
 
 // NormalizePool normalizes the given pool
