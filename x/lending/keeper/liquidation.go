@@ -125,12 +125,11 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 	return nil
 }
 
-// DeductLiquidationAccruedInterest deducts the accrued interest (protocol fee excluded) during the loan liquidation from total borrowed
+// DeductLiquidationAccruedInterest deducts the interest accrued during the loan liquidation from total borrowed
 func (k Keeper) DeductLiquidationAccruedInterest(ctx sdk.Context, loan *types.Loan) {
 	interest := k.GetLiquidationAccruedInterest(ctx, loan)
-	protocolFee := types.GetProtocolFee(interest, k.GetPool(ctx, loan.PoolId).Config.ReserveFactor)
 
-	k.DecreaseTotalBorrowed(ctx, loan.PoolId, loan.Maturity, interest.Sub(protocolFee))
+	k.DecreaseTotalBorrowed(ctx, loan.PoolId, loan.Maturity, interest)
 }
 
 // GetLiquidationAccruedInterest gets the current accrued interest during the loan liquidation

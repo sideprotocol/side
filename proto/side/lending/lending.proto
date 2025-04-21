@@ -86,6 +86,11 @@ message PoolTranche {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
+     // total reserve
+    string total_reserve = 4 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
 }
 
 message LendingPool {
@@ -109,13 +114,17 @@ message LendingPool {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    cosmos.base.v1beta1.Coin total_stokens = 7 [
+    string total_reserve = 7 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    cosmos.base.v1beta1.Coin total_stokens = 8 [
       (gogoproto.nullable) = false,
       (gogoproto.customname) = "TotalSTokens"
     ];
-    repeated PoolTranche tranches = 8 [(gogoproto.nullable) = false];
-    PoolConfig config = 9 [(gogoproto.nullable) = false];
-    PoolStatus status = 10;
+    repeated PoolTranche tranches = 9 [(gogoproto.nullable) = false];
+    PoolConfig config = 10 [(gogoproto.nullable) = false];
+    PoolStatus status = 11;
 }
 
 // Loan Status

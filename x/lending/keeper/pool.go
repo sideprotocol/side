@@ -101,17 +101,19 @@ func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, maturity int64
 func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, amount sdk.Coin, interest sdkmath.Int, protocolFee sdkmath.Int, actualProtocolFee sdkmath.Int) {
 	pool := k.GetPool(ctx, poolId)
 
-	totalRepaid := amount.Amount.Add(interest).Sub(protocolFee)
+	repaidAmount := amount.Amount.Add(interest)
+	actualRepaidAmount := repaidAmount.Sub(protocolFee)
 
 	pool.Supply = pool.Supply.AddAmount(interest).SubAmount(protocolFee)
-	pool.AvailableAmount = pool.AvailableAmount.Add(totalRepaid)
+	pool.AvailableAmount = pool.AvailableAmount.Add(actualRepaidAmount)
 	pool.BorrowedAmount = pool.BorrowedAmount.Sub(amount.Amount)
-	pool.TotalBorrowed = pool.TotalBorrowed.Sub(totalRepaid)
+	pool.TotalBorrowed = pool.TotalBorrowed.Sub(repaidAmount)
 	pool.ReserveAmount = pool.ReserveAmount.Add(actualProtocolFee)
+	pool.TotalReserve = pool.TotalReserve.Sub(protocolFee)
 
 	for i, tranche := range pool.Tranches {
 		if tranche.Maturity == maturity {
-			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(totalRepaid)
+			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(repaidAmount)
 			break
 		}
 	}
@@ -153,11 +155,15 @@ func (k Keeper) UpdatePoolTranches(ctx sdk.Context, pool *types.LendingPool) {
 	for i, tranche := range pool.Tranches {
 		trancheConfig, _ := types.GetTrancheConfig(pool.Config.Tranches, tranche.Maturity)
 
-		borrowRate := sdkmath.LegacyNewDec(int64(trancheConfig.BorrowAPR)).Quo(sdkmath.LegacyNewDec(1000)).Quo(sdkmath.LegacyNewDec(int64(blocksPerYear))).Mul(sdkmath.LegacyNewDec(int64(1000 - pool.Config.ReserveFactor))).Quo(sdkmath.LegacyNewDec(1000))
-		borrowIndexRatio := sdkmath.LegacyOneDec().Add(borrowRate)
+		borrowRatePerBlock := sdkmath.LegacyNewDec(int64(trancheConfig.BorrowAPR)).Quo(sdkmath.LegacyNewDec(1000)).Quo(sdkmath.LegacyNewDec(int64(blocksPerYear)))
+		borrowIndexRatio := sdkmath.LegacyOneDec().Add(borrowRatePerBlock)
+
+		reserveDelta := pool.Tranches[i].TotalBorrowed.ToLegacyDec().Mul(borrowRatePerBlock).MulInt(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).QuoInt(sdkmath.NewInt(1000)).TruncateInt()
 
 		pool.Tranches[i].BorrowIndex = pool.Tranches[i].BorrowIndex.Mul(borrowIndexRatio)
 		pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.ToLegacyDec().Mul(borrowIndexRatio).TruncateInt()
+
+		pool.Tranches[i].TotalReserve = pool.Tranches[i].TotalReserve.Add(reserveDelta)
 	}
 }
 
@@ -166,11 +172,13 @@ func (k Keeper) UpdatePool(ctx sdk.Context, pool *types.LendingPool) {
 	// update all tranches
 	k.UpdatePoolTranches(ctx, pool)
 
-	// reset total borrowed amount
+	// reset total borrowed and total reserve
 	pool.TotalBorrowed = sdkmath.ZeroInt()
+	pool.TotalReserve = sdkmath.ZeroInt()
 
 	for _, tranche := range pool.Tranches {
 		pool.TotalBorrowed = pool.TotalBorrowed.Add(tranche.TotalBorrowed)
+		pool.TotalReserve = pool.TotalReserve.Add(tranche.TotalReserve)
 	}
 }
 
