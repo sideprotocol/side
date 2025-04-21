@@ -48,10 +48,12 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			k.Logger(ctx).Info("failed to get price", "err", err)
 		}
 
+		pool := k.GetPool(ctx, loan.PoolId)
+
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 
 		// check if the loan has defaulted
-		if ctx.BlockTime().Unix() >= types.GetDefaultLiquidationDate(loan.MaturityTime) {
+		if ctx.BlockTime().Unix() >= loan.MaturityTime {
 			liquidationInterest = loan.Interest
 			loan.Status = types.LoanStatus_Defaulted
 
@@ -99,11 +101,12 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				Debtor:                       loan.Borrower,
 				DCM:                          loan.DCM,
 				CollateralAmount:             sdk.NewCoin("sat", loan.CollateralAmount),
-				DebtAmount:                   sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
+				ActualCollateralAmount:       sdk.NewCoin("sat", sdkmath.NewInt(types.GetLiquidationCetOutput(liquidationCet))),
+				DebtAmount:                   sdk.NewCoin(pool.Supply.Denom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
 				LiquidatedPrice:              currentPrice,
 				LiquidatedTime:               ctx.BlockTime(),
 				LiquidatedCollateralAmount:   sdk.NewCoin("sat", sdkmath.ZeroInt()),
-				LiquidatedDebtAmount:         sdk.NewCoin(k.GetPool(ctx, loan.PoolId).Supply.Denom, sdkmath.ZeroInt()),
+				LiquidatedDebtAmount:         sdk.NewCoin(pool.Supply.Denom, sdkmath.ZeroInt()),
 				LiquidationBonusAmount:       sdk.NewCoin("sat", sdkmath.ZeroInt()),
 				ProtocolLiquidationFee:       sdk.NewCoin("sat", sdkmath.ZeroInt()),
 				UnliquidatedCollateralAmount: sdk.NewCoin("sat", sdkmath.ZeroInt()),
@@ -320,26 +323,13 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 	}
 }
 
-// updatePools updates all active pools
+// updatePools updates all active pools at the beginning of each block
 func updatePools(ctx sdk.Context, k keeper.Keeper) {
 	// get all active pools
 	pools := k.GetPools(ctx, types.PoolStatus_ACTIVE)
 
-	// get blocks per year
-	blocksPerYear := k.GetBlocksPerYear(ctx)
-
 	for _, pool := range pools {
-		// update total borrowed amount every block
-		//
-		// Formula:
-		//
-		// borrowIndex_new = borrowIndex_old * (1 + borrowAPR*(1-reserve factor)/blocksPerYear)
-		// totalBorrowed_new = totalBorrowed_old * borrowIndex_new/borrowIndex_old
-
-		borrowIndexRatioNumerator := int64(1000*1000*blocksPerYear) + int64(pool.Config.BorrowAPR*(1000-pool.Config.ReserveFactor))
-		borrowIndexRatioDenominator := int64(1000 * 1000 * blocksPerYear)
-
-		pool.TotalBorrowed = pool.TotalBorrowed.Mul(sdkmath.NewInt(borrowIndexRatioNumerator).Quo(sdkmath.NewInt(borrowIndexRatioDenominator)))
+		k.UpdatePool(ctx, pool)
 
 		k.SetPool(ctx, pool)
 	}

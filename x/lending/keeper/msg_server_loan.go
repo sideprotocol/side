@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"time"
 
 	btcschnorr "github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -43,25 +44,29 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
 	}
 
-	if msg.BorrowAmount.Amount.LT(poolConfig.MinBorrowAmount) {
-		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "borrow amount can not be less than min borrow amount")
+	if err := types.CheckBorrowAmountLimit(pool, msg.BorrowAmount.Amount); err != nil {
+		return nil, err
+	}
+
+	if err := types.CheckBorrowCap(pool, msg.BorrowAmount.Amount); err != nil {
+		return nil, err
 	}
 
 	if msg.BorrowAmount.Amount.GT(pool.AvailableAmount) {
 		return nil, types.ErrInsufficientLiquidity
 	}
 
-	if err := types.CheckBorrowCap(pool, msg.BorrowAmount.Amount); err != nil {
-		return nil, types.ErrBorrowCapExceeded
+	trancheConfig, found := types.GetTrancheConfig(poolConfig.Tranches, msg.Maturity)
+	if !found {
+		return nil, errorsmod.Wrap(types.ErrInvalidMaturity, "maturity does not exist")
 	}
 
-	if err := types.CheckDebtCeiling(pool, msg.BorrowAmount.Amount); err != nil {
-		return nil, types.ErrDebtCeilingExceeded
-	}
+	tranche, _ := types.GetTranche(pool.Tranches, msg.Maturity)
 
-	duration := msg.MaturityTime - ctx.BlockTime().Unix()
-	if duration < m.MinLoanDuration(ctx) || duration > m.MaxLoanDuration(ctx) {
-		return nil, types.ErrInvalidLoanDuration
+	if types.HasRequestFee(pool) {
+		if err := m.bankKeeper.SendCoins(ctx, sdk.MustAccAddressFromBech32(msg.Borrower), sdk.MustAccAddressFromBech32(m.RequestFeeCollector(ctx)), sdk.NewCoins(poolConfig.RequestFee)); err != nil {
+			return nil, err
+		}
 	}
 
 	if !m.dlcKeeper.HasDCM(ctx, msg.DCMId) {
@@ -70,7 +75,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	dcm := m.dlcKeeper.GetDCM(ctx, msg.DCMId)
 
-	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, msg.MaturityTime, msg.MaturityTime+m.FinalTimeoutDuration(ctx))
+	originMaturityTime := ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity) * time.Second).Unix()
+	maturityTime := types.GetMaturityTime(originMaturityTime)
+	finalTimeout := originMaturityTime + m.FinalTimeoutDuration(ctx)
+
+	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, finalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -79,12 +88,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
-	defaultLiquidationDate := types.GetDefaultLiquidationDate(msg.MaturityTime)
-	if !m.dlcKeeper.HasEventByDate(ctx, defaultLiquidationDate) {
+	if !m.dlcKeeper.HasEventByDate(ctx, maturityTime) {
 		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "default liquidation event does not exist")
 	}
 
-	defaultLiquidationEvent := m.dlcKeeper.GetEventByDate(ctx, defaultLiquidationDate)
+	defaultLiquidationEvent := m.dlcKeeper.GetEventByDate(ctx, maturityTime)
 
 	repaymentEvent := m.dlcKeeper.GetAvailableLendingEvent(ctx)
 	if repaymentEvent == nil {
@@ -96,24 +104,29 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	repaymentEvent.Outcomes = []string{vault}
 	m.dlcKeeper.SetEvent(ctx, repaymentEvent)
 
-	interest := msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.BorrowAPR))).Mul(sdkmath.NewInt(int64(msg.MaturityTime - ctx.BlockTime().Unix()))).Quo(sdkmath.NewInt(int64(types.OneYear))).Quo(types.Permille)
-	protocolFee := interest.Mul(sdkmath.NewInt(int64(poolConfig.ReserveFactor))).Quo(types.Permille)
+	interest := types.GetTotalInterest(msg.BorrowAmount.Amount, trancheConfig.Maturity, trancheConfig.BorrowAPR, m.GetBlocksPerYear(ctx))
+	protocolFee := types.GetProtocolFee(interest, poolConfig.ReserveFactor)
 
 	loan := &types.Loan{
 		VaultAddress:              vault,
 		Borrower:                  msg.Borrower,
 		BorrowerPubKey:            msg.BorrowerPubkey,
 		DCM:                       dcm.Pubkey,
-		MaturityTime:              msg.MaturityTime,
-		FinalTimeout:              msg.MaturityTime + m.FinalTimeoutDuration(ctx),
+		MaturityTime:              maturityTime,
+		FinalTimeout:              finalTimeout,
 		PoolId:                    msg.PoolId,
 		BorrowAmount:              msg.BorrowAmount,
+		RequestFee:                poolConfig.RequestFee,
 		OriginationFee:            poolConfig.OriginationFee,
 		Interest:                  interest,
 		ProtocolFee:               protocolFee,
-		Term:                      duration,
+		Maturity:                  trancheConfig.Maturity,
+		BorrowAPR:                 trancheConfig.BorrowAPR,
+		MinMaturity:               trancheConfig.Maturity * int64(trancheConfig.MinMaturityFactor) / 1000,
+		StartBorrowIndex:          tranche.BorrowIndex,
 		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
 		RepaymentEventId:          repaymentEvent.Id,
+		Referrer:                  msg.Referrer,
 		CreateAt:                  ctx.BlockTime(),
 		Status:                    types.LoanStatus_Requested,
 	}
@@ -153,13 +166,20 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
-	fundTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
-	depositTxHash := fundTx.UnsignedTx.TxHash().String()
-
+	depositTxs := []*psbt.Packet{}
+	depositTxHashes := []string{}
 	collateralAmount := sdkmath.ZeroInt()
-	for _, out := range fundTx.UnsignedTx.TxOut {
-		if bytes.Equal(out.PkScript, vaultPkScript) {
-			collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
+
+	for _, depositTx := range msg.DepositTxs {
+		p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(depositTx)), true)
+
+		depositTxs = append(depositTxs, p)
+		depositTxHashes = append(depositTxHashes, p.UnsignedTx.TxHash().String())
+
+		for _, out := range p.UnsignedTx.TxOut {
+			if bytes.Equal(out.PkScript, vaultPkScript) {
+				collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
+			}
 		}
 	}
 
@@ -167,25 +187,27 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount can not be zero")
 	}
 
-	dlcMeta, err := types.BuildDLCMeta(fundTx, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
+	dlcMeta, err := types.BuildDLCMeta(depositTxs, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
 
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
-	if !m.HasDepositLog(ctx, depositTxHash) {
-		depositLog := &types.DepositLog{
-			Txid:         depositTxHash,
-			VaultAddress: loan.VaultAddress,
-			DepositTx:    msg.DepositTx,
-		}
+	for i, depositTx := range msg.DepositTxs {
+		if !m.HasDepositLog(ctx, depositTxHashes[i]) {
+			depositLog := &types.DepositLog{
+				Txid:         depositTxHashes[i],
+				VaultAddress: loan.VaultAddress,
+				DepositTx:    depositTx,
+			}
 
-		m.SetDepositLog(ctx, depositLog)
+			m.SetDepositLog(ctx, depositLog)
+		}
 	}
 
 	loan.CollateralAmount = collateralAmount
-	loan.DepositTxs = append(loan.DepositTxs, depositTxHash)
+	loan.AuthorizationDeposits = append(loan.AuthorizationDeposits, types.AuthorizationDeposits{DepositTxs: depositTxHashes})
 
 	var errRejected error
 
@@ -200,7 +222,6 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 				sdk.NewEvent(
 					types.EventTypeReject,
 					sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
-					sdk.NewAttribute(types.AttributeKeyDepositTxHash, depositTxHash),
 				),
 			)
 		}
@@ -221,12 +242,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
-	if err := types.CheckDebtCeiling(pool, loan.BorrowAmount.Amount); err != nil {
-		errRejected = types.ErrDebtCeilingExceeded
-		return nil, nil
-	}
-
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold)
 	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 		return nil, nil
@@ -240,7 +256,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	defaultLiquidationEvent := m.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
 
-	if err := types.VerifyCets(fundTx, loan.BorrowerPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+	if err := types.VerifyCets(depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
 		return nil, err
 	}
 
@@ -255,9 +271,9 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
-	// if deposit tx already verified, approve the loan
-	if m.GetDepositLog(ctx, depositTxHash).Verified {
-		if err := m.HandleApproval(ctx, msg.Borrower, depositTxHash, loan); err != nil {
+	// if all deposit txs already verified, approve the loan
+	if m.DepositTxsVerified(ctx, depositTxHashes) {
+		if err := m.HandleApproval(ctx, msg.Borrower, loan); err != nil {
 			errRejected = err
 			return nil, nil
 		}
@@ -296,9 +312,9 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	depositTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
 	depositTxHash := depositTx.UnsignedTx.TxHash().String()
 
-	depositTxAlreadyExists := true
+	authorized := true
 	if !m.HasDepositLog(ctx, depositTxHash) {
-		depositTxAlreadyExists = false
+		authorized = false
 
 		depositLog := &types.DepositLog{
 			Txid:         depositTxHash,
@@ -317,7 +333,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	depositLog.Verified = true
 	m.SetDepositLog(ctx, depositLog)
 
-	// cets submission rejected
+	// cet authorization rejected
 	if loan.Status == types.LoanStatus_Rejected {
 		return nil, nil
 	}
@@ -353,44 +369,23 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, nil
 	}
 
-	if err := types.CheckDebtCeiling(pool, loan.BorrowAmount.Amount); err != nil {
-		errRejected = types.ErrDebtCeilingExceeded
-		return nil, nil
-	}
-
-	liquidationPrice := sdkmath.ZeroInt()
-
-	// loan requested
-	if !depositTxAlreadyExists {
-		vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
-
-		collateralAmount := sdkmath.ZeroInt()
-		for _, out := range depositTx.UnsignedTx.TxOut {
-			if bytes.Equal(out.PkScript, vaultPkScript) {
-				collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
-			}
-
-			poolConfig := m.GetPool(ctx, loan.PoolId).Config
-			liquidationPrice = types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.MaturityTime-loan.CreateAt.Unix(), poolConfig.BorrowAPR, poolConfig.LiquidationThreshold)
+	// check liquidation price if cet authorized
+	if authorized {
+		currentPrice, err := m.GetPrice(ctx, "BTCUSD")
+		if err != nil {
+			return nil, err
 		}
-	} else {
-		liquidationPrice = loan.LiquidationPrice
+
+		// check if liquidation price reached
+		if currentPrice.LTE(loan.LiquidationPrice.ToLegacyDec()) {
+			errRejected = types.ErrLiquidationPriceReached
+			return nil, nil
+		}
 	}
 
-	currentPrice, err := m.GetPrice(ctx, "BTCUSD")
-	if err != nil {
-		return nil, err
-	}
-
-	// check if liquidation price reached
-	if currentPrice.LTE(liquidationPrice.ToLegacyDec()) {
-		errRejected = types.ErrLiquidationPriceReached
-		return nil, nil
-	}
-
-	// cets submitted
-	if depositTxAlreadyExists {
-		if err := m.HandleApproval(ctx, msg.Relayer, depositTxHash, loan); err != nil {
+	// approve loan if cet authorized and all deposit txs verified
+	if authorized && m.DepositTxsVerified(ctx, loan.AuthorizationDeposits[len(loan.AuthorizationDeposits)-1].DepositTxs) {
+		if err := m.HandleApproval(ctx, msg.Relayer, loan); err != nil {
 			errRejected = err
 			return nil, nil
 		}
@@ -521,6 +516,10 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	loan := m.GetLoan(ctx, msg.LoanId)
 	if loan.Status != types.LoanStatus_Open {
 		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not open")
+	}
+
+	if ctx.BlockTime().Unix()-loan.CreateAt.Unix() < loan.MinMaturity {
+		return nil, types.ErrMinMaturityNotReached
 	}
 
 	interest := m.GetCurrentInterest(ctx, loan)

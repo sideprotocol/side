@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"time"
-
 	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -148,6 +146,23 @@ func (k Keeper) GetDepositLog(ctx sdk.Context, txid string) *types.DepositLog {
 	return &depositLog
 }
 
+// DepositTxsVerified returns true if all deposit txs verified, false otherwise
+func (k Keeper) DepositTxsVerified(ctx sdk.Context, txids []string) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	for _, txid := range txids {
+		var depositLog types.DepositLog
+		bz := store.Get(types.DepositLogKey(txid))
+		k.cdc.MustUnmarshal(bz, &depositLog)
+
+		if !depositLog.Verified {
+			return false
+		}
+	}
+
+	return true
+}
+
 // SetRepayment sets the given repayment
 func (k Keeper) SetRepayment(ctx sdk.Context, repayment *types.Repayment) {
 	store := ctx.KVStore(k.storeKey)
@@ -202,6 +217,14 @@ func (k Keeper) GetCancellation(ctx sdk.Context, loanId string) *types.Cancellat
 	return &cancellation
 }
 
+// GetCurrentBorrowIndex gets the current borrow index of the given loan
+// Assume that the loan maturity exists in the pool tranches
+func (k Keeper) GetCurrentBorrowIndex(ctx sdk.Context, loan *types.Loan) sdkmath.LegacyDec {
+	tranche, _ := types.GetTranche(k.GetPool(ctx, loan.PoolId).Tranches, loan.Maturity)
+
+	return tranche.BorrowIndex
+}
+
 // GetCurrentInterest gets the current interest of the given loan
 func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 	var interest sdkmath.Int
@@ -216,10 +239,10 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 
 	case types.LoanStatus_Liquidated:
 		liquidation := k.liquidationKeeper.GetLiquidation(ctx, loan.LiquidationId)
-		interest = types.GetInterest(loan.Interest, time.Duration(loan.Term), loan.CreateAt.Unix(), liquidation.LiquidatedTime.Unix())
+		interest = liquidation.DebtAmount.Amount.Sub(loan.BorrowAmount.Amount)
 
 	default:
-		interest = types.GetInterest(loan.Interest, time.Duration(loan.Term), loan.CreateAt.Unix(), ctx.BlockTime().Unix())
+		interest = types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, k.GetCurrentBorrowIndex(ctx, loan))
 	}
 
 	return sdk.NewCoin(loan.BorrowAmount.Denom, interest)

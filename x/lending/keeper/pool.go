@@ -80,25 +80,106 @@ func (k Keeper) IteratePools(ctx sdk.Context, cb func(pool *types.LendingPool) (
 }
 
 // AfterPoolBorrowed is the hook which is invoked after the loan is disbursed
-func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, amount sdk.Coin) {
+func (k Keeper) AfterPoolBorrowed(ctx sdk.Context, poolId string, maturity int64, amount sdk.Coin) {
 	pool := k.GetPool(ctx, poolId)
 
 	pool.AvailableAmount = pool.AvailableAmount.Sub(amount.Amount)
+	pool.BorrowedAmount = pool.BorrowedAmount.Add(amount.Amount)
 	pool.TotalBorrowed = pool.TotalBorrowed.Add(amount.Amount)
+
+	for i, tranche := range pool.Tranches {
+		if tranche.Maturity == maturity {
+			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Add(amount.Amount)
+			break
+		}
+	}
 
 	k.SetPool(ctx, pool)
 }
 
 // AfterPoolRepaid is the hook which is invoked after the loan is repaid
-func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, amount sdk.Coin, interest sdkmath.Int, protocolFee sdkmath.Int) {
+func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, amount sdk.Coin, interest sdkmath.Int, protocolFee sdkmath.Int, actualProtocolFee sdkmath.Int) {
 	pool := k.GetPool(ctx, poolId)
 
+	repaidAmount := amount.Amount.Add(interest)
+	actualRepaidAmount := repaidAmount.Sub(protocolFee)
+
 	pool.Supply = pool.Supply.AddAmount(interest).SubAmount(protocolFee)
-	pool.AvailableAmount = pool.AvailableAmount.Add(amount.Amount).Add(interest).Sub(protocolFee)
-	pool.TotalBorrowed = pool.TotalBorrowed.Sub(amount.Amount)
-	pool.TotalReserves = pool.TotalReserves.Add(protocolFee)
+	pool.AvailableAmount = pool.AvailableAmount.Add(actualRepaidAmount)
+	pool.BorrowedAmount = pool.BorrowedAmount.Sub(amount.Amount)
+	pool.TotalBorrowed = pool.TotalBorrowed.Sub(repaidAmount)
+	pool.ReserveAmount = pool.ReserveAmount.Add(actualProtocolFee)
+	pool.TotalReserve = pool.TotalReserve.Sub(protocolFee)
+
+	for i, tranche := range pool.Tranches {
+		if tranche.Maturity == maturity {
+			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(repaidAmount)
+			break
+		}
+	}
+
+	k.NormalizePool(ctx, pool)
 
 	k.SetPool(ctx, pool)
+}
+
+// DecreaseTotalBorrowed decreases total borrowed by the given amount for the specified pool
+func (k Keeper) DecreaseTotalBorrowed(ctx sdk.Context, poolId string, maturity int64, amount sdkmath.Int) {
+	pool := k.GetPool(ctx, poolId)
+
+	pool.TotalBorrowed = pool.TotalBorrowed.Sub(amount)
+
+	for i, tranche := range pool.Tranches {
+		if tranche.Maturity == maturity {
+			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(amount)
+			break
+		}
+	}
+
+	k.NormalizePool(ctx, pool)
+
+	k.SetPool(ctx, pool)
+}
+
+// UpdatePoolTranches updates total borrowed amount for each tranche at the beginning of each block
+//
+// Formula:
+//
+// borrow rate = borrowAPR / blocksPerYear * (1-reserve factor)
+// borrowIndex_new = borrowIndex_old * (1+borrow rate)
+// totalBorrowed_new = totalBorrowed_old * borrowIndex_new/borrowIndex_old
+func (k Keeper) UpdatePoolTranches(ctx sdk.Context, pool *types.LendingPool) {
+	// get blocks per year
+	blocksPerYear := k.GetBlocksPerYear(ctx)
+
+	for i, tranche := range pool.Tranches {
+		trancheConfig, _ := types.GetTrancheConfig(pool.Config.Tranches, tranche.Maturity)
+
+		borrowRatePerBlock := sdkmath.LegacyNewDec(int64(trancheConfig.BorrowAPR)).Quo(sdkmath.LegacyNewDec(1000)).Quo(sdkmath.LegacyNewDec(int64(blocksPerYear)))
+		borrowIndexRatio := sdkmath.LegacyOneDec().Add(borrowRatePerBlock)
+
+		reserveDelta := pool.Tranches[i].TotalBorrowed.ToLegacyDec().Mul(borrowRatePerBlock).MulInt(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).QuoInt(sdkmath.NewInt(1000)).TruncateInt()
+
+		pool.Tranches[i].BorrowIndex = pool.Tranches[i].BorrowIndex.Mul(borrowIndexRatio)
+		pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.ToLegacyDec().Mul(borrowIndexRatio).TruncateInt()
+
+		pool.Tranches[i].TotalReserve = pool.Tranches[i].TotalReserve.Add(reserveDelta)
+	}
+}
+
+// UpdatePool updates total borrowed amount for the given pool at the beginning of each block
+func (k Keeper) UpdatePool(ctx sdk.Context, pool *types.LendingPool) {
+	// update all tranches
+	k.UpdatePoolTranches(ctx, pool)
+
+	// reset total borrowed and total reserve
+	pool.TotalBorrowed = sdkmath.ZeroInt()
+	pool.TotalReserve = sdkmath.ZeroInt()
+
+	for _, tranche := range pool.Tranches {
+		pool.TotalBorrowed = pool.TotalBorrowed.Add(tranche.TotalBorrowed)
+		pool.TotalReserve = pool.TotalReserve.Add(tranche.TotalReserve)
+	}
 }
 
 // UpdatePoolStatus updates the pool status with the given new config
@@ -117,8 +198,19 @@ func (k Keeper) UpdatePoolStatus(ctx sdk.Context, pool *types.LendingPool, newCo
 	default:
 		return
 	}
+}
 
-	k.SetPool(ctx, pool)
+// NormalizePool normalizes the given pool
+func (k Keeper) NormalizePool(ctx sdk.Context, pool *types.LendingPool) {
+	if pool.TotalBorrowed.IsNegative() {
+		pool.TotalBorrowed = sdkmath.ZeroInt()
+	}
+
+	for i := range pool.Tranches {
+		if pool.Tranches[i].TotalBorrowed.IsNegative() {
+			pool.Tranches[i].TotalBorrowed = sdkmath.ZeroInt()
+		}
+	}
 }
 
 // GetSTokenAmount calculates the sToken amount from the given deposit amount

@@ -53,6 +53,7 @@ func (k Keeper) HandleNonce(ctx sdk.Context, oraclePubKey string, nonce string, 
 		Nonce:        nonce,
 		Pubkey:       oraclePubKey,
 		HasTriggered: false,
+		OutcomeIndex: types.DefaultOutcomeIndex,
 		PublishAt:    ctx.BlockTime(),
 	}
 

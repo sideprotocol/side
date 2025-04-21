@@ -103,9 +103,17 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loanId strin
 // HandleLiquidatedDebt handles the liquidated debt for the liquidated loan
 func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin) error {
 	loan := k.GetLoan(ctx, loanId)
+	pool := k.GetPool(ctx, loan.PoolId)
 
 	interest := k.GetCurrentInterest(ctx, loan).Amount
-	protocolFee := interest.Mul(sdkmath.NewInt(int64(k.GetPool(ctx, loan.PoolId).Config.ReserveFactor))).Quo(sdkmath.NewInt(1000))
+	protocolFee := types.GetProtocolFee(interest, pool.Config.ReserveFactor)
+
+	referralFee := sdkmath.ZeroInt()
+	actualProtocolFee := protocolFee
+	if protocolFee.IsPositive() && types.HasReferralFee(loan, pool) {
+		referralFee = protocolFee.Mul(sdkmath.NewInt(int64(pool.Config.ReferralFeeFactor))).Quo(types.Permille)
+		actualProtocolFee = protocolFee.Sub(referralFee)
+	}
 
 	if debtAmount.Amount.LTE(interest) {
 		// TODO
@@ -116,11 +124,35 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, protocolFee))); err != nil {
-		return err
+	if actualProtocolFee.IsPositive() {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx)), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, actualProtocolFee))); err != nil {
+			return err
+		}
 	}
 
-	k.AfterPoolRepaid(ctx, loan.PoolId, debtAmount.SubAmount(interest), interest, protocolFee)
+	if referralFee.IsPositive() {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(loan.Referrer), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, referralFee))); err != nil {
+			return err
+		}
+	}
+
+	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, debtAmount.SubAmount(interest), interest, protocolFee, actualProtocolFee)
+
+	k.DeductLiquidationAccruedInterest(ctx, loan)
 
 	return nil
+}
+
+// DeductLiquidationAccruedInterest deducts the interest accrued during the loan liquidation from total borrowed
+func (k Keeper) DeductLiquidationAccruedInterest(ctx sdk.Context, loan *types.Loan) {
+	interest := k.GetLiquidationAccruedInterest(ctx, loan)
+
+	k.DecreaseTotalBorrowed(ctx, loan.PoolId, loan.Maturity, interest)
+}
+
+// GetLiquidationAccruedInterest gets the current accrued interest during the loan liquidation
+func (k Keeper) GetLiquidationAccruedInterest(ctx sdk.Context, loan *types.Loan) sdkmath.Int {
+	currentTotalInterest := types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, k.GetCurrentBorrowIndex(ctx, loan))
+
+	return currentTotalInterest.Sub(k.GetCurrentInterest(ctx, loan).Amount)
 }

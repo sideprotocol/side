@@ -20,8 +20,8 @@ import (
 )
 
 // BuildDLCMeta creates the dlc meta from the given params
-func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string, borrowerPubKey string, dcmPubKey string, muturityTime int64, finalTimeout int64) (*DLCMeta, error) {
-	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
+func BuildDLCMeta(depositTxs []*psbt.Packet, vaultPkScript []byte, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string, borrowerPubKey string, dcmPubKey string, muturityTime int64, finalTimeout int64) (*DLCMeta, error) {
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet s
 		return nil, err
 	}
 
-	timeoutRefundTx, err := CreateTimeoutRefundTransaction(depositTx, vaultPkScript, borrowerPkScript, internalKey.SerializeCompressed(), [][]byte{multisigScript, timeoutRefundScript}, 1)
+	timeoutRefundTx, err := CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey.SerializeCompressed(), [][]byte{multisigScript, timeoutRefundScript}, 1)
 	if err != nil {
 		return nil, err
 	}
@@ -115,16 +115,16 @@ func BuildDLCMeta(depositTx *psbt.Packet, vaultPkScript []byte, liquidationCet s
 			Tx:                 repaymentCet,
 			BorrowerSignatures: repaymentSignatures,
 		},
-		VaultUtxos:          []*btcbridgetypes.UTXO{vaultUtxo},
+		TimeoutRefundTx:     timeoutRefundTx,
+		VaultUtxos:          vaultUtxos,
 		InternalKey:         hex.EncodeToString(internalKey.SerializeCompressed()),
 		MultisigScript:      hex.EncodeToString(multisigScript),
 		TimeoutRefundScript: hex.EncodeToString(timeoutRefundScript),
-		TimeoutRefundTx:     timeoutRefundTx,
 	}, nil
 }
 
 // VerifyCets verifies the given cets
-func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey string, liquidationEvent *dlctypes.DLCEvent, defaultLiquidationEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
+func VerifyCets(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, dcmPubKey string, liquidationEvent *dlctypes.DLCEvent, defaultLiquidationEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
 	liquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(liquidationEvent, 0)
 	if err != nil {
 		return err
@@ -135,15 +135,15 @@ func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey string,
 		return err
 	}
 
-	if err := VerifyLiquidationCet(depositTx, borrowerPubKey, dcmPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint); err != nil {
+	if err := VerifyLiquidationCet(depositTxs, vaultPkScript, borrowerPubKey, dcmPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint); err != nil {
 		return err
 	}
 
-	if err := VerifyLiquidationCet(depositTx, borrowerPubKey, dcmPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint); err != nil {
+	if err := VerifyLiquidationCet(depositTxs, vaultPkScript, borrowerPubKey, dcmPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint); err != nil {
 		return err
 	}
 
-	if err := VerifyRepaymentCet(depositTx, borrowerPubKey, dcmPubKey, repaymentCet, repaymentSignatures); err != nil {
+	if err := VerifyRepaymentCet(depositTxs, vaultPkScript, borrowerPubKey, dcmPubKey, repaymentCet, repaymentSignatures); err != nil {
 		return err
 	}
 
@@ -151,21 +151,40 @@ func VerifyCets(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey string,
 }
 
 // VerifyLiquidationCet verifies the given liquidation cet and corresponding adaptor signatures
-func VerifyLiquidationCet(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte) error {
+func VerifyLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, dcmPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte) error {
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
+	if err != nil {
+		return err
+	}
+
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCET)), true)
 	if err != nil {
 		return ErrInvalidCET
 	}
 
-	depositTxHash := depositTx.UnsignedTx.TxHash()
+	if len(p.UnsignedTx.TxIn) != len(vaultUtxos) {
+		return errorsmod.Wrap(ErrInvalidCET, "incorrect input number")
+	}
 
-	for i, input := range p.UnsignedTx.TxIn {
-		if !input.PreviousOutPoint.Hash.IsEqual(&depositTxHash) {
+	for i, txIn := range p.UnsignedTx.TxIn {
+		if txIn.PreviousOutPoint.Hash.String() != vaultUtxos[i].Txid {
 			return errorsmod.Wrap(ErrInvalidCET, "incorrect previous tx hash")
+		}
+
+		if txIn.PreviousOutPoint.Index != uint32(vaultUtxos[i].Vout) {
+			return errorsmod.Wrap(ErrInvalidCET, "incorrect previous tx out index")
 		}
 
 		if p.Inputs[i].WitnessUtxo == nil {
 			return errorsmod.Wrap(ErrInvalidCET, "missing witness utxo")
+		}
+
+		if !bytes.Equal(p.Inputs[i].WitnessUtxo.PkScript, vaultPkScript) {
+			return errorsmod.Wrap(ErrInvalidCET, "mismatched witness utxo pk script")
+		}
+
+		if p.Inputs[i].WitnessUtxo.Value != int64(vaultUtxos[i].Amount) {
+			return errorsmod.Wrap(ErrInvalidCET, "mismatched witness utxo value")
 		}
 	}
 
@@ -203,21 +222,40 @@ func VerifyLiquidationCet(depositTx *psbt.Packet, borrowerPubKey string, dcmPubK
 }
 
 // VerifyRepaymentCet verifies the given repayment cet and corresponding signatures
-func VerifyRepaymentCet(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey string, repaymentCet string, signatures []string) error {
+func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, dcmPubKey string, repaymentCet string, signatures []string) error {
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
+	if err != nil {
+		return err
+	}
+
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet)), true)
 	if err != nil {
 		return ErrInvalidCET
 	}
 
-	depositTxHash := depositTx.UnsignedTx.TxHash()
+	if len(p.UnsignedTx.TxIn) != len(vaultUtxos) {
+		return errorsmod.Wrap(ErrInvalidCET, "incorrect input number")
+	}
 
-	for i, input := range p.UnsignedTx.TxIn {
-		if !input.PreviousOutPoint.Hash.IsEqual(&depositTxHash) {
+	for i, txIn := range p.UnsignedTx.TxIn {
+		if txIn.PreviousOutPoint.Hash.String() != vaultUtxos[i].Txid {
 			return errorsmod.Wrap(ErrInvalidCET, "incorrect previous tx hash")
+		}
+
+		if txIn.PreviousOutPoint.Index != uint32(vaultUtxos[i].Vout) {
+			return errorsmod.Wrap(ErrInvalidCET, "incorrect previous tx out index")
 		}
 
 		if p.Inputs[i].WitnessUtxo == nil {
 			return errorsmod.Wrap(ErrInvalidCET, "missing witness utxo")
+		}
+
+		if !bytes.Equal(p.Inputs[i].WitnessUtxo.PkScript, vaultPkScript) {
+			return errorsmod.Wrap(ErrInvalidCET, "mismatched witness utxo pk script")
+		}
+
+		if p.Inputs[i].WitnessUtxo.Value != int64(vaultUtxos[i].Amount) {
+			return errorsmod.Wrap(ErrInvalidCET, "mismatched witness utxo value")
 		}
 	}
 
@@ -255,13 +293,13 @@ func VerifyRepaymentCet(depositTx *psbt.Packet, borrowerPubKey string, dcmPubKey
 }
 
 // CreateLiquidationCET creates the liquidation cet
-func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
-	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
+func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
 		return "", err
 	}
 
-	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, dcmPkScript, feeRate)
+	p, err := BuildPsbt(vaultUtxos, dcmPkScript, feeRate)
 	if err != nil {
 		return "", err
 	}
@@ -299,13 +337,13 @@ func CreateLiquidationCET(depositTx *psbt.Packet, vaultPkScript []byte, dcmPkScr
 }
 
 // CreateRepaymentCet creates the repayment cet
-func CreateRepaymentCet(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
-	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
+func CreateRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
 		return "", err
 	}
 
-	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, borrowerPkScript, feeRate)
+	p, err := BuildPsbt(vaultUtxos, borrowerPkScript, feeRate)
 	if err != nil {
 		return "", err
 	}
@@ -343,13 +381,13 @@ func CreateRepaymentCet(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPk
 }
 
 // CreateDefaultLiquidationCet creates the default liquidation cet
-func CreateDefaultLiquidationCet(depositTx *psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
-	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
+func CreateDefaultLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
 		return "", err
 	}
 
-	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, dcmPkScript, feeRate)
+	p, err := BuildPsbt(vaultUtxos, dcmPkScript, feeRate)
 	if err != nil {
 		return "", err
 	}
@@ -387,13 +425,13 @@ func CreateDefaultLiquidationCet(depositTx *psbt.Packet, vaultPkScript []byte, d
 }
 
 // CreateTimeoutRefundTransaction creates the timeout refund tx
-func CreateTimeoutRefundTransaction(depositTx *psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
-	vaultUtxo, err := getVaultUTXO(depositTx, vaultPkScript)
+func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
 		return "", err
 	}
 
-	p, err := BuildPsbt([]*btcbridgetypes.UTXO{vaultUtxo}, borrowerPkScript, feeRate)
+	p, err := BuildPsbt(vaultUtxos, borrowerPkScript, feeRate)
 	if err != nil {
 		return "", err
 	}
@@ -593,6 +631,14 @@ func GetRepaymentCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 	return sigHashes, nil
 }
 
+// GetLiquidationCetOutput gets the output value for the given liquidation cet
+// Assume that the given cet is valid
+func GetLiquidationCetOutput(liquidationCet string) int64 {
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCet)), true)
+
+	return p.UnsignedTx.TxOut[0].Value
+}
+
 // GetDLCTapscripts gets the tap scripts from the given dlc meta
 // Assume that the dlc meta is valid
 func GetDLCTapscripts(dlcMeta *DLCMeta) [][]byte {
@@ -602,30 +648,46 @@ func GetDLCTapscripts(dlcMeta *DLCMeta) [][]byte {
 	return [][]byte{multisigScript, timeoutRefundScript}
 }
 
-// getVaultOutIndex returns the index of the vault output
-func getVaultOutIndex(depositTx *psbt.Packet, vaultPkScript []byte) (int, error) {
+// getVaultUtxosFromDepositTx gets vault utxos from the given deposit tx
+func getVaultUtxosFromDepositTx(depositTx *psbt.Packet, vaultPkScript []byte) ([]*btcbridgetypes.UTXO, error) {
+	utxos := []*btcbridgetypes.UTXO{}
+
+	found := false
+
 	for i, out := range depositTx.UnsignedTx.TxOut {
 		if bytes.Equal(out.PkScript, vaultPkScript) {
-			return i, nil
+			utxo := &btcbridgetypes.UTXO{
+				Txid:         depositTx.UnsignedTx.TxHash().String(),
+				Vout:         uint64(i),
+				Amount:       uint64(out.Value),
+				PubKeyScript: out.PkScript,
+			}
+
+			utxos = append(utxos, utxo)
+
+			found = true
 		}
 	}
 
-	return 0, ErrInvalidDepositTx
-}
-
-// getVaultUTXO gets the vault utxo from the given params
-func getVaultUTXO(depositTx *psbt.Packet, vaultPkScript []byte) (*btcbridgetypes.UTXO, error) {
-	vaultOutIndex, err := getVaultOutIndex(depositTx, vaultPkScript)
-	if err != nil {
-		return nil, err
+	if !found {
+		return nil, ErrInvalidDepositTx
 	}
 
-	vaultOutput := depositTx.UnsignedTx.TxOut[vaultOutIndex]
+	return utxos, nil
+}
 
-	return &btcbridgetypes.UTXO{
-		Txid:         depositTx.UnsignedTx.TxHash().String(),
-		Vout:         uint64(vaultOutIndex),
-		Amount:       uint64(vaultOutput.Value),
-		PubKeyScript: vaultOutput.PkScript,
-	}, nil
+// getVaultUtxos gets the vault utxos from the given deposit txs
+func getVaultUtxos(depositTxs []*psbt.Packet, vaultPkScript []byte) ([]*btcbridgetypes.UTXO, error) {
+	utxos := []*btcbridgetypes.UTXO{}
+
+	for _, depositTx := range depositTxs {
+		vaultUtxos, err := getVaultUtxosFromDepositTx(depositTx, vaultPkScript)
+		if err != nil {
+			return nil, err
+		}
+
+		utxos = append(utxos, vaultUtxos...)
+	}
+
+	return utxos, nil
 }

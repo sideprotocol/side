@@ -4,6 +4,7 @@ package side.lending;
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "side/btcbridge/btcbridge.proto";
 
 option go_package = "github.com/sideprotocol/side/x/lending/types";
@@ -15,30 +16,42 @@ enum PoolStatus {
     PAUSED = 2;
 }
 
-// Lending pool config
+// Pool tranche config
+message PoolTrancheConfig {
+  // maturity duration in seconds
+  int64 maturity = 1;
+  // borrow apr permille
+  uint32 borrow_apr = 2 [(gogoproto.customname) = "BorrowAPR"];
+  // minimum maturity factor permille
+  uint32 min_maturity_factor = 3;
+}
+
+// Pool config
 message PoolConfig {
-    // borrow apr permille
-    uint32 borrow_apr = 1 [(gogoproto.customname) = "BorrowAPR"];
-    // reserve factor permille
-    uint32 reserve_factor = 2;
     // supply cap
-    string supply_cap = 3 [
+    string supply_cap = 1 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // borrow cap
-    string borrow_cap = 4 [
-      (gogoproto.customtype) = "cosmossdk.io/math.Int",
-      (gogoproto.nullable) = false
-    ];
-    // debt ceiling
-    string debt_ceiling = 5 [
+    string borrow_cap = 2 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // minimum amount to be borrowed
-    string min_borrow_amount = 6 [
+    string min_borrow_amount = 3 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // maximum amount to be borrowed
+    string max_borrow_amount = 4 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // tranches
+    repeated PoolTrancheConfig tranches = 5 [(gogoproto.nullable) = false];
+    // request fee
+    cosmos.base.v1beta1.Coin request_fee = 6 [
       (gogoproto.nullable) = false
     ];
     // origination fee
@@ -46,12 +59,38 @@ message PoolConfig {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
+    // reserve factor permille
+    uint32 reserve_factor = 8;
+    // referral fee factor permille
+    uint32 referral_fee_factor = 9;
     // maximum ltv percent
-    uint32 max_ltv = 8;
+    uint32 max_ltv = 10;
     // liquidation ltv percent
-    uint32 liquidation_threshold = 9;
+    uint32 liquidation_threshold = 11;
     // indicates if the pool is paused
-    bool paused = 10;
+    bool paused = 12;
+}
+
+// Pool tranche
+message PoolTranche {
+    // maturity duration
+    int64 maturity = 1;
+    // borrow index
+    string borrow_index = 2 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    // total borrowed
+    string total_borrowed = 3 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+     // total reserve
+    string total_reserve = 4 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
 }
 
 message LendingPool {
@@ -63,20 +102,29 @@ message LendingPool {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string total_borrowed = 4 [
+    string borrowed_amount = 4 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string total_reserves = 5 [
+    string total_borrowed = 5 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    cosmos.base.v1beta1.Coin total_stokens = 6 [
+    string reserve_amount = 6 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string total_reserve = 7 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    cosmos.base.v1beta1.Coin total_stokens = 8 [
       (gogoproto.nullable) = false,
       (gogoproto.customname) = "TotalSTokens"
     ];
-    PoolConfig config = 7 [(gogoproto.nullable) = false];
-    PoolStatus status = 8;
+    repeated PoolTranche tranches = 9 [(gogoproto.nullable) = false];
+    PoolConfig config = 10 [(gogoproto.nullable) = false];
+    PoolStatus status = 11;
 }
 
 // Loan Status
@@ -101,6 +149,11 @@ enum LoanStatus {
     Closed = 8;
 }
 
+// Deposits used for CET authorization
+message AuthorizationDeposits {
+  repeated string deposit_txs = 1;
+}
+
 message Loan {
     string vault_address = 1; // id
     string borrower = 2;
@@ -110,35 +163,44 @@ message Loan {
     int64 final_timeout = 6;
     string pool_id = 7;
     cosmos.base.v1beta1.Coin borrow_amount = 8 [(gogoproto.nullable) = false];
-    string origination_fee = 9 [
+    cosmos.base.v1beta1.Coin request_fee = 9 [(gogoproto.nullable) = false];
+    string origination_fee = 10 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string interest = 10 [
+    string interest = 11 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string protocol_fee = 11 [
+    string protocol_fee = 12 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    int64 term = 12;
-    string liquidation_price = 13 [
+    int64 maturity = 13;
+    uint32 borrow_apr = 14 [(gogoproto.customname) = "BorrowAPR"];
+    int64 min_maturity = 15;
+    string start_borrow_index = 16 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    string liquidation_price = 17 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_event_id = 14;
-    uint64 default_liquidation_event_id = 15;
-    uint64 repayment_event_id = 16;
-    repeated string deposit_txs = 17;
-    string collateral_amount = 18 [
+    uint64 liquidation_event_id = 18;
+    uint64 default_liquidation_event_id = 19;
+    uint64 repayment_event_id = 20;
+    repeated AuthorizationDeposits authorization_deposits = 21 [(gogoproto.nullable) = false];
+    string collateral_amount = 22 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_id = 19;
-    google.protobuf.Timestamp create_at = 20 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 21 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 22;
+    uint64 liquidation_id = 23;
+    string referrer = 24;
+    google.protobuf.Timestamp create_at = 25 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 26 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 27;
 }
 
 enum CetType {
@@ -174,11 +236,11 @@ message DLCMeta {
     LiquidationCet liquidation_cet = 1 [(gogoproto.nullable) = false]; 
     LiquidationCet default_liquidation_cet = 2 [(gogoproto.nullable) = false];
     RepaymentCet repayment_cet = 3 [(gogoproto.nullable) = false];
-    repeated side.btcbridge.UTXO vault_utxos = 4;
-    string internal_key = 5;
-    string multisig_script = 6;
-    string timeout_refund_script = 7;
-    string timeout_refund_tx = 8;
+    string timeout_refund_tx = 4;
+    repeated side.btcbridge.UTXO vault_utxos = 5;
+    string internal_key = 6;
+    string multisig_script = 7;
+    string timeout_refund_script = 8;
 }
 
 message DepositLog {

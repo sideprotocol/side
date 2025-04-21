@@ -10,9 +10,12 @@ import (
 	"github.com/sideprotocol/side/crypto/adaptor"
 )
 
-const (
+var (
 	// OneYear represents the seconds in one year
 	OneYear = 365 * 24 * 3600
+
+	// initial borrow index
+	InitialBorrowIndex = sdkmath.LegacyOneDec()
 )
 
 // GetExchangeRate calculates the sToken exchange rate according to the given params
@@ -26,18 +29,31 @@ func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, tota
 	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed)).Quo(totalSTokens.ToLegacyDec())
 }
 
-// GetInterest calculates the loan interest based on the given params
-func GetInterest(totalInterest sdkmath.Int, term time.Duration, startTime int64, destTime int64) sdkmath.Int {
-	elapsed := destTime - startTime
+// GetInterest calculates the loan interest based on the given borrow index
+func GetInterest(borrowAmount sdkmath.Int, startBorrowIndex sdkmath.LegacyDec, borrowIndex sdkmath.LegacyDec) sdkmath.Int {
+	return borrowAmount.ToLegacyDec().Mul(borrowIndex).Quo(startBorrowIndex).TruncateInt().Sub(borrowAmount)
+}
 
-	return totalInterest.Mul(sdkmath.NewInt(elapsed)).Quo(sdkmath.NewInt(int64(term)))
+// GetTotalInterest calculates the total loan interest based on the given params
+func GetTotalInterest(borrowAmount sdkmath.Int, maturity int64, borrowAPR uint32, blocksPerYear uint64) sdkmath.Int {
+	totalBlocks := uint64(maturity) * blocksPerYear / uint64(OneYear)
+
+	borrowRatePerBlock := sdkmath.LegacyNewDec(int64(borrowAPR)).Quo(sdkmath.LegacyNewDec(1000)).Quo(sdkmath.LegacyNewDec(int64(blocksPerYear)))
+	borrowIndexRatio := sdkmath.LegacyOneDec().Add(borrowRatePerBlock)
+
+	return borrowAmount.ToLegacyDec().Mul(borrowIndexRatio.Power(totalBlocks)).TruncateInt().Sub(borrowAmount)
+}
+
+// GetProtocolFee calculates the protocol fee based on the given interest and reserve factor
+func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
+	return interest.Mul(sdkmath.NewInt(int64(reserveFactor))).Quo(Permille)
 }
 
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
-func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int, term int64, borrowAPR uint32, lltv uint32) sdkmath.Int {
-	interest := borrowAmount.Mul(sdkmath.NewInt(int64(borrowAPR))).Mul(sdkmath.NewInt(term)).Quo(sdkmath.NewInt(OneYear)).Quo(Permille)
+func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32) sdkmath.Int {
+	interest := GetTotalInterest(borrowAmount, maturity, borrowAPR, blocksPerYear)
 	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewInt(100000000)).Mul(Percent).Quo(sdkmath.NewInt(int64(lltv))).Quo(collateralAmount).Quo(sdkmath.NewInt(1000000))
 
 	// price precision
@@ -46,13 +62,13 @@ func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int,
 	return liquidationPrice.Quo(precision).Mul(precision)
 }
 
-// GetDefaultLiquidationDate gets the date at which the loan will be liquidated due to default
-func GetDefaultLiquidationDate(maturityTime int64) int64 {
-	if maturityTime%(24*int64(time.Hour)) == 0 {
-		return maturityTime
+// GetMaturityTime gets the actual maturity time according to the given maturity time
+func GetMaturityTime(originMaturityTime int64) int64 {
+	if originMaturityTime%(24*int64(time.Hour)) == 0 {
+		return originMaturityTime
 	}
 
-	return time.Unix(maturityTime, 0).Truncate(24 * time.Hour).Add(24 * time.Hour).Unix()
+	return time.Unix(originMaturityTime, 0).Truncate(24 * time.Hour).Add(24 * time.Hour).Unix()
 }
 
 // AdaptorPointFromSecret gets the corresponding adaptor point from the given secret
@@ -70,9 +86,29 @@ func HasBorrowCap(pool *LendingPool) bool {
 	return pool.Config.BorrowCap.IsPositive()
 }
 
-// HasDebtCeiling returns true if the debt ceiling set in the given pool, false otherwise
-func HasDebtCeiling(pool *LendingPool) bool {
-	return pool.Config.DebtCeiling.IsPositive()
+// HasMinBorrowAmountLimit returns true if the min borrow amount set in the given pool, false otherwise
+func HasMinBorrowAmountLimit(pool *LendingPool) bool {
+	return pool.Config.MinBorrowAmount.IsPositive()
+}
+
+// HasMaxBorrowAmountLimit returns true if the max borrow amount set in the given pool, false otherwise
+func HasMaxBorrowAmountLimit(pool *LendingPool) bool {
+	return pool.Config.MaxBorrowAmount.IsPositive()
+}
+
+// HasRequestFee returns true if the request fee set in the given pool, false otherwise
+func HasRequestFee(pool *LendingPool) bool {
+	return pool.Config.RequestFee.IsPositive()
+}
+
+// HasOriginationFee returns true if the origination fee set in the given pool, false otherwise
+func HasOriginationFee(pool *LendingPool) bool {
+	return pool.Config.OriginationFee.IsPositive()
+}
+
+// HasReferralFee returns true if the referrer exists and the referral fee factor is not 0, false otherwise
+func HasReferralFee(loan *Loan, pool *LendingPool) bool {
+	return len(loan.Referrer) != 0 && pool.Config.ReferralFeeFactor > 0
 }
 
 // CheckSupplyCap checks if the supply cap will be exceeded for the given deposit amount
@@ -86,28 +122,62 @@ func CheckSupplyCap(pool *LendingPool, depositAmount sdkmath.Int) error {
 
 // CheckBorrowCap checks if the borrow cap will be exceeded for the given borrow amount
 func CheckBorrowCap(pool *LendingPool, borrowAmount sdkmath.Int) error {
-	if HasBorrowCap(pool) && pool.TotalBorrowed.Add(borrowAmount).GT(pool.Config.BorrowCap) {
+	if HasBorrowCap(pool) && pool.BorrowedAmount.Add(borrowAmount).GT(pool.Config.BorrowCap) {
 		return ErrBorrowCapExceeded
 	}
 
 	return nil
 }
 
-// CheckDebtCeiling checks if the debt ceiling will be exceeded for the given borrow amount
-func CheckDebtCeiling(pool *LendingPool, borrowAmount sdkmath.Int) error {
-	if HasDebtCeiling(pool) && pool.TotalBorrowed.Add(borrowAmount).GT(pool.Config.DebtCeiling) {
-		return ErrDebtCeilingExceeded
+// CheckBorrowAmountLimit checks if the borrow amount satisfies limits for the given pool
+func CheckBorrowAmountLimit(pool *LendingPool, borrowAmount sdkmath.Int) error {
+	if HasMinBorrowAmountLimit(pool) && borrowAmount.LT(pool.Config.MinBorrowAmount) {
+		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount can not be less than min borrow amount")
+	}
+
+	if HasMaxBorrowAmountLimit(pool) && borrowAmount.GT(pool.Config.MaxBorrowAmount) {
+		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount can not be greater than max borrow amount")
 	}
 
 	return nil
 }
 
-// ValidatePoolConfig validates the given pool config
-func ValidatePoolConfig(config PoolConfig) error {
-	if config.BorrowAPR == 0 || config.BorrowAPR >= 1000 {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1000)")
+// GetTrancheConfig gets the corresponding tranche config according to the given maturity
+func GetTrancheConfig(tranches []PoolTrancheConfig, maturity int64) (*PoolTrancheConfig, bool) {
+	for _, tranche := range tranches {
+		if tranche.Maturity == maturity {
+			return &tranche, true
+		}
 	}
 
+	return nil, false
+}
+
+// GetTranche gets the corresponding tranche according to the given maturity
+func GetTranche(tranches []PoolTranche, maturity int64) (*PoolTranche, bool) {
+	for _, tranche := range tranches {
+		if tranche.Maturity == maturity {
+			return &tranche, true
+		}
+	}
+
+	return nil, false
+}
+
+// NewTranches initializes the pool tranches from the given tranche configs
+func NewTranches(trancheConfigs []PoolTrancheConfig) []PoolTranche {
+	tranches := make([]PoolTranche, len(trancheConfigs))
+
+	for i, config := range trancheConfigs {
+		tranches[i].Maturity = config.Maturity
+		tranches[i].BorrowIndex = InitialBorrowIndex
+	}
+
+	return tranches
+}
+
+// ValidatePoolConfig validates the given pool config
+func ValidatePoolConfig(config PoolConfig) error {
 	if config.SupplyCap.IsNil() || config.SupplyCap.IsNegative() {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "supply cap can not be nil or negative")
 	}
@@ -116,24 +186,40 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow cap can not be nil or negative")
 	}
 
-	if config.DebtCeiling.IsNil() || config.DebtCeiling.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "debt ceiling can not be nil or negative")
+	if config.MinBorrowAmount.IsNil() || config.MinBorrowAmount.IsNegative() {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount can not be nil or negative")
 	}
 
-	if config.MinBorrowAmount.IsNil() || config.MinBorrowAmount.IsZero() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount must be positive")
+	if config.MaxBorrowAmount.IsNil() || config.MaxBorrowAmount.IsNegative() {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount can not be nil or negative")
 	}
 
-	if config.DebtCeiling.IsPositive() && config.MinBorrowAmount.GT(config.DebtCeiling) {
-		errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount must be less or equal than debt ceiling")
+	if config.MinBorrowAmount.IsPositive() && config.MaxBorrowAmount.IsPositive() && config.MaxBorrowAmount.LT(config.MinBorrowAmount) {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount can not be less than min borrow amount")
+	}
+
+	if err := validatePoolTranches(config.Tranches); err != nil {
+		return err
+	}
+
+	if !config.RequestFee.IsValid() {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid request fee")
 	}
 
 	if config.OriginationFee.IsNil() || config.OriginationFee.IsNegative() {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee can not be nil or negative")
 	}
 
-	if config.OriginationFee.GTE(config.MinBorrowAmount) {
+	if config.OriginationFee.IsPositive() && (!config.MinBorrowAmount.IsPositive() || config.OriginationFee.GTE(config.MinBorrowAmount)) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee must be less than min borrow amount")
+	}
+
+	if config.ReserveFactor >= 1000 {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid reserve factor")
+	}
+
+	if config.ReferralFeeFactor > 1000 {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid referral fee factor")
 	}
 
 	if config.LiquidationThreshold == 0 || config.LiquidationThreshold >= 100 {
@@ -142,6 +228,29 @@ func ValidatePoolConfig(config PoolConfig) error {
 
 	if config.MaxLtv == 0 || config.MaxLtv >= 100 || config.MaxLtv >= config.LiquidationThreshold {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid max ltv")
+	}
+
+	return nil
+}
+
+// validatePoolTrancheConfig validates the given tranche config
+func validatePoolTranches(tranches []PoolTrancheConfig) error {
+	if len(tranches) == 0 {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "tranches can not be empty")
+	}
+
+	for _, tranche := range tranches {
+		if tranche.Maturity <= 0 {
+			return errorsmod.Wrap(ErrInvalidPoolConfig, "maturity must be greater than 0")
+		}
+
+		if tranche.BorrowAPR == 0 || tranche.BorrowAPR >= 1000 {
+			return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1000)")
+		}
+
+		if tranche.MinMaturityFactor == 0 || tranche.MinMaturityFactor > 1000 {
+			return errorsmod.Wrap(ErrInvalidPoolConfig, "min maturity factor must be between (0, 1000]")
+		}
 	}
 
 	return nil

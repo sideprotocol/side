@@ -26,22 +26,23 @@ message Liquidation {
     string debtor = 3;
     string dcm = 4 [(gogoproto.customname) = "DCM"];
     cosmos.base.v1beta1.Coin collateral_amount = 5 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin debt_amount = 6 [(gogoproto.nullable) = false];
-    string liquidated_price = 7 [
+    cosmos.base.v1beta1.Coin actual_collateral_amount = 6 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin debt_amount = 7 [(gogoproto.nullable) = false];
+    string liquidated_price = 8 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable)   = false
     ];
-    google.protobuf.Timestamp liquidated_time = 8 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    cosmos.base.v1beta1.Coin liquidated_collateral_amount = 9 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin liquidated_debt_amount = 10 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin liquidation_bonus_amount = 11 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin protocol_liquidation_fee = 12 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin unliquidated_collateral_amount = 13 [(gogoproto.nullable) = false];
-    string liquidation_cet = 14;
-    string settlement_tx = 15;
-    string settlement_tx_id = 16;
-    LiquidationStatus status = 17;
+    google.protobuf.Timestamp liquidated_time = 9 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    cosmos.base.v1beta1.Coin liquidated_collateral_amount = 10 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin liquidated_debt_amount = 11 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin liquidation_bonus_amount = 12 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin protocol_liquidation_fee = 13 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin unliquidated_collateral_amount = 14 [(gogoproto.nullable) = false];
+    string liquidation_cet = 15;
+    string settlement_tx = 16;
+    string settlement_tx_id = 17;
+    LiquidationStatus status = 18;
 }
 
 message LiquidationRecord {
@@ -50,7 +51,8 @@ message LiquidationRecord {
     string liquidator = 3;
     cosmos.base.v1beta1.Coin debt_amount = 4 [(gogoproto.nullable) = false];
     cosmos.base.v1beta1.Coin collateral_amount = 5 [(gogoproto.nullable) = false];
-    google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    cosmos.base.v1beta1.Coin bonus_amount = 6 [(gogoproto.nullable) = false];
+    google.protobuf.Timestamp time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 // Signing intent

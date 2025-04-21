@@ -18,6 +18,9 @@ const (
 
 	// DKG type for nonce generation along with oracle
 	DKG_TYPE_NONCE = "nonce"
+
+	// default outcome index
+	DefaultOutcomeIndex = -1
 )
 
 // GetEventOutcomeHash gets the event outcome hash by the given index

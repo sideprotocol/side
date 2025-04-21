@@ -55,8 +55,9 @@ message DLCEvent {
     string description = 5;
     repeated string outcomes = 6;
     bool has_triggered = 7;
-    uint32 outcome_index = 8;
+    int32 outcome_index = 8;
     google.protobuf.Timestamp publish_at = 9 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp trigger_at = 10 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 message DLCAttestation {

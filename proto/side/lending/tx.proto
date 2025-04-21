@@ -94,10 +94,11 @@ message MsgApply {
 
     string borrower = 1;
     string borrower_pubkey = 2;
-    int64 maturity_time = 3;
-    string pool_id = 4;
-    cosmos.base.v1beta1.Coin borrow_amount = 5 [(gogoproto.nullable) = false];
+    string pool_id = 3;
+    cosmos.base.v1beta1.Coin borrow_amount = 4 [(gogoproto.nullable) = false];
+    int64 maturity = 5;
     uint64 dcm_id = 6 [(gogoproto.customname) = "DCMId"];
+    string referrer = 7;
 }
 
 message MsgApplyResponse {}
@@ -107,7 +108,7 @@ message MsgSubmitCets {
 
     string borrower = 1;
     string loan_id = 2;
-    string deposit_tx = 3;
+    repeated string deposit_txs = 3;
     string liquidation_cet = 4;
     repeated string liquidation_adaptor_signatures = 5;
     repeated string default_liquidation_adaptor_signatures = 6;
