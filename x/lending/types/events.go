@@ -9,7 +9,6 @@ const (
 	EventTypeRepay                                 = "repay"
 	EventTypeDefault                               = "default"
 	EventTypeLiquidate                             = "liquidate"
-	EventTypeSignRepaymentCet                      = "sign_repayment_cet"
 	EventTypeGenerateSignedCet                     = "generate_signed_cet"
 	EventTypeGenerateSignedCancellationTransaction = "generate_signed_cancellation_transaction"
 
@@ -24,13 +23,10 @@ const (
 
 	AttributeKeyLoanId = "loan_id"
 
-	AttributeKeySender        = "sender"
-	AttributeKeyAmount        = "amount"
+	AttributeKeySender = "sender"
+	AttributeKeyAmount = "amount"
+
 	AttributeKeyDepositTxHash = "deposit_tx_hash"
-
-	AttributeKeyAdaptorPoint = "adaptor_point"
-
-	AttributeKeySigHashes = "sig_hashes"
 
 	AttributeKeyTxHash = "tx_hash"
 
