@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
+	"strings"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 
@@ -295,9 +296,15 @@ func (m msgServer) InitiateDKG(goCtx context.Context, msg *types.MsgInitiateDKG)
 	}
 
 	// Emit events
-	m.EmitEvent(ctx, msg.Authority,
-		sdk.NewAttribute("id", fmt.Sprintf("%d", req.Id)),
-		sdk.NewAttribute("expiration", req.Expiration.String()),
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeInitiateDKG,
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", req.Id)),
+			sdk.NewAttribute(types.AttributeKeyParticipants, strings.Join(types.GetParticipantPubKeys(req.Participants), types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", req.Threshold)),
+			sdk.NewAttribute(types.AttributeKeyBatchSize, fmt.Sprintf("%d", len(req.VaultTypes))),
+			sdk.NewAttribute(types.AttributeKeyExpirationTime, req.Expiration.String()),
+		),
 	)
 
 	return &types.MsgInitiateDKGResponse{}, nil

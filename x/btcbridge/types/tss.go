@@ -33,6 +33,17 @@ func ParticipantExists(participants []*DKGParticipant, consAddress string) bool 
 	return false
 }
 
+// GetParticipantPubKeys gets consensus pub keys of all participants
+func GetParticipantPubKeys(participants []*DKGParticipant) []string {
+	pubKeys := []string{}
+
+	for _, p := range participants {
+		pubKeys = append(pubKeys, p.ConsensusPubkey)
+	}
+
+	return pubKeys
+}
+
 // CheckDKGCompletionRequests checks if the vaults of all the DKG completion requests are same
 func CheckDKGCompletionRequests(requests []*DKGCompletionRequest) bool {
 	if len(requests) == 0 {
