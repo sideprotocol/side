@@ -224,8 +224,8 @@ func (k Keeper) LoanDlcMeta(goCtx context.Context, req *types.QueryLoanDlcMetaRe
 	return &types.QueryLoanDlcMetaResponse{DlcMeta: k.GetDLCMeta(ctx, req.LoanId)}, nil
 }
 
-// LoanCancellation implements types.QueryServer.
-func (k Keeper) LoanCancellation(goCtx context.Context, req *types.QueryLoanCancellationRequest) (*types.QueryLoanCancellationResponse, error) {
+// LoanAuthorization implements types.QueryServer.
+func (k Keeper) LoanAuthorization(goCtx context.Context, req *types.QueryLoanAuthorizationRequest) (*types.QueryLoanAuthorizationResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -236,11 +236,31 @@ func (k Keeper) LoanCancellation(goCtx context.Context, req *types.QueryLoanCanc
 		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
 	}
 
-	if !k.HasCancellation(ctx, req.LoanId) {
-		return nil, status.Error(codes.NotFound, "loan cancellation does not exist")
+	if !k.HasAuthorization(ctx, req.LoanId, req.Id) {
+		return nil, status.Error(codes.NotFound, "loan authorization does not exist")
 	}
 
-	return &types.QueryLoanCancellationResponse{Cancellation: k.GetCancellation(ctx, req.LoanId)}, nil
+	authorization := k.GetAuthorization(ctx, req.LoanId, req.Id)
+
+	return &types.QueryLoanAuthorizationResponse{
+		Deposits: k.GetDeposits(ctx, authorization),
+		Status:   authorization.Status,
+	}, nil
+}
+
+// Redemption implements types.QueryServer.
+func (k Keeper) Redemption(goCtx context.Context, req *types.QueryRedemptionRequest) (*types.QueryRedemptionResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasRedemption(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "redemption does not exist")
+	}
+
+	return &types.QueryRedemptionResponse{Redemption: k.GetRedemption(ctx, req.Id)}, nil
 }
 
 // Repayment implements types.QueryServer.

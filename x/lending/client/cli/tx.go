@@ -38,7 +38,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdApply())
 	cmd.AddCommand(CmdSubmitCets())
 	cmd.AddCommand(CmdApprove())
-	cmd.AddCommand(CmdCancel())
+	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
 	cmd.AddCommand(CmdSubmitPrice())
 
@@ -236,10 +236,10 @@ func CmdApprove() *cobra.Command {
 	return cmd
 }
 
-func CmdCancel() *cobra.Command {
+func CmdRedeem() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cancel [loan id] [tx] [signatures]",
-		Short: "Cancel the given loan along with the cancellation tx",
+		Use:   "redeem [loan id] [tx] [signatures]",
+		Short: "Redeem one or more collateral(s) along with the redemption tx and self-signatures",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -247,7 +247,7 @@ func CmdCancel() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCancel(
+			msg := types.NewMsgRedeem(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				args[1],

@@ -2,6 +2,7 @@ package types
 
 import (
 	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -21,17 +22,18 @@ var (
 	Percent  = math.NewInt(100)
 	Permille = math.NewInt(1000)
 
-	ParamsKey = []byte{0x01}
-	PriceKey  = []byte{0x02}
+	ParamsKey       = []byte{0x01}
+	PriceKey        = []byte{0x02}
+	RedemptionIdKey = []byte{0x03}
 
-	PoolKeyPrefix         = []byte{0x10}
-	LoanKeyPrefix         = []byte{0x11}
-	DepositLogKeyPrefix   = []byte{0x12}
-	RepaymentKeyPrefix    = []byte{0x13}
-	DLCMetaKeyPrefix      = []byte{0x14}
-	CancellationKeyPrefix = []byte{0x15}
-
-	LoanByAddressKeyPrefix = []byte{0x16}
+	PoolKeyPrefix            = []byte{0x10}
+	LoanKeyPrefix            = []byte{0x11}
+	LoanByAddressKeyPrefix   = []byte{0x12}
+	AuthorizationIdKeyPrefix = []byte{0x13}
+	DepositLogKeyPrefix      = []byte{0x14}
+	RepaymentKeyPrefix       = []byte{0x15}
+	DLCMetaKeyPrefix         = []byte{0x16}
+	RedemptionKeyPrefix      = []byte{0x17}
 )
 
 func PoolKey(id string) []byte {
@@ -46,6 +48,10 @@ func LoanByAddressKey(id string, address string) []byte {
 	return append(append(LoanByAddressKeyPrefix, []byte(address)...), []byte(id)...)
 }
 
+func AuthorizationIdKey(loanId string) []byte {
+	return append(AuthorizationIdKeyPrefix, []byte(loanId)...)
+}
+
 func DepositLogKey(txid string) []byte {
 	return append(DepositLogKeyPrefix, []byte(txid)...)
 }
@@ -58,6 +64,6 @@ func RepaymentKey(loanId string) []byte {
 	return append(RepaymentKeyPrefix, []byte(loanId)...)
 }
 
-func CancellationKey(loanId string) []byte {
-	return append(CancellationKeyPrefix, []byte(loanId)...)
+func RedemptionKey(id uint64) []byte {
+	return append(RedemptionKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }

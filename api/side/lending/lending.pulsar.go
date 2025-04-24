@@ -3415,72 +3415,76 @@ func (x *fastReflection_LendingPool) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_AuthorizationDeposits_1_list)(nil)
+var _ protoreflect.List = (*_Authorization_2_list)(nil)
 
-type _AuthorizationDeposits_1_list struct {
+type _Authorization_2_list struct {
 	list *[]string
 }
 
-func (x *_AuthorizationDeposits_1_list) Len() int {
+func (x *_Authorization_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_AuthorizationDeposits_1_list) Get(i int) protoreflect.Value {
+func (x *_Authorization_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_AuthorizationDeposits_1_list) Set(i int, value protoreflect.Value) {
+func (x *_Authorization_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_AuthorizationDeposits_1_list) Append(value protoreflect.Value) {
+func (x *_Authorization_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_AuthorizationDeposits_1_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message AuthorizationDeposits at list field DepositTxs as it is not of Message kind"))
+func (x *_Authorization_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message Authorization at list field DepositTxs as it is not of Message kind"))
 }
 
-func (x *_AuthorizationDeposits_1_list) Truncate(n int) {
+func (x *_Authorization_2_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_AuthorizationDeposits_1_list) NewElement() protoreflect.Value {
+func (x *_Authorization_2_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_AuthorizationDeposits_1_list) IsValid() bool {
+func (x *_Authorization_2_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_AuthorizationDeposits             protoreflect.MessageDescriptor
-	fd_AuthorizationDeposits_deposit_txs protoreflect.FieldDescriptor
+	md_Authorization             protoreflect.MessageDescriptor
+	fd_Authorization_id          protoreflect.FieldDescriptor
+	fd_Authorization_deposit_txs protoreflect.FieldDescriptor
+	fd_Authorization_status      protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_lending_proto_init()
-	md_AuthorizationDeposits = File_side_lending_lending_proto.Messages().ByName("AuthorizationDeposits")
-	fd_AuthorizationDeposits_deposit_txs = md_AuthorizationDeposits.Fields().ByName("deposit_txs")
+	md_Authorization = File_side_lending_lending_proto.Messages().ByName("Authorization")
+	fd_Authorization_id = md_Authorization.Fields().ByName("id")
+	fd_Authorization_deposit_txs = md_Authorization.Fields().ByName("deposit_txs")
+	fd_Authorization_status = md_Authorization.Fields().ByName("status")
 }
 
-var _ protoreflect.Message = (*fastReflection_AuthorizationDeposits)(nil)
+var _ protoreflect.Message = (*fastReflection_Authorization)(nil)
 
-type fastReflection_AuthorizationDeposits AuthorizationDeposits
+type fastReflection_Authorization Authorization
 
-func (x *AuthorizationDeposits) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_AuthorizationDeposits)(x)
+func (x *Authorization) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_Authorization)(x)
 }
 
-func (x *AuthorizationDeposits) slowProtoReflect() protoreflect.Message {
+func (x *Authorization) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_lending_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3492,43 +3496,43 @@ func (x *AuthorizationDeposits) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_AuthorizationDeposits_messageType fastReflection_AuthorizationDeposits_messageType
-var _ protoreflect.MessageType = fastReflection_AuthorizationDeposits_messageType{}
+var _fastReflection_Authorization_messageType fastReflection_Authorization_messageType
+var _ protoreflect.MessageType = fastReflection_Authorization_messageType{}
 
-type fastReflection_AuthorizationDeposits_messageType struct{}
+type fastReflection_Authorization_messageType struct{}
 
-func (x fastReflection_AuthorizationDeposits_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_AuthorizationDeposits)(nil)
+func (x fastReflection_Authorization_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_Authorization)(nil)
 }
-func (x fastReflection_AuthorizationDeposits_messageType) New() protoreflect.Message {
-	return new(fastReflection_AuthorizationDeposits)
+func (x fastReflection_Authorization_messageType) New() protoreflect.Message {
+	return new(fastReflection_Authorization)
 }
-func (x fastReflection_AuthorizationDeposits_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_AuthorizationDeposits
+func (x fastReflection_Authorization_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_Authorization
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_AuthorizationDeposits) Descriptor() protoreflect.MessageDescriptor {
-	return md_AuthorizationDeposits
+func (x *fastReflection_Authorization) Descriptor() protoreflect.MessageDescriptor {
+	return md_Authorization
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_AuthorizationDeposits) Type() protoreflect.MessageType {
-	return _fastReflection_AuthorizationDeposits_messageType
+func (x *fastReflection_Authorization) Type() protoreflect.MessageType {
+	return _fastReflection_Authorization_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_AuthorizationDeposits) New() protoreflect.Message {
-	return new(fastReflection_AuthorizationDeposits)
+func (x *fastReflection_Authorization) New() protoreflect.Message {
+	return new(fastReflection_Authorization)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_AuthorizationDeposits) Interface() protoreflect.ProtoMessage {
-	return (*AuthorizationDeposits)(x)
+func (x *fastReflection_Authorization) Interface() protoreflect.ProtoMessage {
+	return (*Authorization)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3536,10 +3540,22 @@ func (x *fastReflection_AuthorizationDeposits) Interface() protoreflect.ProtoMes
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_AuthorizationDeposits) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_Authorization) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_Authorization_id, value) {
+			return
+		}
+	}
 	if len(x.DepositTxs) != 0 {
-		value := protoreflect.ValueOfList(&_AuthorizationDeposits_1_list{list: &x.DepositTxs})
-		if !f(fd_AuthorizationDeposits_deposit_txs, value) {
+		value := protoreflect.ValueOfList(&_Authorization_2_list{list: &x.DepositTxs})
+		if !f(fd_Authorization_deposit_txs, value) {
+			return
+		}
+	}
+	if x.Status != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
+		if !f(fd_Authorization_status, value) {
 			return
 		}
 	}
@@ -3556,15 +3572,19 @@ func (x *fastReflection_AuthorizationDeposits) Range(f func(protoreflect.FieldDe
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_AuthorizationDeposits) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_Authorization) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.AuthorizationDeposits.deposit_txs":
+	case "side.lending.Authorization.id":
+		return x.Id != uint64(0)
+	case "side.lending.Authorization.deposit_txs":
 		return len(x.DepositTxs) != 0
+	case "side.lending.Authorization.status":
+		return x.Status != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AuthorizationDeposits"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Authorization"))
 		}
-		panic(fmt.Errorf("message side.lending.AuthorizationDeposits does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Authorization does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3574,15 +3594,19 @@ func (x *fastReflection_AuthorizationDeposits) Has(fd protoreflect.FieldDescript
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AuthorizationDeposits) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_Authorization) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.AuthorizationDeposits.deposit_txs":
+	case "side.lending.Authorization.id":
+		x.Id = uint64(0)
+	case "side.lending.Authorization.deposit_txs":
 		x.DepositTxs = nil
+	case "side.lending.Authorization.status":
+		x.Status = 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AuthorizationDeposits"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Authorization"))
 		}
-		panic(fmt.Errorf("message side.lending.AuthorizationDeposits does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Authorization does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3592,19 +3616,25 @@ func (x *fastReflection_AuthorizationDeposits) Clear(fd protoreflect.FieldDescri
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_AuthorizationDeposits) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Authorization) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.AuthorizationDeposits.deposit_txs":
+	case "side.lending.Authorization.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	case "side.lending.Authorization.deposit_txs":
 		if len(x.DepositTxs) == 0 {
-			return protoreflect.ValueOfList(&_AuthorizationDeposits_1_list{})
+			return protoreflect.ValueOfList(&_Authorization_2_list{})
 		}
-		listValue := &_AuthorizationDeposits_1_list{list: &x.DepositTxs}
+		listValue := &_Authorization_2_list{list: &x.DepositTxs}
 		return protoreflect.ValueOfList(listValue)
+	case "side.lending.Authorization.status":
+		value := x.Status
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AuthorizationDeposits"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Authorization"))
 		}
-		panic(fmt.Errorf("message side.lending.AuthorizationDeposits does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.Authorization does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3618,17 +3648,21 @@ func (x *fastReflection_AuthorizationDeposits) Get(descriptor protoreflect.Field
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AuthorizationDeposits) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_Authorization) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.AuthorizationDeposits.deposit_txs":
+	case "side.lending.Authorization.id":
+		x.Id = value.Uint()
+	case "side.lending.Authorization.deposit_txs":
 		lv := value.List()
-		clv := lv.(*_AuthorizationDeposits_1_list)
+		clv := lv.(*_Authorization_2_list)
 		x.DepositTxs = *clv.list
+	case "side.lending.Authorization.status":
+		x.Status = (AuthorizationStatus)(value.Enum())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AuthorizationDeposits"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Authorization"))
 		}
-		panic(fmt.Errorf("message side.lending.AuthorizationDeposits does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Authorization does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3642,45 +3676,53 @@ func (x *fastReflection_AuthorizationDeposits) Set(fd protoreflect.FieldDescript
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AuthorizationDeposits) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Authorization) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.AuthorizationDeposits.deposit_txs":
+	case "side.lending.Authorization.deposit_txs":
 		if x.DepositTxs == nil {
 			x.DepositTxs = []string{}
 		}
-		value := &_AuthorizationDeposits_1_list{list: &x.DepositTxs}
+		value := &_Authorization_2_list{list: &x.DepositTxs}
 		return protoreflect.ValueOfList(value)
+	case "side.lending.Authorization.id":
+		panic(fmt.Errorf("field id of message side.lending.Authorization is not mutable"))
+	case "side.lending.Authorization.status":
+		panic(fmt.Errorf("field status of message side.lending.Authorization is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AuthorizationDeposits"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Authorization"))
 		}
-		panic(fmt.Errorf("message side.lending.AuthorizationDeposits does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Authorization does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_AuthorizationDeposits) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Authorization) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.AuthorizationDeposits.deposit_txs":
+	case "side.lending.Authorization.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.lending.Authorization.deposit_txs":
 		list := []string{}
-		return protoreflect.ValueOfList(&_AuthorizationDeposits_1_list{list: &list})
+		return protoreflect.ValueOfList(&_Authorization_2_list{list: &list})
+	case "side.lending.Authorization.status":
+		return protoreflect.ValueOfEnum(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AuthorizationDeposits"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Authorization"))
 		}
-		panic(fmt.Errorf("message side.lending.AuthorizationDeposits does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Authorization does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_AuthorizationDeposits) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_Authorization) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.AuthorizationDeposits", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.Authorization", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3688,7 +3730,7 @@ func (x *fastReflection_AuthorizationDeposits) WhichOneof(d protoreflect.OneofDe
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_AuthorizationDeposits) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_Authorization) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3699,7 +3741,7 @@ func (x *fastReflection_AuthorizationDeposits) GetUnknown() protoreflect.RawFiel
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AuthorizationDeposits) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_Authorization) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3711,7 +3753,7 @@ func (x *fastReflection_AuthorizationDeposits) SetUnknown(fields protoreflect.Ra
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_AuthorizationDeposits) IsValid() bool {
+func (x *fastReflection_Authorization) IsValid() bool {
 	return x != nil
 }
 
@@ -3721,9 +3763,9 @@ func (x *fastReflection_AuthorizationDeposits) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_AuthorizationDeposits) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_Authorization) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*AuthorizationDeposits)
+		x := input.Message.Interface().(*Authorization)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3735,11 +3777,17 @@ func (x *fastReflection_AuthorizationDeposits) ProtoMethods() *protoiface.Method
 		var n int
 		var l int
 		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
 		if len(x.DepositTxs) > 0 {
 			for _, s := range x.DepositTxs {
 				l = len(s)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
+		}
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -3751,7 +3799,7 @@ func (x *fastReflection_AuthorizationDeposits) ProtoMethods() *protoiface.Method
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*AuthorizationDeposits)
+		x := input.Message.Interface().(*Authorization)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3770,14 +3818,24 @@ func (x *fastReflection_AuthorizationDeposits) ProtoMethods() *protoiface.Method
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x18
+		}
 		if len(x.DepositTxs) > 0 {
 			for iNdEx := len(x.DepositTxs) - 1; iNdEx >= 0; iNdEx-- {
 				i -= len(x.DepositTxs[iNdEx])
 				copy(dAtA[i:], x.DepositTxs[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DepositTxs[iNdEx])))
 				i--
-				dAtA[i] = 0xa
+				dAtA[i] = 0x12
 			}
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -3790,7 +3848,7 @@ func (x *fastReflection_AuthorizationDeposits) ProtoMethods() *protoiface.Method
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*AuthorizationDeposits)
+		x := input.Message.Interface().(*Authorization)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3822,13 +3880,32 @@ func (x *fastReflection_AuthorizationDeposits) ProtoMethods() *protoiface.Method
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AuthorizationDeposits: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Authorization: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AuthorizationDeposits: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Authorization: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositTxs", wireType)
 				}
@@ -3860,6 +3937,25 @@ func (x *fastReflection_AuthorizationDeposits) ProtoMethods() *protoiface.Method
 				}
 				x.DepositTxs = append(x.DepositTxs, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= AuthorizationStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -3898,7 +3994,7 @@ func (x *fastReflection_AuthorizationDeposits) ProtoMethods() *protoiface.Method
 var _ protoreflect.List = (*_Loan_21_list)(nil)
 
 type _Loan_21_list struct {
-	list *[]*AuthorizationDeposits
+	list *[]*Authorization
 }
 
 func (x *_Loan_21_list) Len() int {
@@ -3914,18 +4010,18 @@ func (x *_Loan_21_list) Get(i int) protoreflect.Value {
 
 func (x *_Loan_21_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*AuthorizationDeposits)
+	concreteValue := valueUnwrapped.Interface().(*Authorization)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_Loan_21_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*AuthorizationDeposits)
+	concreteValue := valueUnwrapped.Interface().(*Authorization)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_Loan_21_list) AppendMutable() protoreflect.Value {
-	v := new(AuthorizationDeposits)
+	v := new(Authorization)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -3938,7 +4034,7 @@ func (x *_Loan_21_list) Truncate(n int) {
 }
 
 func (x *_Loan_21_list) NewElement() protoreflect.Value {
-	v := new(AuthorizationDeposits)
+	v := new(Authorization)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -3968,7 +4064,7 @@ var (
 	fd_Loan_liquidation_event_id         protoreflect.FieldDescriptor
 	fd_Loan_default_liquidation_event_id protoreflect.FieldDescriptor
 	fd_Loan_repayment_event_id           protoreflect.FieldDescriptor
-	fd_Loan_authorization_deposits       protoreflect.FieldDescriptor
+	fd_Loan_authorizations               protoreflect.FieldDescriptor
 	fd_Loan_collateral_amount            protoreflect.FieldDescriptor
 	fd_Loan_liquidation_id               protoreflect.FieldDescriptor
 	fd_Loan_referrer                     protoreflect.FieldDescriptor
@@ -4000,7 +4096,7 @@ func init() {
 	fd_Loan_liquidation_event_id = md_Loan.Fields().ByName("liquidation_event_id")
 	fd_Loan_default_liquidation_event_id = md_Loan.Fields().ByName("default_liquidation_event_id")
 	fd_Loan_repayment_event_id = md_Loan.Fields().ByName("repayment_event_id")
-	fd_Loan_authorization_deposits = md_Loan.Fields().ByName("authorization_deposits")
+	fd_Loan_authorizations = md_Loan.Fields().ByName("authorizations")
 	fd_Loan_collateral_amount = md_Loan.Fields().ByName("collateral_amount")
 	fd_Loan_liquidation_id = md_Loan.Fields().ByName("liquidation_id")
 	fd_Loan_referrer = md_Loan.Fields().ByName("referrer")
@@ -4194,9 +4290,9 @@ func (x *fastReflection_Loan) Range(f func(protoreflect.FieldDescriptor, protore
 			return
 		}
 	}
-	if len(x.AuthorizationDeposits) != 0 {
-		value := protoreflect.ValueOfList(&_Loan_21_list{list: &x.AuthorizationDeposits})
-		if !f(fd_Loan_authorization_deposits, value) {
+	if len(x.Authorizations) != 0 {
+		value := protoreflect.ValueOfList(&_Loan_21_list{list: &x.Authorizations})
+		if !f(fd_Loan_authorizations, value) {
 			return
 		}
 	}
@@ -4291,8 +4387,8 @@ func (x *fastReflection_Loan) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.DefaultLiquidationEventId != uint64(0)
 	case "side.lending.Loan.repayment_event_id":
 		return x.RepaymentEventId != uint64(0)
-	case "side.lending.Loan.authorization_deposits":
-		return len(x.AuthorizationDeposits) != 0
+	case "side.lending.Loan.authorizations":
+		return len(x.Authorizations) != 0
 	case "side.lending.Loan.collateral_amount":
 		return x.CollateralAmount != ""
 	case "side.lending.Loan.liquidation_id":
@@ -4361,8 +4457,8 @@ func (x *fastReflection_Loan) Clear(fd protoreflect.FieldDescriptor) {
 		x.DefaultLiquidationEventId = uint64(0)
 	case "side.lending.Loan.repayment_event_id":
 		x.RepaymentEventId = uint64(0)
-	case "side.lending.Loan.authorization_deposits":
-		x.AuthorizationDeposits = nil
+	case "side.lending.Loan.authorizations":
+		x.Authorizations = nil
 	case "side.lending.Loan.collateral_amount":
 		x.CollateralAmount = ""
 	case "side.lending.Loan.liquidation_id":
@@ -4451,11 +4547,11 @@ func (x *fastReflection_Loan) Get(descriptor protoreflect.FieldDescriptor) proto
 	case "side.lending.Loan.repayment_event_id":
 		value := x.RepaymentEventId
 		return protoreflect.ValueOfUint64(value)
-	case "side.lending.Loan.authorization_deposits":
-		if len(x.AuthorizationDeposits) == 0 {
+	case "side.lending.Loan.authorizations":
+		if len(x.Authorizations) == 0 {
 			return protoreflect.ValueOfList(&_Loan_21_list{})
 		}
-		listValue := &_Loan_21_list{list: &x.AuthorizationDeposits}
+		listValue := &_Loan_21_list{list: &x.Authorizations}
 		return protoreflect.ValueOfList(listValue)
 	case "side.lending.Loan.collateral_amount":
 		value := x.CollateralAmount
@@ -4535,10 +4631,10 @@ func (x *fastReflection_Loan) Set(fd protoreflect.FieldDescriptor, value protore
 		x.DefaultLiquidationEventId = value.Uint()
 	case "side.lending.Loan.repayment_event_id":
 		x.RepaymentEventId = value.Uint()
-	case "side.lending.Loan.authorization_deposits":
+	case "side.lending.Loan.authorizations":
 		lv := value.List()
 		clv := lv.(*_Loan_21_list)
-		x.AuthorizationDeposits = *clv.list
+		x.Authorizations = *clv.list
 	case "side.lending.Loan.collateral_amount":
 		x.CollateralAmount = value.Interface().(string)
 	case "side.lending.Loan.liquidation_id":
@@ -4581,11 +4677,11 @@ func (x *fastReflection_Loan) Mutable(fd protoreflect.FieldDescriptor) protorefl
 			x.RequestFee = new(v1beta1.Coin)
 		}
 		return protoreflect.ValueOfMessage(x.RequestFee.ProtoReflect())
-	case "side.lending.Loan.authorization_deposits":
-		if x.AuthorizationDeposits == nil {
-			x.AuthorizationDeposits = []*AuthorizationDeposits{}
+	case "side.lending.Loan.authorizations":
+		if x.Authorizations == nil {
+			x.Authorizations = []*Authorization{}
 		}
-		value := &_Loan_21_list{list: &x.AuthorizationDeposits}
+		value := &_Loan_21_list{list: &x.Authorizations}
 		return protoreflect.ValueOfList(value)
 	case "side.lending.Loan.create_at":
 		if x.CreateAt == nil {
@@ -4696,8 +4792,8 @@ func (x *fastReflection_Loan) NewField(fd protoreflect.FieldDescriptor) protoref
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.lending.Loan.repayment_event_id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "side.lending.Loan.authorization_deposits":
-		list := []*AuthorizationDeposits{}
+	case "side.lending.Loan.authorizations":
+		list := []*Authorization{}
 		return protoreflect.ValueOfList(&_Loan_21_list{list: &list})
 	case "side.lending.Loan.collateral_amount":
 		return protoreflect.ValueOfString("")
@@ -4854,8 +4950,8 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 		if x.RepaymentEventId != 0 {
 			n += 2 + runtime.Sov(uint64(x.RepaymentEventId))
 		}
-		if len(x.AuthorizationDeposits) > 0 {
-			for _, e := range x.AuthorizationDeposits {
+		if len(x.Authorizations) > 0 {
+			for _, e := range x.Authorizations {
 				l = options.Size(e)
 				n += 2 + l + runtime.Sov(uint64(l))
 			}
@@ -4975,9 +5071,9 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0xb2
 		}
-		if len(x.AuthorizationDeposits) > 0 {
-			for iNdEx := len(x.AuthorizationDeposits) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.AuthorizationDeposits[iNdEx])
+		if len(x.Authorizations) > 0 {
+			for iNdEx := len(x.Authorizations) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Authorizations[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5736,7 +5832,7 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				}
 			case 21:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AuthorizationDeposits", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authorizations", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -5763,8 +5859,8 @@ func (x *fastReflection_Loan) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.AuthorizationDeposits = append(x.AuthorizationDeposits, &AuthorizationDeposits{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.AuthorizationDeposits[len(x.AuthorizationDeposits)-1]); err != nil {
+				x.Authorizations = append(x.Authorizations, &Authorization{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Authorizations[len(x.Authorizations)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -9257,11 +9353,12 @@ func (x *fastReflection_DLCMeta) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_DepositLog               protoreflect.MessageDescriptor
-	fd_DepositLog_txid          protoreflect.FieldDescriptor
-	fd_DepositLog_vault_address protoreflect.FieldDescriptor
-	fd_DepositLog_deposit_tx    protoreflect.FieldDescriptor
-	fd_DepositLog_verified      protoreflect.FieldDescriptor
+	md_DepositLog                  protoreflect.MessageDescriptor
+	fd_DepositLog_txid             protoreflect.FieldDescriptor
+	fd_DepositLog_vault_address    protoreflect.FieldDescriptor
+	fd_DepositLog_authorization_id protoreflect.FieldDescriptor
+	fd_DepositLog_deposit_tx       protoreflect.FieldDescriptor
+	fd_DepositLog_status           protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -9269,8 +9366,9 @@ func init() {
 	md_DepositLog = File_side_lending_lending_proto.Messages().ByName("DepositLog")
 	fd_DepositLog_txid = md_DepositLog.Fields().ByName("txid")
 	fd_DepositLog_vault_address = md_DepositLog.Fields().ByName("vault_address")
+	fd_DepositLog_authorization_id = md_DepositLog.Fields().ByName("authorization_id")
 	fd_DepositLog_deposit_tx = md_DepositLog.Fields().ByName("deposit_tx")
-	fd_DepositLog_verified = md_DepositLog.Fields().ByName("verified")
+	fd_DepositLog_status = md_DepositLog.Fields().ByName("status")
 }
 
 var _ protoreflect.Message = (*fastReflection_DepositLog)(nil)
@@ -9350,15 +9448,21 @@ func (x *fastReflection_DepositLog) Range(f func(protoreflect.FieldDescriptor, p
 			return
 		}
 	}
+	if x.AuthorizationId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.AuthorizationId)
+		if !f(fd_DepositLog_authorization_id, value) {
+			return
+		}
+	}
 	if x.DepositTx != "" {
 		value := protoreflect.ValueOfString(x.DepositTx)
 		if !f(fd_DepositLog_deposit_tx, value) {
 			return
 		}
 	}
-	if x.Verified != false {
-		value := protoreflect.ValueOfBool(x.Verified)
-		if !f(fd_DepositLog_verified, value) {
+	if x.Status != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
+		if !f(fd_DepositLog_status, value) {
 			return
 		}
 	}
@@ -9381,10 +9485,12 @@ func (x *fastReflection_DepositLog) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Txid != ""
 	case "side.lending.DepositLog.vault_address":
 		return x.VaultAddress != ""
+	case "side.lending.DepositLog.authorization_id":
+		return x.AuthorizationId != uint64(0)
 	case "side.lending.DepositLog.deposit_tx":
 		return x.DepositTx != ""
-	case "side.lending.DepositLog.verified":
-		return x.Verified != false
+	case "side.lending.DepositLog.status":
+		return x.Status != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.DepositLog"))
@@ -9405,10 +9511,12 @@ func (x *fastReflection_DepositLog) Clear(fd protoreflect.FieldDescriptor) {
 		x.Txid = ""
 	case "side.lending.DepositLog.vault_address":
 		x.VaultAddress = ""
+	case "side.lending.DepositLog.authorization_id":
+		x.AuthorizationId = uint64(0)
 	case "side.lending.DepositLog.deposit_tx":
 		x.DepositTx = ""
-	case "side.lending.DepositLog.verified":
-		x.Verified = false
+	case "side.lending.DepositLog.status":
+		x.Status = 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.DepositLog"))
@@ -9431,12 +9539,15 @@ func (x *fastReflection_DepositLog) Get(descriptor protoreflect.FieldDescriptor)
 	case "side.lending.DepositLog.vault_address":
 		value := x.VaultAddress
 		return protoreflect.ValueOfString(value)
+	case "side.lending.DepositLog.authorization_id":
+		value := x.AuthorizationId
+		return protoreflect.ValueOfUint64(value)
 	case "side.lending.DepositLog.deposit_tx":
 		value := x.DepositTx
 		return protoreflect.ValueOfString(value)
-	case "side.lending.DepositLog.verified":
-		value := x.Verified
-		return protoreflect.ValueOfBool(value)
+	case "side.lending.DepositLog.status":
+		value := x.Status
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.DepositLog"))
@@ -9461,10 +9572,12 @@ func (x *fastReflection_DepositLog) Set(fd protoreflect.FieldDescriptor, value p
 		x.Txid = value.Interface().(string)
 	case "side.lending.DepositLog.vault_address":
 		x.VaultAddress = value.Interface().(string)
+	case "side.lending.DepositLog.authorization_id":
+		x.AuthorizationId = value.Uint()
 	case "side.lending.DepositLog.deposit_tx":
 		x.DepositTx = value.Interface().(string)
-	case "side.lending.DepositLog.verified":
-		x.Verified = value.Bool()
+	case "side.lending.DepositLog.status":
+		x.Status = (DepositStatus)(value.Enum())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.DepositLog"))
@@ -9489,10 +9602,12 @@ func (x *fastReflection_DepositLog) Mutable(fd protoreflect.FieldDescriptor) pro
 		panic(fmt.Errorf("field txid of message side.lending.DepositLog is not mutable"))
 	case "side.lending.DepositLog.vault_address":
 		panic(fmt.Errorf("field vault_address of message side.lending.DepositLog is not mutable"))
+	case "side.lending.DepositLog.authorization_id":
+		panic(fmt.Errorf("field authorization_id of message side.lending.DepositLog is not mutable"))
 	case "side.lending.DepositLog.deposit_tx":
 		panic(fmt.Errorf("field deposit_tx of message side.lending.DepositLog is not mutable"))
-	case "side.lending.DepositLog.verified":
-		panic(fmt.Errorf("field verified of message side.lending.DepositLog is not mutable"))
+	case "side.lending.DepositLog.status":
+		panic(fmt.Errorf("field status of message side.lending.DepositLog is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.DepositLog"))
@@ -9510,10 +9625,12 @@ func (x *fastReflection_DepositLog) NewField(fd protoreflect.FieldDescriptor) pr
 		return protoreflect.ValueOfString("")
 	case "side.lending.DepositLog.vault_address":
 		return protoreflect.ValueOfString("")
+	case "side.lending.DepositLog.authorization_id":
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.lending.DepositLog.deposit_tx":
 		return protoreflect.ValueOfString("")
-	case "side.lending.DepositLog.verified":
-		return protoreflect.ValueOfBool(false)
+	case "side.lending.DepositLog.status":
+		return protoreflect.ValueOfEnum(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.DepositLog"))
@@ -9591,12 +9708,15 @@ func (x *fastReflection_DepositLog) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if x.AuthorizationId != 0 {
+			n += 1 + runtime.Sov(uint64(x.AuthorizationId))
+		}
 		l = len(x.DepositTx)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Verified {
-			n += 2
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -9627,22 +9747,22 @@ func (x *fastReflection_DepositLog) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Verified {
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
 			i--
-			if x.Verified {
-				dAtA[i] = 1
-			} else {
-				dAtA[i] = 0
-			}
-			i--
-			dAtA[i] = 0x20
+			dAtA[i] = 0x28
 		}
 		if len(x.DepositTx) > 0 {
 			i -= len(x.DepositTx)
 			copy(dAtA[i:], x.DepositTx)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DepositTx)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
+		}
+		if x.AuthorizationId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.AuthorizationId))
+			i--
+			dAtA[i] = 0x18
 		}
 		if len(x.VaultAddress) > 0 {
 			i -= len(x.VaultAddress)
@@ -9772,6 +9892,25 @@ func (x *fastReflection_DepositLog) ProtoMethods() *protoiface.Methods {
 				x.VaultAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AuthorizationId", wireType)
+				}
+				x.AuthorizationId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.AuthorizationId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DepositTx", wireType)
 				}
@@ -9803,11 +9942,11 @@ func (x *fastReflection_DepositLog) ProtoMethods() *protoiface.Methods {
 				}
 				x.DepositTx = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 4:
+			case 5:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Verified", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 				}
-				var v int
+				x.Status = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -9817,12 +9956,11 @@ func (x *fastReflection_DepositLog) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= int(b&0x7F) << shift
+					x.Status |= DepositStatus(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				x.Verified = bool(v != 0)
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -10436,128 +10574,130 @@ func (x *fastReflection_Repayment) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_Cancellation_4_list)(nil)
+var _ protoreflect.List = (*_Redemption_5_list)(nil)
 
-type _Cancellation_4_list struct {
+type _Redemption_5_list struct {
 	list *[]string
 }
 
-func (x *_Cancellation_4_list) Len() int {
+func (x *_Redemption_5_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_Cancellation_4_list) Get(i int) protoreflect.Value {
+func (x *_Redemption_5_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_Cancellation_4_list) Set(i int, value protoreflect.Value) {
+func (x *_Redemption_5_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_Cancellation_4_list) Append(value protoreflect.Value) {
+func (x *_Redemption_5_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_Cancellation_4_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message Cancellation at list field Signatures as it is not of Message kind"))
+func (x *_Redemption_5_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message Redemption at list field Signatures as it is not of Message kind"))
 }
 
-func (x *_Cancellation_4_list) Truncate(n int) {
+func (x *_Redemption_5_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_Cancellation_4_list) NewElement() protoreflect.Value {
+func (x *_Redemption_5_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_Cancellation_4_list) IsValid() bool {
+func (x *_Redemption_5_list) IsValid() bool {
 	return x.list != nil
 }
 
-var _ protoreflect.List = (*_Cancellation_5_list)(nil)
+var _ protoreflect.List = (*_Redemption_6_list)(nil)
 
-type _Cancellation_5_list struct {
+type _Redemption_6_list struct {
 	list *[]string
 }
 
-func (x *_Cancellation_5_list) Len() int {
+func (x *_Redemption_6_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_Cancellation_5_list) Get(i int) protoreflect.Value {
+func (x *_Redemption_6_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_Cancellation_5_list) Set(i int, value protoreflect.Value) {
+func (x *_Redemption_6_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_Cancellation_5_list) Append(value protoreflect.Value) {
+func (x *_Redemption_6_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_Cancellation_5_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message Cancellation at list field DcmSignatures as it is not of Message kind"))
+func (x *_Redemption_6_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message Redemption at list field DcmSignatures as it is not of Message kind"))
 }
 
-func (x *_Cancellation_5_list) Truncate(n int) {
+func (x *_Redemption_6_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_Cancellation_5_list) NewElement() protoreflect.Value {
+func (x *_Redemption_6_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_Cancellation_5_list) IsValid() bool {
+func (x *_Redemption_6_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_Cancellation                protoreflect.MessageDescriptor
-	fd_Cancellation_loan_id        protoreflect.FieldDescriptor
-	fd_Cancellation_txid           protoreflect.FieldDescriptor
-	fd_Cancellation_tx             protoreflect.FieldDescriptor
-	fd_Cancellation_signatures     protoreflect.FieldDescriptor
-	fd_Cancellation_dcm_signatures protoreflect.FieldDescriptor
-	fd_Cancellation_create_at      protoreflect.FieldDescriptor
+	md_Redemption                protoreflect.MessageDescriptor
+	fd_Redemption_id             protoreflect.FieldDescriptor
+	fd_Redemption_loan_id        protoreflect.FieldDescriptor
+	fd_Redemption_txid           protoreflect.FieldDescriptor
+	fd_Redemption_tx             protoreflect.FieldDescriptor
+	fd_Redemption_signatures     protoreflect.FieldDescriptor
+	fd_Redemption_dcm_signatures protoreflect.FieldDescriptor
+	fd_Redemption_create_at      protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_lending_proto_init()
-	md_Cancellation = File_side_lending_lending_proto.Messages().ByName("Cancellation")
-	fd_Cancellation_loan_id = md_Cancellation.Fields().ByName("loan_id")
-	fd_Cancellation_txid = md_Cancellation.Fields().ByName("txid")
-	fd_Cancellation_tx = md_Cancellation.Fields().ByName("tx")
-	fd_Cancellation_signatures = md_Cancellation.Fields().ByName("signatures")
-	fd_Cancellation_dcm_signatures = md_Cancellation.Fields().ByName("dcm_signatures")
-	fd_Cancellation_create_at = md_Cancellation.Fields().ByName("create_at")
+	md_Redemption = File_side_lending_lending_proto.Messages().ByName("Redemption")
+	fd_Redemption_id = md_Redemption.Fields().ByName("id")
+	fd_Redemption_loan_id = md_Redemption.Fields().ByName("loan_id")
+	fd_Redemption_txid = md_Redemption.Fields().ByName("txid")
+	fd_Redemption_tx = md_Redemption.Fields().ByName("tx")
+	fd_Redemption_signatures = md_Redemption.Fields().ByName("signatures")
+	fd_Redemption_dcm_signatures = md_Redemption.Fields().ByName("dcm_signatures")
+	fd_Redemption_create_at = md_Redemption.Fields().ByName("create_at")
 }
 
-var _ protoreflect.Message = (*fastReflection_Cancellation)(nil)
+var _ protoreflect.Message = (*fastReflection_Redemption)(nil)
 
-type fastReflection_Cancellation Cancellation
+type fastReflection_Redemption Redemption
 
-func (x *Cancellation) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_Cancellation)(x)
+func (x *Redemption) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_Redemption)(x)
 }
 
-func (x *Cancellation) slowProtoReflect() protoreflect.Message {
+func (x *Redemption) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_lending_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10569,43 +10709,43 @@ func (x *Cancellation) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_Cancellation_messageType fastReflection_Cancellation_messageType
-var _ protoreflect.MessageType = fastReflection_Cancellation_messageType{}
+var _fastReflection_Redemption_messageType fastReflection_Redemption_messageType
+var _ protoreflect.MessageType = fastReflection_Redemption_messageType{}
 
-type fastReflection_Cancellation_messageType struct{}
+type fastReflection_Redemption_messageType struct{}
 
-func (x fastReflection_Cancellation_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_Cancellation)(nil)
+func (x fastReflection_Redemption_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_Redemption)(nil)
 }
-func (x fastReflection_Cancellation_messageType) New() protoreflect.Message {
-	return new(fastReflection_Cancellation)
+func (x fastReflection_Redemption_messageType) New() protoreflect.Message {
+	return new(fastReflection_Redemption)
 }
-func (x fastReflection_Cancellation_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_Cancellation
+func (x fastReflection_Redemption_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_Redemption
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_Cancellation) Descriptor() protoreflect.MessageDescriptor {
-	return md_Cancellation
+func (x *fastReflection_Redemption) Descriptor() protoreflect.MessageDescriptor {
+	return md_Redemption
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_Cancellation) Type() protoreflect.MessageType {
-	return _fastReflection_Cancellation_messageType
+func (x *fastReflection_Redemption) Type() protoreflect.MessageType {
+	return _fastReflection_Redemption_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_Cancellation) New() protoreflect.Message {
-	return new(fastReflection_Cancellation)
+func (x *fastReflection_Redemption) New() protoreflect.Message {
+	return new(fastReflection_Redemption)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_Cancellation) Interface() protoreflect.ProtoMessage {
-	return (*Cancellation)(x)
+func (x *fastReflection_Redemption) Interface() protoreflect.ProtoMessage {
+	return (*Redemption)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -10613,40 +10753,46 @@ func (x *fastReflection_Cancellation) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_Cancellation) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_Redemption) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_Redemption_id, value) {
+			return
+		}
+	}
 	if x.LoanId != "" {
 		value := protoreflect.ValueOfString(x.LoanId)
-		if !f(fd_Cancellation_loan_id, value) {
+		if !f(fd_Redemption_loan_id, value) {
 			return
 		}
 	}
 	if x.Txid != "" {
 		value := protoreflect.ValueOfString(x.Txid)
-		if !f(fd_Cancellation_txid, value) {
+		if !f(fd_Redemption_txid, value) {
 			return
 		}
 	}
 	if x.Tx != "" {
 		value := protoreflect.ValueOfString(x.Tx)
-		if !f(fd_Cancellation_tx, value) {
+		if !f(fd_Redemption_tx, value) {
 			return
 		}
 	}
 	if len(x.Signatures) != 0 {
-		value := protoreflect.ValueOfList(&_Cancellation_4_list{list: &x.Signatures})
-		if !f(fd_Cancellation_signatures, value) {
+		value := protoreflect.ValueOfList(&_Redemption_5_list{list: &x.Signatures})
+		if !f(fd_Redemption_signatures, value) {
 			return
 		}
 	}
 	if len(x.DcmSignatures) != 0 {
-		value := protoreflect.ValueOfList(&_Cancellation_5_list{list: &x.DcmSignatures})
-		if !f(fd_Cancellation_dcm_signatures, value) {
+		value := protoreflect.ValueOfList(&_Redemption_6_list{list: &x.DcmSignatures})
+		if !f(fd_Redemption_dcm_signatures, value) {
 			return
 		}
 	}
 	if x.CreateAt != nil {
 		value := protoreflect.ValueOfMessage(x.CreateAt.ProtoReflect())
-		if !f(fd_Cancellation_create_at, value) {
+		if !f(fd_Redemption_create_at, value) {
 			return
 		}
 	}
@@ -10663,25 +10809,27 @@ func (x *fastReflection_Cancellation) Range(f func(protoreflect.FieldDescriptor,
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_Cancellation) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_Redemption) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.Cancellation.loan_id":
+	case "side.lending.Redemption.id":
+		return x.Id != uint64(0)
+	case "side.lending.Redemption.loan_id":
 		return x.LoanId != ""
-	case "side.lending.Cancellation.txid":
+	case "side.lending.Redemption.txid":
 		return x.Txid != ""
-	case "side.lending.Cancellation.tx":
+	case "side.lending.Redemption.tx":
 		return x.Tx != ""
-	case "side.lending.Cancellation.signatures":
+	case "side.lending.Redemption.signatures":
 		return len(x.Signatures) != 0
-	case "side.lending.Cancellation.dcm_signatures":
+	case "side.lending.Redemption.dcm_signatures":
 		return len(x.DcmSignatures) != 0
-	case "side.lending.Cancellation.create_at":
+	case "side.lending.Redemption.create_at":
 		return x.CreateAt != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Cancellation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Redemption"))
 		}
-		panic(fmt.Errorf("message side.lending.Cancellation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Redemption does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10691,25 +10839,27 @@ func (x *fastReflection_Cancellation) Has(fd protoreflect.FieldDescriptor) bool 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Cancellation) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_Redemption) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.Cancellation.loan_id":
+	case "side.lending.Redemption.id":
+		x.Id = uint64(0)
+	case "side.lending.Redemption.loan_id":
 		x.LoanId = ""
-	case "side.lending.Cancellation.txid":
+	case "side.lending.Redemption.txid":
 		x.Txid = ""
-	case "side.lending.Cancellation.tx":
+	case "side.lending.Redemption.tx":
 		x.Tx = ""
-	case "side.lending.Cancellation.signatures":
+	case "side.lending.Redemption.signatures":
 		x.Signatures = nil
-	case "side.lending.Cancellation.dcm_signatures":
+	case "side.lending.Redemption.dcm_signatures":
 		x.DcmSignatures = nil
-	case "side.lending.Cancellation.create_at":
+	case "side.lending.Redemption.create_at":
 		x.CreateAt = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Cancellation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Redemption"))
 		}
-		panic(fmt.Errorf("message side.lending.Cancellation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Redemption does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10719,37 +10869,40 @@ func (x *fastReflection_Cancellation) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_Cancellation) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Redemption) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.Cancellation.loan_id":
+	case "side.lending.Redemption.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	case "side.lending.Redemption.loan_id":
 		value := x.LoanId
 		return protoreflect.ValueOfString(value)
-	case "side.lending.Cancellation.txid":
+	case "side.lending.Redemption.txid":
 		value := x.Txid
 		return protoreflect.ValueOfString(value)
-	case "side.lending.Cancellation.tx":
+	case "side.lending.Redemption.tx":
 		value := x.Tx
 		return protoreflect.ValueOfString(value)
-	case "side.lending.Cancellation.signatures":
+	case "side.lending.Redemption.signatures":
 		if len(x.Signatures) == 0 {
-			return protoreflect.ValueOfList(&_Cancellation_4_list{})
+			return protoreflect.ValueOfList(&_Redemption_5_list{})
 		}
-		listValue := &_Cancellation_4_list{list: &x.Signatures}
+		listValue := &_Redemption_5_list{list: &x.Signatures}
 		return protoreflect.ValueOfList(listValue)
-	case "side.lending.Cancellation.dcm_signatures":
+	case "side.lending.Redemption.dcm_signatures":
 		if len(x.DcmSignatures) == 0 {
-			return protoreflect.ValueOfList(&_Cancellation_5_list{})
+			return protoreflect.ValueOfList(&_Redemption_6_list{})
 		}
-		listValue := &_Cancellation_5_list{list: &x.DcmSignatures}
+		listValue := &_Redemption_6_list{list: &x.DcmSignatures}
 		return protoreflect.ValueOfList(listValue)
-	case "side.lending.Cancellation.create_at":
+	case "side.lending.Redemption.create_at":
 		value := x.CreateAt
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Cancellation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Redemption"))
 		}
-		panic(fmt.Errorf("message side.lending.Cancellation does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.Redemption does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -10763,29 +10916,31 @@ func (x *fastReflection_Cancellation) Get(descriptor protoreflect.FieldDescripto
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Cancellation) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_Redemption) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.Cancellation.loan_id":
+	case "side.lending.Redemption.id":
+		x.Id = value.Uint()
+	case "side.lending.Redemption.loan_id":
 		x.LoanId = value.Interface().(string)
-	case "side.lending.Cancellation.txid":
+	case "side.lending.Redemption.txid":
 		x.Txid = value.Interface().(string)
-	case "side.lending.Cancellation.tx":
+	case "side.lending.Redemption.tx":
 		x.Tx = value.Interface().(string)
-	case "side.lending.Cancellation.signatures":
+	case "side.lending.Redemption.signatures":
 		lv := value.List()
-		clv := lv.(*_Cancellation_4_list)
+		clv := lv.(*_Redemption_5_list)
 		x.Signatures = *clv.list
-	case "side.lending.Cancellation.dcm_signatures":
+	case "side.lending.Redemption.dcm_signatures":
 		lv := value.List()
-		clv := lv.(*_Cancellation_5_list)
+		clv := lv.(*_Redemption_6_list)
 		x.DcmSignatures = *clv.list
-	case "side.lending.Cancellation.create_at":
+	case "side.lending.Redemption.create_at":
 		x.CreateAt = value.Message().Interface().(*timestamppb.Timestamp)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Cancellation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Redemption"))
 		}
-		panic(fmt.Errorf("message side.lending.Cancellation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Redemption does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10799,74 +10954,78 @@ func (x *fastReflection_Cancellation) Set(fd protoreflect.FieldDescriptor, value
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Cancellation) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Redemption) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.Cancellation.signatures":
+	case "side.lending.Redemption.signatures":
 		if x.Signatures == nil {
 			x.Signatures = []string{}
 		}
-		value := &_Cancellation_4_list{list: &x.Signatures}
+		value := &_Redemption_5_list{list: &x.Signatures}
 		return protoreflect.ValueOfList(value)
-	case "side.lending.Cancellation.dcm_signatures":
+	case "side.lending.Redemption.dcm_signatures":
 		if x.DcmSignatures == nil {
 			x.DcmSignatures = []string{}
 		}
-		value := &_Cancellation_5_list{list: &x.DcmSignatures}
+		value := &_Redemption_6_list{list: &x.DcmSignatures}
 		return protoreflect.ValueOfList(value)
-	case "side.lending.Cancellation.create_at":
+	case "side.lending.Redemption.create_at":
 		if x.CreateAt == nil {
 			x.CreateAt = new(timestamppb.Timestamp)
 		}
 		return protoreflect.ValueOfMessage(x.CreateAt.ProtoReflect())
-	case "side.lending.Cancellation.loan_id":
-		panic(fmt.Errorf("field loan_id of message side.lending.Cancellation is not mutable"))
-	case "side.lending.Cancellation.txid":
-		panic(fmt.Errorf("field txid of message side.lending.Cancellation is not mutable"))
-	case "side.lending.Cancellation.tx":
-		panic(fmt.Errorf("field tx of message side.lending.Cancellation is not mutable"))
+	case "side.lending.Redemption.id":
+		panic(fmt.Errorf("field id of message side.lending.Redemption is not mutable"))
+	case "side.lending.Redemption.loan_id":
+		panic(fmt.Errorf("field loan_id of message side.lending.Redemption is not mutable"))
+	case "side.lending.Redemption.txid":
+		panic(fmt.Errorf("field txid of message side.lending.Redemption is not mutable"))
+	case "side.lending.Redemption.tx":
+		panic(fmt.Errorf("field tx of message side.lending.Redemption is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Cancellation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Redemption"))
 		}
-		panic(fmt.Errorf("message side.lending.Cancellation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Redemption does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_Cancellation) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Redemption) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.Cancellation.loan_id":
+	case "side.lending.Redemption.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.lending.Redemption.loan_id":
 		return protoreflect.ValueOfString("")
-	case "side.lending.Cancellation.txid":
+	case "side.lending.Redemption.txid":
 		return protoreflect.ValueOfString("")
-	case "side.lending.Cancellation.tx":
+	case "side.lending.Redemption.tx":
 		return protoreflect.ValueOfString("")
-	case "side.lending.Cancellation.signatures":
+	case "side.lending.Redemption.signatures":
 		list := []string{}
-		return protoreflect.ValueOfList(&_Cancellation_4_list{list: &list})
-	case "side.lending.Cancellation.dcm_signatures":
+		return protoreflect.ValueOfList(&_Redemption_5_list{list: &list})
+	case "side.lending.Redemption.dcm_signatures":
 		list := []string{}
-		return protoreflect.ValueOfList(&_Cancellation_5_list{list: &list})
-	case "side.lending.Cancellation.create_at":
+		return protoreflect.ValueOfList(&_Redemption_6_list{list: &list})
+	case "side.lending.Redemption.create_at":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Cancellation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.Redemption"))
 		}
-		panic(fmt.Errorf("message side.lending.Cancellation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.Redemption does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_Cancellation) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_Redemption) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.Cancellation", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.Redemption", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -10874,7 +11033,7 @@ func (x *fastReflection_Cancellation) WhichOneof(d protoreflect.OneofDescriptor)
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_Cancellation) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_Redemption) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -10885,7 +11044,7 @@ func (x *fastReflection_Cancellation) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Cancellation) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_Redemption) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -10897,7 +11056,7 @@ func (x *fastReflection_Cancellation) SetUnknown(fields protoreflect.RawFields) 
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_Cancellation) IsValid() bool {
+func (x *fastReflection_Redemption) IsValid() bool {
 	return x != nil
 }
 
@@ -10907,9 +11066,9 @@ func (x *fastReflection_Cancellation) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_Redemption) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*Cancellation)
+		x := input.Message.Interface().(*Redemption)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10921,6 +11080,9 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
 		l = len(x.LoanId)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -10959,7 +11121,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*Cancellation)
+		x := input.Message.Interface().(*Redemption)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10990,7 +11152,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x32
+			dAtA[i] = 0x3a
 		}
 		if len(x.DcmSignatures) > 0 {
 			for iNdEx := len(x.DcmSignatures) - 1; iNdEx >= 0; iNdEx-- {
@@ -10998,7 +11160,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], x.DcmSignatures[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DcmSignatures[iNdEx])))
 				i--
-				dAtA[i] = 0x2a
+				dAtA[i] = 0x32
 			}
 		}
 		if len(x.Signatures) > 0 {
@@ -11007,7 +11169,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], x.Signatures[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Signatures[iNdEx])))
 				i--
-				dAtA[i] = 0x22
+				dAtA[i] = 0x2a
 			}
 		}
 		if len(x.Tx) > 0 {
@@ -11015,21 +11177,26 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], x.Tx)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Tx)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 		}
 		if len(x.Txid) > 0 {
 			i -= len(x.Txid)
 			copy(dAtA[i:], x.Txid)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Txid)))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 		}
 		if len(x.LoanId) > 0 {
 			i -= len(x.LoanId)
 			copy(dAtA[i:], x.LoanId)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LoanId)))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -11042,7 +11209,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*Cancellation)
+		x := input.Message.Interface().(*Redemption)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -11074,13 +11241,32 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Cancellation: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Redemption: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Cancellation: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Redemption: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LoanId", wireType)
 				}
@@ -11112,7 +11298,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 				}
 				x.LoanId = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 2:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Txid", wireType)
 				}
@@ -11144,7 +11330,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 				}
 				x.Txid = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 3:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Tx", wireType)
 				}
@@ -11176,7 +11362,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 				}
 				x.Tx = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 4:
+			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Signatures", wireType)
 				}
@@ -11208,7 +11394,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 				}
 				x.Signatures = append(x.Signatures, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
-			case 5:
+			case 6:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DcmSignatures", wireType)
 				}
@@ -11240,7 +11426,7 @@ func (x *fastReflection_Cancellation) ProtoMethods() *protoiface.Methods {
 				}
 				x.DcmSignatures = append(x.DcmSignatures, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
-			case 6:
+			case 7:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CreateAt", wireType)
 				}
@@ -11384,18 +11570,14 @@ const (
 	LoanStatus_Requested LoanStatus = 1
 	// Loan Open
 	LoanStatus_Open LoanStatus = 2
-	// Loan Rejected
-	LoanStatus_Rejected LoanStatus = 3
-	// Loan Cancelled
-	LoanStatus_Cancelled LoanStatus = 4
 	// Loan Repaid
-	LoanStatus_Repaid LoanStatus = 5
+	LoanStatus_Repaid LoanStatus = 3
 	// Loan Defaulted
-	LoanStatus_Defaulted LoanStatus = 6
+	LoanStatus_Defaulted LoanStatus = 4
 	// Loan Liquidated
-	LoanStatus_Liquidated LoanStatus = 7
+	LoanStatus_Liquidated LoanStatus = 5
 	// Loan Closed
-	LoanStatus_Closed LoanStatus = 8
+	LoanStatus_Closed LoanStatus = 6
 )
 
 // Enum value maps for LoanStatus.
@@ -11404,23 +11586,19 @@ var (
 		0: "Unspecified",
 		1: "Requested",
 		2: "Open",
-		3: "Rejected",
-		4: "Cancelled",
-		5: "Repaid",
-		6: "Defaulted",
-		7: "Liquidated",
-		8: "Closed",
+		3: "Repaid",
+		4: "Defaulted",
+		5: "Liquidated",
+		6: "Closed",
 	}
 	LoanStatus_value = map[string]int32{
 		"Unspecified": 0,
 		"Requested":   1,
 		"Open":        2,
-		"Rejected":    3,
-		"Cancelled":   4,
-		"Repaid":      5,
-		"Defaulted":   6,
-		"Liquidated":  7,
-		"Closed":      8,
+		"Repaid":      3,
+		"Defaulted":   4,
+		"Liquidated":  5,
+		"Closed":      6,
 	}
 )
 
@@ -11449,6 +11627,59 @@ func (x LoanStatus) Number() protoreflect.EnumNumber {
 // Deprecated: Use LoanStatus.Descriptor instead.
 func (LoanStatus) EnumDescriptor() ([]byte, []int) {
 	return file_side_lending_lending_proto_rawDescGZIP(), []int{1}
+}
+
+// Authorization Status
+type AuthorizationStatus int32
+
+const (
+	// Pending
+	AuthorizationStatus_AUTHORIZATION_STATUS_PENDING AuthorizationStatus = 0
+	// Authorized
+	AuthorizationStatus_AUTHORIZATION_STATUS_AUTHORIZED AuthorizationStatus = 1
+	// Rejected
+	AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED AuthorizationStatus = 2
+)
+
+// Enum value maps for AuthorizationStatus.
+var (
+	AuthorizationStatus_name = map[int32]string{
+		0: "AUTHORIZATION_STATUS_PENDING",
+		1: "AUTHORIZATION_STATUS_AUTHORIZED",
+		2: "AUTHORIZATION_STATUS_REJECTED",
+	}
+	AuthorizationStatus_value = map[string]int32{
+		"AUTHORIZATION_STATUS_PENDING":    0,
+		"AUTHORIZATION_STATUS_AUTHORIZED": 1,
+		"AUTHORIZATION_STATUS_REJECTED":   2,
+	}
+)
+
+func (x AuthorizationStatus) Enum() *AuthorizationStatus {
+	p := new(AuthorizationStatus)
+	*p = x
+	return p
+}
+
+func (x AuthorizationStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (AuthorizationStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_side_lending_lending_proto_enumTypes[2].Descriptor()
+}
+
+func (AuthorizationStatus) Type() protoreflect.EnumType {
+	return &file_side_lending_lending_proto_enumTypes[2]
+}
+
+func (x AuthorizationStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use AuthorizationStatus.Descriptor instead.
+func (AuthorizationStatus) EnumDescriptor() ([]byte, []int) {
+	return file_side_lending_lending_proto_rawDescGZIP(), []int{2}
 }
 
 type CetType int32
@@ -11484,11 +11715,11 @@ func (x CetType) String() string {
 }
 
 func (CetType) Descriptor() protoreflect.EnumDescriptor {
-	return file_side_lending_lending_proto_enumTypes[2].Descriptor()
+	return file_side_lending_lending_proto_enumTypes[3].Descriptor()
 }
 
 func (CetType) Type() protoreflect.EnumType {
-	return &file_side_lending_lending_proto_enumTypes[2]
+	return &file_side_lending_lending_proto_enumTypes[3]
 }
 
 func (x CetType) Number() protoreflect.EnumNumber {
@@ -11497,7 +11728,59 @@ func (x CetType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use CetType.Descriptor instead.
 func (CetType) EnumDescriptor() ([]byte, []int) {
-	return file_side_lending_lending_proto_rawDescGZIP(), []int{2}
+	return file_side_lending_lending_proto_rawDescGZIP(), []int{3}
+}
+
+type DepositStatus int32
+
+const (
+	DepositStatus_DEPOSIT_STATUS_PENDING   DepositStatus = 0
+	DepositStatus_DEPOSIT_STATUS_VERIFIED  DepositStatus = 1
+	DepositStatus_DEPOSIT_STATUS_REDEEMING DepositStatus = 2
+	DepositStatus_DEPOSIT_STATUS_REDEEMED  DepositStatus = 3
+)
+
+// Enum value maps for DepositStatus.
+var (
+	DepositStatus_name = map[int32]string{
+		0: "DEPOSIT_STATUS_PENDING",
+		1: "DEPOSIT_STATUS_VERIFIED",
+		2: "DEPOSIT_STATUS_REDEEMING",
+		3: "DEPOSIT_STATUS_REDEEMED",
+	}
+	DepositStatus_value = map[string]int32{
+		"DEPOSIT_STATUS_PENDING":   0,
+		"DEPOSIT_STATUS_VERIFIED":  1,
+		"DEPOSIT_STATUS_REDEEMING": 2,
+		"DEPOSIT_STATUS_REDEEMED":  3,
+	}
+)
+
+func (x DepositStatus) Enum() *DepositStatus {
+	p := new(DepositStatus)
+	*p = x
+	return p
+}
+
+func (x DepositStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DepositStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_side_lending_lending_proto_enumTypes[4].Descriptor()
+}
+
+func (DepositStatus) Type() protoreflect.EnumType {
+	return &file_side_lending_lending_proto_enumTypes[4]
+}
+
+func (x DepositStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DepositStatus.Descriptor instead.
+func (DepositStatus) EnumDescriptor() ([]byte, []int) {
+	return file_side_lending_lending_proto_rawDescGZIP(), []int{4}
 }
 
 // Signing intent
@@ -11507,7 +11790,7 @@ const (
 	SigningIntent_SIGNING_INTENT_REPAYMENT           SigningIntent = 0
 	SigningIntent_SIGNING_INTENT_LIQUIDATION         SigningIntent = 1
 	SigningIntent_SIGNING_INTENT_DEFAULT_LIQUIDATION SigningIntent = 2
-	SigningIntent_SIGNING_INTENT_CANCELLATION        SigningIntent = 3
+	SigningIntent_SIGNING_INTENT_REDEMPTION          SigningIntent = 3
 )
 
 // Enum value maps for SigningIntent.
@@ -11516,13 +11799,13 @@ var (
 		0: "SIGNING_INTENT_REPAYMENT",
 		1: "SIGNING_INTENT_LIQUIDATION",
 		2: "SIGNING_INTENT_DEFAULT_LIQUIDATION",
-		3: "SIGNING_INTENT_CANCELLATION",
+		3: "SIGNING_INTENT_REDEMPTION",
 	}
 	SigningIntent_value = map[string]int32{
 		"SIGNING_INTENT_REPAYMENT":           0,
 		"SIGNING_INTENT_LIQUIDATION":         1,
 		"SIGNING_INTENT_DEFAULT_LIQUIDATION": 2,
-		"SIGNING_INTENT_CANCELLATION":        3,
+		"SIGNING_INTENT_REDEMPTION":          3,
 	}
 )
 
@@ -11537,11 +11820,11 @@ func (x SigningIntent) String() string {
 }
 
 func (SigningIntent) Descriptor() protoreflect.EnumDescriptor {
-	return file_side_lending_lending_proto_enumTypes[3].Descriptor()
+	return file_side_lending_lending_proto_enumTypes[5].Descriptor()
 }
 
 func (SigningIntent) Type() protoreflect.EnumType {
-	return &file_side_lending_lending_proto_enumTypes[3]
+	return &file_side_lending_lending_proto_enumTypes[5]
 }
 
 func (x SigningIntent) Number() protoreflect.EnumNumber {
@@ -11550,7 +11833,7 @@ func (x SigningIntent) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SigningIntent.Descriptor instead.
 func (SigningIntent) EnumDescriptor() ([]byte, []int) {
-	return file_side_lending_lending_proto_rawDescGZIP(), []int{3}
+	return file_side_lending_lending_proto_rawDescGZIP(), []int{5}
 }
 
 // Pool tranche config
@@ -11923,17 +12206,19 @@ func (x *LendingPool) GetStatus() PoolStatus {
 	return PoolStatus_INACTIVE
 }
 
-// Deposits used for CET authorization
-type AuthorizationDeposits struct {
+// Authorization with deposit txs for cets
+type Authorization struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DepositTxs []string `protobuf:"bytes,1,rep,name=deposit_txs,json=depositTxs,proto3" json:"deposit_txs,omitempty"`
+	Id         uint64              `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	DepositTxs []string            `protobuf:"bytes,2,rep,name=deposit_txs,json=depositTxs,proto3" json:"deposit_txs,omitempty"`
+	Status     AuthorizationStatus `protobuf:"varint,3,opt,name=status,proto3,enum=side.lending.AuthorizationStatus" json:"status,omitempty"`
 }
 
-func (x *AuthorizationDeposits) Reset() {
-	*x = AuthorizationDeposits{}
+func (x *Authorization) Reset() {
+	*x = Authorization{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_lending_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -11941,22 +12226,36 @@ func (x *AuthorizationDeposits) Reset() {
 	}
 }
 
-func (x *AuthorizationDeposits) String() string {
+func (x *Authorization) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AuthorizationDeposits) ProtoMessage() {}
+func (*Authorization) ProtoMessage() {}
 
-// Deprecated: Use AuthorizationDeposits.ProtoReflect.Descriptor instead.
-func (*AuthorizationDeposits) Descriptor() ([]byte, []int) {
+// Deprecated: Use Authorization.ProtoReflect.Descriptor instead.
+func (*Authorization) Descriptor() ([]byte, []int) {
 	return file_side_lending_lending_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AuthorizationDeposits) GetDepositTxs() []string {
+func (x *Authorization) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Authorization) GetDepositTxs() []string {
 	if x != nil {
 		return x.DepositTxs
 	}
 	return nil
+}
+
+func (x *Authorization) GetStatus() AuthorizationStatus {
+	if x != nil {
+		return x.Status
+	}
+	return AuthorizationStatus_AUTHORIZATION_STATUS_PENDING
 }
 
 type Loan struct {
@@ -11964,33 +12263,33 @@ type Loan struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	VaultAddress              string                   `protobuf:"bytes,1,opt,name=vault_address,json=vaultAddress,proto3" json:"vault_address,omitempty"` // id
-	Borrower                  string                   `protobuf:"bytes,2,opt,name=borrower,proto3" json:"borrower,omitempty"`
-	BorrowerPubKey            string                   `protobuf:"bytes,3,opt,name=borrowerPubKey,proto3" json:"borrowerPubKey,omitempty"`
-	Dcm                       string                   `protobuf:"bytes,4,opt,name=dcm,proto3" json:"dcm,omitempty"`
-	MaturityTime              int64                    `protobuf:"varint,5,opt,name=maturity_time,json=maturityTime,proto3" json:"maturity_time,omitempty"`
-	FinalTimeout              int64                    `protobuf:"varint,6,opt,name=final_timeout,json=finalTimeout,proto3" json:"final_timeout,omitempty"`
-	PoolId                    string                   `protobuf:"bytes,7,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	BorrowAmount              *v1beta1.Coin            `protobuf:"bytes,8,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
-	RequestFee                *v1beta1.Coin            `protobuf:"bytes,9,opt,name=request_fee,json=requestFee,proto3" json:"request_fee,omitempty"`
-	OriginationFee            string                   `protobuf:"bytes,10,opt,name=origination_fee,json=originationFee,proto3" json:"origination_fee,omitempty"`
-	Interest                  string                   `protobuf:"bytes,11,opt,name=interest,proto3" json:"interest,omitempty"`
-	ProtocolFee               string                   `protobuf:"bytes,12,opt,name=protocol_fee,json=protocolFee,proto3" json:"protocol_fee,omitempty"`
-	Maturity                  int64                    `protobuf:"varint,13,opt,name=maturity,proto3" json:"maturity,omitempty"`
-	BorrowApr                 uint32                   `protobuf:"varint,14,opt,name=borrow_apr,json=borrowApr,proto3" json:"borrow_apr,omitempty"`
-	MinMaturity               int64                    `protobuf:"varint,15,opt,name=min_maturity,json=minMaturity,proto3" json:"min_maturity,omitempty"`
-	StartBorrowIndex          string                   `protobuf:"bytes,16,opt,name=start_borrow_index,json=startBorrowIndex,proto3" json:"start_borrow_index,omitempty"`
-	LiquidationPrice          string                   `protobuf:"bytes,17,opt,name=liquidation_price,json=liquidationPrice,proto3" json:"liquidation_price,omitempty"`
-	LiquidationEventId        uint64                   `protobuf:"varint,18,opt,name=liquidation_event_id,json=liquidationEventId,proto3" json:"liquidation_event_id,omitempty"`
-	DefaultLiquidationEventId uint64                   `protobuf:"varint,19,opt,name=default_liquidation_event_id,json=defaultLiquidationEventId,proto3" json:"default_liquidation_event_id,omitempty"`
-	RepaymentEventId          uint64                   `protobuf:"varint,20,opt,name=repayment_event_id,json=repaymentEventId,proto3" json:"repayment_event_id,omitempty"`
-	AuthorizationDeposits     []*AuthorizationDeposits `protobuf:"bytes,21,rep,name=authorization_deposits,json=authorizationDeposits,proto3" json:"authorization_deposits,omitempty"`
-	CollateralAmount          string                   `protobuf:"bytes,22,opt,name=collateral_amount,json=collateralAmount,proto3" json:"collateral_amount,omitempty"`
-	LiquidationId             uint64                   `protobuf:"varint,23,opt,name=liquidation_id,json=liquidationId,proto3" json:"liquidation_id,omitempty"`
-	Referrer                  string                   `protobuf:"bytes,24,opt,name=referrer,proto3" json:"referrer,omitempty"`
-	CreateAt                  *timestamppb.Timestamp   `protobuf:"bytes,25,opt,name=create_at,json=createAt,proto3" json:"create_at,omitempty"`
-	DisburseAt                *timestamppb.Timestamp   `protobuf:"bytes,26,opt,name=disburse_at,json=disburseAt,proto3" json:"disburse_at,omitempty"`
-	Status                    LoanStatus               `protobuf:"varint,27,opt,name=status,proto3,enum=side.lending.LoanStatus" json:"status,omitempty"`
+	VaultAddress              string                 `protobuf:"bytes,1,opt,name=vault_address,json=vaultAddress,proto3" json:"vault_address,omitempty"` // id
+	Borrower                  string                 `protobuf:"bytes,2,opt,name=borrower,proto3" json:"borrower,omitempty"`
+	BorrowerPubKey            string                 `protobuf:"bytes,3,opt,name=borrowerPubKey,proto3" json:"borrowerPubKey,omitempty"`
+	Dcm                       string                 `protobuf:"bytes,4,opt,name=dcm,proto3" json:"dcm,omitempty"`
+	MaturityTime              int64                  `protobuf:"varint,5,opt,name=maturity_time,json=maturityTime,proto3" json:"maturity_time,omitempty"`
+	FinalTimeout              int64                  `protobuf:"varint,6,opt,name=final_timeout,json=finalTimeout,proto3" json:"final_timeout,omitempty"`
+	PoolId                    string                 `protobuf:"bytes,7,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	BorrowAmount              *v1beta1.Coin          `protobuf:"bytes,8,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
+	RequestFee                *v1beta1.Coin          `protobuf:"bytes,9,opt,name=request_fee,json=requestFee,proto3" json:"request_fee,omitempty"`
+	OriginationFee            string                 `protobuf:"bytes,10,opt,name=origination_fee,json=originationFee,proto3" json:"origination_fee,omitempty"`
+	Interest                  string                 `protobuf:"bytes,11,opt,name=interest,proto3" json:"interest,omitempty"`
+	ProtocolFee               string                 `protobuf:"bytes,12,opt,name=protocol_fee,json=protocolFee,proto3" json:"protocol_fee,omitempty"`
+	Maturity                  int64                  `protobuf:"varint,13,opt,name=maturity,proto3" json:"maturity,omitempty"`
+	BorrowApr                 uint32                 `protobuf:"varint,14,opt,name=borrow_apr,json=borrowApr,proto3" json:"borrow_apr,omitempty"`
+	MinMaturity               int64                  `protobuf:"varint,15,opt,name=min_maturity,json=minMaturity,proto3" json:"min_maturity,omitempty"`
+	StartBorrowIndex          string                 `protobuf:"bytes,16,opt,name=start_borrow_index,json=startBorrowIndex,proto3" json:"start_borrow_index,omitempty"`
+	LiquidationPrice          string                 `protobuf:"bytes,17,opt,name=liquidation_price,json=liquidationPrice,proto3" json:"liquidation_price,omitempty"`
+	LiquidationEventId        uint64                 `protobuf:"varint,18,opt,name=liquidation_event_id,json=liquidationEventId,proto3" json:"liquidation_event_id,omitempty"`
+	DefaultLiquidationEventId uint64                 `protobuf:"varint,19,opt,name=default_liquidation_event_id,json=defaultLiquidationEventId,proto3" json:"default_liquidation_event_id,omitempty"`
+	RepaymentEventId          uint64                 `protobuf:"varint,20,opt,name=repayment_event_id,json=repaymentEventId,proto3" json:"repayment_event_id,omitempty"`
+	Authorizations            []*Authorization       `protobuf:"bytes,21,rep,name=authorizations,proto3" json:"authorizations,omitempty"`
+	CollateralAmount          string                 `protobuf:"bytes,22,opt,name=collateral_amount,json=collateralAmount,proto3" json:"collateral_amount,omitempty"`
+	LiquidationId             uint64                 `protobuf:"varint,23,opt,name=liquidation_id,json=liquidationId,proto3" json:"liquidation_id,omitempty"`
+	Referrer                  string                 `protobuf:"bytes,24,opt,name=referrer,proto3" json:"referrer,omitempty"`
+	CreateAt                  *timestamppb.Timestamp `protobuf:"bytes,25,opt,name=create_at,json=createAt,proto3" json:"create_at,omitempty"`
+	DisburseAt                *timestamppb.Timestamp `protobuf:"bytes,26,opt,name=disburse_at,json=disburseAt,proto3" json:"disburse_at,omitempty"`
+	Status                    LoanStatus             `protobuf:"varint,27,opt,name=status,proto3,enum=side.lending.LoanStatus" json:"status,omitempty"`
 }
 
 func (x *Loan) Reset() {
@@ -12153,9 +12452,9 @@ func (x *Loan) GetRepaymentEventId() uint64 {
 	return 0
 }
 
-func (x *Loan) GetAuthorizationDeposits() []*AuthorizationDeposits {
+func (x *Loan) GetAuthorizations() []*Authorization {
 	if x != nil {
-		return x.AuthorizationDeposits
+		return x.Authorizations
 	}
 	return nil
 }
@@ -12491,10 +12790,11 @@ type DepositLog struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Txid         string `protobuf:"bytes,1,opt,name=txid,proto3" json:"txid,omitempty"`
-	VaultAddress string `protobuf:"bytes,2,opt,name=vault_address,json=vaultAddress,proto3" json:"vault_address,omitempty"`
-	DepositTx    string `protobuf:"bytes,3,opt,name=deposit_tx,json=depositTx,proto3" json:"deposit_tx,omitempty"`
-	Verified     bool   `protobuf:"varint,4,opt,name=verified,proto3" json:"verified,omitempty"`
+	Txid            string        `protobuf:"bytes,1,opt,name=txid,proto3" json:"txid,omitempty"`
+	VaultAddress    string        `protobuf:"bytes,2,opt,name=vault_address,json=vaultAddress,proto3" json:"vault_address,omitempty"`
+	AuthorizationId uint64        `protobuf:"varint,3,opt,name=authorization_id,json=authorizationId,proto3" json:"authorization_id,omitempty"`
+	DepositTx       string        `protobuf:"bytes,4,opt,name=deposit_tx,json=depositTx,proto3" json:"deposit_tx,omitempty"`
+	Status          DepositStatus `protobuf:"varint,5,opt,name=status,proto3,enum=side.lending.DepositStatus" json:"status,omitempty"`
 }
 
 func (x *DepositLog) Reset() {
@@ -12531,6 +12831,13 @@ func (x *DepositLog) GetVaultAddress() string {
 	return ""
 }
 
+func (x *DepositLog) GetAuthorizationId() uint64 {
+	if x != nil {
+		return x.AuthorizationId
+	}
+	return 0
+}
+
 func (x *DepositLog) GetDepositTx() string {
 	if x != nil {
 		return x.DepositTx
@@ -12538,11 +12845,11 @@ func (x *DepositLog) GetDepositTx() string {
 	return ""
 }
 
-func (x *DepositLog) GetVerified() bool {
+func (x *DepositLog) GetStatus() DepositStatus {
 	if x != nil {
-		return x.Verified
+		return x.Status
 	}
-	return false
+	return DepositStatus_DEPOSIT_STATUS_PENDING
 }
 
 type Repayment struct {
@@ -12596,21 +12903,22 @@ func (x *Repayment) GetCreateAt() *timestamppb.Timestamp {
 	return nil
 }
 
-type Cancellation struct {
+type Redemption struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LoanId        string                 `protobuf:"bytes,1,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
-	Txid          string                 `protobuf:"bytes,2,opt,name=txid,proto3" json:"txid,omitempty"`
-	Tx            string                 `protobuf:"bytes,3,opt,name=tx,proto3" json:"tx,omitempty"`
-	Signatures    []string               `protobuf:"bytes,4,rep,name=signatures,proto3" json:"signatures,omitempty"`
-	DcmSignatures []string               `protobuf:"bytes,5,rep,name=dcm_signatures,json=dcmSignatures,proto3" json:"dcm_signatures,omitempty"`
-	CreateAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=create_at,json=createAt,proto3" json:"create_at,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	LoanId        string                 `protobuf:"bytes,2,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
+	Txid          string                 `protobuf:"bytes,3,opt,name=txid,proto3" json:"txid,omitempty"`
+	Tx            string                 `protobuf:"bytes,4,opt,name=tx,proto3" json:"tx,omitempty"`
+	Signatures    []string               `protobuf:"bytes,5,rep,name=signatures,proto3" json:"signatures,omitempty"`
+	DcmSignatures []string               `protobuf:"bytes,6,rep,name=dcm_signatures,json=dcmSignatures,proto3" json:"dcm_signatures,omitempty"`
+	CreateAt      *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=create_at,json=createAt,proto3" json:"create_at,omitempty"`
 }
 
-func (x *Cancellation) Reset() {
-	*x = Cancellation{}
+func (x *Redemption) Reset() {
+	*x = Redemption{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_lending_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -12618,53 +12926,60 @@ func (x *Cancellation) Reset() {
 	}
 }
 
-func (x *Cancellation) String() string {
+func (x *Redemption) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Cancellation) ProtoMessage() {}
+func (*Redemption) ProtoMessage() {}
 
-// Deprecated: Use Cancellation.ProtoReflect.Descriptor instead.
-func (*Cancellation) Descriptor() ([]byte, []int) {
+// Deprecated: Use Redemption.ProtoReflect.Descriptor instead.
+func (*Redemption) Descriptor() ([]byte, []int) {
 	return file_side_lending_lending_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *Cancellation) GetLoanId() string {
+func (x *Redemption) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Redemption) GetLoanId() string {
 	if x != nil {
 		return x.LoanId
 	}
 	return ""
 }
 
-func (x *Cancellation) GetTxid() string {
+func (x *Redemption) GetTxid() string {
 	if x != nil {
 		return x.Txid
 	}
 	return ""
 }
 
-func (x *Cancellation) GetTx() string {
+func (x *Redemption) GetTx() string {
 	if x != nil {
 		return x.Tx
 	}
 	return ""
 }
 
-func (x *Cancellation) GetSignatures() []string {
+func (x *Redemption) GetSignatures() []string {
 	if x != nil {
 		return x.Signatures
 	}
 	return nil
 }
 
-func (x *Cancellation) GetDcmSignatures() []string {
+func (x *Redemption) GetDcmSignatures() []string {
 	if x != nil {
 		return x.DcmSignatures
 	}
 	return nil
 }
 
-func (x *Cancellation) GetCreateAt() *timestamppb.Timestamp {
+func (x *Redemption) GetCreateAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreateAt
 	}
@@ -12797,181 +13112,188 @@ var file_side_lending_lending_proto_rawDesc = []byte{
 	0x00, 0x52, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x74, 0x61,
 	0x74, 0x75, 0x73, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65,
 	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x38, 0x0a, 0x15, 0x41,
-	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f,
-	0x74, 0x78, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73,
-	0x69, 0x74, 0x54, 0x78, 0x73, 0x22, 0xa2, 0x0b, 0x0a, 0x04, 0x4c, 0x6f, 0x61, 0x6e, 0x12, 0x23,
-	0x0a, 0x0d, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12,
-	0x26, 0x0a, 0x0e, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x50, 0x75, 0x62, 0x4b, 0x65,
-	0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
-	0x72, 0x50, 0x75, 0x62, 0x4b, 0x65, 0x79, 0x12, 0x19, 0x0a, 0x03, 0x64, 0x63, 0x6d, 0x18, 0x04,
-	0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xe2, 0xde, 0x1f, 0x03, 0x44, 0x43, 0x4d, 0x52, 0x03, 0x64,
-	0x63, 0x6d, 0x12, 0x23, 0x0a, 0x0d, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x5f, 0x74,
-	0x69, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0c, 0x6d, 0x61, 0x74, 0x75, 0x72,
-	0x69, 0x74, 0x79, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x66, 0x69, 0x6e, 0x61, 0x6c,
-	0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0c,
-	0x66, 0x69, 0x6e, 0x61, 0x6c, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x12, 0x17, 0x0a, 0x07,
-	0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70,
-	0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x44, 0x0a, 0x0d, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f,
-	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
-	0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0c, 0x62,
-	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x40, 0x0a, 0x0b, 0x72,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x5f, 0x66, 0x65, 0x65, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76,
-	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f,
-	0x00, 0x52, 0x0a, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x46, 0x65, 0x65, 0x12, 0x46, 0x0a,
-	0x0f, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65,
-	0x18, 0x0a, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74,
-	0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x0e, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x46, 0x65, 0x65, 0x12, 0x39, 0x0a, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73,
-	0x74, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f,
-	0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61,
-	0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74,
-	0x12, 0x40, 0x0a, 0x0c, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x66, 0x65, 0x65,
-	0x18, 0x0c, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74,
-	0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x0b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x46,
-	0x65, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x18, 0x0d,
-	0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x12, 0x2c,
-	0x0a, 0x0a, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f, 0x61, 0x70, 0x72, 0x18, 0x0e, 0x20, 0x01,
-	0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x50,
-	0x52, 0x52, 0x09, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x70, 0x72, 0x12, 0x21, 0x0a, 0x0c,
-	0x6d, 0x69, 0x6e, 0x5f, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x18, 0x0f, 0x20, 0x01,
-	0x28, 0x03, 0x52, 0x0b, 0x6d, 0x69, 0x6e, 0x4d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x12,
-	0x5f, 0x0a, 0x12, 0x73, 0x74, 0x61, 0x72, 0x74, 0x5f, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f,
-	0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x10, 0x20, 0x01, 0x28, 0x09, 0x42, 0x31, 0xc8, 0xde, 0x1f,
-	0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
-	0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63,
-	0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x52, 0x10,
-	0x73, 0x74, 0x61, 0x72, 0x74, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x49, 0x6e, 0x64, 0x65, 0x78,
-	0x12, 0x4a, 0x0a, 0x11, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
-	0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x11, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f,
-	0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
-	0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x10, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x30, 0x0a, 0x14,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x65, 0x76, 0x65, 0x6e,
-	0x74, 0x5f, 0x69, 0x64, 0x18, 0x12, 0x20, 0x01, 0x28, 0x04, 0x52, 0x12, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x3f,
-	0x0a, 0x1c, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x13,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x19, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x4c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12,
-	0x2c, 0x0a, 0x12, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x65, 0x76, 0x65,
-	0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x14, 0x20, 0x01, 0x28, 0x04, 0x52, 0x10, 0x72, 0x65, 0x70,
-	0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x60, 0x0a,
-	0x16, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x18, 0x15, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e,
+	0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x7b, 0x0a, 0x0d, 0x41,
+	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1f, 0x0a, 0x0b,
+	0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
+	0x09, 0x52, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x78, 0x73, 0x12, 0x39, 0x0a,
+	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x21, 0x2e,
 	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x41, 0x75, 0x74,
-	0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69,
-	0x74, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x15, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
-	0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12,
-	0x4a, 0x0a, 0x11, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x5f, 0x61, 0x6d,
-	0x6f, 0x75, 0x6e, 0x74, 0x18, 0x16, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00,
+	0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x8b, 0x0b, 0x0a, 0x04, 0x4c, 0x6f, 0x61,
+	0x6e, 0x12, 0x23, 0x0a, 0x0d, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65,
+	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x41,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x65, 0x72, 0x12, 0x26, 0x0a, 0x0e, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x50, 0x75,
+	0x62, 0x4b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x62, 0x6f, 0x72, 0x72,
+	0x6f, 0x77, 0x65, 0x72, 0x50, 0x75, 0x62, 0x4b, 0x65, 0x79, 0x12, 0x19, 0x0a, 0x03, 0x64, 0x63,
+	0x6d, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xe2, 0xde, 0x1f, 0x03, 0x44, 0x43, 0x4d,
+	0x52, 0x03, 0x64, 0x63, 0x6d, 0x12, 0x23, 0x0a, 0x0d, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74,
+	0x79, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0c, 0x6d, 0x61,
+	0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x66, 0x69,
+	0x6e, 0x61, 0x6c, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28,
+	0x03, 0x52, 0x0c, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x12,
+	0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x44, 0x0a, 0x0d, 0x62, 0x6f, 0x72, 0x72,
+	0x6f, 0x77, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31,
+	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00,
+	0x52, 0x0c, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x40,
+	0x0a, 0x0b, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x5f, 0x66, 0x65, 0x65, 0x18, 0x09, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
+	0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04,
+	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0a, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x46, 0x65, 0x65,
+	0x12, 0x46, 0x0a, 0x0f, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
+	0x66, 0x65, 0x65, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda,
+	0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
+	0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x0e, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x12, 0x39, 0x0a, 0x08, 0x69, 0x6e, 0x74, 0x65,
+	0x72, 0x65, 0x73, 0x74, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00,
 	0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
-	0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x10, 0x63, 0x6f, 0x6c, 0x6c, 0x61,
-	0x74, 0x65, 0x72, 0x61, 0x6c, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x25, 0x0a, 0x0e, 0x6c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x17, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x0d, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x18, 0x18,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x12, 0x41,
-	0x0a, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x5f, 0x61, 0x74, 0x18, 0x19, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8,
-	0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x08, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41,
-	0x74, 0x12, 0x45, 0x0a, 0x0b, 0x64, 0x69, 0x73, 0x62, 0x75, 0x72, 0x73, 0x65, 0x5f, 0x61, 0x74,
-	0x18, 0x1a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
-	0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0a, 0x64, 0x69,
-	0x73, 0x62, 0x75, 0x72, 0x73, 0x65, 0x41, 0x74, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74,
-	0x75, 0x73, 0x18, 0x1b, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x74, 0x61, 0x74,
-	0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x8a, 0x01, 0x0a, 0x07, 0x43,
-	0x65, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x49,
-	0x64, 0x12, 0x23, 0x0a, 0x0d, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x5f, 0x69, 0x6e, 0x64,
-	0x65, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d,
-	0x65, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x27, 0x0a, 0x0f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x5f, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x0e, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x12,
-	0x16, 0x0a, 0x06, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x06, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x22, 0xfe, 0x01, 0x0a, 0x0e, 0x4c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74, 0x78, 0x12, 0x3e, 0x0a, 0x1b, 0x62, 0x6f,
-	0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73,
-	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52,
-	0x19, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72,
-	0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x3e, 0x0a, 0x1b, 0x62, 0x6f,
-	0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x65, 0x64, 0x5f, 0x73,
-	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52,
-	0x19, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x41, 0x64, 0x61, 0x70, 0x74, 0x65, 0x64,
-	0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x38, 0x0a, 0x0e, 0x64, 0x63,
-	0x6d, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03,
-	0x28, 0x09, 0x42, 0x11, 0xe2, 0xde, 0x1f, 0x0d, 0x44, 0x43, 0x4d, 0x53, 0x69, 0x67, 0x6e, 0x61,
-	0x74, 0x75, 0x72, 0x65, 0x73, 0x52, 0x0d, 0x64, 0x63, 0x6d, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x73, 0x12, 0x22, 0x0a, 0x0d, 0x73, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x5f, 0x74,
-	0x78, 0x5f, 0x68, 0x65, 0x78, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x73, 0x69, 0x67,
-	0x6e, 0x65, 0x64, 0x54, 0x78, 0x48, 0x65, 0x78, 0x22, 0x93, 0x02, 0x0a, 0x0c, 0x52, 0x65, 0x70,
-	0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x65, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74, 0x78, 0x12, 0x4e, 0x0a, 0x16, 0x64, 0x63, 0x6d,
-	0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
-	0x72, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x42, 0x18, 0xe2, 0xde, 0x1f, 0x14, 0x44,
-	0x43, 0x4d, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
-	0x72, 0x65, 0x73, 0x52, 0x14, 0x64, 0x63, 0x6d, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53,
-	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x4e, 0x0a, 0x16, 0x64, 0x63, 0x6d,
-	0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x65, 0x64, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
-	0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x42, 0x18, 0xe2, 0xde, 0x1f, 0x14, 0x44,
-	0x43, 0x4d, 0x41, 0x64, 0x61, 0x70, 0x74, 0x65, 0x64, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
-	0x72, 0x65, 0x73, 0x52, 0x14, 0x64, 0x63, 0x6d, 0x41, 0x64, 0x61, 0x70, 0x74, 0x65, 0x64, 0x53,
-	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x2f, 0x0a, 0x13, 0x62, 0x6f, 0x72,
-	0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
-	0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x12, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72,
-	0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x22, 0x0a, 0x0d, 0x73, 0x69,
-	0x67, 0x6e, 0x65, 0x64, 0x5f, 0x74, 0x78, 0x5f, 0x68, 0x65, 0x78, 0x18, 0x05, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x0b, 0x73, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x54, 0x78, 0x48, 0x65, 0x78, 0x22, 0xdc,
-	0x03, 0x0a, 0x07, 0x44, 0x4c, 0x43, 0x4d, 0x65, 0x74, 0x61, 0x12, 0x4b, 0x0a, 0x0f, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65,
-	0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x5a, 0x0a, 0x17, 0x64, 0x65, 0x66, 0x61, 0x75,
-	0x6c, 0x74, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63,
-	0x65, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x15, 0x64, 0x65,
-	0x66, 0x61, 0x75, 0x6c, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x43, 0x65, 0x74, 0x12, 0x45, 0x0a, 0x0d, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74,
-	0x5f, 0x63, 0x65, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d,
-	0x65, 0x6e, 0x74, 0x43, 0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0c, 0x72, 0x65,
-	0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x65, 0x74, 0x12, 0x2a, 0x0a, 0x11, 0x74, 0x69,
-	0x6d, 0x65, 0x6f, 0x75, 0x74, 0x5f, 0x72, 0x65, 0x66, 0x75, 0x6e, 0x64, 0x5f, 0x74, 0x78, 0x18,
-	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x52, 0x65,
-	0x66, 0x75, 0x6e, 0x64, 0x54, 0x78, 0x12, 0x35, 0x0a, 0x0b, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f,
-	0x75, 0x74, 0x78, 0x6f, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x55, 0x54, 0x58,
-	0x4f, 0x52, 0x0a, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x55, 0x74, 0x78, 0x6f, 0x73, 0x12, 0x21, 0x0a,
-	0x0c, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x06, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0b, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x4b, 0x65, 0x79,
-	0x12, 0x27, 0x0a, 0x0f, 0x6d, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x5f, 0x73, 0x63, 0x72,
-	0x69, 0x70, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x6d, 0x75, 0x6c, 0x74, 0x69,
-	0x73, 0x69, 0x67, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x12, 0x32, 0x0a, 0x15, 0x74, 0x69, 0x6d,
-	0x65, 0x6f, 0x75, 0x74, 0x5f, 0x72, 0x65, 0x66, 0x75, 0x6e, 0x64, 0x5f, 0x73, 0x63, 0x72, 0x69,
-	0x70, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x13, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75,
-	0x74, 0x52, 0x65, 0x66, 0x75, 0x6e, 0x64, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x22, 0x80, 0x01,
-	0x0a, 0x0a, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x4c, 0x6f, 0x67, 0x12, 0x12, 0x0a, 0x04,
-	0x74, 0x78, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64,
-	0x12, 0x23, 0x0a, 0x0d, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x5f, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x70, 0x6f, 0x73,
-	0x69, 0x74, 0x54, 0x78, 0x12, 0x1a, 0x0a, 0x08, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x64,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x08, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x64,
+	0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72,
+	0x65, 0x73, 0x74, 0x12, 0x40, 0x0a, 0x0c, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f,
+	0x66, 0x65, 0x65, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda,
+	0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
+	0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x0b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63,
+	0x6f, 0x6c, 0x46, 0x65, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74,
+	0x79, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74,
+	0x79, 0x12, 0x2c, 0x0a, 0x0a, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f, 0x61, 0x70, 0x72, 0x18,
+	0x0e, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x42, 0x6f, 0x72, 0x72, 0x6f,
+	0x77, 0x41, 0x50, 0x52, 0x52, 0x09, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x70, 0x72, 0x12,
+	0x21, 0x0a, 0x0c, 0x6d, 0x69, 0x6e, 0x5f, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x18,
+	0x0f, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0b, 0x6d, 0x69, 0x6e, 0x4d, 0x61, 0x74, 0x75, 0x72, 0x69,
+	0x74, 0x79, 0x12, 0x5f, 0x0a, 0x12, 0x73, 0x74, 0x61, 0x72, 0x74, 0x5f, 0x62, 0x6f, 0x72, 0x72,
+	0x6f, 0x77, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x10, 0x20, 0x01, 0x28, 0x09, 0x42, 0x31,
+	0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
+	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79,
+	0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44, 0x65,
+	0x63, 0x52, 0x10, 0x73, 0x74, 0x61, 0x72, 0x74, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x49, 0x6e,
+	0x64, 0x65, 0x78, 0x12, 0x4a, 0x0a, 0x11, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x11, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d,
+	0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
+	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x10, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12,
+	0x30, 0x0a, 0x14, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x65,
+	0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x12, 0x20, 0x01, 0x28, 0x04, 0x52, 0x12, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x49,
+	0x64, 0x12, 0x3f, 0x0a, 0x1c, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x6c, 0x69, 0x71,
+	0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69,
+	0x64, 0x18, 0x13, 0x20, 0x01, 0x28, 0x04, 0x52, 0x19, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74,
+	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x76, 0x65, 0x6e, 0x74,
+	0x49, 0x64, 0x12, 0x2c, 0x0a, 0x12, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f,
+	0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x14, 0x20, 0x01, 0x28, 0x04, 0x52, 0x10,
+	0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64,
+	0x12, 0x49, 0x0a, 0x0e, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x18, 0x15, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x61, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x4a, 0x0a, 0x11, 0x63,
+	0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x18, 0x16, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74,
+	0x68, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x10, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61,
+	0x6c, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x25, 0x0a, 0x0e, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x17, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x0d, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x1a,
+	0x0a, 0x08, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x18, 0x18, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x12, 0x41, 0x0a, 0x09, 0x63, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x5f, 0x61, 0x74, 0x18, 0x19, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90,
+	0xdf, 0x1f, 0x01, 0x52, 0x08, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x74, 0x12, 0x45, 0x0a,
+	0x0b, 0x64, 0x69, 0x73, 0x62, 0x75, 0x72, 0x73, 0x65, 0x5f, 0x61, 0x74, 0x18, 0x1a, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08,
+	0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0a, 0x64, 0x69, 0x73, 0x62, 0x75, 0x72,
+	0x73, 0x65, 0x41, 0x74, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x1b,
+	0x20, 0x01, 0x28, 0x0e, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x2e, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x8a, 0x01, 0x0a, 0x07, 0x43, 0x65, 0x74, 0x49, 0x6e,
+	0x66, 0x6f, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x23, 0x0a,
+	0x0d, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x49, 0x6e, 0x64,
+	0x65, 0x78, 0x12, 0x27, 0x0a, 0x0f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x5f,
+	0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x73, 0x69, 0x67,
+	0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x73,
+	0x63, 0x72, 0x69, 0x70, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x63, 0x72,
+	0x69, 0x70, 0x74, 0x22, 0xfe, 0x01, 0x0a, 0x0e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x02, 0x74, 0x78, 0x12, 0x3e, 0x0a, 0x1b, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x65, 0x72, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61,
+	0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x19, 0x62, 0x6f, 0x72,
+	0x72, 0x6f, 0x77, 0x65, 0x72, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e,
+	0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x3e, 0x0a, 0x1b, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x65, 0x72, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x65, 0x64, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61,
+	0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x19, 0x62, 0x6f, 0x72,
+	0x72, 0x6f, 0x77, 0x65, 0x72, 0x41, 0x64, 0x61, 0x70, 0x74, 0x65, 0x64, 0x53, 0x69, 0x67, 0x6e,
+	0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x38, 0x0a, 0x0e, 0x64, 0x63, 0x6d, 0x5f, 0x73, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x42, 0x11,
+	0xe2, 0xde, 0x1f, 0x0d, 0x44, 0x43, 0x4d, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65,
+	0x73, 0x52, 0x0d, 0x64, 0x63, 0x6d, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
+	0x12, 0x22, 0x0a, 0x0d, 0x73, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x5f, 0x74, 0x78, 0x5f, 0x68, 0x65,
+	0x78, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x73, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x54,
+	0x78, 0x48, 0x65, 0x78, 0x22, 0x93, 0x02, 0x0a, 0x0c, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65,
+	0x6e, 0x74, 0x43, 0x65, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x02, 0x74, 0x78, 0x12, 0x4e, 0x0a, 0x16, 0x64, 0x63, 0x6d, 0x5f, 0x61, 0x64, 0x61,
+	0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18,
+	0x02, 0x20, 0x03, 0x28, 0x09, 0x42, 0x18, 0xe2, 0xde, 0x1f, 0x14, 0x44, 0x43, 0x4d, 0x41, 0x64,
+	0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52,
+	0x14, 0x64, 0x63, 0x6d, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e, 0x61,
+	0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x4e, 0x0a, 0x16, 0x64, 0x63, 0x6d, 0x5f, 0x61, 0x64, 0x61,
+	0x70, 0x74, 0x65, 0x64, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18,
+	0x03, 0x20, 0x03, 0x28, 0x09, 0x42, 0x18, 0xe2, 0xde, 0x1f, 0x14, 0x44, 0x43, 0x4d, 0x41, 0x64,
+	0x61, 0x70, 0x74, 0x65, 0x64, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52,
+	0x14, 0x64, 0x63, 0x6d, 0x41, 0x64, 0x61, 0x70, 0x74, 0x65, 0x64, 0x53, 0x69, 0x67, 0x6e, 0x61,
+	0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x2f, 0x0a, 0x13, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
+	0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03,
+	0x28, 0x09, 0x52, 0x12, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x53, 0x69, 0x67, 0x6e,
+	0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x22, 0x0a, 0x0d, 0x73, 0x69, 0x67, 0x6e, 0x65, 0x64,
+	0x5f, 0x74, 0x78, 0x5f, 0x68, 0x65, 0x78, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x73,
+	0x69, 0x67, 0x6e, 0x65, 0x64, 0x54, 0x78, 0x48, 0x65, 0x78, 0x22, 0xdc, 0x03, 0x0a, 0x07, 0x44,
+	0x4c, 0x43, 0x4d, 0x65, 0x74, 0x61, 0x12, 0x4b, 0x0a, 0x0f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x1c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x42, 0x04, 0xc8,
+	0xde, 0x1f, 0x00, 0x52, 0x0e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x43, 0x65, 0x74, 0x12, 0x5a, 0x0a, 0x17, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43,
+	0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x15, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c,
+	0x74, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12,
+	0x45, 0x0a, 0x0d, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x63, 0x65, 0x74,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43,
+	0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0c, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d,
+	0x65, 0x6e, 0x74, 0x43, 0x65, 0x74, 0x12, 0x2a, 0x0a, 0x11, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75,
+	0x74, 0x5f, 0x72, 0x65, 0x66, 0x75, 0x6e, 0x64, 0x5f, 0x74, 0x78, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x0f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x66, 0x75, 0x6e, 0x64,
+	0x54, 0x78, 0x12, 0x35, 0x0a, 0x0b, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x75, 0x74, 0x78, 0x6f,
+	0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62,
+	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x55, 0x54, 0x58, 0x4f, 0x52, 0x0a, 0x76,
+	0x61, 0x75, 0x6c, 0x74, 0x55, 0x74, 0x78, 0x6f, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x69, 0x6e, 0x74,
+	0x65, 0x72, 0x6e, 0x61, 0x6c, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0b, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x4b, 0x65, 0x79, 0x12, 0x27, 0x0a, 0x0f,
+	0x6d, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x5f, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x18,
+	0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x6d, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x53,
+	0x63, 0x72, 0x69, 0x70, 0x74, 0x12, 0x32, 0x0a, 0x15, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74,
+	0x5f, 0x72, 0x65, 0x66, 0x75, 0x6e, 0x64, 0x5f, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x18, 0x08,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x13, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x66,
+	0x75, 0x6e, 0x64, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x22, 0xc4, 0x01, 0x0a, 0x0a, 0x44, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x4c, 0x6f, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x78, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x12, 0x23, 0x0a, 0x0d,
+	0x76, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x0c, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x12, 0x29, 0x0a, 0x10, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0f, 0x61, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a,
+	0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x09, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x78, 0x12, 0x33, 0x0a, 0x06, 0x73,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1b, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
 	0x22, 0xa0, 0x01, 0x0a, 0x09, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x17,
 	0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
@@ -12982,58 +13304,73 @@ var file_side_lending_lending_proto_rawDesc = []byte{
 	0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42,
 	0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x08, 0x63, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x41, 0x74, 0x22, 0xe8, 0x01, 0x0a, 0x0c, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x12, 0x0a,
-	0x04, 0x74, 0x78, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69,
-	0x64, 0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74,
-	0x78, 0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18,
-	0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65,
-	0x73, 0x12, 0x38, 0x0a, 0x0e, 0x64, 0x63, 0x6d, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
-	0x72, 0x65, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x09, 0x42, 0x11, 0xe2, 0xde, 0x1f, 0x0d, 0x44,
-	0x43, 0x4d, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52, 0x0d, 0x64, 0x63,
-	0x6d, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x41, 0x0a, 0x09, 0x63,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x5f, 0x61, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a,
-	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00,
-	0x90, 0xdf, 0x1f, 0x01, 0x52, 0x08, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x74, 0x2a, 0x32,
-	0x0a, 0x0a, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0c, 0x0a, 0x08,
-	0x49, 0x4e, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x41, 0x43,
-	0x54, 0x49, 0x56, 0x45, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x50, 0x41, 0x55, 0x53, 0x45, 0x44,
-	0x10, 0x02, 0x2a, 0x8a, 0x01, 0x0a, 0x0a, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x74, 0x61, 0x74, 0x75,
-	0x73, 0x12, 0x0f, 0x0a, 0x0b, 0x55, 0x6e, 0x73, 0x70, 0x65, 0x63, 0x69, 0x66, 0x69, 0x65, 0x64,
-	0x10, 0x00, 0x12, 0x0d, 0x0a, 0x09, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x65, 0x64, 0x10,
-	0x01, 0x12, 0x08, 0x0a, 0x04, 0x4f, 0x70, 0x65, 0x6e, 0x10, 0x02, 0x12, 0x0c, 0x0a, 0x08, 0x52,
-	0x65, 0x6a, 0x65, 0x63, 0x74, 0x65, 0x64, 0x10, 0x03, 0x12, 0x0d, 0x0a, 0x09, 0x43, 0x61, 0x6e,
-	0x63, 0x65, 0x6c, 0x6c, 0x65, 0x64, 0x10, 0x04, 0x12, 0x0a, 0x0a, 0x06, 0x52, 0x65, 0x70, 0x61,
-	0x69, 0x64, 0x10, 0x05, 0x12, 0x0d, 0x0a, 0x09, 0x44, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x65,
-	0x64, 0x10, 0x06, 0x12, 0x0e, 0x0a, 0x0a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x65,
-	0x64, 0x10, 0x07, 0x12, 0x0a, 0x0a, 0x06, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x64, 0x10, 0x08, 0x2a,
-	0x42, 0x0a, 0x07, 0x43, 0x65, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0f, 0x0a, 0x0b, 0x4c, 0x49,
-	0x51, 0x55, 0x49, 0x44, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x00, 0x12, 0x17, 0x0a, 0x13, 0x44,
-	0x45, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x5f, 0x4c, 0x49, 0x51, 0x55, 0x49, 0x44, 0x41, 0x54, 0x49,
-	0x4f, 0x4e, 0x10, 0x01, 0x12, 0x0d, 0x0a, 0x09, 0x52, 0x45, 0x50, 0x41, 0x59, 0x4d, 0x45, 0x4e,
-	0x54, 0x10, 0x02, 0x2a, 0x96, 0x01, 0x0a, 0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x49,
-	0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x1c, 0x0a, 0x18, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47,
-	0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x52, 0x45, 0x50, 0x41, 0x59, 0x4d, 0x45, 0x4e,
-	0x54, 0x10, 0x00, 0x12, 0x1e, 0x0a, 0x1a, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x49,
-	0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x4c, 0x49, 0x51, 0x55, 0x49, 0x44, 0x41, 0x54, 0x49, 0x4f,
-	0x4e, 0x10, 0x01, 0x12, 0x26, 0x0a, 0x22, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x49,
-	0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x44, 0x45, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x5f, 0x4c, 0x49,
-	0x51, 0x55, 0x49, 0x44, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x02, 0x12, 0x1f, 0x0a, 0x1b, 0x53,
-	0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x43, 0x41,
-	0x4e, 0x43, 0x45, 0x4c, 0x4c, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x03, 0x42, 0xa0, 0x01, 0x0a,
-	0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x42, 0x0c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x41, 0x74, 0x22, 0xf6, 0x01, 0x0a, 0x0a, 0x52, 0x65, 0x64, 0x65, 0x6d, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02,
+	0x69, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x74,
+	0x78, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x12,
+	0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74, 0x78, 0x12,
+	0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x05, 0x20,
+	0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12,
+	0x38, 0x0a, 0x0e, 0x64, 0x63, 0x6d, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65,
+	0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x42, 0x11, 0xe2, 0xde, 0x1f, 0x0d, 0x44, 0x43, 0x4d,
+	0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x52, 0x0d, 0x64, 0x63, 0x6d, 0x53,
+	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x41, 0x0a, 0x09, 0x63, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x5f, 0x61, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf,
+	0x1f, 0x01, 0x52, 0x08, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x74, 0x2a, 0x32, 0x0a, 0x0a,
+	0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0c, 0x0a, 0x08, 0x49, 0x4e,
+	0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x41, 0x43, 0x54, 0x49,
+	0x56, 0x45, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x50, 0x41, 0x55, 0x53, 0x45, 0x44, 0x10, 0x02,
+	0x2a, 0x6d, 0x0a, 0x0a, 0x4c, 0x6f, 0x61, 0x6e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0f,
+	0x0a, 0x0b, 0x55, 0x6e, 0x73, 0x70, 0x65, 0x63, 0x69, 0x66, 0x69, 0x65, 0x64, 0x10, 0x00, 0x12,
+	0x0d, 0x0a, 0x09, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x65, 0x64, 0x10, 0x01, 0x12, 0x08,
+	0x0a, 0x04, 0x4f, 0x70, 0x65, 0x6e, 0x10, 0x02, 0x12, 0x0a, 0x0a, 0x06, 0x52, 0x65, 0x70, 0x61,
+	0x69, 0x64, 0x10, 0x03, 0x12, 0x0d, 0x0a, 0x09, 0x44, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x65,
+	0x64, 0x10, 0x04, 0x12, 0x0e, 0x0a, 0x0a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x65,
+	0x64, 0x10, 0x05, 0x12, 0x0a, 0x0a, 0x06, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x64, 0x10, 0x06, 0x2a,
+	0x7f, 0x0a, 0x13, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x20, 0x0a, 0x1c, 0x41, 0x55, 0x54, 0x48, 0x4f, 0x52,
+	0x49, 0x5a, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50,
+	0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x00, 0x12, 0x23, 0x0a, 0x1f, 0x41, 0x55, 0x54, 0x48,
+	0x4f, 0x52, 0x49, 0x5a, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53,
+	0x5f, 0x41, 0x55, 0x54, 0x48, 0x4f, 0x52, 0x49, 0x5a, 0x45, 0x44, 0x10, 0x01, 0x12, 0x21, 0x0a,
+	0x1d, 0x41, 0x55, 0x54, 0x48, 0x4f, 0x52, 0x49, 0x5a, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x53,
+	0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x52, 0x45, 0x4a, 0x45, 0x43, 0x54, 0x45, 0x44, 0x10, 0x02,
+	0x2a, 0x42, 0x0a, 0x07, 0x43, 0x65, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0f, 0x0a, 0x0b, 0x4c,
+	0x49, 0x51, 0x55, 0x49, 0x44, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x00, 0x12, 0x17, 0x0a, 0x13,
+	0x44, 0x45, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x5f, 0x4c, 0x49, 0x51, 0x55, 0x49, 0x44, 0x41, 0x54,
+	0x49, 0x4f, 0x4e, 0x10, 0x01, 0x12, 0x0d, 0x0a, 0x09, 0x52, 0x45, 0x50, 0x41, 0x59, 0x4d, 0x45,
+	0x4e, 0x54, 0x10, 0x02, 0x2a, 0x83, 0x01, 0x0a, 0x0d, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1a, 0x0a, 0x16, 0x44, 0x45, 0x50, 0x4f, 0x53, 0x49,
+	0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47,
+	0x10, 0x00, 0x12, 0x1b, 0x0a, 0x17, 0x44, 0x45, 0x50, 0x4f, 0x53, 0x49, 0x54, 0x5f, 0x53, 0x54,
+	0x41, 0x54, 0x55, 0x53, 0x5f, 0x56, 0x45, 0x52, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x01, 0x12,
+	0x1c, 0x0a, 0x18, 0x44, 0x45, 0x50, 0x4f, 0x53, 0x49, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55,
+	0x53, 0x5f, 0x52, 0x45, 0x44, 0x45, 0x45, 0x4d, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x12, 0x1b, 0x0a,
+	0x17, 0x44, 0x45, 0x50, 0x4f, 0x53, 0x49, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f,
+	0x52, 0x45, 0x44, 0x45, 0x45, 0x4d, 0x45, 0x44, 0x10, 0x03, 0x2a, 0x94, 0x01, 0x0a, 0x0d, 0x53,
+	0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x1c, 0x0a, 0x18,
+	0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x52,
+	0x45, 0x50, 0x41, 0x59, 0x4d, 0x45, 0x4e, 0x54, 0x10, 0x00, 0x12, 0x1e, 0x0a, 0x1a, 0x53, 0x49,
+	0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x4c, 0x49, 0x51,
+	0x55, 0x49, 0x44, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x01, 0x12, 0x26, 0x0a, 0x22, 0x53, 0x49,
+	0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x44, 0x45, 0x46,
+	0x41, 0x55, 0x4c, 0x54, 0x5f, 0x4c, 0x49, 0x51, 0x55, 0x49, 0x44, 0x41, 0x54, 0x49, 0x4f, 0x4e,
+	0x10, 0x02, 0x12, 0x1d, 0x0a, 0x19, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x49, 0x4e,
+	0x54, 0x45, 0x4e, 0x54, 0x5f, 0x52, 0x45, 0x44, 0x45, 0x4d, 0x50, 0x54, 0x49, 0x4f, 0x4e, 0x10,
+	0x03, 0x42, 0xa0, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x0c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x50,
+	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f,
+	0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69,
+	0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64,
+	0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65,
+	0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
+	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -13048,56 +13385,60 @@ func file_side_lending_lending_proto_rawDescGZIP() []byte {
 	return file_side_lending_lending_proto_rawDescData
 }
 
-var file_side_lending_lending_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+var file_side_lending_lending_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
 var file_side_lending_lending_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_side_lending_lending_proto_goTypes = []interface{}{
 	(PoolStatus)(0),               // 0: side.lending.PoolStatus
 	(LoanStatus)(0),               // 1: side.lending.LoanStatus
-	(CetType)(0),                  // 2: side.lending.CetType
-	(SigningIntent)(0),            // 3: side.lending.SigningIntent
-	(*PoolTrancheConfig)(nil),     // 4: side.lending.PoolTrancheConfig
-	(*PoolConfig)(nil),            // 5: side.lending.PoolConfig
-	(*PoolTranche)(nil),           // 6: side.lending.PoolTranche
-	(*LendingPool)(nil),           // 7: side.lending.LendingPool
-	(*AuthorizationDeposits)(nil), // 8: side.lending.AuthorizationDeposits
-	(*Loan)(nil),                  // 9: side.lending.Loan
-	(*CetInfo)(nil),               // 10: side.lending.CetInfo
-	(*LiquidationCet)(nil),        // 11: side.lending.LiquidationCet
-	(*RepaymentCet)(nil),          // 12: side.lending.RepaymentCet
-	(*DLCMeta)(nil),               // 13: side.lending.DLCMeta
-	(*DepositLog)(nil),            // 14: side.lending.DepositLog
-	(*Repayment)(nil),             // 15: side.lending.Repayment
-	(*Cancellation)(nil),          // 16: side.lending.Cancellation
-	(*v1beta1.Coin)(nil),          // 17: cosmos.base.v1beta1.Coin
-	(*timestamppb.Timestamp)(nil), // 18: google.protobuf.Timestamp
-	(*btcbridge.UTXO)(nil),        // 19: side.btcbridge.UTXO
+	(AuthorizationStatus)(0),      // 2: side.lending.AuthorizationStatus
+	(CetType)(0),                  // 3: side.lending.CetType
+	(DepositStatus)(0),            // 4: side.lending.DepositStatus
+	(SigningIntent)(0),            // 5: side.lending.SigningIntent
+	(*PoolTrancheConfig)(nil),     // 6: side.lending.PoolTrancheConfig
+	(*PoolConfig)(nil),            // 7: side.lending.PoolConfig
+	(*PoolTranche)(nil),           // 8: side.lending.PoolTranche
+	(*LendingPool)(nil),           // 9: side.lending.LendingPool
+	(*Authorization)(nil),         // 10: side.lending.Authorization
+	(*Loan)(nil),                  // 11: side.lending.Loan
+	(*CetInfo)(nil),               // 12: side.lending.CetInfo
+	(*LiquidationCet)(nil),        // 13: side.lending.LiquidationCet
+	(*RepaymentCet)(nil),          // 14: side.lending.RepaymentCet
+	(*DLCMeta)(nil),               // 15: side.lending.DLCMeta
+	(*DepositLog)(nil),            // 16: side.lending.DepositLog
+	(*Repayment)(nil),             // 17: side.lending.Repayment
+	(*Redemption)(nil),            // 18: side.lending.Redemption
+	(*v1beta1.Coin)(nil),          // 19: cosmos.base.v1beta1.Coin
+	(*timestamppb.Timestamp)(nil), // 20: google.protobuf.Timestamp
+	(*btcbridge.UTXO)(nil),        // 21: side.btcbridge.UTXO
 }
 var file_side_lending_lending_proto_depIdxs = []int32{
-	4,  // 0: side.lending.PoolConfig.tranches:type_name -> side.lending.PoolTrancheConfig
-	17, // 1: side.lending.PoolConfig.request_fee:type_name -> cosmos.base.v1beta1.Coin
-	17, // 2: side.lending.LendingPool.supply:type_name -> cosmos.base.v1beta1.Coin
-	17, // 3: side.lending.LendingPool.total_stokens:type_name -> cosmos.base.v1beta1.Coin
-	6,  // 4: side.lending.LendingPool.tranches:type_name -> side.lending.PoolTranche
-	5,  // 5: side.lending.LendingPool.config:type_name -> side.lending.PoolConfig
+	6,  // 0: side.lending.PoolConfig.tranches:type_name -> side.lending.PoolTrancheConfig
+	19, // 1: side.lending.PoolConfig.request_fee:type_name -> cosmos.base.v1beta1.Coin
+	19, // 2: side.lending.LendingPool.supply:type_name -> cosmos.base.v1beta1.Coin
+	19, // 3: side.lending.LendingPool.total_stokens:type_name -> cosmos.base.v1beta1.Coin
+	8,  // 4: side.lending.LendingPool.tranches:type_name -> side.lending.PoolTranche
+	7,  // 5: side.lending.LendingPool.config:type_name -> side.lending.PoolConfig
 	0,  // 6: side.lending.LendingPool.status:type_name -> side.lending.PoolStatus
-	17, // 7: side.lending.Loan.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
-	17, // 8: side.lending.Loan.request_fee:type_name -> cosmos.base.v1beta1.Coin
-	8,  // 9: side.lending.Loan.authorization_deposits:type_name -> side.lending.AuthorizationDeposits
-	18, // 10: side.lending.Loan.create_at:type_name -> google.protobuf.Timestamp
-	18, // 11: side.lending.Loan.disburse_at:type_name -> google.protobuf.Timestamp
-	1,  // 12: side.lending.Loan.status:type_name -> side.lending.LoanStatus
-	11, // 13: side.lending.DLCMeta.liquidation_cet:type_name -> side.lending.LiquidationCet
-	11, // 14: side.lending.DLCMeta.default_liquidation_cet:type_name -> side.lending.LiquidationCet
-	12, // 15: side.lending.DLCMeta.repayment_cet:type_name -> side.lending.RepaymentCet
-	19, // 16: side.lending.DLCMeta.vault_utxos:type_name -> side.btcbridge.UTXO
-	17, // 17: side.lending.Repayment.amount:type_name -> cosmos.base.v1beta1.Coin
-	18, // 18: side.lending.Repayment.create_at:type_name -> google.protobuf.Timestamp
-	18, // 19: side.lending.Cancellation.create_at:type_name -> google.protobuf.Timestamp
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	2,  // 7: side.lending.Authorization.status:type_name -> side.lending.AuthorizationStatus
+	19, // 8: side.lending.Loan.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
+	19, // 9: side.lending.Loan.request_fee:type_name -> cosmos.base.v1beta1.Coin
+	10, // 10: side.lending.Loan.authorizations:type_name -> side.lending.Authorization
+	20, // 11: side.lending.Loan.create_at:type_name -> google.protobuf.Timestamp
+	20, // 12: side.lending.Loan.disburse_at:type_name -> google.protobuf.Timestamp
+	1,  // 13: side.lending.Loan.status:type_name -> side.lending.LoanStatus
+	13, // 14: side.lending.DLCMeta.liquidation_cet:type_name -> side.lending.LiquidationCet
+	13, // 15: side.lending.DLCMeta.default_liquidation_cet:type_name -> side.lending.LiquidationCet
+	14, // 16: side.lending.DLCMeta.repayment_cet:type_name -> side.lending.RepaymentCet
+	21, // 17: side.lending.DLCMeta.vault_utxos:type_name -> side.btcbridge.UTXO
+	4,  // 18: side.lending.DepositLog.status:type_name -> side.lending.DepositStatus
+	19, // 19: side.lending.Repayment.amount:type_name -> cosmos.base.v1beta1.Coin
+	20, // 20: side.lending.Repayment.create_at:type_name -> google.protobuf.Timestamp
+	20, // 21: side.lending.Redemption.create_at:type_name -> google.protobuf.Timestamp
+	22, // [22:22] is the sub-list for method output_type
+	22, // [22:22] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_side_lending_lending_proto_init() }
@@ -13155,7 +13496,7 @@ func file_side_lending_lending_proto_init() {
 			}
 		}
 		file_side_lending_lending_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AuthorizationDeposits); i {
+			switch v := v.(*Authorization); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -13251,7 +13592,7 @@ func file_side_lending_lending_proto_init() {
 			}
 		}
 		file_side_lending_lending_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Cancellation); i {
+			switch v := v.(*Redemption); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -13268,7 +13609,7 @@ func file_side_lending_lending_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_lending_lending_proto_rawDesc,
-			NumEnums:      4,
+			NumEnums:      6,
 			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   0,

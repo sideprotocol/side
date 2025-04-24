@@ -8230,78 +8230,78 @@ func (x *fastReflection_MsgApproveResponse) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_MsgCancel_4_list)(nil)
+var _ protoreflect.List = (*_MsgRedeem_4_list)(nil)
 
-type _MsgCancel_4_list struct {
+type _MsgRedeem_4_list struct {
 	list *[]string
 }
 
-func (x *_MsgCancel_4_list) Len() int {
+func (x *_MsgRedeem_4_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_MsgCancel_4_list) Get(i int) protoreflect.Value {
+func (x *_MsgRedeem_4_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_MsgCancel_4_list) Set(i int, value protoreflect.Value) {
+func (x *_MsgRedeem_4_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_MsgCancel_4_list) Append(value protoreflect.Value) {
+func (x *_MsgRedeem_4_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_MsgCancel_4_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message MsgCancel at list field Signatures as it is not of Message kind"))
+func (x *_MsgRedeem_4_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgRedeem at list field Signatures as it is not of Message kind"))
 }
 
-func (x *_MsgCancel_4_list) Truncate(n int) {
+func (x *_MsgRedeem_4_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_MsgCancel_4_list) NewElement() protoreflect.Value {
+func (x *_MsgRedeem_4_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_MsgCancel_4_list) IsValid() bool {
+func (x *_MsgRedeem_4_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_MsgCancel            protoreflect.MessageDescriptor
-	fd_MsgCancel_borrower   protoreflect.FieldDescriptor
-	fd_MsgCancel_loan_id    protoreflect.FieldDescriptor
-	fd_MsgCancel_tx         protoreflect.FieldDescriptor
-	fd_MsgCancel_signatures protoreflect.FieldDescriptor
+	md_MsgRedeem            protoreflect.MessageDescriptor
+	fd_MsgRedeem_borrower   protoreflect.FieldDescriptor
+	fd_MsgRedeem_loan_id    protoreflect.FieldDescriptor
+	fd_MsgRedeem_tx         protoreflect.FieldDescriptor
+	fd_MsgRedeem_signatures protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgCancel = File_side_lending_tx_proto.Messages().ByName("MsgCancel")
-	fd_MsgCancel_borrower = md_MsgCancel.Fields().ByName("borrower")
-	fd_MsgCancel_loan_id = md_MsgCancel.Fields().ByName("loan_id")
-	fd_MsgCancel_tx = md_MsgCancel.Fields().ByName("tx")
-	fd_MsgCancel_signatures = md_MsgCancel.Fields().ByName("signatures")
+	md_MsgRedeem = File_side_lending_tx_proto.Messages().ByName("MsgRedeem")
+	fd_MsgRedeem_borrower = md_MsgRedeem.Fields().ByName("borrower")
+	fd_MsgRedeem_loan_id = md_MsgRedeem.Fields().ByName("loan_id")
+	fd_MsgRedeem_tx = md_MsgRedeem.Fields().ByName("tx")
+	fd_MsgRedeem_signatures = md_MsgRedeem.Fields().ByName("signatures")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgCancel)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgRedeem)(nil)
 
-type fastReflection_MsgCancel MsgCancel
+type fastReflection_MsgRedeem MsgRedeem
 
-func (x *MsgCancel) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCancel)(x)
+func (x *MsgRedeem) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRedeem)(x)
 }
 
-func (x *MsgCancel) slowProtoReflect() protoreflect.Message {
+func (x *MsgRedeem) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -8313,43 +8313,43 @@ func (x *MsgCancel) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgCancel_messageType fastReflection_MsgCancel_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCancel_messageType{}
+var _fastReflection_MsgRedeem_messageType fastReflection_MsgRedeem_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRedeem_messageType{}
 
-type fastReflection_MsgCancel_messageType struct{}
+type fastReflection_MsgRedeem_messageType struct{}
 
-func (x fastReflection_MsgCancel_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCancel)(nil)
+func (x fastReflection_MsgRedeem_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRedeem)(nil)
 }
-func (x fastReflection_MsgCancel_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCancel)
+func (x fastReflection_MsgRedeem_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRedeem)
 }
-func (x fastReflection_MsgCancel_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCancel
+func (x fastReflection_MsgRedeem_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRedeem
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgCancel) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCancel
+func (x *fastReflection_MsgRedeem) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRedeem
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCancel) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCancel_messageType
+func (x *fastReflection_MsgRedeem) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRedeem_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCancel) New() protoreflect.Message {
-	return new(fastReflection_MsgCancel)
+func (x *fastReflection_MsgRedeem) New() protoreflect.Message {
+	return new(fastReflection_MsgRedeem)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCancel) Interface() protoreflect.ProtoMessage {
-	return (*MsgCancel)(x)
+func (x *fastReflection_MsgRedeem) Interface() protoreflect.ProtoMessage {
+	return (*MsgRedeem)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -8357,28 +8357,28 @@ func (x *fastReflection_MsgCancel) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgCancel) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgRedeem) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Borrower != "" {
 		value := protoreflect.ValueOfString(x.Borrower)
-		if !f(fd_MsgCancel_borrower, value) {
+		if !f(fd_MsgRedeem_borrower, value) {
 			return
 		}
 	}
 	if x.LoanId != "" {
 		value := protoreflect.ValueOfString(x.LoanId)
-		if !f(fd_MsgCancel_loan_id, value) {
+		if !f(fd_MsgRedeem_loan_id, value) {
 			return
 		}
 	}
 	if x.Tx != "" {
 		value := protoreflect.ValueOfString(x.Tx)
-		if !f(fd_MsgCancel_tx, value) {
+		if !f(fd_MsgRedeem_tx, value) {
 			return
 		}
 	}
 	if len(x.Signatures) != 0 {
-		value := protoreflect.ValueOfList(&_MsgCancel_4_list{list: &x.Signatures})
-		if !f(fd_MsgCancel_signatures, value) {
+		value := protoreflect.ValueOfList(&_MsgRedeem_4_list{list: &x.Signatures})
+		if !f(fd_MsgRedeem_signatures, value) {
 			return
 		}
 	}
@@ -8395,21 +8395,21 @@ func (x *fastReflection_MsgCancel) Range(f func(protoreflect.FieldDescriptor, pr
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCancel) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgRedeem) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.MsgCancel.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		return x.Borrower != ""
-	case "side.lending.MsgCancel.loan_id":
+	case "side.lending.MsgRedeem.loan_id":
 		return x.LoanId != ""
-	case "side.lending.MsgCancel.tx":
+	case "side.lending.MsgRedeem.tx":
 		return x.Tx != ""
-	case "side.lending.MsgCancel.signatures":
+	case "side.lending.MsgRedeem.signatures":
 		return len(x.Signatures) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancel"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancel does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -8419,21 +8419,21 @@ func (x *fastReflection_MsgCancel) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCancel) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgRedeem) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.MsgCancel.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		x.Borrower = ""
-	case "side.lending.MsgCancel.loan_id":
+	case "side.lending.MsgRedeem.loan_id":
 		x.LoanId = ""
-	case "side.lending.MsgCancel.tx":
+	case "side.lending.MsgRedeem.tx":
 		x.Tx = ""
-	case "side.lending.MsgCancel.signatures":
+	case "side.lending.MsgRedeem.signatures":
 		x.Signatures = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancel"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancel does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -8443,28 +8443,28 @@ func (x *fastReflection_MsgCancel) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCancel) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeem) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.MsgCancel.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		value := x.Borrower
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgCancel.loan_id":
+	case "side.lending.MsgRedeem.loan_id":
 		value := x.LoanId
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgCancel.tx":
+	case "side.lending.MsgRedeem.tx":
 		value := x.Tx
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgCancel.signatures":
+	case "side.lending.MsgRedeem.signatures":
 		if len(x.Signatures) == 0 {
-			return protoreflect.ValueOfList(&_MsgCancel_4_list{})
+			return protoreflect.ValueOfList(&_MsgRedeem_4_list{})
 		}
-		listValue := &_MsgCancel_4_list{list: &x.Signatures}
+		listValue := &_MsgRedeem_4_list{list: &x.Signatures}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancel"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancel does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -8478,23 +8478,23 @@ func (x *fastReflection_MsgCancel) Get(descriptor protoreflect.FieldDescriptor) 
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCancel) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgRedeem) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.MsgCancel.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		x.Borrower = value.Interface().(string)
-	case "side.lending.MsgCancel.loan_id":
+	case "side.lending.MsgRedeem.loan_id":
 		x.LoanId = value.Interface().(string)
-	case "side.lending.MsgCancel.tx":
+	case "side.lending.MsgRedeem.tx":
 		x.Tx = value.Interface().(string)
-	case "side.lending.MsgCancel.signatures":
+	case "side.lending.MsgRedeem.signatures":
 		lv := value.List()
-		clv := lv.(*_MsgCancel_4_list)
+		clv := lv.(*_MsgRedeem_4_list)
 		x.Signatures = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancel"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancel does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -8508,57 +8508,57 @@ func (x *fastReflection_MsgCancel) Set(fd protoreflect.FieldDescriptor, value pr
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCancel) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeem) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgCancel.signatures":
+	case "side.lending.MsgRedeem.signatures":
 		if x.Signatures == nil {
 			x.Signatures = []string{}
 		}
-		value := &_MsgCancel_4_list{list: &x.Signatures}
+		value := &_MsgRedeem_4_list{list: &x.Signatures}
 		return protoreflect.ValueOfList(value)
-	case "side.lending.MsgCancel.borrower":
-		panic(fmt.Errorf("field borrower of message side.lending.MsgCancel is not mutable"))
-	case "side.lending.MsgCancel.loan_id":
-		panic(fmt.Errorf("field loan_id of message side.lending.MsgCancel is not mutable"))
-	case "side.lending.MsgCancel.tx":
-		panic(fmt.Errorf("field tx of message side.lending.MsgCancel is not mutable"))
+	case "side.lending.MsgRedeem.borrower":
+		panic(fmt.Errorf("field borrower of message side.lending.MsgRedeem is not mutable"))
+	case "side.lending.MsgRedeem.loan_id":
+		panic(fmt.Errorf("field loan_id of message side.lending.MsgRedeem is not mutable"))
+	case "side.lending.MsgRedeem.tx":
+		panic(fmt.Errorf("field tx of message side.lending.MsgRedeem is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancel"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancel does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCancel) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeem) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgCancel.borrower":
+	case "side.lending.MsgRedeem.borrower":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgCancel.loan_id":
+	case "side.lending.MsgRedeem.loan_id":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgCancel.tx":
+	case "side.lending.MsgRedeem.tx":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgCancel.signatures":
+	case "side.lending.MsgRedeem.signatures":
 		list := []string{}
-		return protoreflect.ValueOfList(&_MsgCancel_4_list{list: &list})
+		return protoreflect.ValueOfList(&_MsgRedeem_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancel"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeem"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancel does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeem does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCancel) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgRedeem) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgCancel", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgRedeem", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -8566,7 +8566,7 @@ func (x *fastReflection_MsgCancel) WhichOneof(d protoreflect.OneofDescriptor) pr
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCancel) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgRedeem) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -8577,7 +8577,7 @@ func (x *fastReflection_MsgCancel) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCancel) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgRedeem) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -8589,7 +8589,7 @@ func (x *fastReflection_MsgCancel) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCancel) IsValid() bool {
+func (x *fastReflection_MsgRedeem) IsValid() bool {
 	return x != nil
 }
 
@@ -8599,9 +8599,9 @@ func (x *fastReflection_MsgCancel) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCancel) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgRedeem) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCancel)
+		x := input.Message.Interface().(*MsgRedeem)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -8641,7 +8641,7 @@ func (x *fastReflection_MsgCancel) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCancel)
+		x := input.Message.Interface().(*MsgRedeem)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -8701,7 +8701,7 @@ func (x *fastReflection_MsgCancel) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCancel)
+		x := input.Message.Interface().(*MsgRedeem)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -8733,10 +8733,10 @@ func (x *fastReflection_MsgCancel) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCancel: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRedeem: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCancel: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRedeem: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -8903,23 +8903,23 @@ func (x *fastReflection_MsgCancel) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgCancelResponse protoreflect.MessageDescriptor
+	md_MsgRedeemResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgCancelResponse = File_side_lending_tx_proto.Messages().ByName("MsgCancelResponse")
+	md_MsgRedeemResponse = File_side_lending_tx_proto.Messages().ByName("MsgRedeemResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgCancelResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgRedeemResponse)(nil)
 
-type fastReflection_MsgCancelResponse MsgCancelResponse
+type fastReflection_MsgRedeemResponse MsgRedeemResponse
 
-func (x *MsgCancelResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCancelResponse)(x)
+func (x *MsgRedeemResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRedeemResponse)(x)
 }
 
-func (x *MsgCancelResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgRedeemResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -8931,43 +8931,43 @@ func (x *MsgCancelResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgCancelResponse_messageType fastReflection_MsgCancelResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCancelResponse_messageType{}
+var _fastReflection_MsgRedeemResponse_messageType fastReflection_MsgRedeemResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRedeemResponse_messageType{}
 
-type fastReflection_MsgCancelResponse_messageType struct{}
+type fastReflection_MsgRedeemResponse_messageType struct{}
 
-func (x fastReflection_MsgCancelResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCancelResponse)(nil)
+func (x fastReflection_MsgRedeemResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRedeemResponse)(nil)
 }
-func (x fastReflection_MsgCancelResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCancelResponse)
+func (x fastReflection_MsgRedeemResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRedeemResponse)
 }
-func (x fastReflection_MsgCancelResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCancelResponse
+func (x fastReflection_MsgRedeemResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRedeemResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgCancelResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCancelResponse
+func (x *fastReflection_MsgRedeemResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRedeemResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCancelResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCancelResponse_messageType
+func (x *fastReflection_MsgRedeemResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRedeemResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCancelResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgCancelResponse)
+func (x *fastReflection_MsgRedeemResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgRedeemResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCancelResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgCancelResponse)(x)
+func (x *fastReflection_MsgRedeemResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgRedeemResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -8975,7 +8975,7 @@ func (x *fastReflection_MsgCancelResponse) Interface() protoreflect.ProtoMessage
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgCancelResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgRedeemResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -8989,13 +8989,13 @@ func (x *fastReflection_MsgCancelResponse) Range(f func(protoreflect.FieldDescri
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCancelResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgRedeemResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancelResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancelResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -9005,13 +9005,13 @@ func (x *fastReflection_MsgCancelResponse) Has(fd protoreflect.FieldDescriptor) 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCancelResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgRedeemResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancelResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancelResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -9021,13 +9021,13 @@ func (x *fastReflection_MsgCancelResponse) Clear(fd protoreflect.FieldDescriptor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCancelResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeemResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancelResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancelResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -9041,13 +9041,13 @@ func (x *fastReflection_MsgCancelResponse) Get(descriptor protoreflect.FieldDesc
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCancelResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgRedeemResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancelResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancelResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -9061,36 +9061,36 @@ func (x *fastReflection_MsgCancelResponse) Set(fd protoreflect.FieldDescriptor, 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCancelResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeemResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancelResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancelResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCancelResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRedeemResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgCancelResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRedeemResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgCancelResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgRedeemResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCancelResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgRedeemResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgCancelResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgRedeemResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -9098,7 +9098,7 @@ func (x *fastReflection_MsgCancelResponse) WhichOneof(d protoreflect.OneofDescri
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCancelResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgRedeemResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -9109,7 +9109,7 @@ func (x *fastReflection_MsgCancelResponse) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCancelResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgRedeemResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -9121,7 +9121,7 @@ func (x *fastReflection_MsgCancelResponse) SetUnknown(fields protoreflect.RawFie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCancelResponse) IsValid() bool {
+func (x *fastReflection_MsgRedeemResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -9131,9 +9131,9 @@ func (x *fastReflection_MsgCancelResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCancelResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgRedeemResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCancelResponse)
+		x := input.Message.Interface().(*MsgRedeemResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -9155,7 +9155,7 @@ func (x *fastReflection_MsgCancelResponse) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCancelResponse)
+		x := input.Message.Interface().(*MsgRedeemResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -9185,7 +9185,7 @@ func (x *fastReflection_MsgCancelResponse) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCancelResponse)
+		x := input.Message.Interface().(*MsgRedeemResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -9217,10 +9217,10 @@ func (x *fastReflection_MsgCancelResponse) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCancelResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRedeemResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCancelResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRedeemResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -11669,7 +11669,7 @@ func (*MsgApproveResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{15}
 }
 
-type MsgCancel struct {
+type MsgRedeem struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -11680,8 +11680,8 @@ type MsgCancel struct {
 	Signatures []string `protobuf:"bytes,4,rep,name=signatures,proto3" json:"signatures,omitempty"`
 }
 
-func (x *MsgCancel) Reset() {
-	*x = MsgCancel{}
+func (x *MsgRedeem) Reset() {
+	*x = MsgRedeem{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -11689,53 +11689,53 @@ func (x *MsgCancel) Reset() {
 	}
 }
 
-func (x *MsgCancel) String() string {
+func (x *MsgRedeem) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgCancel) ProtoMessage() {}
+func (*MsgRedeem) ProtoMessage() {}
 
-// Deprecated: Use MsgCancel.ProtoReflect.Descriptor instead.
-func (*MsgCancel) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgRedeem.ProtoReflect.Descriptor instead.
+func (*MsgRedeem) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *MsgCancel) GetBorrower() string {
+func (x *MsgRedeem) GetBorrower() string {
 	if x != nil {
 		return x.Borrower
 	}
 	return ""
 }
 
-func (x *MsgCancel) GetLoanId() string {
+func (x *MsgRedeem) GetLoanId() string {
 	if x != nil {
 		return x.LoanId
 	}
 	return ""
 }
 
-func (x *MsgCancel) GetTx() string {
+func (x *MsgRedeem) GetTx() string {
 	if x != nil {
 		return x.Tx
 	}
 	return ""
 }
 
-func (x *MsgCancel) GetSignatures() []string {
+func (x *MsgRedeem) GetSignatures() []string {
 	if x != nil {
 		return x.Signatures
 	}
 	return nil
 }
 
-type MsgCancelResponse struct {
+type MsgRedeemResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgCancelResponse) Reset() {
-	*x = MsgCancelResponse{}
+func (x *MsgRedeemResponse) Reset() {
+	*x = MsgRedeemResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -11743,14 +11743,14 @@ func (x *MsgCancelResponse) Reset() {
 	}
 }
 
-func (x *MsgCancelResponse) String() string {
+func (x *MsgRedeemResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgCancelResponse) ProtoMessage() {}
+func (*MsgRedeemResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgCancelResponse.ProtoReflect.Descriptor instead.
-func (*MsgCancelResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgRedeemResponse.ProtoReflect.Descriptor instead.
+func (*MsgRedeemResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{17}
 }
 
@@ -12023,7 +12023,7 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x18, 0x05, 0x20, 0x03, 0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x3a, 0x0c, 0x82,
 	0xe7, 0xb0, 0x2a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x22, 0x14, 0x0a, 0x12, 0x4d,
 	0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x7f, 0x0a, 0x09, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x12, 0x1a,
+	0x65, 0x22, 0x7f, 0x0a, 0x09, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12, 0x1a,
 	0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f,
 	0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61,
@@ -12031,7 +12031,7 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x02, 0x74, 0x78, 0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65,
 	0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
 	0x72, 0x65, 0x73, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
-	0x65, 0x72, 0x22, 0x13, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x52,
+	0x65, 0x72, 0x22, 0x13, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52,
 	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4b, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x53, 0x75,
 	0x62, 0x6d, 0x69, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e,
 	0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
@@ -12084,11 +12084,11 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72,
 	0x6f, 0x76, 0x65, 0x1a, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
 	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x42, 0x0a, 0x06, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x12,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x42, 0x0a, 0x06, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12,
 	0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
-	0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x1a, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65,
-	0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x52, 0x65, 0x70,
+	0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x1a, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65,
+	0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x52, 0x65, 0x70,
 	0x61, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
 	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64,
 	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70,
@@ -12146,8 +12146,8 @@ var file_side_lending_tx_proto_goTypes = []interface{}{
 	(*MsgSubmitCetsResponse)(nil),       // 13: side.lending.MsgSubmitCetsResponse
 	(*MsgApprove)(nil),                  // 14: side.lending.MsgApprove
 	(*MsgApproveResponse)(nil),          // 15: side.lending.MsgApproveResponse
-	(*MsgCancel)(nil),                   // 16: side.lending.MsgCancel
-	(*MsgCancelResponse)(nil),           // 17: side.lending.MsgCancelResponse
+	(*MsgRedeem)(nil),                   // 16: side.lending.MsgRedeem
+	(*MsgRedeemResponse)(nil),           // 17: side.lending.MsgRedeemResponse
 	(*MsgSubmitPrice)(nil),              // 18: side.lending.MsgSubmitPrice
 	(*MsgSubmitPriceResponse)(nil),      // 19: side.lending.MsgSubmitPriceResponse
 	(*MsgUpdateParams)(nil),             // 20: side.lending.MsgUpdateParams
@@ -12170,7 +12170,7 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	10, // 10: side.lending.Msg.Apply:input_type -> side.lending.MsgApply
 	12, // 11: side.lending.Msg.SubmitCets:input_type -> side.lending.MsgSubmitCets
 	14, // 12: side.lending.Msg.Approve:input_type -> side.lending.MsgApprove
-	16, // 13: side.lending.Msg.Cancel:input_type -> side.lending.MsgCancel
+	16, // 13: side.lending.Msg.Redeem:input_type -> side.lending.MsgRedeem
 	4,  // 14: side.lending.Msg.Repay:input_type -> side.lending.MsgRepay
 	18, // 15: side.lending.Msg.SubmitPrice:input_type -> side.lending.MsgSubmitPrice
 	20, // 16: side.lending.Msg.UpdateParams:input_type -> side.lending.MsgUpdateParams
@@ -12181,7 +12181,7 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	11, // 21: side.lending.Msg.Apply:output_type -> side.lending.MsgApplyResponse
 	13, // 22: side.lending.Msg.SubmitCets:output_type -> side.lending.MsgSubmitCetsResponse
 	15, // 23: side.lending.Msg.Approve:output_type -> side.lending.MsgApproveResponse
-	17, // 24: side.lending.Msg.Cancel:output_type -> side.lending.MsgCancelResponse
+	17, // 24: side.lending.Msg.Redeem:output_type -> side.lending.MsgRedeemResponse
 	5,  // 25: side.lending.Msg.Repay:output_type -> side.lending.MsgRepayResponse
 	19, // 26: side.lending.Msg.SubmitPrice:output_type -> side.lending.MsgSubmitPriceResponse
 	21, // 27: side.lending.Msg.UpdateParams:output_type -> side.lending.MsgUpdateParamsResponse
@@ -12393,7 +12393,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCancel); i {
+			switch v := v.(*MsgRedeem); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -12405,7 +12405,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCancelResponse); i {
+			switch v := v.(*MsgRedeemResponse); i {
 			case 0:
 				return &v.state
 			case 1:

@@ -14,7 +14,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgApply{}, "lending/MsgApply", nil)
 	cdc.RegisterConcrete(&MsgSubmitCets{}, "lending/MsgSubmitCets", nil)
 	cdc.RegisterConcrete(&MsgApprove{}, "lending/MsgApprove", nil)
-	cdc.RegisterConcrete(&MsgCancel{}, "lending/MsgCancel", nil)
+	cdc.RegisterConcrete(&MsgRedeem{}, "lending/MsgRedeem", nil)
 	cdc.RegisterConcrete(&MsgRepay{}, "lending/MsgRepay", nil)
 	cdc.RegisterConcrete(&MsgUpdateParams{}, "lending/MsgUpdateParams", nil)
 
@@ -28,7 +28,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgApply{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitCets{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgApprove{})
-	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgCancel{})
+	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgRedeem{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgRepay{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgUpdateParams{})
 

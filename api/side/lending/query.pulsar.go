@@ -10682,25 +10682,27 @@ func (x *fastReflection_QueryLoanDlcMetaResponse) ProtoMethods() *protoiface.Met
 }
 
 var (
-	md_QueryLoanCancellationRequest         protoreflect.MessageDescriptor
-	fd_QueryLoanCancellationRequest_loan_id protoreflect.FieldDescriptor
+	md_QueryLoanAuthorizationRequest         protoreflect.MessageDescriptor
+	fd_QueryLoanAuthorizationRequest_loan_id protoreflect.FieldDescriptor
+	fd_QueryLoanAuthorizationRequest_id      protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_query_proto_init()
-	md_QueryLoanCancellationRequest = File_side_lending_query_proto.Messages().ByName("QueryLoanCancellationRequest")
-	fd_QueryLoanCancellationRequest_loan_id = md_QueryLoanCancellationRequest.Fields().ByName("loan_id")
+	md_QueryLoanAuthorizationRequest = File_side_lending_query_proto.Messages().ByName("QueryLoanAuthorizationRequest")
+	fd_QueryLoanAuthorizationRequest_loan_id = md_QueryLoanAuthorizationRequest.Fields().ByName("loan_id")
+	fd_QueryLoanAuthorizationRequest_id = md_QueryLoanAuthorizationRequest.Fields().ByName("id")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryLoanCancellationRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryLoanAuthorizationRequest)(nil)
 
-type fastReflection_QueryLoanCancellationRequest QueryLoanCancellationRequest
+type fastReflection_QueryLoanAuthorizationRequest QueryLoanAuthorizationRequest
 
-func (x *QueryLoanCancellationRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryLoanCancellationRequest)(x)
+func (x *QueryLoanAuthorizationRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryLoanAuthorizationRequest)(x)
 }
 
-func (x *QueryLoanCancellationRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryLoanAuthorizationRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_query_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10712,43 +10714,43 @@ func (x *QueryLoanCancellationRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryLoanCancellationRequest_messageType fastReflection_QueryLoanCancellationRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryLoanCancellationRequest_messageType{}
+var _fastReflection_QueryLoanAuthorizationRequest_messageType fastReflection_QueryLoanAuthorizationRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryLoanAuthorizationRequest_messageType{}
 
-type fastReflection_QueryLoanCancellationRequest_messageType struct{}
+type fastReflection_QueryLoanAuthorizationRequest_messageType struct{}
 
-func (x fastReflection_QueryLoanCancellationRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryLoanCancellationRequest)(nil)
+func (x fastReflection_QueryLoanAuthorizationRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryLoanAuthorizationRequest)(nil)
 }
-func (x fastReflection_QueryLoanCancellationRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryLoanCancellationRequest)
+func (x fastReflection_QueryLoanAuthorizationRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryLoanAuthorizationRequest)
 }
-func (x fastReflection_QueryLoanCancellationRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryLoanCancellationRequest
+func (x fastReflection_QueryLoanAuthorizationRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryLoanAuthorizationRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryLoanCancellationRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryLoanCancellationRequest
+func (x *fastReflection_QueryLoanAuthorizationRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryLoanAuthorizationRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryLoanCancellationRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryLoanCancellationRequest_messageType
+func (x *fastReflection_QueryLoanAuthorizationRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryLoanAuthorizationRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryLoanCancellationRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryLoanCancellationRequest)
+func (x *fastReflection_QueryLoanAuthorizationRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryLoanAuthorizationRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryLoanCancellationRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryLoanCancellationRequest)(x)
+func (x *fastReflection_QueryLoanAuthorizationRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryLoanAuthorizationRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -10756,10 +10758,16 @@ func (x *fastReflection_QueryLoanCancellationRequest) Interface() protoreflect.P
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryLoanCancellationRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryLoanAuthorizationRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.LoanId != "" {
 		value := protoreflect.ValueOfString(x.LoanId)
-		if !f(fd_QueryLoanCancellationRequest_loan_id, value) {
+		if !f(fd_QueryLoanAuthorizationRequest_loan_id, value) {
+			return
+		}
+	}
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_QueryLoanAuthorizationRequest_id, value) {
 			return
 		}
 	}
@@ -10776,15 +10784,17 @@ func (x *fastReflection_QueryLoanCancellationRequest) Range(f func(protoreflect.
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryLoanCancellationRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryLoanAuthorizationRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationRequest.loan_id":
+	case "side.lending.QueryLoanAuthorizationRequest.loan_id":
 		return x.LoanId != ""
+	case "side.lending.QueryLoanAuthorizationRequest.id":
+		return x.Id != uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10794,15 +10804,17 @@ func (x *fastReflection_QueryLoanCancellationRequest) Has(fd protoreflect.FieldD
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCancellationRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryLoanAuthorizationRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationRequest.loan_id":
+	case "side.lending.QueryLoanAuthorizationRequest.loan_id":
 		x.LoanId = ""
+	case "side.lending.QueryLoanAuthorizationRequest.id":
+		x.Id = uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10812,16 +10824,19 @@ func (x *fastReflection_QueryLoanCancellationRequest) Clear(fd protoreflect.Fiel
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryLoanCancellationRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanAuthorizationRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.QueryLoanCancellationRequest.loan_id":
+	case "side.lending.QueryLoanAuthorizationRequest.loan_id":
 		value := x.LoanId
 		return protoreflect.ValueOfString(value)
+	case "side.lending.QueryLoanAuthorizationRequest.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -10835,15 +10850,17 @@ func (x *fastReflection_QueryLoanCancellationRequest) Get(descriptor protoreflec
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCancellationRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryLoanAuthorizationRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationRequest.loan_id":
+	case "side.lending.QueryLoanAuthorizationRequest.loan_id":
 		x.LoanId = value.Interface().(string)
+	case "side.lending.QueryLoanAuthorizationRequest.id":
+		x.Id = value.Uint()
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10857,40 +10874,44 @@ func (x *fastReflection_QueryLoanCancellationRequest) Set(fd protoreflect.FieldD
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCancellationRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanAuthorizationRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationRequest.loan_id":
-		panic(fmt.Errorf("field loan_id of message side.lending.QueryLoanCancellationRequest is not mutable"))
+	case "side.lending.QueryLoanAuthorizationRequest.loan_id":
+		panic(fmt.Errorf("field loan_id of message side.lending.QueryLoanAuthorizationRequest is not mutable"))
+	case "side.lending.QueryLoanAuthorizationRequest.id":
+		panic(fmt.Errorf("field id of message side.lending.QueryLoanAuthorizationRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryLoanCancellationRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryLoanAuthorizationRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationRequest.loan_id":
+	case "side.lending.QueryLoanAuthorizationRequest.loan_id":
 		return protoreflect.ValueOfString("")
+	case "side.lending.QueryLoanAuthorizationRequest.id":
+		return protoreflect.ValueOfUint64(uint64(0))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryLoanCancellationRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryLoanAuthorizationRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryLoanCancellationRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryLoanAuthorizationRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -10898,7 +10919,7 @@ func (x *fastReflection_QueryLoanCancellationRequest) WhichOneof(d protoreflect.
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryLoanCancellationRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryLoanAuthorizationRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -10909,7 +10930,7 @@ func (x *fastReflection_QueryLoanCancellationRequest) GetUnknown() protoreflect.
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCancellationRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryLoanAuthorizationRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -10921,7 +10942,7 @@ func (x *fastReflection_QueryLoanCancellationRequest) SetUnknown(fields protoref
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryLoanCancellationRequest) IsValid() bool {
+func (x *fastReflection_QueryLoanAuthorizationRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -10931,9 +10952,9 @@ func (x *fastReflection_QueryLoanCancellationRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryLoanCancellationRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryLoanAuthorizationRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryLoanCancellationRequest)
+		x := input.Message.Interface().(*QueryLoanAuthorizationRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10949,6 +10970,9 @@ func (x *fastReflection_QueryLoanCancellationRequest) ProtoMethods() *protoiface
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -10959,7 +10983,7 @@ func (x *fastReflection_QueryLoanCancellationRequest) ProtoMethods() *protoiface
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryLoanCancellationRequest)
+		x := input.Message.Interface().(*QueryLoanAuthorizationRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10977,6 +11001,11 @@ func (x *fastReflection_QueryLoanCancellationRequest) ProtoMethods() *protoiface
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x10
 		}
 		if len(x.LoanId) > 0 {
 			i -= len(x.LoanId)
@@ -10996,7 +11025,7 @@ func (x *fastReflection_QueryLoanCancellationRequest) ProtoMethods() *protoiface
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryLoanCancellationRequest)
+		x := input.Message.Interface().(*QueryLoanAuthorizationRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -11028,10 +11057,10 @@ func (x *fastReflection_QueryLoanCancellationRequest) ProtoMethods() *protoiface
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCancellationRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanAuthorizationRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCancellationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanAuthorizationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -11066,6 +11095,567 @@ func (x *fastReflection_QueryLoanCancellationRequest) ProtoMethods() *protoiface
 				}
 				x.LoanId = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryLoanAuthorizationResponse_1_list)(nil)
+
+type _QueryLoanAuthorizationResponse_1_list struct {
+	list *[]*DepositLog
+}
+
+func (x *_QueryLoanAuthorizationResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryLoanAuthorizationResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryLoanAuthorizationResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*DepositLog)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryLoanAuthorizationResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*DepositLog)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryLoanAuthorizationResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(DepositLog)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryLoanAuthorizationResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryLoanAuthorizationResponse_1_list) NewElement() protoreflect.Value {
+	v := new(DepositLog)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryLoanAuthorizationResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryLoanAuthorizationResponse          protoreflect.MessageDescriptor
+	fd_QueryLoanAuthorizationResponse_deposits protoreflect.FieldDescriptor
+	fd_QueryLoanAuthorizationResponse_status   protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_lending_query_proto_init()
+	md_QueryLoanAuthorizationResponse = File_side_lending_query_proto.Messages().ByName("QueryLoanAuthorizationResponse")
+	fd_QueryLoanAuthorizationResponse_deposits = md_QueryLoanAuthorizationResponse.Fields().ByName("deposits")
+	fd_QueryLoanAuthorizationResponse_status = md_QueryLoanAuthorizationResponse.Fields().ByName("status")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryLoanAuthorizationResponse)(nil)
+
+type fastReflection_QueryLoanAuthorizationResponse QueryLoanAuthorizationResponse
+
+func (x *QueryLoanAuthorizationResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryLoanAuthorizationResponse)(x)
+}
+
+func (x *QueryLoanAuthorizationResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_lending_query_proto_msgTypes[23]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryLoanAuthorizationResponse_messageType fastReflection_QueryLoanAuthorizationResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryLoanAuthorizationResponse_messageType{}
+
+type fastReflection_QueryLoanAuthorizationResponse_messageType struct{}
+
+func (x fastReflection_QueryLoanAuthorizationResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryLoanAuthorizationResponse)(nil)
+}
+func (x fastReflection_QueryLoanAuthorizationResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryLoanAuthorizationResponse)
+}
+func (x fastReflection_QueryLoanAuthorizationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryLoanAuthorizationResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryLoanAuthorizationResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryLoanAuthorizationResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryLoanAuthorizationResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryLoanAuthorizationResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryLoanAuthorizationResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Deposits) != 0 {
+		value := protoreflect.ValueOfList(&_QueryLoanAuthorizationResponse_1_list{list: &x.Deposits})
+		if !f(fd_QueryLoanAuthorizationResponse_deposits, value) {
+			return
+		}
+	}
+	if x.Status != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
+		if !f(fd_QueryLoanAuthorizationResponse_status, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.lending.QueryLoanAuthorizationResponse.deposits":
+		return len(x.Deposits) != 0
+	case "side.lending.QueryLoanAuthorizationResponse.status":
+		return x.Status != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.lending.QueryLoanAuthorizationResponse.deposits":
+		x.Deposits = nil
+	case "side.lending.QueryLoanAuthorizationResponse.status":
+		x.Status = 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.lending.QueryLoanAuthorizationResponse.deposits":
+		if len(x.Deposits) == 0 {
+			return protoreflect.ValueOfList(&_QueryLoanAuthorizationResponse_1_list{})
+		}
+		listValue := &_QueryLoanAuthorizationResponse_1_list{list: &x.Deposits}
+		return protoreflect.ValueOfList(listValue)
+	case "side.lending.QueryLoanAuthorizationResponse.status":
+		value := x.Status
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.lending.QueryLoanAuthorizationResponse.deposits":
+		lv := value.List()
+		clv := lv.(*_QueryLoanAuthorizationResponse_1_list)
+		x.Deposits = *clv.list
+	case "side.lending.QueryLoanAuthorizationResponse.status":
+		x.Status = (AuthorizationStatus)(value.Enum())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryLoanAuthorizationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.lending.QueryLoanAuthorizationResponse.deposits":
+		if x.Deposits == nil {
+			x.Deposits = []*DepositLog{}
+		}
+		value := &_QueryLoanAuthorizationResponse_1_list{list: &x.Deposits}
+		return protoreflect.ValueOfList(value)
+	case "side.lending.QueryLoanAuthorizationResponse.status":
+		panic(fmt.Errorf("field status of message side.lending.QueryLoanAuthorizationResponse is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryLoanAuthorizationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.lending.QueryLoanAuthorizationResponse.deposits":
+		list := []*DepositLog{}
+		return protoreflect.ValueOfList(&_QueryLoanAuthorizationResponse_1_list{list: &list})
+	case "side.lending.QueryLoanAuthorizationResponse.status":
+		return protoreflect.ValueOfEnum(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanAuthorizationResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryLoanAuthorizationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryLoanAuthorizationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryLoanAuthorizationResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryLoanAuthorizationResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryLoanAuthorizationResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryLoanAuthorizationResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryLoanAuthorizationResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryLoanAuthorizationResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.Deposits) > 0 {
+			for _, e := range x.Deposits {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryLoanAuthorizationResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.Deposits) > 0 {
+			for iNdEx := len(x.Deposits) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Deposits[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryLoanAuthorizationResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanAuthorizationResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanAuthorizationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Deposits", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Deposits = append(x.Deposits, &DepositLog{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Deposits[len(x.Deposits)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= AuthorizationStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -11102,26 +11692,26 @@ func (x *fastReflection_QueryLoanCancellationRequest) ProtoMethods() *protoiface
 }
 
 var (
-	md_QueryLoanCancellationResponse              protoreflect.MessageDescriptor
-	fd_QueryLoanCancellationResponse_cancellation protoreflect.FieldDescriptor
+	md_QueryRedemptionRequest    protoreflect.MessageDescriptor
+	fd_QueryRedemptionRequest_id protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_query_proto_init()
-	md_QueryLoanCancellationResponse = File_side_lending_query_proto.Messages().ByName("QueryLoanCancellationResponse")
-	fd_QueryLoanCancellationResponse_cancellation = md_QueryLoanCancellationResponse.Fields().ByName("cancellation")
+	md_QueryRedemptionRequest = File_side_lending_query_proto.Messages().ByName("QueryRedemptionRequest")
+	fd_QueryRedemptionRequest_id = md_QueryRedemptionRequest.Fields().ByName("id")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryLoanCancellationResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryRedemptionRequest)(nil)
 
-type fastReflection_QueryLoanCancellationResponse QueryLoanCancellationResponse
+type fastReflection_QueryRedemptionRequest QueryRedemptionRequest
 
-func (x *QueryLoanCancellationResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryLoanCancellationResponse)(x)
+func (x *QueryRedemptionRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRedemptionRequest)(x)
 }
 
-func (x *QueryLoanCancellationResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_query_proto_msgTypes[23]
+func (x *QueryRedemptionRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_lending_query_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11132,43 +11722,43 @@ func (x *QueryLoanCancellationResponse) slowProtoReflect() protoreflect.Message 
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryLoanCancellationResponse_messageType fastReflection_QueryLoanCancellationResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryLoanCancellationResponse_messageType{}
+var _fastReflection_QueryRedemptionRequest_messageType fastReflection_QueryRedemptionRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRedemptionRequest_messageType{}
 
-type fastReflection_QueryLoanCancellationResponse_messageType struct{}
+type fastReflection_QueryRedemptionRequest_messageType struct{}
 
-func (x fastReflection_QueryLoanCancellationResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryLoanCancellationResponse)(nil)
+func (x fastReflection_QueryRedemptionRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRedemptionRequest)(nil)
 }
-func (x fastReflection_QueryLoanCancellationResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryLoanCancellationResponse)
+func (x fastReflection_QueryRedemptionRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRedemptionRequest)
 }
-func (x fastReflection_QueryLoanCancellationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryLoanCancellationResponse
+func (x fastReflection_QueryRedemptionRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRedemptionRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryLoanCancellationResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryLoanCancellationResponse
+func (x *fastReflection_QueryRedemptionRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRedemptionRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryLoanCancellationResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryLoanCancellationResponse_messageType
+func (x *fastReflection_QueryRedemptionRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRedemptionRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryLoanCancellationResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryLoanCancellationResponse)
+func (x *fastReflection_QueryRedemptionRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryRedemptionRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryLoanCancellationResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryLoanCancellationResponse)(x)
+func (x *fastReflection_QueryRedemptionRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryRedemptionRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -11176,10 +11766,10 @@ func (x *fastReflection_QueryLoanCancellationResponse) Interface() protoreflect.
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryLoanCancellationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Cancellation != nil {
-		value := protoreflect.ValueOfMessage(x.Cancellation.ProtoReflect())
-		if !f(fd_QueryLoanCancellationResponse_cancellation, value) {
+func (x *fastReflection_QueryRedemptionRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_QueryRedemptionRequest_id, value) {
 			return
 		}
 	}
@@ -11196,15 +11786,15 @@ func (x *fastReflection_QueryLoanCancellationResponse) Range(f func(protoreflect
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryLoanCancellationResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryRedemptionRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationResponse.cancellation":
-		return x.Cancellation != nil
+	case "side.lending.QueryRedemptionRequest.id":
+		return x.Id != uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryRedemptionRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -11214,15 +11804,15 @@ func (x *fastReflection_QueryLoanCancellationResponse) Has(fd protoreflect.Field
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCancellationResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryRedemptionRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationResponse.cancellation":
-		x.Cancellation = nil
+	case "side.lending.QueryRedemptionRequest.id":
+		x.Id = uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryRedemptionRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -11232,16 +11822,16 @@ func (x *fastReflection_QueryLoanCancellationResponse) Clear(fd protoreflect.Fie
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryLoanCancellationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRedemptionRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.QueryLoanCancellationResponse.cancellation":
-		value := x.Cancellation
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.lending.QueryRedemptionRequest.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryRedemptionRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -11255,15 +11845,15 @@ func (x *fastReflection_QueryLoanCancellationResponse) Get(descriptor protorefle
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCancellationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryRedemptionRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationResponse.cancellation":
-		x.Cancellation = value.Message().Interface().(*Cancellation)
+	case "side.lending.QueryRedemptionRequest.id":
+		x.Id = value.Uint()
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryRedemptionRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -11277,44 +11867,40 @@ func (x *fastReflection_QueryLoanCancellationResponse) Set(fd protoreflect.Field
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCancellationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRedemptionRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationResponse.cancellation":
-		if x.Cancellation == nil {
-			x.Cancellation = new(Cancellation)
-		}
-		return protoreflect.ValueOfMessage(x.Cancellation.ProtoReflect())
+	case "side.lending.QueryRedemptionRequest.id":
+		panic(fmt.Errorf("field id of message side.lending.QueryRedemptionRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryRedemptionRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryLoanCancellationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRedemptionRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.QueryLoanCancellationResponse.cancellation":
-		m := new(Cancellation)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.lending.QueryRedemptionRequest.id":
+		return protoreflect.ValueOfUint64(uint64(0))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryLoanCancellationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionRequest"))
 		}
-		panic(fmt.Errorf("message side.lending.QueryLoanCancellationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.QueryRedemptionRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryLoanCancellationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryRedemptionRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryLoanCancellationResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryRedemptionRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -11322,7 +11908,7 @@ func (x *fastReflection_QueryLoanCancellationResponse) WhichOneof(d protoreflect
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryLoanCancellationResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryRedemptionRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -11333,7 +11919,7 @@ func (x *fastReflection_QueryLoanCancellationResponse) GetUnknown() protoreflect
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryLoanCancellationResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryRedemptionRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -11345,7 +11931,7 @@ func (x *fastReflection_QueryLoanCancellationResponse) SetUnknown(fields protore
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryLoanCancellationResponse) IsValid() bool {
+func (x *fastReflection_QueryRedemptionRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -11355,9 +11941,9 @@ func (x *fastReflection_QueryLoanCancellationResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryLoanCancellationResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryRedemptionRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryLoanCancellationResponse)
+		x := input.Message.Interface().(*QueryRedemptionRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -11369,9 +11955,8 @@ func (x *fastReflection_QueryLoanCancellationResponse) ProtoMethods() *protoifac
 		var n int
 		var l int
 		_ = l
-		if x.Cancellation != nil {
-			l = options.Size(x.Cancellation)
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -11383,7 +11968,7 @@ func (x *fastReflection_QueryLoanCancellationResponse) ProtoMethods() *protoifac
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryLoanCancellationResponse)
+		x := input.Message.Interface().(*QueryRedemptionRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -11402,19 +11987,10 @@ func (x *fastReflection_QueryLoanCancellationResponse) ProtoMethods() *protoifac
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Cancellation != nil {
-			encoded, err := options.Marshal(x.Cancellation)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -11427,7 +12003,7 @@ func (x *fastReflection_QueryLoanCancellationResponse) ProtoMethods() *protoifac
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryLoanCancellationResponse)
+		x := input.Message.Interface().(*QueryRedemptionRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -11459,15 +12035,433 @@ func (x *fastReflection_QueryLoanCancellationResponse) ProtoMethods() *protoifac
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCancellationResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRedemptionRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryLoanCancellationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRedemptionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryRedemptionResponse            protoreflect.MessageDescriptor
+	fd_QueryRedemptionResponse_redemption protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_lending_query_proto_init()
+	md_QueryRedemptionResponse = File_side_lending_query_proto.Messages().ByName("QueryRedemptionResponse")
+	fd_QueryRedemptionResponse_redemption = md_QueryRedemptionResponse.Fields().ByName("redemption")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryRedemptionResponse)(nil)
+
+type fastReflection_QueryRedemptionResponse QueryRedemptionResponse
+
+func (x *QueryRedemptionResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRedemptionResponse)(x)
+}
+
+func (x *QueryRedemptionResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_lending_query_proto_msgTypes[25]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryRedemptionResponse_messageType fastReflection_QueryRedemptionResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRedemptionResponse_messageType{}
+
+type fastReflection_QueryRedemptionResponse_messageType struct{}
+
+func (x fastReflection_QueryRedemptionResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRedemptionResponse)(nil)
+}
+func (x fastReflection_QueryRedemptionResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRedemptionResponse)
+}
+func (x fastReflection_QueryRedemptionResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRedemptionResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryRedemptionResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRedemptionResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryRedemptionResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRedemptionResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryRedemptionResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryRedemptionResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryRedemptionResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryRedemptionResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryRedemptionResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Redemption != nil {
+		value := protoreflect.ValueOfMessage(x.Redemption.ProtoReflect())
+		if !f(fd_QueryRedemptionResponse_redemption, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryRedemptionResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.lending.QueryRedemptionResponse.redemption":
+		return x.Redemption != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryRedemptionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRedemptionResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.lending.QueryRedemptionResponse.redemption":
+		x.Redemption = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryRedemptionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryRedemptionResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.lending.QueryRedemptionResponse.redemption":
+		value := x.Redemption
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryRedemptionResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRedemptionResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.lending.QueryRedemptionResponse.redemption":
+		x.Redemption = value.Message().Interface().(*Redemption)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryRedemptionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRedemptionResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.lending.QueryRedemptionResponse.redemption":
+		if x.Redemption == nil {
+			x.Redemption = new(Redemption)
+		}
+		return protoreflect.ValueOfMessage(x.Redemption.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryRedemptionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryRedemptionResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.lending.QueryRedemptionResponse.redemption":
+		m := new(Redemption)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.QueryRedemptionResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.QueryRedemptionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryRedemptionResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.QueryRedemptionResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryRedemptionResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRedemptionResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryRedemptionResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryRedemptionResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryRedemptionResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Redemption != nil {
+			l = options.Size(x.Redemption)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryRedemptionResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Redemption != nil {
+			encoded, err := options.Marshal(x.Redemption)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryRedemptionResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRedemptionResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRedemptionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Cancellation", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Redemption", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -11494,10 +12488,10 @@ func (x *fastReflection_QueryLoanCancellationResponse) ProtoMethods() *protoifac
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.Cancellation == nil {
-					x.Cancellation = &Cancellation{}
+				if x.Redemption == nil {
+					x.Redemption = &Redemption{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Cancellation); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Redemption); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -11556,7 +12550,7 @@ func (x *QueryRepaymentRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryRepaymentRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_query_proto_msgTypes[24]
+	mi := &file_side_lending_query_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11976,7 +12970,7 @@ func (x *QueryRepaymentResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryRepaymentResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_query_proto_msgTypes[25]
+	mi := &file_side_lending_query_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12411,7 +13405,7 @@ func (x *QueryCurrentInterestRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryCurrentInterestRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_query_proto_msgTypes[26]
+	mi := &file_side_lending_query_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12831,7 +13825,7 @@ func (x *QueryCurrentInterestResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryCurrentInterestResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_query_proto_msgTypes[27]
+	mi := &file_side_lending_query_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13266,7 +14260,7 @@ func (x *QueryPriceRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryPriceRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_query_proto_msgTypes[28]
+	mi := &file_side_lending_query_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13686,7 +14680,7 @@ func (x *QueryPriceResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryPriceResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_query_proto_msgTypes[29]
+	mi := &file_side_lending_query_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15020,17 +16014,18 @@ func (x *QueryLoanDlcMetaResponse) GetDlcMeta() *DLCMeta {
 	return nil
 }
 
-// QueryLoanCancellationRequest is request type for the Query/LoanCancellation RPC method.
-type QueryLoanCancellationRequest struct {
+// QueryLoanAuthorizationRequest is request type for the Query/LoanAuthorization RPC method.
+type QueryLoanAuthorizationRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	LoanId string `protobuf:"bytes,1,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
+	Id     uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (x *QueryLoanCancellationRequest) Reset() {
-	*x = QueryLoanCancellationRequest{}
+func (x *QueryLoanAuthorizationRequest) Reset() {
+	*x = QueryLoanAuthorizationRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_query_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -15038,35 +16033,43 @@ func (x *QueryLoanCancellationRequest) Reset() {
 	}
 }
 
-func (x *QueryLoanCancellationRequest) String() string {
+func (x *QueryLoanAuthorizationRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryLoanCancellationRequest) ProtoMessage() {}
+func (*QueryLoanAuthorizationRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryLoanCancellationRequest.ProtoReflect.Descriptor instead.
-func (*QueryLoanCancellationRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryLoanAuthorizationRequest.ProtoReflect.Descriptor instead.
+func (*QueryLoanAuthorizationRequest) Descriptor() ([]byte, []int) {
 	return file_side_lending_query_proto_rawDescGZIP(), []int{22}
 }
 
-func (x *QueryLoanCancellationRequest) GetLoanId() string {
+func (x *QueryLoanAuthorizationRequest) GetLoanId() string {
 	if x != nil {
 		return x.LoanId
 	}
 	return ""
 }
 
-// QueryLoanCancellationResponse is response type for the Query/LoanCancellation RPC method.
-type QueryLoanCancellationResponse struct {
+func (x *QueryLoanAuthorizationRequest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+// QueryLoanAuthorizationResponse is response type for the Query/LoanAuthorization RPC method.
+type QueryLoanAuthorizationResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Cancellation *Cancellation `protobuf:"bytes,1,opt,name=cancellation,proto3" json:"cancellation,omitempty"`
+	Deposits []*DepositLog       `protobuf:"bytes,1,rep,name=deposits,proto3" json:"deposits,omitempty"`
+	Status   AuthorizationStatus `protobuf:"varint,2,opt,name=status,proto3,enum=side.lending.AuthorizationStatus" json:"status,omitempty"`
 }
 
-func (x *QueryLoanCancellationResponse) Reset() {
-	*x = QueryLoanCancellationResponse{}
+func (x *QueryLoanAuthorizationResponse) Reset() {
+	*x = QueryLoanAuthorizationResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_query_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -15074,20 +16077,99 @@ func (x *QueryLoanCancellationResponse) Reset() {
 	}
 }
 
-func (x *QueryLoanCancellationResponse) String() string {
+func (x *QueryLoanAuthorizationResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryLoanCancellationResponse) ProtoMessage() {}
+func (*QueryLoanAuthorizationResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryLoanCancellationResponse.ProtoReflect.Descriptor instead.
-func (*QueryLoanCancellationResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryLoanAuthorizationResponse.ProtoReflect.Descriptor instead.
+func (*QueryLoanAuthorizationResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_query_proto_rawDescGZIP(), []int{23}
 }
 
-func (x *QueryLoanCancellationResponse) GetCancellation() *Cancellation {
+func (x *QueryLoanAuthorizationResponse) GetDeposits() []*DepositLog {
 	if x != nil {
-		return x.Cancellation
+		return x.Deposits
+	}
+	return nil
+}
+
+func (x *QueryLoanAuthorizationResponse) GetStatus() AuthorizationStatus {
+	if x != nil {
+		return x.Status
+	}
+	return AuthorizationStatus_AUTHORIZATION_STATUS_PENDING
+}
+
+// QueryRedemptionRequest is request type for the Query/Redemption RPC method.
+type QueryRedemptionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *QueryRedemptionRequest) Reset() {
+	*x = QueryRedemptionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_lending_query_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryRedemptionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryRedemptionRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryRedemptionRequest.ProtoReflect.Descriptor instead.
+func (*QueryRedemptionRequest) Descriptor() ([]byte, []int) {
+	return file_side_lending_query_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *QueryRedemptionRequest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+// QueryRedemptionResponse is response type for the Query/Redemption RPC method.
+type QueryRedemptionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Redemption *Redemption `protobuf:"bytes,1,opt,name=redemption,proto3" json:"redemption,omitempty"`
+}
+
+func (x *QueryRedemptionResponse) Reset() {
+	*x = QueryRedemptionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_lending_query_proto_msgTypes[25]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryRedemptionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryRedemptionResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryRedemptionResponse.ProtoReflect.Descriptor instead.
+func (*QueryRedemptionResponse) Descriptor() ([]byte, []int) {
+	return file_side_lending_query_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *QueryRedemptionResponse) GetRedemption() *Redemption {
+	if x != nil {
+		return x.Redemption
 	}
 	return nil
 }
@@ -15103,7 +16185,7 @@ type QueryRepaymentRequest struct {
 func (x *QueryRepaymentRequest) Reset() {
 	*x = QueryRepaymentRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_lending_query_proto_msgTypes[24]
+		mi := &file_side_lending_query_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -15117,7 +16199,7 @@ func (*QueryRepaymentRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryRepaymentRequest.ProtoReflect.Descriptor instead.
 func (*QueryRepaymentRequest) Descriptor() ([]byte, []int) {
-	return file_side_lending_query_proto_rawDescGZIP(), []int{24}
+	return file_side_lending_query_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *QueryRepaymentRequest) GetLoanId() string {
@@ -15138,7 +16220,7 @@ type QueryRepaymentResponse struct {
 func (x *QueryRepaymentResponse) Reset() {
 	*x = QueryRepaymentResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_lending_query_proto_msgTypes[25]
+		mi := &file_side_lending_query_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -15152,7 +16234,7 @@ func (*QueryRepaymentResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryRepaymentResponse.ProtoReflect.Descriptor instead.
 func (*QueryRepaymentResponse) Descriptor() ([]byte, []int) {
-	return file_side_lending_query_proto_rawDescGZIP(), []int{25}
+	return file_side_lending_query_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *QueryRepaymentResponse) GetRepayment() *Repayment {
@@ -15173,7 +16255,7 @@ type QueryCurrentInterestRequest struct {
 func (x *QueryCurrentInterestRequest) Reset() {
 	*x = QueryCurrentInterestRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_lending_query_proto_msgTypes[26]
+		mi := &file_side_lending_query_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -15187,7 +16269,7 @@ func (*QueryCurrentInterestRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryCurrentInterestRequest.ProtoReflect.Descriptor instead.
 func (*QueryCurrentInterestRequest) Descriptor() ([]byte, []int) {
-	return file_side_lending_query_proto_rawDescGZIP(), []int{26}
+	return file_side_lending_query_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *QueryCurrentInterestRequest) GetLoanId() string {
@@ -15208,7 +16290,7 @@ type QueryCurrentInterestResponse struct {
 func (x *QueryCurrentInterestResponse) Reset() {
 	*x = QueryCurrentInterestResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_lending_query_proto_msgTypes[27]
+		mi := &file_side_lending_query_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -15222,7 +16304,7 @@ func (*QueryCurrentInterestResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryCurrentInterestResponse.ProtoReflect.Descriptor instead.
 func (*QueryCurrentInterestResponse) Descriptor() ([]byte, []int) {
-	return file_side_lending_query_proto_rawDescGZIP(), []int{27}
+	return file_side_lending_query_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *QueryCurrentInterestResponse) GetInterest() *v1beta11.Coin {
@@ -15244,7 +16326,7 @@ type QueryPriceRequest struct {
 func (x *QueryPriceRequest) Reset() {
 	*x = QueryPriceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_lending_query_proto_msgTypes[28]
+		mi := &file_side_lending_query_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -15258,7 +16340,7 @@ func (*QueryPriceRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryPriceRequest.ProtoReflect.Descriptor instead.
 func (*QueryPriceRequest) Descriptor() ([]byte, []int) {
-	return file_side_lending_query_proto_rawDescGZIP(), []int{28}
+	return file_side_lending_query_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *QueryPriceRequest) GetPair() string {
@@ -15280,7 +16362,7 @@ type QueryPriceResponse struct {
 func (x *QueryPriceResponse) Reset() {
 	*x = QueryPriceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_lending_query_proto_msgTypes[29]
+		mi := &file_side_lending_query_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -15294,7 +16376,7 @@ func (*QueryPriceResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryPriceResponse.ProtoReflect.Descriptor instead.
 func (*QueryPriceResponse) Descriptor() ([]byte, []int) {
-	return file_side_lending_query_proto_rawDescGZIP(), []int{29}
+	return file_side_lending_query_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *QueryPriceResponse) GetPrice() string {
@@ -15466,172 +16548,193 @@ var file_side_lending_query_proto_rawDesc = []byte{
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x30, 0x0a, 0x08, 0x64, 0x6c, 0x63, 0x5f, 0x6d, 0x65, 0x74,
 	0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
 	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x44, 0x4c, 0x43, 0x4d, 0x65, 0x74, 0x61, 0x52, 0x07,
-	0x64, 0x6c, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x22, 0x37, 0x0a, 0x1c, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64,
-	0x22, 0x5f, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x61, 0x6e,
-	0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x3e, 0x0a, 0x0c, 0x63, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x52, 0x0c, 0x63, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0x30, 0x0a, 0x15, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d,
-	0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f,
-	0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61,
-	0x6e, 0x49, 0x64, 0x22, 0x4f, 0x0a, 0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x70, 0x61,
-	0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x35, 0x0a,
-	0x09, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
-	0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x09, 0x72, 0x65, 0x70, 0x61, 0x79,
-	0x6d, 0x65, 0x6e, 0x74, 0x22, 0x36, 0x0a, 0x1b, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x75, 0x72,
-	0x72, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x22, 0x5b, 0x0a, 0x1c,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65,
-	0x72, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3b, 0x0a, 0x08,
-	0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19,
-	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62,
-	0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
-	0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x22, 0x27, 0x0a, 0x11, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x50, 0x72, 0x69, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12,
-	0x0a, 0x04, 0x70, 0x61, 0x69, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61,
-	0x69, 0x72, 0x22, 0x2a, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x69, 0x63, 0x65,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x63,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x32, 0x9f,
-	0x0f, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x6b, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1c, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x16, 0x12,
-	0x14, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x70,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x69, 0x0a, 0x04, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x1e, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x20,
-	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1a, 0x12, 0x18, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d,
-	0x12, 0x67, 0x0a, 0x05, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f,
-	0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50,
-	0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x15, 0x12, 0x13, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x95, 0x01, 0x0a, 0x10, 0x50, 0x6f,
-	0x6f, 0x6c, 0x45, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x61, 0x74, 0x65, 0x12, 0x2a,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x45, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x52,
-	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50,
-	0x6f, 0x6f, 0x6c, 0x45, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x61, 0x74, 0x65, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x28, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x22, 0x12,
-	0x20, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x70,
-	0x6f, 0x6f, 0x6c, 0x2f, 0x65, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x5f, 0x72, 0x61, 0x74,
-	0x65, 0x12, 0x98, 0x01, 0x0a, 0x11, 0x43, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c,
-	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x2b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x6f, 0x6c, 0x6c,
-	0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65,
-	0x72, 0x61, 0x6c, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x28, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x22, 0x12, 0x20, 0x2f, 0x73, 0x69, 0x64,
-	0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74,
-	0x65, 0x72, 0x61, 0x6c, 0x2f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x94, 0x01, 0x0a,
-	0x10, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x76, 0x65, 0x6e,
-	0x74, 0x12, 0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x76, 0x65,
-	0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x27, 0x82, 0xd3, 0xe4, 0x93,
-	0x02, 0x21, 0x12, 0x1f, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x65, 0x76,
-	0x65, 0x6e, 0x74, 0x12, 0x69, 0x0a, 0x04, 0x4c, 0x6f, 0x61, 0x6e, 0x12, 0x1e, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x4c, 0x6f, 0x61, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x4c, 0x6f, 0x61, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x20, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x1a, 0x12, 0x18, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x67,
-	0x0a, 0x05, 0x4c, 0x6f, 0x61, 0x6e, 0x73, 0x12, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e,
-	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61,
-	0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82, 0xd3, 0xe4, 0x93,
-	0x02, 0x15, 0x12, 0x13, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x73, 0x12, 0x94, 0x01, 0x0a, 0x0e, 0x4c, 0x6f, 0x61, 0x6e,
-	0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x28, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c,
-	0x6f, 0x61, 0x6e, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x73, 0x42, 0x79,
-	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x2d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x27, 0x12, 0x25, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x73, 0x2f, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0x85,
-	0x01, 0x0a, 0x0c, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x12,
-	0x26, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e,
-	0x43, 0x65, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1e, 0x12, 0x1c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
-	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x2f, 0x63, 0x65, 0x74,
-	0x2f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x12, 0x81, 0x01, 0x0a, 0x0b, 0x4c, 0x6f, 0x61, 0x6e, 0x44,
-	0x6c, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x12, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x44,
-	0x6c, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x26, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x44, 0x6c, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x12, 0x1b, 0x2f,
-	0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61,
-	0x6e, 0x2f, 0x64, 0x6c, 0x63, 0x2f, 0x6d, 0x65, 0x74, 0x61, 0x12, 0x94, 0x01, 0x0a, 0x10, 0x4c,
-	0x6f, 0x61, 0x6e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x27, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x21,
-	0x12, 0x1f, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f,
-	0x6c, 0x6f, 0x61, 0x6e, 0x2f, 0x63, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x7c, 0x0a, 0x09, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x23,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e,
-	0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02,
-	0x1e, 0x12, 0x1c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x2f, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x12,
-	0x95, 0x01, 0x0a, 0x0f, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x72,
-	0x65, 0x73, 0x74, 0x12, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x49,
-	0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65,
-	0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2b, 0x82, 0xd3, 0xe4, 0x93,
-	0x02, 0x25, 0x12, 0x23, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x2f, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x69,
-	0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x12, 0x67, 0x0a, 0x05, 0x50, 0x72, 0x69, 0x63, 0x65,
-	0x12, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x64, 0x6c, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x22, 0x48, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x4c, 0x6f, 0x61, 0x6e, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49,
+	0x64, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69,
+	0x64, 0x22, 0x91, 0x01, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x41,
+	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x34, 0x0a, 0x08, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73,
+	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x4c, 0x6f, 0x67,
+	0x52, 0x08, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x39, 0x0a, 0x06, 0x73, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x21, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72,
+	0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x28, 0x0a, 0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65,
+	0x64, 0x65, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22,
+	0x53, 0x0a, 0x17, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x64, 0x65, 0x6d, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x38, 0x0a, 0x0a, 0x72, 0x65,
+	0x64, 0x65, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18,
+	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x52, 0x65,
+	0x64, 0x65, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0a, 0x72, 0x65, 0x64, 0x65, 0x6d, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x22, 0x30, 0x0a, 0x15, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x70,
+	0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a,
+	0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x22, 0x4f, 0x0a, 0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52,
+	0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x35, 0x0a, 0x09, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x09, 0x72, 0x65,
+	0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x22, 0x36, 0x0a, 0x1b, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x22,
+	0x5b, 0x0a, 0x1c, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x49,
+	0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x3b, 0x0a, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde,
+	0x1f, 0x00, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x22, 0x27, 0x0a, 0x11,
 	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x69, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x15, 0x12, 0x13, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x70, 0x72, 0x69, 0x63, 0x65,
-	0x42, 0x9e, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74,
-	0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64,
-	0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e,
-	0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
-	0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x69, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x70, 0x61, 0x69, 0x72, 0x22, 0x2a, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72,
+	0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x70,
+	0x72, 0x69, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63,
+	0x65, 0x32, 0xb1, 0x10, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x6b, 0x0a, 0x06, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1c, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x16, 0x12, 0x14, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x69, 0x0a, 0x04, 0x50, 0x6f, 0x6f, 0x6c,
+	0x12, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x20, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1a, 0x12, 0x18, 0x2f, 0x73, 0x69, 0x64, 0x65,
+	0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x2f, 0x7b,
+	0x69, 0x64, 0x7d, 0x12, 0x67, 0x0a, 0x05, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x1f, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x1b, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x15, 0x12, 0x13, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x95, 0x01, 0x0a,
+	0x10, 0x50, 0x6f, 0x6f, 0x6c, 0x45, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x61, 0x74,
+	0x65, 0x12, 0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x45, 0x78, 0x63, 0x68, 0x61, 0x6e,
+	0x67, 0x65, 0x52, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x45, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x28, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x22, 0x12, 0x20, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x65, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x5f,
+	0x72, 0x61, 0x74, 0x65, 0x12, 0x98, 0x01, 0x0a, 0x11, 0x43, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65,
+	0x72, 0x61, 0x6c, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x2b, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43,
+	0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x6f, 0x6c, 0x6c,
+	0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x28, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x22, 0x12, 0x20, 0x2f,
+	0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x63, 0x6f, 0x6c,
+	0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x2f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12,
+	0x94, 0x01, 0x0a, 0x10, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45,
+	0x76, 0x65, 0x6e, 0x74, 0x12, 0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x2b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x27, 0x82,
+	0xd3, 0xe4, 0x93, 0x02, 0x21, 0x12, 0x1f, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x2f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x69, 0x0a, 0x04, 0x4c, 0x6f, 0x61, 0x6e, 0x12, 0x1e,
+	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f,
+	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x20, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1a, 0x12, 0x18, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x73, 0x2f, 0x7b, 0x69, 0x64,
+	0x7d, 0x12, 0x67, 0x0a, 0x05, 0x4c, 0x6f, 0x61, 0x6e, 0x73, 0x12, 0x1f, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c,
+	0x6f, 0x61, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x4c, 0x6f, 0x61, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82,
+	0xd3, 0xe4, 0x93, 0x02, 0x15, 0x12, 0x13, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x73, 0x12, 0x94, 0x01, 0x0a, 0x0e, 0x4c,
+	0x6f, 0x61, 0x6e, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x28, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e,
+	0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x2d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x27, 0x12, 0x25, 0x2f, 0x73, 0x69, 0x64,
+	0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x73, 0x2f,
+	0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x7d, 0x12, 0x85, 0x01, 0x0a, 0x0c, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x49, 0x6e, 0x66,
+	0x6f, 0x73, 0x12, 0x26, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x49, 0x6e,
+	0x66, 0x6f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c,
+	0x6f, 0x61, 0x6e, 0x43, 0x65, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1e, 0x12, 0x1c, 0x2f, 0x73, 0x69,
+	0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x2f,
+	0x63, 0x65, 0x74, 0x2f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x12, 0x81, 0x01, 0x0a, 0x0b, 0x4c, 0x6f,
+	0x61, 0x6e, 0x44, 0x6c, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x12, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f,
+	0x61, 0x6e, 0x44, 0x6c, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x26, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x44, 0x6c, 0x63, 0x4d, 0x65, 0x74, 0x61,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d,
+	0x12, 0x1b, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f,
+	0x6c, 0x6f, 0x61, 0x6e, 0x2f, 0x64, 0x6c, 0x63, 0x2f, 0x6d, 0x65, 0x74, 0x61, 0x12, 0x98, 0x01,
+	0x0a, 0x11, 0x4c, 0x6f, 0x61, 0x6e, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x2b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x41, 0x75, 0x74, 0x68,
+	0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x2c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x6f, 0x61, 0x6e, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
+	0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x28,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x22, 0x12, 0x20, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x6f,
+	0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x8b, 0x01, 0x0a, 0x0a, 0x52, 0x65, 0x64,
+	0x65, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x64, 0x65,
+	0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x52, 0x65, 0x64, 0x65, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x30, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2a, 0x12, 0x28, 0x2f, 0x73,
+	0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e,
+	0x2f, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x2f, 0x72, 0x65, 0x64, 0x65,
+	0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x7c, 0x0a, 0x09, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d,
+	0x65, 0x6e, 0x74, 0x12, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e,
+	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x70,
+	0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x24,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1e, 0x12, 0x1c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x2f, 0x72, 0x65, 0x70, 0x61, 0x79,
+	0x6d, 0x65, 0x6e, 0x74, 0x12, 0x95, 0x01, 0x0a, 0x0f, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74,
+	0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x12, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x75, 0x72,
+	0x72, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x49,
+	0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x2b, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x25, 0x12, 0x23, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x6f, 0x61, 0x6e, 0x2f, 0x63, 0x75, 0x72, 0x72,
+	0x65, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x12, 0x67, 0x0a, 0x05,
+	0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x69, 0x63, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x69, 0x63, 0x65,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x15,
+	0x12, 0x13, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f,
+	0x70, 0x72, 0x69, 0x63, 0x65, 0x42, 0x9e, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f,
+	0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c,
+	0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53,
+	0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69,
+	0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -15646,7 +16749,7 @@ func file_side_lending_query_proto_rawDescGZIP() []byte {
 	return file_side_lending_query_proto_rawDescData
 }
 
-var file_side_lending_query_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
+var file_side_lending_query_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
 var file_side_lending_query_proto_goTypes = []interface{}{
 	(*QueryPoolRequest)(nil),               // 0: side.lending.QueryPoolRequest
 	(*QueryPoolResponse)(nil),              // 1: side.lending.QueryPoolResponse
@@ -15670,83 +16773,91 @@ var file_side_lending_query_proto_goTypes = []interface{}{
 	(*QueryLoansByAddressResponse)(nil),    // 19: side.lending.QueryLoansByAddressResponse
 	(*QueryLoanDlcMetaRequest)(nil),        // 20: side.lending.QueryLoanDlcMetaRequest
 	(*QueryLoanDlcMetaResponse)(nil),       // 21: side.lending.QueryLoanDlcMetaResponse
-	(*QueryLoanCancellationRequest)(nil),   // 22: side.lending.QueryLoanCancellationRequest
-	(*QueryLoanCancellationResponse)(nil),  // 23: side.lending.QueryLoanCancellationResponse
-	(*QueryRepaymentRequest)(nil),          // 24: side.lending.QueryRepaymentRequest
-	(*QueryRepaymentResponse)(nil),         // 25: side.lending.QueryRepaymentResponse
-	(*QueryCurrentInterestRequest)(nil),    // 26: side.lending.QueryCurrentInterestRequest
-	(*QueryCurrentInterestResponse)(nil),   // 27: side.lending.QueryCurrentInterestResponse
-	(*QueryPriceRequest)(nil),              // 28: side.lending.QueryPriceRequest
-	(*QueryPriceResponse)(nil),             // 29: side.lending.QueryPriceResponse
-	(*LendingPool)(nil),                    // 30: side.lending.LendingPool
-	(*v1beta1.PageRequest)(nil),            // 31: cosmos.base.query.v1beta1.PageRequest
-	(*v1beta1.PageResponse)(nil),           // 32: cosmos.base.query.v1beta1.PageResponse
-	(*CetInfo)(nil),                        // 33: side.lending.CetInfo
-	(*Params)(nil),                         // 34: side.lending.Params
-	(*Loan)(nil),                           // 35: side.lending.Loan
-	(LoanStatus)(0),                        // 36: side.lending.LoanStatus
-	(*DLCMeta)(nil),                        // 37: side.lending.DLCMeta
-	(*Cancellation)(nil),                   // 38: side.lending.Cancellation
-	(*Repayment)(nil),                      // 39: side.lending.Repayment
-	(*v1beta11.Coin)(nil),                  // 40: cosmos.base.v1beta1.Coin
+	(*QueryLoanAuthorizationRequest)(nil),  // 22: side.lending.QueryLoanAuthorizationRequest
+	(*QueryLoanAuthorizationResponse)(nil), // 23: side.lending.QueryLoanAuthorizationResponse
+	(*QueryRedemptionRequest)(nil),         // 24: side.lending.QueryRedemptionRequest
+	(*QueryRedemptionResponse)(nil),        // 25: side.lending.QueryRedemptionResponse
+	(*QueryRepaymentRequest)(nil),          // 26: side.lending.QueryRepaymentRequest
+	(*QueryRepaymentResponse)(nil),         // 27: side.lending.QueryRepaymentResponse
+	(*QueryCurrentInterestRequest)(nil),    // 28: side.lending.QueryCurrentInterestRequest
+	(*QueryCurrentInterestResponse)(nil),   // 29: side.lending.QueryCurrentInterestResponse
+	(*QueryPriceRequest)(nil),              // 30: side.lending.QueryPriceRequest
+	(*QueryPriceResponse)(nil),             // 31: side.lending.QueryPriceResponse
+	(*LendingPool)(nil),                    // 32: side.lending.LendingPool
+	(*v1beta1.PageRequest)(nil),            // 33: cosmos.base.query.v1beta1.PageRequest
+	(*v1beta1.PageResponse)(nil),           // 34: cosmos.base.query.v1beta1.PageResponse
+	(*CetInfo)(nil),                        // 35: side.lending.CetInfo
+	(*Params)(nil),                         // 36: side.lending.Params
+	(*Loan)(nil),                           // 37: side.lending.Loan
+	(LoanStatus)(0),                        // 38: side.lending.LoanStatus
+	(*DLCMeta)(nil),                        // 39: side.lending.DLCMeta
+	(*DepositLog)(nil),                     // 40: side.lending.DepositLog
+	(AuthorizationStatus)(0),               // 41: side.lending.AuthorizationStatus
+	(*Redemption)(nil),                     // 42: side.lending.Redemption
+	(*Repayment)(nil),                      // 43: side.lending.Repayment
+	(*v1beta11.Coin)(nil),                  // 44: cosmos.base.v1beta1.Coin
 }
 var file_side_lending_query_proto_depIdxs = []int32{
-	30, // 0: side.lending.QueryPoolResponse.pool:type_name -> side.lending.LendingPool
-	31, // 1: side.lending.QueryPoolsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	30, // 2: side.lending.QueryPoolsResponse.pools:type_name -> side.lending.LendingPool
-	32, // 3: side.lending.QueryPoolsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	33, // 4: side.lending.QueryLoanCetInfosResponse.liquidation_cet_info:type_name -> side.lending.CetInfo
-	33, // 5: side.lending.QueryLoanCetInfosResponse.default_liquidation_cet_info:type_name -> side.lending.CetInfo
-	33, // 6: side.lending.QueryLoanCetInfosResponse.repayment_cet_info:type_name -> side.lending.CetInfo
-	34, // 7: side.lending.QueryParamsResponse.params:type_name -> side.lending.Params
-	35, // 8: side.lending.QueryLoanResponse.loan:type_name -> side.lending.Loan
-	36, // 9: side.lending.QueryLoansRequest.status:type_name -> side.lending.LoanStatus
-	31, // 10: side.lending.QueryLoansRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	35, // 11: side.lending.QueryLoansResponse.loans:type_name -> side.lending.Loan
-	32, // 12: side.lending.QueryLoansResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	36, // 13: side.lending.QueryLoansByAddressRequest.status:type_name -> side.lending.LoanStatus
-	31, // 14: side.lending.QueryLoansByAddressRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	35, // 15: side.lending.QueryLoansByAddressResponse.loans:type_name -> side.lending.Loan
-	32, // 16: side.lending.QueryLoansByAddressResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	37, // 17: side.lending.QueryLoanDlcMetaResponse.dlc_meta:type_name -> side.lending.DLCMeta
-	38, // 18: side.lending.QueryLoanCancellationResponse.cancellation:type_name -> side.lending.Cancellation
-	39, // 19: side.lending.QueryRepaymentResponse.repayment:type_name -> side.lending.Repayment
-	40, // 20: side.lending.QueryCurrentInterestResponse.interest:type_name -> cosmos.base.v1beta1.Coin
-	12, // 21: side.lending.Query.Params:input_type -> side.lending.QueryParamsRequest
-	0,  // 22: side.lending.Query.Pool:input_type -> side.lending.QueryPoolRequest
-	2,  // 23: side.lending.Query.Pools:input_type -> side.lending.QueryPoolsRequest
-	4,  // 24: side.lending.Query.PoolExchangeRate:input_type -> side.lending.QueryPoolExchangeRateRequest
-	10, // 25: side.lending.Query.CollateralAddress:input_type -> side.lending.QueryCollateralAddressRequest
-	6,  // 26: side.lending.Query.LiquidationEvent:input_type -> side.lending.QueryLiquidationEventRequest
-	14, // 27: side.lending.Query.Loan:input_type -> side.lending.QueryLoanRequest
-	16, // 28: side.lending.Query.Loans:input_type -> side.lending.QueryLoansRequest
-	18, // 29: side.lending.Query.LoansByAddress:input_type -> side.lending.QueryLoansByAddressRequest
-	8,  // 30: side.lending.Query.LoanCetInfos:input_type -> side.lending.QueryLoanCetInfosRequest
-	20, // 31: side.lending.Query.LoanDlcMeta:input_type -> side.lending.QueryLoanDlcMetaRequest
-	22, // 32: side.lending.Query.LoanCancellation:input_type -> side.lending.QueryLoanCancellationRequest
-	24, // 33: side.lending.Query.Repayment:input_type -> side.lending.QueryRepaymentRequest
-	26, // 34: side.lending.Query.CurrentInterest:input_type -> side.lending.QueryCurrentInterestRequest
-	28, // 35: side.lending.Query.Price:input_type -> side.lending.QueryPriceRequest
-	13, // 36: side.lending.Query.Params:output_type -> side.lending.QueryParamsResponse
-	1,  // 37: side.lending.Query.Pool:output_type -> side.lending.QueryPoolResponse
-	3,  // 38: side.lending.Query.Pools:output_type -> side.lending.QueryPoolsResponse
-	5,  // 39: side.lending.Query.PoolExchangeRate:output_type -> side.lending.QueryPoolExchangeRateResponse
-	11, // 40: side.lending.Query.CollateralAddress:output_type -> side.lending.QueryCollateralAddressResponse
-	7,  // 41: side.lending.Query.LiquidationEvent:output_type -> side.lending.QueryLiquidationEventResponse
-	15, // 42: side.lending.Query.Loan:output_type -> side.lending.QueryLoanResponse
-	17, // 43: side.lending.Query.Loans:output_type -> side.lending.QueryLoansResponse
-	19, // 44: side.lending.Query.LoansByAddress:output_type -> side.lending.QueryLoansByAddressResponse
-	9,  // 45: side.lending.Query.LoanCetInfos:output_type -> side.lending.QueryLoanCetInfosResponse
-	21, // 46: side.lending.Query.LoanDlcMeta:output_type -> side.lending.QueryLoanDlcMetaResponse
-	23, // 47: side.lending.Query.LoanCancellation:output_type -> side.lending.QueryLoanCancellationResponse
-	25, // 48: side.lending.Query.Repayment:output_type -> side.lending.QueryRepaymentResponse
-	27, // 49: side.lending.Query.CurrentInterest:output_type -> side.lending.QueryCurrentInterestResponse
-	29, // 50: side.lending.Query.Price:output_type -> side.lending.QueryPriceResponse
-	36, // [36:51] is the sub-list for method output_type
-	21, // [21:36] is the sub-list for method input_type
-	21, // [21:21] is the sub-list for extension type_name
-	21, // [21:21] is the sub-list for extension extendee
-	0,  // [0:21] is the sub-list for field type_name
+	32, // 0: side.lending.QueryPoolResponse.pool:type_name -> side.lending.LendingPool
+	33, // 1: side.lending.QueryPoolsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	32, // 2: side.lending.QueryPoolsResponse.pools:type_name -> side.lending.LendingPool
+	34, // 3: side.lending.QueryPoolsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	35, // 4: side.lending.QueryLoanCetInfosResponse.liquidation_cet_info:type_name -> side.lending.CetInfo
+	35, // 5: side.lending.QueryLoanCetInfosResponse.default_liquidation_cet_info:type_name -> side.lending.CetInfo
+	35, // 6: side.lending.QueryLoanCetInfosResponse.repayment_cet_info:type_name -> side.lending.CetInfo
+	36, // 7: side.lending.QueryParamsResponse.params:type_name -> side.lending.Params
+	37, // 8: side.lending.QueryLoanResponse.loan:type_name -> side.lending.Loan
+	38, // 9: side.lending.QueryLoansRequest.status:type_name -> side.lending.LoanStatus
+	33, // 10: side.lending.QueryLoansRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	37, // 11: side.lending.QueryLoansResponse.loans:type_name -> side.lending.Loan
+	34, // 12: side.lending.QueryLoansResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	38, // 13: side.lending.QueryLoansByAddressRequest.status:type_name -> side.lending.LoanStatus
+	33, // 14: side.lending.QueryLoansByAddressRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	37, // 15: side.lending.QueryLoansByAddressResponse.loans:type_name -> side.lending.Loan
+	34, // 16: side.lending.QueryLoansByAddressResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	39, // 17: side.lending.QueryLoanDlcMetaResponse.dlc_meta:type_name -> side.lending.DLCMeta
+	40, // 18: side.lending.QueryLoanAuthorizationResponse.deposits:type_name -> side.lending.DepositLog
+	41, // 19: side.lending.QueryLoanAuthorizationResponse.status:type_name -> side.lending.AuthorizationStatus
+	42, // 20: side.lending.QueryRedemptionResponse.redemption:type_name -> side.lending.Redemption
+	43, // 21: side.lending.QueryRepaymentResponse.repayment:type_name -> side.lending.Repayment
+	44, // 22: side.lending.QueryCurrentInterestResponse.interest:type_name -> cosmos.base.v1beta1.Coin
+	12, // 23: side.lending.Query.Params:input_type -> side.lending.QueryParamsRequest
+	0,  // 24: side.lending.Query.Pool:input_type -> side.lending.QueryPoolRequest
+	2,  // 25: side.lending.Query.Pools:input_type -> side.lending.QueryPoolsRequest
+	4,  // 26: side.lending.Query.PoolExchangeRate:input_type -> side.lending.QueryPoolExchangeRateRequest
+	10, // 27: side.lending.Query.CollateralAddress:input_type -> side.lending.QueryCollateralAddressRequest
+	6,  // 28: side.lending.Query.LiquidationEvent:input_type -> side.lending.QueryLiquidationEventRequest
+	14, // 29: side.lending.Query.Loan:input_type -> side.lending.QueryLoanRequest
+	16, // 30: side.lending.Query.Loans:input_type -> side.lending.QueryLoansRequest
+	18, // 31: side.lending.Query.LoansByAddress:input_type -> side.lending.QueryLoansByAddressRequest
+	8,  // 32: side.lending.Query.LoanCetInfos:input_type -> side.lending.QueryLoanCetInfosRequest
+	20, // 33: side.lending.Query.LoanDlcMeta:input_type -> side.lending.QueryLoanDlcMetaRequest
+	22, // 34: side.lending.Query.LoanAuthorization:input_type -> side.lending.QueryLoanAuthorizationRequest
+	24, // 35: side.lending.Query.Redemption:input_type -> side.lending.QueryRedemptionRequest
+	26, // 36: side.lending.Query.Repayment:input_type -> side.lending.QueryRepaymentRequest
+	28, // 37: side.lending.Query.CurrentInterest:input_type -> side.lending.QueryCurrentInterestRequest
+	30, // 38: side.lending.Query.Price:input_type -> side.lending.QueryPriceRequest
+	13, // 39: side.lending.Query.Params:output_type -> side.lending.QueryParamsResponse
+	1,  // 40: side.lending.Query.Pool:output_type -> side.lending.QueryPoolResponse
+	3,  // 41: side.lending.Query.Pools:output_type -> side.lending.QueryPoolsResponse
+	5,  // 42: side.lending.Query.PoolExchangeRate:output_type -> side.lending.QueryPoolExchangeRateResponse
+	11, // 43: side.lending.Query.CollateralAddress:output_type -> side.lending.QueryCollateralAddressResponse
+	7,  // 44: side.lending.Query.LiquidationEvent:output_type -> side.lending.QueryLiquidationEventResponse
+	15, // 45: side.lending.Query.Loan:output_type -> side.lending.QueryLoanResponse
+	17, // 46: side.lending.Query.Loans:output_type -> side.lending.QueryLoansResponse
+	19, // 47: side.lending.Query.LoansByAddress:output_type -> side.lending.QueryLoansByAddressResponse
+	9,  // 48: side.lending.Query.LoanCetInfos:output_type -> side.lending.QueryLoanCetInfosResponse
+	21, // 49: side.lending.Query.LoanDlcMeta:output_type -> side.lending.QueryLoanDlcMetaResponse
+	23, // 50: side.lending.Query.LoanAuthorization:output_type -> side.lending.QueryLoanAuthorizationResponse
+	25, // 51: side.lending.Query.Redemption:output_type -> side.lending.QueryRedemptionResponse
+	27, // 52: side.lending.Query.Repayment:output_type -> side.lending.QueryRepaymentResponse
+	29, // 53: side.lending.Query.CurrentInterest:output_type -> side.lending.QueryCurrentInterestResponse
+	31, // 54: side.lending.Query.Price:output_type -> side.lending.QueryPriceResponse
+	39, // [39:55] is the sub-list for method output_type
+	23, // [23:39] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_side_lending_query_proto_init() }
@@ -16022,7 +17133,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryLoanCancellationRequest); i {
+			switch v := v.(*QueryLoanAuthorizationRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16034,7 +17145,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryLoanCancellationResponse); i {
+			switch v := v.(*QueryLoanAuthorizationResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16046,7 +17157,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryRepaymentRequest); i {
+			switch v := v.(*QueryRedemptionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16058,7 +17169,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryRepaymentResponse); i {
+			switch v := v.(*QueryRedemptionResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16070,7 +17181,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryCurrentInterestRequest); i {
+			switch v := v.(*QueryRepaymentRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16082,7 +17193,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryCurrentInterestResponse); i {
+			switch v := v.(*QueryRepaymentResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16094,7 +17205,7 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryPriceRequest); i {
+			switch v := v.(*QueryCurrentInterestRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16106,6 +17217,30 @@ func file_side_lending_query_proto_init() {
 			}
 		}
 		file_side_lending_query_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryCurrentInterestResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_lending_query_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryPriceRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_lending_query_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryPriceResponse); i {
 			case 0:
 				return &v.state
@@ -16124,7 +17259,7 @@ func file_side_lending_query_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_lending_query_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   30,
+			NumMessages:   32,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

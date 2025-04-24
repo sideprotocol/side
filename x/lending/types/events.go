@@ -2,15 +2,15 @@ package types
 
 // Lending module event types
 const (
-	EventTypeApply                                 = "apply"
-	EventTypeApprove                               = "approve"
-	EventTypeReject                                = "reject"
-	EventTypeCancel                                = "cancel"
-	EventTypeRepay                                 = "repay"
-	EventTypeDefault                               = "default"
-	EventTypeLiquidate                             = "liquidate"
-	EventTypeGenerateSignedCet                     = "generate_signed_cet"
-	EventTypeGenerateSignedCancellationTransaction = "generate_signed_cancellation_transaction"
+	EventTypeApply                               = "apply"
+	EventTypeApprove                             = "approve"
+	EventTypeReject                              = "reject"
+	EventTypeRedeem                              = "redeem"
+	EventTypeRepay                               = "repay"
+	EventTypeDefault                             = "default"
+	EventTypeLiquidate                           = "liquidate"
+	EventTypeGenerateSignedCet                   = "generate_signed_cet"
+	EventTypeGenerateSignedRedemptionTransaction = "generate_signed_redemption_transaction"
 
 	AttributeKeyVault            = "vault"
 	AttributeKeyBorrower         = "borrower"
@@ -22,9 +22,12 @@ const (
 	AttributeKeyBorrowAmount     = "borrow_amount"
 
 	AttributeKeyLoanId = "loan_id"
+	AttributeKeyId     = "id"
 
 	AttributeKeySender = "sender"
 	AttributeKeyAmount = "amount"
+
+	AttributeKeyAuthorizationId = "authorization_id"
 
 	AttributeKeyDepositTxHash = "deposit_tx_hash"
 

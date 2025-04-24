@@ -57,8 +57,12 @@ service Query {
         option (google.api.http).get = "/side/lending/loan/dlc/meta";
     }
 
-    rpc LoanCancellation(QueryLoanCancellationRequest) returns (QueryLoanCancellationResponse) {
-        option (google.api.http).get = "/side/lending/loan/cancellation";
+    rpc LoanAuthorization(QueryLoanAuthorizationRequest) returns (QueryLoanAuthorizationResponse) {
+        option (google.api.http).get = "/side/lending/loan/authorization";
+    }
+
+    rpc Redemption(QueryRedemptionRequest) returns (QueryRedemptionResponse) {
+        option (google.api.http).get = "/side/lending/loan/collateral/redemption";
     }
 
     rpc Repayment(QueryRepaymentRequest) returns (QueryRepaymentResponse) {
@@ -196,14 +200,26 @@ message QueryLoanDlcMetaResponse {
     DLCMeta dlc_meta = 1;
 }
 
-// QueryLoanCancellationRequest is request type for the Query/LoanCancellation RPC method.
-message QueryLoanCancellationRequest {
+// QueryLoanAuthorizationRequest is request type for the Query/LoanAuthorization RPC method.
+message QueryLoanAuthorizationRequest {
     string loan_id = 1;
+    uint64 id = 2;
 }
 
-// QueryLoanCancellationResponse is response type for the Query/LoanCancellation RPC method.
-message QueryLoanCancellationResponse {
-    Cancellation cancellation = 1;
+// QueryLoanAuthorizationResponse is response type for the Query/LoanAuthorization RPC method.
+message QueryLoanAuthorizationResponse {
+    repeated DepositLog deposits = 1;
+    AuthorizationStatus status = 2;
+}
+
+// QueryRedemptionRequest is request type for the Query/Redemption RPC method.
+message QueryRedemptionRequest {
+    uint64 id = 1;
+}
+
+// QueryRedemptionResponse is response type for the Query/Redemption RPC method.
+message QueryRedemptionResponse {
+    Redemption redemption = 1;
 }
 
 message QueryRepaymentRequest {

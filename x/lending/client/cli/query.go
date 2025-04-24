@@ -36,7 +36,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryLoansByAddress())
 	cmd.AddCommand(CmdQueryLoanCetInfos())
 	cmd.AddCommand(CmdQueryDlcMeta())
-	cmd.AddCommand(CmdQueryCancellation())
+	cmd.AddCommand(CmdQueryRedemption())
 	cmd.AddCommand(CmdQueryRepayment())
 	cmd.AddCommand(CmdQueryCurrentInterest())
 	cmd.AddCommand(CmdQueryPrice())
@@ -388,10 +388,10 @@ func CmdQueryDlcMeta() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryCancellation() *cobra.Command {
+func CmdQueryRedemption() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cancellation [loan id]",
-		Short: "Query the cancellation of the given loan",
+		Use:   "redemption [id]",
+		Short: "Query redemption by the given id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -401,7 +401,12 @@ func CmdQueryCancellation() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.LoanCancellation(cmd.Context(), &types.QueryLoanCancellationRequest{LoanId: args[0]})
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.Redemption(cmd.Context(), &types.QueryRedemptionRequest{Id: id})
 			if err != nil {
 				return err
 			}

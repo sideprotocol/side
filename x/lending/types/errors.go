@@ -35,7 +35,8 @@ var (
 	ErrInsufficientCollateral  = errorsmod.Register(ModuleName, 3012, "insufficient collateral")
 	ErrLiquidationPriceReached = errorsmod.Register(ModuleName, 3013, "liquidation price reached")
 	ErrMaturityTimeReached     = errorsmod.Register(ModuleName, 3014, "maturity time reached")
-	ErrFailedToBuildTx         = errorsmod.Register(ModuleName, 3015, "failed to build tx")
+	ErrAuthorizationRejected   = errorsmod.Register(ModuleName, 3015, "authorization rejected")
+	ErrFailedToBuildTx         = errorsmod.Register(ModuleName, 3016, "failed to build tx")
 
 	ErrInvalidVault          = errorsmod.Register(ModuleName, 4001, "invalid vault")
 	ErrInvalidBlockHash      = errorsmod.Register(ModuleName, 4002, "invalid block hash")
@@ -44,7 +45,7 @@ var (
 
 	ErrMismatchedBorrower        = errorsmod.Register(ModuleName, 5001, "mismatched borrower")
 	ErrInvalidTx                 = errorsmod.Register(ModuleName, 5002, "invalid tx")
-	ErrCancellationDoesNotExist  = errorsmod.Register(ModuleName, 5003, "cancellation does not exist")
+	ErrRedemptionDoesNotExist    = errorsmod.Register(ModuleName, 5003, "redemption does not exist")
 	ErrDCMSignaturesAlreadyExist = errorsmod.Register(ModuleName, 5004, "dcm signatures already exist")
 
 	ErrMinMaturityNotReached            = errorsmod.Register(ModuleName, 6001, "min maturity not reached")

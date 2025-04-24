@@ -146,23 +146,6 @@ func (k Keeper) GetDepositLog(ctx sdk.Context, txid string) *types.DepositLog {
 	return &depositLog
 }
 
-// DepositTxsVerified returns true if all deposit txs verified, false otherwise
-func (k Keeper) DepositTxsVerified(ctx sdk.Context, txids []string) bool {
-	store := ctx.KVStore(k.storeKey)
-
-	for _, txid := range txids {
-		var depositLog types.DepositLog
-		bz := store.Get(types.DepositLogKey(txid))
-		k.cdc.MustUnmarshal(bz, &depositLog)
-
-		if !depositLog.Verified {
-			return false
-		}
-	}
-
-	return true
-}
-
 // SetRepayment sets the given repayment
 func (k Keeper) SetRepayment(ctx sdk.Context, repayment *types.Repayment) {
 	store := ctx.KVStore(k.storeKey)
@@ -188,33 +171,6 @@ func (k Keeper) GetRepayment(ctx sdk.Context, loanId string) *types.Repayment {
 	k.cdc.MustUnmarshal(bz, &repayment)
 
 	return &repayment
-}
-
-// HasCancellation returns true if there exists cancellation for the given loan, false otherwise
-func (k Keeper) HasCancellation(ctx sdk.Context, loanId string) bool {
-	store := ctx.KVStore(k.storeKey)
-
-	return store.Has(types.CancellationKey(loanId))
-}
-
-// SetCancellation sets the given cancellation
-func (k Keeper) SetCancellation(ctx sdk.Context, cancellation *types.Cancellation) {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := k.cdc.MustMarshal(cancellation)
-
-	store.Set(types.CancellationKey(cancellation.LoanId), bz)
-}
-
-// GetCancellation gets the specified cancellation
-func (k Keeper) GetCancellation(ctx sdk.Context, loanId string) *types.Cancellation {
-	store := ctx.KVStore(k.storeKey)
-
-	var cancellation types.Cancellation
-	bz := store.Get(types.CancellationKey(loanId))
-	k.cdc.MustUnmarshal(bz, &cancellation)
-
-	return &cancellation
 }
 
 // GetCurrentBorrowIndex gets the current borrow index of the given loan

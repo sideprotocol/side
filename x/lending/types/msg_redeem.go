@@ -11,10 +11,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgCancel{}
+var _ sdk.Msg = &MsgRedeem{}
 
-func NewMsgCancel(borrower string, loanId string, tx string, signatures []string) *MsgCancel {
-	return &MsgCancel{
+func NewMsgRedeem(borrower string, loanId string, tx string, signatures []string) *MsgRedeem {
+	return &MsgRedeem{
 		Borrower:   borrower,
 		LoanId:     loanId,
 		Tx:         tx,
@@ -23,7 +23,7 @@ func NewMsgCancel(borrower string, loanId string, tx string, signatures []string
 }
 
 // ValidateBasic performs basic message validation.
-func (m *MsgCancel) ValidateBasic() error {
+func (m *MsgRedeem) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Borrower); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}

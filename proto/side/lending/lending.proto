@@ -135,23 +135,31 @@ enum LoanStatus {
     Requested = 1;
     // Loan Open
     Open = 2;
-    // Loan Rejected
-    Rejected = 3;
-    // Loan Cancelled
-    Cancelled = 4;
     // Loan Repaid
-    Repaid = 5;
+    Repaid = 3;
     // Loan Defaulted
-    Defaulted = 6;
+    Defaulted = 4;
     // Loan Liquidated
-    Liquidated = 7;
+    Liquidated = 5;
     // Loan Closed
-    Closed = 8;
+    Closed = 6;
 }
 
-// Deposits used for CET authorization
-message AuthorizationDeposits {
-  repeated string deposit_txs = 1;
+// Authorization Status
+enum AuthorizationStatus {
+    // Pending
+    AUTHORIZATION_STATUS_PENDING = 0;
+    // Authorized
+    AUTHORIZATION_STATUS_AUTHORIZED = 1;
+    // Rejected
+    AUTHORIZATION_STATUS_REJECTED = 2;
+}
+
+// Authorization with deposit txs for cets
+message Authorization {
+    uint64 id = 1;
+    repeated string deposit_txs = 2;
+    AuthorizationStatus status = 3;
 }
 
 message Loan {
@@ -191,7 +199,7 @@ message Loan {
     uint64 liquidation_event_id = 18;
     uint64 default_liquidation_event_id = 19;
     uint64 repayment_event_id = 20;
-    repeated AuthorizationDeposits authorization_deposits = 21 [(gogoproto.nullable) = false];
+    repeated Authorization authorizations = 21 [(gogoproto.nullable) = false];
     string collateral_amount = 22 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
@@ -243,11 +251,19 @@ message DLCMeta {
     string timeout_refund_script = 8;
 }
 
+enum DepositStatus {
+    DEPOSIT_STATUS_PENDING = 0;
+    DEPOSIT_STATUS_VERIFIED = 1;
+    DEPOSIT_STATUS_REDEEMING = 2;
+    DEPOSIT_STATUS_REDEEMED = 3;
+}
+
 message DepositLog {
     string txid = 1;
     string vault_address = 2;
-    string deposit_tx = 3;
-    bool verified = 4;
+    uint64 authorization_id = 3;
+    string deposit_tx = 4;
+    DepositStatus status = 5;
 }
 
 message Repayment {
@@ -256,13 +272,14 @@ message Repayment {
     google.protobuf.Timestamp create_at = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
-message Cancellation {
-    string loan_id = 1;
-    string txid = 2;
-    string tx = 3;
-    repeated string signatures = 4;
-    repeated string dcm_signatures = 5 [(gogoproto.customname) = "DCMSignatures"];
-    google.protobuf.Timestamp create_at = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+message Redemption {
+    uint64 id = 1;
+    string loan_id = 2;
+    string txid = 3;
+    string tx = 4;
+    repeated string signatures = 5;
+    repeated string dcm_signatures = 6 [(gogoproto.customname) = "DCMSignatures"];
+    google.protobuf.Timestamp create_at = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 // Signing intent
@@ -270,5 +287,5 @@ enum SigningIntent {
   SIGNING_INTENT_REPAYMENT = 0;
   SIGNING_INTENT_LIQUIDATION = 1;
   SIGNING_INTENT_DEFAULT_LIQUIDATION = 2;
-  SIGNING_INTENT_CANCELLATION = 3;
+  SIGNING_INTENT_REDEMPTION = 3;
 }
