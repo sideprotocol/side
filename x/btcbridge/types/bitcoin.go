@@ -1,6 +1,9 @@
 package types
 
 import (
+	"bytes"
+	"encoding/base64"
+
 	"lukechampine.com/uint128"
 
 	"github.com/btcsuite/btcd/blockchain"
@@ -10,9 +13,10 @@ import (
 	"github.com/btcsuite/btcd/mempool"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/sideprotocol/side/bitcoin"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/sideprotocol/side/bitcoin"
 )
 
 const (
@@ -554,6 +558,36 @@ func IsValidBtcAddress(address string) bool {
 	return err == nil
 }
 
+// GetSigners gets all signer addresses from the given psbt
+// Assume that the given psbt is valid and contains witness utxos
+func GetSigners(psbtB64 string) []string {
+	signers := []string{}
+
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(psbtB64)), true)
+
+	for _, input := range p.Inputs {
+		signers = append(signers, MustAddressFromPkScript(input.WitnessUtxo.PkScript))
+	}
+
+	return signers
+}
+
+// GetSigHashes gets all sig hashes from the given psbt
+// Assume that the given psbt is valid and contains taproot witness utxos
+func GetSigHashes(psbtB64 string) []string {
+	sigHashes := []string{}
+
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(psbtB64)), true)
+
+	for i, input := range p.Inputs {
+		sigHash, _ := CalcTaprootSigHash(p, i, input.SighashType)
+
+		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
+	}
+
+	return sigHashes
+}
+
 // MustPkScriptFromAddress returns the public key script of the given address
 // Panic if any error occurred
 func MustPkScriptFromAddress(address string) []byte {
@@ -568,4 +602,36 @@ func MustPkScriptFromAddress(address string) []byte {
 	}
 
 	return pkScript
+}
+
+// MustAddressFromPkScript returns the corresponding address from the given pk script
+// Panic if any error occurred
+func MustAddressFromPkScript(pkScript []byte) string {
+	parsedPkScript, err := txscript.ParsePkScript(pkScript)
+	if err != nil {
+		panic(err)
+	}
+
+	address, err := parsedPkScript.Address(bitcoin.Network)
+	if err != nil {
+		panic(err)
+	}
+
+	return address.EncodeAddress()
+}
+
+// CalcTaprootSigHash computes the sig hash of the given input
+// Assume that the psbt is valid
+func CalcTaprootSigHash(p *psbt.Packet, idx int, sigHashType txscript.SigHashType) ([]byte, error) {
+	prevOutFetcher := txscript.NewMultiPrevOutFetcher(nil)
+	for i, txIn := range p.UnsignedTx.TxIn {
+		prevOutFetcher.AddPrevOut(txIn.PreviousOutPoint, p.Inputs[i].WitnessUtxo)
+	}
+
+	sigHash, err := txscript.CalcTaprootSignatureHash(txscript.NewTxSigHashes(p.UnsignedTx, prevOutFetcher), sigHashType, p.UnsignedTx, idx, prevOutFetcher)
+	if err != nil {
+		return nil, err
+	}
+
+	return sigHash, nil
 }

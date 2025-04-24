@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"fmt"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -77,9 +77,13 @@ func (k Keeper) handleBtcConsolidation(ctx sdk.Context, vaultVersion uint64, tar
 	k.SetSigningRequest(ctx, signingReq)
 
 	// Emit events
-	k.EmitEvent(ctx, k.authority,
-		sdk.NewAttribute("sequence", fmt.Sprintf("%d", signingReq.Sequence)),
-		sdk.NewAttribute("txid", signingReq.Txid),
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeInitiateSigning,
+			sdk.NewAttribute(types.AttributeKeyId, signingReq.Txid),
+			sdk.NewAttribute(types.AttributeKeySigners, strings.Join(types.GetSigners(signingReq.Psbt), types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(types.GetSigHashes(signingReq.Psbt), types.AttributeValueSeparator)),
+		),
 	)
 
 	return nil
@@ -140,9 +144,13 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 	k.SetSigningRequest(ctx, signingReq)
 
 	// Emit events
-	k.EmitEvent(ctx, k.authority,
-		sdk.NewAttribute("sequence", fmt.Sprintf("%d", signingReq.Sequence)),
-		sdk.NewAttribute("txid", signingReq.Txid),
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeInitiateSigning,
+			sdk.NewAttribute(types.AttributeKeyId, signingReq.Txid),
+			sdk.NewAttribute(types.AttributeKeySigners, strings.Join(types.GetSigners(signingReq.Psbt), types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(types.GetSigHashes(signingReq.Psbt), types.AttributeValueSeparator)),
+		),
 	)
 
 	return nil

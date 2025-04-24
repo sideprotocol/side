@@ -146,7 +146,7 @@ message MsgSubmitSignatures {
 
   string sender = 1;
   string txid = 2;
-  string psbt = 3;
+  repeated string signatures = 3;
 }
 
 // MsgSubmitSignaturesResponse defines the Msg/SubmitSignatures response type.

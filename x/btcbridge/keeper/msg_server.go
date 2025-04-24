@@ -3,6 +3,7 @@ package keeper
 import (
 	"bytes"
 	"context"
+	"encoding/hex"
 	"fmt"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -11,6 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
+	"github.com/sideprotocol/side/crypto/schnorr"
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
@@ -212,34 +214,43 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 
 	signingRequest := m.GetSigningRequestByTxHash(ctx, msg.Txid)
 	if signingRequest.Status != types.SigningStatus_SIGNING_STATUS_PENDING {
-		// return without error
+		// return no error
 		return nil, nil
 	}
 
-	packet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Psbt)), true)
-	if err != nil {
-		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "invalid psbt")
+	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(signingRequest.Psbt)), true)
+
+	if len(msg.Signatures) != len(p.Inputs) {
+		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
 	}
 
-	if packet.UnsignedTx.TxHash().String() != msg.Txid {
-		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "tx hash mismatch")
+	for i, input := range p.Inputs {
+		sigHash, err := types.CalcTaprootSigHash(p, i, input.SighashType)
+		if err != nil {
+			return nil, err
+		}
+
+		pubKeyBytes := input.WitnessUtxo.PkScript[2:34]
+		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
+
+		if !schnorr.Verify(sigBytes, sigHash, pubKeyBytes) {
+			return nil, types.ErrInvalidSignature
+		}
+
+		p.Inputs[i].TaprootKeySpendSig = sigBytes
 	}
 
-	if err = packet.SanityCheck(); err != nil {
+	if err := psbt.MaybeFinalizeAll(p); err != nil {
 		return nil, err
 	}
 
-	if !packet.IsComplete() {
-		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "psbt not complete")
+	psbtB64, err := p.B64Encode()
+	if err != nil {
+		return nil, types.ErrFailToSerializePsbt
 	}
 
-	// verify the signatures
-	if !types.VerifyPsbtSignatures(packet) {
-		return nil, errorsmod.Wrap(types.ErrInvalidSignatures, "failed to verify")
-	}
-
-	// set the signing request status to broadcasted
-	signingRequest.Psbt = msg.Psbt
+	// update the signing request
+	signingRequest.Psbt = psbtB64
 	signingRequest.Status = types.SigningStatus_SIGNING_STATUS_BROADCASTED
 
 	m.SetSigningRequest(ctx, signingRequest)

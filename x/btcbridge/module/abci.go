@@ -2,6 +2,7 @@ package btcbridge
 
 import (
 	"fmt"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -68,6 +69,15 @@ func handleBtcWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 			sdk.NewAttribute("txid", req.Txid),
 		)
 	}
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeInitiateSigning,
+			sdk.NewAttribute(types.AttributeKeyId, signingRequest.Txid),
+			sdk.NewAttribute(types.AttributeKeySigners, strings.Join(types.GetSigners(signingRequest.Psbt), types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(types.GetSigHashes(signingRequest.Psbt), types.AttributeValueSeparator)),
+		),
+	)
 }
 
 // handleDKGRequests performs the DKG request handling

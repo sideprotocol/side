@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"bytes"
+	"strings"
 
 	"lukechampine.com/uint128"
 
@@ -150,6 +151,16 @@ func (k Keeper) HandleRunesWithdrawal(ctx sdk.Context, sender string, amount sdk
 		return nil, err
 	}
 
+	// Emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeInitiateSigning,
+			sdk.NewAttribute(types.AttributeKeyId, signingRequest.Txid),
+			sdk.NewAttribute(types.AttributeKeySigners, strings.Join(types.GetSigners(signingRequest.Psbt), types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeySigHashes, strings.Join(types.GetSigHashes(signingRequest.Psbt), types.AttributeValueSeparator)),
+		),
+	)
+
 	return withdrawRequest, nil
 }
 
@@ -161,6 +172,7 @@ func (k Keeper) NewWithdrawRequest(ctx sdk.Context, sender string, amount string
 		Sequence: k.IncreaseWithdrawRequestSequence(ctx),
 	}
 }
+
 // NewRunesSigningRequest creates the signing request for runes withdrawal
 func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sdk.Coin, feeRate int64, vault string, btcVault string) (*types.SigningRequest, error) {
 	var runeId types.RuneId
