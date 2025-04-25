@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_CompleteDKG_FullMethodName      = "/side.tss.Msg/CompleteDKG"
 	Msg_SubmitSignatures_FullMethodName = "/side.tss.Msg/SubmitSignatures"
+	Msg_RefreshShares_FullMethodName    = "/side.tss.Msg/RefreshShares"
 	Msg_UpdateParams_FullMethodName     = "/side.tss.Msg/UpdateParams"
 )
 
@@ -28,10 +29,12 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MsgClient interface {
-	// CompleteDKG completes the given DKG request.
+	// CompleteDKG completes the given DKG request by the participant.
 	CompleteDKG(ctx context.Context, in *MsgCompleteDKG, opts ...grpc.CallOption) (*MsgCompleteDKGResponse, error)
 	// SubmitSignatures submits signatures.
 	SubmitSignatures(ctx context.Context, in *MsgSubmitSignatures, opts ...grpc.CallOption) (*MsgSubmitSignaturesResponse, error)
+	// RefreshShares refreshes key shares.
+	RefreshShares(ctx context.Context, in *MsgRefreshShares, opts ...grpc.CallOption) (*MsgRefreshSharesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/tss module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -65,6 +68,15 @@ func (c *msgClient) SubmitSignatures(ctx context.Context, in *MsgSubmitSignature
 	return out, nil
 }
 
+func (c *msgClient) RefreshShares(ctx context.Context, in *MsgRefreshShares, opts ...grpc.CallOption) (*MsgRefreshSharesResponse, error) {
+	out := new(MsgRefreshSharesResponse)
+	err := c.cc.Invoke(ctx, Msg_RefreshShares_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	out := new(MsgUpdateParamsResponse)
 	err := c.cc.Invoke(ctx, Msg_UpdateParams_FullMethodName, in, out, opts...)
@@ -78,10 +90,12 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
 type MsgServer interface {
-	// CompleteDKG completes the given DKG request.
+	// CompleteDKG completes the given DKG request by the participant.
 	CompleteDKG(context.Context, *MsgCompleteDKG) (*MsgCompleteDKGResponse, error)
 	// SubmitSignatures submits signatures.
 	SubmitSignatures(context.Context, *MsgSubmitSignatures) (*MsgSubmitSignaturesResponse, error)
+	// RefreshShares refreshes key shares.
+	RefreshShares(context.Context, *MsgRefreshShares) (*MsgRefreshSharesResponse, error)
 	// UpdateParams defines a governance operation for updating the x/tss module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -99,6 +113,9 @@ func (UnimplementedMsgServer) CompleteDKG(context.Context, *MsgCompleteDKG) (*Ms
 }
 func (UnimplementedMsgServer) SubmitSignatures(context.Context, *MsgSubmitSignatures) (*MsgSubmitSignaturesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitSignatures not implemented")
+}
+func (UnimplementedMsgServer) RefreshShares(context.Context, *MsgRefreshShares) (*MsgRefreshSharesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshShares not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -152,6 +169,24 @@ func _Msg_SubmitSignatures_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_RefreshShares_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRefreshShares)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RefreshShares(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RefreshShares_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RefreshShares(ctx, req.(*MsgRefreshShares))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -184,6 +219,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SubmitSignatures",
 			Handler:    _Msg_SubmitSignatures_Handler,
+		},
+		{
+			MethodName: "RefreshShares",
+			Handler:    _Msg_RefreshShares_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

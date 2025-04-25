@@ -11,11 +11,14 @@ option go_package = "github.com/sideprotocol/side/x/tss/types";
 service Msg {
     option (cosmos.msg.v1.service) = true;
 
-    // CompleteDKG completes the given DKG request.
+    // CompleteDKG completes the given DKG request by the participant.
     rpc CompleteDKG (MsgCompleteDKG) returns (MsgCompleteDKGResponse);
 
     // SubmitSignatures submits signatures.
     rpc SubmitSignatures(MsgSubmitSignatures) returns (MsgSubmitSignaturesResponse);
+
+    // RefreshShares refreshes key shares.
+    rpc RefreshShares(MsgRefreshShares) returns (MsgRefreshSharesResponse);
 
     // UpdateParams defines a governance operation for updating the x/tss module
     // parameters. The authority defaults to the x/gov module account.
@@ -54,6 +57,19 @@ message MsgSubmitSignatures {
 
 // MsgSubmitSignaturesResponse defines the Msg/SubmitSignatures response type.
 message MsgSubmitSignaturesResponse {}
+
+// MsgRefreshShares defines the Msg/RefreshShares request type.
+message MsgRefreshShares {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // public key corresponding to shares to be refreshed
+  string pub_key = 2;
+}
+
+// MsgRefreshSharesResponse defines the Msg/RefreshShares response type.
+message MsgRefreshSharesResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

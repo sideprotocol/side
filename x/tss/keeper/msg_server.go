@@ -75,6 +75,28 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	return &types.MsgSubmitSignaturesResponse{}, nil
 }
 
+// RefreshShares refreshes the key shares
+func (m msgServer) RefreshShares(goCtx context.Context, msg *types.MsgRefreshShares) (*types.MsgRefreshSharesResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCompleteSigning,
+			sdk.NewAttribute(types.AttributeKeyPubKey, msg.PubKey),
+		),
+	)
+
+	return &types.MsgRefreshSharesResponse{}, nil
+}
+
 // UpdateParams updates the module params
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {
