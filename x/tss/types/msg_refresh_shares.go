@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 
-	"github.com/decred/dcrd/dcrec/secp256k1/v4/schnorr"
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
