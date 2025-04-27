@@ -1,9 +1,7 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -36,46 +34,12 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	cmd.AddCommand(CmdSubmitBlocks())
 	cmd.AddCommand(CmdSubmitFeeRate())
 	cmd.AddCommand(CmdUpdateTrustedNonBtcRelayers())
 	cmd.AddCommand(CmdUpdateTrustedOracles())
 	cmd.AddCommand(CmdWithdrawToBitcoin())
 	cmd.AddCommand(CmdSubmitSignatures())
 	cmd.AddCommand(CmdCompleteDKG())
-
-	return cmd
-}
-
-func CmdSubmitBlocks() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "submit-blocks [file-path-to-block-headers.json]",
-		Short: "Submit Bitcoin block headers to the chain",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			// read the block headers from the file
-			blockHeaders, err := readBlockHeadersFromFile(args[0])
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgSubmitBlockHeaders(
-				clientCtx.GetFromAddress().String(),
-				blockHeaders,
-			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
@@ -275,22 +239,4 @@ func CmdCompleteDKG() *cobra.Command {
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
-}
-
-// readBlockHeadersFromFile reads the block headers from the file
-func readBlockHeadersFromFile(filePath string) ([]*types.BlockHeader, error) {
-	// read the file
-	file, err := os.Open(filePath)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	// read the block headers from the file
-	var blockHeaders []*types.BlockHeader
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&blockHeaders); err != nil {
-		return nil, err
-	}
-	return blockHeaders, nil
 }

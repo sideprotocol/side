@@ -8,7 +8,6 @@ import (
 )
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgSubmitBlockHeaders{}, "btcbridge/MsgSubmitBlockHeaders", nil)
 	cdc.RegisterConcrete(&MsgSubmitDepositTransaction{}, "btcbridge/MsgSubmitDepositTransaction", nil)
 	cdc.RegisterConcrete(&MsgSubmitWithdrawTransaction{}, "btcbridge/MsgSubmitWithdrawTransaction", nil)
 	cdc.RegisterConcrete(&MsgSubmitFeeRate{}, "btcbridge/MsgSubmitFeeRate", nil)
@@ -22,7 +21,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
-	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitBlockHeaders{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitDepositTransaction{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitWithdrawTransaction{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitFeeRate{})

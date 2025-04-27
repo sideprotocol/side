@@ -15,18 +15,6 @@ service Query {
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/side/btcbridge/params";
   }
-  // ChainTip queries the chain tip of the module.
-  rpc QueryChainTip(QueryChainTipRequest) returns (QueryChainTipResponse) {
-    option (google.api.http).get = "/side/btcbridge/tip";
-  }
-  // BlockHeaderByHeight queries the block header by height.
-  rpc QueryBlockHeaderByHeight(QueryBlockHeaderByHeightRequest) returns (QueryBlockHeaderByHeightResponse) {
-    option (google.api.http).get = "/side/btcbridge/height/{height}";
-  }
-  // BlockHeaderByHash queries the block header by hash.
-  rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
-    option (google.api.http).get = "/side/btcbridge/hash/{hash}";
-  }
   // QueryFeeRate queries the bitcoin network fee rate on the side chain.
   rpc QueryFeeRate(QueryFeeRateRequest) returns (QueryFeeRateResponse) {
     option (google.api.http).get = "/side/btcbridge/feerate";
@@ -184,35 +172,6 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
-}
-
-// QueryChainTipRequest is request type for the Query/ChainTip RPC method.
-message QueryChainTipRequest {}
-
-// QueryChainTipResponse is response type for the Query/ChainTip RPC method.
-message QueryChainTipResponse {
-  string hash = 1;
-  uint64 height = 2;
-}
-
-// QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method.
-message QueryBlockHeaderByHeightRequest {
-  uint64 height = 1;
-}
-
-// QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method.
-message QueryBlockHeaderByHeightResponse {
-  BlockHeader block_header = 1;
-}
-
-// QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method.
-message QueryBlockHeaderByHashRequest {
-  string hash = 1;
-}
-
-// QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
-message QueryBlockHeaderByHashResponse {
-  BlockHeader block_header = 1;
 }
 
 // QueryUTXOsRequest is the request type for the Query/UTXOs RPC method.

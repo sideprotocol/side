@@ -21,7 +21,7 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 		return nil, nil, err
 	}
 
-	recipient, err := k.Mint(ctx, msg.Sender, tx, prevTx, k.GetBlockHeader(ctx, msg.Blockhash).Height)
+	recipient, err := k.Mint(ctx, msg.Sender, tx, prevTx, uint64(k.oracleKeeper.GetBlockHeader(ctx, msg.Blockhash).Height))
 	if err != nil {
 		return nil, nil, err
 	}

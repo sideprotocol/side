@@ -658,6 +658,7 @@ func New(
 		keys[btcbridgetypes.MemStoreKey],
 		app.BankKeeper,
 		app.StakingKeeper,
+		app.OracleKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 

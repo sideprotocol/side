@@ -29,8 +29,6 @@ func GetQueryCmd(_ string) *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdQueryParams())
-	cmd.AddCommand(CmdBestBlock())
-	cmd.AddCommand(CmdQueryBlock())
 	cmd.AddCommand(CmdQueryFeeRate())
 	cmd.AddCommand(CmdQueryWithdrawRequests())
 	cmd.AddCommand(CmdQuerySigningRequests())
@@ -57,71 +55,6 @@ func CmdQueryParams() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.QueryParams(cmd.Context(), &types.QueryParamsRequest{})
-			if err != nil {
-				return err
-			}
-
-			return clientCtx.PrintProto(res)
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdBestBlock() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "best-block",
-		Short: "Query the best block header of the btc bridge",
-		Args:  cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-
-			res, err := queryClient.QueryChainTip(cmd.Context(), &types.QueryChainTipRequest{})
-			if err != nil {
-				return err
-			}
-
-			return clientCtx.PrintProto(res)
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
-// CmdQueryBlock returns the command to query the block by hash or height
-func CmdQueryBlock() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "block [hash or height]",
-		Short: "Query block by hash or height",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-
-			height, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				res, err := queryClient.QueryBlockHeaderByHash(cmd.Context(), &types.QueryBlockHeaderByHashRequest{Hash: args[0]})
-				if err != nil {
-					return err
-				}
-
-				return clientCtx.PrintProto(res)
-			}
-
-			res, err := queryClient.QueryBlockHeaderByHeight(cmd.Context(), &types.QueryBlockHeaderByHeightRequest{Height: height})
 			if err != nil {
 				return err
 			}

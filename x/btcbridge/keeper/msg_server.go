@@ -21,27 +21,6 @@ type msgServer struct {
 	Keeper
 }
 
-// SubmitBlockHeaders implements types.MsgServer.
-func (m msgServer) SubmitBlockHeaders(goCtx context.Context, msg *types.MsgSubmitBlockHeaders) (*types.MsgSubmitBlockHeadersResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	if !m.IsTrustedBtcRelayer(ctx, msg.Sender) {
-		return nil, types.ErrUntrustedBtcRelayer
-	}
-
-	// insert block headers
-	err := m.InsertBlockHeaders(ctx, msg.BlockHeaders)
-	if err != nil {
-		return nil, err
-	}
-
-	return &types.MsgSubmitBlockHeadersResponse{}, nil
-}
-
 // UpdateTrustedNonBtcRelayers implements types.MsgServer.
 func (m msgServer) UpdateTrustedNonBtcRelayers(goCtx context.Context, msg *types.MsgUpdateTrustedNonBtcRelayers) (*types.MsgUpdateTrustedNonBtcRelayersResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)

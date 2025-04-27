@@ -13,57 +13,6 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_GenesisState_3_list)(nil)
-
-type _GenesisState_3_list struct {
-	list *[]*BlockHeader
-}
-
-func (x *_GenesisState_3_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_GenesisState_3_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_GenesisState_3_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*BlockHeader)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_GenesisState_3_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*BlockHeader)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_GenesisState_3_list) AppendMutable() protoreflect.Value {
-	v := new(BlockHeader)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_GenesisState_3_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_GenesisState_3_list) NewElement() protoreflect.Value {
-	v := new(BlockHeader)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_GenesisState_3_list) IsValid() bool {
-	return x.list != nil
-}
-
 var _ protoreflect.List = (*_GenesisState_4_list)(nil)
 
 type _GenesisState_4_list struct {
@@ -116,19 +65,15 @@ func (x *_GenesisState_4_list) IsValid() bool {
 }
 
 var (
-	md_GenesisState                   protoreflect.MessageDescriptor
-	fd_GenesisState_params            protoreflect.FieldDescriptor
-	fd_GenesisState_best_block_header protoreflect.FieldDescriptor
-	fd_GenesisState_block_headers     protoreflect.FieldDescriptor
-	fd_GenesisState_utxos             protoreflect.FieldDescriptor
+	md_GenesisState        protoreflect.MessageDescriptor
+	fd_GenesisState_params protoreflect.FieldDescriptor
+	fd_GenesisState_utxos  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_btcbridge_genesis_proto_init()
 	md_GenesisState = File_side_btcbridge_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
-	fd_GenesisState_best_block_header = md_GenesisState.Fields().ByName("best_block_header")
-	fd_GenesisState_block_headers = md_GenesisState.Fields().ByName("block_headers")
 	fd_GenesisState_utxos = md_GenesisState.Fields().ByName("utxos")
 }
 
@@ -203,18 +148,6 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if x.BestBlockHeader != nil {
-		value := protoreflect.ValueOfMessage(x.BestBlockHeader.ProtoReflect())
-		if !f(fd_GenesisState_best_block_header, value) {
-			return
-		}
-	}
-	if len(x.BlockHeaders) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_3_list{list: &x.BlockHeaders})
-		if !f(fd_GenesisState_block_headers, value) {
-			return
-		}
-	}
 	if len(x.Utxos) != 0 {
 		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.Utxos})
 		if !f(fd_GenesisState_utxos, value) {
@@ -238,10 +171,6 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "side.btcbridge.GenesisState.params":
 		return x.Params != nil
-	case "side.btcbridge.GenesisState.best_block_header":
-		return x.BestBlockHeader != nil
-	case "side.btcbridge.GenesisState.block_headers":
-		return len(x.BlockHeaders) != 0
 	case "side.btcbridge.GenesisState.utxos":
 		return len(x.Utxos) != 0
 	default:
@@ -262,10 +191,6 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "side.btcbridge.GenesisState.params":
 		x.Params = nil
-	case "side.btcbridge.GenesisState.best_block_header":
-		x.BestBlockHeader = nil
-	case "side.btcbridge.GenesisState.block_headers":
-		x.BlockHeaders = nil
 	case "side.btcbridge.GenesisState.utxos":
 		x.Utxos = nil
 	default:
@@ -287,15 +212,6 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 	case "side.btcbridge.GenesisState.params":
 		value := x.Params
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.btcbridge.GenesisState.best_block_header":
-		value := x.BestBlockHeader
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.btcbridge.GenesisState.block_headers":
-		if len(x.BlockHeaders) == 0 {
-			return protoreflect.ValueOfList(&_GenesisState_3_list{})
-		}
-		listValue := &_GenesisState_3_list{list: &x.BlockHeaders}
-		return protoreflect.ValueOfList(listValue)
 	case "side.btcbridge.GenesisState.utxos":
 		if len(x.Utxos) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_4_list{})
@@ -324,12 +240,6 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "side.btcbridge.GenesisState.params":
 		x.Params = value.Message().Interface().(*Params)
-	case "side.btcbridge.GenesisState.best_block_header":
-		x.BestBlockHeader = value.Message().Interface().(*BlockHeader)
-	case "side.btcbridge.GenesisState.block_headers":
-		lv := value.List()
-		clv := lv.(*_GenesisState_3_list)
-		x.BlockHeaders = *clv.list
 	case "side.btcbridge.GenesisState.utxos":
 		lv := value.List()
 		clv := lv.(*_GenesisState_4_list)
@@ -359,17 +269,6 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 			x.Params = new(Params)
 		}
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-	case "side.btcbridge.GenesisState.best_block_header":
-		if x.BestBlockHeader == nil {
-			x.BestBlockHeader = new(BlockHeader)
-		}
-		return protoreflect.ValueOfMessage(x.BestBlockHeader.ProtoReflect())
-	case "side.btcbridge.GenesisState.block_headers":
-		if x.BlockHeaders == nil {
-			x.BlockHeaders = []*BlockHeader{}
-		}
-		value := &_GenesisState_3_list{list: &x.BlockHeaders}
-		return protoreflect.ValueOfList(value)
 	case "side.btcbridge.GenesisState.utxos":
 		if x.Utxos == nil {
 			x.Utxos = []*UTXO{}
@@ -392,12 +291,6 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "side.btcbridge.GenesisState.params":
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.btcbridge.GenesisState.best_block_header":
-		m := new(BlockHeader)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.btcbridge.GenesisState.block_headers":
-		list := []*BlockHeader{}
-		return protoreflect.ValueOfList(&_GenesisState_3_list{list: &list})
 	case "side.btcbridge.GenesisState.utxos":
 		list := []*UTXO{}
 		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
@@ -474,16 +367,6 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Params)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.BestBlockHeader != nil {
-			l = options.Size(x.BestBlockHeader)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if len(x.BlockHeaders) > 0 {
-			for _, e := range x.BlockHeaders {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
 		if len(x.Utxos) > 0 {
 			for _, e := range x.Utxos {
 				l = options.Size(e)
@@ -534,36 +417,6 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				i--
 				dAtA[i] = 0x22
 			}
-		}
-		if len(x.BlockHeaders) > 0 {
-			for iNdEx := len(x.BlockHeaders) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.BlockHeaders[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x1a
-			}
-		}
-		if x.BestBlockHeader != nil {
-			encoded, err := options.Marshal(x.BestBlockHeader)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x12
 		}
 		if x.Params != nil {
 			encoded, err := options.Marshal(x.Params)
@@ -664,76 +517,6 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BestBlockHeader", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.BestBlockHeader == nil {
-					x.BestBlockHeader = &BlockHeader{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.BestBlockHeader); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BlockHeaders", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.BlockHeaders = append(x.BlockHeaders, &BlockHeader{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.BlockHeaders[len(x.BlockHeaders)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Utxos", wireType)
@@ -823,10 +606,7 @@ type GenesisState struct {
 	unknownFields protoimpl.UnknownFields
 
 	Params *Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	// the chain tip of the bitcoin chain
-	BestBlockHeader *BlockHeader   `protobuf:"bytes,2,opt,name=best_block_header,json=bestBlockHeader,proto3" json:"best_block_header,omitempty"`
-	BlockHeaders    []*BlockHeader `protobuf:"bytes,3,rep,name=block_headers,json=blockHeaders,proto3" json:"block_headers,omitempty"`
-	Utxos           []*UTXO        `protobuf:"bytes,4,rep,name=utxos,proto3" json:"utxos,omitempty"`
+	Utxos  []*UTXO `protobuf:"bytes,4,rep,name=utxos,proto3" json:"utxos,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -856,20 +636,6 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
-func (x *GenesisState) GetBestBlockHeader() *BlockHeader {
-	if x != nil {
-		return x.BestBlockHeader
-	}
-	return nil
-}
-
-func (x *GenesisState) GetBlockHeaders() []*BlockHeader {
-	if x != nil {
-		return x.BlockHeaders
-	}
-	return nil
-}
-
 func (x *GenesisState) GetUtxos() []*UTXO {
 	if x != nil {
 		return x.Utxos
@@ -888,34 +654,25 @@ var file_side_btcbridge_genesis_proto_rawDesc = []byte{
 	0x69, 0x64, 0x67, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x1a, 0x1e, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
 	0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0xfb, 0x01, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61,
-	0x74, 0x65, 0x12, 0x34, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
-	0x64, 0x67, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00,
-	0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x47, 0x0a, 0x11, 0x62, 0x65, 0x73, 0x74,
-	0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72,
-	0x69, 0x64, 0x67, 0x65, 0x2e, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72,
-	0x52, 0x0f, 0x62, 0x65, 0x73, 0x74, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65,
-	0x72, 0x12, 0x40, 0x0a, 0x0d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x65, 0x61, 0x64, 0x65,
-	0x72, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48,
-	0x65, 0x61, 0x64, 0x65, 0x72, 0x52, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64,
-	0x65, 0x72, 0x73, 0x12, 0x2a, 0x0a, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x18, 0x04, 0x20, 0x03,
-	0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
-	0x64, 0x67, 0x65, 0x2e, 0x55, 0x54, 0x58, 0x4f, 0x52, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x42,
-	0xac, 0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50,
-	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
-	0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f,
-	0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02, 0x0e,
-	0x53, 0x69, 0x64, 0x65, 0x2e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xca, 0x02,
-	0x0e, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xe2,
-	0x02, 0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f, 0x53,
-	0x69, 0x64, 0x65, 0x3a, 0x3a, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x22, 0x70, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74,
+	0x65, 0x12, 0x34, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
+	0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x2a, 0x0a, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73,
+	0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
+	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x55, 0x54, 0x58, 0x4f, 0x52, 0x05, 0x75, 0x74,
+	0x78, 0x6f, 0x73, 0x42, 0xac, 0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65,
+	0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64,
+	0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x42,
+	0x58, 0xaa, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0xca, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69,
+	0x64, 0x67, 0x65, 0xe2, 0x02, 0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72,
+	0x69, 0x64, 0x67, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
+	0xea, 0x02, 0x0f, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -934,19 +691,16 @@ var file_side_btcbridge_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 1
 var file_side_btcbridge_genesis_proto_goTypes = []interface{}{
 	(*GenesisState)(nil), // 0: side.btcbridge.GenesisState
 	(*Params)(nil),       // 1: side.btcbridge.Params
-	(*BlockHeader)(nil),  // 2: side.btcbridge.BlockHeader
-	(*UTXO)(nil),         // 3: side.btcbridge.UTXO
+	(*UTXO)(nil),         // 2: side.btcbridge.UTXO
 }
 var file_side_btcbridge_genesis_proto_depIdxs = []int32{
 	1, // 0: side.btcbridge.GenesisState.params:type_name -> side.btcbridge.Params
-	2, // 1: side.btcbridge.GenesisState.best_block_header:type_name -> side.btcbridge.BlockHeader
-	2, // 2: side.btcbridge.GenesisState.block_headers:type_name -> side.btcbridge.BlockHeader
-	3, // 3: side.btcbridge.GenesisState.utxos:type_name -> side.btcbridge.UTXO
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	2, // 1: side.btcbridge.GenesisState.utxos:type_name -> side.btcbridge.UTXO
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_side_btcbridge_genesis_proto_init() }

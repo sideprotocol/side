@@ -7,6 +7,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
+	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
@@ -38,4 +40,13 @@ type BankKeeper interface {
 type StakingKeeper interface {
 	GetValidator(ctx context.Context, addr sdk.ValAddress) (stakingtypes.Validator, error)
 	GetValidatorByConsAddr(ctx context.Context, consAddr sdk.ConsAddress) (stakingtypes.Validator, error)
+}
+
+// OracleKeeper defines the expected oracle interfaces
+type OracleKeeper interface {
+	HasBlockHeader(ctx sdk.Context, hash string) bool
+
+	GetBestBlockHeader(ctx sdk.Context) *oracletypes.BlockHeader
+	GetBlockHeader(ctx sdk.Context, hash string) *oracletypes.BlockHeader
+	GetBlockHeaderByHeight(ctx sdk.Context, height int32) *oracletypes.BlockHeader
 }

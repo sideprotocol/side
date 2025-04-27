@@ -8,9 +8,7 @@ import (
 
 // x/btcbridge module sentinel errors
 var (
-	ErrInvalidBlockHeader  = errorsmod.Register(ModuleName, 1100, "invalid block header")
-	ErrInvalidBlockHeaders = errorsmod.Register(ModuleName, 1101, "invalid block headers")
-	ErrInvalidReorgDepth   = errorsmod.Register(ModuleName, 1102, "invalid reorg depth")
+	ErrInvalidParams = errorsmod.Register(ModuleName, 1000, "invalid params")
 
 	ErrBlockNotFound             = errorsmod.Register(ModuleName, 2101, "block not found")
 	ErrTransactionNotIncluded    = errorsmod.Register(ModuleName, 2102, "transaction not included in block")
@@ -49,9 +47,8 @@ var (
 	ErrInvalidRunes  = errorsmod.Register(ModuleName, 5100, "invalid runes")
 	ErrInvalidRuneId = errorsmod.Register(ModuleName, 5101, "invalid rune id")
 
-	ErrInvalidParams   = errorsmod.Register(ModuleName, 6100, "invalid module params")
-	ErrInvalidRelayers = errorsmod.Register(ModuleName, 6101, "invalid relayers")
-	ErrInvalidOracles  = errorsmod.Register(ModuleName, 6102, "invalid oracles")
+	ErrInvalidRelayers = errorsmod.Register(ModuleName, 6100, "invalid relayers")
+	ErrInvalidOracles  = errorsmod.Register(ModuleName, 6101, "invalid oracles")
 
 	ErrInvalidDKGParams                 = errorsmod.Register(ModuleName, 7100, "invalid dkg params")
 	ErrDKGRequestDoesNotExist           = errorsmod.Register(ModuleName, 7101, "dkg request does not exist")

@@ -19,7 +19,6 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_SubmitBlockHeaders_FullMethodName          = "/side.btcbridge.Msg/SubmitBlockHeaders"
 	Msg_SubmitDepositTransaction_FullMethodName    = "/side.btcbridge.Msg/SubmitDepositTransaction"
 	Msg_SubmitWithdrawTransaction_FullMethodName   = "/side.btcbridge.Msg/SubmitWithdrawTransaction"
 	Msg_SubmitFeeRate_FullMethodName               = "/side.btcbridge.Msg/SubmitFeeRate"
@@ -38,9 +37,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MsgClient interface {
-	// SubmitBlockHeaders submits bitcoin block headers to the side chain.
-	SubmitBlockHeaders(ctx context.Context, in *MsgSubmitBlockHeaders, opts ...grpc.CallOption) (*MsgSubmitBlockHeadersResponse, error)
-	// SubmitDepositTransaction submits the bitcoin deposit transaction to the side chain.
 	SubmitDepositTransaction(ctx context.Context, in *MsgSubmitDepositTransaction, opts ...grpc.CallOption) (*MsgSubmitDepositTransactionResponse, error)
 	// SubmitWithdrawalTransaction submits the bitcoin withdrawal transaction to the side chain.
 	SubmitWithdrawTransaction(ctx context.Context, in *MsgSubmitWithdrawTransaction, opts ...grpc.CallOption) (*MsgSubmitWithdrawTransactionResponse, error)
@@ -75,15 +71,6 @@ type msgClient struct {
 
 func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
-}
-
-func (c *msgClient) SubmitBlockHeaders(ctx context.Context, in *MsgSubmitBlockHeaders, opts ...grpc.CallOption) (*MsgSubmitBlockHeadersResponse, error) {
-	out := new(MsgSubmitBlockHeadersResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitBlockHeaders_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *msgClient) SubmitDepositTransaction(ctx context.Context, in *MsgSubmitDepositTransaction, opts ...grpc.CallOption) (*MsgSubmitDepositTransactionResponse, error) {
@@ -198,9 +185,6 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
 type MsgServer interface {
-	// SubmitBlockHeaders submits bitcoin block headers to the side chain.
-	SubmitBlockHeaders(context.Context, *MsgSubmitBlockHeaders) (*MsgSubmitBlockHeadersResponse, error)
-	// SubmitDepositTransaction submits the bitcoin deposit transaction to the side chain.
 	SubmitDepositTransaction(context.Context, *MsgSubmitDepositTransaction) (*MsgSubmitDepositTransactionResponse, error)
 	// SubmitWithdrawalTransaction submits the bitcoin withdrawal transaction to the side chain.
 	SubmitWithdrawTransaction(context.Context, *MsgSubmitWithdrawTransaction) (*MsgSubmitWithdrawTransactionResponse, error)
@@ -234,9 +218,6 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
-func (UnimplementedMsgServer) SubmitBlockHeaders(context.Context, *MsgSubmitBlockHeaders) (*MsgSubmitBlockHeadersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitBlockHeaders not implemented")
-}
 func (UnimplementedMsgServer) SubmitDepositTransaction(context.Context, *MsgSubmitDepositTransaction) (*MsgSubmitDepositTransactionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitDepositTransaction not implemented")
 }
@@ -284,24 +265,6 @@ type UnsafeMsgServer interface {
 
 func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 	s.RegisterService(&Msg_ServiceDesc, srv)
-}
-
-func _Msg_SubmitBlockHeaders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitBlockHeaders)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitBlockHeaders(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_SubmitBlockHeaders_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitBlockHeaders(ctx, req.(*MsgSubmitBlockHeaders))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Msg_SubmitDepositTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -527,10 +490,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "side.btcbridge.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "SubmitBlockHeaders",
-			Handler:    _Msg_SubmitBlockHeaders_Handler,
-		},
 		{
 			MethodName: "SubmitDepositTransaction",
 			Handler:    _Msg_SubmitDepositTransaction_Handler,

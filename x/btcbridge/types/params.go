@@ -51,7 +51,6 @@ func NewParams() Params {
 		BtcVoucherDenom:         DefaultBtcVoucherDenom,
 		DepositEnabled:          true,
 		WithdrawEnabled:         true,
-		TrustedBtcRelayers:      []string{},
 		TrustedNonBtcRelayers:   []string{},
 		TrustedOracles:          []string{},
 		FeeRateValidityPeriod:   DefaultFeeRateValidityPeriod,
@@ -86,10 +85,6 @@ func DefaultParams() Params {
 // Validate validates the set of params
 func (p Params) Validate() error {
 	if err := sdk.ValidateDenom(p.BtcVoucherDenom); err != nil {
-		return err
-	}
-
-	if err := validateBtcRelayers(p.TrustedBtcRelayers); err != nil {
 		return err
 	}
 
@@ -174,18 +169,6 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 
 		if bytes.Equal(addrScript, pkScript) {
 			return v
-		}
-	}
-
-	return nil
-}
-
-// validateBtcRelayers validates the given btc relayers
-func validateBtcRelayers(relayers []string) error {
-	for _, relayer := range relayers {
-		_, err := sdk.AccAddressFromBech32(relayer)
-		if err != nil {
-			return ErrInvalidRelayers
 		}
 	}
 

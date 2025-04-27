@@ -8575,2524 +8575,6 @@ func (x *fastReflection_QueryParamsResponse) ProtoMethods() *protoiface.Methods 
 }
 
 var (
-	md_QueryChainTipRequest protoreflect.MessageDescriptor
-)
-
-func init() {
-	file_side_btcbridge_query_proto_init()
-	md_QueryChainTipRequest = File_side_btcbridge_query_proto.Messages().ByName("QueryChainTipRequest")
-}
-
-var _ protoreflect.Message = (*fastReflection_QueryChainTipRequest)(nil)
-
-type fastReflection_QueryChainTipRequest QueryChainTipRequest
-
-func (x *QueryChainTipRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryChainTipRequest)(x)
-}
-
-func (x *QueryChainTipRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[18]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_QueryChainTipRequest_messageType fastReflection_QueryChainTipRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryChainTipRequest_messageType{}
-
-type fastReflection_QueryChainTipRequest_messageType struct{}
-
-func (x fastReflection_QueryChainTipRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryChainTipRequest)(nil)
-}
-func (x fastReflection_QueryChainTipRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryChainTipRequest)
-}
-func (x fastReflection_QueryChainTipRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryChainTipRequest
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_QueryChainTipRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryChainTipRequest
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryChainTipRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryChainTipRequest_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryChainTipRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryChainTipRequest)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryChainTipRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryChainTipRequest)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_QueryChainTipRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryChainTipRequest) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryChainTipRequest) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryChainTipRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipRequest does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryChainTipRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryChainTipRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryChainTipRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryChainTipRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.QueryChainTipRequest", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryChainTipRequest) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryChainTipRequest) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_QueryChainTipRequest) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryChainTipRequest) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryChainTipRequest)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryChainTipRequest)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryChainTipRequest)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryChainTipRequest: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryChainTipRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_QueryChainTipResponse        protoreflect.MessageDescriptor
-	fd_QueryChainTipResponse_hash   protoreflect.FieldDescriptor
-	fd_QueryChainTipResponse_height protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_side_btcbridge_query_proto_init()
-	md_QueryChainTipResponse = File_side_btcbridge_query_proto.Messages().ByName("QueryChainTipResponse")
-	fd_QueryChainTipResponse_hash = md_QueryChainTipResponse.Fields().ByName("hash")
-	fd_QueryChainTipResponse_height = md_QueryChainTipResponse.Fields().ByName("height")
-}
-
-var _ protoreflect.Message = (*fastReflection_QueryChainTipResponse)(nil)
-
-type fastReflection_QueryChainTipResponse QueryChainTipResponse
-
-func (x *QueryChainTipResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryChainTipResponse)(x)
-}
-
-func (x *QueryChainTipResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[19]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_QueryChainTipResponse_messageType fastReflection_QueryChainTipResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryChainTipResponse_messageType{}
-
-type fastReflection_QueryChainTipResponse_messageType struct{}
-
-func (x fastReflection_QueryChainTipResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryChainTipResponse)(nil)
-}
-func (x fastReflection_QueryChainTipResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryChainTipResponse)
-}
-func (x fastReflection_QueryChainTipResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryChainTipResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_QueryChainTipResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryChainTipResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryChainTipResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryChainTipResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryChainTipResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryChainTipResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryChainTipResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryChainTipResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_QueryChainTipResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Hash != "" {
-		value := protoreflect.ValueOfString(x.Hash)
-		if !f(fd_QueryChainTipResponse_hash, value) {
-			return
-		}
-	}
-	if x.Height != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Height)
-		if !f(fd_QueryChainTipResponse_height, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryChainTipResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryChainTipResponse.hash":
-		return x.Hash != ""
-	case "side.btcbridge.QueryChainTipResponse.height":
-		return x.Height != uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryChainTipResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryChainTipResponse.hash":
-		x.Hash = ""
-	case "side.btcbridge.QueryChainTipResponse.height":
-		x.Height = uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryChainTipResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "side.btcbridge.QueryChainTipResponse.hash":
-		value := x.Hash
-		return protoreflect.ValueOfString(value)
-	case "side.btcbridge.QueryChainTipResponse.height":
-		value := x.Height
-		return protoreflect.ValueOfUint64(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryChainTipResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryChainTipResponse.hash":
-		x.Hash = value.Interface().(string)
-	case "side.btcbridge.QueryChainTipResponse.height":
-		x.Height = value.Uint()
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryChainTipResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryChainTipResponse.hash":
-		panic(fmt.Errorf("field hash of message side.btcbridge.QueryChainTipResponse is not mutable"))
-	case "side.btcbridge.QueryChainTipResponse.height":
-		panic(fmt.Errorf("field height of message side.btcbridge.QueryChainTipResponse is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryChainTipResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryChainTipResponse.hash":
-		return protoreflect.ValueOfString("")
-	case "side.btcbridge.QueryChainTipResponse.height":
-		return protoreflect.ValueOfUint64(uint64(0))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryChainTipResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryChainTipResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryChainTipResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.QueryChainTipResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryChainTipResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryChainTipResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_QueryChainTipResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryChainTipResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryChainTipResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Hash)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Height != 0 {
-			n += 1 + runtime.Sov(uint64(x.Height))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryChainTipResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Height != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Height))
-			i--
-			dAtA[i] = 0x10
-		}
-		if len(x.Hash) > 0 {
-			i -= len(x.Hash)
-			copy(dAtA[i:], x.Hash)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Hash)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryChainTipResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryChainTipResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryChainTipResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Hash", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Hash = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
-				}
-				x.Height = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Height |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_QueryBlockHeaderByHeightRequest        protoreflect.MessageDescriptor
-	fd_QueryBlockHeaderByHeightRequest_height protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_side_btcbridge_query_proto_init()
-	md_QueryBlockHeaderByHeightRequest = File_side_btcbridge_query_proto.Messages().ByName("QueryBlockHeaderByHeightRequest")
-	fd_QueryBlockHeaderByHeightRequest_height = md_QueryBlockHeaderByHeightRequest.Fields().ByName("height")
-}
-
-var _ protoreflect.Message = (*fastReflection_QueryBlockHeaderByHeightRequest)(nil)
-
-type fastReflection_QueryBlockHeaderByHeightRequest QueryBlockHeaderByHeightRequest
-
-func (x *QueryBlockHeaderByHeightRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryBlockHeaderByHeightRequest)(x)
-}
-
-func (x *QueryBlockHeaderByHeightRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[20]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_QueryBlockHeaderByHeightRequest_messageType fastReflection_QueryBlockHeaderByHeightRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryBlockHeaderByHeightRequest_messageType{}
-
-type fastReflection_QueryBlockHeaderByHeightRequest_messageType struct{}
-
-func (x fastReflection_QueryBlockHeaderByHeightRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryBlockHeaderByHeightRequest)(nil)
-}
-func (x fastReflection_QueryBlockHeaderByHeightRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryBlockHeaderByHeightRequest)
-}
-func (x fastReflection_QueryBlockHeaderByHeightRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryBlockHeaderByHeightRequest
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryBlockHeaderByHeightRequest
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryBlockHeaderByHeightRequest_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryBlockHeaderByHeightRequest)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryBlockHeaderByHeightRequest)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Height != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Height)
-		if !f(fd_QueryBlockHeaderByHeightRequest_height, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightRequest.height":
-		return x.Height != uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightRequest.height":
-		x.Height = uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightRequest.height":
-		value := x.Height
-		return protoreflect.ValueOfUint64(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightRequest does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightRequest.height":
-		x.Height = value.Uint()
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightRequest.height":
-		panic(fmt.Errorf("field height of message side.btcbridge.QueryBlockHeaderByHeightRequest is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightRequest.height":
-		return protoreflect.ValueOfUint64(uint64(0))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.QueryBlockHeaderByHeightRequest", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryBlockHeaderByHeightRequest) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryBlockHeaderByHeightRequest)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.Height != 0 {
-			n += 1 + runtime.Sov(uint64(x.Height))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryBlockHeaderByHeightRequest)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Height != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Height))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryBlockHeaderByHeightRequest)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryBlockHeaderByHeightRequest: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryBlockHeaderByHeightRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
-				}
-				x.Height = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Height |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_QueryBlockHeaderByHeightResponse              protoreflect.MessageDescriptor
-	fd_QueryBlockHeaderByHeightResponse_block_header protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_side_btcbridge_query_proto_init()
-	md_QueryBlockHeaderByHeightResponse = File_side_btcbridge_query_proto.Messages().ByName("QueryBlockHeaderByHeightResponse")
-	fd_QueryBlockHeaderByHeightResponse_block_header = md_QueryBlockHeaderByHeightResponse.Fields().ByName("block_header")
-}
-
-var _ protoreflect.Message = (*fastReflection_QueryBlockHeaderByHeightResponse)(nil)
-
-type fastReflection_QueryBlockHeaderByHeightResponse QueryBlockHeaderByHeightResponse
-
-func (x *QueryBlockHeaderByHeightResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryBlockHeaderByHeightResponse)(x)
-}
-
-func (x *QueryBlockHeaderByHeightResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[21]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_QueryBlockHeaderByHeightResponse_messageType fastReflection_QueryBlockHeaderByHeightResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryBlockHeaderByHeightResponse_messageType{}
-
-type fastReflection_QueryBlockHeaderByHeightResponse_messageType struct{}
-
-func (x fastReflection_QueryBlockHeaderByHeightResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryBlockHeaderByHeightResponse)(nil)
-}
-func (x fastReflection_QueryBlockHeaderByHeightResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryBlockHeaderByHeightResponse)
-}
-func (x fastReflection_QueryBlockHeaderByHeightResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryBlockHeaderByHeightResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryBlockHeaderByHeightResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryBlockHeaderByHeightResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryBlockHeaderByHeightResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryBlockHeaderByHeightResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.BlockHeader != nil {
-		value := protoreflect.ValueOfMessage(x.BlockHeader.ProtoReflect())
-		if !f(fd_QueryBlockHeaderByHeightResponse_block_header, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightResponse.block_header":
-		return x.BlockHeader != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightResponse.block_header":
-		x.BlockHeader = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightResponse.block_header":
-		value := x.BlockHeader
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightResponse.block_header":
-		x.BlockHeader = value.Message().Interface().(*BlockHeader)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightResponse.block_header":
-		if x.BlockHeader == nil {
-			x.BlockHeader = new(BlockHeader)
-		}
-		return protoreflect.ValueOfMessage(x.BlockHeader.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHeightResponse.block_header":
-		m := new(BlockHeader)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHeightResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHeightResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.QueryBlockHeaderByHeightResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryBlockHeaderByHeightResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryBlockHeaderByHeightResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.BlockHeader != nil {
-			l = options.Size(x.BlockHeader)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryBlockHeaderByHeightResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.BlockHeader != nil {
-			encoded, err := options.Marshal(x.BlockHeader)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryBlockHeaderByHeightResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryBlockHeaderByHeightResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryBlockHeaderByHeightResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BlockHeader", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.BlockHeader == nil {
-					x.BlockHeader = &BlockHeader{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.BlockHeader); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_QueryBlockHeaderByHashRequest      protoreflect.MessageDescriptor
-	fd_QueryBlockHeaderByHashRequest_hash protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_side_btcbridge_query_proto_init()
-	md_QueryBlockHeaderByHashRequest = File_side_btcbridge_query_proto.Messages().ByName("QueryBlockHeaderByHashRequest")
-	fd_QueryBlockHeaderByHashRequest_hash = md_QueryBlockHeaderByHashRequest.Fields().ByName("hash")
-}
-
-var _ protoreflect.Message = (*fastReflection_QueryBlockHeaderByHashRequest)(nil)
-
-type fastReflection_QueryBlockHeaderByHashRequest QueryBlockHeaderByHashRequest
-
-func (x *QueryBlockHeaderByHashRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryBlockHeaderByHashRequest)(x)
-}
-
-func (x *QueryBlockHeaderByHashRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[22]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_QueryBlockHeaderByHashRequest_messageType fastReflection_QueryBlockHeaderByHashRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryBlockHeaderByHashRequest_messageType{}
-
-type fastReflection_QueryBlockHeaderByHashRequest_messageType struct{}
-
-func (x fastReflection_QueryBlockHeaderByHashRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryBlockHeaderByHashRequest)(nil)
-}
-func (x fastReflection_QueryBlockHeaderByHashRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryBlockHeaderByHashRequest)
-}
-func (x fastReflection_QueryBlockHeaderByHashRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryBlockHeaderByHashRequest
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryBlockHeaderByHashRequest
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryBlockHeaderByHashRequest_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryBlockHeaderByHashRequest)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryBlockHeaderByHashRequest)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Hash != "" {
-		value := protoreflect.ValueOfString(x.Hash)
-		if !f(fd_QueryBlockHeaderByHashRequest_hash, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashRequest.hash":
-		return x.Hash != ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashRequest.hash":
-		x.Hash = ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashRequest.hash":
-		value := x.Hash
-		return protoreflect.ValueOfString(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashRequest does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashRequest.hash":
-		x.Hash = value.Interface().(string)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashRequest.hash":
-		panic(fmt.Errorf("field hash of message side.btcbridge.QueryBlockHeaderByHashRequest is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashRequest.hash":
-		return protoreflect.ValueOfString("")
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashRequest"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashRequest does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.QueryBlockHeaderByHashRequest", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryBlockHeaderByHashRequest) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryBlockHeaderByHashRequest)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Hash)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryBlockHeaderByHashRequest)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.Hash) > 0 {
-			i -= len(x.Hash)
-			copy(dAtA[i:], x.Hash)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Hash)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryBlockHeaderByHashRequest)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryBlockHeaderByHashRequest: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryBlockHeaderByHashRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Hash", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Hash = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_QueryBlockHeaderByHashResponse              protoreflect.MessageDescriptor
-	fd_QueryBlockHeaderByHashResponse_block_header protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_side_btcbridge_query_proto_init()
-	md_QueryBlockHeaderByHashResponse = File_side_btcbridge_query_proto.Messages().ByName("QueryBlockHeaderByHashResponse")
-	fd_QueryBlockHeaderByHashResponse_block_header = md_QueryBlockHeaderByHashResponse.Fields().ByName("block_header")
-}
-
-var _ protoreflect.Message = (*fastReflection_QueryBlockHeaderByHashResponse)(nil)
-
-type fastReflection_QueryBlockHeaderByHashResponse QueryBlockHeaderByHashResponse
-
-func (x *QueryBlockHeaderByHashResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryBlockHeaderByHashResponse)(x)
-}
-
-func (x *QueryBlockHeaderByHashResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[23]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_QueryBlockHeaderByHashResponse_messageType fastReflection_QueryBlockHeaderByHashResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryBlockHeaderByHashResponse_messageType{}
-
-type fastReflection_QueryBlockHeaderByHashResponse_messageType struct{}
-
-func (x fastReflection_QueryBlockHeaderByHashResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryBlockHeaderByHashResponse)(nil)
-}
-func (x fastReflection_QueryBlockHeaderByHashResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryBlockHeaderByHashResponse)
-}
-func (x fastReflection_QueryBlockHeaderByHashResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryBlockHeaderByHashResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryBlockHeaderByHashResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryBlockHeaderByHashResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryBlockHeaderByHashResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryBlockHeaderByHashResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.BlockHeader != nil {
-		value := protoreflect.ValueOfMessage(x.BlockHeader.ProtoReflect())
-		if !f(fd_QueryBlockHeaderByHashResponse_block_header, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashResponse.block_header":
-		return x.BlockHeader != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashResponse.block_header":
-		x.BlockHeader = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashResponse.block_header":
-		value := x.BlockHeader
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashResponse.block_header":
-		x.BlockHeader = value.Message().Interface().(*BlockHeader)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashResponse.block_header":
-		if x.BlockHeader == nil {
-			x.BlockHeader = new(BlockHeader)
-		}
-		return protoreflect.ValueOfMessage(x.BlockHeader.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.btcbridge.QueryBlockHeaderByHashResponse.block_header":
-		m := new(BlockHeader)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.QueryBlockHeaderByHashResponse"))
-		}
-		panic(fmt.Errorf("message side.btcbridge.QueryBlockHeaderByHashResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.QueryBlockHeaderByHashResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryBlockHeaderByHashResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryBlockHeaderByHashResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.BlockHeader != nil {
-			l = options.Size(x.BlockHeader)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryBlockHeaderByHashResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.BlockHeader != nil {
-			encoded, err := options.Marshal(x.BlockHeader)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryBlockHeaderByHashResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryBlockHeaderByHashResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryBlockHeaderByHashResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BlockHeader", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.BlockHeader == nil {
-					x.BlockHeader = &BlockHeader{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.BlockHeader); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
 	md_QueryUTXOsRequest protoreflect.MessageDescriptor
 )
 
@@ -11110,7 +8592,7 @@ func (x *QueryUTXOsRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryUTXOsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[24]
+	mi := &file_side_btcbridge_query_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11519,7 +9001,7 @@ func (x *QueryUTXOsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryUTXOsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[25]
+	mi := &file_side_btcbridge_query_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11962,7 +9444,7 @@ func (x *QueryUTXOsByAddressRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryUTXOsByAddressRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[26]
+	mi := &file_side_btcbridge_query_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12433,7 +9915,7 @@ func (x *QueryUTXOsByAddressResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryUTXOsByAddressResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[27]
+	mi := &file_side_btcbridge_query_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12876,7 +10358,7 @@ func (x *QueryUTXOCountAndBalancesByAddressRequest) ProtoReflect() protoreflect.
 }
 
 func (x *QueryUTXOCountAndBalancesByAddressRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[28]
+	mi := &file_side_btcbridge_query_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13351,7 +10833,7 @@ func (x *QueryUTXOCountAndBalancesByAddressResponse) ProtoReflect() protoreflect
 }
 
 func (x *QueryUTXOCountAndBalancesByAddressResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[29]
+	mi := &file_side_btcbridge_query_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13886,7 +11368,7 @@ func (x *QueryDKGRequestRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDKGRequestRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[30]
+	mi := &file_side_btcbridge_query_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14290,7 +11772,7 @@ func (x *QueryDKGRequestResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDKGRequestResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[31]
+	mi := &file_side_btcbridge_query_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14725,7 +12207,7 @@ func (x *QueryDKGRequestsRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDKGRequestsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[32]
+	mi := &file_side_btcbridge_query_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15180,7 +12662,7 @@ func (x *QueryDKGRequestsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDKGRequestsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[33]
+	mi := &file_side_btcbridge_query_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15621,7 +13103,7 @@ func (x *QueryAllDKGRequestsRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryAllDKGRequestsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[34]
+	mi := &file_side_btcbridge_query_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -16030,7 +13512,7 @@ func (x *QueryAllDKGRequestsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryAllDKGRequestsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[35]
+	mi := &file_side_btcbridge_query_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -16473,7 +13955,7 @@ func (x *QueryDKGCompletionRequestsRequest) ProtoReflect() protoreflect.Message 
 }
 
 func (x *QueryDKGCompletionRequestsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[36]
+	mi := &file_side_btcbridge_query_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -16928,7 +14410,7 @@ func (x *QueryDKGCompletionRequestsResponse) ProtoReflect() protoreflect.Message
 }
 
 func (x *QueryDKGCompletionRequestsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_btcbridge_query_proto_msgTypes[37]
+	mi := &file_side_btcbridge_query_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18075,221 +15557,6 @@ func (x *QueryParamsResponse) GetParams() *Params {
 	return nil
 }
 
-// QueryChainTipRequest is request type for the Query/ChainTip RPC method.
-type QueryChainTipRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *QueryChainTipRequest) Reset() {
-	*x = QueryChainTipRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[18]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryChainTipRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryChainTipRequest) ProtoMessage() {}
-
-// Deprecated: Use QueryChainTipRequest.ProtoReflect.Descriptor instead.
-func (*QueryChainTipRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{18}
-}
-
-// QueryChainTipResponse is response type for the Query/ChainTip RPC method.
-type QueryChainTipResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Hash   string `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
-	Height uint64 `protobuf:"varint,2,opt,name=height,proto3" json:"height,omitempty"`
-}
-
-func (x *QueryChainTipResponse) Reset() {
-	*x = QueryChainTipResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[19]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryChainTipResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryChainTipResponse) ProtoMessage() {}
-
-// Deprecated: Use QueryChainTipResponse.ProtoReflect.Descriptor instead.
-func (*QueryChainTipResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{19}
-}
-
-func (x *QueryChainTipResponse) GetHash() string {
-	if x != nil {
-		return x.Hash
-	}
-	return ""
-}
-
-func (x *QueryChainTipResponse) GetHeight() uint64 {
-	if x != nil {
-		return x.Height
-	}
-	return 0
-}
-
-// QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method.
-type QueryBlockHeaderByHeightRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Height uint64 `protobuf:"varint,1,opt,name=height,proto3" json:"height,omitempty"`
-}
-
-func (x *QueryBlockHeaderByHeightRequest) Reset() {
-	*x = QueryBlockHeaderByHeightRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[20]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryBlockHeaderByHeightRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryBlockHeaderByHeightRequest) ProtoMessage() {}
-
-// Deprecated: Use QueryBlockHeaderByHeightRequest.ProtoReflect.Descriptor instead.
-func (*QueryBlockHeaderByHeightRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{20}
-}
-
-func (x *QueryBlockHeaderByHeightRequest) GetHeight() uint64 {
-	if x != nil {
-		return x.Height
-	}
-	return 0
-}
-
-// QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method.
-type QueryBlockHeaderByHeightResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	BlockHeader *BlockHeader `protobuf:"bytes,1,opt,name=block_header,json=blockHeader,proto3" json:"block_header,omitempty"`
-}
-
-func (x *QueryBlockHeaderByHeightResponse) Reset() {
-	*x = QueryBlockHeaderByHeightResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[21]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryBlockHeaderByHeightResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryBlockHeaderByHeightResponse) ProtoMessage() {}
-
-// Deprecated: Use QueryBlockHeaderByHeightResponse.ProtoReflect.Descriptor instead.
-func (*QueryBlockHeaderByHeightResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{21}
-}
-
-func (x *QueryBlockHeaderByHeightResponse) GetBlockHeader() *BlockHeader {
-	if x != nil {
-		return x.BlockHeader
-	}
-	return nil
-}
-
-// QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method.
-type QueryBlockHeaderByHashRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Hash string `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
-}
-
-func (x *QueryBlockHeaderByHashRequest) Reset() {
-	*x = QueryBlockHeaderByHashRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[22]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryBlockHeaderByHashRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryBlockHeaderByHashRequest) ProtoMessage() {}
-
-// Deprecated: Use QueryBlockHeaderByHashRequest.ProtoReflect.Descriptor instead.
-func (*QueryBlockHeaderByHashRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{22}
-}
-
-func (x *QueryBlockHeaderByHashRequest) GetHash() string {
-	if x != nil {
-		return x.Hash
-	}
-	return ""
-}
-
-// QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
-type QueryBlockHeaderByHashResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	BlockHeader *BlockHeader `protobuf:"bytes,1,opt,name=block_header,json=blockHeader,proto3" json:"block_header,omitempty"`
-}
-
-func (x *QueryBlockHeaderByHashResponse) Reset() {
-	*x = QueryBlockHeaderByHashResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[23]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryBlockHeaderByHashResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryBlockHeaderByHashResponse) ProtoMessage() {}
-
-// Deprecated: Use QueryBlockHeaderByHashResponse.ProtoReflect.Descriptor instead.
-func (*QueryBlockHeaderByHashResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{23}
-}
-
-func (x *QueryBlockHeaderByHashResponse) GetBlockHeader() *BlockHeader {
-	if x != nil {
-		return x.BlockHeader
-	}
-	return nil
-}
-
 // QueryUTXOsRequest is the request type for the Query/UTXOs RPC method.
 type QueryUTXOsRequest struct {
 	state         protoimpl.MessageState
@@ -18300,7 +15567,7 @@ type QueryUTXOsRequest struct {
 func (x *QueryUTXOsRequest) Reset() {
 	*x = QueryUTXOsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[24]
+		mi := &file_side_btcbridge_query_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18314,7 +15581,7 @@ func (*QueryUTXOsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryUTXOsRequest.ProtoReflect.Descriptor instead.
 func (*QueryUTXOsRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{24}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{18}
 }
 
 // QueryUTXOsResponse is the response type for the Query/UTXOs RPC method.
@@ -18329,7 +15596,7 @@ type QueryUTXOsResponse struct {
 func (x *QueryUTXOsResponse) Reset() {
 	*x = QueryUTXOsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[25]
+		mi := &file_side_btcbridge_query_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18343,7 +15610,7 @@ func (*QueryUTXOsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryUTXOsResponse.ProtoReflect.Descriptor instead.
 func (*QueryUTXOsResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{25}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *QueryUTXOsResponse) GetUtxos() []*UTXO {
@@ -18365,7 +15632,7 @@ type QueryUTXOsByAddressRequest struct {
 func (x *QueryUTXOsByAddressRequest) Reset() {
 	*x = QueryUTXOsByAddressRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[26]
+		mi := &file_side_btcbridge_query_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18379,7 +15646,7 @@ func (*QueryUTXOsByAddressRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryUTXOsByAddressRequest.ProtoReflect.Descriptor instead.
 func (*QueryUTXOsByAddressRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{26}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *QueryUTXOsByAddressRequest) GetAddress() string {
@@ -18401,7 +15668,7 @@ type QueryUTXOsByAddressResponse struct {
 func (x *QueryUTXOsByAddressResponse) Reset() {
 	*x = QueryUTXOsByAddressResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[27]
+		mi := &file_side_btcbridge_query_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18415,7 +15682,7 @@ func (*QueryUTXOsByAddressResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryUTXOsByAddressResponse.ProtoReflect.Descriptor instead.
 func (*QueryUTXOsByAddressResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{27}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *QueryUTXOsByAddressResponse) GetUtxos() []*UTXO {
@@ -18437,7 +15704,7 @@ type QueryUTXOCountAndBalancesByAddressRequest struct {
 func (x *QueryUTXOCountAndBalancesByAddressRequest) Reset() {
 	*x = QueryUTXOCountAndBalancesByAddressRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[28]
+		mi := &file_side_btcbridge_query_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18451,7 +15718,7 @@ func (*QueryUTXOCountAndBalancesByAddressRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryUTXOCountAndBalancesByAddressRequest.ProtoReflect.Descriptor instead.
 func (*QueryUTXOCountAndBalancesByAddressRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{28}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *QueryUTXOCountAndBalancesByAddressRequest) GetAddress() string {
@@ -18475,7 +15742,7 @@ type QueryUTXOCountAndBalancesByAddressResponse struct {
 func (x *QueryUTXOCountAndBalancesByAddressResponse) Reset() {
 	*x = QueryUTXOCountAndBalancesByAddressResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[29]
+		mi := &file_side_btcbridge_query_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18489,7 +15756,7 @@ func (*QueryUTXOCountAndBalancesByAddressResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryUTXOCountAndBalancesByAddressResponse.ProtoReflect.Descriptor instead.
 func (*QueryUTXOCountAndBalancesByAddressResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{29}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *QueryUTXOCountAndBalancesByAddressResponse) GetCount() uint32 {
@@ -18525,7 +15792,7 @@ type QueryDKGRequestRequest struct {
 func (x *QueryDKGRequestRequest) Reset() {
 	*x = QueryDKGRequestRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[30]
+		mi := &file_side_btcbridge_query_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18539,7 +15806,7 @@ func (*QueryDKGRequestRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDKGRequestRequest.ProtoReflect.Descriptor instead.
 func (*QueryDKGRequestRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{30}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *QueryDKGRequestRequest) GetId() uint64 {
@@ -18561,7 +15828,7 @@ type QueryDKGRequestResponse struct {
 func (x *QueryDKGRequestResponse) Reset() {
 	*x = QueryDKGRequestResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[31]
+		mi := &file_side_btcbridge_query_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18575,7 +15842,7 @@ func (*QueryDKGRequestResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDKGRequestResponse.ProtoReflect.Descriptor instead.
 func (*QueryDKGRequestResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{31}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *QueryDKGRequestResponse) GetRequest() *DKGRequest {
@@ -18597,7 +15864,7 @@ type QueryDKGRequestsRequest struct {
 func (x *QueryDKGRequestsRequest) Reset() {
 	*x = QueryDKGRequestsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[32]
+		mi := &file_side_btcbridge_query_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18611,7 +15878,7 @@ func (*QueryDKGRequestsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDKGRequestsRequest.ProtoReflect.Descriptor instead.
 func (*QueryDKGRequestsRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{32}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *QueryDKGRequestsRequest) GetStatus() DKGRequestStatus {
@@ -18633,7 +15900,7 @@ type QueryDKGRequestsResponse struct {
 func (x *QueryDKGRequestsResponse) Reset() {
 	*x = QueryDKGRequestsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[33]
+		mi := &file_side_btcbridge_query_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18647,7 +15914,7 @@ func (*QueryDKGRequestsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDKGRequestsResponse.ProtoReflect.Descriptor instead.
 func (*QueryDKGRequestsResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{33}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *QueryDKGRequestsResponse) GetRequests() []*DKGRequest {
@@ -18667,7 +15934,7 @@ type QueryAllDKGRequestsRequest struct {
 func (x *QueryAllDKGRequestsRequest) Reset() {
 	*x = QueryAllDKGRequestsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[34]
+		mi := &file_side_btcbridge_query_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18681,7 +15948,7 @@ func (*QueryAllDKGRequestsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryAllDKGRequestsRequest.ProtoReflect.Descriptor instead.
 func (*QueryAllDKGRequestsRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{34}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{28}
 }
 
 // QueryAllDKGRequestsResponse is the response type for the Query/AllDKGRequests RPC method.
@@ -18696,7 +15963,7 @@ type QueryAllDKGRequestsResponse struct {
 func (x *QueryAllDKGRequestsResponse) Reset() {
 	*x = QueryAllDKGRequestsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[35]
+		mi := &file_side_btcbridge_query_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18710,7 +15977,7 @@ func (*QueryAllDKGRequestsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryAllDKGRequestsResponse.ProtoReflect.Descriptor instead.
 func (*QueryAllDKGRequestsResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{35}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *QueryAllDKGRequestsResponse) GetRequests() []*DKGRequest {
@@ -18732,7 +15999,7 @@ type QueryDKGCompletionRequestsRequest struct {
 func (x *QueryDKGCompletionRequestsRequest) Reset() {
 	*x = QueryDKGCompletionRequestsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[36]
+		mi := &file_side_btcbridge_query_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18746,7 +16013,7 @@ func (*QueryDKGCompletionRequestsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDKGCompletionRequestsRequest.ProtoReflect.Descriptor instead.
 func (*QueryDKGCompletionRequestsRequest) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{36}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *QueryDKGCompletionRequestsRequest) GetId() uint64 {
@@ -18768,7 +16035,7 @@ type QueryDKGCompletionRequestsResponse struct {
 func (x *QueryDKGCompletionRequestsResponse) Reset() {
 	*x = QueryDKGCompletionRequestsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_btcbridge_query_proto_msgTypes[37]
+		mi := &file_side_btcbridge_query_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18782,7 +16049,7 @@ func (*QueryDKGCompletionRequestsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDKGCompletionRequestsResponse.ProtoReflect.Descriptor instead.
 func (*QueryDKGCompletionRequestsResponse) Descriptor() ([]byte, []int) {
-	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{37}
+	return file_side_btcbridge_query_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *QueryDKGCompletionRequestsResponse) GetRequests() []*DKGCompletionRequest {
@@ -18930,303 +16197,249 @@ var file_side_btcbridge_query_proto_rawDesc = []byte{
 	0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65,
 	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d,
 	0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22,
-	0x16, 0x0a, 0x14, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x68, 0x61, 0x69, 0x6e, 0x54, 0x69, 0x70,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x43, 0x0a, 0x15, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x43, 0x68, 0x61, 0x69, 0x6e, 0x54, 0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x12, 0x0a, 0x04, 0x68, 0x61, 0x73, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
-	0x68, 0x61, 0x73, 0x68, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x39, 0x0a, 0x1f,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72,
-	0x42, 0x79, 0x48, 0x65, 0x69, 0x67, 0x68, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
-	0x16, 0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52,
-	0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x62, 0x0a, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x42, 0x79, 0x48, 0x65, 0x69,
-	0x67, 0x68, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3e, 0x0a, 0x0c, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
-	0x67, 0x65, 0x2e, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x52, 0x0b,
-	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x22, 0x33, 0x0a, 0x1d, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x42,
-	0x79, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04,
-	0x68, 0x61, 0x73, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x61, 0x73, 0x68,
-	0x22, 0x60, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65,
-	0x61, 0x64, 0x65, 0x72, 0x42, 0x79, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x3e, 0x0a, 0x0c, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x65, 0x61, 0x64,
-	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48,
-	0x65, 0x61, 0x64, 0x65, 0x72, 0x52, 0x0b, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64,
-	0x65, 0x72, 0x22, 0x13, 0x0a, 0x11, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x40, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x55, 0x54, 0x58, 0x4f, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2a, 0x0a,
+	0x13, 0x0a, 0x11, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x22, 0x40, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58,
+	0x4f, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2a, 0x0a, 0x05, 0x75, 0x74,
+	0x78, 0x6f, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x55, 0x54, 0x58, 0x4f, 0x52,
+	0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x22, 0x36, 0x0a, 0x1a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55,
+	0x54, 0x58, 0x4f, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x49,
+	0x0a, 0x1b, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x42, 0x79, 0x41, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2a, 0x0a,
 	0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73,
 	0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x55, 0x54,
-	0x58, 0x4f, 0x52, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x22, 0x36, 0x0a, 0x1a, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x22, 0x49, 0x0a, 0x1b, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x42,
-	0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x2a, 0x0a, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x14, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2e, 0x55, 0x54, 0x58, 0x4f, 0x52, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x22, 0x45, 0x0a, 0x29,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x6e,
-	0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x22, 0x99, 0x01, 0x0a, 0x2a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58,
-	0x4f, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x6e, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65,
-	0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0d, 0x52, 0x05, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75,
-	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x12, 0x3f,
-	0x0a, 0x0c, 0x72, 0x75, 0x6e, 0x65, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x18, 0x03,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
-	0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x52, 0x75, 0x6e, 0x65, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63,
-	0x65, 0x52, 0x0c, 0x72, 0x75, 0x6e, 0x65, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x22,
-	0x28, 0x0a, 0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x4f, 0x0a, 0x17, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x34, 0x0a, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x52, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x53, 0x0a, 0x17, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x38, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22,
-	0x52, 0x0a, 0x18, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x36, 0x0a, 0x08, 0x72,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44,
-	0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x73, 0x22, 0x1c, 0x0a, 0x1a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44,
-	0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x22, 0x55, 0x0a, 0x1b, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44, 0x4b, 0x47,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x36, 0x0a, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03,
+	0x58, 0x4f, 0x52, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x22, 0x45, 0x0a, 0x29, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x6e, 0x64, 0x42, 0x61,
+	0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x22, 0x99, 0x01, 0x0a, 0x2a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x43, 0x6f,
+	0x75, 0x6e, 0x74, 0x41, 0x6e, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x42, 0x79,
+	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x14, 0x0a, 0x05, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x05,
+	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x12, 0x3f, 0x0a, 0x0c, 0x72,
+	0x75, 0x6e, 0x65, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0x2e, 0x52, 0x75, 0x6e, 0x65, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x52, 0x0c,
+	0x72, 0x75, 0x6e, 0x65, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x22, 0x28, 0x0a, 0x16,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x4f, 0x0a, 0x17, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
+	0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x34, 0x0a, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
-	0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x08,
-	0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x22, 0x33, 0x0a, 0x21, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a,
-	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x66, 0x0a,
-	0x22, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74,
-	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x40, 0x0a, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65,
-	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x08, 0x72, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x73, 0x32, 0xc8, 0x18, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12,
-	0x76, 0x0a, 0x0b, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x22,
+	0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x07,
+	0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x53, 0x0a, 0x17, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x38, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0e, 0x32, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
+	0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x52, 0x0a, 0x18,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x36, 0x0a, 0x08, 0x72, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x22, 0x1c, 0x0a, 0x1a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44, 0x4b, 0x47, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x55,
+	0x0a, 0x1b, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x36, 0x0a,
+	0x08, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x1a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
+	0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x08, 0x72, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x73, 0x22, 0x33, 0x0a, 0x21, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b,
+	0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x66, 0x0a, 0x22, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x40, 0x0a, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
+	0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f,
+	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x73, 0x32, 0x85, 0x15, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x76, 0x0a, 0x0b,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x22, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1e, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x18, 0x12, 0x16, 0x2f, 0x73,
+	0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x70, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x12, 0x7a, 0x0a, 0x0c, 0x51, 0x75, 0x65, 0x72, 0x79, 0x46, 0x65, 0x65,
+	0x52, 0x61, 0x74, 0x65, 0x12, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
+	0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x46, 0x65, 0x65, 0x52, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x46, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x1f, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x19, 0x12, 0x17, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62,
+	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x66, 0x65, 0x65, 0x72, 0x61, 0x74, 0x65,
+	0x12, 0xb3, 0x01, 0x0a, 0x19, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x61, 0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x46, 0x65, 0x65, 0x12, 0x30,
 	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
-	0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1e, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x18, 0x12,
-	0x16, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x79, 0x0a, 0x0d, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x43, 0x68, 0x61, 0x69, 0x6e, 0x54, 0x69, 0x70, 0x12, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43,
-	0x68, 0x61, 0x69, 0x6e, 0x54, 0x69, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x68, 0x61, 0x69, 0x6e, 0x54, 0x69, 0x70, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x15, 0x12, 0x13, 0x2f,
-	0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x74,
-	0x69, 0x70, 0x12, 0xa6, 0x01, 0x0a, 0x18, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f, 0x63,
-	0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x42, 0x79, 0x48, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12,
-	0x2f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65,
-	0x72, 0x42, 0x79, 0x48, 0x65, 0x69, 0x67, 0x68, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x30, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
-	0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64,
-	0x65, 0x72, 0x42, 0x79, 0x48, 0x65, 0x69, 0x67, 0x68, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x27, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x21, 0x12, 0x1f, 0x2f, 0x73, 0x69, 0x64,
-	0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x68, 0x65, 0x69, 0x67,
-	0x68, 0x74, 0x2f, 0x7b, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x7d, 0x12, 0x9c, 0x01, 0x0a, 0x16,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72,
-	0x42, 0x79, 0x48, 0x61, 0x73, 0x68, 0x12, 0x2d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f,
-	0x63, 0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x42, 0x79, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x6c, 0x6f, 0x63,
-	0x6b, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x42, 0x79, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x12, 0x1b, 0x2f,
-	0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x68,
-	0x61, 0x73, 0x68, 0x2f, 0x7b, 0x68, 0x61, 0x73, 0x68, 0x7d, 0x12, 0x7a, 0x0a, 0x0c, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x46, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x12, 0x23, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x46, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x46, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1f, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x19, 0x12, 0x17, 0x2f,
-	0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x66,
-	0x65, 0x65, 0x72, 0x61, 0x74, 0x65, 0x12, 0xb3, 0x01, 0x0a, 0x19, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x46, 0x65, 0x65, 0x12, 0x30, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
-	0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64,
-	0x72, 0x61, 0x77, 0x61, 0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x46, 0x65, 0x65, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74,
-	0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x46, 0x65,
-	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x31, 0x82, 0xd3, 0xe4, 0x93, 0x02,
-	0x2b, 0x12, 0x29, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
-	0x67, 0x65, 0x2f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x2f, 0x66, 0x65,
-	0x65, 0x2f, 0x65, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0xce, 0x01, 0x0a,
-	0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x4e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x46, 0x65, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x31, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61,
+	0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x46, 0x65, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x31, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2b, 0x12, 0x29, 0x2f, 0x73, 0x69,
+	0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x77, 0x69, 0x74,
+	0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x2f, 0x66, 0x65, 0x65, 0x2f, 0x65, 0x73, 0x74, 0x69,
+	0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0xce, 0x01, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x35, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x36, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x37,
+	0x12, 0x35, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x2f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x2f, 0x72, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x2f, 0x7b, 0x61,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xc3, 0x01, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x73, 0x42, 0x79, 0x54, 0x78, 0x48, 0x61, 0x73, 0x68, 0x12, 0x34, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x42, 0x79, 0x54, 0x78, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
 	0x35, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
 	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74,
-	0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x41,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3d,
-	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x37, 0x12, 0x35, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
-	0x61, 0x6c, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x61, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xc3, 0x01,
-	0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x54, 0x78, 0x48, 0x61, 0x73, 0x68, 0x12,
-	0x34, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x54, 0x78, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68,
-	0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x54, 0x78,
-	0x48, 0x61, 0x73, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x35, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x2f, 0x12, 0x2d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62,
-	0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c,
-	0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x74, 0x78, 0x2f, 0x7b, 0x74, 0x78,
-	0x69, 0x64, 0x7d, 0x12, 0xcb, 0x01, 0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x42, 0x74, 0x63, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x36, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62,
-	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x74, 0x63, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x37, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x74, 0x63,
-	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x37, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x31,
-	0x12, 0x2f, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
-	0x65, 0x2f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x2f, 0x72, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x62, 0x74, 0x63, 0x2f, 0x70, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x12, 0x9b, 0x01, 0x0a, 0x14, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69,
-	0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x2b, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62,
-	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69,
-	0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x28, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x22, 0x12, 0x20, 0x2f,
-	0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x73,
-	0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12,
-	0xc8, 0x01, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x12, 0x34, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x35, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2f, 0x12, 0x2d,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f,
+	0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x73, 0x2f, 0x74, 0x78, 0x2f, 0x7b, 0x74, 0x78, 0x69, 0x64, 0x7d, 0x12, 0xcb, 0x01,
+	0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x74,
+	0x63, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x73, 0x12, 0x36, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42,
+	0x74, 0x63, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x37, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x50, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x74, 0x63, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x37, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x31, 0x12, 0x2f, 0x2f, 0x73, 0x69, 0x64,
+	0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x77, 0x69, 0x74, 0x68,
+	0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f,
+	0x62, 0x74, 0x63, 0x2f, 0x70, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x9b, 0x01, 0x0a, 0x14,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x73, 0x12, 0x2b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
+	0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69,
+	0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x28, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x22, 0x12, 0x20, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62,
+	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67,
+	0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0xc8, 0x01, 0x0a, 0x1d, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x34, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x35, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
 	0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62,
-	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69,
-	0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x42, 0x79, 0x41,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3a,
-	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x34, 0x12, 0x32, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2f,
-	0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xba, 0x01, 0x0a, 0x1b, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x42, 0x79, 0x54, 0x78, 0x48, 0x61, 0x73, 0x68, 0x12, 0x32, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42,
-	0x79, 0x54, 0x78, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x33,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x42, 0x79, 0x54, 0x78, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x32, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2c, 0x12, 0x2a, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x73, 0x69, 0x67,
-	0x6e, 0x69, 0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x74, 0x78,
-	0x2f, 0x7b, 0x74, 0x78, 0x69, 0x64, 0x7d, 0x12, 0x72, 0x0a, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x55, 0x54, 0x58, 0x4f, 0x73, 0x12, 0x21, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f,
-	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x22, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55,
-	0x54, 0x58, 0x4f, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1d, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x17, 0x12, 0x15, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62,
-	0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x12, 0x97, 0x01, 0x0a, 0x13,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x12, 0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72,
-	0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x42,
-	0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x2b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x27, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x21, 0x12, 0x1f, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62,
-	0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xca, 0x01, 0x0a, 0x22, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55,
-	0x54, 0x58, 0x4f, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x6e, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e,
-	0x63, 0x65, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x39, 0x2e, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x34,
+	0x12, 0x32, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x2f, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x73, 0x2f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x7d, 0x12, 0xba, 0x01, 0x0a, 0x1b, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69,
+	0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42, 0x79, 0x54, 0x78,
+	0x48, 0x61, 0x73, 0x68, 0x12, 0x32, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
+	0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69,
+	0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42, 0x79, 0x54, 0x78, 0x48, 0x61, 0x73,
+	0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x33, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53,
+	0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42, 0x79, 0x54,
+	0x78, 0x48, 0x61, 0x73, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x32, 0x82,
+	0xd3, 0xe4, 0x93, 0x02, 0x2c, 0x12, 0x2a, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63,
+	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2f, 0x72,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x74, 0x78, 0x2f, 0x7b, 0x74, 0x78, 0x69, 0x64,
+	0x7d, 0x12, 0x72, 0x0a, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x12,
+	0x21, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x22, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
+	0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x17, 0x12, 0x15,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f,
+	0x75, 0x74, 0x78, 0x6f, 0x73, 0x12, 0x97, 0x01, 0x0a, 0x13, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55,
+	0x54, 0x58, 0x4f, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x2a, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65,
+	0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x55, 0x54, 0x58, 0x4f, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x27, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x21, 0x12, 0x1f,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f,
+	0x75, 0x74, 0x78, 0x6f, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12,
+	0xca, 0x01, 0x0a, 0x22, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x43, 0x6f, 0x75,
+	0x6e, 0x74, 0x41, 0x6e, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x42, 0x79, 0x41,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x39, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
+	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58,
+	0x4f, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x6e, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65,
+	0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x3a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x43, 0x6f, 0x75, 0x6e,
+	0x74, 0x41, 0x6e, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x42, 0x79, 0x41, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2d, 0x82,
+	0xd3, 0xe4, 0x93, 0x02, 0x27, 0x12, 0x25, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63,
+	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x2f, 0x7b, 0x61, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x73, 0x74, 0x61, 0x74, 0x73, 0x12, 0x8c, 0x01, 0x0a,
+	0x0f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x26, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
+	0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x28, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x22, 0x12, 0x20, 0x2f, 0x73, 0x69, 0x64, 0x65,
+	0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x72,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x8a, 0x01, 0x0a, 0x10,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x12, 0x27, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x12, 0x1b, 0x2f, 0x73, 0x69,
+	0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x64, 0x6b, 0x67,
+	0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x94, 0x01, 0x0a, 0x13, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x12, 0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x73,
 	0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x55, 0x54, 0x58, 0x4f, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x6e, 0x64, 0x42,
-	0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62,
-	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x55, 0x54,
-	0x58, 0x4f, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x6e, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63,
-	0x65, 0x73, 0x42, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x2d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x27, 0x12, 0x25, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x75, 0x74, 0x78,
-	0x6f, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x73, 0x74, 0x61,
-	0x74, 0x73, 0x12, 0x8c, 0x01, 0x0a, 0x0f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x26, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27,
+	0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02,
+	0x1e, 0x12, 0x1c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12,
+	0xb8, 0x01, 0x0a, 0x1a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70,
+	0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x31,
 	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x28, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x22, 0x12,
-	0x20, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2f, 0x7b, 0x69, 0x64,
-	0x7d, 0x12, 0x8a, 0x01, 0x0a, 0x10, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x27, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x28, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02,
-	0x1d, 0x12, 0x1b, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
-	0x67, 0x65, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x94,
-	0x01, 0x0a, 0x13, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44, 0x4b, 0x47, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c,
-	0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
-	0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x6c, 0x6c, 0x44, 0x4b, 0x47, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1e, 0x12, 0x1c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62,
-	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x72, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0xb8, 0x01, 0x0a, 0x1a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
-	0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
-	0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f,
-	0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62,
-	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b,
-	0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x33, 0x82, 0xd3, 0xe4,
-	0x93, 0x02, 0x2d, 0x12, 0x2b, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72,
-	0x69, 0x64, 0x67, 0x65, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74,
-	0x69, 0x6f, 0x6e, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2f, 0x7b, 0x69, 0x64, 0x7d,
-	0x42, 0xaa, 0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72,
-	0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
-	0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73,
-	0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02, 0x0e, 0x53,
-	0x69, 0x64, 0x65, 0x2e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xca, 0x02, 0x0e,
-	0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xe2, 0x02,
-	0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x5c,
-	0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f, 0x53, 0x69,
-	0x64, 0x65, 0x3a, 0x3a, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x32, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
+	0x67, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c,
+	0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x33, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2d, 0x12, 0x2b, 0x2f,
+	0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x64,
+	0x6b, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x72, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x42, 0xaa, 0x01, 0x0a, 0x12, 0x63,
+	0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x2f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
+	0xa2, 0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x42, 0x74,
+	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xca, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42,
+	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xe2, 0x02, 0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c,
+	0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
+	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x42, 0x74,
+	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -19241,7 +16454,7 @@ func file_side_btcbridge_query_proto_rawDescGZIP() []byte {
 	return file_side_btcbridge_query_proto_rawDescData
 }
 
-var file_side_btcbridge_query_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
+var file_side_btcbridge_query_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
 var file_side_btcbridge_query_proto_goTypes = []interface{}{
 	(*QueryWithdrawRequestsByAddressRequest)(nil),      // 0: side.btcbridge.QueryWithdrawRequestsByAddressRequest
 	(*QueryWithdrawRequestsByAddressResponse)(nil),     // 1: side.btcbridge.QueryWithdrawRequestsByAddressResponse
@@ -19261,111 +16474,96 @@ var file_side_btcbridge_query_proto_goTypes = []interface{}{
 	(*QueryWithdrawalNetworkFeeResponse)(nil),          // 15: side.btcbridge.QueryWithdrawalNetworkFeeResponse
 	(*QueryParamsRequest)(nil),                         // 16: side.btcbridge.QueryParamsRequest
 	(*QueryParamsResponse)(nil),                        // 17: side.btcbridge.QueryParamsResponse
-	(*QueryChainTipRequest)(nil),                       // 18: side.btcbridge.QueryChainTipRequest
-	(*QueryChainTipResponse)(nil),                      // 19: side.btcbridge.QueryChainTipResponse
-	(*QueryBlockHeaderByHeightRequest)(nil),            // 20: side.btcbridge.QueryBlockHeaderByHeightRequest
-	(*QueryBlockHeaderByHeightResponse)(nil),           // 21: side.btcbridge.QueryBlockHeaderByHeightResponse
-	(*QueryBlockHeaderByHashRequest)(nil),              // 22: side.btcbridge.QueryBlockHeaderByHashRequest
-	(*QueryBlockHeaderByHashResponse)(nil),             // 23: side.btcbridge.QueryBlockHeaderByHashResponse
-	(*QueryUTXOsRequest)(nil),                          // 24: side.btcbridge.QueryUTXOsRequest
-	(*QueryUTXOsResponse)(nil),                         // 25: side.btcbridge.QueryUTXOsResponse
-	(*QueryUTXOsByAddressRequest)(nil),                 // 26: side.btcbridge.QueryUTXOsByAddressRequest
-	(*QueryUTXOsByAddressResponse)(nil),                // 27: side.btcbridge.QueryUTXOsByAddressResponse
-	(*QueryUTXOCountAndBalancesByAddressRequest)(nil),  // 28: side.btcbridge.QueryUTXOCountAndBalancesByAddressRequest
-	(*QueryUTXOCountAndBalancesByAddressResponse)(nil), // 29: side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse
-	(*QueryDKGRequestRequest)(nil),                     // 30: side.btcbridge.QueryDKGRequestRequest
-	(*QueryDKGRequestResponse)(nil),                    // 31: side.btcbridge.QueryDKGRequestResponse
-	(*QueryDKGRequestsRequest)(nil),                    // 32: side.btcbridge.QueryDKGRequestsRequest
-	(*QueryDKGRequestsResponse)(nil),                   // 33: side.btcbridge.QueryDKGRequestsResponse
-	(*QueryAllDKGRequestsRequest)(nil),                 // 34: side.btcbridge.QueryAllDKGRequestsRequest
-	(*QueryAllDKGRequestsResponse)(nil),                // 35: side.btcbridge.QueryAllDKGRequestsResponse
-	(*QueryDKGCompletionRequestsRequest)(nil),          // 36: side.btcbridge.QueryDKGCompletionRequestsRequest
-	(*QueryDKGCompletionRequestsResponse)(nil),         // 37: side.btcbridge.QueryDKGCompletionRequestsResponse
-	(*v1beta1.PageRequest)(nil),                        // 38: cosmos.base.query.v1beta1.PageRequest
-	(*WithdrawRequest)(nil),                            // 39: side.btcbridge.WithdrawRequest
-	(*v1beta1.PageResponse)(nil),                       // 40: cosmos.base.query.v1beta1.PageResponse
-	(SigningStatus)(0),                                 // 41: side.btcbridge.SigningStatus
-	(*SigningRequest)(nil),                             // 42: side.btcbridge.SigningRequest
-	(*FeeRate)(nil),                                    // 43: side.btcbridge.FeeRate
-	(*Params)(nil),                                     // 44: side.btcbridge.Params
-	(*BlockHeader)(nil),                                // 45: side.btcbridge.BlockHeader
-	(*UTXO)(nil),                                       // 46: side.btcbridge.UTXO
-	(*RuneBalance)(nil),                                // 47: side.btcbridge.RuneBalance
-	(*DKGRequest)(nil),                                 // 48: side.btcbridge.DKGRequest
-	(DKGRequestStatus)(0),                              // 49: side.btcbridge.DKGRequestStatus
-	(*DKGCompletionRequest)(nil),                       // 50: side.btcbridge.DKGCompletionRequest
+	(*QueryUTXOsRequest)(nil),                          // 18: side.btcbridge.QueryUTXOsRequest
+	(*QueryUTXOsResponse)(nil),                         // 19: side.btcbridge.QueryUTXOsResponse
+	(*QueryUTXOsByAddressRequest)(nil),                 // 20: side.btcbridge.QueryUTXOsByAddressRequest
+	(*QueryUTXOsByAddressResponse)(nil),                // 21: side.btcbridge.QueryUTXOsByAddressResponse
+	(*QueryUTXOCountAndBalancesByAddressRequest)(nil),  // 22: side.btcbridge.QueryUTXOCountAndBalancesByAddressRequest
+	(*QueryUTXOCountAndBalancesByAddressResponse)(nil), // 23: side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse
+	(*QueryDKGRequestRequest)(nil),                     // 24: side.btcbridge.QueryDKGRequestRequest
+	(*QueryDKGRequestResponse)(nil),                    // 25: side.btcbridge.QueryDKGRequestResponse
+	(*QueryDKGRequestsRequest)(nil),                    // 26: side.btcbridge.QueryDKGRequestsRequest
+	(*QueryDKGRequestsResponse)(nil),                   // 27: side.btcbridge.QueryDKGRequestsResponse
+	(*QueryAllDKGRequestsRequest)(nil),                 // 28: side.btcbridge.QueryAllDKGRequestsRequest
+	(*QueryAllDKGRequestsResponse)(nil),                // 29: side.btcbridge.QueryAllDKGRequestsResponse
+	(*QueryDKGCompletionRequestsRequest)(nil),          // 30: side.btcbridge.QueryDKGCompletionRequestsRequest
+	(*QueryDKGCompletionRequestsResponse)(nil),         // 31: side.btcbridge.QueryDKGCompletionRequestsResponse
+	(*v1beta1.PageRequest)(nil),                        // 32: cosmos.base.query.v1beta1.PageRequest
+	(*WithdrawRequest)(nil),                            // 33: side.btcbridge.WithdrawRequest
+	(*v1beta1.PageResponse)(nil),                       // 34: cosmos.base.query.v1beta1.PageResponse
+	(SigningStatus)(0),                                 // 35: side.btcbridge.SigningStatus
+	(*SigningRequest)(nil),                             // 36: side.btcbridge.SigningRequest
+	(*FeeRate)(nil),                                    // 37: side.btcbridge.FeeRate
+	(*Params)(nil),                                     // 38: side.btcbridge.Params
+	(*UTXO)(nil),                                       // 39: side.btcbridge.UTXO
+	(*RuneBalance)(nil),                                // 40: side.btcbridge.RuneBalance
+	(*DKGRequest)(nil),                                 // 41: side.btcbridge.DKGRequest
+	(DKGRequestStatus)(0),                              // 42: side.btcbridge.DKGRequestStatus
+	(*DKGCompletionRequest)(nil),                       // 43: side.btcbridge.DKGCompletionRequest
 }
 var file_side_btcbridge_query_proto_depIdxs = []int32{
-	38, // 0: side.btcbridge.QueryWithdrawRequestsByAddressRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	39, // 1: side.btcbridge.QueryWithdrawRequestsByAddressResponse.requests:type_name -> side.btcbridge.WithdrawRequest
-	40, // 2: side.btcbridge.QueryWithdrawRequestsByAddressResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	39, // 3: side.btcbridge.QueryWithdrawRequestsByTxHashResponse.requests:type_name -> side.btcbridge.WithdrawRequest
-	38, // 4: side.btcbridge.QueryPendingBtcWithdrawRequestsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	39, // 5: side.btcbridge.QueryPendingBtcWithdrawRequestsResponse.requests:type_name -> side.btcbridge.WithdrawRequest
-	40, // 6: side.btcbridge.QueryPendingBtcWithdrawRequestsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	41, // 7: side.btcbridge.QuerySigningRequestsRequest.status:type_name -> side.btcbridge.SigningStatus
-	38, // 8: side.btcbridge.QuerySigningRequestsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	42, // 9: side.btcbridge.QuerySigningRequestsResponse.requests:type_name -> side.btcbridge.SigningRequest
-	40, // 10: side.btcbridge.QuerySigningRequestsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	38, // 11: side.btcbridge.QuerySigningRequestsByAddressRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	42, // 12: side.btcbridge.QuerySigningRequestsByAddressResponse.requests:type_name -> side.btcbridge.SigningRequest
-	40, // 13: side.btcbridge.QuerySigningRequestsByAddressResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	42, // 14: side.btcbridge.QuerySigningRequestByTxHashResponse.request:type_name -> side.btcbridge.SigningRequest
-	43, // 15: side.btcbridge.QueryFeeRateResponse.fee_rate:type_name -> side.btcbridge.FeeRate
-	44, // 16: side.btcbridge.QueryParamsResponse.params:type_name -> side.btcbridge.Params
-	45, // 17: side.btcbridge.QueryBlockHeaderByHeightResponse.block_header:type_name -> side.btcbridge.BlockHeader
-	45, // 18: side.btcbridge.QueryBlockHeaderByHashResponse.block_header:type_name -> side.btcbridge.BlockHeader
-	46, // 19: side.btcbridge.QueryUTXOsResponse.utxos:type_name -> side.btcbridge.UTXO
-	46, // 20: side.btcbridge.QueryUTXOsByAddressResponse.utxos:type_name -> side.btcbridge.UTXO
-	47, // 21: side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse.runeBalances:type_name -> side.btcbridge.RuneBalance
-	48, // 22: side.btcbridge.QueryDKGRequestResponse.request:type_name -> side.btcbridge.DKGRequest
-	49, // 23: side.btcbridge.QueryDKGRequestsRequest.status:type_name -> side.btcbridge.DKGRequestStatus
-	48, // 24: side.btcbridge.QueryDKGRequestsResponse.requests:type_name -> side.btcbridge.DKGRequest
-	48, // 25: side.btcbridge.QueryAllDKGRequestsResponse.requests:type_name -> side.btcbridge.DKGRequest
-	50, // 26: side.btcbridge.QueryDKGCompletionRequestsResponse.requests:type_name -> side.btcbridge.DKGCompletionRequest
-	16, // 27: side.btcbridge.Query.QueryParams:input_type -> side.btcbridge.QueryParamsRequest
-	18, // 28: side.btcbridge.Query.QueryChainTip:input_type -> side.btcbridge.QueryChainTipRequest
-	20, // 29: side.btcbridge.Query.QueryBlockHeaderByHeight:input_type -> side.btcbridge.QueryBlockHeaderByHeightRequest
-	22, // 30: side.btcbridge.Query.QueryBlockHeaderByHash:input_type -> side.btcbridge.QueryBlockHeaderByHashRequest
-	12, // 31: side.btcbridge.Query.QueryFeeRate:input_type -> side.btcbridge.QueryFeeRateRequest
-	14, // 32: side.btcbridge.Query.QueryWithdrawalNetworkFee:input_type -> side.btcbridge.QueryWithdrawalNetworkFeeRequest
-	0,  // 33: side.btcbridge.Query.QueryWithdrawRequestsByAddress:input_type -> side.btcbridge.QueryWithdrawRequestsByAddressRequest
-	2,  // 34: side.btcbridge.Query.QueryWithdrawRequestsByTxHash:input_type -> side.btcbridge.QueryWithdrawRequestsByTxHashRequest
-	4,  // 35: side.btcbridge.Query.QueryPendingBtcWithdrawRequests:input_type -> side.btcbridge.QueryPendingBtcWithdrawRequestsRequest
-	6,  // 36: side.btcbridge.Query.QuerySigningRequests:input_type -> side.btcbridge.QuerySigningRequestsRequest
-	8,  // 37: side.btcbridge.Query.QuerySigningRequestsByAddress:input_type -> side.btcbridge.QuerySigningRequestsByAddressRequest
-	10, // 38: side.btcbridge.Query.QuerySigningRequestByTxHash:input_type -> side.btcbridge.QuerySigningRequestByTxHashRequest
-	24, // 39: side.btcbridge.Query.QueryUTXOs:input_type -> side.btcbridge.QueryUTXOsRequest
-	26, // 40: side.btcbridge.Query.QueryUTXOsByAddress:input_type -> side.btcbridge.QueryUTXOsByAddressRequest
-	28, // 41: side.btcbridge.Query.QueryUTXOCountAndBalancesByAddress:input_type -> side.btcbridge.QueryUTXOCountAndBalancesByAddressRequest
-	30, // 42: side.btcbridge.Query.QueryDKGRequest:input_type -> side.btcbridge.QueryDKGRequestRequest
-	32, // 43: side.btcbridge.Query.QueryDKGRequests:input_type -> side.btcbridge.QueryDKGRequestsRequest
-	34, // 44: side.btcbridge.Query.QueryAllDKGRequests:input_type -> side.btcbridge.QueryAllDKGRequestsRequest
-	36, // 45: side.btcbridge.Query.QueryDKGCompletionRequests:input_type -> side.btcbridge.QueryDKGCompletionRequestsRequest
-	17, // 46: side.btcbridge.Query.QueryParams:output_type -> side.btcbridge.QueryParamsResponse
-	19, // 47: side.btcbridge.Query.QueryChainTip:output_type -> side.btcbridge.QueryChainTipResponse
-	21, // 48: side.btcbridge.Query.QueryBlockHeaderByHeight:output_type -> side.btcbridge.QueryBlockHeaderByHeightResponse
-	23, // 49: side.btcbridge.Query.QueryBlockHeaderByHash:output_type -> side.btcbridge.QueryBlockHeaderByHashResponse
-	13, // 50: side.btcbridge.Query.QueryFeeRate:output_type -> side.btcbridge.QueryFeeRateResponse
-	15, // 51: side.btcbridge.Query.QueryWithdrawalNetworkFee:output_type -> side.btcbridge.QueryWithdrawalNetworkFeeResponse
-	1,  // 52: side.btcbridge.Query.QueryWithdrawRequestsByAddress:output_type -> side.btcbridge.QueryWithdrawRequestsByAddressResponse
-	3,  // 53: side.btcbridge.Query.QueryWithdrawRequestsByTxHash:output_type -> side.btcbridge.QueryWithdrawRequestsByTxHashResponse
-	5,  // 54: side.btcbridge.Query.QueryPendingBtcWithdrawRequests:output_type -> side.btcbridge.QueryPendingBtcWithdrawRequestsResponse
-	7,  // 55: side.btcbridge.Query.QuerySigningRequests:output_type -> side.btcbridge.QuerySigningRequestsResponse
-	9,  // 56: side.btcbridge.Query.QuerySigningRequestsByAddress:output_type -> side.btcbridge.QuerySigningRequestsByAddressResponse
-	11, // 57: side.btcbridge.Query.QuerySigningRequestByTxHash:output_type -> side.btcbridge.QuerySigningRequestByTxHashResponse
-	25, // 58: side.btcbridge.Query.QueryUTXOs:output_type -> side.btcbridge.QueryUTXOsResponse
-	27, // 59: side.btcbridge.Query.QueryUTXOsByAddress:output_type -> side.btcbridge.QueryUTXOsByAddressResponse
-	29, // 60: side.btcbridge.Query.QueryUTXOCountAndBalancesByAddress:output_type -> side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse
-	31, // 61: side.btcbridge.Query.QueryDKGRequest:output_type -> side.btcbridge.QueryDKGRequestResponse
-	33, // 62: side.btcbridge.Query.QueryDKGRequests:output_type -> side.btcbridge.QueryDKGRequestsResponse
-	35, // 63: side.btcbridge.Query.QueryAllDKGRequests:output_type -> side.btcbridge.QueryAllDKGRequestsResponse
-	37, // 64: side.btcbridge.Query.QueryDKGCompletionRequests:output_type -> side.btcbridge.QueryDKGCompletionRequestsResponse
-	46, // [46:65] is the sub-list for method output_type
-	27, // [27:46] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	32, // 0: side.btcbridge.QueryWithdrawRequestsByAddressRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	33, // 1: side.btcbridge.QueryWithdrawRequestsByAddressResponse.requests:type_name -> side.btcbridge.WithdrawRequest
+	34, // 2: side.btcbridge.QueryWithdrawRequestsByAddressResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	33, // 3: side.btcbridge.QueryWithdrawRequestsByTxHashResponse.requests:type_name -> side.btcbridge.WithdrawRequest
+	32, // 4: side.btcbridge.QueryPendingBtcWithdrawRequestsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	33, // 5: side.btcbridge.QueryPendingBtcWithdrawRequestsResponse.requests:type_name -> side.btcbridge.WithdrawRequest
+	34, // 6: side.btcbridge.QueryPendingBtcWithdrawRequestsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	35, // 7: side.btcbridge.QuerySigningRequestsRequest.status:type_name -> side.btcbridge.SigningStatus
+	32, // 8: side.btcbridge.QuerySigningRequestsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	36, // 9: side.btcbridge.QuerySigningRequestsResponse.requests:type_name -> side.btcbridge.SigningRequest
+	34, // 10: side.btcbridge.QuerySigningRequestsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	32, // 11: side.btcbridge.QuerySigningRequestsByAddressRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	36, // 12: side.btcbridge.QuerySigningRequestsByAddressResponse.requests:type_name -> side.btcbridge.SigningRequest
+	34, // 13: side.btcbridge.QuerySigningRequestsByAddressResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	36, // 14: side.btcbridge.QuerySigningRequestByTxHashResponse.request:type_name -> side.btcbridge.SigningRequest
+	37, // 15: side.btcbridge.QueryFeeRateResponse.fee_rate:type_name -> side.btcbridge.FeeRate
+	38, // 16: side.btcbridge.QueryParamsResponse.params:type_name -> side.btcbridge.Params
+	39, // 17: side.btcbridge.QueryUTXOsResponse.utxos:type_name -> side.btcbridge.UTXO
+	39, // 18: side.btcbridge.QueryUTXOsByAddressResponse.utxos:type_name -> side.btcbridge.UTXO
+	40, // 19: side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse.runeBalances:type_name -> side.btcbridge.RuneBalance
+	41, // 20: side.btcbridge.QueryDKGRequestResponse.request:type_name -> side.btcbridge.DKGRequest
+	42, // 21: side.btcbridge.QueryDKGRequestsRequest.status:type_name -> side.btcbridge.DKGRequestStatus
+	41, // 22: side.btcbridge.QueryDKGRequestsResponse.requests:type_name -> side.btcbridge.DKGRequest
+	41, // 23: side.btcbridge.QueryAllDKGRequestsResponse.requests:type_name -> side.btcbridge.DKGRequest
+	43, // 24: side.btcbridge.QueryDKGCompletionRequestsResponse.requests:type_name -> side.btcbridge.DKGCompletionRequest
+	16, // 25: side.btcbridge.Query.QueryParams:input_type -> side.btcbridge.QueryParamsRequest
+	12, // 26: side.btcbridge.Query.QueryFeeRate:input_type -> side.btcbridge.QueryFeeRateRequest
+	14, // 27: side.btcbridge.Query.QueryWithdrawalNetworkFee:input_type -> side.btcbridge.QueryWithdrawalNetworkFeeRequest
+	0,  // 28: side.btcbridge.Query.QueryWithdrawRequestsByAddress:input_type -> side.btcbridge.QueryWithdrawRequestsByAddressRequest
+	2,  // 29: side.btcbridge.Query.QueryWithdrawRequestsByTxHash:input_type -> side.btcbridge.QueryWithdrawRequestsByTxHashRequest
+	4,  // 30: side.btcbridge.Query.QueryPendingBtcWithdrawRequests:input_type -> side.btcbridge.QueryPendingBtcWithdrawRequestsRequest
+	6,  // 31: side.btcbridge.Query.QuerySigningRequests:input_type -> side.btcbridge.QuerySigningRequestsRequest
+	8,  // 32: side.btcbridge.Query.QuerySigningRequestsByAddress:input_type -> side.btcbridge.QuerySigningRequestsByAddressRequest
+	10, // 33: side.btcbridge.Query.QuerySigningRequestByTxHash:input_type -> side.btcbridge.QuerySigningRequestByTxHashRequest
+	18, // 34: side.btcbridge.Query.QueryUTXOs:input_type -> side.btcbridge.QueryUTXOsRequest
+	20, // 35: side.btcbridge.Query.QueryUTXOsByAddress:input_type -> side.btcbridge.QueryUTXOsByAddressRequest
+	22, // 36: side.btcbridge.Query.QueryUTXOCountAndBalancesByAddress:input_type -> side.btcbridge.QueryUTXOCountAndBalancesByAddressRequest
+	24, // 37: side.btcbridge.Query.QueryDKGRequest:input_type -> side.btcbridge.QueryDKGRequestRequest
+	26, // 38: side.btcbridge.Query.QueryDKGRequests:input_type -> side.btcbridge.QueryDKGRequestsRequest
+	28, // 39: side.btcbridge.Query.QueryAllDKGRequests:input_type -> side.btcbridge.QueryAllDKGRequestsRequest
+	30, // 40: side.btcbridge.Query.QueryDKGCompletionRequests:input_type -> side.btcbridge.QueryDKGCompletionRequestsRequest
+	17, // 41: side.btcbridge.Query.QueryParams:output_type -> side.btcbridge.QueryParamsResponse
+	13, // 42: side.btcbridge.Query.QueryFeeRate:output_type -> side.btcbridge.QueryFeeRateResponse
+	15, // 43: side.btcbridge.Query.QueryWithdrawalNetworkFee:output_type -> side.btcbridge.QueryWithdrawalNetworkFeeResponse
+	1,  // 44: side.btcbridge.Query.QueryWithdrawRequestsByAddress:output_type -> side.btcbridge.QueryWithdrawRequestsByAddressResponse
+	3,  // 45: side.btcbridge.Query.QueryWithdrawRequestsByTxHash:output_type -> side.btcbridge.QueryWithdrawRequestsByTxHashResponse
+	5,  // 46: side.btcbridge.Query.QueryPendingBtcWithdrawRequests:output_type -> side.btcbridge.QueryPendingBtcWithdrawRequestsResponse
+	7,  // 47: side.btcbridge.Query.QuerySigningRequests:output_type -> side.btcbridge.QuerySigningRequestsResponse
+	9,  // 48: side.btcbridge.Query.QuerySigningRequestsByAddress:output_type -> side.btcbridge.QuerySigningRequestsByAddressResponse
+	11, // 49: side.btcbridge.Query.QuerySigningRequestByTxHash:output_type -> side.btcbridge.QuerySigningRequestByTxHashResponse
+	19, // 50: side.btcbridge.Query.QueryUTXOs:output_type -> side.btcbridge.QueryUTXOsResponse
+	21, // 51: side.btcbridge.Query.QueryUTXOsByAddress:output_type -> side.btcbridge.QueryUTXOsByAddressResponse
+	23, // 52: side.btcbridge.Query.QueryUTXOCountAndBalancesByAddress:output_type -> side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse
+	25, // 53: side.btcbridge.Query.QueryDKGRequest:output_type -> side.btcbridge.QueryDKGRequestResponse
+	27, // 54: side.btcbridge.Query.QueryDKGRequests:output_type -> side.btcbridge.QueryDKGRequestsResponse
+	29, // 55: side.btcbridge.Query.QueryAllDKGRequests:output_type -> side.btcbridge.QueryAllDKGRequestsResponse
+	31, // 56: side.btcbridge.Query.QueryDKGCompletionRequests:output_type -> side.btcbridge.QueryDKGCompletionRequestsResponse
+	41, // [41:57] is the sub-list for method output_type
+	25, // [25:41] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_side_btcbridge_query_proto_init() }
@@ -19593,78 +16791,6 @@ func file_side_btcbridge_query_proto_init() {
 			}
 		}
 		file_side_btcbridge_query_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryChainTipRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_side_btcbridge_query_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryChainTipResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_side_btcbridge_query_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryBlockHeaderByHeightRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_side_btcbridge_query_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryBlockHeaderByHeightResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_side_btcbridge_query_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryBlockHeaderByHashRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_side_btcbridge_query_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryBlockHeaderByHashResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_side_btcbridge_query_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryUTXOsRequest); i {
 			case 0:
 				return &v.state
@@ -19676,7 +16802,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryUTXOsResponse); i {
 			case 0:
 				return &v.state
@@ -19688,7 +16814,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryUTXOsByAddressRequest); i {
 			case 0:
 				return &v.state
@@ -19700,7 +16826,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryUTXOsByAddressResponse); i {
 			case 0:
 				return &v.state
@@ -19712,7 +16838,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryUTXOCountAndBalancesByAddressRequest); i {
 			case 0:
 				return &v.state
@@ -19724,7 +16850,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryUTXOCountAndBalancesByAddressResponse); i {
 			case 0:
 				return &v.state
@@ -19736,7 +16862,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryDKGRequestRequest); i {
 			case 0:
 				return &v.state
@@ -19748,7 +16874,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryDKGRequestResponse); i {
 			case 0:
 				return &v.state
@@ -19760,7 +16886,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryDKGRequestsRequest); i {
 			case 0:
 				return &v.state
@@ -19772,7 +16898,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryDKGRequestsResponse); i {
 			case 0:
 				return &v.state
@@ -19784,7 +16910,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryAllDKGRequestsRequest); i {
 			case 0:
 				return &v.state
@@ -19796,7 +16922,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryAllDKGRequestsResponse); i {
 			case 0:
 				return &v.state
@@ -19808,7 +16934,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[36].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryDKGCompletionRequestsRequest); i {
 			case 0:
 				return &v.state
@@ -19820,7 +16946,7 @@ func file_side_btcbridge_query_proto_init() {
 				return nil
 			}
 		}
-		file_side_btcbridge_query_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
+		file_side_btcbridge_query_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryDKGCompletionRequestsResponse); i {
 			case 0:
 				return &v.state
@@ -19839,7 +16965,7 @@ func file_side_btcbridge_query_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_btcbridge_query_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   38,
+			NumMessages:   32,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

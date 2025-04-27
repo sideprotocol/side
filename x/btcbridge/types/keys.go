@@ -19,12 +19,9 @@ const (
 )
 
 var (
-	ParamsStoreKey = []byte{0x1}
+	ParamsStoreKey = []byte{0x01}
 
-	BtcBlockHeaderHashPrefix   = []byte{0x10} // prefix for each key to a block header, for a hash
-	BtcBlockHeaderHeightPrefix = []byte{0x11} // prefix for each key to a block hash, for a height
-	BtcBestBlockHeaderKey      = []byte{0x12} // key for the best block height
-	BtcFeeRateKey              = []byte{0x13} // key for the bitcoin network fee rate
+	BtcFeeRateKey = []byte{0x10} // key for the bitcoin network fee rate
 
 	BtcWithdrawRequestSequenceKey       = []byte{0x20} // key for the withdrawal request sequence
 	BtcWithdrawRequestKeyPrefix         = []byte{0x21} // prefix for each key to a withdrawal request
@@ -46,14 +43,6 @@ var (
 	DKGCompletionRequestKeyPrefix = []byte{0x42} // prefix for each key to a DKG completion request
 	VaultVersionKey               = []byte{0x43} // key for vault version increased by 1 once updated
 )
-
-func BtcBlockHeaderHashKey(hash string) []byte {
-	return append(BtcBlockHeaderHashPrefix, []byte(hash)...)
-}
-
-func BtcBlockHeaderHeightKey(height uint64) []byte {
-	return append(BtcBlockHeaderHeightPrefix, sdk.Uint64ToBigEndian(height)...)
-}
 
 func BtcWithdrawRequestKey(sequence uint64) []byte {
 	return append(BtcWithdrawRequestKeyPrefix, sdk.Uint64ToBigEndian(sequence)...)

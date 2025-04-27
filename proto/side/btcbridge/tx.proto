@@ -13,9 +13,6 @@ option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
-  // SubmitBlockHeaders submits bitcoin block headers to the side chain.
-  rpc SubmitBlockHeaders (MsgSubmitBlockHeaders) returns (MsgSubmitBlockHeadersResponse);
-  // SubmitDepositTransaction submits the bitcoin deposit transaction to the side chain.
   rpc SubmitDepositTransaction (MsgSubmitDepositTransaction) returns (MsgSubmitDepositTransactionResponse);
   // SubmitWithdrawalTransaction submits the bitcoin withdrawal transaction to the side chain.
   rpc SubmitWithdrawTransaction (MsgSubmitWithdrawTransaction) returns (MsgSubmitWithdrawTransactionResponse);
@@ -42,18 +39,6 @@ service Msg {
   //
   // Since: cosmos-sdk 0.47
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
-}
-
-// MsgSubmitBlockHeaders defines the Msg/SubmitBlockHeaders request type.
-message MsgSubmitBlockHeaders {
-  option (cosmos.msg.v1.signer) = "sender";
-
-  string sender = 1;
-  repeated BlockHeader block_headers = 2;
-}
-
-// MsgSubmitBlockHeadersResponse defines the Msg/SubmitBlockHeaders response type.
-message MsgSubmitBlockHeadersResponse {
 }
 
 // MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type.

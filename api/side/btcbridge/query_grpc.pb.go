@@ -20,9 +20,6 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Query_QueryParams_FullMethodName                        = "/side.btcbridge.Query/QueryParams"
-	Query_QueryChainTip_FullMethodName                      = "/side.btcbridge.Query/QueryChainTip"
-	Query_QueryBlockHeaderByHeight_FullMethodName           = "/side.btcbridge.Query/QueryBlockHeaderByHeight"
-	Query_QueryBlockHeaderByHash_FullMethodName             = "/side.btcbridge.Query/QueryBlockHeaderByHash"
 	Query_QueryFeeRate_FullMethodName                       = "/side.btcbridge.Query/QueryFeeRate"
 	Query_QueryWithdrawalNetworkFee_FullMethodName          = "/side.btcbridge.Query/QueryWithdrawalNetworkFee"
 	Query_QueryWithdrawRequestsByAddress_FullMethodName     = "/side.btcbridge.Query/QueryWithdrawRequestsByAddress"
@@ -46,12 +43,6 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	QueryParams(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// ChainTip queries the chain tip of the module.
-	QueryChainTip(ctx context.Context, in *QueryChainTipRequest, opts ...grpc.CallOption) (*QueryChainTipResponse, error)
-	// BlockHeaderByHeight queries the block header by height.
-	QueryBlockHeaderByHeight(ctx context.Context, in *QueryBlockHeaderByHeightRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHeightResponse, error)
-	// BlockHeaderByHash queries the block header by hash.
-	QueryBlockHeaderByHash(ctx context.Context, in *QueryBlockHeaderByHashRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHashResponse, error)
 	// QueryFeeRate queries the bitcoin network fee rate on the side chain.
 	QueryFeeRate(ctx context.Context, in *QueryFeeRateRequest, opts ...grpc.CallOption) (*QueryFeeRateResponse, error)
 	// QueryWithdrawalNetworkFee queries the estimated btc network fee for the given withdrawal.
@@ -95,33 +86,6 @@ func NewQueryClient(cc grpc.ClientConnInterface) QueryClient {
 func (c *queryClient) QueryParams(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
 	out := new(QueryParamsResponse)
 	err := c.cc.Invoke(ctx, Query_QueryParams_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) QueryChainTip(ctx context.Context, in *QueryChainTipRequest, opts ...grpc.CallOption) (*QueryChainTipResponse, error) {
-	out := new(QueryChainTipResponse)
-	err := c.cc.Invoke(ctx, Query_QueryChainTip_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) QueryBlockHeaderByHeight(ctx context.Context, in *QueryBlockHeaderByHeightRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHeightResponse, error) {
-	out := new(QueryBlockHeaderByHeightResponse)
-	err := c.cc.Invoke(ctx, Query_QueryBlockHeaderByHeight_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) QueryBlockHeaderByHash(ctx context.Context, in *QueryBlockHeaderByHashRequest, opts ...grpc.CallOption) (*QueryBlockHeaderByHashResponse, error) {
-	out := new(QueryBlockHeaderByHashResponse)
-	err := c.cc.Invoke(ctx, Query_QueryBlockHeaderByHash_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -269,12 +233,6 @@ func (c *queryClient) QueryDKGCompletionRequests(ctx context.Context, in *QueryD
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	QueryParams(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// ChainTip queries the chain tip of the module.
-	QueryChainTip(context.Context, *QueryChainTipRequest) (*QueryChainTipResponse, error)
-	// BlockHeaderByHeight queries the block header by height.
-	QueryBlockHeaderByHeight(context.Context, *QueryBlockHeaderByHeightRequest) (*QueryBlockHeaderByHeightResponse, error)
-	// BlockHeaderByHash queries the block header by hash.
-	QueryBlockHeaderByHash(context.Context, *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error)
 	// QueryFeeRate queries the bitcoin network fee rate on the side chain.
 	QueryFeeRate(context.Context, *QueryFeeRateRequest) (*QueryFeeRateResponse, error)
 	// QueryWithdrawalNetworkFee queries the estimated btc network fee for the given withdrawal.
@@ -314,15 +272,6 @@ type UnimplementedQueryServer struct {
 
 func (UnimplementedQueryServer) QueryParams(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryParams not implemented")
-}
-func (UnimplementedQueryServer) QueryChainTip(context.Context, *QueryChainTipRequest) (*QueryChainTipResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryChainTip not implemented")
-}
-func (UnimplementedQueryServer) QueryBlockHeaderByHeight(context.Context, *QueryBlockHeaderByHeightRequest) (*QueryBlockHeaderByHeightResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryBlockHeaderByHeight not implemented")
-}
-func (UnimplementedQueryServer) QueryBlockHeaderByHash(context.Context, *QueryBlockHeaderByHashRequest) (*QueryBlockHeaderByHashResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryBlockHeaderByHash not implemented")
 }
 func (UnimplementedQueryServer) QueryFeeRate(context.Context, *QueryFeeRateRequest) (*QueryFeeRateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryFeeRate not implemented")
@@ -396,60 +345,6 @@ func _Query_QueryParams_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).QueryParams(ctx, req.(*QueryParamsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_QueryChainTip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryChainTipRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).QueryChainTip(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_QueryChainTip_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).QueryChainTip(ctx, req.(*QueryChainTipRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_QueryBlockHeaderByHeight_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryBlockHeaderByHeightRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).QueryBlockHeaderByHeight(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_QueryBlockHeaderByHeight_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).QueryBlockHeaderByHeight(ctx, req.(*QueryBlockHeaderByHeightRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_QueryBlockHeaderByHash_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryBlockHeaderByHashRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).QueryBlockHeaderByHash(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_QueryBlockHeaderByHash_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).QueryBlockHeaderByHash(ctx, req.(*QueryBlockHeaderByHashRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -734,18 +629,6 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryParams",
 			Handler:    _Query_QueryParams_Handler,
-		},
-		{
-			MethodName: "QueryChainTip",
-			Handler:    _Query_QueryChainTip_Handler,
-		},
-		{
-			MethodName: "QueryBlockHeaderByHeight",
-			Handler:    _Query_QueryBlockHeaderByHeight_Handler,
-		},
-		{
-			MethodName: "QueryBlockHeaderByHash",
-			Handler:    _Query_QueryBlockHeaderByHash_Handler,
 		},
 		{
 			MethodName: "QueryFeeRate",
