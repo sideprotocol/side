@@ -2,11 +2,12 @@ package types
 
 // TSS module event types and attribute keys
 const (
-	EventTypeInitiateDKG     = "initiate_dkg"
-	EventTypeCompleteDKG     = "complete_dkg"
-	EventTypeInitiateSigning = "initiate_signing"
-	EventTypeCompleteSigning = "complete_signing"
-	EventTypeRefreshShares   = "refresh_shares"
+	EventTypeInitiateDKG       = "initiate_dkg"
+	EventTypeCompleteDKG       = "complete_dkg"
+	EventTypeInitiateSigning   = "initiate_signing"
+	EventTypeCompleteSigning   = "complete_signing"
+	EventTypeInitiateResharing = "initiate_resharing"
+	EventTypeCompleteResharing = "complete_resharing"
 
 	AttributeKeySender = "sender"
 
@@ -26,6 +27,8 @@ const (
 	AttributeKeyPubKey    = "pub_key"
 	AttributeKeySigHashes = "sig_hashes"
 	AttributeKeyOption    = "option"
+
+	AttributeKeyDKGId = "dkg_id"
 )
 
 const (

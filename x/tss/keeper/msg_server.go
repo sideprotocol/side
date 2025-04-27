@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -75,7 +76,7 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	return &types.MsgSubmitSignaturesResponse{}, nil
 }
 
-// RefreshShares refreshes the key shares
+// RefreshShares refreshes the key shares (a.k.a. reshare)
 func (m msgServer) RefreshShares(goCtx context.Context, msg *types.MsgRefreshShares) (*types.MsgRefreshSharesResponse, error) {
 	if m.authority != msg.Authority {
 		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
@@ -87,14 +88,48 @@ func (m msgServer) RefreshShares(goCtx context.Context, msg *types.MsgRefreshSha
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if !m.HasDKGRequest(ctx, msg.DkgId) {
+		return nil, types.ErrDKGRequestDoesNotExist
+	}
+
+	dkgRequest := m.GetDKGRequest(ctx, msg.DkgId)
+	if dkgRequest.Status != types.DKGStatus_DKG_STATUS_COMPLETED {
+		return nil, errorsmod.Wrap(types.ErrInvalidDKGStatus, "dkg request not completed")
+	}
+
+	dkgCompletion := m.GetDKGCompletions(ctx, msg.DkgId)[0]
+	if !slices.Contains(dkgCompletion.PubKeys, msg.PubKey) {
+		return nil, errorsmod.Wrap(types.ErrInvalidPubKey, "pub key does not match the dkg")
+	}
+
+	m.InitiateResharingRequest(ctx, msg.DkgId, msg.PubKey, msg.Participants)
+
+	return &types.MsgRefreshSharesResponse{}, nil
+}
+
+// CompleteResharing completes the resharing request by the participant
+func (m msgServer) CompleteResharing(goCtx context.Context, msg *types.MsgCompleteResharing) (*types.MsgCompleteResharingResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := m.Keeper.CompleteResharing(ctx, msg.Sender, msg.Id, msg.ConsensusPubkey, msg.Signature); err != nil {
+		return nil, err
+	}
+
+	// Emit events
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.EventTypeCompleteSigning,
-			sdk.NewAttribute(types.AttributeKeyPubKey, msg.PubKey),
+			types.EventTypeCompleteResharing,
+			sdk.NewAttribute(types.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", msg.Id)),
+			sdk.NewAttribute(types.AttributeKeyParticipant, msg.ConsensusPubkey),
 		),
 	)
 
-	return &types.MsgRefreshSharesResponse{}, nil
+	return &types.MsgCompleteResharingResponse{}, nil
 }
 
 // UpdateParams updates the module params

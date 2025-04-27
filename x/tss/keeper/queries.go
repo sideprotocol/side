@@ -80,3 +80,37 @@ func (k Keeper) SigningRequests(goCtx context.Context, req *types.QuerySigningRe
 
 	return &types.QuerySigningRequestsResponse{Requests: k.GetSigningRequests(ctx, req.Status)}, nil
 }
+
+func (k Keeper) ResharingRequest(goCtx context.Context, req *types.QueryResharingRequestRequest) (*types.QueryResharingRequestResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasResharingRequest(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "resharing request does not exist")
+	}
+
+	return &types.QueryResharingRequestResponse{Request: k.GetResharingRequest(ctx, req.Id)}, nil
+}
+
+func (k Keeper) ResharingRequests(goCtx context.Context, req *types.QueryResharingRequestsRequest) (*types.QueryResharingRequestsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryResharingRequestsResponse{Requests: k.GetResharingRequests(ctx, req.Status)}, nil
+}
+
+func (k Keeper) ResharingCompletions(goCtx context.Context, req *types.QueryResharingCompletionsRequest) (*types.QueryResharingCompletionsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryResharingCompletionsResponse{Completions: k.GetResharingCompletions(ctx, req.Id)}, nil
+}

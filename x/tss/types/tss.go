@@ -57,18 +57,26 @@ func VerifySignature(signature string, pubKey string, msg []byte) bool {
 	return ed25519.Verify(pubKeyBytes, msg, sigBytes)
 }
 
-// GetSigMsg gets the msg to be signed from the given data
+// GetDKGCompletionSigMsg gets the msg to be signed from the given data for the DKG completion
 // Assume that the given pub keys are hex encoded
-func GetSigMsg(id uint64, pubKeys []string) []byte {
-	rawMsg := make([]byte, 8)
-	binary.BigEndian.PutUint64(rawMsg, id)
+func GetDKGCompletionSigMsg(id uint64, pubKeys []string) []byte {
+	msg := make([]byte, 8)
+	binary.BigEndian.PutUint64(msg, id)
 
 	for _, pubKey := range pubKeys {
 		pubKeyBytes, _ := hex.DecodeString(pubKey)
-		rawMsg = append(rawMsg, pubKeyBytes...)
+		msg = append(msg, pubKeyBytes...)
 	}
 
-	return hash.Sha256(rawMsg)
+	return hash.Sha256(msg)
+}
+
+// GetResharingCompletionSigMsg gets the msg to be signed from the given data for the resharing completion
+func GetResharingCompletionSigMsg(id uint64) []byte {
+	msg := make([]byte, 8)
+	binary.BigEndian.PutUint64(msg, id)
+
+	return hash.Sha256(msg)
 }
 
 // GetSigningOption gets the signing option according to the given signing type and options

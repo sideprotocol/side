@@ -534,6 +534,302 @@ func (m *QuerySigningRequestsResponse) GetPagination() *query.PageResponse {
 	return nil
 }
 
+type QueryResharingRequestRequest struct {
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *QueryResharingRequestRequest) Reset()         { *m = QueryResharingRequestRequest{} }
+func (m *QueryResharingRequestRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryResharingRequestRequest) ProtoMessage()    {}
+func (*QueryResharingRequestRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86275002d1cd700f, []int{10}
+}
+func (m *QueryResharingRequestRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryResharingRequestRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryResharingRequestRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryResharingRequestRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryResharingRequestRequest.Merge(m, src)
+}
+func (m *QueryResharingRequestRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryResharingRequestRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryResharingRequestRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryResharingRequestRequest proto.InternalMessageInfo
+
+func (m *QueryResharingRequestRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+type QueryResharingRequestResponse struct {
+	Request *ResharingRequest `protobuf:"bytes,1,opt,name=request,proto3" json:"request,omitempty"`
+}
+
+func (m *QueryResharingRequestResponse) Reset()         { *m = QueryResharingRequestResponse{} }
+func (m *QueryResharingRequestResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryResharingRequestResponse) ProtoMessage()    {}
+func (*QueryResharingRequestResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86275002d1cd700f, []int{11}
+}
+func (m *QueryResharingRequestResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryResharingRequestResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryResharingRequestResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryResharingRequestResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryResharingRequestResponse.Merge(m, src)
+}
+func (m *QueryResharingRequestResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryResharingRequestResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryResharingRequestResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryResharingRequestResponse proto.InternalMessageInfo
+
+func (m *QueryResharingRequestResponse) GetRequest() *ResharingRequest {
+	if m != nil {
+		return m.Request
+	}
+	return nil
+}
+
+type QueryResharingRequestsRequest struct {
+	Status     ResharingStatus    `protobuf:"varint,1,opt,name=status,proto3,enum=side.tss.ResharingStatus" json:"status,omitempty"`
+	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryResharingRequestsRequest) Reset()         { *m = QueryResharingRequestsRequest{} }
+func (m *QueryResharingRequestsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryResharingRequestsRequest) ProtoMessage()    {}
+func (*QueryResharingRequestsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86275002d1cd700f, []int{12}
+}
+func (m *QueryResharingRequestsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryResharingRequestsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryResharingRequestsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryResharingRequestsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryResharingRequestsRequest.Merge(m, src)
+}
+func (m *QueryResharingRequestsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryResharingRequestsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryResharingRequestsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryResharingRequestsRequest proto.InternalMessageInfo
+
+func (m *QueryResharingRequestsRequest) GetStatus() ResharingStatus {
+	if m != nil {
+		return m.Status
+	}
+	return ResharingStatus_RESHARING_STATUS_UNSPECIFIED
+}
+
+func (m *QueryResharingRequestsRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+type QueryResharingRequestsResponse struct {
+	Requests   []*ResharingRequest `protobuf:"bytes,1,rep,name=requests,proto3" json:"requests,omitempty"`
+	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryResharingRequestsResponse) Reset()         { *m = QueryResharingRequestsResponse{} }
+func (m *QueryResharingRequestsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryResharingRequestsResponse) ProtoMessage()    {}
+func (*QueryResharingRequestsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86275002d1cd700f, []int{13}
+}
+func (m *QueryResharingRequestsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryResharingRequestsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryResharingRequestsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryResharingRequestsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryResharingRequestsResponse.Merge(m, src)
+}
+func (m *QueryResharingRequestsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryResharingRequestsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryResharingRequestsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryResharingRequestsResponse proto.InternalMessageInfo
+
+func (m *QueryResharingRequestsResponse) GetRequests() []*ResharingRequest {
+	if m != nil {
+		return m.Requests
+	}
+	return nil
+}
+
+func (m *QueryResharingRequestsResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+type QueryResharingCompletionsRequest struct {
+	Id         uint64             `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryResharingCompletionsRequest) Reset()         { *m = QueryResharingCompletionsRequest{} }
+func (m *QueryResharingCompletionsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryResharingCompletionsRequest) ProtoMessage()    {}
+func (*QueryResharingCompletionsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86275002d1cd700f, []int{14}
+}
+func (m *QueryResharingCompletionsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryResharingCompletionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryResharingCompletionsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryResharingCompletionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryResharingCompletionsRequest.Merge(m, src)
+}
+func (m *QueryResharingCompletionsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryResharingCompletionsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryResharingCompletionsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryResharingCompletionsRequest proto.InternalMessageInfo
+
+func (m *QueryResharingCompletionsRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *QueryResharingCompletionsRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+type QueryResharingCompletionsResponse struct {
+	Completions []*ResharingCompletion `protobuf:"bytes,1,rep,name=completions,proto3" json:"completions,omitempty"`
+	Pagination  *query.PageResponse    `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryResharingCompletionsResponse) Reset()         { *m = QueryResharingCompletionsResponse{} }
+func (m *QueryResharingCompletionsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryResharingCompletionsResponse) ProtoMessage()    {}
+func (*QueryResharingCompletionsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86275002d1cd700f, []int{15}
+}
+func (m *QueryResharingCompletionsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryResharingCompletionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryResharingCompletionsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryResharingCompletionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryResharingCompletionsResponse.Merge(m, src)
+}
+func (m *QueryResharingCompletionsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryResharingCompletionsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryResharingCompletionsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryResharingCompletionsResponse proto.InternalMessageInfo
+
+func (m *QueryResharingCompletionsResponse) GetCompletions() []*ResharingCompletion {
+	if m != nil {
+		return m.Completions
+	}
+	return nil
+}
+
+func (m *QueryResharingCompletionsResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
 // QueryParamsRequest is request type for the Query/Params RPC method.
 type QueryParamsRequest struct {
 }
@@ -542,7 +838,7 @@ func (m *QueryParamsRequest) Reset()         { *m = QueryParamsRequest{} }
 func (m *QueryParamsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryParamsRequest) ProtoMessage()    {}
 func (*QueryParamsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86275002d1cd700f, []int{10}
+	return fileDescriptor_86275002d1cd700f, []int{16}
 }
 func (m *QueryParamsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -580,7 +876,7 @@ func (m *QueryParamsResponse) Reset()         { *m = QueryParamsResponse{} }
 func (m *QueryParamsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryParamsResponse) ProtoMessage()    {}
 func (*QueryParamsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86275002d1cd700f, []int{11}
+	return fileDescriptor_86275002d1cd700f, []int{17}
 }
 func (m *QueryParamsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -627,6 +923,12 @@ func init() {
 	proto.RegisterType((*QuerySigningRequestResponse)(nil), "side.tss.QuerySigningRequestResponse")
 	proto.RegisterType((*QuerySigningRequestsRequest)(nil), "side.tss.QuerySigningRequestsRequest")
 	proto.RegisterType((*QuerySigningRequestsResponse)(nil), "side.tss.QuerySigningRequestsResponse")
+	proto.RegisterType((*QueryResharingRequestRequest)(nil), "side.tss.QueryResharingRequestRequest")
+	proto.RegisterType((*QueryResharingRequestResponse)(nil), "side.tss.QueryResharingRequestResponse")
+	proto.RegisterType((*QueryResharingRequestsRequest)(nil), "side.tss.QueryResharingRequestsRequest")
+	proto.RegisterType((*QueryResharingRequestsResponse)(nil), "side.tss.QueryResharingRequestsResponse")
+	proto.RegisterType((*QueryResharingCompletionsRequest)(nil), "side.tss.QueryResharingCompletionsRequest")
+	proto.RegisterType((*QueryResharingCompletionsResponse)(nil), "side.tss.QueryResharingCompletionsResponse")
 	proto.RegisterType((*QueryParamsRequest)(nil), "side.tss.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "side.tss.QueryParamsResponse")
 }
@@ -634,52 +936,63 @@ func init() {
 func init() { proto.RegisterFile("side/tss/query.proto", fileDescriptor_86275002d1cd700f) }
 
 var fileDescriptor_86275002d1cd700f = []byte{
-	// 715 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x3f, 0x6f, 0xd3, 0x4e,
-	0x18, 0xce, 0xa5, 0x6d, 0x7e, 0xfd, 0xbd, 0x95, 0x42, 0x75, 0x0d, 0xad, 0xe5, 0xa6, 0x6e, 0x6a,
-	0xa0, 0x8d, 0x00, 0xd9, 0x34, 0xb0, 0xb0, 0x96, 0x3f, 0x15, 0x62, 0x69, 0xd3, 0x8d, 0x05, 0x39,
-	0xc9, 0xc9, 0x58, 0x24, 0x3e, 0x37, 0x77, 0xa9, 0xa8, 0x10, 0x0b, 0x02, 0x66, 0x24, 0xc4, 0xc8,
-	0xc0, 0xc2, 0xc8, 0xe7, 0xe8, 0x58, 0x89, 0x85, 0x09, 0xa1, 0x96, 0x99, 0xcf, 0x80, 0x72, 0x77,
-	0xb6, 0x63, 0x3b, 0x4e, 0x24, 0x44, 0xa7, 0xb6, 0xef, 0x3d, 0xf7, 0x3e, 0xcf, 0xfb, 0xdc, 0xdb,
-	0x47, 0x86, 0x0a, 0xf3, 0x3a, 0xc4, 0xe6, 0x8c, 0xd9, 0x87, 0x03, 0xd2, 0x3f, 0xb6, 0x82, 0x3e,
-	0xe5, 0x14, 0xcf, 0x0f, 0xab, 0x16, 0x67, 0x4c, 0xaf, 0xb8, 0xd4, 0xa5, 0xa2, 0x68, 0x0f, 0x7f,
-	0x93, 0xe7, 0x7a, 0xd5, 0xa5, 0xd4, 0xed, 0x12, 0xdb, 0x09, 0x3c, 0xdb, 0xf1, 0x7d, 0xca, 0x1d,
-	0xee, 0x51, 0x9f, 0xa9, 0xd3, 0xeb, 0x6d, 0xca, 0x7a, 0x94, 0xd9, 0x2d, 0x87, 0x11, 0xd9, 0xd6,
-	0x3e, 0xda, 0x6e, 0x11, 0xee, 0x6c, 0xdb, 0x81, 0xe3, 0x7a, 0xbe, 0x00, 0x2b, 0xec, 0xe5, 0x88,
-	0x3f, 0x70, 0xfa, 0x4e, 0x2f, 0x6c, 0x81, 0xa3, 0x32, 0x67, 0xaa, 0x66, 0xd6, 0x61, 0x79, 0x7f,
-	0xd8, 0xec, 0xfe, 0xe3, 0xdd, 0x26, 0x39, 0x1c, 0x10, 0xc6, 0xd5, 0x0f, 0x5c, 0x86, 0xa2, 0xd7,
-	0xd1, 0x50, 0x0d, 0xd5, 0x67, 0x9b, 0x45, 0xaf, 0x63, 0x3e, 0x82, 0x95, 0x0c, 0x92, 0x05, 0xd4,
-	0x67, 0x04, 0x5b, 0xf0, 0x5f, 0x5f, 0x96, 0x04, 0x7e, 0xa1, 0x51, 0xb1, 0xc2, 0x59, 0xad, 0x11,
-	0x78, 0x08, 0x32, 0xbf, 0xa0, 0x4c, 0x2f, 0x16, 0xd2, 0x2e, 0x43, 0xa9, 0x47, 0x3b, 0x83, 0x2e,
-	0x11, 0xad, 0xfe, 0x6f, 0xaa, 0xbf, 0xf0, 0x0d, 0x28, 0x31, 0xee, 0xf0, 0x01, 0xd3, 0x8a, 0x35,
-	0x54, 0x2f, 0x37, 0x96, 0x12, 0x14, 0x07, 0xe2, 0xa8, 0xa9, 0x20, 0xf8, 0x21, 0x40, 0x6c, 0x8a,
-	0x36, 0x23, 0x34, 0x6d, 0x5a, 0xd2, 0x41, 0x6b, 0xe8, 0xa0, 0x25, 0x1f, 0x46, 0x39, 0x68, 0xed,
-	0x39, 0x2e, 0x09, 0x55, 0x8e, 0xdc, 0x34, 0x3f, 0x22, 0xd0, 0xb2, 0x42, 0xd5, 0xd4, 0xb7, 0x60,
-	0x5e, 0x0d, 0xc4, 0x34, 0x54, 0x9b, 0xc9, 0x1d, 0x3b, 0x42, 0xe1, 0xdd, 0x84, 0xac, 0xa2, 0x90,
-	0xb5, 0x35, 0x55, 0x96, 0xa4, 0x4b, 0xe8, 0xe2, 0xa0, 0x87, 0xb2, 0xee, 0xd1, 0x5e, 0xd0, 0x25,
-	0x62, 0x53, 0x72, 0x5e, 0x2e, 0xe5, 0x46, 0xf1, 0xaf, 0xdd, 0xf8, 0x8c, 0x60, 0x75, 0x2c, 0xad,
-	0x32, 0xe4, 0x2e, 0x2c, 0xb4, 0xe3, 0xb2, 0xf2, 0x64, 0x25, 0xe1, 0x49, 0x7c, 0xad, 0x39, 0x8a,
-	0xfd, 0x77, 0xce, 0xdc, 0x54, 0xce, 0x1c, 0x78, 0xae, 0xef, 0xf9, 0xee, 0x94, 0x9d, 0xde, 0x57,
-	0x03, 0xa5, 0xd1, 0x6a, 0xa0, 0x46, 0x7a, 0xaf, 0xb5, 0x78, 0x98, 0xd4, 0x95, 0x68, 0xb7, 0xbf,
-	0xa2, 0xb1, 0x3d, 0xa7, 0xee, 0xb7, 0x9d, 0xda, 0xef, 0x95, 0x0c, 0xd5, 0x05, 0xed, 0xf8, 0x27,
-	0x04, 0xd5, 0xf1, 0x82, 0x95, 0x0b, 0x77, 0x32, 0x7b, 0x9e, 0x6f, 0xc3, 0x05, 0xec, 0x7a, 0x05,
-	0xb0, 0x90, 0xb7, 0x27, 0xa2, 0x4c, 0x11, 0x99, 0x0f, 0x60, 0x29, 0x51, 0x8d, 0x92, 0xa8, 0x24,
-	0x23, 0x4f, 0x3d, 0xd8, 0x62, 0xac, 0x54, 0x22, 0x77, 0x66, 0x4f, 0x7e, 0xac, 0x17, 0x9a, 0x0a,
-	0xd5, 0xf8, 0x3d, 0x07, 0x73, 0xa2, 0x0f, 0x7e, 0x0a, 0x25, 0x89, 0xc0, 0xd5, 0xf8, 0x4e, 0x96,
-	0x58, 0x5f, 0xcb, 0x39, 0x95, 0x02, 0x4c, 0xed, 0xf5, 0xb7, 0x5f, 0x1f, 0x8a, 0x18, 0x2f, 0xda,
-	0xa9, 0x0c, 0xc6, 0x47, 0x00, 0x71, 0x28, 0xe0, 0x5a, 0xaa, 0x4d, 0x26, 0x7f, 0xf5, 0x8d, 0x09,
-	0x08, 0x45, 0x76, 0x45, 0x90, 0xad, 0xe1, 0xd5, 0x98, 0xac, 0xf3, 0xdc, 0xb5, 0xc3, 0x37, 0xb0,
-	0x5f, 0x7a, 0x9d, 0x57, 0x98, 0xc3, 0xc2, 0x48, 0x7a, 0xe1, 0xfc, 0xb6, 0xd1, 0x88, 0xe6, 0x24,
-	0x88, 0xa2, 0x36, 0x04, 0xb5, 0x86, 0x97, 0xc7, 0x53, 0xe3, 0xb7, 0x08, 0xca, 0xc9, 0x98, 0xc0,
-	0x57, 0xb3, 0x6d, 0xb3, 0xe1, 0xa5, 0x5f, 0x9b, 0x82, 0x52, 0xfc, 0x9b, 0x82, 0xbf, 0x86, 0x8d,
-	0x24, 0xff, 0x48, 0xa6, 0xc8, 0xe9, 0xdf, 0x21, 0x28, 0x27, 0x77, 0x34, 0xa3, 0x63, 0x6c, 0x54,
-	0x64, 0x74, 0x8c, 0x8f, 0x08, 0x73, 0x4b, 0xe8, 0xd8, 0xc0, 0xeb, 0xb1, 0x0e, 0x26, 0x91, 0xa9,
-	0x67, 0x78, 0x83, 0xe0, 0x52, 0xea, 0x3f, 0x0c, 0x4f, 0xe6, 0x88, 0x2c, 0xd9, 0x9c, 0x06, 0x53,
-	0x5a, 0x4c, 0xa1, 0xa5, 0x8a, 0xf5, 0x7c, 0x2d, 0x3b, 0x3b, 0x27, 0x67, 0x06, 0x3a, 0x3d, 0x33,
-	0xd0, 0xcf, 0x33, 0x03, 0xbd, 0x3f, 0x37, 0x0a, 0xa7, 0xe7, 0x46, 0xe1, 0xfb, 0xb9, 0x51, 0x78,
-	0x52, 0x77, 0x3d, 0xfe, 0x6c, 0xd0, 0xb2, 0xda, 0xb4, 0x27, 0xee, 0x8b, 0xef, 0x83, 0x36, 0xed,
-	0xca, 0x66, 0x2f, 0xe4, 0x77, 0xc3, 0x71, 0x40, 0x58, 0xab, 0x24, 0x8e, 0x6e, 0xff, 0x09, 0x00,
-	0x00, 0xff, 0xff, 0x10, 0x05, 0x63, 0xe6, 0xe7, 0x08, 0x00, 0x00,
+	// 893 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x57, 0x4d, 0x6f, 0xdb, 0x46,
+	0x10, 0xd5, 0xca, 0xae, 0x6a, 0x8f, 0x01, 0xd5, 0x1d, 0xab, 0x36, 0x4b, 0x4b, 0xb4, 0x44, 0xbb,
+	0xb2, 0x6a, 0x1b, 0x64, 0xad, 0x16, 0x05, 0x7a, 0x2a, 0xe0, 0x7e, 0x18, 0x45, 0x2f, 0xb6, 0x8c,
+	0x5e, 0x7a, 0x29, 0x28, 0x89, 0xa0, 0x89, 0x4a, 0xa2, 0xac, 0xa5, 0x8c, 0xba, 0x45, 0x2f, 0x41,
+	0x92, 0x53, 0x10, 0x04, 0x08, 0x72, 0x09, 0xe0, 0x43, 0x2e, 0xb9, 0xc5, 0xbf, 0xc3, 0x47, 0x03,
+	0xb9, 0xe4, 0x14, 0x04, 0x76, 0x7e, 0x48, 0xa0, 0xe5, 0x92, 0x14, 0xbf, 0xc4, 0x20, 0x89, 0x72,
+	0x92, 0xb4, 0xfb, 0x76, 0xde, 0x9b, 0x37, 0xa3, 0x1d, 0x12, 0x0a, 0xd4, 0x6c, 0xeb, 0xaa, 0x4d,
+	0xa9, 0x7a, 0x32, 0xd4, 0x07, 0x67, 0x4a, 0x7f, 0x60, 0xd9, 0x16, 0xce, 0x8d, 0x56, 0x15, 0x9b,
+	0x52, 0xb1, 0x60, 0x58, 0x86, 0xc5, 0x16, 0xd5, 0xd1, 0x37, 0x67, 0x5f, 0x2c, 0x1a, 0x96, 0x65,
+	0x74, 0x74, 0x55, 0xeb, 0x9b, 0xaa, 0xd6, 0xeb, 0x59, 0xb6, 0x66, 0x9b, 0x56, 0x8f, 0xf2, 0xdd,
+	0xad, 0x96, 0x45, 0xbb, 0x16, 0x55, 0x9b, 0x1a, 0xd5, 0x9d, 0xb0, 0xea, 0xe9, 0x6e, 0x53, 0xb7,
+	0xb5, 0x5d, 0xb5, 0xaf, 0x19, 0x66, 0x8f, 0x81, 0x39, 0xf6, 0x0b, 0x8f, 0xbf, 0xaf, 0x0d, 0xb4,
+	0xae, 0x1b, 0x02, 0xbd, 0x65, 0x9b, 0xf2, 0x35, 0xb9, 0x06, 0xcb, 0x87, 0xa3, 0x60, 0x3f, 0xff,
+	0xbe, 0xdf, 0xd0, 0x4f, 0x86, 0x3a, 0xb5, 0xf9, 0x07, 0xe6, 0x21, 0x6b, 0xb6, 0x05, 0x52, 0x26,
+	0xb5, 0xd9, 0x46, 0xd6, 0x6c, 0xcb, 0xbf, 0xc1, 0x4a, 0x04, 0x49, 0xfb, 0x56, 0x8f, 0xea, 0xa8,
+	0xc0, 0xa7, 0x03, 0x67, 0x89, 0xe1, 0x17, 0xea, 0x05, 0xc5, 0xcd, 0x55, 0x19, 0x83, 0xbb, 0x20,
+	0xf9, 0x29, 0x89, 0xc4, 0xa2, 0x2e, 0xed, 0x32, 0xe4, 0xba, 0x56, 0x7b, 0xd8, 0xd1, 0x59, 0xa8,
+	0xf9, 0x06, 0xff, 0x85, 0xdb, 0x90, 0xa3, 0xb6, 0x66, 0x0f, 0xa9, 0x90, 0x2d, 0x93, 0x5a, 0xbe,
+	0xbe, 0x14, 0xa0, 0x38, 0x62, 0x5b, 0x0d, 0x0e, 0xc1, 0x5f, 0x01, 0x7c, 0x53, 0x84, 0x19, 0xa6,
+	0xa9, 0xaa, 0x38, 0x0e, 0x2a, 0x23, 0x07, 0x15, 0xa7, 0x30, 0xdc, 0x41, 0xe5, 0x40, 0x33, 0x74,
+	0x57, 0xe5, 0xd8, 0x49, 0xf9, 0x11, 0x01, 0x21, 0x2a, 0x94, 0x67, 0xfd, 0x0d, 0xcc, 0xf1, 0x84,
+	0xa8, 0x40, 0xca, 0x33, 0x89, 0x69, 0x7b, 0x28, 0xdc, 0x0f, 0xc8, 0xca, 0x32, 0x59, 0x9b, 0xa9,
+	0xb2, 0x1c, 0xba, 0x80, 0x2e, 0x1b, 0x44, 0x57, 0xd6, 0x4f, 0x56, 0xb7, 0xdf, 0xd1, 0x59, 0xa7,
+	0x24, 0x54, 0x2e, 0xe4, 0x46, 0xf6, 0x9d, 0xdd, 0x78, 0x42, 0x60, 0x35, 0x96, 0x96, 0x1b, 0xf2,
+	0x03, 0x2c, 0xb4, 0xfc, 0x65, 0xee, 0xc9, 0x4a, 0xc0, 0x13, 0xff, 0x58, 0x63, 0x1c, 0xfb, 0xe1,
+	0x9c, 0xd9, 0xe1, 0xce, 0x1c, 0x99, 0x46, 0xcf, 0xec, 0x19, 0x29, 0x3d, 0x7d, 0xc8, 0x13, 0x0a,
+	0xa3, 0x79, 0x42, 0xf5, 0x70, 0x5f, 0x0b, 0x7e, 0x32, 0xa1, 0x23, 0x5e, 0x6f, 0x5f, 0x90, 0xd8,
+	0x98, 0xa9, 0xfd, 0xad, 0x86, 0xfa, 0x7b, 0x25, 0x42, 0x35, 0xa5, 0x1e, 0x3f, 0x27, 0x50, 0x8c,
+	0x17, 0xcc, 0x5d, 0xf8, 0x2e, 0xd2, 0xe7, 0xc9, 0x36, 0x4c, 0xa1, 0xd7, 0x15, 0x2e, 0xaf, 0xa1,
+	0xd3, 0x63, 0x6d, 0x90, 0x5e, 0xd3, 0x3f, 0xa0, 0x94, 0x80, 0xf7, 0xf2, 0x09, 0x55, 0x55, 0xf4,
+	0xd3, 0x89, 0x1c, 0xf2, 0xea, 0xfa, 0x98, 0x24, 0xc4, 0xf5, 0x2a, 0xbb, 0xeb, 0x55, 0x90, 0xb0,
+	0x0a, 0x7e, 0x19, 0x13, 0x76, 0x62, 0x0d, 0xdf, 0xeb, 0x9f, 0x29, 0x25, 0x89, 0xe3, 0x59, 0x7f,
+	0x1f, 0xa9, 0xe2, 0xa4, 0xb4, 0xa7, 0x50, 0xc7, 0x7f, 0xa1, 0x1c, 0x94, 0xf8, 0x11, 0x6f, 0xae,
+	0x67, 0x04, 0x2a, 0x13, 0xc8, 0xb9, 0x45, 0x3f, 0xc6, 0xdd, 0x5f, 0xa5, 0x18, 0x97, 0xa6, 0x7e,
+	0x8b, 0x15, 0x00, 0x99, 0xdc, 0x03, 0x36, 0xbe, 0x79, 0x46, 0xf2, 0x2f, 0xb0, 0x14, 0x58, 0xf5,
+	0xa6, 0x6f, 0xce, 0x19, 0xf3, 0xbc, 0x9d, 0x17, 0x7d, 0xc5, 0x0e, 0x72, 0x6f, 0xf6, 0xf2, 0xe5,
+	0x5a, 0xa6, 0xc1, 0x51, 0xf5, 0x8b, 0x79, 0xf8, 0x84, 0xc5, 0xc1, 0xbf, 0x20, 0xe7, 0x20, 0xb0,
+	0xe8, 0x9f, 0x89, 0x12, 0x8b, 0xa5, 0x84, 0x5d, 0x47, 0x80, 0x2c, 0xdc, 0x7a, 0xfe, 0xfa, 0x61,
+	0x16, 0x71, 0x51, 0x0d, 0x3d, 0x77, 0xe0, 0x29, 0x80, 0x3f, 0x08, 0xb1, 0x1c, 0x0a, 0x13, 0x79,
+	0xe6, 0x10, 0x2b, 0x13, 0x10, 0x9c, 0x6c, 0x9d, 0x91, 0x95, 0x70, 0xd5, 0x27, 0x6b, 0xff, 0x6d,
+	0xa8, 0x6e, 0xbf, 0xaa, 0xff, 0x99, 0xed, 0xff, 0xd1, 0x86, 0x85, 0xb1, 0x89, 0x8d, 0xc9, 0x61,
+	0xbd, 0x14, 0xe5, 0x49, 0x10, 0x4e, 0x2d, 0x31, 0x6a, 0x01, 0x97, 0xe3, 0xa9, 0xf1, 0x0e, 0x81,
+	0x7c, 0x70, 0x34, 0xe2, 0x46, 0x34, 0x6c, 0xb4, 0xed, 0xc5, 0xaf, 0x52, 0x50, 0x9c, 0xbf, 0xca,
+	0xf8, 0xcb, 0x28, 0x05, 0xf9, 0xc7, 0x3a, 0xd0, 0xc9, 0xfe, 0x2e, 0x81, 0x7c, 0xf0, 0x5e, 0x8e,
+	0xe8, 0x88, 0x1d, 0x8f, 0x11, 0x1d, 0xf1, 0x63, 0x51, 0xde, 0x64, 0x3a, 0x2a, 0xb8, 0xe6, 0xeb,
+	0xa0, 0x0e, 0x32, 0x54, 0x86, 0xdb, 0x04, 0x3e, 0x0b, 0x4d, 0x15, 0x9c, 0xcc, 0xe1, 0x59, 0x52,
+	0x4d, 0x83, 0x71, 0x2d, 0x32, 0xd3, 0x52, 0x44, 0x31, 0x59, 0x0b, 0xde, 0x27, 0xb0, 0x18, 0xbe,
+	0xe1, 0x30, 0x4c, 0x90, 0x30, 0x5e, 0xc4, 0xcd, 0x54, 0x1c, 0x57, 0xf2, 0x35, 0x53, 0xb2, 0x8e,
+	0x15, 0x5f, 0xc9, 0xc0, 0xc5, 0x86, 0x7c, 0xb9, 0x47, 0xe0, 0xf3, 0xc8, 0x4d, 0x8d, 0x69, 0x4c,
+	0x9e, 0x37, 0xb5, 0x74, 0x20, 0xd7, 0xb4, 0xc1, 0x34, 0x49, 0x58, 0x9c, 0xa4, 0x09, 0xcf, 0x09,
+	0x14, 0xe2, 0x2e, 0x46, 0xdc, 0x4a, 0x22, 0x8a, 0xe9, 0xe1, 0xed, 0xb7, 0xc2, 0x72, 0x5d, 0x3b,
+	0x4c, 0x57, 0x15, 0x37, 0xe2, 0x74, 0x85, 0xfb, 0x79, 0x6f, 0xef, 0xf2, 0x5a, 0x22, 0x57, 0xd7,
+	0x12, 0x79, 0x75, 0x2d, 0x91, 0x07, 0x37, 0x52, 0xe6, 0xea, 0x46, 0xca, 0xbc, 0xb8, 0x91, 0x32,
+	0x7f, 0xd6, 0x0c, 0xd3, 0x3e, 0x1e, 0x36, 0x95, 0x96, 0xd5, 0x65, 0x91, 0xd8, 0x3b, 0x4d, 0xcb,
+	0xea, 0x38, 0x61, 0xff, 0x71, 0xde, 0x75, 0xce, 0xfa, 0x3a, 0x6d, 0xe6, 0xd8, 0xd6, 0xb7, 0x6f,
+	0x02, 0x00, 0x00, 0xff, 0xff, 0xc0, 0xa8, 0xbb, 0x02, 0x9b, 0x0d, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -706,6 +1019,12 @@ type QueryClient interface {
 	SigningRequest(ctx context.Context, in *QuerySigningRequestRequest, opts ...grpc.CallOption) (*QuerySigningRequestResponse, error)
 	// SigningRequests queries the signing requests by the given params.
 	SigningRequests(ctx context.Context, in *QuerySigningRequestsRequest, opts ...grpc.CallOption) (*QuerySigningRequestsResponse, error)
+	// ResharingRequest queries the resharing request by the given id.
+	ResharingRequest(ctx context.Context, in *QueryResharingRequestRequest, opts ...grpc.CallOption) (*QueryResharingRequestResponse, error)
+	// ResharingRequests queries the resharing requests by the given status.
+	ResharingRequests(ctx context.Context, in *QueryResharingRequestsRequest, opts ...grpc.CallOption) (*QueryResharingRequestsResponse, error)
+	// ResharingCompletions queries resharing completions by the given request id.
+	ResharingCompletions(ctx context.Context, in *QueryResharingCompletionsRequest, opts ...grpc.CallOption) (*QueryResharingCompletionsResponse, error)
 }
 
 type queryClient struct {
@@ -770,6 +1089,33 @@ func (c *queryClient) SigningRequests(ctx context.Context, in *QuerySigningReque
 	return out, nil
 }
 
+func (c *queryClient) ResharingRequest(ctx context.Context, in *QueryResharingRequestRequest, opts ...grpc.CallOption) (*QueryResharingRequestResponse, error) {
+	out := new(QueryResharingRequestResponse)
+	err := c.cc.Invoke(ctx, "/side.tss.Query/ResharingRequest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ResharingRequests(ctx context.Context, in *QueryResharingRequestsRequest, opts ...grpc.CallOption) (*QueryResharingRequestsResponse, error) {
+	out := new(QueryResharingRequestsResponse)
+	err := c.cc.Invoke(ctx, "/side.tss.Query/ResharingRequests", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ResharingCompletions(ctx context.Context, in *QueryResharingCompletionsRequest, opts ...grpc.CallOption) (*QueryResharingCompletionsResponse, error) {
+	out := new(QueryResharingCompletionsResponse)
+	err := c.cc.Invoke(ctx, "/side.tss.Query/ResharingCompletions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Params queries the parameters of the module.
@@ -784,6 +1130,12 @@ type QueryServer interface {
 	SigningRequest(context.Context, *QuerySigningRequestRequest) (*QuerySigningRequestResponse, error)
 	// SigningRequests queries the signing requests by the given params.
 	SigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error)
+	// ResharingRequest queries the resharing request by the given id.
+	ResharingRequest(context.Context, *QueryResharingRequestRequest) (*QueryResharingRequestResponse, error)
+	// ResharingRequests queries the resharing requests by the given status.
+	ResharingRequests(context.Context, *QueryResharingRequestsRequest) (*QueryResharingRequestsResponse, error)
+	// ResharingCompletions queries resharing completions by the given request id.
+	ResharingCompletions(context.Context, *QueryResharingCompletionsRequest) (*QueryResharingCompletionsResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -807,6 +1159,15 @@ func (*UnimplementedQueryServer) SigningRequest(ctx context.Context, req *QueryS
 }
 func (*UnimplementedQueryServer) SigningRequests(ctx context.Context, req *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SigningRequests not implemented")
+}
+func (*UnimplementedQueryServer) ResharingRequest(ctx context.Context, req *QueryResharingRequestRequest) (*QueryResharingRequestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResharingRequest not implemented")
+}
+func (*UnimplementedQueryServer) ResharingRequests(ctx context.Context, req *QueryResharingRequestsRequest) (*QueryResharingRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResharingRequests not implemented")
+}
+func (*UnimplementedQueryServer) ResharingCompletions(ctx context.Context, req *QueryResharingCompletionsRequest) (*QueryResharingCompletionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResharingCompletions not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -921,6 +1282,60 @@ func _Query_SigningRequests_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ResharingRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryResharingRequestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ResharingRequest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.tss.Query/ResharingRequest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ResharingRequest(ctx, req.(*QueryResharingRequestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ResharingRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryResharingRequestsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ResharingRequests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.tss.Query/ResharingRequests",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ResharingRequests(ctx, req.(*QueryResharingRequestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ResharingCompletions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryResharingCompletionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ResharingCompletions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/side.tss.Query/ResharingCompletions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ResharingCompletions(ctx, req.(*QueryResharingCompletionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "side.tss.Query",
@@ -949,6 +1364,18 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SigningRequests",
 			Handler:    _Query_SigningRequests_Handler,
+		},
+		{
+			MethodName: "ResharingRequest",
+			Handler:    _Query_ResharingRequest_Handler,
+		},
+		{
+			MethodName: "ResharingRequests",
+			Handler:    _Query_ResharingRequests_Handler,
+		},
+		{
+			MethodName: "ResharingCompletions",
+			Handler:    _Query_ResharingCompletions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1362,6 +1789,247 @@ func (m *QuerySigningRequestsResponse) MarshalToSizedBuffer(dAtA []byte) (int, e
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryResharingRequestRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryResharingRequestRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryResharingRequestRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryResharingRequestResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryResharingRequestResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryResharingRequestResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Request != nil {
+		{
+			size, err := m.Request.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryResharingRequestsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryResharingRequestsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryResharingRequestsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Status != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Status))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryResharingRequestsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryResharingRequestsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryResharingRequestsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Requests) > 0 {
+		for iNdEx := len(m.Requests) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Requests[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryResharingCompletionsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryResharingCompletionsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryResharingCompletionsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryResharingCompletionsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryResharingCompletionsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryResharingCompletionsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Completions) > 0 {
+		for iNdEx := len(m.Completions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Completions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *QueryParamsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1581,6 +2249,101 @@ func (m *QuerySigningRequestsResponse) Size() (n int) {
 	_ = l
 	if len(m.Requests) > 0 {
 		for _, e := range m.Requests {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryResharingRequestRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovQuery(uint64(m.Id))
+	}
+	return n
+}
+
+func (m *QueryResharingRequestResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Request != nil {
+		l = m.Request.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryResharingRequestsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Status != 0 {
+		n += 1 + sovQuery(uint64(m.Status))
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryResharingRequestsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Requests) > 0 {
+		for _, e := range m.Requests {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryResharingCompletionsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovQuery(uint64(m.Id))
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryResharingCompletionsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Completions) > 0 {
+		for _, e := range m.Completions {
 			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
@@ -2607,6 +3370,611 @@ func (m *QuerySigningRequestsResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Requests = append(m.Requests, &SigningRequest{})
 			if err := m.Requests[len(m.Requests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryResharingRequestRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryResharingRequestRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryResharingRequestRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryResharingRequestResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryResharingRequestResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryResharingRequestResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Request", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Request == nil {
+				m.Request = &ResharingRequest{}
+			}
+			if err := m.Request.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryResharingRequestsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryResharingRequestsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryResharingRequestsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= ResharingStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryResharingRequestsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryResharingRequestsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryResharingRequestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requests", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Requests = append(m.Requests, &ResharingRequest{})
+			if err := m.Requests[len(m.Requests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryResharingCompletionsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryResharingCompletionsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryResharingCompletionsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryResharingCompletionsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryResharingCompletionsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryResharingCompletionsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Completions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Completions = append(m.Completions, &ResharingCompletion{})
+			if err := m.Completions[len(m.Completions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

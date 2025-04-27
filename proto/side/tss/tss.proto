@@ -29,7 +29,7 @@ message DKGRequest {
   // dkg type
   string type = 3;
   // dkg intent
-  int32 intent = 4; 
+  int32 intent = 4;
   // participant set
   repeated string participants = 5;
   // threshold required to perform DKG
@@ -108,4 +108,44 @@ message SigningRequest {
   google.protobuf.Timestamp creation_time = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   // status
   SigningStatus status = 10;
+}
+
+// Resharing Status
+enum ResharingStatus {
+  // RESHARING_STATUS_UNSPECIFIED defines the unknown resharing status
+  RESHARING_STATUS_UNSPECIFIED = 0;
+  // RESHARING_STATUS_PENDING defines the status of the resharing request which is pending
+  RESHARING_STATUS_PENDING = 1;
+  // RESHARING_STATUS_COMPLETED defines the status of the resharing request which is completed
+  RESHARING_STATUS_COMPLETED = 2;
+  // RESHARING_STATUS_TIMEDOUT defines the status of the resharing request which timed out
+  RESHARING_STATUS_TIMEDOUT = 3;
+}
+
+// Resharing Request
+message ResharingRequest {
+  // request id
+  uint64 id = 1;
+  // dkg request id
+  uint64 dkg_id = 2;
+  // pub key corresponding to shares to be refreshed
+  string pub_key = 3;
+  // participant set
+  repeated string participants = 4;
+  // expiration time
+  google.protobuf.Timestamp expiration_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // status
+  ResharingStatus status = 6;
+}
+
+// Resharing Completion
+message ResharingCompletion {
+  // request id
+  uint64 id = 1;
+  // sender
+  string sender = 2;
+  // participant consensus pub key
+  string consensus_pubkey = 3;
+  // hex encoded participant signature
+  string signature = 4;
 }

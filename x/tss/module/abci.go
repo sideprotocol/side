@@ -10,6 +10,7 @@ import (
 // EndBlocker called at the end of every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handleDKGRequests(ctx, k)
+	handleResharingRequests(ctx, k)
 }
 
 // handleDKGRequests performs the DKG request handling
@@ -51,5 +52,31 @@ func handleDKGRequests(ctx sdk.Context, k keeper.Keeper) {
 		// update status
 		req.Status = types.DKGStatus_DKG_STATUS_COMPLETED
 		k.SetDKGRequest(ctx, req)
+	}
+}
+
+// handleResharingRequests performs the resharing request handling
+func handleResharingRequests(ctx sdk.Context, k keeper.Keeper) {
+	// get pending resharing requests
+	requests := k.GetPendingResharingRequests(ctx)
+
+	for _, req := range requests {
+		// check if the resharing request expired
+		if !ctx.BlockTime().Before(req.ExpirationTime) {
+			req.Status = types.ResharingStatus_RESHARING_STATUS_TIMEDOUT
+			k.SetResharingRequest(ctx, req)
+
+			continue
+		}
+
+		// get resharing completions
+		completions := k.GetResharingCompletions(ctx, req.Id)
+		if len(completions) != len(req.Participants) {
+			continue
+		}
+
+		// update status
+		req.Status = types.ResharingStatus_RESHARING_STATUS_COMPLETED
+		k.SetResharingRequest(ctx, req)
 	}
 }

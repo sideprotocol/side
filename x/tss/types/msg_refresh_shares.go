@@ -1,11 +1,13 @@
 package types
 
 import (
+	"encoding/base64"
 	"encoding/hex"
 
 	"github.com/decred/dcrd/dcrec/secp256k1/v4/schnorr"
 
 	errorsmod "cosmossdk.io/errors"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -24,6 +26,24 @@ func (m *MsgRefreshShares) ValidateBasic() error {
 
 	if _, err := schnorr.ParsePubKey(pubKey); err != nil {
 		return ErrInvalidPubKey
+	}
+
+	if len(m.Participants) == 0 {
+		return errorsmod.Wrap(ErrInvalidParticipants, "participants can not be empty")
+	}
+
+	participants := make(map[string]bool)
+
+	for _, p := range m.Participants {
+		if pubKey, err := base64.StdEncoding.DecodeString(p); err != nil || len(pubKey) != ed25519.PubKeySize {
+			return errorsmod.Wrap(err, "invalid participant public key")
+		}
+
+		if participants[p] {
+			return errorsmod.Wrap(ErrInvalidParticipants, "duplicate participant")
+		}
+
+		participants[p] = true
 	}
 
 	return nil

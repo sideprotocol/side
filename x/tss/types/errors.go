@@ -23,5 +23,11 @@ var (
 	ErrSigningRequestDoesNotExist = errorsmod.Register(ModuleName, 3000, "signing request does not exist")
 	ErrInvalidSigningStatus       = errorsmod.Register(ModuleName, 3001, "invalid signing status")
 
-	ErrInvalidParams = errorsmod.Register(ModuleName, 4000, "invalid params")
+	ErrInvalidParticipants              = errorsmod.Register(ModuleName, 4000, "invalid participants")
+	ErrResharingRequestDoesNotExist     = errorsmod.Register(ModuleName, 4001, "resharing request does not exist")
+	ErrInvalidResharingStatus           = errorsmod.Register(ModuleName, 4002, "invalid resharing status")
+	ErrResharingRequestExpired          = errorsmod.Register(ModuleName, 4003, "resharing request expired")
+	ErrResharingCompletionAlreadyExists = errorsmod.Register(ModuleName, 4004, "resharing completion already exists")
+
+	ErrInvalidParams = errorsmod.Register(ModuleName, 5000, "invalid params")
 )

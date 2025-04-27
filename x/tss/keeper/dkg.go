@@ -221,7 +221,7 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, sender string, id uint64, pubKeys [
 		return errorsmod.Wrap(types.ErrInvalidDKGCompletion, "mismatched public key count")
 	}
 
-	if !types.VerifySignature(signature, consensusPubKey, types.GetSigMsg(id, pubKeys)) {
+	if !types.VerifySignature(signature, consensusPubKey, types.GetDKGCompletionSigMsg(id, pubKeys)) {
 		return types.ErrInvalidSignature
 	}
 

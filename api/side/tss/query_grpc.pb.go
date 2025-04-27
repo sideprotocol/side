@@ -19,12 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName          = "/side.tss.Query/Params"
-	Query_DKGRequest_FullMethodName      = "/side.tss.Query/DKGRequest"
-	Query_DKGRequests_FullMethodName     = "/side.tss.Query/DKGRequests"
-	Query_DKGCompletions_FullMethodName  = "/side.tss.Query/DKGCompletions"
-	Query_SigningRequest_FullMethodName  = "/side.tss.Query/SigningRequest"
-	Query_SigningRequests_FullMethodName = "/side.tss.Query/SigningRequests"
+	Query_Params_FullMethodName               = "/side.tss.Query/Params"
+	Query_DKGRequest_FullMethodName           = "/side.tss.Query/DKGRequest"
+	Query_DKGRequests_FullMethodName          = "/side.tss.Query/DKGRequests"
+	Query_DKGCompletions_FullMethodName       = "/side.tss.Query/DKGCompletions"
+	Query_SigningRequest_FullMethodName       = "/side.tss.Query/SigningRequest"
+	Query_SigningRequests_FullMethodName      = "/side.tss.Query/SigningRequests"
+	Query_ResharingRequest_FullMethodName     = "/side.tss.Query/ResharingRequest"
+	Query_ResharingRequests_FullMethodName    = "/side.tss.Query/ResharingRequests"
+	Query_ResharingCompletions_FullMethodName = "/side.tss.Query/ResharingCompletions"
 )
 
 // QueryClient is the client API for Query service.
@@ -43,6 +46,12 @@ type QueryClient interface {
 	SigningRequest(ctx context.Context, in *QuerySigningRequestRequest, opts ...grpc.CallOption) (*QuerySigningRequestResponse, error)
 	// SigningRequests queries the signing requests by the given params.
 	SigningRequests(ctx context.Context, in *QuerySigningRequestsRequest, opts ...grpc.CallOption) (*QuerySigningRequestsResponse, error)
+	// ResharingRequest queries the resharing request by the given id.
+	ResharingRequest(ctx context.Context, in *QueryResharingRequestRequest, opts ...grpc.CallOption) (*QueryResharingRequestResponse, error)
+	// ResharingRequests queries the resharing requests by the given status.
+	ResharingRequests(ctx context.Context, in *QueryResharingRequestsRequest, opts ...grpc.CallOption) (*QueryResharingRequestsResponse, error)
+	// ResharingCompletions queries resharing completions by the given request id.
+	ResharingCompletions(ctx context.Context, in *QueryResharingCompletionsRequest, opts ...grpc.CallOption) (*QueryResharingCompletionsResponse, error)
 }
 
 type queryClient struct {
@@ -107,6 +116,33 @@ func (c *queryClient) SigningRequests(ctx context.Context, in *QuerySigningReque
 	return out, nil
 }
 
+func (c *queryClient) ResharingRequest(ctx context.Context, in *QueryResharingRequestRequest, opts ...grpc.CallOption) (*QueryResharingRequestResponse, error) {
+	out := new(QueryResharingRequestResponse)
+	err := c.cc.Invoke(ctx, Query_ResharingRequest_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ResharingRequests(ctx context.Context, in *QueryResharingRequestsRequest, opts ...grpc.CallOption) (*QueryResharingRequestsResponse, error) {
+	out := new(QueryResharingRequestsResponse)
+	err := c.cc.Invoke(ctx, Query_ResharingRequests_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ResharingCompletions(ctx context.Context, in *QueryResharingCompletionsRequest, opts ...grpc.CallOption) (*QueryResharingCompletionsResponse, error) {
+	out := new(QueryResharingCompletionsResponse)
+	err := c.cc.Invoke(ctx, Query_ResharingCompletions_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -123,6 +159,12 @@ type QueryServer interface {
 	SigningRequest(context.Context, *QuerySigningRequestRequest) (*QuerySigningRequestResponse, error)
 	// SigningRequests queries the signing requests by the given params.
 	SigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error)
+	// ResharingRequest queries the resharing request by the given id.
+	ResharingRequest(context.Context, *QueryResharingRequestRequest) (*QueryResharingRequestResponse, error)
+	// ResharingRequests queries the resharing requests by the given status.
+	ResharingRequests(context.Context, *QueryResharingRequestsRequest) (*QueryResharingRequestsResponse, error)
+	// ResharingCompletions queries resharing completions by the given request id.
+	ResharingCompletions(context.Context, *QueryResharingCompletionsRequest) (*QueryResharingCompletionsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -147,6 +189,15 @@ func (UnimplementedQueryServer) SigningRequest(context.Context, *QuerySigningReq
 }
 func (UnimplementedQueryServer) SigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SigningRequests not implemented")
+}
+func (UnimplementedQueryServer) ResharingRequest(context.Context, *QueryResharingRequestRequest) (*QueryResharingRequestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResharingRequest not implemented")
+}
+func (UnimplementedQueryServer) ResharingRequests(context.Context, *QueryResharingRequestsRequest) (*QueryResharingRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResharingRequests not implemented")
+}
+func (UnimplementedQueryServer) ResharingCompletions(context.Context, *QueryResharingCompletionsRequest) (*QueryResharingCompletionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResharingCompletions not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -269,6 +320,60 @@ func _Query_SigningRequests_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ResharingRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryResharingRequestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ResharingRequest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ResharingRequest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ResharingRequest(ctx, req.(*QueryResharingRequestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ResharingRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryResharingRequestsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ResharingRequests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ResharingRequests_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ResharingRequests(ctx, req.(*QueryResharingRequestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ResharingCompletions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryResharingCompletionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ResharingCompletions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ResharingCompletions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ResharingCompletions(ctx, req.(*QueryResharingCompletionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -299,6 +404,18 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SigningRequests",
 			Handler:    _Query_SigningRequests_Handler,
+		},
+		{
+			MethodName: "ResharingRequest",
+			Handler:    _Query_ResharingRequest_Handler,
+		},
+		{
+			MethodName: "ResharingRequests",
+			Handler:    _Query_ResharingRequests_Handler,
+		},
+		{
+			MethodName: "ResharingCompletions",
+			Handler:    _Query_ResharingCompletions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
