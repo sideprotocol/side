@@ -31,6 +31,9 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryDKGCompletions())
 	cmd.AddCommand(CmdQuerySigningRequest())
 	cmd.AddCommand(CmdQuerySigningRequests())
+	cmd.AddCommand(CmdQueryResharingRequest())
+	cmd.AddCommand(CmdQueryResharingRequests())
+	cmd.AddCommand(CmdQueryResharingCompletions())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -210,6 +213,102 @@ func CmdQuerySigningRequests() *cobra.Command {
 			}
 
 			res, err := queryClient.SigningRequests(cmd.Context(), &types.QuerySigningRequestsRequest{Status: types.SigningStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryResharingRequest() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "resharing-request [id]",
+		Short: "Query the resharing request by the given id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ResharingRequest(cmd.Context(), &types.QueryResharingRequestRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryResharingRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "resharing-requests [status]",
+		Short: "Query resharing requests by the given status",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			status, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ResharingRequests(cmd.Context(), &types.QueryResharingRequestsRequest{Status: types.ResharingStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryResharingCompletions() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "resharing-completions [id]",
+		Short: "Query resharing completions by the given resharing request id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ResharingCompletions(cmd.Context(), &types.QueryResharingCompletionsRequest{Id: id})
 			if err != nil {
 				return err
 			}

@@ -34,6 +34,7 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdCompleteDKG())
 	cmd.AddCommand(CmdSubmitSignatures())
+	cmd.AddCommand(CmdCompleteResharing())
 
 	return cmd
 }
@@ -96,6 +97,43 @@ func CmdSubmitSignatures() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				id,
 				strings.Split(args[1], listSeparator),
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// Complete resharing
+func CmdCompleteResharing() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "complete-resharing [id] [consensus pub key] [signature]",
+		Short: "Complete resharing with the corresponding signature",
+		Args:  cobra.ExactArgs(3),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgCompleteResharing(
+				clientCtx.GetFromAddress().String(),
+				id,
+				args[1],
+				args[2],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {
