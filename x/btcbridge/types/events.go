@@ -2,8 +2,8 @@ package types
 
 // BtcBridge module event types and attribute keys
 const (
-	EventTypeInitiateDKG     = "initiate_dkg"
-	EventTypeInitiateSigning = "initiate_signing"
+	EventTypeInitiateDKG     = "initiate_dkg_bridge"
+	EventTypeInitiateSigning = "initiate_signing_bridge"
 
 	AttributeKeyId = "id"
 
