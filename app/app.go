@@ -381,8 +381,7 @@ func New(
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey, tsstypes.StoreKey,
 		btcbridgetypes.StoreKey, liquidationtypes.StoreKey,
 		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
-		ibcfeetypes.StoreKey, wasmtypes.StoreKey,
-		btcbridgetypes.StoreKey, incentivetypes.StoreKey,
+		incentivetypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 
