@@ -6,7 +6,6 @@ import (
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
-	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -66,29 +65,29 @@ func (k Keeper) HandleNonce(ctx sdk.Context, oraclePubKey string, nonce string, 
 		}
 
 		priceInterval := priceIntervals[pricePairIndex]
+		pair := priceInterval.PricePair
 
-		if k.GetTriggeredPriceEventQueueCount(ctx) > 0 {
-			triggeredPriceEvent := k.GetTriggeredPriceEventFromQueue(ctx)
+		if k.GetTriggeredPriceEventQueueCount(ctx, pair) > 0 {
+			triggeredPriceEvent := k.GetTriggeredPriceEventFromQueue(ctx, pair)
 
 			dlcEvent.Description = triggeredPriceEvent.Description
 			dlcEvent.Outcomes = triggeredPriceEvent.Outcomes
 
-			triggerPrice, _ := sdkmath.NewIntFromString(triggeredPriceEvent.Outcomes[triggeredPriceEvent.OutcomeIndex])
-			k.SetEventByPrice(ctx, triggerPrice, dlcEvent)
+			triggerPrice := types.GetPriceFromOutcome(triggeredPriceEvent.Outcomes[triggeredPriceEvent.OutcomeIndex])
+			k.SetEventByPrice(ctx, pair, triggerPrice, dlcEvent)
 
 			break
 		}
 
-		pair := priceInterval.PricePair
 		currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
 
-		triggerPrice := sdkmath.NewInt(currentEventPrice + int64(priceInterval.Interval))
+		triggerPrice := currentEventPrice.Add(priceInterval.Interval)
 
 		dlcEvent.Description = fmt.Sprintf("price event at price %s for pair %s", triggerPrice.String(), pair)
-		dlcEvent.Outcomes = append(dlcEvent.Outcomes, triggerPrice.String())
+		dlcEvent.Outcomes = append(dlcEvent.Outcomes, types.FormatPrice(triggerPrice.String(), pair))
 
-		k.SetEventByPrice(ctx, triggerPrice, dlcEvent)
-		k.SetCurrentEventPrice(ctx, pair, triggerPrice)
+		k.SetEventByPrice(ctx, pair, triggerPrice.String(), dlcEvent)
+		k.SetCurrentEventPrice(ctx, pair, triggerPrice.String())
 
 	case types.DlcEventType_DATE:
 		currentEventDate := k.GetCurrentEventDate(ctx)

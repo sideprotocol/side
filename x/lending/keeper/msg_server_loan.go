@@ -266,12 +266,12 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	liquidationPrice := types.GetLiquidationPrice(collateralAmount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold)
-	if !m.dlcKeeper.HasEventByPrice(ctx, liquidationPrice) {
+	if !m.dlcKeeper.HasEventByPrice(ctx, "BTCUSD", liquidationPrice.String()) {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 		return nil, nil
 	}
 
-	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
+	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, "BTCUSD", liquidationPrice.String())
 	if liquidationEvent.HasTriggered {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event has triggered")
 		return nil, nil

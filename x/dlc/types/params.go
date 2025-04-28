@@ -5,6 +5,7 @@ import (
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 	BTCUSDPricePair = "BTCUSD"
 
 	// default price interval for BTCUSD
-	DefaultBTCUSDPriceInterval = int32(100)
+	DefaultBTCUSDPriceInterval = sdkmath.LegacyNewDec(100)
 
 	// default nonce queue size for date events
 	DefaultDateEventNonceQueueSize = uint32(180)
@@ -49,7 +50,7 @@ func NewParams() Params {
 		PriceIntervals: []PriceInterval{
 			{
 				PricePair: BTCUSDPricePair,
-				Interval:  int32(DefaultBTCUSDPriceInterval),
+				Interval:  DefaultBTCUSDPriceInterval,
 			},
 		},
 		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
@@ -115,7 +116,7 @@ func validatePriceInterval(priceInterval PriceInterval) error {
 		return errorsmod.Wrap(ErrInvalidParams, "price pair must be in uppercase")
 	}
 
-	if priceInterval.Interval <= 0 {
+	if !priceInterval.Interval.IsPositive() {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid price interval")
 	}
 

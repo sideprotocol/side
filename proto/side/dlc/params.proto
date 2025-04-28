@@ -3,12 +3,17 @@ package side.dlc;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
+import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
 message PriceInterval {
     string price_pair = 1;
-    int32 interval = 2;
+    string interval = 2 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
 }
 
 // Params defines the parameters for the module.

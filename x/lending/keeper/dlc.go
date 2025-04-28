@@ -40,7 +40,7 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 		liquidationEvent = k.dlcKeeper.GetEvent(ctx, loan.LiquidationEventId)
 	} else if collateralAmount.Amount.IsPositive() {
 		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold)
-		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
+		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, "BTCUSD", liquidationPrice.String())
 	}
 
 	defaultLiquidationEvent := k.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)

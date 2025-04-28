@@ -2,8 +2,9 @@ package types
 
 import (
 	"encoding/hex"
-	fmt "fmt"
+	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
@@ -21,6 +22,9 @@ const (
 
 	// default outcome index
 	DefaultOutcomeIndex = -1
+
+	// price separator
+	PriceSeparator = " "
 )
 
 // GetEventOutcomeHash gets the event outcome hash by the given index
@@ -73,6 +77,31 @@ func GetSignaturePoint(pubKeyBytes []byte, nonceBytes []byte, msg []byte) ([]byt
 	btcec.AddNonConst(&R, &eP, &sG)
 
 	return btcec.JacobianToByteSlice(sG), nil
+}
+
+// GetPricePairFromOutcome gets the price pair from the given price event outcome
+//
+// The outcome format for price event is as follows:
+// {price}{separator}{pair}
+//
+// Assume that the outcome is valid
+func GetPricePairFromOutcome(outcome string) string {
+	return strings.Split(outcome, PriceSeparator)[1]
+}
+
+// GetPriceFromOutcome gets the price from the given price event outcome
+//
+// The outcome format for price event is as follows:
+// {price}{separator}{pair}
+//
+// Assume that the outcome is valid
+func GetPriceFromOutcome(outcome string) string {
+	return strings.Split(outcome, PriceSeparator)[0]
+}
+
+// FormatPrice formats the price with the given pair
+func FormatPrice(price string, pair string) string {
+	return fmt.Sprintf("%s%s%s", price, PriceSeparator, pair)
 }
 
 // GetEventTypeFromIntent gets the event type from the given nonce DKG intent

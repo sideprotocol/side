@@ -109,7 +109,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 
 	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, borrowedAmount.Amount, trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold)
 
-	event := k.dlcKeeper.GetEventByPrice(ctx, liquidationPrice)
+	event := k.dlcKeeper.GetEventByPrice(ctx, "BTCUSD", liquidationPrice.String())
 	if event == nil {
 		return nil, status.Error(codes.NotFound, "liquidation event does not exist")
 	}

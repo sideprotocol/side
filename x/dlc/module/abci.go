@@ -29,7 +29,7 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 
 		// check if price event nonces need to be generated
 		currentEventPrice := k.GetCurrentEventPrice(ctx, pi.PricePair)
-		if currentEventPrice >= currentPrice.TruncateInt64()+nonceQueueSize*int64(pi.Interval) && k.GetTriggeredPriceEventQueueCount(ctx) == 0 {
+		if currentEventPrice.GTE(currentPrice.Add(pi.Interval.MulInt64(nonceQueueSize))) && k.GetTriggeredPriceEventQueueCount(ctx, pi.PricePair) == 0 {
 			continue
 		}
 
