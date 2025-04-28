@@ -29,6 +29,7 @@ const (
 	Query_QuerySigningRequests_FullMethodName               = "/side.btcbridge.Query/QuerySigningRequests"
 	Query_QuerySigningRequestsByAddress_FullMethodName      = "/side.btcbridge.Query/QuerySigningRequestsByAddress"
 	Query_QuerySigningRequestByTxHash_FullMethodName        = "/side.btcbridge.Query/QuerySigningRequestByTxHash"
+	Query_QueryPendingSigningRequests_FullMethodName        = "/side.btcbridge.Query/QueryPendingSigningRequests"
 	Query_QueryUTXOs_FullMethodName                         = "/side.btcbridge.Query/QueryUTXOs"
 	Query_QueryUTXOsByAddress_FullMethodName                = "/side.btcbridge.Query/QueryUTXOsByAddress"
 	Query_QueryUTXOCountAndBalancesByAddress_FullMethodName = "/side.btcbridge.Query/QueryUTXOCountAndBalancesByAddress"
@@ -62,6 +63,8 @@ type QueryClient interface {
 	QuerySigningRequestsByAddress(ctx context.Context, in *QuerySigningRequestsByAddressRequest, opts ...grpc.CallOption) (*QuerySigningRequestsByAddressResponse, error)
 	// QuerySigningRequestByTxHash queries the signing request by the given tx hash.
 	QuerySigningRequestByTxHash(ctx context.Context, in *QuerySigningRequestByTxHashRequest, opts ...grpc.CallOption) (*QuerySigningRequestByTxHashResponse, error)
+	// QueryPendingSigningRequests queries the pending signing requests.
+	QueryPendingSigningRequests(ctx context.Context, in *QueryPendingSigningRequestsRequest, opts ...grpc.CallOption) (*QueryPendingSigningRequestsResponse, error)
 	// QueryUTXOs queries all utxos.
 	QueryUTXOs(ctx context.Context, in *QueryUTXOsRequest, opts ...grpc.CallOption) (*QueryUTXOsResponse, error)
 	// QueryUTXOsByAddress queries the utxos of the given address.
@@ -176,6 +179,15 @@ func (c *queryClient) QuerySigningRequestByTxHash(ctx context.Context, in *Query
 	return out, nil
 }
 
+func (c *queryClient) QueryPendingSigningRequests(ctx context.Context, in *QueryPendingSigningRequestsRequest, opts ...grpc.CallOption) (*QueryPendingSigningRequestsResponse, error) {
+	out := new(QueryPendingSigningRequestsResponse)
+	err := c.cc.Invoke(ctx, Query_QueryPendingSigningRequests_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) QueryUTXOs(ctx context.Context, in *QueryUTXOsRequest, opts ...grpc.CallOption) (*QueryUTXOsResponse, error) {
 	out := new(QueryUTXOsResponse)
 	err := c.cc.Invoke(ctx, Query_QueryUTXOs_FullMethodName, in, out, opts...)
@@ -263,6 +275,8 @@ type QueryServer interface {
 	QuerySigningRequestsByAddress(context.Context, *QuerySigningRequestsByAddressRequest) (*QuerySigningRequestsByAddressResponse, error)
 	// QuerySigningRequestByTxHash queries the signing request by the given tx hash.
 	QuerySigningRequestByTxHash(context.Context, *QuerySigningRequestByTxHashRequest) (*QuerySigningRequestByTxHashResponse, error)
+	// QueryPendingSigningRequests queries the pending signing requests.
+	QueryPendingSigningRequests(context.Context, *QueryPendingSigningRequestsRequest) (*QueryPendingSigningRequestsResponse, error)
 	// QueryUTXOs queries all utxos.
 	QueryUTXOs(context.Context, *QueryUTXOsRequest) (*QueryUTXOsResponse, error)
 	// QueryUTXOsByAddress queries the utxos of the given address.
@@ -313,6 +327,9 @@ func (UnimplementedQueryServer) QuerySigningRequestsByAddress(context.Context, *
 }
 func (UnimplementedQueryServer) QuerySigningRequestByTxHash(context.Context, *QuerySigningRequestByTxHashRequest) (*QuerySigningRequestByTxHashResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QuerySigningRequestByTxHash not implemented")
+}
+func (UnimplementedQueryServer) QueryPendingSigningRequests(context.Context, *QueryPendingSigningRequestsRequest) (*QueryPendingSigningRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryPendingSigningRequests not implemented")
 }
 func (UnimplementedQueryServer) QueryUTXOs(context.Context, *QueryUTXOsRequest) (*QueryUTXOsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryUTXOs not implemented")
@@ -528,6 +545,24 @@ func _Query_QuerySigningRequestByTxHash_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_QueryPendingSigningRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPendingSigningRequestsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryPendingSigningRequests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryPendingSigningRequests_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryPendingSigningRequests(ctx, req.(*QueryPendingSigningRequestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_QueryUTXOs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryUTXOsRequest)
 	if err := dec(in); err != nil {
@@ -700,6 +735,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QuerySigningRequestByTxHash",
 			Handler:    _Query_QuerySigningRequestByTxHash_Handler,
+		},
+		{
+			MethodName: "QueryPendingSigningRequests",
+			Handler:    _Query_QueryPendingSigningRequests_Handler,
 		},
 		{
 			MethodName: "QueryUTXOs",

@@ -536,31 +536,14 @@ func (k Keeper) RemoveSigningRequestStatus(ctx sdk.Context, sequence uint64) {
 	store.Delete(types.BtcSigningRequestByStatusKey(signingRequest.Status, sequence))
 }
 
-// IterateSigningRequests iterates through all signing requests
-func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *types.SigningRequest) (stop bool)) {
+// GetSigningRequestsByStatus gets signing requests by the given status with pagination
+func (k Keeper) GetSigningRequestsByStatus(ctx sdk.Context, status types.SigningStatus, pagination *query.PageRequest) ([]*types.SigningRequest, *query.PageResponse, error) {
 	store := ctx.KVStore(k.storeKey)
-
-	iterator := storetypes.KVStorePrefixIterator(store, types.BtcSigningRequestPrefix)
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var signingRequest types.SigningRequest
-		k.cdc.MustUnmarshal(iterator.Value(), &signingRequest)
-
-		if cb(&signingRequest) {
-			break
-		}
-	}
-}
-
-// FilterSigningRequestsByStatus filters signing requests by status with pagination
-func (k Keeper) FilterSigningRequestsByStatus(ctx sdk.Context, req *types.QuerySigningRequestsRequest) ([]*types.SigningRequest, *query.PageResponse, error) {
-	store := ctx.KVStore(k.storeKey)
-	signingRequestStatusStore := prefix.NewStore(store, append(types.BtcSigningRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(req.Status))...))
+	signingRequestStatusStore := prefix.NewStore(store, append(types.BtcSigningRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...))
 
 	var signingRequests []*types.SigningRequest
 
-	pageRes, err := query.Paginate(signingRequestStatusStore, req.Pagination, func(key []byte, value []byte) error {
+	pageRes, err := query.Paginate(signingRequestStatusStore, pagination, func(key []byte, value []byte) error {
 		sequence := sdk.BigEndianToUint64(key)
 		signingRequest := k.GetSigningRequest(ctx, sequence)
 
@@ -575,8 +558,30 @@ func (k Keeper) FilterSigningRequestsByStatus(ctx sdk.Context, req *types.QueryS
 	return signingRequests, pageRes, nil
 }
 
-// FilterSigningRequestsByAddr filters signing requests by address with pagination
-func (k Keeper) FilterSigningRequestsByAddr(ctx sdk.Context, req *types.QuerySigningRequestsByAddressRequest) []*types.SigningRequest {
+// GetCompactSigningRequestsByStatus gets compact signing requests by the given status with pagination
+func (k Keeper) GetCompactSigningRequestsByStatus(ctx sdk.Context, status types.SigningStatus, pagination *query.PageRequest) ([]*types.CompactSigningRequest, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	signingRequestStatusStore := prefix.NewStore(store, append(types.BtcSigningRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...))
+
+	var signingRequests []*types.CompactSigningRequest
+
+	pageRes, err := query.Paginate(signingRequestStatusStore, pagination, func(key []byte, value []byte) error {
+		sequence := sdk.BigEndianToUint64(key)
+		signingRequest := k.GetSigningRequest(ctx, sequence)
+
+		signingRequests = append(signingRequests, signingRequest.Compact())
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return signingRequests, pageRes, nil
+}
+
+// GetSigningRequestsByAddr gets signing requests by address with pagination
+func (k Keeper) GetSigningRequestsByAddr(ctx sdk.Context, req *types.QuerySigningRequestsByAddressRequest) []*types.SigningRequest {
 	var signingRequests []*types.SigningRequest
 
 	k.IterateSigningRequests(ctx, func(signingRequest *types.SigningRequest) (stop bool) {
@@ -593,6 +598,23 @@ func (k Keeper) FilterSigningRequestsByAddr(ctx sdk.Context, req *types.QuerySig
 	})
 
 	return signingRequests
+}
+
+// IterateSigningRequests iterates through all signing requests
+func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *types.SigningRequest) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcSigningRequestPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var signingRequest types.SigningRequest
+		k.cdc.MustUnmarshal(iterator.Value(), &signingRequest)
+
+		if cb(&signingRequest) {
+			break
+		}
+	}
 }
 
 // ProcessBitcoinWithdrawTransaction handles the withdrawal transaction

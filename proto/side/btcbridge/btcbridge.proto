@@ -43,6 +43,18 @@ message SigningRequest {
   SigningStatus status = 7;
 }
 
+// Compact Signing Request
+message CompactSigningRequest {
+  string address = 1;
+  uint64 sequence = 2;
+  AssetType type = 3;
+  string txid = 4;
+  repeated string signers = 5;
+  repeated string sig_hashes = 6;
+  google.protobuf.Timestamp creation_time = 7 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  SigningStatus status = 8;
+}
+
 // Withdrawal Request
 message WithdrawRequest {
   string address = 1;

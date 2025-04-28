@@ -1,0 +1,15 @@
+package types
+
+// Compact converts the signing request to the compact version
+func (req *SigningRequest) Compact() *CompactSigningRequest {
+	return &CompactSigningRequest{
+		Address:      req.Address,
+		Sequence:     req.Sequence,
+		Type:         req.Type,
+		Txid:         req.Txid,
+		Signers:      GetSigners(req.Psbt),
+		SigHashes:    GetSigHashes(req.Psbt),
+		CreationTime: req.CreationTime,
+		Status:       req.Status,
+	}
+}

@@ -51,6 +51,10 @@ service Query {
   rpc QuerySigningRequestByTxHash(QuerySigningRequestByTxHashRequest) returns (QuerySigningRequestByTxHashResponse) {
     option (google.api.http).get = "/side/btcbridge/signing/requests/tx/{txid}";
   }
+  // QueryPendingSigningRequests queries the pending signing requests.
+  rpc QueryPendingSigningRequests(QueryPendingSigningRequestsRequest) returns (QueryPendingSigningRequestsResponse) {
+    option (google.api.http).get = "/side/btcbridge/signing/requests/pending";
+  }
   // QueryUTXOs queries all utxos.
   rpc QueryUTXOs(QueryUTXOsRequest) returns (QueryUTXOsResponse) {
     option (google.api.http).get = "/side/btcbridge/utxos";
@@ -156,6 +160,17 @@ message QuerySigningRequestByTxHashRequest {
 // QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHashResponse RPC method.
 message QuerySigningRequestByTxHashResponse {
   SigningRequest request = 1;
+}
+
+// QueryPendingSigningRequestsRequest is request type for the Query/PendingSigningRequests RPC method.
+message QueryPendingSigningRequestsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryPendingSigningRequestsResponse is response type for the Query/PendingSigningRequests RPC method.
+message QueryPendingSigningRequestsResponse {
+  repeated CompactSigningRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryFeeRateRequest is request type for the Query/FeeRate RPC method.

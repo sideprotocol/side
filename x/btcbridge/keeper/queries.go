@@ -137,7 +137,7 @@ func (k Keeper) QuerySigningRequests(goCtx context.Context, req *types.QuerySign
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	requests, pagination, err := k.FilterSigningRequestsByStatus(ctx, req)
+	requests, pagination, err := k.GetSigningRequestsByStatus(ctx, req.Status, req.Pagination)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -152,7 +152,7 @@ func (k Keeper) QuerySigningRequestsByAddress(goCtx context.Context, req *types.
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	requests := k.FilterSigningRequestsByAddr(ctx, req)
+	requests := k.GetSigningRequestsByAddr(ctx, req)
 
 	return &types.QuerySigningRequestsByAddressResponse{Requests: requests}, nil
 }
@@ -171,6 +171,21 @@ func (k Keeper) QuerySigningRequestByTxHash(goCtx context.Context, req *types.Qu
 	}
 
 	return &types.QuerySigningRequestByTxHashResponse{Request: request}, nil
+}
+
+func (k Keeper) QueryPendingSigningRequests(goCtx context.Context, req *types.QueryPendingSigningRequestsRequest) (*types.QueryPendingSigningRequestsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	requests, pagination, err := k.GetCompactSigningRequestsByStatus(ctx, types.SigningStatus_SIGNING_STATUS_PENDING, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryPendingSigningRequestsResponse{Requests: requests, Pagination: pagination}, nil
 }
 
 func (k Keeper) QueryUTXOs(goCtx context.Context, req *types.QueryUTXOsRequest) (*types.QueryUTXOsResponse, error) {
