@@ -43,12 +43,13 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		var liquidationInterest sdkmath.Int
 
-		currentPrice, err := k.GetPrice(ctx, "BTCUSD")
-		if err != nil {
-			k.Logger(ctx).Info("failed to get price", "err", err)
-		}
-
 		pool := k.GetPool(ctx, loan.PoolId)
+		pricePair := types.GetPricePair(pool.Config)
+
+		currentPrice, err := k.GetPrice(ctx, pricePair)
+		if err != nil {
+			k.Logger(ctx).Info("failed to get price", "pair", pricePair, "err", err)
+		}
 
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 
@@ -96,20 +97,23 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		// create liquidation if defaulted or liquidated
 		if loan.Status == types.LoanStatus_Defaulted || loan.Status == types.LoanStatus_Liquidated {
+			collateralDenom := pool.Config.CollateralAsset.Denom
+			debtDenom := pool.Config.LendingAsset.Denom
+
 			liquidation := k.LiquidationKeeper().CreateLiquidation(ctx, &liquidationtypes.Liquidation{
 				LoanId:                       loan.VaultAddress,
 				Debtor:                       loan.Borrower,
 				DCM:                          loan.DCM,
-				CollateralAmount:             sdk.NewCoin("sat", loan.CollateralAmount),
-				ActualCollateralAmount:       sdk.NewCoin("sat", sdkmath.NewInt(types.GetLiquidationCetOutput(liquidationCet))),
-				DebtAmount:                   sdk.NewCoin(pool.Supply.Denom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
+				CollateralAmount:             sdk.NewCoin(collateralDenom, loan.CollateralAmount),
+				ActualCollateralAmount:       sdk.NewCoin(collateralDenom, sdkmath.NewInt(types.GetLiquidationCetOutput(liquidationCet))),
+				DebtAmount:                   sdk.NewCoin(debtDenom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
 				LiquidatedPrice:              currentPrice,
 				LiquidatedTime:               ctx.BlockTime(),
-				LiquidatedCollateralAmount:   sdk.NewCoin("sat", sdkmath.ZeroInt()),
-				LiquidatedDebtAmount:         sdk.NewCoin(pool.Supply.Denom, sdkmath.ZeroInt()),
-				LiquidationBonusAmount:       sdk.NewCoin("sat", sdkmath.ZeroInt()),
-				ProtocolLiquidationFee:       sdk.NewCoin("sat", sdkmath.ZeroInt()),
-				UnliquidatedCollateralAmount: sdk.NewCoin("sat", sdkmath.ZeroInt()),
+				LiquidatedCollateralAmount:   sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+				LiquidatedDebtAmount:         sdk.NewCoin(debtDenom, sdkmath.ZeroInt()),
+				LiquidationBonusAmount:       sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+				ProtocolLiquidationFee:       sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+				UnliquidatedCollateralAmount: sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
 				LiquidationCet:               liquidationCet,
 			})
 

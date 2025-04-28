@@ -4,11 +4,13 @@ import (
 	"encoding/hex"
 	fmt "fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sideprotocol/side/crypto/adaptor"
 )
 
@@ -76,6 +78,11 @@ func GetMaturityTime(originMaturityTime int64) int64 {
 // AdaptorPointFromSecret gets the corresponding adaptor point from the given secret
 func AdaptorPointFromSecret(secret []byte) string {
 	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
+}
+
+// GetPricePair gets the price pair from the given pool config
+func GetPricePair(poolConfig PoolConfig) string {
+	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol), strings.ToUpper(poolConfig.LendingAsset.PriceSymbol))
 }
 
 // HasSupplyCap returns true if the supply cap set in the given pool, false otherwise
@@ -180,6 +187,14 @@ func NewTranches(trancheConfigs []PoolTrancheConfig) []PoolTranche {
 
 // ValidatePoolConfig validates the given pool config
 func ValidatePoolConfig(config PoolConfig) error {
+	if err := validateAssetMetadata(config.CollateralAsset); err != nil {
+		return err
+	}
+
+	if err := validateAssetMetadata(config.LendingAsset); err != nil {
+		return err
+	}
+
 	if config.SupplyCap.IsNil() || config.SupplyCap.IsNegative() {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "supply cap can not be nil or negative")
 	}
@@ -230,6 +245,26 @@ func ValidatePoolConfig(config PoolConfig) error {
 
 	if config.MaxLtv == 0 || config.MaxLtv >= 100 || config.MaxLtv >= config.LiquidationThreshold {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid max ltv")
+	}
+
+	return nil
+}
+
+func validateAssetMetadata(metadata AssetMetadata) error {
+	if err := sdk.ValidateDenom(metadata.Denom); err != nil {
+		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset denom")
+	}
+
+	if len(metadata.Symbol) == 0 {
+		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset symbol")
+	}
+
+	if len(metadata.PriceSymbol) == 0 {
+		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset price symbol")
+	}
+
+	if metadata.Decimals < 0 {
+		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset decimals")
 	}
 
 	return nil

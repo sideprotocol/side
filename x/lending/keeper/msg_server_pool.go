@@ -33,7 +33,7 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 
 	pool := &types.LendingPool{
 		Id:           msg.Id,
-		Supply:       sdk.NewCoin(msg.LendingAsset, sdkmath.ZeroInt()),
+		Supply:       sdk.NewCoin(msg.Config.LendingAsset.Denom, sdkmath.ZeroInt()),
 		TotalSTokens: sdk.NewCoin(msg.Id, sdkmath.ZeroInt()),
 		Tranches:     types.NewTranches(msg.Config.Tranches),
 		Config:       msg.Config,

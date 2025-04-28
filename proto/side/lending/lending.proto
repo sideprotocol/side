@@ -16,6 +16,13 @@ enum PoolStatus {
     PAUSED = 2;
 }
 
+message AssetMetadata {
+    string denom = 1;
+    string symbol = 2;
+    string price_symbol = 3;
+    int32 decimals = 4;
+}
+
 // Pool tranche config
 message PoolTrancheConfig {
   // maturity duration in seconds
@@ -28,47 +35,51 @@ message PoolTrancheConfig {
 
 // Pool config
 message PoolConfig {
+    // collateral asset metadata
+    AssetMetadata collateral_asset = 1 [(gogoproto.nullable) = false];
+    // lending asset metadata
+    AssetMetadata lending_asset = 2 [(gogoproto.nullable) = false];
     // supply cap
-    string supply_cap = 1 [
+    string supply_cap = 3 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // borrow cap
-    string borrow_cap = 2 [
+    string borrow_cap = 4 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // minimum amount to be borrowed
-    string min_borrow_amount = 3 [
+    string min_borrow_amount = 5 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // maximum amount to be borrowed
-    string max_borrow_amount = 4 [
+    string max_borrow_amount = 6 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // tranches
-    repeated PoolTrancheConfig tranches = 5 [(gogoproto.nullable) = false];
+    repeated PoolTrancheConfig tranches = 7 [(gogoproto.nullable) = false];
     // request fee
-    cosmos.base.v1beta1.Coin request_fee = 6 [
+    cosmos.base.v1beta1.Coin request_fee = 8 [
       (gogoproto.nullable) = false
     ];
     // origination fee
-    string origination_fee = 7 [
+    string origination_fee = 9 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
     // reserve factor permille
-    uint32 reserve_factor = 8;
+    uint32 reserve_factor = 10;
     // referral fee factor permille
-    uint32 referral_fee_factor = 9;
+    uint32 referral_fee_factor = 11;
     // maximum ltv percent
-    uint32 max_ltv = 10;
+    uint32 max_ltv = 12;
     // liquidation ltv percent
-    uint32 liquidation_threshold = 11;
+    uint32 liquidation_threshold = 13;
     // indicates if the pool is paused
-    bool paused = 12;
+    bool paused = 14;
 }
 
 // Pool tranche

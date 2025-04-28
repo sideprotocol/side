@@ -17,9 +17,5 @@ func (m *MsgCreatePool) ValidateBasic() error {
 		return errorsmod.Wrapf(ErrInvalidPoolId, "%v", err)
 	}
 
-	if err := sdk.ValidateDenom(m.LendingAsset); err != nil {
-		return errorsmod.Wrapf(ErrInvalidLendingAsset, "%v", err)
-	}
-
 	return ValidatePoolConfig(m.Config)
 }
