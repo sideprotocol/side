@@ -16,11 +16,6 @@ func (k Keeper) WithdrawConfirmationDepth(ctx sdk.Context) int32 {
 	return k.GetParams(ctx).WithdrawConfirmationDepth
 }
 
-// MaxReorgDepth gets the allowed maximum reorg depth
-func (k Keeper) MaxReorgDepth(ctx sdk.Context) int32 {
-	return k.GetParams(ctx).MaxReorgDepth
-}
-
 // DepositEnabled returns true if deposit enabled, false otherwise
 func (k Keeper) DepositEnabled(ctx sdk.Context) bool {
 	return k.GetParams(ctx).DepositEnabled
