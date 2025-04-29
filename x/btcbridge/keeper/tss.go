@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"bytes"
-	"encoding/base64"
 	"time"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -11,7 +10,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
@@ -169,29 +167,6 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 
 // InitiateDKG initiates the DKG request by the specified params
 func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
-	for _, p := range participants {
-		valAddr, _ := sdk.ValAddressFromBech32(p.OperatorAddress)
-
-		validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
-		if err != nil {
-			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "non validator")
-		}
-
-		pubKey, err := validator.ConsPubKey()
-		if err != nil {
-			return nil, err
-		}
-
-		pubKeyBytes, _ := base64.StdEncoding.DecodeString(p.ConsensusPubkey)
-		if !bytes.Equal(pubKeyBytes, pubKey.Bytes()) {
-			errorsmod.Wrap(types.ErrInvalidDKGParams, "incorrect consensus public key")
-		}
-
-		if validator.Status != stakingtypes.Bonded {
-			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "validator not bonded")
-		}
-	}
-
 	req := &types.DKGRequest{
 		Id:             k.GetNextDKGRequestID(ctx),
 		Participants:   participants,
@@ -237,24 +212,24 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return err
 	}
 
-	consAddress, _ := sdk.ConsAddressFromHex(req.ConsensusAddress)
-	validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
-	if err != nil {
-		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
-	}
+	// consAddress, _ := sdk.ConsAddressFromHex(req.ConsensusAddress)
+	// validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
+	// if err != nil {
+	// 	return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
+	// }
 
-	if validator.Status != stakingtypes.Bonded {
-		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "validator not bonded")
-	}
+	// if validator.Status != stakingtypes.Bonded {
+	// 	return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "validator not bonded")
+	// }
 
-	pubKey, err := validator.ConsPubKey()
-	if err != nil {
-		return err
-	}
+	// pubKey, err := validator.ConsPubKey()
+	// if err != nil {
+	// 	return err
+	// }
 
-	if !types.VerifySignature(req.Signature, pubKey.Bytes(), req) {
-		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid signature")
-	}
+	// if !types.VerifySignature(req.Signature, pubKey.Bytes(), req) {
+	// 	return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid signature")
+	// }
 
 	k.SetDKGCompletionRequest(ctx, req)
 
