@@ -33,30 +33,30 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 	}
 
 	if len(m.Vaults) == 0 {
-		return ErrInvalidDKGCompletionRequest
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "vaults can not be empty")
 	}
 
 	vaults := make(map[string]bool)
 	for _, v := range m.Vaults {
 		_, err := sdk.AccAddressFromBech32(v)
 		if err != nil || vaults[v] {
-			return ErrInvalidDKGCompletionRequest
+			return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "invalid vault")
 		}
 
 		vaults[v] = true
 	}
 
 	if _, err := sdk.ConsAddressFromHex(m.ConsensusAddress); err != nil {
-		return ErrInvalidDKGCompletionRequest
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "invalid consensus address")
 	}
 
 	sigBytes, err := hex.DecodeString(m.Signature)
 	if err != nil {
-		return ErrInvalidDKGCompletionRequest
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "failed to decode signature")
 	}
 
 	if len(sigBytes) != ed25519.SignatureSize {
-		return ErrInvalidDKGCompletionRequest
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "invalid signature size")
 	}
 
 	return nil
