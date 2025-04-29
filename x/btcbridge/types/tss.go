@@ -2,31 +2,17 @@ package types
 
 import (
 	"crypto/ed25519"
-	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
 	"reflect"
-	"strings"
 
 	"github.com/cometbft/cometbft/crypto"
-	"github.com/cometbft/cometbft/crypto/tmhash"
 )
 
-// MustGetConsensusAddr gets the hex-encoded consensus address from the given consensus public key
-// Panic if any error occurs
-func MustGetConsensusAddr(consPubKey string) string {
-	pubKey, err := base64.StdEncoding.DecodeString(consPubKey)
-	if err != nil {
-		panic(err)
-	}
-
-	return hex.EncodeToString(tmhash.SumTruncated(pubKey))
-}
-
-// ParticipantExists returns true if the given address is a participant, false otherwise
-func ParticipantExists(participants []*DKGParticipant, consAddress string) bool {
+// ParticipantExists returns true if the given participant is included in the authorized participants, false otherwise
+func ParticipantExists(participants []*DKGParticipant, consPubKey string) bool {
 	for _, p := range participants {
-		if MustGetConsensusAddr(p.ConsensusPubkey) == strings.ToLower(consAddress) {
+		if p.ConsensusPubkey == consPubKey {
 			return true
 		}
 	}

@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/base64"
 	"encoding/hex"
 
 	errorsmod "cosmossdk.io/errors"
@@ -14,15 +15,15 @@ func NewMsgCompleteDKG(
 	sender string,
 	id uint64,
 	vaults []string,
-	consAddress string,
+	consPubKey string,
 	signature string,
 ) *MsgCompleteDKG {
 	return &MsgCompleteDKG{
-		Sender:           sender,
-		Id:               id,
-		Vaults:           vaults,
-		ConsensusAddress: consAddress,
-		Signature:        signature,
+		Sender:          sender,
+		Id:              id,
+		Vaults:          vaults,
+		ConsensusPubkey: consPubKey,
+		Signature:       signature,
 	}
 }
 
@@ -46,8 +47,13 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 		vaults[v] = true
 	}
 
-	if _, err := sdk.ConsAddressFromHex(m.ConsensusAddress); err != nil {
-		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "invalid consensus address")
+	consensusPubKey, err := base64.StdEncoding.DecodeString(m.ConsensusPubkey)
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "failed to decode the consensus pub key")
+	}
+
+	if len(consensusPubKey) != ed25519.PubKeySize {
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "incorrect consensus pub key size")
 	}
 
 	sigBytes, err := hex.DecodeString(m.Signature)
