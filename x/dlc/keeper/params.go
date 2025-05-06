@@ -33,14 +33,23 @@ func (k Keeper) LendingEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).LendingEventNonceQueueSize
 }
 
-// OracleParticipantBaseNum gets the oracle participant base number
-func (k Keeper) OracleParticipantBaseNum(ctx sdk.Context) uint32 {
-	return k.GetParams(ctx).OracleParticipantBaseNum
+// OracleParticipantBaseSet gets the oracle participant base set
+func (k Keeper) OracleParticipantBaseSet(ctx sdk.Context) []string {
+	if len(k.GetParams(ctx).AllowedOracleParticipants) != 0 {
+		return k.GetParams(ctx).AllowedOracleParticipants
+	}
+
+	return k.tssKeeper.GetParams(ctx).AllowedDkgParticipants
 }
 
 // OracleParticipantNum gets the oracle participant number
 func (k Keeper) OracleParticipantNum(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).OracleParticipantNum
+}
+
+// OracleParticipantThreshold gets the oracle participant threshold
+func (k Keeper) OracleParticipantThreshold(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).OracleParticipantThreshold
 }
 
 // NonceGenerationBatchSize gets the nonce generation batch size

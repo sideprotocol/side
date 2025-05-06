@@ -30,6 +30,7 @@ type (
 		stakingKeeper   types.StakingKeeper
 		oracleKeeper    types.OracleKeeper
 		incentiveKeeper types.IncentiveKeeper
+		tssKeeper       types.TSSKeeper
 
 		authority string
 	}
@@ -43,6 +44,7 @@ func NewKeeper(
 	stakingKeeper types.StakingKeeper,
 	oracleKeeper types.OracleKeeper,
 	incentiveKeeper types.IncentiveKeeper,
+	tssKeeper types.TSSKeeper,
 	authority string,
 ) *Keeper {
 	return &Keeper{
@@ -53,6 +55,7 @@ func NewKeeper(
 		stakingKeeper:   stakingKeeper,
 		oracleKeeper:    oracleKeeper,
 		incentiveKeeper: incentiveKeeper,
+		tssKeeper:       tssKeeper,
 		BaseUTXOKeeper:  *NewBaseUTXOKeeper(cdc, storeKey),
 		authority:       authority,
 	}

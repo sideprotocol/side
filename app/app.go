@@ -679,6 +679,7 @@ func New(
 		app.StakingKeeper,
 		app.OracleKeeper,
 		app.IncentiveKeeper,
+		app.TSSKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 

@@ -3,6 +3,7 @@ package keeper
 import (
 	"bytes"
 	"encoding/base64"
+	"slices"
 	"time"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -175,6 +176,14 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 
 // InitiateDKG initiates the DKG request by the specified params
 func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
+	baseParticipants := k.tssKeeper.GetParams(ctx).AllowedDkgParticipants
+
+	for _, p := range participants {
+		if !slices.Contains(baseParticipants, p.ConsensusPubkey) {
+			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "participant not authorized")
+		}
+	}
+
 	req := &types.DKGRequest{
 		Id:             k.GetNextDKGRequestID(ctx),
 		Participants:   participants,

@@ -49,6 +49,7 @@ func BtcBridgeKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		app.StakingKeeper,
 		app.OracleKeeper,
 		app.IncentiveKeeper,
+		app.TSSKeeper,
 		authority,
 	)
 

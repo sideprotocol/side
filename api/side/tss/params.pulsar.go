@@ -14,14 +14,62 @@ import (
 	sync "sync"
 )
 
+var _ protoreflect.List = (*_Params_1_list)(nil)
+
+type _Params_1_list struct {
+	list *[]string
+}
+
+func (x *_Params_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_Params_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_Params_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_Params_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_Params_1_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field AllowedDkgParticipants as it is not of Message kind"))
+}
+
+func (x *_Params_1_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_Params_1_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_Params_1_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_Params                    protoreflect.MessageDescriptor
-	fd_Params_dkg_timeout_period protoreflect.FieldDescriptor
+	md_Params                          protoreflect.MessageDescriptor
+	fd_Params_allowed_dkg_participants protoreflect.FieldDescriptor
+	fd_Params_dkg_timeout_period       protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_params_proto_init()
 	md_Params = File_side_tss_params_proto.Messages().ByName("Params")
+	fd_Params_allowed_dkg_participants = md_Params.Fields().ByName("allowed_dkg_participants")
 	fd_Params_dkg_timeout_period = md_Params.Fields().ByName("dkg_timeout_period")
 }
 
@@ -90,6 +138,12 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.AllowedDkgParticipants) != 0 {
+		value := protoreflect.ValueOfList(&_Params_1_list{list: &x.AllowedDkgParticipants})
+		if !f(fd_Params_allowed_dkg_participants, value) {
+			return
+		}
+	}
 	if x.DkgTimeoutPeriod != nil {
 		value := protoreflect.ValueOfMessage(x.DkgTimeoutPeriod.ProtoReflect())
 		if !f(fd_Params_dkg_timeout_period, value) {
@@ -111,6 +165,8 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "side.tss.Params.allowed_dkg_participants":
+		return len(x.AllowedDkgParticipants) != 0
 	case "side.tss.Params.dkg_timeout_period":
 		return x.DkgTimeoutPeriod != nil
 	default:
@@ -129,6 +185,8 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "side.tss.Params.allowed_dkg_participants":
+		x.AllowedDkgParticipants = nil
 	case "side.tss.Params.dkg_timeout_period":
 		x.DkgTimeoutPeriod = nil
 	default:
@@ -147,6 +205,12 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "side.tss.Params.allowed_dkg_participants":
+		if len(x.AllowedDkgParticipants) == 0 {
+			return protoreflect.ValueOfList(&_Params_1_list{})
+		}
+		listValue := &_Params_1_list{list: &x.AllowedDkgParticipants}
+		return protoreflect.ValueOfList(listValue)
 	case "side.tss.Params.dkg_timeout_period":
 		value := x.DkgTimeoutPeriod
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -170,6 +234,10 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "side.tss.Params.allowed_dkg_participants":
+		lv := value.List()
+		clv := lv.(*_Params_1_list)
+		x.AllowedDkgParticipants = *clv.list
 	case "side.tss.Params.dkg_timeout_period":
 		x.DkgTimeoutPeriod = value.Message().Interface().(*durationpb.Duration)
 	default:
@@ -192,6 +260,12 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "side.tss.Params.allowed_dkg_participants":
+		if x.AllowedDkgParticipants == nil {
+			x.AllowedDkgParticipants = []string{}
+		}
+		value := &_Params_1_list{list: &x.AllowedDkgParticipants}
+		return protoreflect.ValueOfList(value)
 	case "side.tss.Params.dkg_timeout_period":
 		if x.DkgTimeoutPeriod == nil {
 			x.DkgTimeoutPeriod = new(durationpb.Duration)
@@ -210,6 +284,9 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "side.tss.Params.allowed_dkg_participants":
+		list := []string{}
+		return protoreflect.ValueOfList(&_Params_1_list{list: &list})
 	case "side.tss.Params.dkg_timeout_period":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -282,6 +359,12 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		if len(x.AllowedDkgParticipants) > 0 {
+			for _, s := range x.AllowedDkgParticipants {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.DkgTimeoutPeriod != nil {
 			l = options.Size(x.DkgTimeoutPeriod)
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -327,7 +410,16 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
+		}
+		if len(x.AllowedDkgParticipants) > 0 {
+			for iNdEx := len(x.AllowedDkgParticipants) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.AllowedDkgParticipants[iNdEx])
+				copy(dAtA[i:], x.AllowedDkgParticipants[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AllowedDkgParticipants[iNdEx])))
+				i--
+				dAtA[i] = 0xa
+			}
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -379,6 +471,38 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AllowedDkgParticipants", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AllowedDkgParticipants = append(x.AllowedDkgParticipants, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DkgTimeoutPeriod", wireType)
 				}
@@ -468,7 +592,8 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DkgTimeoutPeriod *durationpb.Duration `protobuf:"bytes,1,opt,name=dkg_timeout_period,json=dkgTimeoutPeriod,proto3" json:"dkg_timeout_period,omitempty"`
+	AllowedDkgParticipants []string             `protobuf:"bytes,1,rep,name=allowed_dkg_participants,json=allowedDkgParticipants,proto3" json:"allowed_dkg_participants,omitempty"`
+	DkgTimeoutPeriod       *durationpb.Duration `protobuf:"bytes,2,opt,name=dkg_timeout_period,json=dkgTimeoutPeriod,proto3" json:"dkg_timeout_period,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -491,6 +616,13 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_side_tss_params_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *Params) GetAllowedDkgParticipants() []string {
+	if x != nil {
+		return x.AllowedDkgParticipants
+	}
+	return nil
+}
+
 func (x *Params) GetDkgTimeoutPeriod() *durationpb.Duration {
 	if x != nil {
 		return x.DkgTimeoutPeriod
@@ -506,22 +638,26 @@ var file_side_tss_params_proto_rawDesc = []byte{
 	0x73, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67,
 	0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x5b, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x12, 0x51, 0x0a, 0x12, 0x64, 0x6b, 0x67, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74,
-	0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e,
-	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf,
-	0x1f, 0x01, 0x52, 0x10, 0x64, 0x6b, 0x67, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x50, 0x65,
-	0x72, 0x69, 0x6f, 0x64, 0x42, 0x87, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x74, 0x73, 0x73, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0xa2,
-	0x02, 0x03, 0x53, 0x54, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x54, 0x73, 0x73,
-	0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x54, 0x73, 0x73, 0xe2, 0x02, 0x14, 0x53, 0x69,
-	0x64, 0x65, 0x5c, 0x54, 0x73, 0x73, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x54, 0x73, 0x73, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x95, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x12, 0x38, 0x0a, 0x18, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x5f, 0x64, 0x6b,
+	0x67, 0x5f, 0x70, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x09, 0x52, 0x16, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x44, 0x6b, 0x67,
+	0x50, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x73, 0x12, 0x51, 0x0a, 0x12,
+	0x64, 0x6b, 0x67, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x5f, 0x70, 0x65, 0x72, 0x69,
+	0x6f, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x10, 0x64,
+	0x6b, 0x67, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x42,
+	0x87, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73,
+	0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0xa2, 0x02, 0x03, 0x53, 0x54, 0x58,
+	0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x54, 0x73, 0x73, 0xca, 0x02, 0x08, 0x53, 0x69,
+	0x64, 0x65, 0x5c, 0x54, 0x73, 0x73, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x54, 0x73,
+	0x73, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09,
+	0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x54, 0x73, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (

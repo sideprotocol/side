@@ -1,11 +1,9 @@
 package keeper
 
 import (
-	"encoding/base64"
 	"math/rand"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sideprotocol/side/x/dlc/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
@@ -36,46 +34,22 @@ func (k Keeper) SigningCompletedHandler(ctx sdk.Context, sender string, id uint6
 }
 
 // GetOracleParticipants gets oracle participants
-func (k Keeper) GetOracleParticipants(ctx sdk.Context) ([]string, error) {
-	baseParticipants := []string{}
-	participants := []string{}
-
-	baseParticipantNum := int(k.OracleParticipantBaseNum(ctx))
+func (k Keeper) GetOracleParticipants(ctx sdk.Context) []string {
+	baseParticipants := k.OracleParticipantBaseSet(ctx)
 	participantNum := int(k.OracleParticipantNum(ctx))
 
-	var errIterate error
-
-	k.stakingKeeper.IterateBondedValidatorsByPower(ctx, func(index int64, validator stakingtypes.ValidatorI) (stop bool) {
-		if len(baseParticipants) == baseParticipantNum {
-			return true
-		}
-
-		pk, err := validator.ConsPubKey()
-		if err != nil {
-			errIterate = err
-			return true
-		}
-
-		baseParticipants = append(baseParticipants, base64.StdEncoding.EncodeToString(pk.Bytes()))
-
-		return false
-	})
-
-	if errIterate != nil {
-		return nil, errIterate
+	if participantNum == len(baseParticipants) {
+		return baseParticipants
 	}
 
-	// check if the base participant count is less than the oracle participant base number
-	if len(baseParticipants) < baseParticipantNum {
-		return nil, types.ErrInsufficientOracleParticipants
-	}
+	participants := []string{}
 
 	// select oracle participants randomly by the expected participant number
 	rand := rand.New(rand.NewSource(ctx.BlockTime().Unix()))
-	selectedIndices := rand.Perm(baseParticipantNum)[0:participantNum]
+	selectedIndices := rand.Perm(len(baseParticipants))[0:participantNum]
 	for _, index := range selectedIndices {
 		participants = append(participants, baseParticipants[index])
 	}
 
-	return participants, nil
+	return participants
 }

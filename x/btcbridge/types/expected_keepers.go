@@ -9,6 +9,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
@@ -58,4 +59,9 @@ type IncentiveKeeper interface {
 
 	DistributeDepositReward(ctx sdk.Context, addr string) error
 	DistributeWithdrawReward(ctx sdk.Context, addr string) error
+}
+
+// TSSKeeper defines the expected TSS keeper interface
+type TSSKeeper interface {
+	GetParams(ctx sdk.Context) tsstypes.Params
 }
