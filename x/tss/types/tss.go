@@ -2,6 +2,7 @@ package types
 
 import (
 	"crypto/ed25519"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
 	"reflect"
@@ -49,10 +50,10 @@ func CheckDKGCompletions(completions []*DKGCompletion) bool {
 }
 
 // VerifySignature verifies the ed25519 signature against the given pub key and msg
-// Assume that the signature and pub key are hex encoded
+// Assume that the signature is hex encoded and the pub key is base64 encoded
 func VerifySignature(signature string, pubKey string, msg []byte) bool {
 	sigBytes, _ := hex.DecodeString(signature)
-	pubKeyBytes, _ := hex.DecodeString(pubKey)
+	pubKeyBytes, _ := base64.StdEncoding.DecodeString(pubKey)
 
 	return ed25519.Verify(pubKeyBytes, msg, sigBytes)
 }
