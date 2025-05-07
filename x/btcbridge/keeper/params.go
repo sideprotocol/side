@@ -46,6 +46,11 @@ func (k Keeper) BtcDenom(ctx sdk.Context) string {
 	return k.GetParams(ctx).BtcVoucherDenom
 }
 
+// MaxBtcBatchWithdrawNum gets the maximum btc batch withdrawal number
+func (k Keeper) MaxBtcBatchWithdrawNum(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).WithdrawParams.MaxBtcBatchWithdrawNum
+}
+
 // IsTrustedNonBtcRelayer returns true if the given address is a trusted non-btc relayer, false otherwise
 func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
 	for _, relayer := range k.GetParams(ctx).TrustedNonBtcRelayers {
