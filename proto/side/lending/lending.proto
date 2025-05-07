@@ -204,7 +204,8 @@ message Loan {
       (gogoproto.nullable)   = false
     ];
     string liquidation_price = 17 [
-      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable) = false
     ];
     uint64 liquidation_event_id = 18;

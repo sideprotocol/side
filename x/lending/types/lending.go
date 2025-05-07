@@ -56,14 +56,14 @@ func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
-func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32) sdkmath.Int {
+func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32) sdkmath.LegacyDec {
 	interest := GetTotalInterest(borrowAmount, maturity, borrowAPR, blocksPerYear)
 	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewInt(100000000)).Mul(Percent).Quo(sdkmath.NewInt(int64(lltv))).Quo(collateralAmount).Quo(sdkmath.NewInt(1000000))
 
 	// price precision
 	precision := sdkmath.NewInt(100)
 
-	return liquidationPrice.Quo(precision).Mul(precision)
+	return liquidationPrice.Quo(precision).Mul(precision).ToLegacyDec()
 }
 
 // GetMaturityTime gets the actual maturity time according to the given maturity time

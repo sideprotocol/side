@@ -404,7 +404,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		}
 
 		// check if liquidation price reached
-		if currentPrice.LTE(loan.LiquidationPrice.ToLegacyDec()) {
+		if currentPrice.LTE(loan.LiquidationPrice) {
 			errRejected = types.ErrLiquidationPriceReached
 			return nil, nil
 		}
