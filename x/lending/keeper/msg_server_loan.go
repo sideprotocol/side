@@ -398,7 +398,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 
 	// authorization submitted
 	if authorizationId == m.GetAuthorizationId(ctx, msg.Vault) {
-		currentPrice, err := m.GetPrice(ctx, types.GetPricePair(m.GetPool(ctx, loan.VaultAddress).Config))
+		currentPrice, err := m.GetPrice(ctx, types.GetPricePair(pool.Config))
 		if err != nil {
 			return nil, err
 		}
