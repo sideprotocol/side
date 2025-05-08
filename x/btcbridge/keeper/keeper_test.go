@@ -123,7 +123,7 @@ func (suite *KeeperTestSuite) TestMintRunes() {
 	balanceBefore := suite.app.BankKeeper.GetBalance(suite.ctx, sdk.MustAccAddressFromBech32(suite.sender), denom)
 	suite.True(balanceBefore.Amount.IsZero(), "%s balance before mint should be zero", denom)
 
-	assetType, recipient, err := suite.app.BtcBridgeKeeper.Mint(suite.ctx, suite.sender, btcutil.NewTx(tx), btcutil.NewTx(tx), 0)
+	assetType, recipient, _, err := suite.app.BtcBridgeKeeper.Mint(suite.ctx, suite.sender, btcutil.NewTx(tx), btcutil.NewTx(tx), 0)
 	suite.NoError(err)
 	suite.Equal(assetType, types.AssetType_ASSET_TYPE_RUNES)
 	suite.Equal(suite.sender, recipient.EncodeAddress(), "incorrect recipient")

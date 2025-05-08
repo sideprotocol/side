@@ -12,6 +12,26 @@ import (
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
+// IBCTransfer transfers the specified token via IBC
+func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, token sdk.Coin, channelId string) error {
+	msg := &transfertypes.MsgTransfer{
+		SourcePort:       types.DefaultPortId,
+		SourceChannel:    channelId,
+		Token:            token,
+		Sender:           sender,
+		Receiver:         recipient,
+		TimeoutHeight:    clienttypes.NewHeight(0, 0),
+		TimeoutTimestamp: 0,
+		Memo:             types.DefaultMemo,
+	}
+
+	if _, err := k.ibctransferKeeper.Transfer(ctx, msg); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // AddToIBCWithdrawRequestQueue adds the given packet to IBC withdrawal queue for sBTC
 func (k Keeper) AddToIBCWithdrawRequestQueue(ctx sdk.Context, sequence uint64, recipient string, amount int64) {
 	store := ctx.KVStore(k.storeKey)
@@ -62,9 +82,9 @@ func (k Keeper) IterateIBCWithdrawRequestQueue(ctx sdk.Context, cb func(req *typ
 	}
 }
 
-// CheckSBTCAutoPegout returns true if the given packet is sBTC transfer and auto-pegout enabled, false otherwise
-func (k Keeper) CheckSBTCAutoPegout(ctx sdk.Context, packet transfertypes.FungibleTokenPacketData) bool {
-	return packet.Denom == k.BtcDenom(ctx) && packet.Memo == types.TagAutoPegout
+// CheckSBTCAutoPegOut returns true if the given packet is sBTC transfer and auto-pegout enabled, false otherwise
+func (k Keeper) CheckSBTCAutoPegOut(ctx sdk.Context, packet transfertypes.FungibleTokenPacketData) bool {
+	return packet.Denom == k.BtcDenom(ctx) && packet.Memo == types.FlagAutoPegOut
 }
 
 // IBCSendPacketCallback implements IBC callbacks
@@ -121,7 +141,7 @@ func (k Keeper) IBCReceivePacketCallback(
 
 	// parse the transfer packet
 	tranferPacket, ok := tryGetTransferPacket(packet)
-	if !ok || !k.CheckSBTCAutoPegout(ctx, tranferPacket) {
+	if !ok || !k.CheckSBTCAutoPegOut(ctx, tranferPacket) {
 		return nil
 	}
 

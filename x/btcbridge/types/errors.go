@@ -62,5 +62,5 @@ var (
 
 	ErrInvalidConsolidation = errorsmod.Register(ModuleName, 8100, "invalid consolidation")
 
-	ErrInvalidDepositScript = errorsmod.Register(ModuleName, 9000, "invalid deposit script for IBC transfer")
+	ErrInvalidIBCTransferScript = errorsmod.Register(ModuleName, 9000, "invalid deposit script for IBC transfer")
 )

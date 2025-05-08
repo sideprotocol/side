@@ -1,47 +1,63 @@
 package types
 
-import "github.com/btcsuite/btcd/txscript"
+import (
+	"github.com/btcsuite/btcd/txscript"
+	"github.com/btcsuite/btcd/wire"
+)
 
 const (
-	// tag for the IBC channel through which the ibc transfer will be performed
-	TagChannel = txscript.OP_0
+	// magic number
+	IBCTransferMagicNumber = txscript.OP_10
 
-	// tag for the recipient which represents the recipient address on the destination chain
-	TagRecipient = txscript.OP_1
+	// default port id
+	DefaultPortId = "transfer"
 
-	// tag for auto pegout enabling
-	TagAutoPegout = "auto-pegout"
+	// default memo for IBC transfer
+	DefaultMemo = "BTC bridge | Side Chain"
+
+	// flag to enable auto pegout
+	FlagAutoPegOut = "auto-pegout"
 
 	// default max gas for IBC callback
 	DefaultMaxIBCCallbackGas = uint64(1_000_000)
 )
 
-// IBCTransferMaybeEnabled returns true if the deposit script maybe indicates enabling the IBC transfer, false otherwise
-func IBCTransferMaybeEnabled(depositScript []byte) bool {
-	return txscript.IsNullData(depositScript)
-}
-
-// ParseIBCTransfer parses the channel id and recipient address from the given deposit script
-func ParseIBCTransfer(depositScript []byte) (channelId string, recipient string, err error) {
-	tokenizer := txscript.MakeScriptTokenizer(0, depositScript)
-	if !tokenizer.Next() || tokenizer.Err() != nil || tokenizer.Opcode() != txscript.OP_RETURN {
-		return "", "", ErrInvalidDepositScript
+// GetIBCTransferScript gets the IBC transfer script from the given deposit tx
+func GetIBCTransferScript(depositTx *wire.MsgTx) []byte {
+	for _, out := range depositTx.TxOut {
+		if IsOpReturnOutput(out) && out.PkScript[1] == IBCTransferMagicNumber {
+			return out.PkScript
+		}
 	}
 
-	if !tokenizer.Next() || tokenizer.Err() != nil || tokenizer.Opcode() != TagChannel {
-		return "", "", ErrInvalidDepositScript
+	return nil
+}
+
+// ParseIBCTransferScript parses the channel id and recipient address from the given script
+func ParseIBCTransferScript(script []byte) (channelId string, recipient string, err error) {
+	tokenizer := txscript.MakeScriptTokenizer(0, script)
+	if !tokenizer.Next() || tokenizer.Err() != nil || tokenizer.Opcode() != txscript.OP_RETURN {
+		return "", "", ErrInvalidIBCTransferScript
+	}
+
+	if !tokenizer.Next() || tokenizer.Err() != nil || tokenizer.Opcode() != IBCTransferMagicNumber {
+		return "", "", ErrInvalidIBCTransferScript
+	}
+
+	if !tokenizer.Next() || tokenizer.Err() != nil {
+		return "", "", ErrInvalidIBCTransferScript
 	}
 
 	channelId = string(tokenizer.Data())
 
-	if !tokenizer.Next() || tokenizer.Err() != nil || tokenizer.Opcode() != TagRecipient {
-		return "", "", ErrInvalidDepositScript
+	if !tokenizer.Next() || tokenizer.Err() != nil {
+		return "", "", ErrInvalidIBCTransferScript
 	}
 
 	recipient = string(tokenizer.Data())
 
 	if tokenizer.Next() {
-		return "", "", ErrInvalidDepositScript
+		return "", "", ErrInvalidIBCTransferScript
 	}
 
 	return

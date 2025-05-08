@@ -50,6 +50,7 @@ func BtcBridgeKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		app.OracleKeeper,
 		app.IncentiveKeeper,
 		app.TSSKeeper,
+		app.TransferKeeper,
 		authority,
 	)
 
