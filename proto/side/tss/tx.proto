@@ -2,6 +2,7 @@ syntax = "proto3";
 package side.tss;
 
 import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
 import "cosmos/msg/v1/msg.proto";
 import "side/tss/params.proto";
 
@@ -17,8 +18,8 @@ service Msg {
     // SubmitSignatures submits signatures.
     rpc SubmitSignatures(MsgSubmitSignatures) returns (MsgSubmitSignaturesResponse);
 
-    // RefreshShares refreshes key shares (a.k.a. reshare).
-    rpc RefreshShares(MsgRefreshShares) returns (MsgRefreshSharesResponse);
+    // Reshare refreshes key shares.
+    rpc Reshare(MsgReshare) returns (MsgReshareResponse);
 
     // CompleteResharing completes the given resharing request by the participant.
     rpc CompleteResharing(MsgCompleteResharing) returns (MsgCompleteResharingResponse);
@@ -61,22 +62,24 @@ message MsgSubmitSignatures {
 // MsgSubmitSignaturesResponse defines the Msg/SubmitSignatures response type.
 message MsgSubmitSignaturesResponse {}
 
-// MsgRefreshShares defines the Msg/RefreshShares request type.
-message MsgRefreshShares {
+// MsgReshare defines the Msg/Reshare request type.
+message MsgReshare {
   option (cosmos.msg.v1.signer) = "authority";
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1;
-  // dkg request id
-  uint64 dkg_id = 2;
-  // public key corresponding to shares to be refreshed
-  string pub_key = 3;
-  // participant set
-  repeated string participants = 4;
+  // removed participant set
+  repeated string removed_participants = 2;
+  // new participant set
+  repeated string new_participants = 3;
+  // type defined offchain
+  int32 type = 4;
+  // timeout duration
+  google.protobuf.Duration timeout_duration = 5 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }
 
-// MsgRefreshSharesResponse defines the Msg/RefreshShares response type.
-message MsgRefreshSharesResponse {}
+// MsgReshareResponse defines the Msg/Reshare response type.
+message MsgReshareResponse {}
 
 // MsgCompleteResharing defines the Msg/CompleteResharing request type.
 message MsgCompleteResharing {

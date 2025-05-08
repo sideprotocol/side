@@ -126,12 +126,12 @@ enum ResharingStatus {
 message ResharingRequest {
   // request id
   uint64 id = 1;
-  // dkg request id
-  uint64 dkg_id = 2;
-  // pub key corresponding to shares to be refreshed
-  string pub_key = 3;
-  // participant set
-  repeated string participants = 4;
+  // removed participant set
+  repeated string removed_participants = 2;
+  // new participant set
+  repeated string new_participants = 3;
+  // type defined offchain
+  int32 type = 4;
   // expiration time
   google.protobuf.Timestamp expiration_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   // status

@@ -12,15 +12,15 @@ var (
 	// minimum DKG participant number
 	MinDKGParticipantNum = 3
 
-	// default DKG timeout period
-	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
+	// default DKG timeout duration
+	DefaultDKGTimeoutDuration = time.Duration(86400) * time.Second // 1 day
 )
 
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
 		AllowedDkgParticipants: []string{},
-		DkgTimeoutPeriod:       DefaultDKGTimeoutPeriod,
+		DkgTimeoutDuration:     DefaultDKGTimeoutDuration,
 	}
 }
 
@@ -35,7 +35,7 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if err := validateDKGTimeoutPeriod(p.DkgTimeoutPeriod); err != nil {
+	if err := validateDKGTimeoutDuration(p.DkgTimeoutDuration); err != nil {
 		return err
 	}
 
@@ -67,10 +67,10 @@ func validateDKGParticipants(participants []string) error {
 	return nil
 }
 
-// validateDKGTimeoutPeriod validates the given DKG timeout period
-func validateDKGTimeoutPeriod(timeoutPeriod time.Duration) error {
-	if timeoutPeriod <= 0 {
-		return errorsmod.Wrapf(ErrInvalidParams, "invalid dkg timeout period")
+// validateDKGTimeoutDuration validates the given DKG timeout duration
+func validateDKGTimeoutDuration(timeoutDuration time.Duration) error {
+	if timeoutDuration <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid dkg timeout duration")
 	}
 
 	return nil

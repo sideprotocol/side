@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"fmt"
-	"slices"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -76,8 +75,8 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	return &types.MsgSubmitSignaturesResponse{}, nil
 }
 
-// RefreshShares refreshes the key shares (a.k.a. reshare)
-func (m msgServer) RefreshShares(goCtx context.Context, msg *types.MsgRefreshShares) (*types.MsgRefreshSharesResponse, error) {
+// Reshare refreshes the key shares
+func (m msgServer) Reshare(goCtx context.Context, msg *types.MsgReshare) (*types.MsgReshareResponse, error) {
 	if m.authority != msg.Authority {
 		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
 	}
@@ -88,23 +87,9 @@ func (m msgServer) RefreshShares(goCtx context.Context, msg *types.MsgRefreshSha
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasDKGRequest(ctx, msg.DkgId) {
-		return nil, types.ErrDKGRequestDoesNotExist
-	}
+	m.InitiateResharingRequest(ctx, msg.RemovedParticipants, msg.NewParticipants, msg.Type, msg.TimeoutDuration)
 
-	dkgRequest := m.GetDKGRequest(ctx, msg.DkgId)
-	if dkgRequest.Status != types.DKGStatus_DKG_STATUS_COMPLETED {
-		return nil, errorsmod.Wrap(types.ErrInvalidDKGStatus, "dkg request not completed")
-	}
-
-	dkgCompletion := m.GetDKGCompletions(ctx, msg.DkgId)[0]
-	if !slices.Contains(dkgCompletion.PubKeys, msg.PubKey) {
-		return nil, errorsmod.Wrap(types.ErrInvalidPubKey, "pub key does not match the dkg")
-	}
-
-	m.InitiateResharingRequest(ctx, msg.DkgId, msg.PubKey, msg.Participants)
-
-	return &types.MsgRefreshSharesResponse{}, nil
+	return &types.MsgReshareResponse{}, nil
 }
 
 // CompleteResharing completes the resharing request by the participant

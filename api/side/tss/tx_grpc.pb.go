@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_CompleteDKG_FullMethodName       = "/side.tss.Msg/CompleteDKG"
 	Msg_SubmitSignatures_FullMethodName  = "/side.tss.Msg/SubmitSignatures"
-	Msg_RefreshShares_FullMethodName     = "/side.tss.Msg/RefreshShares"
+	Msg_Reshare_FullMethodName           = "/side.tss.Msg/Reshare"
 	Msg_CompleteResharing_FullMethodName = "/side.tss.Msg/CompleteResharing"
 	Msg_UpdateParams_FullMethodName      = "/side.tss.Msg/UpdateParams"
 )
@@ -34,8 +34,8 @@ type MsgClient interface {
 	CompleteDKG(ctx context.Context, in *MsgCompleteDKG, opts ...grpc.CallOption) (*MsgCompleteDKGResponse, error)
 	// SubmitSignatures submits signatures.
 	SubmitSignatures(ctx context.Context, in *MsgSubmitSignatures, opts ...grpc.CallOption) (*MsgSubmitSignaturesResponse, error)
-	// RefreshShares refreshes key shares (a.k.a. reshare).
-	RefreshShares(ctx context.Context, in *MsgRefreshShares, opts ...grpc.CallOption) (*MsgRefreshSharesResponse, error)
+	// Reshare refreshes key shares.
+	Reshare(ctx context.Context, in *MsgReshare, opts ...grpc.CallOption) (*MsgReshareResponse, error)
 	// CompleteResharing completes the given resharing request by the participant.
 	CompleteResharing(ctx context.Context, in *MsgCompleteResharing, opts ...grpc.CallOption) (*MsgCompleteResharingResponse, error)
 	// UpdateParams defines a governance operation for updating the x/tss module
@@ -71,9 +71,9 @@ func (c *msgClient) SubmitSignatures(ctx context.Context, in *MsgSubmitSignature
 	return out, nil
 }
 
-func (c *msgClient) RefreshShares(ctx context.Context, in *MsgRefreshShares, opts ...grpc.CallOption) (*MsgRefreshSharesResponse, error) {
-	out := new(MsgRefreshSharesResponse)
-	err := c.cc.Invoke(ctx, Msg_RefreshShares_FullMethodName, in, out, opts...)
+func (c *msgClient) Reshare(ctx context.Context, in *MsgReshare, opts ...grpc.CallOption) (*MsgReshareResponse, error) {
+	out := new(MsgReshareResponse)
+	err := c.cc.Invoke(ctx, Msg_Reshare_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,8 +106,8 @@ type MsgServer interface {
 	CompleteDKG(context.Context, *MsgCompleteDKG) (*MsgCompleteDKGResponse, error)
 	// SubmitSignatures submits signatures.
 	SubmitSignatures(context.Context, *MsgSubmitSignatures) (*MsgSubmitSignaturesResponse, error)
-	// RefreshShares refreshes key shares (a.k.a. reshare).
-	RefreshShares(context.Context, *MsgRefreshShares) (*MsgRefreshSharesResponse, error)
+	// Reshare refreshes key shares.
+	Reshare(context.Context, *MsgReshare) (*MsgReshareResponse, error)
 	// CompleteResharing completes the given resharing request by the participant.
 	CompleteResharing(context.Context, *MsgCompleteResharing) (*MsgCompleteResharingResponse, error)
 	// UpdateParams defines a governance operation for updating the x/tss module
@@ -128,8 +128,8 @@ func (UnimplementedMsgServer) CompleteDKG(context.Context, *MsgCompleteDKG) (*Ms
 func (UnimplementedMsgServer) SubmitSignatures(context.Context, *MsgSubmitSignatures) (*MsgSubmitSignaturesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitSignatures not implemented")
 }
-func (UnimplementedMsgServer) RefreshShares(context.Context, *MsgRefreshShares) (*MsgRefreshSharesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RefreshShares not implemented")
+func (UnimplementedMsgServer) Reshare(context.Context, *MsgReshare) (*MsgReshareResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Reshare not implemented")
 }
 func (UnimplementedMsgServer) CompleteResharing(context.Context, *MsgCompleteResharing) (*MsgCompleteResharingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CompleteResharing not implemented")
@@ -186,20 +186,20 @@ func _Msg_SubmitSignatures_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_RefreshShares_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRefreshShares)
+func _Msg_Reshare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReshare)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RefreshShares(ctx, in)
+		return srv.(MsgServer).Reshare(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_RefreshShares_FullMethodName,
+		FullMethod: Msg_Reshare_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RefreshShares(ctx, req.(*MsgRefreshShares))
+		return srv.(MsgServer).Reshare(ctx, req.(*MsgReshare))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -256,8 +256,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitSignatures_Handler,
 		},
 		{
-			MethodName: "RefreshShares",
-			Handler:    _Msg_RefreshShares_Handler,
+			MethodName: "Reshare",
+			Handler:    _Msg_Reshare_Handler,
 		},
 		{
 			MethodName: "CompleteResharing",

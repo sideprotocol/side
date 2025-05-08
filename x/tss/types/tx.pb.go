@@ -10,18 +10,22 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	_ "google.golang.org/protobuf/types/known/durationpb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -246,30 +250,32 @@ func (m *MsgSubmitSignaturesResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubmitSignaturesResponse proto.InternalMessageInfo
 
-// MsgRefreshShares defines the Msg/RefreshShares request type.
-type MsgRefreshShares struct {
+// MsgReshare defines the Msg/Reshare request type.
+type MsgReshare struct {
 	// authority is the address that controls the module (defaults to x/gov unless overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// dkg request id
-	DkgId uint64 `protobuf:"varint,2,opt,name=dkg_id,json=dkgId,proto3" json:"dkg_id,omitempty"`
-	// public key corresponding to shares to be refreshed
-	PubKey string `protobuf:"bytes,3,opt,name=pub_key,json=pubKey,proto3" json:"pub_key,omitempty"`
-	// participant set
-	Participants []string `protobuf:"bytes,4,rep,name=participants,proto3" json:"participants,omitempty"`
+	// removed participant set
+	RemovedParticipants []string `protobuf:"bytes,2,rep,name=removed_participants,json=removedParticipants,proto3" json:"removed_participants,omitempty"`
+	// new participant set
+	NewParticipants []string `protobuf:"bytes,3,rep,name=new_participants,json=newParticipants,proto3" json:"new_participants,omitempty"`
+	// type defined offchain
+	Type int32 `protobuf:"varint,4,opt,name=type,proto3" json:"type,omitempty"`
+	// timeout duration
+	TimeoutDuration time.Duration `protobuf:"bytes,5,opt,name=timeout_duration,json=timeoutDuration,proto3,stdduration" json:"timeout_duration"`
 }
 
-func (m *MsgRefreshShares) Reset()         { *m = MsgRefreshShares{} }
-func (m *MsgRefreshShares) String() string { return proto.CompactTextString(m) }
-func (*MsgRefreshShares) ProtoMessage()    {}
-func (*MsgRefreshShares) Descriptor() ([]byte, []int) {
+func (m *MsgReshare) Reset()         { *m = MsgReshare{} }
+func (m *MsgReshare) String() string { return proto.CompactTextString(m) }
+func (*MsgReshare) ProtoMessage()    {}
+func (*MsgReshare) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1229450f2932bf35, []int{4}
 }
-func (m *MsgRefreshShares) XXX_Unmarshal(b []byte) error {
+func (m *MsgReshare) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRefreshShares) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgReshare) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRefreshShares.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgReshare.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -279,62 +285,69 @@ func (m *MsgRefreshShares) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *MsgRefreshShares) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRefreshShares.Merge(m, src)
+func (m *MsgReshare) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgReshare.Merge(m, src)
 }
-func (m *MsgRefreshShares) XXX_Size() int {
+func (m *MsgReshare) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRefreshShares) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRefreshShares.DiscardUnknown(m)
+func (m *MsgReshare) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgReshare.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRefreshShares proto.InternalMessageInfo
+var xxx_messageInfo_MsgReshare proto.InternalMessageInfo
 
-func (m *MsgRefreshShares) GetAuthority() string {
+func (m *MsgReshare) GetAuthority() string {
 	if m != nil {
 		return m.Authority
 	}
 	return ""
 }
 
-func (m *MsgRefreshShares) GetDkgId() uint64 {
+func (m *MsgReshare) GetRemovedParticipants() []string {
 	if m != nil {
-		return m.DkgId
-	}
-	return 0
-}
-
-func (m *MsgRefreshShares) GetPubKey() string {
-	if m != nil {
-		return m.PubKey
-	}
-	return ""
-}
-
-func (m *MsgRefreshShares) GetParticipants() []string {
-	if m != nil {
-		return m.Participants
+		return m.RemovedParticipants
 	}
 	return nil
 }
 
-// MsgRefreshSharesResponse defines the Msg/RefreshShares response type.
-type MsgRefreshSharesResponse struct {
+func (m *MsgReshare) GetNewParticipants() []string {
+	if m != nil {
+		return m.NewParticipants
+	}
+	return nil
 }
 
-func (m *MsgRefreshSharesResponse) Reset()         { *m = MsgRefreshSharesResponse{} }
-func (m *MsgRefreshSharesResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgRefreshSharesResponse) ProtoMessage()    {}
-func (*MsgRefreshSharesResponse) Descriptor() ([]byte, []int) {
+func (m *MsgReshare) GetType() int32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *MsgReshare) GetTimeoutDuration() time.Duration {
+	if m != nil {
+		return m.TimeoutDuration
+	}
+	return 0
+}
+
+// MsgReshareResponse defines the Msg/Reshare response type.
+type MsgReshareResponse struct {
+}
+
+func (m *MsgReshareResponse) Reset()         { *m = MsgReshareResponse{} }
+func (m *MsgReshareResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgReshareResponse) ProtoMessage()    {}
+func (*MsgReshareResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1229450f2932bf35, []int{5}
 }
-func (m *MsgRefreshSharesResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgReshareResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRefreshSharesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgReshareResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRefreshSharesResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgReshareResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -344,17 +357,17 @@ func (m *MsgRefreshSharesResponse) XXX_Marshal(b []byte, deterministic bool) ([]
 		return b[:n], nil
 	}
 }
-func (m *MsgRefreshSharesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRefreshSharesResponse.Merge(m, src)
+func (m *MsgReshareResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgReshareResponse.Merge(m, src)
 }
-func (m *MsgRefreshSharesResponse) XXX_Size() int {
+func (m *MsgReshareResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRefreshSharesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRefreshSharesResponse.DiscardUnknown(m)
+func (m *MsgReshareResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgReshareResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRefreshSharesResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgReshareResponse proto.InternalMessageInfo
 
 // MsgCompleteResharing defines the Msg/CompleteResharing request type.
 type MsgCompleteResharing struct {
@@ -569,8 +582,8 @@ func init() {
 	proto.RegisterType((*MsgCompleteDKGResponse)(nil), "side.tss.MsgCompleteDKGResponse")
 	proto.RegisterType((*MsgSubmitSignatures)(nil), "side.tss.MsgSubmitSignatures")
 	proto.RegisterType((*MsgSubmitSignaturesResponse)(nil), "side.tss.MsgSubmitSignaturesResponse")
-	proto.RegisterType((*MsgRefreshShares)(nil), "side.tss.MsgRefreshShares")
-	proto.RegisterType((*MsgRefreshSharesResponse)(nil), "side.tss.MsgRefreshSharesResponse")
+	proto.RegisterType((*MsgReshare)(nil), "side.tss.MsgReshare")
+	proto.RegisterType((*MsgReshareResponse)(nil), "side.tss.MsgReshareResponse")
 	proto.RegisterType((*MsgCompleteResharing)(nil), "side.tss.MsgCompleteResharing")
 	proto.RegisterType((*MsgCompleteResharingResponse)(nil), "side.tss.MsgCompleteResharingResponse")
 	proto.RegisterType((*MsgUpdateParams)(nil), "side.tss.MsgUpdateParams")
@@ -580,46 +593,49 @@ func init() {
 func init() { proto.RegisterFile("side/tss/tx.proto", fileDescriptor_1229450f2932bf35) }
 
 var fileDescriptor_1229450f2932bf35 = []byte{
-	// 609 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xcd, 0x6e, 0xd3, 0x4c,
-	0x14, 0x8d, 0xeb, 0x34, 0x6d, 0x6e, 0xfb, 0xb5, 0xa9, 0xbf, 0xfe, 0xb8, 0xa6, 0x35, 0xc1, 0x12,
-	0x28, 0x74, 0x61, 0x8b, 0xb2, 0xeb, 0xb2, 0x20, 0xa1, 0xaa, 0x44, 0x54, 0xae, 0x90, 0x10, 0x2c,
-	0x2a, 0x3b, 0x1e, 0x26, 0x26, 0xb5, 0xc7, 0xf2, 0x1d, 0xa3, 0x66, 0x87, 0x78, 0x02, 0x16, 0xbc,
-	0x04, 0x0b, 0xa4, 0x3e, 0x46, 0x97, 0x5d, 0xb2, 0x42, 0xa8, 0x5d, 0xf4, 0x35, 0x90, 0x7f, 0x13,
-	0x37, 0x3f, 0x64, 0x65, 0xcf, 0x39, 0x73, 0xcf, 0x3d, 0x73, 0xef, 0x9d, 0x81, 0x35, 0x74, 0x1d,
-	0x62, 0x70, 0x44, 0x83, 0x5f, 0xe8, 0x41, 0xc8, 0x38, 0x93, 0x16, 0x63, 0x48, 0xe7, 0x88, 0xca,
-	0x3a, 0x65, 0x94, 0x25, 0xa0, 0x11, 0xff, 0xa5, 0xbc, 0xb2, 0xd5, 0x61, 0xe8, 0x31, 0x34, 0x3c,
-	0xa4, 0xc6, 0xe7, 0x67, 0xf1, 0x27, 0x23, 0x36, 0x0a, 0xad, 0xc0, 0x0a, 0x2d, 0x0f, 0x53, 0x58,
-	0xfb, 0x21, 0xc0, 0x4a, 0x1b, 0xe9, 0x0b, 0xe6, 0x05, 0xe7, 0x84, 0x93, 0x97, 0xc7, 0xaf, 0xa4,
-	0x4d, 0xa8, 0x21, 0xf1, 0x1d, 0x12, 0xca, 0x42, 0x53, 0x68, 0xd5, 0xcd, 0x6c, 0x25, 0xad, 0xc0,
-	0x9c, 0xeb, 0xc8, 0x73, 0x4d, 0xa1, 0x55, 0x35, 0xe7, 0x5c, 0x47, 0xda, 0x86, 0xc5, 0x20, 0xb2,
-	0xcf, 0x7a, 0xa4, 0x8f, 0xb2, 0xd8, 0x14, 0x5b, 0x75, 0x73, 0x21, 0x88, 0xec, 0x63, 0xd2, 0x47,
-	0xe9, 0x29, 0x34, 0x3a, 0xcc, 0x47, 0xe2, 0x63, 0x84, 0x67, 0x41, 0x64, 0xf7, 0x48, 0x5f, 0xae,
-	0x26, 0x62, 0xab, 0x05, 0x7e, 0x92, 0xc0, 0xd2, 0x0e, 0xd4, 0xd1, 0xa5, 0xbe, 0xc5, 0xa3, 0x90,
-	0xc8, 0xf3, 0xc9, 0x9e, 0x01, 0x70, 0xb0, 0xf4, 0xf5, 0xee, 0x72, 0x2f, 0x33, 0xa0, 0xc9, 0xb0,
-	0x59, 0xb6, 0x6a, 0x12, 0x0c, 0x62, 0x39, 0xed, 0x13, 0xfc, 0xdf, 0x46, 0x7a, 0x1a, 0xd9, 0x9e,
-	0xcb, 0x4f, 0xf3, 0x60, 0x9c, 0xf9, 0x24, 0x2a, 0x40, 0x91, 0x32, 0x3f, 0xcb, 0x10, 0x52, 0x76,
-	0xb1, 0x0b, 0x0f, 0xc6, 0xe4, 0x2a, 0xac, 0x7c, 0x17, 0xa0, 0xd1, 0x46, 0x6a, 0x92, 0x8f, 0x21,
-	0xc1, 0xee, 0x69, 0xd7, 0x8a, 0x8d, 0xec, 0x40, 0xdd, 0x8a, 0x78, 0x97, 0x85, 0x2e, 0xef, 0x67,
-	0x5e, 0x06, 0x80, 0xb4, 0x01, 0x35, 0xa7, 0x47, 0xcf, 0x0a, 0x4b, 0xf3, 0x4e, 0x8f, 0x1e, 0x39,
-	0xd2, 0x16, 0x2c, 0x64, 0xf5, 0x95, 0xc5, 0xd4, 0x7e, 0x5a, 0x5e, 0x49, 0x83, 0xe5, 0xc0, 0x0a,
-	0xb9, 0xdb, 0x71, 0x03, 0xcb, 0xe7, 0x28, 0x57, 0x13, 0xc3, 0x25, 0xec, 0x60, 0x25, 0xb6, 0x3c,
-	0xc8, 0xa1, 0x29, 0x20, 0xdf, 0x77, 0x35, 0x6c, 0x79, 0x7d, 0xa8, 0xb0, 0x26, 0xc1, 0xae, 0x15,
-	0xba, 0x3e, 0x9d, 0xb9, 0x7e, 0xe3, 0xda, 0x2d, 0xce, 0xd0, 0xee, 0xea, 0xd4, 0x76, 0xab, 0xb0,
-	0x33, 0xce, 0x55, 0x61, 0x9b, 0xc1, 0x6a, 0x1b, 0xe9, 0xdb, 0xc0, 0xb1, 0x38, 0x39, 0x49, 0x66,
-	0xfa, 0x1f, 0x75, 0xd6, 0xa1, 0x96, 0xce, 0x7e, 0x62, 0x7d, 0x69, 0xbf, 0xa1, 0xe7, 0x97, 0x49,
-	0x4f, 0xe3, 0x0f, 0xab, 0x57, 0xbf, 0x1f, 0x56, 0xcc, 0x6c, 0xd7, 0x48, 0x0d, 0xb7, 0x61, 0xeb,
-	0x5e, 0xc2, 0xdc, 0xcb, 0xfe, 0x4f, 0x11, 0xc4, 0x36, 0x52, 0xe9, 0x08, 0x96, 0x86, 0xaf, 0x92,
-	0x3c, 0xc8, 0x50, 0x9e, 0x5c, 0xa5, 0x39, 0x89, 0xc9, 0x25, 0xa5, 0x77, 0xd0, 0x18, 0x19, 0xe8,
-	0xdd, 0x52, 0xd4, 0x7d, 0x5a, 0x79, 0x3c, 0x95, 0x2e, 0x94, 0xdf, 0xc0, 0x7f, 0xe5, 0xf1, 0x54,
-	0x4a, 0x71, 0x25, 0x4e, 0xd1, 0x26, 0x73, 0x85, 0xe0, 0x07, 0x58, 0x1b, 0x1d, 0x1e, 0x75, 0xec,
-	0x09, 0x0b, 0x5e, 0x79, 0x32, 0x9d, 0x2f, 0xc4, 0x5f, 0xc3, 0x72, 0xa9, 0xc7, 0xdb, 0xa5, 0xb8,
-	0x61, 0x4a, 0x79, 0x34, 0x91, 0xca, 0xd5, 0x94, 0xf9, 0x2f, 0x77, 0x97, 0x7b, 0xc2, 0xe1, 0xe1,
-	0xd5, 0x8d, 0x2a, 0x5c, 0xdf, 0xa8, 0xc2, 0x9f, 0x1b, 0x55, 0xf8, 0x76, 0xab, 0x56, 0xae, 0x6f,
-	0xd5, 0xca, 0xaf, 0x5b, 0xb5, 0xf2, 0xbe, 0x45, 0x5d, 0xde, 0x8d, 0x6c, 0xbd, 0xc3, 0x3c, 0x23,
-	0x56, 0x4b, 0x9e, 0xc9, 0x0e, 0x3b, 0x4f, 0x16, 0xc6, 0x45, 0xfa, 0x1a, 0xf7, 0x03, 0x82, 0x76,
-	0x2d, 0xa1, 0x9e, 0xff, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x7b, 0xfa, 0x47, 0xac, 0xa6, 0x05, 0x00,
-	0x00,
+	// 671 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xbb, 0x6e, 0xd3, 0x50,
+	0x18, 0x8e, 0x93, 0xf4, 0xf6, 0x07, 0x35, 0xa9, 0x1b, 0x5a, 0xc7, 0xb4, 0x6e, 0x88, 0x04, 0x0a,
+	0x1d, 0x6c, 0xb5, 0x6c, 0x95, 0x58, 0x42, 0x25, 0x84, 0x4a, 0x50, 0xe5, 0x0a, 0x09, 0xc1, 0x10,
+	0xd9, 0xf1, 0xc1, 0x35, 0xad, 0x7d, 0x2c, 0xff, 0xc7, 0x6d, 0xb3, 0x21, 0x9e, 0x80, 0x81, 0x01,
+	0x89, 0x27, 0x60, 0xeb, 0x63, 0x74, 0xec, 0xc8, 0x04, 0xa8, 0x1d, 0xfa, 0x12, 0x0c, 0xc8, 0xc7,
+	0x97, 0xc4, 0x6d, 0x5a, 0x32, 0xc5, 0xe7, 0xfb, 0xfe, 0xcb, 0xf7, 0xdf, 0x02, 0x0b, 0xe8, 0x58,
+	0x44, 0x63, 0x88, 0x1a, 0x3b, 0x51, 0xfd, 0x80, 0x32, 0x2a, 0xce, 0x46, 0x90, 0xca, 0x10, 0xe5,
+	0xba, 0x4d, 0x6d, 0xca, 0x41, 0x2d, 0xfa, 0x8a, 0x79, 0x59, 0xb1, 0x29, 0xb5, 0x0f, 0x89, 0xc6,
+	0x5f, 0x66, 0xf8, 0x41, 0xb3, 0xc2, 0xc0, 0x60, 0x0e, 0xf5, 0x12, 0x7e, 0xb9, 0x4f, 0xd1, 0xa5,
+	0xa8, 0xb9, 0x68, 0x6b, 0x47, 0x1b, 0xd1, 0x4f, 0x42, 0xdc, 0xcf, 0x72, 0xf9, 0x46, 0x60, 0xb8,
+	0x18, 0xc3, 0xad, 0x1f, 0x02, 0xcc, 0x77, 0xd1, 0x7e, 0x4e, 0x5d, 0xff, 0x90, 0x30, 0xb2, 0xbd,
+	0xf3, 0x42, 0x5c, 0x82, 0x69, 0x24, 0x9e, 0x45, 0x02, 0x49, 0x68, 0x0a, 0xed, 0x39, 0x3d, 0x79,
+	0x89, 0xf3, 0x50, 0x74, 0x2c, 0xa9, 0xd8, 0x14, 0xda, 0x65, 0xbd, 0xe8, 0x58, 0x62, 0x03, 0x66,
+	0xfd, 0xd0, 0xec, 0x1d, 0x90, 0x01, 0x4a, 0xa5, 0x66, 0xa9, 0x3d, 0xa7, 0xcf, 0xf8, 0xa1, 0xb9,
+	0x43, 0x06, 0x28, 0x3e, 0x81, 0x5a, 0x9f, 0x7a, 0x48, 0x3c, 0x0c, 0xb1, 0xe7, 0x87, 0xe6, 0x01,
+	0x19, 0x48, 0x65, 0x1e, 0xac, 0x9a, 0xe1, 0xbb, 0x1c, 0x16, 0x57, 0x60, 0x0e, 0x1d, 0xdb, 0x33,
+	0x58, 0x18, 0x10, 0x69, 0x8a, 0xdb, 0x0c, 0x81, 0xad, 0xca, 0xe7, 0xab, 0xd3, 0xf5, 0x44, 0x40,
+	0x4b, 0x82, 0xa5, 0xbc, 0x54, 0x9d, 0xa0, 0x1f, 0x85, 0x6b, 0x7d, 0x84, 0xc5, 0x2e, 0xda, 0x7b,
+	0xa1, 0xe9, 0x3a, 0x6c, 0x2f, 0x75, 0xc6, 0x89, 0x2b, 0x51, 0x00, 0xb2, 0x94, 0x69, 0x2d, 0x23,
+	0x48, 0x5e, 0xc5, 0x2a, 0x3c, 0x18, 0x93, 0x2b, 0x93, 0xf2, 0x57, 0x00, 0xe8, 0xa2, 0xad, 0x13,
+	0xdc, 0x37, 0x02, 0x12, 0x95, 0x67, 0x84, 0x6c, 0x9f, 0x06, 0x0e, 0x1b, 0x24, 0x2a, 0x86, 0x80,
+	0xb8, 0x01, 0xf5, 0x80, 0xb8, 0xf4, 0x88, 0x58, 0x3d, 0xdf, 0x08, 0x98, 0xd3, 0x77, 0x7c, 0xc3,
+	0x63, 0x28, 0x15, 0xb9, 0x84, 0xc5, 0x84, 0xdb, 0x1d, 0xa1, 0xa2, 0xd6, 0x7a, 0xe4, 0x38, 0x6f,
+	0x1e, 0x2b, 0xae, 0x7a, 0xe4, 0x38, 0x67, 0x2a, 0x42, 0x99, 0x0d, 0x7c, 0xc2, 0x3b, 0x3f, 0xa5,
+	0xf3, 0x6f, 0xf1, 0x35, 0xd4, 0x98, 0xe3, 0x12, 0x1a, 0xb2, 0x5e, 0xba, 0x39, 0xbc, 0xeb, 0x95,
+	0xcd, 0x86, 0x1a, 0xaf, 0x96, 0x9a, 0xae, 0x96, 0xba, 0x9d, 0x18, 0x74, 0x66, 0xcf, 0x7e, 0xad,
+	0x15, 0xbe, 0xfd, 0x5e, 0x13, 0xf4, 0x6a, 0xe2, 0x9c, 0x52, 0x5b, 0xf3, 0x51, 0x6b, 0x86, 0x15,
+	0xb5, 0xea, 0x20, 0x0e, 0xab, 0xcf, 0x9a, 0xf2, 0x55, 0x80, 0xfa, 0xc8, 0xe8, 0x62, 0xda, 0xf1,
+	0xec, 0x89, 0x27, 0x34, 0x6e, 0xa1, 0x4a, 0x13, 0x2c, 0x54, 0xf9, 0xce, 0x85, 0x52, 0x60, 0x65,
+	0x9c, 0xaa, 0x4c, 0x36, 0x85, 0x6a, 0x17, 0xed, 0x37, 0xbe, 0x65, 0x30, 0xb2, 0xcb, 0xaf, 0xe6,
+	0x3f, 0xf3, 0x54, 0x61, 0x3a, 0xbe, 0x2e, 0x2e, 0xbd, 0xb2, 0x59, 0x53, 0xd3, 0x73, 0x56, 0x63,
+	0xff, 0x4e, 0x39, 0x6a, 0xa5, 0x9e, 0x58, 0xdd, 0xe8, 0x5e, 0x03, 0x96, 0xaf, 0x25, 0x4c, 0xb5,
+	0x6c, 0x7e, 0x2f, 0x41, 0xa9, 0x8b, 0xb6, 0xf8, 0x12, 0x2a, 0xa3, 0xc7, 0x2a, 0x0d, 0x33, 0xe4,
+	0x6f, 0x43, 0x6e, 0xde, 0xc6, 0xa4, 0x21, 0xc5, 0xb7, 0x50, 0xbb, 0x71, 0x32, 0xab, 0x39, 0xaf,
+	0xeb, 0xb4, 0xfc, 0xe8, 0x4e, 0x3a, 0x8b, 0xfc, 0x0c, 0x66, 0xd2, 0x03, 0xa8, 0xe7, 0x3c, 0x12,
+	0x54, 0x5e, 0x19, 0x87, 0x66, 0xee, 0xef, 0x61, 0xe1, 0xe6, 0xaa, 0x28, 0x63, 0xeb, 0xc9, 0x78,
+	0xf9, 0xf1, 0xdd, 0x7c, 0x16, 0xfc, 0x15, 0xdc, 0xcb, 0x4d, 0xb4, 0x91, 0xf3, 0x1b, 0xa5, 0xe4,
+	0x87, 0xb7, 0x52, 0x69, 0x34, 0x79, 0xea, 0xd3, 0xd5, 0xe9, 0xba, 0xd0, 0xe9, 0x9c, 0x5d, 0x28,
+	0xc2, 0xf9, 0x85, 0x22, 0xfc, 0xb9, 0x50, 0x84, 0x2f, 0x97, 0x4a, 0xe1, 0xfc, 0x52, 0x29, 0xfc,
+	0xbc, 0x54, 0x0a, 0xef, 0xda, 0xb6, 0xc3, 0xf6, 0x43, 0x53, 0xed, 0x53, 0x57, 0x8b, 0xa2, 0xf1,
+	0xeb, 0xea, 0xd3, 0x43, 0xfe, 0xd0, 0x4e, 0xe2, 0x7f, 0xff, 0x81, 0x4f, 0xd0, 0x9c, 0xe6, 0xd4,
+	0xd3, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x4d, 0x3f, 0xec, 0x43, 0x16, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -638,8 +654,8 @@ type MsgClient interface {
 	CompleteDKG(ctx context.Context, in *MsgCompleteDKG, opts ...grpc.CallOption) (*MsgCompleteDKGResponse, error)
 	// SubmitSignatures submits signatures.
 	SubmitSignatures(ctx context.Context, in *MsgSubmitSignatures, opts ...grpc.CallOption) (*MsgSubmitSignaturesResponse, error)
-	// RefreshShares refreshes key shares (a.k.a. reshare).
-	RefreshShares(ctx context.Context, in *MsgRefreshShares, opts ...grpc.CallOption) (*MsgRefreshSharesResponse, error)
+	// Reshare refreshes key shares.
+	Reshare(ctx context.Context, in *MsgReshare, opts ...grpc.CallOption) (*MsgReshareResponse, error)
 	// CompleteResharing completes the given resharing request by the participant.
 	CompleteResharing(ctx context.Context, in *MsgCompleteResharing, opts ...grpc.CallOption) (*MsgCompleteResharingResponse, error)
 	// UpdateParams defines a governance operation for updating the x/tss module
@@ -675,9 +691,9 @@ func (c *msgClient) SubmitSignatures(ctx context.Context, in *MsgSubmitSignature
 	return out, nil
 }
 
-func (c *msgClient) RefreshShares(ctx context.Context, in *MsgRefreshShares, opts ...grpc.CallOption) (*MsgRefreshSharesResponse, error) {
-	out := new(MsgRefreshSharesResponse)
-	err := c.cc.Invoke(ctx, "/side.tss.Msg/RefreshShares", in, out, opts...)
+func (c *msgClient) Reshare(ctx context.Context, in *MsgReshare, opts ...grpc.CallOption) (*MsgReshareResponse, error) {
+	out := new(MsgReshareResponse)
+	err := c.cc.Invoke(ctx, "/side.tss.Msg/Reshare", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -708,8 +724,8 @@ type MsgServer interface {
 	CompleteDKG(context.Context, *MsgCompleteDKG) (*MsgCompleteDKGResponse, error)
 	// SubmitSignatures submits signatures.
 	SubmitSignatures(context.Context, *MsgSubmitSignatures) (*MsgSubmitSignaturesResponse, error)
-	// RefreshShares refreshes key shares (a.k.a. reshare).
-	RefreshShares(context.Context, *MsgRefreshShares) (*MsgRefreshSharesResponse, error)
+	// Reshare refreshes key shares.
+	Reshare(context.Context, *MsgReshare) (*MsgReshareResponse, error)
 	// CompleteResharing completes the given resharing request by the participant.
 	CompleteResharing(context.Context, *MsgCompleteResharing) (*MsgCompleteResharingResponse, error)
 	// UpdateParams defines a governance operation for updating the x/tss module
@@ -729,8 +745,8 @@ func (*UnimplementedMsgServer) CompleteDKG(ctx context.Context, req *MsgComplete
 func (*UnimplementedMsgServer) SubmitSignatures(ctx context.Context, req *MsgSubmitSignatures) (*MsgSubmitSignaturesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitSignatures not implemented")
 }
-func (*UnimplementedMsgServer) RefreshShares(ctx context.Context, req *MsgRefreshShares) (*MsgRefreshSharesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RefreshShares not implemented")
+func (*UnimplementedMsgServer) Reshare(ctx context.Context, req *MsgReshare) (*MsgReshareResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Reshare not implemented")
 }
 func (*UnimplementedMsgServer) CompleteResharing(ctx context.Context, req *MsgCompleteResharing) (*MsgCompleteResharingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CompleteResharing not implemented")
@@ -779,20 +795,20 @@ func _Msg_SubmitSignatures_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_RefreshShares_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRefreshShares)
+func _Msg_Reshare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReshare)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RefreshShares(ctx, in)
+		return srv.(MsgServer).Reshare(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.tss.Msg/RefreshShares",
+		FullMethod: "/side.tss.Msg/Reshare",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RefreshShares(ctx, req.(*MsgRefreshShares))
+		return srv.(MsgServer).Reshare(ctx, req.(*MsgReshare))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -847,8 +863,8 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitSignatures_Handler,
 		},
 		{
-			MethodName: "RefreshShares",
-			Handler:    _Msg_RefreshShares_Handler,
+			MethodName: "Reshare",
+			Handler:    _Msg_Reshare_Handler,
 		},
 		{
 			MethodName: "CompleteResharing",
@@ -1011,7 +1027,7 @@ func (m *MsgSubmitSignaturesResponse) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRefreshShares) Marshal() (dAtA []byte, err error) {
+func (m *MsgReshare) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1021,36 +1037,46 @@ func (m *MsgRefreshShares) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRefreshShares) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgReshare) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRefreshShares) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgReshare) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Participants) > 0 {
-		for iNdEx := len(m.Participants) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Participants[iNdEx])
-			copy(dAtA[i:], m.Participants[iNdEx])
-			i = encodeVarintTx(dAtA, i, uint64(len(m.Participants[iNdEx])))
+	n1, err1 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.TimeoutDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.TimeoutDuration):])
+	if err1 != nil {
+		return 0, err1
+	}
+	i -= n1
+	i = encodeVarintTx(dAtA, i, uint64(n1))
+	i--
+	dAtA[i] = 0x2a
+	if m.Type != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.NewParticipants) > 0 {
+		for iNdEx := len(m.NewParticipants) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NewParticipants[iNdEx])
+			copy(dAtA[i:], m.NewParticipants[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.NewParticipants[iNdEx])))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x1a
 		}
 	}
-	if len(m.PubKey) > 0 {
-		i -= len(m.PubKey)
-		copy(dAtA[i:], m.PubKey)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.PubKey)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.DkgId != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.DkgId))
-		i--
-		dAtA[i] = 0x10
+	if len(m.RemovedParticipants) > 0 {
+		for iNdEx := len(m.RemovedParticipants) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RemovedParticipants[iNdEx])
+			copy(dAtA[i:], m.RemovedParticipants[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.RemovedParticipants[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
 	}
 	if len(m.Authority) > 0 {
 		i -= len(m.Authority)
@@ -1062,7 +1088,7 @@ func (m *MsgRefreshShares) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRefreshSharesResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgReshareResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1072,12 +1098,12 @@ func (m *MsgRefreshSharesResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRefreshSharesResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgReshareResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRefreshSharesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgReshareResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1301,7 +1327,7 @@ func (m *MsgSubmitSignaturesResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgRefreshShares) Size() (n int) {
+func (m *MsgReshare) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1311,23 +1337,27 @@ func (m *MsgRefreshShares) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	if m.DkgId != 0 {
-		n += 1 + sovTx(uint64(m.DkgId))
-	}
-	l = len(m.PubKey)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	if len(m.Participants) > 0 {
-		for _, s := range m.Participants {
+	if len(m.RemovedParticipants) > 0 {
+		for _, s := range m.RemovedParticipants {
 			l = len(s)
 			n += 1 + l + sovTx(uint64(l))
 		}
 	}
+	if len(m.NewParticipants) > 0 {
+		for _, s := range m.NewParticipants {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.Type != 0 {
+		n += 1 + sovTx(uint64(m.Type))
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.TimeoutDuration)
+	n += 1 + l + sovTx(uint64(l))
 	return n
 }
 
-func (m *MsgRefreshSharesResponse) Size() (n int) {
+func (m *MsgReshareResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1829,7 +1859,7 @@ func (m *MsgSubmitSignaturesResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRefreshShares) Unmarshal(dAtA []byte) error {
+func (m *MsgReshare) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1852,10 +1882,10 @@ func (m *MsgRefreshShares) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRefreshShares: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgReshare: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRefreshShares: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgReshare: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1891,10 +1921,10 @@ func (m *MsgRefreshShares) Unmarshal(dAtA []byte) error {
 			m.Authority = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DkgId", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RemovedParticipants", wireType)
 			}
-			m.DkgId = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1904,14 +1934,27 @@ func (m *MsgRefreshShares) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.DkgId |= uint64(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RemovedParticipants = append(m.RemovedParticipants, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PubKey", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NewParticipants", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1939,13 +1982,13 @@ func (m *MsgRefreshShares) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PubKey = string(dAtA[iNdEx:postIndex])
+			m.NewParticipants = append(m.NewParticipants, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Participants", wireType)
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
 			}
-			var stringLen uint64
+			m.Type = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1955,23 +1998,43 @@ func (m *MsgRefreshShares) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Type |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TimeoutDuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
 				return ErrInvalidLengthTx
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTx
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Participants = append(m.Participants, string(dAtA[iNdEx:postIndex]))
+			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.TimeoutDuration, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1994,7 +2057,7 @@ func (m *MsgRefreshShares) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRefreshSharesResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgReshareResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2017,10 +2080,10 @@ func (m *MsgRefreshSharesResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRefreshSharesResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgReshareResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRefreshSharesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgReshareResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

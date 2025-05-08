@@ -10,7 +10,7 @@ import (
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCompleteDKG{}, "tss/MsgCompleteDKG", nil)
 	cdc.RegisterConcrete(&MsgSubmitSignatures{}, "tss/MsgSubmitSignatures", nil)
-	cdc.RegisterConcrete(&MsgRefreshShares{}, "tss/MsgRefreshShares", nil)
+	cdc.RegisterConcrete(&MsgReshare{}, "tss/MsgReshare", nil)
 	cdc.RegisterConcrete(&MsgCompleteResharing{}, "tss/MsgCompleteResharing", nil)
 	cdc.RegisterConcrete(&MsgUpdateParams{}, "tss/MsgUpdateParams", nil)
 	// this line is used by starport scaffolding # 2
@@ -19,7 +19,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgCompleteDKG{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgSubmitSignatures{})
-	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgRefreshShares{})
+	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgReshare{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgCompleteResharing{})
 	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgUpdateParams{})
 

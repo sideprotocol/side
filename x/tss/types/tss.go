@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"reflect"
 	"slices"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -93,4 +94,13 @@ func GetSigningOption(signingType SigningType, options *SigningOptions) string {
 	default:
 		return ""
 	}
+}
+
+// GetExpirationTime gets the expiration time according to the given timeout duration
+func GetExpirationTime(currentTime time.Time, timeoutDuration time.Duration) time.Time {
+	if timeoutDuration == 0 {
+		return time.Time{}
+	}
+
+	return currentTime.Add(timeoutDuration)
 }
