@@ -8,6 +8,7 @@ import (
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
+	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
@@ -61,7 +62,12 @@ type IncentiveKeeper interface {
 	DistributeWithdrawReward(ctx sdk.Context, addr string) error
 }
 
-// TSSKeeper defines the expected TSS keeper interface
+// TSSKeeper defines the expected TSS keeper interfaces
 type TSSKeeper interface {
 	GetParams(ctx sdk.Context) tsstypes.Params
+}
+
+// IBCTransferKeeper defines the expected IBC transfer interfaces
+type IBCTransferKeeper interface {
+	Transfer(goCtx context.Context, msg *ibctransfertypes.MsgTransfer) (*ibctransfertypes.MsgTransferResponse, error)
 }
