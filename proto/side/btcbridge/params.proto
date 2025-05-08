@@ -37,6 +37,8 @@ message Params {
   ProtocolFees protocol_fees = 13 [(gogoproto.nullable) = false];
   // TSS params
   TSSParams tss_params = 14 [(gogoproto.nullable) = false];
+  // IBC params
+  IBCParams ibc_params = 15 [(gogoproto.nullable) = false];
 }
 
 // AssetType defines the type of asset
@@ -98,4 +100,14 @@ message TSSParams {
   google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
   // Transition period after which TSS participants update process is completed
   google.protobuf.Duration participant_update_transition_period = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// IBCParams defines the params related to IBC
+message IBCParams {
+  // Id of the IBC port used to transfer sBTC
+  string port_id = 1;
+  // Timeout height offset relative to the current client height
+  uint64 timeout_height_offset = 2;
+  // Timeout duration relative to the current time
+  google.protobuf.Duration timeout_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }

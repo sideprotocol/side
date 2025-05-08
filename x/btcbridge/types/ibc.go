@@ -9,9 +9,6 @@ const (
 	// magic number
 	IBCTransferMagicNumber = txscript.OP_10
 
-	// default port id
-	DefaultPortId = "transfer"
-
 	// default memo for IBC transfer
 	DefaultMemo = "BTC bridge | Side Chain"
 
