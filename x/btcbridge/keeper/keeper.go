@@ -31,6 +31,9 @@ type (
 		oracleKeeper      types.OracleKeeper
 		incentiveKeeper   types.IncentiveKeeper
 		tssKeeper         types.TSSKeeper
+		ibcclientKeeper   types.IBCClientKeeper
+		ibcconnectionKeeper types.IBCConnectionKeeper
+		ibcchannelKeeper  types.IBCChannelKeeper
 		ibctransferKeeper types.IBCTransferKeeper
 
 		authority string
@@ -46,6 +49,9 @@ func NewKeeper(
 	oracleKeeper types.OracleKeeper,
 	incentiveKeeper types.IncentiveKeeper,
 	tssKeeper types.TSSKeeper,
+	ibcclientKeeper types.IBCClientKeeper,
+	ibcconnectionKeeper types.IBCConnectionKeeper,
+	ibcchannelKeeper types.IBCChannelKeeper,
 	ibctransferKeeper types.IBCTransferKeeper,
 	authority string,
 ) *Keeper {
@@ -58,6 +64,9 @@ func NewKeeper(
 		oracleKeeper:      oracleKeeper,
 		incentiveKeeper:   incentiveKeeper,
 		tssKeeper:         tssKeeper,
+		ibcclientKeeper:   ibcclientKeeper,
+		ibcconnectionKeeper: ibcconnectionKeeper,
+		ibcchannelKeeper:  ibcchannelKeeper,
 		ibctransferKeeper: ibctransferKeeper,
 		BaseUTXOKeeper:    *NewBaseUTXOKeeper(cdc, storeKey),
 		authority:         authority,

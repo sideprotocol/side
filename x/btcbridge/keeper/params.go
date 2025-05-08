@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
@@ -49,6 +51,21 @@ func (k Keeper) BtcDenom(ctx sdk.Context) string {
 // MaxBtcBatchWithdrawNum gets the maximum btc batch withdrawal number
 func (k Keeper) MaxBtcBatchWithdrawNum(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).WithdrawParams.MaxBtcBatchWithdrawNum
+}
+
+// IBCPortId gets the IBC port id
+func (k Keeper) IBCPortId(ctx sdk.Context) string {
+	return k.GetParams(ctx).IbcParams.PortId
+}
+
+// IBCTimeoutHeightOffset gets the IBC timeout height offset
+func (k Keeper) IBCTimeoutHeightOffset(ctx sdk.Context) uint64 {
+	return k.GetParams(ctx).IbcParams.TimeoutHeightOffset
+}
+
+// IBCTimeoutDuration gets the IBC timeout duration
+func (k Keeper) IBCTimeoutDuration(ctx sdk.Context) time.Duration {
+	return k.GetParams(ctx).IbcParams.TimeoutDuration
 }
 
 // IsTrustedNonBtcRelayer returns true if the given address is a trusted non-btc relayer, false otherwise

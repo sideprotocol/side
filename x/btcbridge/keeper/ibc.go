@@ -1,27 +1,36 @@
 package keeper
 
 import (
+	"time"
+
+	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
+	connectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
-// IBCTransfer transfers the specified token via IBC
+// IBCTransfer performs the IBC transfer by the given params
 func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, token sdk.Coin, channelId string) error {
+	clientHeight, err := k.GetClientHeight(ctx, k.IBCPortId(ctx), channelId)
+	if err != nil {
+		return err
+	}
+
 	msg := &transfertypes.MsgTransfer{
-		SourcePort:       types.DefaultPortId,
+		SourcePort:       k.IBCPortId(ctx),
 		SourceChannel:    channelId,
 		Token:            token,
 		Sender:           sender,
 		Receiver:         recipient,
-		TimeoutHeight:    clienttypes.NewHeight(0, 0),
-		TimeoutTimestamp: 0,
+		TimeoutHeight:    getTimeoutHeight(clientHeight, k.IBCTimeoutHeightOffset(ctx)),
+		TimeoutTimestamp: getTimeoutTimestamp(ctx.BlockTime(), k.IBCTimeoutDuration(ctx)),
 		Memo:             types.DefaultMemo,
 	}
 
@@ -85,6 +94,26 @@ func (k Keeper) IterateIBCWithdrawRequestQueue(ctx sdk.Context, cb func(req *typ
 // CheckSBTCAutoPegOut returns true if the given packet is sBTC transfer and auto-pegout enabled, false otherwise
 func (k Keeper) CheckSBTCAutoPegOut(ctx sdk.Context, packet transfertypes.FungibleTokenPacketData) bool {
 	return packet.Denom == k.BtcDenom(ctx) && packet.Memo == types.FlagAutoPegOut
+}
+
+// GetClientHeight gets the current client height by the given source port and channel
+func (k Keeper) GetClientHeight(ctx sdk.Context, sourcePort string, sourceChannel string) (ibcexported.Height, error) {
+	channel, found := k.ibcchannelKeeper.GetChannel(ctx, sourcePort, sourceChannel)
+	if !found {
+		return nil, errorsmod.Wrap(channeltypes.ErrChannelNotFound, sourceChannel)
+	}
+
+	connectionEnd, found := k.ibcconnectionKeeper.GetConnection(ctx, channel.ConnectionHops[0])
+	if !found {
+		return nil, errorsmod.Wrap(connectiontypes.ErrConnectionNotFound, channel.ConnectionHops[0])
+	}
+
+	clientState, found := k.ibcclientKeeper.GetClientState(ctx, connectionEnd.GetClientID())
+	if !found {
+		return nil, errorsmod.Wrap(clienttypes.ErrClientNotFound, connectionEnd.GetClientID())
+	}
+
+	return clientState.GetLatestHeight(), nil
 }
 
 // IBCSendPacketCallback implements IBC callbacks
@@ -170,4 +199,22 @@ func tryGetTransferPacket(packet ibcexported.PacketI) (transfertypes.FungibleTok
 	}
 
 	return data, true
+}
+
+// getTimeoutHeight gets the timeout height
+func getTimeoutHeight(clientHeight ibcexported.Height, timeoutHeightOffset uint64) clienttypes.Height {
+	if timeoutHeightOffset == 0 {
+		return clienttypes.ZeroHeight()
+	}
+
+	return clienttypes.NewHeight(clientHeight.GetRevisionNumber(), clientHeight.GetRevisionHeight()+timeoutHeightOffset)
+}
+
+// getTimeoutTimestamp gets the timeout timestamp
+func getTimeoutTimestamp(currentTime time.Time, timeoutDuration time.Duration) uint64 {
+	if timeoutDuration == 0 {
+		return 0
+	}
+
+	return uint64(currentTime.UnixNano()) + uint64(timeoutDuration.Nanoseconds())
 }

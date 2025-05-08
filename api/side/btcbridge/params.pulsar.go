@@ -174,6 +174,7 @@ var (
 	fd_Params_protocol_limits             protoreflect.FieldDescriptor
 	fd_Params_protocol_fees               protoreflect.FieldDescriptor
 	fd_Params_tss_params                  protoreflect.FieldDescriptor
+	fd_Params_ibc_params                  protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -193,6 +194,7 @@ func init() {
 	fd_Params_protocol_limits = md_Params.Fields().ByName("protocol_limits")
 	fd_Params_protocol_fees = md_Params.Fields().ByName("protocol_fees")
 	fd_Params_tss_params = md_Params.Fields().ByName("tss_params")
+	fd_Params_ibc_params = md_Params.Fields().ByName("ibc_params")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -344,6 +346,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
+	if x.IbcParams != nil {
+		value := protoreflect.ValueOfMessage(x.IbcParams.ProtoReflect())
+		if !f(fd_Params_ibc_params, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -387,6 +395,8 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ProtocolFees != nil
 	case "side.btcbridge.Params.tss_params":
 		return x.TssParams != nil
+	case "side.btcbridge.Params.ibc_params":
+		return x.IbcParams != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.Params"))
@@ -431,6 +441,8 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.ProtocolFees = nil
 	case "side.btcbridge.Params.tss_params":
 		x.TssParams = nil
+	case "side.btcbridge.Params.ibc_params":
+		x.IbcParams = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.Params"))
@@ -498,6 +510,9 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "side.btcbridge.Params.tss_params":
 		value := x.TssParams
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.btcbridge.Params.ibc_params":
+		value := x.IbcParams
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.Params"))
@@ -552,6 +567,8 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.ProtocolFees = value.Message().Interface().(*ProtocolFees)
 	case "side.btcbridge.Params.tss_params":
 		x.TssParams = value.Message().Interface().(*TSSParams)
+	case "side.btcbridge.Params.ibc_params":
+		x.IbcParams = value.Message().Interface().(*IBCParams)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.Params"))
@@ -610,6 +627,11 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 			x.TssParams = new(TSSParams)
 		}
 		return protoreflect.ValueOfMessage(x.TssParams.ProtoReflect())
+	case "side.btcbridge.Params.ibc_params":
+		if x.IbcParams == nil {
+			x.IbcParams = new(IBCParams)
+		}
+		return protoreflect.ValueOfMessage(x.IbcParams.ProtoReflect())
 	case "side.btcbridge.Params.deposit_confirmation_depth":
 		panic(fmt.Errorf("field deposit_confirmation_depth of message side.btcbridge.Params is not mutable"))
 	case "side.btcbridge.Params.withdraw_confirmation_depth":
@@ -671,6 +693,9 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.btcbridge.Params.tss_params":
 		m := new(TSSParams)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.btcbridge.Params.ibc_params":
+		m := new(IBCParams)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
@@ -797,6 +822,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.TssParams)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if x.IbcParams != nil {
+			l = options.Size(x.IbcParams)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -825,6 +854,20 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.IbcParams != nil {
+			encoded, err := options.Marshal(x.IbcParams)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x7a
 		}
 		if x.TssParams != nil {
 			encoded, err := options.Marshal(x.TssParams)
@@ -1399,6 +1442,42 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					x.TssParams = &TSSParams{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TssParams); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 15:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IbcParams", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.IbcParams == nil {
+					x.IbcParams = &IBCParams{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.IbcParams); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -4047,6 +4126,553 @@ func (x *fastReflection_TSSParams) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var (
+	md_IBCParams                       protoreflect.MessageDescriptor
+	fd_IBCParams_port_id               protoreflect.FieldDescriptor
+	fd_IBCParams_timeout_height_offset protoreflect.FieldDescriptor
+	fd_IBCParams_timeout_duration      protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_btcbridge_params_proto_init()
+	md_IBCParams = File_side_btcbridge_params_proto.Messages().ByName("IBCParams")
+	fd_IBCParams_port_id = md_IBCParams.Fields().ByName("port_id")
+	fd_IBCParams_timeout_height_offset = md_IBCParams.Fields().ByName("timeout_height_offset")
+	fd_IBCParams_timeout_duration = md_IBCParams.Fields().ByName("timeout_duration")
+}
+
+var _ protoreflect.Message = (*fastReflection_IBCParams)(nil)
+
+type fastReflection_IBCParams IBCParams
+
+func (x *IBCParams) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_IBCParams)(x)
+}
+
+func (x *IBCParams) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_btcbridge_params_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_IBCParams_messageType fastReflection_IBCParams_messageType
+var _ protoreflect.MessageType = fastReflection_IBCParams_messageType{}
+
+type fastReflection_IBCParams_messageType struct{}
+
+func (x fastReflection_IBCParams_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_IBCParams)(nil)
+}
+func (x fastReflection_IBCParams_messageType) New() protoreflect.Message {
+	return new(fastReflection_IBCParams)
+}
+func (x fastReflection_IBCParams_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_IBCParams
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_IBCParams) Descriptor() protoreflect.MessageDescriptor {
+	return md_IBCParams
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_IBCParams) Type() protoreflect.MessageType {
+	return _fastReflection_IBCParams_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_IBCParams) New() protoreflect.Message {
+	return new(fastReflection_IBCParams)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_IBCParams) Interface() protoreflect.ProtoMessage {
+	return (*IBCParams)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_IBCParams) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.PortId != "" {
+		value := protoreflect.ValueOfString(x.PortId)
+		if !f(fd_IBCParams_port_id, value) {
+			return
+		}
+	}
+	if x.TimeoutHeightOffset != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.TimeoutHeightOffset)
+		if !f(fd_IBCParams_timeout_height_offset, value) {
+			return
+		}
+	}
+	if x.TimeoutDuration != nil {
+		value := protoreflect.ValueOfMessage(x.TimeoutDuration.ProtoReflect())
+		if !f(fd_IBCParams_timeout_duration, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_IBCParams) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.btcbridge.IBCParams.port_id":
+		return x.PortId != ""
+	case "side.btcbridge.IBCParams.timeout_height_offset":
+		return x.TimeoutHeightOffset != uint64(0)
+	case "side.btcbridge.IBCParams.timeout_duration":
+		return x.TimeoutDuration != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.IBCParams"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.IBCParams does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_IBCParams) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.btcbridge.IBCParams.port_id":
+		x.PortId = ""
+	case "side.btcbridge.IBCParams.timeout_height_offset":
+		x.TimeoutHeightOffset = uint64(0)
+	case "side.btcbridge.IBCParams.timeout_duration":
+		x.TimeoutDuration = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.IBCParams"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.IBCParams does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_IBCParams) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.btcbridge.IBCParams.port_id":
+		value := x.PortId
+		return protoreflect.ValueOfString(value)
+	case "side.btcbridge.IBCParams.timeout_height_offset":
+		value := x.TimeoutHeightOffset
+		return protoreflect.ValueOfUint64(value)
+	case "side.btcbridge.IBCParams.timeout_duration":
+		value := x.TimeoutDuration
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.IBCParams"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.IBCParams does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_IBCParams) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.btcbridge.IBCParams.port_id":
+		x.PortId = value.Interface().(string)
+	case "side.btcbridge.IBCParams.timeout_height_offset":
+		x.TimeoutHeightOffset = value.Uint()
+	case "side.btcbridge.IBCParams.timeout_duration":
+		x.TimeoutDuration = value.Message().Interface().(*durationpb.Duration)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.IBCParams"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.IBCParams does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_IBCParams) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.btcbridge.IBCParams.timeout_duration":
+		if x.TimeoutDuration == nil {
+			x.TimeoutDuration = new(durationpb.Duration)
+		}
+		return protoreflect.ValueOfMessage(x.TimeoutDuration.ProtoReflect())
+	case "side.btcbridge.IBCParams.port_id":
+		panic(fmt.Errorf("field port_id of message side.btcbridge.IBCParams is not mutable"))
+	case "side.btcbridge.IBCParams.timeout_height_offset":
+		panic(fmt.Errorf("field timeout_height_offset of message side.btcbridge.IBCParams is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.IBCParams"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.IBCParams does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_IBCParams) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.btcbridge.IBCParams.port_id":
+		return protoreflect.ValueOfString("")
+	case "side.btcbridge.IBCParams.timeout_height_offset":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.btcbridge.IBCParams.timeout_duration":
+		m := new(durationpb.Duration)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.IBCParams"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.IBCParams does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_IBCParams) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.IBCParams", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_IBCParams) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_IBCParams) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_IBCParams) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_IBCParams) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*IBCParams)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.PortId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.TimeoutHeightOffset != 0 {
+			n += 1 + runtime.Sov(uint64(x.TimeoutHeightOffset))
+		}
+		if x.TimeoutDuration != nil {
+			l = options.Size(x.TimeoutDuration)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*IBCParams)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.TimeoutDuration != nil {
+			encoded, err := options.Marshal(x.TimeoutDuration)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.TimeoutHeightOffset != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TimeoutHeightOffset))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.PortId) > 0 {
+			i -= len(x.PortId)
+			copy(dAtA[i:], x.PortId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PortId)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*IBCParams)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: IBCParams: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: IBCParams: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PortId", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.PortId = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TimeoutHeightOffset", wireType)
+				}
+				x.TimeoutHeightOffset = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.TimeoutHeightOffset |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TimeoutDuration", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.TimeoutDuration == nil {
+					x.TimeoutDuration = &durationpb.Duration{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TimeoutDuration); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -4151,6 +4777,8 @@ type Params struct {
 	ProtocolFees *ProtocolFees `protobuf:"bytes,13,opt,name=protocol_fees,json=protocolFees,proto3" json:"protocol_fees,omitempty"`
 	// TSS params
 	TssParams *TSSParams `protobuf:"bytes,14,opt,name=tss_params,json=tssParams,proto3" json:"tss_params,omitempty"`
+	// IBC params
+	IbcParams *IBCParams `protobuf:"bytes,15,opt,name=ibc_params,json=ibcParams,proto3" json:"ibc_params,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -4267,6 +4895,13 @@ func (x *Params) GetProtocolFees() *ProtocolFees {
 func (x *Params) GetTssParams() *TSSParams {
 	if x != nil {
 		return x.TssParams
+	}
+	return nil
+}
+
+func (x *Params) GetIbcParams() *IBCParams {
+	if x != nil {
+		return x.IbcParams
 	}
 	return nil
 }
@@ -4545,6 +5180,61 @@ func (x *TSSParams) GetParticipantUpdateTransitionPeriod() *durationpb.Duration 
 	return nil
 }
 
+// IBCParams defines the params related to IBC
+type IBCParams struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Id of the IBC port used to transfer sBTC
+	PortId string `protobuf:"bytes,1,opt,name=port_id,json=portId,proto3" json:"port_id,omitempty"`
+	// Timeout height offset relative to the current client height
+	TimeoutHeightOffset uint64 `protobuf:"varint,2,opt,name=timeout_height_offset,json=timeoutHeightOffset,proto3" json:"timeout_height_offset,omitempty"`
+	// Timeout duration relative to the current time
+	TimeoutDuration *durationpb.Duration `protobuf:"bytes,3,opt,name=timeout_duration,json=timeoutDuration,proto3" json:"timeout_duration,omitempty"`
+}
+
+func (x *IBCParams) Reset() {
+	*x = IBCParams{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_btcbridge_params_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *IBCParams) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IBCParams) ProtoMessage() {}
+
+// Deprecated: Use IBCParams.ProtoReflect.Descriptor instead.
+func (*IBCParams) Descriptor() ([]byte, []int) {
+	return file_side_btcbridge_params_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *IBCParams) GetPortId() string {
+	if x != nil {
+		return x.PortId
+	}
+	return ""
+}
+
+func (x *IBCParams) GetTimeoutHeightOffset() uint64 {
+	if x != nil {
+		return x.TimeoutHeightOffset
+	}
+	return 0
+}
+
+func (x *IBCParams) GetTimeoutDuration() *durationpb.Duration {
+	if x != nil {
+		return x.TimeoutDuration
+	}
+	return nil
+}
+
 var File_side_btcbridge_params_proto protoreflect.FileDescriptor
 
 var file_side_btcbridge_params_proto_rawDesc = []byte{
@@ -4556,7 +5246,7 @@ var file_side_btcbridge_params_proto_rawDesc = []byte{
 	0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65,
 	0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x22, 0xbf, 0x06, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3c,
+	0x6f, 0x74, 0x6f, 0x22, 0xff, 0x06, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3c,
 	0x0a, 0x1a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72,
 	0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x65, 0x70, 0x74, 0x68, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x05, 0x52, 0x18, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69,
@@ -4608,6 +5298,10 @@ var file_side_btcbridge_params_proto_rawDesc = []byte{
 	0x61, 0x6d, 0x73, 0x18, 0x0e, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x69, 0x64, 0x65,
 	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x54, 0x53, 0x53, 0x50, 0x61,
 	0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x09, 0x74, 0x73, 0x73, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3e, 0x0a, 0x0a, 0x69, 0x62, 0x63, 0x5f, 0x70, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x18, 0x0f, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x49, 0x42, 0x43, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x09, 0x69, 0x62, 0x63, 0x50,
 	0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x8e, 0x01, 0x0a, 0x05, 0x56, 0x61, 0x75, 0x6c, 0x74, 0x12,
 	0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x75, 0x62,
@@ -4657,25 +5351,36 @@ var file_side_btcbridge_params_proto_rawDesc = []byte{
 	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8,
 	0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x21, 0x70, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69,
 	0x70, 0x61, 0x6e, 0x74, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x69,
-	0x74, 0x69, 0x6f, 0x6e, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x2a, 0x67, 0x0a, 0x09, 0x41, 0x73,
-	0x73, 0x65, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1a, 0x0a, 0x16, 0x41, 0x53, 0x53, 0x45, 0x54,
-	0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45,
-	0x44, 0x10, 0x00, 0x12, 0x12, 0x0a, 0x0e, 0x41, 0x53, 0x53, 0x45, 0x54, 0x5f, 0x54, 0x59, 0x50,
-	0x45, 0x5f, 0x42, 0x54, 0x43, 0x10, 0x01, 0x12, 0x14, 0x0a, 0x10, 0x41, 0x53, 0x53, 0x45, 0x54,
-	0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x42, 0x52, 0x43, 0x32, 0x30, 0x10, 0x02, 0x12, 0x14, 0x0a,
-	0x10, 0x41, 0x53, 0x53, 0x45, 0x54, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x52, 0x55, 0x4e, 0x45,
-	0x53, 0x10, 0x03, 0x42, 0xab, 0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63,
-	0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65,
-	0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x42, 0x58,
-	0xaa, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
-	0x65, 0xca, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64,
-	0x67, 0x65, 0xe2, 0x02, 0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69,
-	0x64, 0x67, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x0f, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
-	0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x69, 0x6f, 0x6e, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x22, 0xa8, 0x01, 0x0a, 0x09, 0x49,
+	0x42, 0x43, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x72, 0x74,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x72, 0x74, 0x49,
+	0x64, 0x12, 0x32, 0x0a, 0x15, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x5f, 0x68, 0x65, 0x69,
+	0x67, 0x68, 0x74, 0x5f, 0x6f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x13, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x48, 0x65, 0x69, 0x67, 0x68, 0x74, 0x4f,
+	0x66, 0x66, 0x73, 0x65, 0x74, 0x12, 0x4e, 0x0a, 0x10, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74,
+	0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00,
+	0x98, 0xdf, 0x1f, 0x01, 0x52, 0x0f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x44, 0x75, 0x72,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2a, 0x67, 0x0a, 0x09, 0x41, 0x73, 0x73, 0x65, 0x74, 0x54, 0x79,
+	0x70, 0x65, 0x12, 0x1a, 0x0a, 0x16, 0x41, 0x53, 0x53, 0x45, 0x54, 0x5f, 0x54, 0x59, 0x50, 0x45,
+	0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x12,
+	0x0a, 0x0e, 0x41, 0x53, 0x53, 0x45, 0x54, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x42, 0x54, 0x43,
+	0x10, 0x01, 0x12, 0x14, 0x0a, 0x10, 0x41, 0x53, 0x53, 0x45, 0x54, 0x5f, 0x54, 0x59, 0x50, 0x45,
+	0x5f, 0x42, 0x52, 0x43, 0x32, 0x30, 0x10, 0x02, 0x12, 0x14, 0x0a, 0x10, 0x41, 0x53, 0x53, 0x45,
+	0x54, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x52, 0x55, 0x4e, 0x45, 0x53, 0x10, 0x03, 0x42, 0xab,
+	0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
+	0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f,
+	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69,
+	0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62,
+	0x72, 0x69, 0x64, 0x67, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02, 0x0e, 0x53, 0x69,
+	0x64, 0x65, 0x2e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xca, 0x02, 0x0e, 0x53,
+	0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xe2, 0x02, 0x1a,
+	0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x5c, 0x47,
+	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f, 0x53, 0x69, 0x64,
+	0x65, 0x3a, 0x3a, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -4691,7 +5396,7 @@ func file_side_btcbridge_params_proto_rawDescGZIP() []byte {
 }
 
 var file_side_btcbridge_params_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_side_btcbridge_params_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_side_btcbridge_params_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_side_btcbridge_params_proto_goTypes = []interface{}{
 	(AssetType)(0),              // 0: side.btcbridge.AssetType
 	(*Params)(nil),              // 1: side.btcbridge.Params
@@ -4700,22 +5405,25 @@ var file_side_btcbridge_params_proto_goTypes = []interface{}{
 	(*ProtocolLimits)(nil),      // 4: side.btcbridge.ProtocolLimits
 	(*ProtocolFees)(nil),        // 5: side.btcbridge.ProtocolFees
 	(*TSSParams)(nil),           // 6: side.btcbridge.TSSParams
-	(*durationpb.Duration)(nil), // 7: google.protobuf.Duration
+	(*IBCParams)(nil),           // 7: side.btcbridge.IBCParams
+	(*durationpb.Duration)(nil), // 8: google.protobuf.Duration
 }
 var file_side_btcbridge_params_proto_depIdxs = []int32{
-	2, // 0: side.btcbridge.Params.vaults:type_name -> side.btcbridge.Vault
-	3, // 1: side.btcbridge.Params.withdraw_params:type_name -> side.btcbridge.WithdrawParams
-	4, // 2: side.btcbridge.Params.protocol_limits:type_name -> side.btcbridge.ProtocolLimits
-	5, // 3: side.btcbridge.Params.protocol_fees:type_name -> side.btcbridge.ProtocolFees
-	6, // 4: side.btcbridge.Params.tss_params:type_name -> side.btcbridge.TSSParams
-	0, // 5: side.btcbridge.Vault.asset_type:type_name -> side.btcbridge.AssetType
-	7, // 6: side.btcbridge.TSSParams.dkg_timeout_period:type_name -> google.protobuf.Duration
-	7, // 7: side.btcbridge.TSSParams.participant_update_transition_period:type_name -> google.protobuf.Duration
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	2,  // 0: side.btcbridge.Params.vaults:type_name -> side.btcbridge.Vault
+	3,  // 1: side.btcbridge.Params.withdraw_params:type_name -> side.btcbridge.WithdrawParams
+	4,  // 2: side.btcbridge.Params.protocol_limits:type_name -> side.btcbridge.ProtocolLimits
+	5,  // 3: side.btcbridge.Params.protocol_fees:type_name -> side.btcbridge.ProtocolFees
+	6,  // 4: side.btcbridge.Params.tss_params:type_name -> side.btcbridge.TSSParams
+	7,  // 5: side.btcbridge.Params.ibc_params:type_name -> side.btcbridge.IBCParams
+	0,  // 6: side.btcbridge.Vault.asset_type:type_name -> side.btcbridge.AssetType
+	8,  // 7: side.btcbridge.TSSParams.dkg_timeout_period:type_name -> google.protobuf.Duration
+	8,  // 8: side.btcbridge.TSSParams.participant_update_transition_period:type_name -> google.protobuf.Duration
+	8,  // 9: side.btcbridge.IBCParams.timeout_duration:type_name -> google.protobuf.Duration
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_side_btcbridge_params_proto_init() }
@@ -4796,6 +5504,18 @@ func file_side_btcbridge_params_proto_init() {
 				return nil
 			}
 		}
+		file_side_btcbridge_params_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*IBCParams); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -4803,7 +5523,7 @@ func file_side_btcbridge_params_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_btcbridge_params_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

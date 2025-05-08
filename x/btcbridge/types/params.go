@@ -14,6 +14,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	ibchost "github.com/cosmos/ibc-go/v8/modules/core/24-host"
 
 	"github.com/sideprotocol/side/bitcoin"
 )
@@ -46,6 +47,15 @@ var (
 
 	// default TSS participant update transition period; not used for now
 	DefaultTSSParticipantUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
+
+	// default port id used to transfer sBTC via IBC
+	DefaultIBCPortId = "transfer"
+
+	// default IBC timeout height offset
+	DefaultIBCTimeoutHeightOffset = uint64(1000)
+
+	// default IBC timeout duration
+	DefaultIBCTimeoutDuration = time.Duration(10) * time.Minute // 10 mins
 )
 
 // NewParams creates a new Params instance
@@ -79,6 +89,11 @@ func NewParams() Params {
 		TssParams: TSSParams{
 			DkgTimeoutPeriod:                  DefaultDKGTimeoutPeriod,
 			ParticipantUpdateTransitionPeriod: DefaultTSSParticipantUpdateTransitionPeriod,
+		},
+		IbcParams: IBCParams{
+			PortId:              DefaultIBCPortId,
+			TimeoutHeightOffset: DefaultIBCTimeoutHeightOffset,
+			TimeoutDuration:     DefaultIBCTimeoutDuration,
 		},
 	}
 }
@@ -122,7 +137,11 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	return validateTSSParams(&p.TssParams)
+	if err := validateTSSParams(&p.TssParams); err != nil {
+		return err
+	}
+
+	return validateIBCParams(&p.IbcParams)
 }
 
 // SelectVaultByAddress returns the vault by the given address
@@ -300,6 +319,19 @@ func validateTSSParams(params *TSSParams) error {
 
 	if params.ParticipantUpdateTransitionPeriod == 0 {
 		return errorsmod.Wrapf(ErrInvalidParams, "invalid participant update transition period")
+	}
+
+	return nil
+}
+
+// validateIBCParams validates the given IBC params
+func validateIBCParams(params *IBCParams) error {
+	if err := ibchost.PortIdentifierValidator(params.PortId); err != nil {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid IBC port: %v", err)
+	}
+
+	if params.TimeoutDuration < 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid timeout duration")
 	}
 
 	return nil

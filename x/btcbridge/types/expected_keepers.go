@@ -7,8 +7,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
+	ibcconnectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
+	ibcchanneltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
+	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
+
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
@@ -65,6 +68,22 @@ type IncentiveKeeper interface {
 // TSSKeeper defines the expected TSS keeper interfaces
 type TSSKeeper interface {
 	GetParams(ctx sdk.Context) tsstypes.Params
+}
+
+// IBCClientKeeper defines the expected IBC client keeper
+type IBCClientKeeper interface {
+	GetClientState(ctx sdk.Context, clientID string) (ibcexported.ClientState, bool)
+}
+
+// IBCConnectionKeeper defines the expected IBC connection keeper
+type IBCConnectionKeeper interface {
+	GetConnection(ctx sdk.Context, connectionID string) (ibcconnectiontypes.ConnectionEnd, bool)
+	GetTimestampAtHeight(ctx sdk.Context, connection ibcconnectiontypes.ConnectionEnd, height ibcexported.Height) (uint64, error)
+}
+
+// IBCChannelKeeper defines the expected IBC channel keeper
+type IBCChannelKeeper interface {
+	GetChannel(ctx sdk.Context, srcPort, srcChan string) (channel ibcchanneltypes.Channel, found bool)
 }
 
 // IBCTransferKeeper defines the expected IBC transfer interfaces
