@@ -181,7 +181,7 @@ func (k Keeper) InitiateResharingRequest(ctx sdk.Context, dkgId uint64, removedP
 		sdk.NewEvent(
 			types.EventTypeInitiateResharing,
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", req.Id)),
-			sdk.NewAttribute(types.AttributeKeyDKGID, fmt.Sprintf("%d", dkgId)),
+			sdk.NewAttribute(types.AttributeKeyDKGId, fmt.Sprintf("%d", dkgId)),
 			sdk.NewAttribute(types.AttributeKeyRemovedParticipants, strings.Join(removedParticipants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyNewParticipants, strings.Join(newParticipants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyExpirationTime, req.ExpirationTime.String()),

@@ -1,6 +1,8 @@
 package tss
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/tss/keeper"
@@ -78,5 +80,14 @@ func handleResharingRequests(ctx sdk.Context, k keeper.Keeper) {
 		// update status
 		req.Status = types.ResharingStatus_RESHARING_STATUS_COMPLETED
 		k.SetResharingRequest(ctx, req)
+
+		// Emit events
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeResharingCompleted,
+				sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", req.Id)),
+				sdk.NewAttribute(types.AttributeKeyDKGId, fmt.Sprintf("%d", req.DkgId)),
+			),
+		)
 	}
 }
