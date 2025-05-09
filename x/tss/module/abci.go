@@ -65,6 +65,18 @@ func handleResharingRequests(ctx sdk.Context, k keeper.Keeper) {
 		if !req.ExpirationTime.IsZero() && !ctx.BlockTime().Before(req.ExpirationTime) {
 			req.Status = types.ResharingStatus_RESHARING_STATUS_TIMEDOUT
 			k.SetResharingRequest(ctx, req)
+
+			continue
 		}
+
+		// check resharing completions
+		completions := k.GetResharingCompletions(ctx, req.Id)
+		if len(completions) != len(k.GetDKGRequest(ctx, req.DkgId).Participants) {
+			continue
+		}
+
+		// update status
+		req.Status = types.ResharingStatus_RESHARING_STATUS_COMPLETED
+		k.SetResharingRequest(ctx, req)
 	}
 }

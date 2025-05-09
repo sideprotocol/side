@@ -16,8 +16,16 @@ func (m *MsgReshare) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid authority address")
 	}
 
+	if len(m.DkgIds) == 0 {
+		return errorsmod.Wrap(ErrInvalidDKGs, "dkgs cannot be empty")
+	}
+
 	if len(m.RemovedParticipants) == 0 || len(m.NewParticipants) == 0 {
 		return errorsmod.Wrap(ErrInvalidParticipants, "removed or new participants cannot be empty")
+	}
+
+	if len(m.RemovedParticipants) != len(m.NewParticipants) {
+		return errorsmod.Wrap(ErrInvalidParticipants, "the numbers of removed and new participants do not match")
 	}
 
 	participants := append(m.RemovedParticipants, m.NewParticipants...)

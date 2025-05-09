@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -87,7 +88,24 @@ func (m msgServer) Reshare(goCtx context.Context, msg *types.MsgReshare) (*types
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	m.InitiateResharingRequest(ctx, msg.RemovedParticipants, msg.NewParticipants, msg.Type, msg.TimeoutDuration)
+	for _, dkgId := range msg.DkgIds {
+		if !m.HasDKGRequest(ctx, dkgId) {
+			return nil, errorsmod.Wrapf(types.ErrDKGRequestDoesNotExist, "%d", dkgId)
+		}
+
+		dkgRequest := m.GetDKGRequest(ctx, dkgId)
+		if dkgRequest.Status != types.DKGStatus_DKG_STATUS_COMPLETED {
+			return nil, errorsmod.Wrapf(types.ErrInvalidDKGStatus, "dkg %d not completed", dkgId)
+		}
+
+		for _, p := range msg.RemovedParticipants {
+			if !slices.Contains(dkgRequest.Participants, p) {
+				return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "participant %s does not exist for dkg %d", p, dkgId)
+			}
+		}
+
+		m.InitiateResharingRequest(ctx, dkgId, msg.RemovedParticipants, msg.NewParticipants, msg.TimeoutDuration)
+	}
 
 	return &types.MsgReshareResponse{}, nil
 }

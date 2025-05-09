@@ -28,6 +28,7 @@ const (
 	AttributeKeySigHashes = "sig_hashes"
 	AttributeKeyOption    = "option"
 
+	AttributeKeyDKGID               = "dkg_id"
 	AttributeKeyRemovedParticipants = "removed_participants"
 	AttributeKeyNewParticipants     = "new_participants"
 )

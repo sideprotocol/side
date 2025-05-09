@@ -68,12 +68,12 @@ message MsgReshare {
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1;
+  // list of DKGs corresponding to key shares to be refreshed
+  repeated uint64 dkg_ids = 2;
   // removed participant set
-  repeated string removed_participants = 2;
+  repeated string removed_participants = 3;
   // new participant set
-  repeated string new_participants = 3;
-  // type defined offchain
-  int32 type = 4;
+  repeated string new_participants = 4;
   // timeout duration
   google.protobuf.Duration timeout_duration = 5 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }

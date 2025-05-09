@@ -150,12 +150,12 @@ func (k Keeper) IterateResharingCompletions(ctx sdk.Context, id uint64, cb func(
 }
 
 // InitiateResharingRequest initiates the resharing request with the specified params
-func (k Keeper) InitiateResharingRequest(ctx sdk.Context, removedParticipants []string, newParticipants []string, ty int32, timeoutDuration time.Duration) *types.ResharingRequest {
+func (k Keeper) InitiateResharingRequest(ctx sdk.Context, dkgId uint64, removedParticipants []string, newParticipants []string, timeoutDuration time.Duration) *types.ResharingRequest {
 	req := &types.ResharingRequest{
 		Id:                  k.IncrementResharingRequestId(ctx),
+		DkgId:               dkgId,
 		RemovedParticipants: removedParticipants,
 		NewParticipants:     newParticipants,
-		Type:                ty,
 		ExpirationTime:      types.GetExpirationTime(ctx.BlockTime(), timeoutDuration),
 		Status:              types.ResharingStatus_RESHARING_STATUS_PENDING,
 	}
@@ -166,9 +166,9 @@ func (k Keeper) InitiateResharingRequest(ctx sdk.Context, removedParticipants []
 		sdk.NewEvent(
 			types.EventTypeInitiateResharing,
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", req.Id)),
-			sdk.NewAttribute(types.AttributeKeyRemovedParticipants, strings.Join(req.RemovedParticipants, types.AttributeValueSeparator)),
-			sdk.NewAttribute(types.AttributeKeyNewParticipants, strings.Join(req.NewParticipants, types.AttributeValueSeparator)),
-			sdk.NewAttribute(types.AttributeKeyType, fmt.Sprintf("%d", req.Type)),
+			sdk.NewAttribute(types.AttributeKeyDKGID, fmt.Sprintf("%d", dkgId)),
+			sdk.NewAttribute(types.AttributeKeyRemovedParticipants, strings.Join(removedParticipants, types.AttributeValueSeparator)),
+			sdk.NewAttribute(types.AttributeKeyNewParticipants, strings.Join(newParticipants, types.AttributeValueSeparator)),
 			sdk.NewAttribute(types.AttributeKeyExpirationTime, req.ExpirationTime.String()),
 		),
 	)
@@ -177,6 +177,7 @@ func (k Keeper) InitiateResharingRequest(ctx sdk.Context, removedParticipants []
 }
 
 // CompleteResharing completes the resharing request by the participant
+// The resharing request will be finalized when all participants submit valid completions before timeout
 func (k Keeper) CompleteResharing(ctx sdk.Context, sender string, id uint64, consensusPubKey string, signature string) error {
 	if !k.HasResharingRequest(ctx, id) {
 		return types.ErrResharingRequestDoesNotExist
@@ -189,6 +190,10 @@ func (k Keeper) CompleteResharing(ctx sdk.Context, sender string, id uint64, con
 
 	if !resharingRequest.ExpirationTime.IsZero() && !ctx.BlockTime().Before(resharingRequest.ExpirationTime) {
 		return types.ErrResharingRequestExpired
+	}
+
+	if !types.ParticipantExists(k.GetDKGRequest(ctx, resharingRequest.DkgId).Participants, consensusPubKey) {
+		return types.ErrUnauthorizedParticipant
 	}
 
 	if k.HasResharingCompletion(ctx, id, consensusPubKey) {
