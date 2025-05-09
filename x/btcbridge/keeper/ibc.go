@@ -91,9 +91,20 @@ func (k Keeper) IterateIBCWithdrawRequestQueue(ctx sdk.Context, cb func(req *typ
 	}
 }
 
-// CheckSBTCAutoPegOut returns true if the given packet is sBTC transfer and auto-pegout enabled, false otherwise
-func (k Keeper) CheckSBTCAutoPegOut(ctx sdk.Context, packet transfertypes.FungibleTokenPacketData) bool {
-	return packet.Denom == k.BtcDenom(ctx) && packet.Memo == types.FlagAutoPegOut
+// CheckSBTCAutoPegOut returns true if the given packet is to receive native sBTC and auto-pegout enabled, false otherwise
+func (k Keeper) CheckSBTCAutoPegOut(ctx sdk.Context, packet ibcexported.PacketI, data transfertypes.FungibleTokenPacketData) bool {
+	// check if the receiving chain is source
+	if !transfertypes.ReceiverChainIsSource(packet.GetSourcePort(), packet.GetSourceChannel(), data.Denom) {
+		return false
+	}
+
+	// sender prefix
+	prefix := transfertypes.GetDenomPrefix(packet.GetSourcePort(), packet.GetSourceChannel())
+
+	// remove sender prefix
+	unprefixedDenom := data.Denom[len(prefix):]
+
+	return unprefixedDenom == k.BtcDenom(ctx) && data.Memo == types.FlagAutoPegOut
 }
 
 // GetClientHeight gets the current client height by the given source port and channel
@@ -168,31 +179,31 @@ func (k Keeper) IBCReceivePacketCallback(
 		return nil
 	}
 
-	// parse the transfer packet
-	tranferPacket, ok := tryGetTransferPacket(packet)
-	if !ok || !k.CheckSBTCAutoPegOut(ctx, tranferPacket) {
+	// parse the fungible token packet data
+	data, ok := tryGetFungibleTokenPacketData(packet)
+	if !ok || !k.CheckSBTCAutoPegOut(ctx, packet, data) {
 		return nil
 	}
 
 	// check amount
-	amount, ok := sdkmath.NewIntFromString(tranferPacket.Amount)
+	amount, ok := sdkmath.NewIntFromString(data.Amount)
 	if !ok || !amount.IsInt64() {
 		return nil
 	}
 
 	// check if the recipient address is valid btc address
-	if !types.IsValidBtcAddress(tranferPacket.Receiver) {
+	if !types.IsValidBtcAddress(data.Receiver) {
 		return nil
 	}
 
 	// add to IBC withdrawal request queue
-	k.AddToIBCWithdrawRequestQueue(ctx, packet.GetSequence(), tranferPacket.Receiver, amount.Int64())
+	k.AddToIBCWithdrawRequestQueue(ctx, packet.GetSequence(), data.Receiver, amount.Int64())
 
 	return nil
 }
 
-// tryGetTransferPacket attempts to parse the IBC transfer packet from the given packet
-func tryGetTransferPacket(packet ibcexported.PacketI) (transfertypes.FungibleTokenPacketData, bool) {
+// tryGetFungibleTokenPacketData attempts to parse the IBC transfer packet data from the given packet
+func tryGetFungibleTokenPacketData(packet ibcexported.PacketI) (transfertypes.FungibleTokenPacketData, bool) {
 	var data transfertypes.FungibleTokenPacketData
 	if err := transfertypes.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
 		return data, false
