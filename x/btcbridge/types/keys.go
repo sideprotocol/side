@@ -112,6 +112,6 @@ func DKGCompletionRequestKey(id uint64, consPubKey string) []byte {
 	return append(append(DKGCompletionRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...), []byte(consPubKey)...)
 }
 
-func IBCWithdrawRequestQueueKey(sequence uint64) []byte {
-	return append(IBCWithdrawRequestQueueKeyPrefix, sdk.Uint64ToBigEndian(sequence)...)
+func IBCWithdrawRequestQueueKey(channelId string, sequence uint64) []byte {
+	return append(append(IBCWithdrawRequestQueueKeyPrefix, []byte(channelId)...), sdk.Uint64ToBigEndian(sequence)...)
 }
