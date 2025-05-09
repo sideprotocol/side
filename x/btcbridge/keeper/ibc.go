@@ -41,24 +41,25 @@ func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, to
 	return nil
 }
 
-// AddToIBCWithdrawRequestQueue adds the given packet to IBC withdrawal queue for sBTC
-func (k Keeper) AddToIBCWithdrawRequestQueue(ctx sdk.Context, sequence uint64, recipient string, amount int64) {
+// AddToIBCWithdrawRequestQueue adds the given withdrawal request to the IBC withdrawal queue for sBTC
+func (k Keeper) AddToIBCWithdrawRequestQueue(ctx sdk.Context, channelId string, sequence uint64, recipient string, amount int64) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(&types.IBCWithdrawRequest{
-		Sequence: sequence,
-		Address:  recipient,
-		Amount:   sdk.NewInt64Coin(k.GetParams(ctx).BtcVoucherDenom, amount).String(),
+		ChannelId: channelId,
+		Sequence:  sequence,
+		Address:   recipient,
+		Amount:    sdk.NewInt64Coin(k.BtcDenom(ctx), amount).String(),
 	})
 
-	store.Set(types.IBCWithdrawRequestQueueKey(sequence), bz)
+	store.Set(types.IBCWithdrawRequestQueueKey(channelId, sequence), bz)
 }
 
 // RemoveFromIBCWithdrawRequestQueue removes the given IBC withdrawal request from the IBC withdrawal request queue
-func (k Keeper) RemoveFromIBCWithdrawRequestQueue(ctx sdk.Context, sequence uint64) {
+func (k Keeper) RemoveFromIBCWithdrawRequestQueue(ctx sdk.Context, channelId string, sequence uint64) {
 	store := ctx.KVStore(k.storeKey)
 
-	store.Delete(types.IBCWithdrawRequestQueueKey(sequence))
+	store.Delete(types.IBCWithdrawRequestQueueKey(channelId, sequence))
 }
 
 // GetPendingIBCWithdrawRequests gets the pending IBC withdrawal requests up to the given maximum number
@@ -197,7 +198,7 @@ func (k Keeper) IBCReceivePacketCallback(
 	}
 
 	// add to IBC withdrawal request queue
-	k.AddToIBCWithdrawRequestQueue(ctx, packet.GetSequence(), data.Receiver, amount.Int64())
+	k.AddToIBCWithdrawRequestQueue(ctx, packet.GetDestChannel(), packet.GetSequence(), data.Receiver, amount.Int64())
 
 	return nil
 }

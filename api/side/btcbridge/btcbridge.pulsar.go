@@ -2792,15 +2792,17 @@ func (x *fastReflection_WithdrawRequest) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_IBCWithdrawRequest          protoreflect.MessageDescriptor
-	fd_IBCWithdrawRequest_sequence protoreflect.FieldDescriptor
-	fd_IBCWithdrawRequest_address  protoreflect.FieldDescriptor
-	fd_IBCWithdrawRequest_amount   protoreflect.FieldDescriptor
+	md_IBCWithdrawRequest            protoreflect.MessageDescriptor
+	fd_IBCWithdrawRequest_channel_id protoreflect.FieldDescriptor
+	fd_IBCWithdrawRequest_sequence   protoreflect.FieldDescriptor
+	fd_IBCWithdrawRequest_address    protoreflect.FieldDescriptor
+	fd_IBCWithdrawRequest_amount     protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_btcbridge_btcbridge_proto_init()
 	md_IBCWithdrawRequest = File_side_btcbridge_btcbridge_proto.Messages().ByName("IBCWithdrawRequest")
+	fd_IBCWithdrawRequest_channel_id = md_IBCWithdrawRequest.Fields().ByName("channel_id")
 	fd_IBCWithdrawRequest_sequence = md_IBCWithdrawRequest.Fields().ByName("sequence")
 	fd_IBCWithdrawRequest_address = md_IBCWithdrawRequest.Fields().ByName("address")
 	fd_IBCWithdrawRequest_amount = md_IBCWithdrawRequest.Fields().ByName("amount")
@@ -2871,6 +2873,12 @@ func (x *fastReflection_IBCWithdrawRequest) Interface() protoreflect.ProtoMessag
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_IBCWithdrawRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.ChannelId != "" {
+		value := protoreflect.ValueOfString(x.ChannelId)
+		if !f(fd_IBCWithdrawRequest_channel_id, value) {
+			return
+		}
+	}
 	if x.Sequence != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.Sequence)
 		if !f(fd_IBCWithdrawRequest_sequence, value) {
@@ -2904,6 +2912,8 @@ func (x *fastReflection_IBCWithdrawRequest) Range(f func(protoreflect.FieldDescr
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_IBCWithdrawRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "side.btcbridge.IBCWithdrawRequest.channel_id":
+		return x.ChannelId != ""
 	case "side.btcbridge.IBCWithdrawRequest.sequence":
 		return x.Sequence != uint64(0)
 	case "side.btcbridge.IBCWithdrawRequest.address":
@@ -2926,6 +2936,8 @@ func (x *fastReflection_IBCWithdrawRequest) Has(fd protoreflect.FieldDescriptor)
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_IBCWithdrawRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "side.btcbridge.IBCWithdrawRequest.channel_id":
+		x.ChannelId = ""
 	case "side.btcbridge.IBCWithdrawRequest.sequence":
 		x.Sequence = uint64(0)
 	case "side.btcbridge.IBCWithdrawRequest.address":
@@ -2948,6 +2960,9 @@ func (x *fastReflection_IBCWithdrawRequest) Clear(fd protoreflect.FieldDescripto
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_IBCWithdrawRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "side.btcbridge.IBCWithdrawRequest.channel_id":
+		value := x.ChannelId
+		return protoreflect.ValueOfString(value)
 	case "side.btcbridge.IBCWithdrawRequest.sequence":
 		value := x.Sequence
 		return protoreflect.ValueOfUint64(value)
@@ -2977,6 +2992,8 @@ func (x *fastReflection_IBCWithdrawRequest) Get(descriptor protoreflect.FieldDes
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_IBCWithdrawRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "side.btcbridge.IBCWithdrawRequest.channel_id":
+		x.ChannelId = value.Interface().(string)
 	case "side.btcbridge.IBCWithdrawRequest.sequence":
 		x.Sequence = value.Uint()
 	case "side.btcbridge.IBCWithdrawRequest.address":
@@ -3003,6 +3020,8 @@ func (x *fastReflection_IBCWithdrawRequest) Set(fd protoreflect.FieldDescriptor,
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_IBCWithdrawRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "side.btcbridge.IBCWithdrawRequest.channel_id":
+		panic(fmt.Errorf("field channel_id of message side.btcbridge.IBCWithdrawRequest is not mutable"))
 	case "side.btcbridge.IBCWithdrawRequest.sequence":
 		panic(fmt.Errorf("field sequence of message side.btcbridge.IBCWithdrawRequest is not mutable"))
 	case "side.btcbridge.IBCWithdrawRequest.address":
@@ -3022,6 +3041,8 @@ func (x *fastReflection_IBCWithdrawRequest) Mutable(fd protoreflect.FieldDescrip
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_IBCWithdrawRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "side.btcbridge.IBCWithdrawRequest.channel_id":
+		return protoreflect.ValueOfString("")
 	case "side.btcbridge.IBCWithdrawRequest.sequence":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.btcbridge.IBCWithdrawRequest.address":
@@ -3097,6 +3118,10 @@ func (x *fastReflection_IBCWithdrawRequest) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		l = len(x.ChannelId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.Sequence != 0 {
 			n += 1 + runtime.Sov(uint64(x.Sequence))
 		}
@@ -3142,19 +3167,26 @@ func (x *fastReflection_IBCWithdrawRequest) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], x.Amount)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Amount)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 		}
 		if len(x.Address) > 0 {
 			i -= len(x.Address)
 			copy(dAtA[i:], x.Address)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 		}
 		if x.Sequence != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Sequence))
 			i--
-			dAtA[i] = 0x8
+			dAtA[i] = 0x10
+		}
+		if len(x.ChannelId) > 0 {
+			i -= len(x.ChannelId)
+			copy(dAtA[i:], x.ChannelId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ChannelId)))
+			i--
+			dAtA[i] = 0xa
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -3206,6 +3238,38 @@ func (x *fastReflection_IBCWithdrawRequest) ProtoMethods() *protoiface.Methods {
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ChannelId", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ChannelId = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sequence", wireType)
 				}
@@ -3224,7 +3288,7 @@ func (x *fastReflection_IBCWithdrawRequest) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 2:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
 				}
@@ -3256,7 +3320,7 @@ func (x *fastReflection_IBCWithdrawRequest) ProtoMethods() *protoiface.Methods {
 				}
 				x.Address = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 3:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 				}
@@ -9359,9 +9423,10 @@ type IBCWithdrawRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sequence uint64 `protobuf:"varint,1,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	Address  string `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
-	Amount   string `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	ChannelId string `protobuf:"bytes,1,opt,name=channel_id,json=channelId,proto3" json:"channel_id,omitempty"`
+	Sequence  uint64 `protobuf:"varint,2,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	Address   string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+	Amount    string `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
 func (x *IBCWithdrawRequest) Reset() {
@@ -9382,6 +9447,13 @@ func (*IBCWithdrawRequest) ProtoMessage() {}
 // Deprecated: Use IBCWithdrawRequest.ProtoReflect.Descriptor instead.
 func (*IBCWithdrawRequest) Descriptor() ([]byte, []int) {
 	return file_side_btcbridge_btcbridge_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *IBCWithdrawRequest) GetChannelId() string {
+	if x != nil {
+		return x.ChannelId
+	}
+	return ""
 }
 
 func (x *IBCWithdrawRequest) GetSequence() uint64 {
@@ -10037,12 +10109,14 @@ var file_side_btcbridge_btcbridge_proto_rawDesc = []byte{
 	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x71, 0x75,
 	0x65, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x73, 0x65, 0x71, 0x75,
 	0x65, 0x6e, 0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x78, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x22, 0x62, 0x0a, 0x12, 0x49, 0x42, 0x43, 0x57,
-	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a,
-	0x0a, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04,
+	0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x22, 0x81, 0x01, 0x0a, 0x12, 0x49, 0x42, 0x43,
+	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x1d, 0x0a, 0x0a, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x49, 0x64, 0x12, 0x1a,
+	0x0a, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04,
 	0x52, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xee, 0x01, 0x0a,
 	0x04, 0x55, 0x54, 0x58, 0x4f, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x78, 0x69, 0x64, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x78, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x76, 0x6f, 0x75,
