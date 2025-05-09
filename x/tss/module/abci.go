@@ -71,7 +71,7 @@ func handleResharingRequests(ctx sdk.Context, k keeper.Keeper) {
 
 		// check resharing completions
 		completions := k.GetResharingCompletions(ctx, req.Id)
-		if len(completions) != len(k.GetDKGRequest(ctx, req.DkgId).Participants) {
+		if len(completions) != len(k.GetResharingParticipants(ctx, req)) {
 			continue
 		}
 

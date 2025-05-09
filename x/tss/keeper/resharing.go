@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 	"time"
 
@@ -56,6 +57,20 @@ func (k Keeper) GetResharingRequest(ctx sdk.Context, id uint64) *types.Resharing
 	k.cdc.MustUnmarshal(bz, &resharingRequest)
 
 	return &resharingRequest
+}
+
+// GetResharingParticipants gets all participants of the given resharing request
+func (k Keeper) GetResharingParticipants(ctx sdk.Context, resharingRequest *types.ResharingRequest) []string {
+	dkgReq := k.GetDKGRequest(ctx, resharingRequest.DkgId)
+
+	participants := []string{}
+	for _, p := range dkgReq.Participants {
+		if !slices.Contains(resharingRequest.RemovedParticipants, p) {
+			participants = append(participants, p)
+		}
+	}
+
+	return append(participants, resharingRequest.NewParticipants...)
 }
 
 // GetResharingRequests gets the resharing requests by the given status
@@ -192,7 +207,7 @@ func (k Keeper) CompleteResharing(ctx sdk.Context, sender string, id uint64, con
 		return types.ErrResharingRequestExpired
 	}
 
-	if !types.ParticipantExists(k.GetDKGRequest(ctx, resharingRequest.DkgId).Participants, consensusPubKey) {
+	if !types.ParticipantExists(k.GetResharingParticipants(ctx, resharingRequest), consensusPubKey) {
 		return types.ErrUnauthorizedParticipant
 	}
 
