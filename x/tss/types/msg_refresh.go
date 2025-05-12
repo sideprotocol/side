@@ -8,10 +8,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgReshare{}
+var _ sdk.Msg = &MsgRefresh{}
 
-// ValidateBasic performs basic MsgReshare message validation.
-func (m *MsgReshare) ValidateBasic() error {
+// ValidateBasic performs basic MsgRefresh message validation.
+func (m *MsgRefresh) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
 		return errorsmod.Wrap(err, "invalid authority address")
 	}

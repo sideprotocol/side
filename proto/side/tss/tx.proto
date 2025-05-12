@@ -18,11 +18,11 @@ service Msg {
     // SubmitSignatures submits signatures.
     rpc SubmitSignatures(MsgSubmitSignatures) returns (MsgSubmitSignaturesResponse);
 
-    // Reshare refreshes key shares.
-    rpc Reshare(MsgReshare) returns (MsgReshareResponse);
+    // Refresh refreshes key shares.
+    rpc Refresh(MsgRefresh) returns (MsgRefreshResponse);
 
-    // CompleteResharing completes the given resharing request by the participant.
-    rpc CompleteResharing(MsgCompleteResharing) returns (MsgCompleteResharingResponse);
+    // CompleteRefreshing completes the given refreshing request by the participant.
+    rpc CompleteRefreshing(MsgCompleteRefreshing) returns (MsgCompleteRefreshingResponse);
 
     // UpdateParams defines a governance operation for updating the x/tss module
     // parameters. The authority defaults to the x/gov module account.
@@ -62,8 +62,8 @@ message MsgSubmitSignatures {
 // MsgSubmitSignaturesResponse defines the Msg/SubmitSignatures response type.
 message MsgSubmitSignaturesResponse {}
 
-// MsgReshare defines the Msg/Reshare request type.
-message MsgReshare {
+// MsgRefresh defines the Msg/Refresh request type.
+message MsgRefresh {
   option (cosmos.msg.v1.signer) = "authority";
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
@@ -78,11 +78,11 @@ message MsgReshare {
   google.protobuf.Duration timeout_duration = 5 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }
 
-// MsgReshareResponse defines the Msg/Reshare response type.
-message MsgReshareResponse {}
+// MsgRefreshResponse defines the Msg/Refresh response type.
+message MsgRefreshResponse {}
 
-// MsgCompleteResharing defines the Msg/CompleteResharing request type.
-message MsgCompleteResharing {
+// MsgCompleteRefreshing defines the Msg/CompleteRefreshing request type.
+message MsgCompleteRefreshing {
   option (cosmos.msg.v1.signer) = "sender";
 
   // sender
@@ -95,8 +95,8 @@ message MsgCompleteResharing {
   string signature = 4;
 }
 
-// MsgCompleteResharingResponse defines the Msg/CompleteResharing response type.
-message MsgCompleteResharingResponse {}
+// MsgCompleteRefreshingResponse defines the Msg/CompleteRefreshing response type.
+message MsgCompleteRefreshingResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

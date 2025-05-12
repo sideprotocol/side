@@ -12,7 +12,7 @@ import (
 // EndBlocker called at the end of every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handleDKGRequests(ctx, k)
-	handleResharingRequests(ctx, k)
+	handleRefreshingRequests(ctx, k)
 }
 
 // handleDKGRequests performs the DKG request handling
@@ -57,34 +57,34 @@ func handleDKGRequests(ctx sdk.Context, k keeper.Keeper) {
 	}
 }
 
-// handleResharingRequests performs the resharing request handling
-func handleResharingRequests(ctx sdk.Context, k keeper.Keeper) {
-	// get pending resharing requests
-	requests := k.GetPendingResharingRequests(ctx)
+// handleRefreshingRequests performs the refreshing request handling
+func handleRefreshingRequests(ctx sdk.Context, k keeper.Keeper) {
+	// get pending refreshing requests
+	requests := k.GetPendingRefreshingRequests(ctx)
 
 	for _, req := range requests {
-		// check if the resharing request expired
+		// check if the refreshing request expired
 		if !req.ExpirationTime.IsZero() && !ctx.BlockTime().Before(req.ExpirationTime) {
-			req.Status = types.ResharingStatus_RESHARING_STATUS_TIMEDOUT
-			k.SetResharingRequest(ctx, req)
+			req.Status = types.RefreshingStatus_REFRESHING_STATUS_TIMEDOUT
+			k.SetRefreshingRequest(ctx, req)
 
 			continue
 		}
 
-		// check resharing completions
-		completions := k.GetResharingCompletions(ctx, req.Id)
-		if len(completions) != len(k.GetResharingParticipants(ctx, req)) {
+		// check refreshing completions
+		completions := k.GetRefreshingCompletions(ctx, req.Id)
+		if len(completions) != len(k.GetRefreshingParticipants(ctx, req)) {
 			continue
 		}
 
 		// update status
-		req.Status = types.ResharingStatus_RESHARING_STATUS_COMPLETED
-		k.SetResharingRequest(ctx, req)
+		req.Status = types.RefreshingStatus_REFRESHING_STATUS_COMPLETED
+		k.SetRefreshingRequest(ctx, req)
 
 		// Emit events
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(
-				types.EventTypeResharingCompleted,
+				types.EventTypeRefreshingCompleted,
 				sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", req.Id)),
 				sdk.NewAttribute(types.AttributeKeyDKGId, fmt.Sprintf("%d", req.DkgId)),
 			),

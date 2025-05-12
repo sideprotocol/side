@@ -76,8 +76,8 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 	return &types.MsgSubmitSignaturesResponse{}, nil
 }
 
-// Reshare refreshes the key shares
-func (m msgServer) Reshare(goCtx context.Context, msg *types.MsgReshare) (*types.MsgReshareResponse, error) {
+// Refresh refreshes the key shares
+func (m msgServer) Refresh(goCtx context.Context, msg *types.MsgRefresh) (*types.MsgRefreshResponse, error) {
 	if m.authority != msg.Authority {
 		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
 	}
@@ -104,35 +104,35 @@ func (m msgServer) Reshare(goCtx context.Context, msg *types.MsgReshare) (*types
 			}
 		}
 
-		m.InitiateResharingRequest(ctx, dkgId, msg.RemovedParticipants, msg.NewParticipants, msg.TimeoutDuration)
+		m.InitiateRefreshingRequest(ctx, dkgId, msg.RemovedParticipants, msg.NewParticipants, msg.TimeoutDuration)
 	}
 
-	return &types.MsgReshareResponse{}, nil
+	return &types.MsgRefreshResponse{}, nil
 }
 
-// CompleteResharing completes the resharing request by the participant
-func (m msgServer) CompleteResharing(goCtx context.Context, msg *types.MsgCompleteResharing) (*types.MsgCompleteResharingResponse, error) {
+// CompleteRefreshing completes the refreshing request by the participant
+func (m msgServer) CompleteRefreshing(goCtx context.Context, msg *types.MsgCompleteRefreshing) (*types.MsgCompleteRefreshingResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.CompleteResharing(ctx, msg.Sender, msg.Id, msg.ConsensusPubkey, msg.Signature); err != nil {
+	if err := m.Keeper.CompleteRefreshing(ctx, msg.Sender, msg.Id, msg.ConsensusPubkey, msg.Signature); err != nil {
 		return nil, err
 	}
 
 	// Emit events
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.EventTypeCompleteResharing,
+			types.EventTypeCompleteRefreshing,
 			sdk.NewAttribute(types.AttributeKeySender, msg.Sender),
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", msg.Id)),
 			sdk.NewAttribute(types.AttributeKeyParticipant, msg.ConsensusPubkey),
 		),
 	)
 
-	return &types.MsgCompleteResharingResponse{}, nil
+	return &types.MsgCompleteRefreshingResponse{}, nil
 }
 
 // UpdateParams updates the module params

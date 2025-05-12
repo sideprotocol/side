@@ -250,8 +250,8 @@ func (m *MsgSubmitSignaturesResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubmitSignaturesResponse proto.InternalMessageInfo
 
-// MsgReshare defines the Msg/Reshare request type.
-type MsgReshare struct {
+// MsgRefresh defines the Msg/Refresh request type.
+type MsgRefresh struct {
 	// authority is the address that controls the module (defaults to x/gov unless overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
 	// list of DKGs corresponding to key shares to be refreshed
@@ -264,18 +264,18 @@ type MsgReshare struct {
 	TimeoutDuration time.Duration `protobuf:"bytes,5,opt,name=timeout_duration,json=timeoutDuration,proto3,stdduration" json:"timeout_duration"`
 }
 
-func (m *MsgReshare) Reset()         { *m = MsgReshare{} }
-func (m *MsgReshare) String() string { return proto.CompactTextString(m) }
-func (*MsgReshare) ProtoMessage()    {}
-func (*MsgReshare) Descriptor() ([]byte, []int) {
+func (m *MsgRefresh) Reset()         { *m = MsgRefresh{} }
+func (m *MsgRefresh) String() string { return proto.CompactTextString(m) }
+func (*MsgRefresh) ProtoMessage()    {}
+func (*MsgRefresh) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1229450f2932bf35, []int{4}
 }
-func (m *MsgReshare) XXX_Unmarshal(b []byte) error {
+func (m *MsgRefresh) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgReshare) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRefresh) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgReshare.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRefresh.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -285,69 +285,69 @@ func (m *MsgReshare) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *MsgReshare) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgReshare.Merge(m, src)
+func (m *MsgRefresh) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRefresh.Merge(m, src)
 }
-func (m *MsgReshare) XXX_Size() int {
+func (m *MsgRefresh) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgReshare) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgReshare.DiscardUnknown(m)
+func (m *MsgRefresh) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRefresh.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgReshare proto.InternalMessageInfo
+var xxx_messageInfo_MsgRefresh proto.InternalMessageInfo
 
-func (m *MsgReshare) GetAuthority() string {
+func (m *MsgRefresh) GetAuthority() string {
 	if m != nil {
 		return m.Authority
 	}
 	return ""
 }
 
-func (m *MsgReshare) GetDkgIds() []uint64 {
+func (m *MsgRefresh) GetDkgIds() []uint64 {
 	if m != nil {
 		return m.DkgIds
 	}
 	return nil
 }
 
-func (m *MsgReshare) GetRemovedParticipants() []string {
+func (m *MsgRefresh) GetRemovedParticipants() []string {
 	if m != nil {
 		return m.RemovedParticipants
 	}
 	return nil
 }
 
-func (m *MsgReshare) GetNewParticipants() []string {
+func (m *MsgRefresh) GetNewParticipants() []string {
 	if m != nil {
 		return m.NewParticipants
 	}
 	return nil
 }
 
-func (m *MsgReshare) GetTimeoutDuration() time.Duration {
+func (m *MsgRefresh) GetTimeoutDuration() time.Duration {
 	if m != nil {
 		return m.TimeoutDuration
 	}
 	return 0
 }
 
-// MsgReshareResponse defines the Msg/Reshare response type.
-type MsgReshareResponse struct {
+// MsgRefreshResponse defines the Msg/Refresh response type.
+type MsgRefreshResponse struct {
 }
 
-func (m *MsgReshareResponse) Reset()         { *m = MsgReshareResponse{} }
-func (m *MsgReshareResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgReshareResponse) ProtoMessage()    {}
-func (*MsgReshareResponse) Descriptor() ([]byte, []int) {
+func (m *MsgRefreshResponse) Reset()         { *m = MsgRefreshResponse{} }
+func (m *MsgRefreshResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRefreshResponse) ProtoMessage()    {}
+func (*MsgRefreshResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1229450f2932bf35, []int{5}
 }
-func (m *MsgReshareResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgRefreshResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgReshareResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRefreshResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgReshareResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRefreshResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -357,20 +357,20 @@ func (m *MsgReshareResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return b[:n], nil
 	}
 }
-func (m *MsgReshareResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgReshareResponse.Merge(m, src)
+func (m *MsgRefreshResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRefreshResponse.Merge(m, src)
 }
-func (m *MsgReshareResponse) XXX_Size() int {
+func (m *MsgRefreshResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgReshareResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgReshareResponse.DiscardUnknown(m)
+func (m *MsgRefreshResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRefreshResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgReshareResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgRefreshResponse proto.InternalMessageInfo
 
-// MsgCompleteResharing defines the Msg/CompleteResharing request type.
-type MsgCompleteResharing struct {
+// MsgCompleteRefreshing defines the Msg/CompleteRefreshing request type.
+type MsgCompleteRefreshing struct {
 	// sender
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// request id
@@ -381,18 +381,18 @@ type MsgCompleteResharing struct {
 	Signature string `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
-func (m *MsgCompleteResharing) Reset()         { *m = MsgCompleteResharing{} }
-func (m *MsgCompleteResharing) String() string { return proto.CompactTextString(m) }
-func (*MsgCompleteResharing) ProtoMessage()    {}
-func (*MsgCompleteResharing) Descriptor() ([]byte, []int) {
+func (m *MsgCompleteRefreshing) Reset()         { *m = MsgCompleteRefreshing{} }
+func (m *MsgCompleteRefreshing) String() string { return proto.CompactTextString(m) }
+func (*MsgCompleteRefreshing) ProtoMessage()    {}
+func (*MsgCompleteRefreshing) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1229450f2932bf35, []int{6}
 }
-func (m *MsgCompleteResharing) XXX_Unmarshal(b []byte) error {
+func (m *MsgCompleteRefreshing) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgCompleteResharing) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCompleteRefreshing) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgCompleteResharing.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCompleteRefreshing.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -402,62 +402,62 @@ func (m *MsgCompleteResharing) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *MsgCompleteResharing) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCompleteResharing.Merge(m, src)
+func (m *MsgCompleteRefreshing) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCompleteRefreshing.Merge(m, src)
 }
-func (m *MsgCompleteResharing) XXX_Size() int {
+func (m *MsgCompleteRefreshing) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgCompleteResharing) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCompleteResharing.DiscardUnknown(m)
+func (m *MsgCompleteRefreshing) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCompleteRefreshing.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgCompleteResharing proto.InternalMessageInfo
+var xxx_messageInfo_MsgCompleteRefreshing proto.InternalMessageInfo
 
-func (m *MsgCompleteResharing) GetSender() string {
+func (m *MsgCompleteRefreshing) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgCompleteResharing) GetId() uint64 {
+func (m *MsgCompleteRefreshing) GetId() uint64 {
 	if m != nil {
 		return m.Id
 	}
 	return 0
 }
 
-func (m *MsgCompleteResharing) GetConsensusPubkey() string {
+func (m *MsgCompleteRefreshing) GetConsensusPubkey() string {
 	if m != nil {
 		return m.ConsensusPubkey
 	}
 	return ""
 }
 
-func (m *MsgCompleteResharing) GetSignature() string {
+func (m *MsgCompleteRefreshing) GetSignature() string {
 	if m != nil {
 		return m.Signature
 	}
 	return ""
 }
 
-// MsgCompleteResharingResponse defines the Msg/CompleteResharing response type.
-type MsgCompleteResharingResponse struct {
+// MsgCompleteRefreshingResponse defines the Msg/CompleteRefreshing response type.
+type MsgCompleteRefreshingResponse struct {
 }
 
-func (m *MsgCompleteResharingResponse) Reset()         { *m = MsgCompleteResharingResponse{} }
-func (m *MsgCompleteResharingResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgCompleteResharingResponse) ProtoMessage()    {}
-func (*MsgCompleteResharingResponse) Descriptor() ([]byte, []int) {
+func (m *MsgCompleteRefreshingResponse) Reset()         { *m = MsgCompleteRefreshingResponse{} }
+func (m *MsgCompleteRefreshingResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCompleteRefreshingResponse) ProtoMessage()    {}
+func (*MsgCompleteRefreshingResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1229450f2932bf35, []int{7}
 }
-func (m *MsgCompleteResharingResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgCompleteRefreshingResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgCompleteResharingResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCompleteRefreshingResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgCompleteResharingResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCompleteRefreshingResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -467,17 +467,17 @@ func (m *MsgCompleteResharingResponse) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *MsgCompleteResharingResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCompleteResharingResponse.Merge(m, src)
+func (m *MsgCompleteRefreshingResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCompleteRefreshingResponse.Merge(m, src)
 }
-func (m *MsgCompleteResharingResponse) XXX_Size() int {
+func (m *MsgCompleteRefreshingResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgCompleteResharingResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCompleteResharingResponse.DiscardUnknown(m)
+func (m *MsgCompleteRefreshingResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCompleteRefreshingResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgCompleteResharingResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgCompleteRefreshingResponse proto.InternalMessageInfo
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //
@@ -582,10 +582,10 @@ func init() {
 	proto.RegisterType((*MsgCompleteDKGResponse)(nil), "side.tss.MsgCompleteDKGResponse")
 	proto.RegisterType((*MsgSubmitSignatures)(nil), "side.tss.MsgSubmitSignatures")
 	proto.RegisterType((*MsgSubmitSignaturesResponse)(nil), "side.tss.MsgSubmitSignaturesResponse")
-	proto.RegisterType((*MsgReshare)(nil), "side.tss.MsgReshare")
-	proto.RegisterType((*MsgReshareResponse)(nil), "side.tss.MsgReshareResponse")
-	proto.RegisterType((*MsgCompleteResharing)(nil), "side.tss.MsgCompleteResharing")
-	proto.RegisterType((*MsgCompleteResharingResponse)(nil), "side.tss.MsgCompleteResharingResponse")
+	proto.RegisterType((*MsgRefresh)(nil), "side.tss.MsgRefresh")
+	proto.RegisterType((*MsgRefreshResponse)(nil), "side.tss.MsgRefreshResponse")
+	proto.RegisterType((*MsgCompleteRefreshing)(nil), "side.tss.MsgCompleteRefreshing")
+	proto.RegisterType((*MsgCompleteRefreshingResponse)(nil), "side.tss.MsgCompleteRefreshingResponse")
 	proto.RegisterType((*MsgUpdateParams)(nil), "side.tss.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "side.tss.MsgUpdateParamsResponse")
 }
@@ -593,50 +593,50 @@ func init() {
 func init() { proto.RegisterFile("side/tss/tx.proto", fileDescriptor_1229450f2932bf35) }
 
 var fileDescriptor_1229450f2932bf35 = []byte{
-	// 679 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x55, 0xcd, 0x4e, 0xdb, 0x58,
-	0x14, 0x8e, 0x93, 0x10, 0xe0, 0x64, 0x44, 0x82, 0xc9, 0x80, 0xe3, 0x01, 0x93, 0x89, 0x34, 0xa3,
-	0x94, 0x85, 0x2d, 0xe8, 0x0e, 0xa9, 0x9b, 0x14, 0xa9, 0x42, 0x34, 0x15, 0x32, 0xaa, 0x54, 0xb5,
-	0x8b, 0xc8, 0x8e, 0x6f, 0x2f, 0x6e, 0xb0, 0xaf, 0xe5, 0x73, 0x0d, 0x64, 0xd7, 0xf6, 0x09, 0xba,
-	0xe8, 0xa2, 0x52, 0x9f, 0xa0, 0x3b, 0x1e, 0x83, 0x25, 0xcb, 0xae, 0xda, 0x0a, 0x16, 0xbc, 0x46,
-	0xe5, 0xdf, 0xc4, 0x10, 0x28, 0xab, 0xe4, 0x7e, 0xdf, 0xf9, 0xf9, 0xce, 0x9f, 0x0c, 0x8b, 0x68,
-	0x5b, 0x44, 0xe3, 0x88, 0x1a, 0x3f, 0x55, 0x3d, 0x9f, 0x71, 0x26, 0xce, 0x85, 0x90, 0xca, 0x11,
-	0xe5, 0x06, 0x65, 0x94, 0x45, 0xa0, 0x16, 0xfe, 0x8b, 0x79, 0x59, 0xa1, 0x8c, 0xd1, 0x23, 0xa2,
-	0x45, 0x2f, 0x33, 0x78, 0xab, 0x59, 0x81, 0x6f, 0x70, 0x9b, 0xb9, 0x09, 0xbf, 0x32, 0x60, 0xe8,
-	0x30, 0xd4, 0x1c, 0xa4, 0xda, 0xf1, 0x66, 0xf8, 0x93, 0x10, 0x7f, 0x67, 0xb9, 0x3c, 0xc3, 0x37,
-	0x1c, 0x8c, 0xe1, 0xf6, 0x37, 0x01, 0x16, 0x7a, 0x48, 0x9f, 0x32, 0xc7, 0x3b, 0x22, 0x9c, 0xec,
-	0xec, 0x3d, 0x13, 0x97, 0xa1, 0x82, 0xc4, 0xb5, 0x88, 0x2f, 0x09, 0x2d, 0xa1, 0x33, 0xaf, 0x27,
-	0x2f, 0x71, 0x01, 0x8a, 0xb6, 0x25, 0x15, 0x5b, 0x42, 0xa7, 0xac, 0x17, 0x6d, 0x4b, 0x6c, 0xc2,
-	0x9c, 0x17, 0x98, 0xfd, 0x21, 0x19, 0xa1, 0x54, 0x6a, 0x95, 0x3a, 0xf3, 0xfa, 0xac, 0x17, 0x98,
-	0x7b, 0x64, 0x84, 0xe2, 0x23, 0xa8, 0x0f, 0x98, 0x8b, 0xc4, 0xc5, 0x00, 0xfb, 0x5e, 0x60, 0x0e,
-	0xc9, 0x48, 0x2a, 0x47, 0xc1, 0x6a, 0x19, 0xbe, 0x1f, 0xc1, 0xe2, 0x2a, 0xcc, 0xa3, 0x4d, 0x5d,
-	0x83, 0x07, 0x3e, 0x91, 0x66, 0x22, 0x9b, 0x31, 0xb0, 0x5d, 0xfd, 0x78, 0x7d, 0xb6, 0x91, 0x08,
-	0x68, 0x4b, 0xb0, 0x9c, 0x97, 0xaa, 0x13, 0xf4, 0xc2, 0x70, 0xed, 0x77, 0xb0, 0xd4, 0x43, 0x7a,
-	0x10, 0x98, 0x8e, 0xcd, 0x0f, 0x52, 0x67, 0x7c, 0x70, 0x25, 0x0a, 0x40, 0x96, 0x32, 0xad, 0x65,
-	0x02, 0xc9, 0xab, 0x58, 0x83, 0x7f, 0xa6, 0xe4, 0xca, 0xa4, 0x7c, 0x28, 0x02, 0xf4, 0x90, 0xea,
-	0x04, 0x0f, 0x0d, 0x9f, 0x84, 0xe5, 0x19, 0x01, 0x3f, 0x64, 0xbe, 0xcd, 0x47, 0x89, 0x8a, 0x31,
-	0x20, 0xae, 0xc0, 0xac, 0x35, 0xa4, 0x7d, 0xdb, 0x42, 0xa9, 0xd8, 0x2a, 0x75, 0xca, 0x7a, 0xc5,
-	0x1a, 0xd2, 0x5d, 0x0b, 0xc5, 0x4d, 0x68, 0xf8, 0xc4, 0x61, 0xc7, 0xc4, 0xea, 0x7b, 0x86, 0xcf,
-	0xed, 0x81, 0xed, 0x19, 0x2e, 0x4f, 0xb5, 0x2d, 0x25, 0xdc, 0xfe, 0x04, 0x15, 0xf6, 0xdc, 0x25,
-	0x27, 0x79, 0xf3, 0x72, 0x64, 0x5e, 0x73, 0xc9, 0x49, 0xce, 0xf4, 0x05, 0xd4, 0xb9, 0xed, 0x10,
-	0x16, 0xf0, 0x7e, 0xba, 0x3e, 0x51, 0xeb, 0xab, 0x5b, 0x4d, 0x35, 0xde, 0x2f, 0x35, 0xdd, 0x2f,
-	0x75, 0x27, 0x31, 0xe8, 0xce, 0x9d, 0xff, 0x58, 0x2f, 0x7c, 0xf9, 0xb9, 0x2e, 0xe8, 0xb5, 0xc4,
-	0x39, 0xa5, 0xb6, 0x17, 0xc2, 0xfe, 0x8c, 0xcb, 0x6a, 0x37, 0x40, 0x1c, 0xb7, 0x20, 0xeb, 0xcc,
-	0x67, 0x01, 0x1a, 0x13, 0xf3, 0x8b, 0x69, 0xdb, 0xa5, 0x0f, 0x1e, 0xd3, 0xb4, 0xad, 0x2a, 0x3d,
-	0x60, 0xab, 0xca, 0xf7, 0x6e, 0x95, 0x02, 0xab, 0xd3, 0x54, 0x65, 0xb2, 0x19, 0xd4, 0x7a, 0x48,
-	0x5f, 0x7a, 0x96, 0xc1, 0xc9, 0x7e, 0x74, 0x3a, 0x7f, 0x18, 0xaa, 0x0a, 0x95, 0xf8, 0xc4, 0x22,
-	0xe9, 0xd5, 0xad, 0xba, 0x9a, 0xde, 0xb4, 0x1a, 0xfb, 0x77, 0xcb, 0x61, 0x2b, 0xf5, 0xc4, 0xea,
-	0x56, 0xf7, 0x9a, 0xb0, 0x72, 0x23, 0x61, 0xaa, 0x65, 0xeb, 0x6b, 0x09, 0x4a, 0x3d, 0xa4, 0xe2,
-	0x2e, 0x54, 0x27, 0x2f, 0x56, 0x1a, 0x67, 0xc8, 0x1f, 0x88, 0xdc, 0xba, 0x8b, 0x49, 0x43, 0x8a,
-	0xaf, 0xa0, 0x7e, 0xeb, 0x6e, 0xd6, 0x72, 0x5e, 0x37, 0x69, 0xf9, 0xbf, 0x7b, 0xe9, 0x2c, 0xf2,
-	0x13, 0x98, 0x4d, 0xaf, 0xa0, 0x91, 0xf3, 0x48, 0x50, 0x79, 0x75, 0x1a, 0x9a, 0xb9, 0xbf, 0x81,
-	0xc5, 0xdb, 0xab, 0xa2, 0x4c, 0xad, 0x27, 0xe3, 0xe5, 0xff, 0xef, 0xe7, 0xb3, 0xe0, 0xcf, 0xe1,
-	0xaf, 0xdc, 0x44, 0x9b, 0x39, 0xbf, 0x49, 0x4a, 0xfe, 0xf7, 0x4e, 0x2a, 0x8d, 0x26, 0xcf, 0xbc,
-	0xbf, 0x3e, 0xdb, 0x10, 0xba, 0xdd, 0xf3, 0x4b, 0x45, 0xb8, 0xb8, 0x54, 0x84, 0x5f, 0x97, 0x8a,
-	0xf0, 0xe9, 0x4a, 0x29, 0x5c, 0x5c, 0x29, 0x85, 0xef, 0x57, 0x4a, 0xe1, 0x75, 0x87, 0xda, 0xfc,
-	0x30, 0x30, 0xd5, 0x01, 0x73, 0xb4, 0x30, 0x5a, 0x74, 0x5d, 0x03, 0x76, 0x14, 0x3d, 0xb4, 0xd3,
-	0xf8, 0x13, 0x30, 0xf2, 0x08, 0x9a, 0x95, 0x88, 0x7a, 0xfc, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x89,
-	0x7e, 0xc1, 0xf3, 0x1b, 0x06, 0x00, 0x00,
+	// 681 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x55, 0x3d, 0x4f, 0xdb, 0x5a,
+	0x18, 0x8e, 0x93, 0x10, 0xe0, 0xcd, 0x15, 0xc9, 0x35, 0x01, 0x1c, 0x5f, 0x70, 0x72, 0x23, 0x5d,
+	0xdd, 0x94, 0xc1, 0x16, 0x74, 0x43, 0xea, 0x92, 0x22, 0x55, 0x88, 0xa6, 0x42, 0x46, 0x95, 0xaa,
+	0x0e, 0x8d, 0xec, 0xf8, 0x70, 0x70, 0x83, 0x7d, 0x2c, 0xbf, 0xc7, 0x40, 0xb6, 0xb6, 0xbf, 0xa0,
+	0x4b, 0xa5, 0x4e, 0xdd, 0xbb, 0xf1, 0x33, 0x18, 0x19, 0x3b, 0xb5, 0x15, 0x0c, 0xfc, 0x8d, 0xca,
+	0x8e, 0xed, 0xc4, 0x10, 0x3e, 0xa6, 0xe4, 0x3c, 0xcf, 0xfb, 0xf1, 0xbc, 0x5f, 0x32, 0xfc, 0x8d,
+	0xb6, 0x45, 0x34, 0x8e, 0xa8, 0xf1, 0x53, 0xd5, 0xf3, 0x19, 0x67, 0xe2, 0x5c, 0x08, 0xa9, 0x1c,
+	0x51, 0xae, 0x51, 0x46, 0x59, 0x04, 0x6a, 0xe1, 0xbf, 0x11, 0x2f, 0x2b, 0x94, 0x31, 0x7a, 0x44,
+	0xb4, 0xe8, 0x65, 0x06, 0x07, 0x9a, 0x15, 0xf8, 0x06, 0xb7, 0x99, 0x1b, 0xf3, 0x2b, 0x7d, 0x86,
+	0x0e, 0x43, 0xcd, 0x41, 0xaa, 0x1d, 0x6f, 0x84, 0x3f, 0x31, 0xb1, 0x94, 0xe6, 0xf2, 0x0c, 0xdf,
+	0x70, 0x70, 0x04, 0xb7, 0xbe, 0x0b, 0xb0, 0xd0, 0x45, 0xfa, 0x9c, 0x39, 0xde, 0x11, 0xe1, 0x64,
+	0x7b, 0xf7, 0x85, 0xb8, 0x0c, 0x25, 0x24, 0xae, 0x45, 0x7c, 0x49, 0x68, 0x0a, 0xed, 0x79, 0x3d,
+	0x7e, 0x89, 0x0b, 0x90, 0xb7, 0x2d, 0x29, 0xdf, 0x14, 0xda, 0x45, 0x3d, 0x6f, 0x5b, 0x62, 0x1d,
+	0xe6, 0xbc, 0xc0, 0xec, 0x0d, 0xc8, 0x10, 0xa5, 0x42, 0xb3, 0xd0, 0x9e, 0xd7, 0x67, 0xbd, 0xc0,
+	0xdc, 0x25, 0x43, 0x14, 0x9f, 0x40, 0xb5, 0xcf, 0x5c, 0x24, 0x2e, 0x06, 0xd8, 0xf3, 0x02, 0x73,
+	0x40, 0x86, 0x52, 0x31, 0x0a, 0x56, 0x49, 0xf1, 0xbd, 0x08, 0x16, 0x57, 0x61, 0x1e, 0x6d, 0xea,
+	0x1a, 0x3c, 0xf0, 0x89, 0x34, 0x13, 0xd9, 0x8c, 0x81, 0xad, 0xf2, 0xa7, 0xeb, 0xb3, 0xf5, 0x58,
+	0x40, 0x4b, 0x82, 0xe5, 0xac, 0x54, 0x9d, 0xa0, 0x17, 0x86, 0x6b, 0xbd, 0x87, 0xc5, 0x2e, 0xd2,
+	0xfd, 0xc0, 0x74, 0x6c, 0xbe, 0x9f, 0x38, 0xe3, 0xa3, 0x2b, 0x51, 0x00, 0xd2, 0x94, 0x49, 0x2d,
+	0x13, 0x48, 0x56, 0xc5, 0x1a, 0xfc, 0x33, 0x25, 0x57, 0x2a, 0xe5, 0x63, 0x1e, 0xa0, 0x8b, 0x54,
+	0x27, 0x07, 0x3e, 0xc1, 0xc3, 0xb0, 0x3c, 0x23, 0xe0, 0x87, 0xcc, 0xb7, 0xf9, 0x30, 0x56, 0x31,
+	0x06, 0xc4, 0x15, 0x98, 0xb5, 0x06, 0xb4, 0x67, 0x5b, 0x28, 0xe5, 0x9b, 0x85, 0x76, 0x51, 0x2f,
+	0x59, 0x03, 0xba, 0x63, 0xa1, 0xb8, 0x01, 0x35, 0x9f, 0x38, 0xec, 0x98, 0x58, 0x3d, 0xcf, 0xf0,
+	0xb9, 0xdd, 0xb7, 0x3d, 0xc3, 0xe5, 0x89, 0xb6, 0xc5, 0x98, 0xdb, 0x9b, 0xa0, 0xc2, 0x9e, 0xbb,
+	0xe4, 0x24, 0x6b, 0x5e, 0x8c, 0xcc, 0x2b, 0x2e, 0x39, 0xc9, 0x98, 0xbe, 0x82, 0x2a, 0xb7, 0x1d,
+	0xc2, 0x02, 0xde, 0x4b, 0xd6, 0x27, 0x6a, 0x7d, 0x79, 0xb3, 0xae, 0x8e, 0xf6, 0x4b, 0x4d, 0xf6,
+	0x4b, 0xdd, 0x8e, 0x0d, 0x3a, 0x73, 0xe7, 0x3f, 0x1b, 0xb9, 0xaf, 0xbf, 0x1a, 0x82, 0x5e, 0x89,
+	0x9d, 0x13, 0x6a, 0x6b, 0x21, 0xec, 0xcf, 0xb8, 0xac, 0x56, 0x0d, 0xc4, 0x71, 0x0b, 0xd2, 0xce,
+	0x7c, 0x11, 0x60, 0x69, 0x62, 0x7e, 0x31, 0x6d, 0xbb, 0xf4, 0xd1, 0x73, 0x9a, 0xb6, 0x56, 0x85,
+	0x47, 0xac, 0x55, 0xf1, 0xde, 0xb5, 0x6a, 0xc0, 0xda, 0x54, 0x59, 0xa9, 0x70, 0x06, 0x95, 0x2e,
+	0xd2, 0xd7, 0x9e, 0x65, 0x70, 0xb2, 0x17, 0x1d, 0xcf, 0x03, 0x63, 0x55, 0xa1, 0x34, 0x3a, 0xb2,
+	0x48, 0x7b, 0x79, 0xb3, 0xaa, 0x26, 0x57, 0xad, 0x8e, 0xfc, 0x3b, 0xc5, 0xb0, 0x99, 0x7a, 0x6c,
+	0x75, 0xab, 0x7f, 0x75, 0x58, 0xb9, 0x91, 0x30, 0xd1, 0xb2, 0xf9, 0xad, 0x00, 0x85, 0x2e, 0x52,
+	0x71, 0x07, 0xca, 0x93, 0x37, 0x2b, 0x8d, 0x33, 0x64, 0x4f, 0x44, 0x6e, 0xde, 0xc5, 0x24, 0x21,
+	0xc5, 0x37, 0x50, 0xbd, 0x75, 0x39, 0x6b, 0x19, 0xaf, 0x9b, 0xb4, 0xfc, 0xdf, 0xbd, 0x74, 0x1a,
+	0xf9, 0x19, 0xcc, 0x26, 0x77, 0x50, 0xcb, 0x78, 0xc4, 0xa8, 0xbc, 0x3a, 0x0d, 0x4d, 0xdd, 0xdf,
+	0x81, 0x38, 0x65, 0x59, 0x1a, 0x53, 0x0b, 0x1a, 0x1b, 0xc8, 0xff, 0x3f, 0x60, 0x90, 0xc6, 0x7f,
+	0x09, 0x7f, 0x65, 0x86, 0x5a, 0xcf, 0x38, 0x4e, 0x52, 0xf2, 0xbf, 0x77, 0x52, 0x49, 0x34, 0x79,
+	0xe6, 0xc3, 0xf5, 0xd9, 0xba, 0xd0, 0xe9, 0x9c, 0x5f, 0x2a, 0xc2, 0xc5, 0xa5, 0x22, 0xfc, 0xbe,
+	0x54, 0x84, 0xcf, 0x57, 0x4a, 0xee, 0xe2, 0x4a, 0xc9, 0xfd, 0xb8, 0x52, 0x72, 0x6f, 0xdb, 0xd4,
+	0xe6, 0x87, 0x81, 0xa9, 0xf6, 0x99, 0xa3, 0x85, 0xd1, 0xa2, 0x13, 0xeb, 0xb3, 0xa3, 0xe8, 0xa1,
+	0x9d, 0x8e, 0xbe, 0x03, 0x43, 0x8f, 0xa0, 0x59, 0x8a, 0xa8, 0xa7, 0x7f, 0x02, 0x00, 0x00, 0xff,
+	0xff, 0x9b, 0x80, 0xb2, 0xbe, 0x20, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -655,10 +655,10 @@ type MsgClient interface {
 	CompleteDKG(ctx context.Context, in *MsgCompleteDKG, opts ...grpc.CallOption) (*MsgCompleteDKGResponse, error)
 	// SubmitSignatures submits signatures.
 	SubmitSignatures(ctx context.Context, in *MsgSubmitSignatures, opts ...grpc.CallOption) (*MsgSubmitSignaturesResponse, error)
-	// Reshare refreshes key shares.
-	Reshare(ctx context.Context, in *MsgReshare, opts ...grpc.CallOption) (*MsgReshareResponse, error)
-	// CompleteResharing completes the given resharing request by the participant.
-	CompleteResharing(ctx context.Context, in *MsgCompleteResharing, opts ...grpc.CallOption) (*MsgCompleteResharingResponse, error)
+	// Refresh refreshes key shares.
+	Refresh(ctx context.Context, in *MsgRefresh, opts ...grpc.CallOption) (*MsgRefreshResponse, error)
+	// CompleteRefreshing completes the given refreshing request by the participant.
+	CompleteRefreshing(ctx context.Context, in *MsgCompleteRefreshing, opts ...grpc.CallOption) (*MsgCompleteRefreshingResponse, error)
 	// UpdateParams defines a governance operation for updating the x/tss module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -692,18 +692,18 @@ func (c *msgClient) SubmitSignatures(ctx context.Context, in *MsgSubmitSignature
 	return out, nil
 }
 
-func (c *msgClient) Reshare(ctx context.Context, in *MsgReshare, opts ...grpc.CallOption) (*MsgReshareResponse, error) {
-	out := new(MsgReshareResponse)
-	err := c.cc.Invoke(ctx, "/side.tss.Msg/Reshare", in, out, opts...)
+func (c *msgClient) Refresh(ctx context.Context, in *MsgRefresh, opts ...grpc.CallOption) (*MsgRefreshResponse, error) {
+	out := new(MsgRefreshResponse)
+	err := c.cc.Invoke(ctx, "/side.tss.Msg/Refresh", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) CompleteResharing(ctx context.Context, in *MsgCompleteResharing, opts ...grpc.CallOption) (*MsgCompleteResharingResponse, error) {
-	out := new(MsgCompleteResharingResponse)
-	err := c.cc.Invoke(ctx, "/side.tss.Msg/CompleteResharing", in, out, opts...)
+func (c *msgClient) CompleteRefreshing(ctx context.Context, in *MsgCompleteRefreshing, opts ...grpc.CallOption) (*MsgCompleteRefreshingResponse, error) {
+	out := new(MsgCompleteRefreshingResponse)
+	err := c.cc.Invoke(ctx, "/side.tss.Msg/CompleteRefreshing", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -725,10 +725,10 @@ type MsgServer interface {
 	CompleteDKG(context.Context, *MsgCompleteDKG) (*MsgCompleteDKGResponse, error)
 	// SubmitSignatures submits signatures.
 	SubmitSignatures(context.Context, *MsgSubmitSignatures) (*MsgSubmitSignaturesResponse, error)
-	// Reshare refreshes key shares.
-	Reshare(context.Context, *MsgReshare) (*MsgReshareResponse, error)
-	// CompleteResharing completes the given resharing request by the participant.
-	CompleteResharing(context.Context, *MsgCompleteResharing) (*MsgCompleteResharingResponse, error)
+	// Refresh refreshes key shares.
+	Refresh(context.Context, *MsgRefresh) (*MsgRefreshResponse, error)
+	// CompleteRefreshing completes the given refreshing request by the participant.
+	CompleteRefreshing(context.Context, *MsgCompleteRefreshing) (*MsgCompleteRefreshingResponse, error)
 	// UpdateParams defines a governance operation for updating the x/tss module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -746,11 +746,11 @@ func (*UnimplementedMsgServer) CompleteDKG(ctx context.Context, req *MsgComplete
 func (*UnimplementedMsgServer) SubmitSignatures(ctx context.Context, req *MsgSubmitSignatures) (*MsgSubmitSignaturesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitSignatures not implemented")
 }
-func (*UnimplementedMsgServer) Reshare(ctx context.Context, req *MsgReshare) (*MsgReshareResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Reshare not implemented")
+func (*UnimplementedMsgServer) Refresh(ctx context.Context, req *MsgRefresh) (*MsgRefreshResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
 }
-func (*UnimplementedMsgServer) CompleteResharing(ctx context.Context, req *MsgCompleteResharing) (*MsgCompleteResharingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CompleteResharing not implemented")
+func (*UnimplementedMsgServer) CompleteRefreshing(ctx context.Context, req *MsgCompleteRefreshing) (*MsgCompleteRefreshingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompleteRefreshing not implemented")
 }
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -796,38 +796,38 @@ func _Msg_SubmitSignatures_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_Reshare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgReshare)
+func _Msg_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRefresh)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).Reshare(ctx, in)
+		return srv.(MsgServer).Refresh(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.tss.Msg/Reshare",
+		FullMethod: "/side.tss.Msg/Refresh",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Reshare(ctx, req.(*MsgReshare))
+		return srv.(MsgServer).Refresh(ctx, req.(*MsgRefresh))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_CompleteResharing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCompleteResharing)
+func _Msg_CompleteRefreshing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCompleteRefreshing)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).CompleteResharing(ctx, in)
+		return srv.(MsgServer).CompleteRefreshing(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/side.tss.Msg/CompleteResharing",
+		FullMethod: "/side.tss.Msg/CompleteRefreshing",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).CompleteResharing(ctx, req.(*MsgCompleteResharing))
+		return srv.(MsgServer).CompleteRefreshing(ctx, req.(*MsgCompleteRefreshing))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -864,12 +864,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitSignatures_Handler,
 		},
 		{
-			MethodName: "Reshare",
-			Handler:    _Msg_Reshare_Handler,
+			MethodName: "Refresh",
+			Handler:    _Msg_Refresh_Handler,
 		},
 		{
-			MethodName: "CompleteResharing",
-			Handler:    _Msg_CompleteResharing_Handler,
+			MethodName: "CompleteRefreshing",
+			Handler:    _Msg_CompleteRefreshing_Handler,
 		},
 		{
 			MethodName: "UpdateParams",
@@ -1028,7 +1028,7 @@ func (m *MsgSubmitSignaturesResponse) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgReshare) Marshal() (dAtA []byte, err error) {
+func (m *MsgRefresh) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1038,12 +1038,12 @@ func (m *MsgReshare) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgReshare) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRefresh) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgReshare) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRefresh) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1102,7 +1102,7 @@ func (m *MsgReshare) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgReshareResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgRefreshResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1112,12 +1112,12 @@ func (m *MsgReshareResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgReshareResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRefreshResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgReshareResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRefreshResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1125,7 +1125,7 @@ func (m *MsgReshareResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgCompleteResharing) Marshal() (dAtA []byte, err error) {
+func (m *MsgCompleteRefreshing) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1135,12 +1135,12 @@ func (m *MsgCompleteResharing) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgCompleteResharing) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCompleteRefreshing) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgCompleteResharing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCompleteRefreshing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1174,7 +1174,7 @@ func (m *MsgCompleteResharing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgCompleteResharingResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgCompleteRefreshingResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1184,12 +1184,12 @@ func (m *MsgCompleteResharingResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgCompleteResharingResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCompleteRefreshingResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgCompleteResharingResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCompleteRefreshingResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1341,7 +1341,7 @@ func (m *MsgSubmitSignaturesResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgReshare) Size() (n int) {
+func (m *MsgRefresh) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1375,7 +1375,7 @@ func (m *MsgReshare) Size() (n int) {
 	return n
 }
 
-func (m *MsgReshareResponse) Size() (n int) {
+func (m *MsgRefreshResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1384,7 +1384,7 @@ func (m *MsgReshareResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgCompleteResharing) Size() (n int) {
+func (m *MsgCompleteRefreshing) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1408,7 +1408,7 @@ func (m *MsgCompleteResharing) Size() (n int) {
 	return n
 }
 
-func (m *MsgCompleteResharingResponse) Size() (n int) {
+func (m *MsgCompleteRefreshingResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1877,7 +1877,7 @@ func (m *MsgSubmitSignaturesResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgReshare) Unmarshal(dAtA []byte) error {
+func (m *MsgRefresh) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1900,10 +1900,10 @@ func (m *MsgReshare) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgReshare: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRefresh: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgReshare: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRefresh: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2132,7 +2132,7 @@ func (m *MsgReshare) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgReshareResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgRefreshResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2155,10 +2155,10 @@ func (m *MsgReshareResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgReshareResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRefreshResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgReshareResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRefreshResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -2182,7 +2182,7 @@ func (m *MsgReshareResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgCompleteResharing) Unmarshal(dAtA []byte) error {
+func (m *MsgCompleteRefreshing) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2205,10 +2205,10 @@ func (m *MsgCompleteResharing) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCompleteResharing: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCompleteRefreshing: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCompleteResharing: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCompleteRefreshing: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2347,7 +2347,7 @@ func (m *MsgCompleteResharing) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgCompleteResharingResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgCompleteRefreshingResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2370,10 +2370,10 @@ func (m *MsgCompleteResharingResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCompleteResharingResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCompleteRefreshingResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCompleteResharingResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCompleteRefreshingResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

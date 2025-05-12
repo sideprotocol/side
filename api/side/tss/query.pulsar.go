@@ -4990,25 +4990,25 @@ func (x *fastReflection_QuerySigningRequestsResponse) ProtoMethods() *protoiface
 }
 
 var (
-	md_QueryResharingRequestRequest    protoreflect.MessageDescriptor
-	fd_QueryResharingRequestRequest_id protoreflect.FieldDescriptor
+	md_QueryRefreshingRequestRequest    protoreflect.MessageDescriptor
+	fd_QueryRefreshingRequestRequest_id protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_query_proto_init()
-	md_QueryResharingRequestRequest = File_side_tss_query_proto.Messages().ByName("QueryResharingRequestRequest")
-	fd_QueryResharingRequestRequest_id = md_QueryResharingRequestRequest.Fields().ByName("id")
+	md_QueryRefreshingRequestRequest = File_side_tss_query_proto.Messages().ByName("QueryRefreshingRequestRequest")
+	fd_QueryRefreshingRequestRequest_id = md_QueryRefreshingRequestRequest.Fields().ByName("id")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryResharingRequestRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryRefreshingRequestRequest)(nil)
 
-type fastReflection_QueryResharingRequestRequest QueryResharingRequestRequest
+type fastReflection_QueryRefreshingRequestRequest QueryRefreshingRequestRequest
 
-func (x *QueryResharingRequestRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryResharingRequestRequest)(x)
+func (x *QueryRefreshingRequestRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingRequestRequest)(x)
 }
 
-func (x *QueryResharingRequestRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryRefreshingRequestRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_tss_query_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5020,43 +5020,43 @@ func (x *QueryResharingRequestRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryResharingRequestRequest_messageType fastReflection_QueryResharingRequestRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryResharingRequestRequest_messageType{}
+var _fastReflection_QueryRefreshingRequestRequest_messageType fastReflection_QueryRefreshingRequestRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRefreshingRequestRequest_messageType{}
 
-type fastReflection_QueryResharingRequestRequest_messageType struct{}
+type fastReflection_QueryRefreshingRequestRequest_messageType struct{}
 
-func (x fastReflection_QueryResharingRequestRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryResharingRequestRequest)(nil)
+func (x fastReflection_QueryRefreshingRequestRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingRequestRequest)(nil)
 }
-func (x fastReflection_QueryResharingRequestRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingRequestRequest)
+func (x fastReflection_QueryRefreshingRequestRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingRequestRequest)
 }
-func (x fastReflection_QueryResharingRequestRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingRequestRequest
+func (x fastReflection_QueryRefreshingRequestRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingRequestRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryResharingRequestRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingRequestRequest
+func (x *fastReflection_QueryRefreshingRequestRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingRequestRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryResharingRequestRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryResharingRequestRequest_messageType
+func (x *fastReflection_QueryRefreshingRequestRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRefreshingRequestRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryResharingRequestRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingRequestRequest)
+func (x *fastReflection_QueryRefreshingRequestRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingRequestRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryResharingRequestRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryResharingRequestRequest)(x)
+func (x *fastReflection_QueryRefreshingRequestRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryRefreshingRequestRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5064,10 +5064,10 @@ func (x *fastReflection_QueryResharingRequestRequest) Interface() protoreflect.P
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryResharingRequestRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryRefreshingRequestRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Id != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.Id)
-		if !f(fd_QueryResharingRequestRequest_id, value) {
+		if !f(fd_QueryRefreshingRequestRequest_id, value) {
 			return
 		}
 	}
@@ -5084,15 +5084,15 @@ func (x *fastReflection_QueryResharingRequestRequest) Range(f func(protoreflect.
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryResharingRequestRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryRefreshingRequestRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestRequest.id":
+	case "side.tss.QueryRefreshingRequestRequest.id":
 		return x.Id != uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5102,15 +5102,15 @@ func (x *fastReflection_QueryResharingRequestRequest) Has(fd protoreflect.FieldD
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryRefreshingRequestRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestRequest.id":
+	case "side.tss.QueryRefreshingRequestRequest.id":
 		x.Id = uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5120,16 +5120,16 @@ func (x *fastReflection_QueryResharingRequestRequest) Clear(fd protoreflect.Fiel
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryResharingRequestRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.tss.QueryResharingRequestRequest.id":
+	case "side.tss.QueryRefreshingRequestRequest.id":
 		value := x.Id
 		return protoreflect.ValueOfUint64(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5143,15 +5143,15 @@ func (x *fastReflection_QueryResharingRequestRequest) Get(descriptor protoreflec
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryRefreshingRequestRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestRequest.id":
+	case "side.tss.QueryRefreshingRequestRequest.id":
 		x.Id = value.Uint()
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5165,40 +5165,40 @@ func (x *fastReflection_QueryResharingRequestRequest) Set(fd protoreflect.FieldD
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestRequest.id":
-		panic(fmt.Errorf("field id of message side.tss.QueryResharingRequestRequest is not mutable"))
+	case "side.tss.QueryRefreshingRequestRequest.id":
+		panic(fmt.Errorf("field id of message side.tss.QueryRefreshingRequestRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryResharingRequestRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestRequest.id":
+	case "side.tss.QueryRefreshingRequestRequest.id":
 		return protoreflect.ValueOfUint64(uint64(0))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryResharingRequestRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryRefreshingRequestRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryResharingRequestRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryRefreshingRequestRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -5206,7 +5206,7 @@ func (x *fastReflection_QueryResharingRequestRequest) WhichOneof(d protoreflect.
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryResharingRequestRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryRefreshingRequestRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -5217,7 +5217,7 @@ func (x *fastReflection_QueryResharingRequestRequest) GetUnknown() protoreflect.
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryRefreshingRequestRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -5229,7 +5229,7 @@ func (x *fastReflection_QueryResharingRequestRequest) SetUnknown(fields protoref
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryResharingRequestRequest) IsValid() bool {
+func (x *fastReflection_QueryRefreshingRequestRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -5239,9 +5239,9 @@ func (x *fastReflection_QueryResharingRequestRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryResharingRequestRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryRefreshingRequestRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryResharingRequestRequest)
+		x := input.Message.Interface().(*QueryRefreshingRequestRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5266,7 +5266,7 @@ func (x *fastReflection_QueryResharingRequestRequest) ProtoMethods() *protoiface
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingRequestRequest)
+		x := input.Message.Interface().(*QueryRefreshingRequestRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5301,7 +5301,7 @@ func (x *fastReflection_QueryResharingRequestRequest) ProtoMethods() *protoiface
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingRequestRequest)
+		x := input.Message.Interface().(*QueryRefreshingRequestRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5333,10 +5333,10 @@ func (x *fastReflection_QueryResharingRequestRequest) ProtoMethods() *protoiface
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingRequestRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingRequestRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingRequestRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingRequestRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -5394,25 +5394,25 @@ func (x *fastReflection_QueryResharingRequestRequest) ProtoMethods() *protoiface
 }
 
 var (
-	md_QueryResharingRequestResponse         protoreflect.MessageDescriptor
-	fd_QueryResharingRequestResponse_request protoreflect.FieldDescriptor
+	md_QueryRefreshingRequestResponse         protoreflect.MessageDescriptor
+	fd_QueryRefreshingRequestResponse_request protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_query_proto_init()
-	md_QueryResharingRequestResponse = File_side_tss_query_proto.Messages().ByName("QueryResharingRequestResponse")
-	fd_QueryResharingRequestResponse_request = md_QueryResharingRequestResponse.Fields().ByName("request")
+	md_QueryRefreshingRequestResponse = File_side_tss_query_proto.Messages().ByName("QueryRefreshingRequestResponse")
+	fd_QueryRefreshingRequestResponse_request = md_QueryRefreshingRequestResponse.Fields().ByName("request")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryResharingRequestResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryRefreshingRequestResponse)(nil)
 
-type fastReflection_QueryResharingRequestResponse QueryResharingRequestResponse
+type fastReflection_QueryRefreshingRequestResponse QueryRefreshingRequestResponse
 
-func (x *QueryResharingRequestResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryResharingRequestResponse)(x)
+func (x *QueryRefreshingRequestResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingRequestResponse)(x)
 }
 
-func (x *QueryResharingRequestResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryRefreshingRequestResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_tss_query_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5424,43 +5424,43 @@ func (x *QueryResharingRequestResponse) slowProtoReflect() protoreflect.Message 
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryResharingRequestResponse_messageType fastReflection_QueryResharingRequestResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryResharingRequestResponse_messageType{}
+var _fastReflection_QueryRefreshingRequestResponse_messageType fastReflection_QueryRefreshingRequestResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRefreshingRequestResponse_messageType{}
 
-type fastReflection_QueryResharingRequestResponse_messageType struct{}
+type fastReflection_QueryRefreshingRequestResponse_messageType struct{}
 
-func (x fastReflection_QueryResharingRequestResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryResharingRequestResponse)(nil)
+func (x fastReflection_QueryRefreshingRequestResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingRequestResponse)(nil)
 }
-func (x fastReflection_QueryResharingRequestResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingRequestResponse)
+func (x fastReflection_QueryRefreshingRequestResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingRequestResponse)
 }
-func (x fastReflection_QueryResharingRequestResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingRequestResponse
+func (x fastReflection_QueryRefreshingRequestResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingRequestResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryResharingRequestResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingRequestResponse
+func (x *fastReflection_QueryRefreshingRequestResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingRequestResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryResharingRequestResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryResharingRequestResponse_messageType
+func (x *fastReflection_QueryRefreshingRequestResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRefreshingRequestResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryResharingRequestResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingRequestResponse)
+func (x *fastReflection_QueryRefreshingRequestResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingRequestResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryResharingRequestResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryResharingRequestResponse)(x)
+func (x *fastReflection_QueryRefreshingRequestResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryRefreshingRequestResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5468,10 +5468,10 @@ func (x *fastReflection_QueryResharingRequestResponse) Interface() protoreflect.
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryResharingRequestResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryRefreshingRequestResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Request != nil {
 		value := protoreflect.ValueOfMessage(x.Request.ProtoReflect())
-		if !f(fd_QueryResharingRequestResponse_request, value) {
+		if !f(fd_QueryRefreshingRequestResponse_request, value) {
 			return
 		}
 	}
@@ -5488,15 +5488,15 @@ func (x *fastReflection_QueryResharingRequestResponse) Range(f func(protoreflect
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryResharingRequestResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryRefreshingRequestResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestResponse.request":
+	case "side.tss.QueryRefreshingRequestResponse.request":
 		return x.Request != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5506,15 +5506,15 @@ func (x *fastReflection_QueryResharingRequestResponse) Has(fd protoreflect.Field
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryRefreshingRequestResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestResponse.request":
+	case "side.tss.QueryRefreshingRequestResponse.request":
 		x.Request = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5524,16 +5524,16 @@ func (x *fastReflection_QueryResharingRequestResponse) Clear(fd protoreflect.Fie
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryResharingRequestResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.tss.QueryResharingRequestResponse.request":
+	case "side.tss.QueryRefreshingRequestResponse.request":
 		value := x.Request
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5547,15 +5547,15 @@ func (x *fastReflection_QueryResharingRequestResponse) Get(descriptor protorefle
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryRefreshingRequestResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestResponse.request":
-		x.Request = value.Message().Interface().(*ResharingRequest)
+	case "side.tss.QueryRefreshingRequestResponse.request":
+		x.Request = value.Message().Interface().(*RefreshingRequest)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5569,44 +5569,44 @@ func (x *fastReflection_QueryResharingRequestResponse) Set(fd protoreflect.Field
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestResponse.request":
+	case "side.tss.QueryRefreshingRequestResponse.request":
 		if x.Request == nil {
-			x.Request = new(ResharingRequest)
+			x.Request = new(RefreshingRequest)
 		}
 		return protoreflect.ValueOfMessage(x.Request.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryResharingRequestResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestResponse.request":
-		m := new(ResharingRequest)
+	case "side.tss.QueryRefreshingRequestResponse.request":
+		m := new(RefreshingRequest)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryResharingRequestResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryRefreshingRequestResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryResharingRequestResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryRefreshingRequestResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -5614,7 +5614,7 @@ func (x *fastReflection_QueryResharingRequestResponse) WhichOneof(d protoreflect
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryResharingRequestResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryRefreshingRequestResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -5625,7 +5625,7 @@ func (x *fastReflection_QueryResharingRequestResponse) GetUnknown() protoreflect
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryRefreshingRequestResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -5637,7 +5637,7 @@ func (x *fastReflection_QueryResharingRequestResponse) SetUnknown(fields protore
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryResharingRequestResponse) IsValid() bool {
+func (x *fastReflection_QueryRefreshingRequestResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -5647,9 +5647,9 @@ func (x *fastReflection_QueryResharingRequestResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryResharingRequestResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryRefreshingRequestResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryResharingRequestResponse)
+		x := input.Message.Interface().(*QueryRefreshingRequestResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5675,7 +5675,7 @@ func (x *fastReflection_QueryResharingRequestResponse) ProtoMethods() *protoifac
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingRequestResponse)
+		x := input.Message.Interface().(*QueryRefreshingRequestResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5719,7 +5719,7 @@ func (x *fastReflection_QueryResharingRequestResponse) ProtoMethods() *protoifac
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingRequestResponse)
+		x := input.Message.Interface().(*QueryRefreshingRequestResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5751,10 +5751,10 @@ func (x *fastReflection_QueryResharingRequestResponse) ProtoMethods() *protoifac
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingRequestResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingRequestResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingRequestResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingRequestResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -5787,7 +5787,7 @@ func (x *fastReflection_QueryResharingRequestResponse) ProtoMethods() *protoifac
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.Request == nil {
-					x.Request = &ResharingRequest{}
+					x.Request = &RefreshingRequest{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Request); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -5829,27 +5829,27 @@ func (x *fastReflection_QueryResharingRequestResponse) ProtoMethods() *protoifac
 }
 
 var (
-	md_QueryResharingRequestsRequest            protoreflect.MessageDescriptor
-	fd_QueryResharingRequestsRequest_status     protoreflect.FieldDescriptor
-	fd_QueryResharingRequestsRequest_pagination protoreflect.FieldDescriptor
+	md_QueryRefreshingRequestsRequest            protoreflect.MessageDescriptor
+	fd_QueryRefreshingRequestsRequest_status     protoreflect.FieldDescriptor
+	fd_QueryRefreshingRequestsRequest_pagination protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_query_proto_init()
-	md_QueryResharingRequestsRequest = File_side_tss_query_proto.Messages().ByName("QueryResharingRequestsRequest")
-	fd_QueryResharingRequestsRequest_status = md_QueryResharingRequestsRequest.Fields().ByName("status")
-	fd_QueryResharingRequestsRequest_pagination = md_QueryResharingRequestsRequest.Fields().ByName("pagination")
+	md_QueryRefreshingRequestsRequest = File_side_tss_query_proto.Messages().ByName("QueryRefreshingRequestsRequest")
+	fd_QueryRefreshingRequestsRequest_status = md_QueryRefreshingRequestsRequest.Fields().ByName("status")
+	fd_QueryRefreshingRequestsRequest_pagination = md_QueryRefreshingRequestsRequest.Fields().ByName("pagination")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryResharingRequestsRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryRefreshingRequestsRequest)(nil)
 
-type fastReflection_QueryResharingRequestsRequest QueryResharingRequestsRequest
+type fastReflection_QueryRefreshingRequestsRequest QueryRefreshingRequestsRequest
 
-func (x *QueryResharingRequestsRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryResharingRequestsRequest)(x)
+func (x *QueryRefreshingRequestsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingRequestsRequest)(x)
 }
 
-func (x *QueryResharingRequestsRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryRefreshingRequestsRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_tss_query_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5861,43 +5861,43 @@ func (x *QueryResharingRequestsRequest) slowProtoReflect() protoreflect.Message 
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryResharingRequestsRequest_messageType fastReflection_QueryResharingRequestsRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryResharingRequestsRequest_messageType{}
+var _fastReflection_QueryRefreshingRequestsRequest_messageType fastReflection_QueryRefreshingRequestsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRefreshingRequestsRequest_messageType{}
 
-type fastReflection_QueryResharingRequestsRequest_messageType struct{}
+type fastReflection_QueryRefreshingRequestsRequest_messageType struct{}
 
-func (x fastReflection_QueryResharingRequestsRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryResharingRequestsRequest)(nil)
+func (x fastReflection_QueryRefreshingRequestsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingRequestsRequest)(nil)
 }
-func (x fastReflection_QueryResharingRequestsRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingRequestsRequest)
+func (x fastReflection_QueryRefreshingRequestsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingRequestsRequest)
 }
-func (x fastReflection_QueryResharingRequestsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingRequestsRequest
+func (x fastReflection_QueryRefreshingRequestsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingRequestsRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryResharingRequestsRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingRequestsRequest
+func (x *fastReflection_QueryRefreshingRequestsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingRequestsRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryResharingRequestsRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryResharingRequestsRequest_messageType
+func (x *fastReflection_QueryRefreshingRequestsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRefreshingRequestsRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryResharingRequestsRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingRequestsRequest)
+func (x *fastReflection_QueryRefreshingRequestsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingRequestsRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryResharingRequestsRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryResharingRequestsRequest)(x)
+func (x *fastReflection_QueryRefreshingRequestsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryRefreshingRequestsRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5905,16 +5905,16 @@ func (x *fastReflection_QueryResharingRequestsRequest) Interface() protoreflect.
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryResharingRequestsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryRefreshingRequestsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Status != 0 {
 		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
-		if !f(fd_QueryResharingRequestsRequest_status, value) {
+		if !f(fd_QueryRefreshingRequestsRequest_status, value) {
 			return
 		}
 	}
 	if x.Pagination != nil {
 		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-		if !f(fd_QueryResharingRequestsRequest_pagination, value) {
+		if !f(fd_QueryRefreshingRequestsRequest_pagination, value) {
 			return
 		}
 	}
@@ -5931,17 +5931,17 @@ func (x *fastReflection_QueryResharingRequestsRequest) Range(f func(protoreflect
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryResharingRequestsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryRefreshingRequestsRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsRequest.status":
+	case "side.tss.QueryRefreshingRequestsRequest.status":
 		return x.Status != 0
-	case "side.tss.QueryResharingRequestsRequest.pagination":
+	case "side.tss.QueryRefreshingRequestsRequest.pagination":
 		return x.Pagination != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5951,17 +5951,17 @@ func (x *fastReflection_QueryResharingRequestsRequest) Has(fd protoreflect.Field
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestsRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryRefreshingRequestsRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsRequest.status":
+	case "side.tss.QueryRefreshingRequestsRequest.status":
 		x.Status = 0
-	case "side.tss.QueryResharingRequestsRequest.pagination":
+	case "side.tss.QueryRefreshingRequestsRequest.pagination":
 		x.Pagination = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5971,19 +5971,19 @@ func (x *fastReflection_QueryResharingRequestsRequest) Clear(fd protoreflect.Fie
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryResharingRequestsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.tss.QueryResharingRequestsRequest.status":
+	case "side.tss.QueryRefreshingRequestsRequest.status":
 		value := x.Status
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
-	case "side.tss.QueryResharingRequestsRequest.pagination":
+	case "side.tss.QueryRefreshingRequestsRequest.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5997,17 +5997,17 @@ func (x *fastReflection_QueryResharingRequestsRequest) Get(descriptor protorefle
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryRefreshingRequestsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsRequest.status":
-		x.Status = (ResharingStatus)(value.Enum())
-	case "side.tss.QueryResharingRequestsRequest.pagination":
+	case "side.tss.QueryRefreshingRequestsRequest.status":
+		x.Status = (RefreshingStatus)(value.Enum())
+	case "side.tss.QueryRefreshingRequestsRequest.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6021,48 +6021,48 @@ func (x *fastReflection_QueryResharingRequestsRequest) Set(fd protoreflect.Field
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsRequest.pagination":
+	case "side.tss.QueryRefreshingRequestsRequest.pagination":
 		if x.Pagination == nil {
 			x.Pagination = new(v1beta1.PageRequest)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-	case "side.tss.QueryResharingRequestsRequest.status":
-		panic(fmt.Errorf("field status of message side.tss.QueryResharingRequestsRequest is not mutable"))
+	case "side.tss.QueryRefreshingRequestsRequest.status":
+		panic(fmt.Errorf("field status of message side.tss.QueryRefreshingRequestsRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryResharingRequestsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsRequest.status":
+	case "side.tss.QueryRefreshingRequestsRequest.status":
 		return protoreflect.ValueOfEnum(0)
-	case "side.tss.QueryResharingRequestsRequest.pagination":
+	case "side.tss.QueryRefreshingRequestsRequest.pagination":
 		m := new(v1beta1.PageRequest)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryResharingRequestsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryRefreshingRequestsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryResharingRequestsRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryRefreshingRequestsRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6070,7 +6070,7 @@ func (x *fastReflection_QueryResharingRequestsRequest) WhichOneof(d protoreflect
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryResharingRequestsRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryRefreshingRequestsRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6081,7 +6081,7 @@ func (x *fastReflection_QueryResharingRequestsRequest) GetUnknown() protoreflect
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestsRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryRefreshingRequestsRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6093,7 +6093,7 @@ func (x *fastReflection_QueryResharingRequestsRequest) SetUnknown(fields protore
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryResharingRequestsRequest) IsValid() bool {
+func (x *fastReflection_QueryRefreshingRequestsRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -6103,9 +6103,9 @@ func (x *fastReflection_QueryResharingRequestsRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryResharingRequestsRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryRefreshingRequestsRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryResharingRequestsRequest)
+		x := input.Message.Interface().(*QueryRefreshingRequestsRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6134,7 +6134,7 @@ func (x *fastReflection_QueryResharingRequestsRequest) ProtoMethods() *protoifac
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingRequestsRequest)
+		x := input.Message.Interface().(*QueryRefreshingRequestsRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6183,7 +6183,7 @@ func (x *fastReflection_QueryResharingRequestsRequest) ProtoMethods() *protoifac
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingRequestsRequest)
+		x := input.Message.Interface().(*QueryRefreshingRequestsRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6215,10 +6215,10 @@ func (x *fastReflection_QueryResharingRequestsRequest) ProtoMethods() *protoifac
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingRequestsRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingRequestsRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingRequestsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingRequestsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -6235,7 +6235,7 @@ func (x *fastReflection_QueryResharingRequestsRequest) ProtoMethods() *protoifac
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Status |= ResharingStatus(b&0x7F) << shift
+					x.Status |= RefreshingStatus(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -6311,79 +6311,79 @@ func (x *fastReflection_QueryResharingRequestsRequest) ProtoMethods() *protoifac
 	}
 }
 
-var _ protoreflect.List = (*_QueryResharingRequestsResponse_1_list)(nil)
+var _ protoreflect.List = (*_QueryRefreshingRequestsResponse_1_list)(nil)
 
-type _QueryResharingRequestsResponse_1_list struct {
-	list *[]*ResharingRequest
+type _QueryRefreshingRequestsResponse_1_list struct {
+	list *[]*RefreshingRequest
 }
 
-func (x *_QueryResharingRequestsResponse_1_list) Len() int {
+func (x *_QueryRefreshingRequestsResponse_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_QueryResharingRequestsResponse_1_list) Get(i int) protoreflect.Value {
+func (x *_QueryRefreshingRequestsResponse_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_QueryResharingRequestsResponse_1_list) Set(i int, value protoreflect.Value) {
+func (x *_QueryRefreshingRequestsResponse_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ResharingRequest)
+	concreteValue := valueUnwrapped.Interface().(*RefreshingRequest)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_QueryResharingRequestsResponse_1_list) Append(value protoreflect.Value) {
+func (x *_QueryRefreshingRequestsResponse_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ResharingRequest)
+	concreteValue := valueUnwrapped.Interface().(*RefreshingRequest)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_QueryResharingRequestsResponse_1_list) AppendMutable() protoreflect.Value {
-	v := new(ResharingRequest)
+func (x *_QueryRefreshingRequestsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(RefreshingRequest)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_QueryResharingRequestsResponse_1_list) Truncate(n int) {
+func (x *_QueryRefreshingRequestsResponse_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_QueryResharingRequestsResponse_1_list) NewElement() protoreflect.Value {
-	v := new(ResharingRequest)
+func (x *_QueryRefreshingRequestsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(RefreshingRequest)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_QueryResharingRequestsResponse_1_list) IsValid() bool {
+func (x *_QueryRefreshingRequestsResponse_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_QueryResharingRequestsResponse            protoreflect.MessageDescriptor
-	fd_QueryResharingRequestsResponse_requests   protoreflect.FieldDescriptor
-	fd_QueryResharingRequestsResponse_pagination protoreflect.FieldDescriptor
+	md_QueryRefreshingRequestsResponse            protoreflect.MessageDescriptor
+	fd_QueryRefreshingRequestsResponse_requests   protoreflect.FieldDescriptor
+	fd_QueryRefreshingRequestsResponse_pagination protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_query_proto_init()
-	md_QueryResharingRequestsResponse = File_side_tss_query_proto.Messages().ByName("QueryResharingRequestsResponse")
-	fd_QueryResharingRequestsResponse_requests = md_QueryResharingRequestsResponse.Fields().ByName("requests")
-	fd_QueryResharingRequestsResponse_pagination = md_QueryResharingRequestsResponse.Fields().ByName("pagination")
+	md_QueryRefreshingRequestsResponse = File_side_tss_query_proto.Messages().ByName("QueryRefreshingRequestsResponse")
+	fd_QueryRefreshingRequestsResponse_requests = md_QueryRefreshingRequestsResponse.Fields().ByName("requests")
+	fd_QueryRefreshingRequestsResponse_pagination = md_QueryRefreshingRequestsResponse.Fields().ByName("pagination")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryResharingRequestsResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryRefreshingRequestsResponse)(nil)
 
-type fastReflection_QueryResharingRequestsResponse QueryResharingRequestsResponse
+type fastReflection_QueryRefreshingRequestsResponse QueryRefreshingRequestsResponse
 
-func (x *QueryResharingRequestsResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryResharingRequestsResponse)(x)
+func (x *QueryRefreshingRequestsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingRequestsResponse)(x)
 }
 
-func (x *QueryResharingRequestsResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryRefreshingRequestsResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_tss_query_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6395,43 +6395,43 @@ func (x *QueryResharingRequestsResponse) slowProtoReflect() protoreflect.Message
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryResharingRequestsResponse_messageType fastReflection_QueryResharingRequestsResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryResharingRequestsResponse_messageType{}
+var _fastReflection_QueryRefreshingRequestsResponse_messageType fastReflection_QueryRefreshingRequestsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRefreshingRequestsResponse_messageType{}
 
-type fastReflection_QueryResharingRequestsResponse_messageType struct{}
+type fastReflection_QueryRefreshingRequestsResponse_messageType struct{}
 
-func (x fastReflection_QueryResharingRequestsResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryResharingRequestsResponse)(nil)
+func (x fastReflection_QueryRefreshingRequestsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingRequestsResponse)(nil)
 }
-func (x fastReflection_QueryResharingRequestsResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingRequestsResponse)
+func (x fastReflection_QueryRefreshingRequestsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingRequestsResponse)
 }
-func (x fastReflection_QueryResharingRequestsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingRequestsResponse
+func (x fastReflection_QueryRefreshingRequestsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingRequestsResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryResharingRequestsResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingRequestsResponse
+func (x *fastReflection_QueryRefreshingRequestsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingRequestsResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryResharingRequestsResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryResharingRequestsResponse_messageType
+func (x *fastReflection_QueryRefreshingRequestsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRefreshingRequestsResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryResharingRequestsResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingRequestsResponse)
+func (x *fastReflection_QueryRefreshingRequestsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingRequestsResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryResharingRequestsResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryResharingRequestsResponse)(x)
+func (x *fastReflection_QueryRefreshingRequestsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryRefreshingRequestsResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -6439,16 +6439,16 @@ func (x *fastReflection_QueryResharingRequestsResponse) Interface() protoreflect
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryResharingRequestsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryRefreshingRequestsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.Requests) != 0 {
-		value := protoreflect.ValueOfList(&_QueryResharingRequestsResponse_1_list{list: &x.Requests})
-		if !f(fd_QueryResharingRequestsResponse_requests, value) {
+		value := protoreflect.ValueOfList(&_QueryRefreshingRequestsResponse_1_list{list: &x.Requests})
+		if !f(fd_QueryRefreshingRequestsResponse_requests, value) {
 			return
 		}
 	}
 	if x.Pagination != nil {
 		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-		if !f(fd_QueryResharingRequestsResponse_pagination, value) {
+		if !f(fd_QueryRefreshingRequestsResponse_pagination, value) {
 			return
 		}
 	}
@@ -6465,17 +6465,17 @@ func (x *fastReflection_QueryResharingRequestsResponse) Range(f func(protoreflec
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryResharingRequestsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryRefreshingRequestsResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsResponse.requests":
+	case "side.tss.QueryRefreshingRequestsResponse.requests":
 		return len(x.Requests) != 0
-	case "side.tss.QueryResharingRequestsResponse.pagination":
+	case "side.tss.QueryRefreshingRequestsResponse.pagination":
 		return x.Pagination != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6485,17 +6485,17 @@ func (x *fastReflection_QueryResharingRequestsResponse) Has(fd protoreflect.Fiel
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestsResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryRefreshingRequestsResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsResponse.requests":
+	case "side.tss.QueryRefreshingRequestsResponse.requests":
 		x.Requests = nil
-	case "side.tss.QueryResharingRequestsResponse.pagination":
+	case "side.tss.QueryRefreshingRequestsResponse.pagination":
 		x.Pagination = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6505,22 +6505,22 @@ func (x *fastReflection_QueryResharingRequestsResponse) Clear(fd protoreflect.Fi
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryResharingRequestsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.tss.QueryResharingRequestsResponse.requests":
+	case "side.tss.QueryRefreshingRequestsResponse.requests":
 		if len(x.Requests) == 0 {
-			return protoreflect.ValueOfList(&_QueryResharingRequestsResponse_1_list{})
+			return protoreflect.ValueOfList(&_QueryRefreshingRequestsResponse_1_list{})
 		}
-		listValue := &_QueryResharingRequestsResponse_1_list{list: &x.Requests}
+		listValue := &_QueryRefreshingRequestsResponse_1_list{list: &x.Requests}
 		return protoreflect.ValueOfList(listValue)
-	case "side.tss.QueryResharingRequestsResponse.pagination":
+	case "side.tss.QueryRefreshingRequestsResponse.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -6534,19 +6534,19 @@ func (x *fastReflection_QueryResharingRequestsResponse) Get(descriptor protorefl
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryRefreshingRequestsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsResponse.requests":
+	case "side.tss.QueryRefreshingRequestsResponse.requests":
 		lv := value.List()
-		clv := lv.(*_QueryResharingRequestsResponse_1_list)
+		clv := lv.(*_QueryRefreshingRequestsResponse_1_list)
 		x.Requests = *clv.list
-	case "side.tss.QueryResharingRequestsResponse.pagination":
+	case "side.tss.QueryRefreshingRequestsResponse.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6560,53 +6560,53 @@ func (x *fastReflection_QueryResharingRequestsResponse) Set(fd protoreflect.Fiel
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsResponse.requests":
+	case "side.tss.QueryRefreshingRequestsResponse.requests":
 		if x.Requests == nil {
-			x.Requests = []*ResharingRequest{}
+			x.Requests = []*RefreshingRequest{}
 		}
-		value := &_QueryResharingRequestsResponse_1_list{list: &x.Requests}
+		value := &_QueryRefreshingRequestsResponse_1_list{list: &x.Requests}
 		return protoreflect.ValueOfList(value)
-	case "side.tss.QueryResharingRequestsResponse.pagination":
+	case "side.tss.QueryRefreshingRequestsResponse.pagination":
 		if x.Pagination == nil {
 			x.Pagination = new(v1beta1.PageResponse)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryResharingRequestsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingRequestsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingRequestsResponse.requests":
-		list := []*ResharingRequest{}
-		return protoreflect.ValueOfList(&_QueryResharingRequestsResponse_1_list{list: &list})
-	case "side.tss.QueryResharingRequestsResponse.pagination":
+	case "side.tss.QueryRefreshingRequestsResponse.requests":
+		list := []*RefreshingRequest{}
+		return protoreflect.ValueOfList(&_QueryRefreshingRequestsResponse_1_list{list: &list})
+	case "side.tss.QueryRefreshingRequestsResponse.pagination":
 		m := new(v1beta1.PageResponse)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingRequestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingRequestsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingRequestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingRequestsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryResharingRequestsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryRefreshingRequestsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryResharingRequestsResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryRefreshingRequestsResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6614,7 +6614,7 @@ func (x *fastReflection_QueryResharingRequestsResponse) WhichOneof(d protoreflec
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryResharingRequestsResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryRefreshingRequestsResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6625,7 +6625,7 @@ func (x *fastReflection_QueryResharingRequestsResponse) GetUnknown() protoreflec
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingRequestsResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryRefreshingRequestsResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6637,7 +6637,7 @@ func (x *fastReflection_QueryResharingRequestsResponse) SetUnknown(fields protor
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryResharingRequestsResponse) IsValid() bool {
+func (x *fastReflection_QueryRefreshingRequestsResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -6647,9 +6647,9 @@ func (x *fastReflection_QueryResharingRequestsResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryResharingRequestsResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryRefreshingRequestsResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryResharingRequestsResponse)
+		x := input.Message.Interface().(*QueryRefreshingRequestsResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6681,7 +6681,7 @@ func (x *fastReflection_QueryResharingRequestsResponse) ProtoMethods() *protoifa
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingRequestsResponse)
+		x := input.Message.Interface().(*QueryRefreshingRequestsResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6741,7 +6741,7 @@ func (x *fastReflection_QueryResharingRequestsResponse) ProtoMethods() *protoifa
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingRequestsResponse)
+		x := input.Message.Interface().(*QueryRefreshingRequestsResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6773,10 +6773,10 @@ func (x *fastReflection_QueryResharingRequestsResponse) ProtoMethods() *protoifa
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingRequestsResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingRequestsResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingRequestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingRequestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -6808,7 +6808,7 @@ func (x *fastReflection_QueryResharingRequestsResponse) ProtoMethods() *protoifa
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Requests = append(x.Requests, &ResharingRequest{})
+				x.Requests = append(x.Requests, &RefreshingRequest{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Requests[len(x.Requests)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -6885,27 +6885,27 @@ func (x *fastReflection_QueryResharingRequestsResponse) ProtoMethods() *protoifa
 }
 
 var (
-	md_QueryResharingCompletionsRequest            protoreflect.MessageDescriptor
-	fd_QueryResharingCompletionsRequest_id         protoreflect.FieldDescriptor
-	fd_QueryResharingCompletionsRequest_pagination protoreflect.FieldDescriptor
+	md_QueryRefreshingCompletionsRequest            protoreflect.MessageDescriptor
+	fd_QueryRefreshingCompletionsRequest_id         protoreflect.FieldDescriptor
+	fd_QueryRefreshingCompletionsRequest_pagination protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_query_proto_init()
-	md_QueryResharingCompletionsRequest = File_side_tss_query_proto.Messages().ByName("QueryResharingCompletionsRequest")
-	fd_QueryResharingCompletionsRequest_id = md_QueryResharingCompletionsRequest.Fields().ByName("id")
-	fd_QueryResharingCompletionsRequest_pagination = md_QueryResharingCompletionsRequest.Fields().ByName("pagination")
+	md_QueryRefreshingCompletionsRequest = File_side_tss_query_proto.Messages().ByName("QueryRefreshingCompletionsRequest")
+	fd_QueryRefreshingCompletionsRequest_id = md_QueryRefreshingCompletionsRequest.Fields().ByName("id")
+	fd_QueryRefreshingCompletionsRequest_pagination = md_QueryRefreshingCompletionsRequest.Fields().ByName("pagination")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryResharingCompletionsRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryRefreshingCompletionsRequest)(nil)
 
-type fastReflection_QueryResharingCompletionsRequest QueryResharingCompletionsRequest
+type fastReflection_QueryRefreshingCompletionsRequest QueryRefreshingCompletionsRequest
 
-func (x *QueryResharingCompletionsRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryResharingCompletionsRequest)(x)
+func (x *QueryRefreshingCompletionsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingCompletionsRequest)(x)
 }
 
-func (x *QueryResharingCompletionsRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryRefreshingCompletionsRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_tss_query_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6917,43 +6917,43 @@ func (x *QueryResharingCompletionsRequest) slowProtoReflect() protoreflect.Messa
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryResharingCompletionsRequest_messageType fastReflection_QueryResharingCompletionsRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryResharingCompletionsRequest_messageType{}
+var _fastReflection_QueryRefreshingCompletionsRequest_messageType fastReflection_QueryRefreshingCompletionsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRefreshingCompletionsRequest_messageType{}
 
-type fastReflection_QueryResharingCompletionsRequest_messageType struct{}
+type fastReflection_QueryRefreshingCompletionsRequest_messageType struct{}
 
-func (x fastReflection_QueryResharingCompletionsRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryResharingCompletionsRequest)(nil)
+func (x fastReflection_QueryRefreshingCompletionsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingCompletionsRequest)(nil)
 }
-func (x fastReflection_QueryResharingCompletionsRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingCompletionsRequest)
+func (x fastReflection_QueryRefreshingCompletionsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingCompletionsRequest)
 }
-func (x fastReflection_QueryResharingCompletionsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingCompletionsRequest
+func (x fastReflection_QueryRefreshingCompletionsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingCompletionsRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryResharingCompletionsRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingCompletionsRequest
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingCompletionsRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryResharingCompletionsRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryResharingCompletionsRequest_messageType
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRefreshingCompletionsRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryResharingCompletionsRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingCompletionsRequest)
+func (x *fastReflection_QueryRefreshingCompletionsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingCompletionsRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryResharingCompletionsRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryResharingCompletionsRequest)(x)
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryRefreshingCompletionsRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -6961,16 +6961,16 @@ func (x *fastReflection_QueryResharingCompletionsRequest) Interface() protorefle
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryResharingCompletionsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Id != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.Id)
-		if !f(fd_QueryResharingCompletionsRequest_id, value) {
+		if !f(fd_QueryRefreshingCompletionsRequest_id, value) {
 			return
 		}
 	}
 	if x.Pagination != nil {
 		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-		if !f(fd_QueryResharingCompletionsRequest_pagination, value) {
+		if !f(fd_QueryRefreshingCompletionsRequest_pagination, value) {
 			return
 		}
 	}
@@ -6987,17 +6987,17 @@ func (x *fastReflection_QueryResharingCompletionsRequest) Range(f func(protorefl
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryResharingCompletionsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsRequest.id":
+	case "side.tss.QueryRefreshingCompletionsRequest.id":
 		return x.Id != uint64(0)
-	case "side.tss.QueryResharingCompletionsRequest.pagination":
+	case "side.tss.QueryRefreshingCompletionsRequest.pagination":
 		return x.Pagination != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7007,17 +7007,17 @@ func (x *fastReflection_QueryResharingCompletionsRequest) Has(fd protoreflect.Fi
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingCompletionsRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsRequest.id":
+	case "side.tss.QueryRefreshingCompletionsRequest.id":
 		x.Id = uint64(0)
-	case "side.tss.QueryResharingCompletionsRequest.pagination":
+	case "side.tss.QueryRefreshingCompletionsRequest.pagination":
 		x.Pagination = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7027,19 +7027,19 @@ func (x *fastReflection_QueryResharingCompletionsRequest) Clear(fd protoreflect.
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryResharingCompletionsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.tss.QueryResharingCompletionsRequest.id":
+	case "side.tss.QueryRefreshingCompletionsRequest.id":
 		value := x.Id
 		return protoreflect.ValueOfUint64(value)
-	case "side.tss.QueryResharingCompletionsRequest.pagination":
+	case "side.tss.QueryRefreshingCompletionsRequest.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -7053,17 +7053,17 @@ func (x *fastReflection_QueryResharingCompletionsRequest) Get(descriptor protore
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingCompletionsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsRequest.id":
+	case "side.tss.QueryRefreshingCompletionsRequest.id":
 		x.Id = value.Uint()
-	case "side.tss.QueryResharingCompletionsRequest.pagination":
+	case "side.tss.QueryRefreshingCompletionsRequest.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7077,48 +7077,48 @@ func (x *fastReflection_QueryResharingCompletionsRequest) Set(fd protoreflect.Fi
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingCompletionsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsRequest.pagination":
+	case "side.tss.QueryRefreshingCompletionsRequest.pagination":
 		if x.Pagination == nil {
 			x.Pagination = new(v1beta1.PageRequest)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-	case "side.tss.QueryResharingCompletionsRequest.id":
-		panic(fmt.Errorf("field id of message side.tss.QueryResharingCompletionsRequest is not mutable"))
+	case "side.tss.QueryRefreshingCompletionsRequest.id":
+		panic(fmt.Errorf("field id of message side.tss.QueryRefreshingCompletionsRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryResharingCompletionsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsRequest.id":
+	case "side.tss.QueryRefreshingCompletionsRequest.id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "side.tss.QueryResharingCompletionsRequest.pagination":
+	case "side.tss.QueryRefreshingCompletionsRequest.pagination":
 		m := new(v1beta1.PageRequest)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsRequest"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryResharingCompletionsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryResharingCompletionsRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryRefreshingCompletionsRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -7126,7 +7126,7 @@ func (x *fastReflection_QueryResharingCompletionsRequest) WhichOneof(d protorefl
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryResharingCompletionsRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -7137,7 +7137,7 @@ func (x *fastReflection_QueryResharingCompletionsRequest) GetUnknown() protorefl
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingCompletionsRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -7149,7 +7149,7 @@ func (x *fastReflection_QueryResharingCompletionsRequest) SetUnknown(fields prot
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryResharingCompletionsRequest) IsValid() bool {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -7159,9 +7159,9 @@ func (x *fastReflection_QueryResharingCompletionsRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryResharingCompletionsRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryRefreshingCompletionsRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryResharingCompletionsRequest)
+		x := input.Message.Interface().(*QueryRefreshingCompletionsRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7190,7 +7190,7 @@ func (x *fastReflection_QueryResharingCompletionsRequest) ProtoMethods() *protoi
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingCompletionsRequest)
+		x := input.Message.Interface().(*QueryRefreshingCompletionsRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7239,7 +7239,7 @@ func (x *fastReflection_QueryResharingCompletionsRequest) ProtoMethods() *protoi
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingCompletionsRequest)
+		x := input.Message.Interface().(*QueryRefreshingCompletionsRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7271,10 +7271,10 @@ func (x *fastReflection_QueryResharingCompletionsRequest) ProtoMethods() *protoi
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingCompletionsRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingCompletionsRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingCompletionsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingCompletionsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -7367,79 +7367,79 @@ func (x *fastReflection_QueryResharingCompletionsRequest) ProtoMethods() *protoi
 	}
 }
 
-var _ protoreflect.List = (*_QueryResharingCompletionsResponse_1_list)(nil)
+var _ protoreflect.List = (*_QueryRefreshingCompletionsResponse_1_list)(nil)
 
-type _QueryResharingCompletionsResponse_1_list struct {
-	list *[]*ResharingCompletion
+type _QueryRefreshingCompletionsResponse_1_list struct {
+	list *[]*RefreshingCompletion
 }
 
-func (x *_QueryResharingCompletionsResponse_1_list) Len() int {
+func (x *_QueryRefreshingCompletionsResponse_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_QueryResharingCompletionsResponse_1_list) Get(i int) protoreflect.Value {
+func (x *_QueryRefreshingCompletionsResponse_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_QueryResharingCompletionsResponse_1_list) Set(i int, value protoreflect.Value) {
+func (x *_QueryRefreshingCompletionsResponse_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ResharingCompletion)
+	concreteValue := valueUnwrapped.Interface().(*RefreshingCompletion)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_QueryResharingCompletionsResponse_1_list) Append(value protoreflect.Value) {
+func (x *_QueryRefreshingCompletionsResponse_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ResharingCompletion)
+	concreteValue := valueUnwrapped.Interface().(*RefreshingCompletion)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_QueryResharingCompletionsResponse_1_list) AppendMutable() protoreflect.Value {
-	v := new(ResharingCompletion)
+func (x *_QueryRefreshingCompletionsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(RefreshingCompletion)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_QueryResharingCompletionsResponse_1_list) Truncate(n int) {
+func (x *_QueryRefreshingCompletionsResponse_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_QueryResharingCompletionsResponse_1_list) NewElement() protoreflect.Value {
-	v := new(ResharingCompletion)
+func (x *_QueryRefreshingCompletionsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(RefreshingCompletion)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_QueryResharingCompletionsResponse_1_list) IsValid() bool {
+func (x *_QueryRefreshingCompletionsResponse_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_QueryResharingCompletionsResponse             protoreflect.MessageDescriptor
-	fd_QueryResharingCompletionsResponse_completions protoreflect.FieldDescriptor
-	fd_QueryResharingCompletionsResponse_pagination  protoreflect.FieldDescriptor
+	md_QueryRefreshingCompletionsResponse             protoreflect.MessageDescriptor
+	fd_QueryRefreshingCompletionsResponse_completions protoreflect.FieldDescriptor
+	fd_QueryRefreshingCompletionsResponse_pagination  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_query_proto_init()
-	md_QueryResharingCompletionsResponse = File_side_tss_query_proto.Messages().ByName("QueryResharingCompletionsResponse")
-	fd_QueryResharingCompletionsResponse_completions = md_QueryResharingCompletionsResponse.Fields().ByName("completions")
-	fd_QueryResharingCompletionsResponse_pagination = md_QueryResharingCompletionsResponse.Fields().ByName("pagination")
+	md_QueryRefreshingCompletionsResponse = File_side_tss_query_proto.Messages().ByName("QueryRefreshingCompletionsResponse")
+	fd_QueryRefreshingCompletionsResponse_completions = md_QueryRefreshingCompletionsResponse.Fields().ByName("completions")
+	fd_QueryRefreshingCompletionsResponse_pagination = md_QueryRefreshingCompletionsResponse.Fields().ByName("pagination")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryResharingCompletionsResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryRefreshingCompletionsResponse)(nil)
 
-type fastReflection_QueryResharingCompletionsResponse QueryResharingCompletionsResponse
+type fastReflection_QueryRefreshingCompletionsResponse QueryRefreshingCompletionsResponse
 
-func (x *QueryResharingCompletionsResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryResharingCompletionsResponse)(x)
+func (x *QueryRefreshingCompletionsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingCompletionsResponse)(x)
 }
 
-func (x *QueryResharingCompletionsResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryRefreshingCompletionsResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_tss_query_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7451,43 +7451,43 @@ func (x *QueryResharingCompletionsResponse) slowProtoReflect() protoreflect.Mess
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryResharingCompletionsResponse_messageType fastReflection_QueryResharingCompletionsResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryResharingCompletionsResponse_messageType{}
+var _fastReflection_QueryRefreshingCompletionsResponse_messageType fastReflection_QueryRefreshingCompletionsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRefreshingCompletionsResponse_messageType{}
 
-type fastReflection_QueryResharingCompletionsResponse_messageType struct{}
+type fastReflection_QueryRefreshingCompletionsResponse_messageType struct{}
 
-func (x fastReflection_QueryResharingCompletionsResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryResharingCompletionsResponse)(nil)
+func (x fastReflection_QueryRefreshingCompletionsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRefreshingCompletionsResponse)(nil)
 }
-func (x fastReflection_QueryResharingCompletionsResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingCompletionsResponse)
+func (x fastReflection_QueryRefreshingCompletionsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingCompletionsResponse)
 }
-func (x fastReflection_QueryResharingCompletionsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingCompletionsResponse
+func (x fastReflection_QueryRefreshingCompletionsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingCompletionsResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryResharingCompletionsResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryResharingCompletionsResponse
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRefreshingCompletionsResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryResharingCompletionsResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryResharingCompletionsResponse_messageType
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRefreshingCompletionsResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryResharingCompletionsResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryResharingCompletionsResponse)
+func (x *fastReflection_QueryRefreshingCompletionsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryRefreshingCompletionsResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryResharingCompletionsResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryResharingCompletionsResponse)(x)
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryRefreshingCompletionsResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -7495,16 +7495,16 @@ func (x *fastReflection_QueryResharingCompletionsResponse) Interface() protorefl
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryResharingCompletionsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.Completions) != 0 {
-		value := protoreflect.ValueOfList(&_QueryResharingCompletionsResponse_1_list{list: &x.Completions})
-		if !f(fd_QueryResharingCompletionsResponse_completions, value) {
+		value := protoreflect.ValueOfList(&_QueryRefreshingCompletionsResponse_1_list{list: &x.Completions})
+		if !f(fd_QueryRefreshingCompletionsResponse_completions, value) {
 			return
 		}
 	}
 	if x.Pagination != nil {
 		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-		if !f(fd_QueryResharingCompletionsResponse_pagination, value) {
+		if !f(fd_QueryRefreshingCompletionsResponse_pagination, value) {
 			return
 		}
 	}
@@ -7521,17 +7521,17 @@ func (x *fastReflection_QueryResharingCompletionsResponse) Range(f func(protoref
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryResharingCompletionsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsResponse.completions":
+	case "side.tss.QueryRefreshingCompletionsResponse.completions":
 		return len(x.Completions) != 0
-	case "side.tss.QueryResharingCompletionsResponse.pagination":
+	case "side.tss.QueryRefreshingCompletionsResponse.pagination":
 		return x.Pagination != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7541,17 +7541,17 @@ func (x *fastReflection_QueryResharingCompletionsResponse) Has(fd protoreflect.F
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingCompletionsResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsResponse.completions":
+	case "side.tss.QueryRefreshingCompletionsResponse.completions":
 		x.Completions = nil
-	case "side.tss.QueryResharingCompletionsResponse.pagination":
+	case "side.tss.QueryRefreshingCompletionsResponse.pagination":
 		x.Pagination = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7561,22 +7561,22 @@ func (x *fastReflection_QueryResharingCompletionsResponse) Clear(fd protoreflect
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryResharingCompletionsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.tss.QueryResharingCompletionsResponse.completions":
+	case "side.tss.QueryRefreshingCompletionsResponse.completions":
 		if len(x.Completions) == 0 {
-			return protoreflect.ValueOfList(&_QueryResharingCompletionsResponse_1_list{})
+			return protoreflect.ValueOfList(&_QueryRefreshingCompletionsResponse_1_list{})
 		}
-		listValue := &_QueryResharingCompletionsResponse_1_list{list: &x.Completions}
+		listValue := &_QueryRefreshingCompletionsResponse_1_list{list: &x.Completions}
 		return protoreflect.ValueOfList(listValue)
-	case "side.tss.QueryResharingCompletionsResponse.pagination":
+	case "side.tss.QueryRefreshingCompletionsResponse.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -7590,19 +7590,19 @@ func (x *fastReflection_QueryResharingCompletionsResponse) Get(descriptor protor
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingCompletionsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsResponse.completions":
+	case "side.tss.QueryRefreshingCompletionsResponse.completions":
 		lv := value.List()
-		clv := lv.(*_QueryResharingCompletionsResponse_1_list)
+		clv := lv.(*_QueryRefreshingCompletionsResponse_1_list)
 		x.Completions = *clv.list
-	case "side.tss.QueryResharingCompletionsResponse.pagination":
+	case "side.tss.QueryRefreshingCompletionsResponse.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7616,53 +7616,53 @@ func (x *fastReflection_QueryResharingCompletionsResponse) Set(fd protoreflect.F
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingCompletionsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsResponse.completions":
+	case "side.tss.QueryRefreshingCompletionsResponse.completions":
 		if x.Completions == nil {
-			x.Completions = []*ResharingCompletion{}
+			x.Completions = []*RefreshingCompletion{}
 		}
-		value := &_QueryResharingCompletionsResponse_1_list{list: &x.Completions}
+		value := &_QueryRefreshingCompletionsResponse_1_list{list: &x.Completions}
 		return protoreflect.ValueOfList(value)
-	case "side.tss.QueryResharingCompletionsResponse.pagination":
+	case "side.tss.QueryRefreshingCompletionsResponse.pagination":
 		if x.Pagination == nil {
 			x.Pagination = new(v1beta1.PageResponse)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryResharingCompletionsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryResharingCompletionsResponse.completions":
-		list := []*ResharingCompletion{}
-		return protoreflect.ValueOfList(&_QueryResharingCompletionsResponse_1_list{list: &list})
-	case "side.tss.QueryResharingCompletionsResponse.pagination":
+	case "side.tss.QueryRefreshingCompletionsResponse.completions":
+		list := []*RefreshingCompletion{}
+		return protoreflect.ValueOfList(&_QueryRefreshingCompletionsResponse_1_list{list: &list})
+	case "side.tss.QueryRefreshingCompletionsResponse.pagination":
 		m := new(v1beta1.PageResponse)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryResharingCompletionsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryRefreshingCompletionsResponse"))
 		}
-		panic(fmt.Errorf("message side.tss.QueryResharingCompletionsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.tss.QueryRefreshingCompletionsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryResharingCompletionsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryResharingCompletionsResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.tss.QueryRefreshingCompletionsResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -7670,7 +7670,7 @@ func (x *fastReflection_QueryResharingCompletionsResponse) WhichOneof(d protoref
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryResharingCompletionsResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -7681,7 +7681,7 @@ func (x *fastReflection_QueryResharingCompletionsResponse) GetUnknown() protoref
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryResharingCompletionsResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -7693,7 +7693,7 @@ func (x *fastReflection_QueryResharingCompletionsResponse) SetUnknown(fields pro
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryResharingCompletionsResponse) IsValid() bool {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -7703,9 +7703,9 @@ func (x *fastReflection_QueryResharingCompletionsResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryResharingCompletionsResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryRefreshingCompletionsResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryResharingCompletionsResponse)
+		x := input.Message.Interface().(*QueryRefreshingCompletionsResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7737,7 +7737,7 @@ func (x *fastReflection_QueryResharingCompletionsResponse) ProtoMethods() *proto
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingCompletionsResponse)
+		x := input.Message.Interface().(*QueryRefreshingCompletionsResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7797,7 +7797,7 @@ func (x *fastReflection_QueryResharingCompletionsResponse) ProtoMethods() *proto
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryResharingCompletionsResponse)
+		x := input.Message.Interface().(*QueryRefreshingCompletionsResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7829,10 +7829,10 @@ func (x *fastReflection_QueryResharingCompletionsResponse) ProtoMethods() *proto
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingCompletionsResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingCompletionsResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryResharingCompletionsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRefreshingCompletionsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -7864,7 +7864,7 @@ func (x *fastReflection_QueryResharingCompletionsResponse) ProtoMethods() *proto
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Completions = append(x.Completions, &ResharingCompletion{})
+				x.Completions = append(x.Completions, &RefreshingCompletion{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Completions[len(x.Completions)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9158,7 +9158,7 @@ func (x *QuerySigningRequestsResponse) GetPagination() *v1beta1.PageResponse {
 	return nil
 }
 
-type QueryResharingRequestRequest struct {
+type QueryRefreshingRequestRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -9166,8 +9166,8 @@ type QueryResharingRequestRequest struct {
 	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (x *QueryResharingRequestRequest) Reset() {
-	*x = QueryResharingRequestRequest{}
+func (x *QueryRefreshingRequestRequest) Reset() {
+	*x = QueryRefreshingRequestRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_tss_query_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -9175,34 +9175,34 @@ func (x *QueryResharingRequestRequest) Reset() {
 	}
 }
 
-func (x *QueryResharingRequestRequest) String() string {
+func (x *QueryRefreshingRequestRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryResharingRequestRequest) ProtoMessage() {}
+func (*QueryRefreshingRequestRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryResharingRequestRequest.ProtoReflect.Descriptor instead.
-func (*QueryResharingRequestRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryRefreshingRequestRequest.ProtoReflect.Descriptor instead.
+func (*QueryRefreshingRequestRequest) Descriptor() ([]byte, []int) {
 	return file_side_tss_query_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *QueryResharingRequestRequest) GetId() uint64 {
+func (x *QueryRefreshingRequestRequest) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-type QueryResharingRequestResponse struct {
+type QueryRefreshingRequestResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Request *ResharingRequest `protobuf:"bytes,1,opt,name=request,proto3" json:"request,omitempty"`
+	Request *RefreshingRequest `protobuf:"bytes,1,opt,name=request,proto3" json:"request,omitempty"`
 }
 
-func (x *QueryResharingRequestResponse) Reset() {
-	*x = QueryResharingRequestResponse{}
+func (x *QueryRefreshingRequestResponse) Reset() {
+	*x = QueryRefreshingRequestResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_tss_query_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -9210,35 +9210,35 @@ func (x *QueryResharingRequestResponse) Reset() {
 	}
 }
 
-func (x *QueryResharingRequestResponse) String() string {
+func (x *QueryRefreshingRequestResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryResharingRequestResponse) ProtoMessage() {}
+func (*QueryRefreshingRequestResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryResharingRequestResponse.ProtoReflect.Descriptor instead.
-func (*QueryResharingRequestResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryRefreshingRequestResponse.ProtoReflect.Descriptor instead.
+func (*QueryRefreshingRequestResponse) Descriptor() ([]byte, []int) {
 	return file_side_tss_query_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *QueryResharingRequestResponse) GetRequest() *ResharingRequest {
+func (x *QueryRefreshingRequestResponse) GetRequest() *RefreshingRequest {
 	if x != nil {
 		return x.Request
 	}
 	return nil
 }
 
-type QueryResharingRequestsRequest struct {
+type QueryRefreshingRequestsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Status     ResharingStatus      `protobuf:"varint,1,opt,name=status,proto3,enum=side.tss.ResharingStatus" json:"status,omitempty"`
+	Status     RefreshingStatus     `protobuf:"varint,1,opt,name=status,proto3,enum=side.tss.RefreshingStatus" json:"status,omitempty"`
 	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (x *QueryResharingRequestsRequest) Reset() {
-	*x = QueryResharingRequestsRequest{}
+func (x *QueryRefreshingRequestsRequest) Reset() {
+	*x = QueryRefreshingRequestsRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_tss_query_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -9246,42 +9246,42 @@ func (x *QueryResharingRequestsRequest) Reset() {
 	}
 }
 
-func (x *QueryResharingRequestsRequest) String() string {
+func (x *QueryRefreshingRequestsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryResharingRequestsRequest) ProtoMessage() {}
+func (*QueryRefreshingRequestsRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryResharingRequestsRequest.ProtoReflect.Descriptor instead.
-func (*QueryResharingRequestsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryRefreshingRequestsRequest.ProtoReflect.Descriptor instead.
+func (*QueryRefreshingRequestsRequest) Descriptor() ([]byte, []int) {
 	return file_side_tss_query_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *QueryResharingRequestsRequest) GetStatus() ResharingStatus {
+func (x *QueryRefreshingRequestsRequest) GetStatus() RefreshingStatus {
 	if x != nil {
 		return x.Status
 	}
-	return ResharingStatus_RESHARING_STATUS_UNSPECIFIED
+	return RefreshingStatus_REFRESHING_STATUS_UNSPECIFIED
 }
 
-func (x *QueryResharingRequestsRequest) GetPagination() *v1beta1.PageRequest {
+func (x *QueryRefreshingRequestsRequest) GetPagination() *v1beta1.PageRequest {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-type QueryResharingRequestsResponse struct {
+type QueryRefreshingRequestsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Requests   []*ResharingRequest   `protobuf:"bytes,1,rep,name=requests,proto3" json:"requests,omitempty"`
+	Requests   []*RefreshingRequest  `protobuf:"bytes,1,rep,name=requests,proto3" json:"requests,omitempty"`
 	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (x *QueryResharingRequestsResponse) Reset() {
-	*x = QueryResharingRequestsResponse{}
+func (x *QueryRefreshingRequestsResponse) Reset() {
+	*x = QueryRefreshingRequestsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_tss_query_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -9289,32 +9289,32 @@ func (x *QueryResharingRequestsResponse) Reset() {
 	}
 }
 
-func (x *QueryResharingRequestsResponse) String() string {
+func (x *QueryRefreshingRequestsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryResharingRequestsResponse) ProtoMessage() {}
+func (*QueryRefreshingRequestsResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryResharingRequestsResponse.ProtoReflect.Descriptor instead.
-func (*QueryResharingRequestsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryRefreshingRequestsResponse.ProtoReflect.Descriptor instead.
+func (*QueryRefreshingRequestsResponse) Descriptor() ([]byte, []int) {
 	return file_side_tss_query_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *QueryResharingRequestsResponse) GetRequests() []*ResharingRequest {
+func (x *QueryRefreshingRequestsResponse) GetRequests() []*RefreshingRequest {
 	if x != nil {
 		return x.Requests
 	}
 	return nil
 }
 
-func (x *QueryResharingRequestsResponse) GetPagination() *v1beta1.PageResponse {
+func (x *QueryRefreshingRequestsResponse) GetPagination() *v1beta1.PageResponse {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-type QueryResharingCompletionsRequest struct {
+type QueryRefreshingCompletionsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -9323,8 +9323,8 @@ type QueryResharingCompletionsRequest struct {
 	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (x *QueryResharingCompletionsRequest) Reset() {
-	*x = QueryResharingCompletionsRequest{}
+func (x *QueryRefreshingCompletionsRequest) Reset() {
+	*x = QueryRefreshingCompletionsRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_tss_query_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -9332,42 +9332,42 @@ func (x *QueryResharingCompletionsRequest) Reset() {
 	}
 }
 
-func (x *QueryResharingCompletionsRequest) String() string {
+func (x *QueryRefreshingCompletionsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryResharingCompletionsRequest) ProtoMessage() {}
+func (*QueryRefreshingCompletionsRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryResharingCompletionsRequest.ProtoReflect.Descriptor instead.
-func (*QueryResharingCompletionsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryRefreshingCompletionsRequest.ProtoReflect.Descriptor instead.
+func (*QueryRefreshingCompletionsRequest) Descriptor() ([]byte, []int) {
 	return file_side_tss_query_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *QueryResharingCompletionsRequest) GetId() uint64 {
+func (x *QueryRefreshingCompletionsRequest) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *QueryResharingCompletionsRequest) GetPagination() *v1beta1.PageRequest {
+func (x *QueryRefreshingCompletionsRequest) GetPagination() *v1beta1.PageRequest {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-type QueryResharingCompletionsResponse struct {
+type QueryRefreshingCompletionsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Completions []*ResharingCompletion `protobuf:"bytes,1,rep,name=completions,proto3" json:"completions,omitempty"`
-	Pagination  *v1beta1.PageResponse  `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Completions []*RefreshingCompletion `protobuf:"bytes,1,rep,name=completions,proto3" json:"completions,omitempty"`
+	Pagination  *v1beta1.PageResponse   `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (x *QueryResharingCompletionsResponse) Reset() {
-	*x = QueryResharingCompletionsResponse{}
+func (x *QueryRefreshingCompletionsResponse) Reset() {
+	*x = QueryRefreshingCompletionsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_tss_query_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -9375,25 +9375,25 @@ func (x *QueryResharingCompletionsResponse) Reset() {
 	}
 }
 
-func (x *QueryResharingCompletionsResponse) String() string {
+func (x *QueryRefreshingCompletionsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryResharingCompletionsResponse) ProtoMessage() {}
+func (*QueryRefreshingCompletionsResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryResharingCompletionsResponse.ProtoReflect.Descriptor instead.
-func (*QueryResharingCompletionsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryRefreshingCompletionsResponse.ProtoReflect.Descriptor instead.
+func (*QueryRefreshingCompletionsResponse) Descriptor() ([]byte, []int) {
 	return file_side_tss_query_proto_rawDescGZIP(), []int{15}
 }
 
-func (x *QueryResharingCompletionsResponse) GetCompletions() []*ResharingCompletion {
+func (x *QueryRefreshingCompletionsResponse) GetCompletions() []*RefreshingCompletion {
 	if x != nil {
 		return x.Completions
 	}
 	return nil
 }
 
-func (x *QueryResharingCompletionsResponse) GetPagination() *v1beta1.PageResponse {
+func (x *QueryRefreshingCompletionsResponse) GetPagination() *v1beta1.PageResponse {
 	if x != nil {
 		return x.Pagination
 	}
@@ -9550,144 +9550,146 @@ var file_side_tss_query_proto_rawDesc = []byte{
 	0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
 	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62,
 	0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x2e, 0x0a,
-	0x1c, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a,
-	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x55, 0x0a,
-	0x1d, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x34,
-	0x0a, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x1a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x52, 0x65, 0x73, 0x68, 0x61,
-	0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x07, 0x72, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x22, 0x9a, 0x01, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65,
-	0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x31, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x19, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73,
-	0x73, 0x2e, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x53, 0x74, 0x61, 0x74, 0x75,
-	0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67,
-	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72,
-	0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0xa1, 0x01, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x68, 0x61,
-	0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x36, 0x0a, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
-	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73,
-	0x73, 0x2e, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x52, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x47, 0x0a, 0x0a,
-	0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71,
-	0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67,
-	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x7a, 0x0a, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65,
-	0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f,
-	0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67,
-	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72,
-	0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0xad, 0x01, 0x0a, 0x21, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x68, 0x61,
-	0x72, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x70, 0x6c,
-	0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e,
-	0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x63, 0x6f, 0x6d,
-	0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69,
-	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79,
-	0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0x14, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x45, 0x0a, 0x13, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2e,
-	0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x32, 0xae,
-	0x09, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x5f, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x12, 0x1c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12, 0x12, 0x10, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74,
-	0x73, 0x73, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x76, 0x0a, 0x0a, 0x44, 0x4b, 0x47,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74,
-	0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x23, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x1d, 0x12, 0x1b, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f,
-	0x64, 0x6b, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69, 0x64,
-	0x7d, 0x12, 0x74, 0x0a, 0x0b, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
-	0x12, 0x21, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x22, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1e, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x18, 0x12,
-	0x16, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x72,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x85, 0x01, 0x0a, 0x0e, 0x44, 0x4b, 0x47, 0x43,
-	0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x24, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x2f, 0x0a,
+	0x1d, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x57,
+	0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e,
+	0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x35, 0x0a, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x52, 0x65, 0x66,
+	0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x07,
+	0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x9c, 0x01, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x32, 0x0a, 0x06, 0x73, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1a, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x46,
+	0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
+	0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50,
+	0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69,
+	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xa3, 0x01, 0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x37, 0x0a, 0x08, 0x72, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69,
+	0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x08, 0x72, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65,
+	0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x7b, 0x0a, 0x21,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x43,
+	0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69,
+	0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
+	0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70,
+	0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xaf, 0x01, 0x0a, 0x22, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6d,
+	0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x40, 0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18,
+	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73,
+	0x2e, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c,
+	0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
+	0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52,
+	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x14, 0x0a, 0x12, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x22, 0x45, 0x0a, 0x13, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2e, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x74, 0x73, 0x73, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00,
+	0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x32, 0xba, 0x09, 0x0a, 0x05, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x12, 0x5f, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1c, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02,
+	0x12, 0x12, 0x10, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x70, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x12, 0x76, 0x0a, 0x0a, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x12, 0x1b,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x72, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x74, 0x0a, 0x0b, 0x44,
+	0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x21, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x22, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b,
+	0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x1e, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x18, 0x12, 0x16, 0x2f, 0x73, 0x69, 0x64, 0x65,
+	0x2f, 0x74, 0x73, 0x73, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x73, 0x12, 0x85, 0x01, 0x0a, 0x0e, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x12, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64,
 	0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f,
-	0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x44, 0x4b, 0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x26, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x20, 0x12,
-	0x1e, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x63,
-	0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12,
-	0x86, 0x01, 0x0a, 0x0e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x27, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x21, 0x12, 0x1f, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74,
-	0x73, 0x73, 0x2f, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x84, 0x01, 0x0a, 0x0f, 0x53, 0x69, 0x67,
-	0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x25, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67,
-	0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x26, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x22, 0x82, 0xd3, 0xe4,
-	0x93, 0x02, 0x1c, 0x12, 0x1a, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x73,
-	0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12,
-	0x8e, 0x01, 0x0a, 0x10, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x12, 0x26, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73,
-	0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x29, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x23, 0x12, 0x21, 0x2f,
-	0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x72, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69,
-	0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d,
-	0x12, 0x8c, 0x01, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x27, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73,
-	0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x28, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02,
-	0x1e, 0x12, 0x1c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x72, 0x65, 0x73,
-	0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12,
-	0x9d, 0x01, 0x0a, 0x14, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6d,
-	0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x2a, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69,
-	0x6e, 0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x43, 0x6f,
 	0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x2c, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x26, 0x12, 0x24, 0x2f, 0x73, 0x69, 0x64, 0x65,
-	0x2f, 0x74, 0x73, 0x73, 0x2f, 0x72, 0x65, 0x73, 0x68, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x2f, 0x63,
-	0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x42,
-	0x86, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73,
-	0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0xa2, 0x02, 0x03, 0x53, 0x54, 0x58, 0xaa,
-	0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x54, 0x73, 0x73, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64,
-	0x65, 0x5c, 0x54, 0x73, 0x73, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x54, 0x73, 0x73,
-	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53,
-	0x69, 0x64, 0x65, 0x3a, 0x3a, 0x54, 0x73, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x22, 0x26, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x20, 0x12, 0x1e, 0x2f, 0x73, 0x69, 0x64, 0x65,
+	0x2f, 0x74, 0x73, 0x73, 0x2f, 0x64, 0x6b, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x86, 0x01, 0x0a, 0x0e, 0x53, 0x69,
+	0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x24, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67,
+	0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x27, 0x82, 0xd3, 0xe4, 0x93, 0x02,
+	0x21, 0x12, 0x1f, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x73, 0x69, 0x67,
+	0x6e, 0x69, 0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69,
+	0x64, 0x7d, 0x12, 0x84, 0x01, 0x0a, 0x0f, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73,
+	0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x26, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69,
+	0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x22, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1c, 0x12, 0x1a, 0x2f,
+	0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67,
+	0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x92, 0x01, 0x0a, 0x11, 0x52, 0x65,
+	0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x27, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68,
+	0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x2a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x24, 0x12, 0x22, 0x2f, 0x73, 0x69, 0x64,
+	0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x72, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67,
+	0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x90,
+	0x01, 0x0a, 0x12, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x28, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x25, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x1f, 0x12, 0x1d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x72, 0x65,
+	0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x73, 0x12, 0xa1, 0x01, 0x0a, 0x15, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67,
+	0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x2b, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x66, 0x72,
+	0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x74, 0x73, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68,
+	0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x27, 0x12, 0x25,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0x2f, 0x72, 0x65, 0x66, 0x72, 0x65, 0x73,
+	0x68, 0x69, 0x6e, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x42, 0x86, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f,
+	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69,
+	0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x74, 0x73, 0x73, 0xa2,
+	0x02, 0x03, 0x53, 0x54, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x54, 0x73, 0x73,
+	0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x54, 0x73, 0x73, 0xe2, 0x02, 0x14, 0x53, 0x69,
+	0x64, 0x65, 0x5c, 0x54, 0x73, 0x73, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x54, 0x73, 0x73, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -9704,35 +9706,35 @@ func file_side_tss_query_proto_rawDescGZIP() []byte {
 
 var file_side_tss_query_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_side_tss_query_proto_goTypes = []interface{}{
-	(*QueryDKGRequestRequest)(nil),            // 0: side.tss.QueryDKGRequestRequest
-	(*QueryDKGRequestResponse)(nil),           // 1: side.tss.QueryDKGRequestResponse
-	(*QueryDKGRequestsRequest)(nil),           // 2: side.tss.QueryDKGRequestsRequest
-	(*QueryDKGRequestsResponse)(nil),          // 3: side.tss.QueryDKGRequestsResponse
-	(*QueryDKGCompletionsRequest)(nil),        // 4: side.tss.QueryDKGCompletionsRequest
-	(*QueryDKGCompletionsResponse)(nil),       // 5: side.tss.QueryDKGCompletionsResponse
-	(*QuerySigningRequestRequest)(nil),        // 6: side.tss.QuerySigningRequestRequest
-	(*QuerySigningRequestResponse)(nil),       // 7: side.tss.QuerySigningRequestResponse
-	(*QuerySigningRequestsRequest)(nil),       // 8: side.tss.QuerySigningRequestsRequest
-	(*QuerySigningRequestsResponse)(nil),      // 9: side.tss.QuerySigningRequestsResponse
-	(*QueryResharingRequestRequest)(nil),      // 10: side.tss.QueryResharingRequestRequest
-	(*QueryResharingRequestResponse)(nil),     // 11: side.tss.QueryResharingRequestResponse
-	(*QueryResharingRequestsRequest)(nil),     // 12: side.tss.QueryResharingRequestsRequest
-	(*QueryResharingRequestsResponse)(nil),    // 13: side.tss.QueryResharingRequestsResponse
-	(*QueryResharingCompletionsRequest)(nil),  // 14: side.tss.QueryResharingCompletionsRequest
-	(*QueryResharingCompletionsResponse)(nil), // 15: side.tss.QueryResharingCompletionsResponse
-	(*QueryParamsRequest)(nil),                // 16: side.tss.QueryParamsRequest
-	(*QueryParamsResponse)(nil),               // 17: side.tss.QueryParamsResponse
-	(*DKGRequest)(nil),                        // 18: side.tss.DKGRequest
-	(DKGStatus)(0),                            // 19: side.tss.DKGStatus
-	(*v1beta1.PageRequest)(nil),               // 20: cosmos.base.query.v1beta1.PageRequest
-	(*v1beta1.PageResponse)(nil),              // 21: cosmos.base.query.v1beta1.PageResponse
-	(*DKGCompletion)(nil),                     // 22: side.tss.DKGCompletion
-	(*SigningRequest)(nil),                    // 23: side.tss.SigningRequest
-	(SigningStatus)(0),                        // 24: side.tss.SigningStatus
-	(*ResharingRequest)(nil),                  // 25: side.tss.ResharingRequest
-	(ResharingStatus)(0),                      // 26: side.tss.ResharingStatus
-	(*ResharingCompletion)(nil),               // 27: side.tss.ResharingCompletion
-	(*Params)(nil),                            // 28: side.tss.Params
+	(*QueryDKGRequestRequest)(nil),             // 0: side.tss.QueryDKGRequestRequest
+	(*QueryDKGRequestResponse)(nil),            // 1: side.tss.QueryDKGRequestResponse
+	(*QueryDKGRequestsRequest)(nil),            // 2: side.tss.QueryDKGRequestsRequest
+	(*QueryDKGRequestsResponse)(nil),           // 3: side.tss.QueryDKGRequestsResponse
+	(*QueryDKGCompletionsRequest)(nil),         // 4: side.tss.QueryDKGCompletionsRequest
+	(*QueryDKGCompletionsResponse)(nil),        // 5: side.tss.QueryDKGCompletionsResponse
+	(*QuerySigningRequestRequest)(nil),         // 6: side.tss.QuerySigningRequestRequest
+	(*QuerySigningRequestResponse)(nil),        // 7: side.tss.QuerySigningRequestResponse
+	(*QuerySigningRequestsRequest)(nil),        // 8: side.tss.QuerySigningRequestsRequest
+	(*QuerySigningRequestsResponse)(nil),       // 9: side.tss.QuerySigningRequestsResponse
+	(*QueryRefreshingRequestRequest)(nil),      // 10: side.tss.QueryRefreshingRequestRequest
+	(*QueryRefreshingRequestResponse)(nil),     // 11: side.tss.QueryRefreshingRequestResponse
+	(*QueryRefreshingRequestsRequest)(nil),     // 12: side.tss.QueryRefreshingRequestsRequest
+	(*QueryRefreshingRequestsResponse)(nil),    // 13: side.tss.QueryRefreshingRequestsResponse
+	(*QueryRefreshingCompletionsRequest)(nil),  // 14: side.tss.QueryRefreshingCompletionsRequest
+	(*QueryRefreshingCompletionsResponse)(nil), // 15: side.tss.QueryRefreshingCompletionsResponse
+	(*QueryParamsRequest)(nil),                 // 16: side.tss.QueryParamsRequest
+	(*QueryParamsResponse)(nil),                // 17: side.tss.QueryParamsResponse
+	(*DKGRequest)(nil),                         // 18: side.tss.DKGRequest
+	(DKGStatus)(0),                             // 19: side.tss.DKGStatus
+	(*v1beta1.PageRequest)(nil),                // 20: cosmos.base.query.v1beta1.PageRequest
+	(*v1beta1.PageResponse)(nil),               // 21: cosmos.base.query.v1beta1.PageResponse
+	(*DKGCompletion)(nil),                      // 22: side.tss.DKGCompletion
+	(*SigningRequest)(nil),                     // 23: side.tss.SigningRequest
+	(SigningStatus)(0),                         // 24: side.tss.SigningStatus
+	(*RefreshingRequest)(nil),                  // 25: side.tss.RefreshingRequest
+	(RefreshingStatus)(0),                      // 26: side.tss.RefreshingStatus
+	(*RefreshingCompletion)(nil),               // 27: side.tss.RefreshingCompletion
+	(*Params)(nil),                             // 28: side.tss.Params
 }
 var file_side_tss_query_proto_depIdxs = []int32{
 	18, // 0: side.tss.QueryDKGRequestResponse.request:type_name -> side.tss.DKGRequest
@@ -9748,14 +9750,14 @@ var file_side_tss_query_proto_depIdxs = []int32{
 	20, // 10: side.tss.QuerySigningRequestsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
 	23, // 11: side.tss.QuerySigningRequestsResponse.requests:type_name -> side.tss.SigningRequest
 	21, // 12: side.tss.QuerySigningRequestsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	25, // 13: side.tss.QueryResharingRequestResponse.request:type_name -> side.tss.ResharingRequest
-	26, // 14: side.tss.QueryResharingRequestsRequest.status:type_name -> side.tss.ResharingStatus
-	20, // 15: side.tss.QueryResharingRequestsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	25, // 16: side.tss.QueryResharingRequestsResponse.requests:type_name -> side.tss.ResharingRequest
-	21, // 17: side.tss.QueryResharingRequestsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	20, // 18: side.tss.QueryResharingCompletionsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	27, // 19: side.tss.QueryResharingCompletionsResponse.completions:type_name -> side.tss.ResharingCompletion
-	21, // 20: side.tss.QueryResharingCompletionsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	25, // 13: side.tss.QueryRefreshingRequestResponse.request:type_name -> side.tss.RefreshingRequest
+	26, // 14: side.tss.QueryRefreshingRequestsRequest.status:type_name -> side.tss.RefreshingStatus
+	20, // 15: side.tss.QueryRefreshingRequestsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	25, // 16: side.tss.QueryRefreshingRequestsResponse.requests:type_name -> side.tss.RefreshingRequest
+	21, // 17: side.tss.QueryRefreshingRequestsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	20, // 18: side.tss.QueryRefreshingCompletionsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	27, // 19: side.tss.QueryRefreshingCompletionsResponse.completions:type_name -> side.tss.RefreshingCompletion
+	21, // 20: side.tss.QueryRefreshingCompletionsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
 	28, // 21: side.tss.QueryParamsResponse.params:type_name -> side.tss.Params
 	16, // 22: side.tss.Query.Params:input_type -> side.tss.QueryParamsRequest
 	0,  // 23: side.tss.Query.DKGRequest:input_type -> side.tss.QueryDKGRequestRequest
@@ -9763,18 +9765,18 @@ var file_side_tss_query_proto_depIdxs = []int32{
 	4,  // 25: side.tss.Query.DKGCompletions:input_type -> side.tss.QueryDKGCompletionsRequest
 	6,  // 26: side.tss.Query.SigningRequest:input_type -> side.tss.QuerySigningRequestRequest
 	8,  // 27: side.tss.Query.SigningRequests:input_type -> side.tss.QuerySigningRequestsRequest
-	10, // 28: side.tss.Query.ResharingRequest:input_type -> side.tss.QueryResharingRequestRequest
-	12, // 29: side.tss.Query.ResharingRequests:input_type -> side.tss.QueryResharingRequestsRequest
-	14, // 30: side.tss.Query.ResharingCompletions:input_type -> side.tss.QueryResharingCompletionsRequest
+	10, // 28: side.tss.Query.RefreshingRequest:input_type -> side.tss.QueryRefreshingRequestRequest
+	12, // 29: side.tss.Query.RefreshingRequests:input_type -> side.tss.QueryRefreshingRequestsRequest
+	14, // 30: side.tss.Query.RefreshingCompletions:input_type -> side.tss.QueryRefreshingCompletionsRequest
 	17, // 31: side.tss.Query.Params:output_type -> side.tss.QueryParamsResponse
 	1,  // 32: side.tss.Query.DKGRequest:output_type -> side.tss.QueryDKGRequestResponse
 	3,  // 33: side.tss.Query.DKGRequests:output_type -> side.tss.QueryDKGRequestsResponse
 	5,  // 34: side.tss.Query.DKGCompletions:output_type -> side.tss.QueryDKGCompletionsResponse
 	7,  // 35: side.tss.Query.SigningRequest:output_type -> side.tss.QuerySigningRequestResponse
 	9,  // 36: side.tss.Query.SigningRequests:output_type -> side.tss.QuerySigningRequestsResponse
-	11, // 37: side.tss.Query.ResharingRequest:output_type -> side.tss.QueryResharingRequestResponse
-	13, // 38: side.tss.Query.ResharingRequests:output_type -> side.tss.QueryResharingRequestsResponse
-	15, // 39: side.tss.Query.ResharingCompletions:output_type -> side.tss.QueryResharingCompletionsResponse
+	11, // 37: side.tss.Query.RefreshingRequest:output_type -> side.tss.QueryRefreshingRequestResponse
+	13, // 38: side.tss.Query.RefreshingRequests:output_type -> side.tss.QueryRefreshingRequestsResponse
+	15, // 39: side.tss.Query.RefreshingCompletions:output_type -> side.tss.QueryRefreshingCompletionsResponse
 	31, // [31:40] is the sub-list for method output_type
 	22, // [22:31] is the sub-list for method input_type
 	22, // [22:22] is the sub-list for extension type_name
@@ -9911,7 +9913,7 @@ func file_side_tss_query_proto_init() {
 			}
 		}
 		file_side_tss_query_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryResharingRequestRequest); i {
+			switch v := v.(*QueryRefreshingRequestRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9923,7 +9925,7 @@ func file_side_tss_query_proto_init() {
 			}
 		}
 		file_side_tss_query_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryResharingRequestResponse); i {
+			switch v := v.(*QueryRefreshingRequestResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9935,7 +9937,7 @@ func file_side_tss_query_proto_init() {
 			}
 		}
 		file_side_tss_query_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryResharingRequestsRequest); i {
+			switch v := v.(*QueryRefreshingRequestsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9947,7 +9949,7 @@ func file_side_tss_query_proto_init() {
 			}
 		}
 		file_side_tss_query_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryResharingRequestsResponse); i {
+			switch v := v.(*QueryRefreshingRequestsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9959,7 +9961,7 @@ func file_side_tss_query_proto_init() {
 			}
 		}
 		file_side_tss_query_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryResharingCompletionsRequest); i {
+			switch v := v.(*QueryRefreshingCompletionsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9971,7 +9973,7 @@ func file_side_tss_query_proto_init() {
 			}
 		}
 		file_side_tss_query_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryResharingCompletionsResponse); i {
+			switch v := v.(*QueryRefreshingCompletionsResponse); i {
 			case 0:
 				return &v.state
 			case 1:

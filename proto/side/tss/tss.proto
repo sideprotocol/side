@@ -110,20 +110,20 @@ message SigningRequest {
   SigningStatus status = 10;
 }
 
-// Resharing Status
-enum ResharingStatus {
-  // RESHARING_STATUS_UNSPECIFIED defines the unknown resharing status
-  RESHARING_STATUS_UNSPECIFIED = 0;
-  // RESHARING_STATUS_PENDING defines the status of the resharing request which is pending
-  RESHARING_STATUS_PENDING = 1;
-  // RESHARING_STATUS_COMPLETED defines the status of the resharing request which is completed
-  RESHARING_STATUS_COMPLETED = 2;
-  // RESHARING_STATUS_TIMEDOUT defines the status of the resharing request which timed out
-  RESHARING_STATUS_TIMEDOUT = 3;
+// Refreshing Status
+enum RefreshingStatus {
+  // REFRESHING_STATUS_UNSPECIFIED defines the unknown refreshing status
+  REFRESHING_STATUS_UNSPECIFIED = 0;
+  // REFRESHING_STATUS_PENDING defines the status of the refreshing request which is pending
+  REFRESHING_STATUS_PENDING = 1;
+  // REFRESHING_STATUS_COMPLETED defines the status of the refreshing request which is completed
+  REFRESHING_STATUS_COMPLETED = 2;
+  // REFRESHING_STATUS_TIMEDOUT defines the status of the refreshing request which timed out
+  REFRESHING_STATUS_TIMEDOUT = 3;
 }
 
-// Resharing Request
-message ResharingRequest {
+// Refreshing Request
+message RefreshingRequest {
   // request id
   uint64 id = 1;
   // request id of the DKG corresponding to the key shares to be refreshed
@@ -135,11 +135,11 @@ message ResharingRequest {
   // expiration time
   google.protobuf.Timestamp expiration_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   // status
-  ResharingStatus status = 6;
+  RefreshingStatus status = 6;
 }
 
-// Resharing Completion
-message ResharingCompletion {
+// Refreshing Completion
+message RefreshingCompletion {
   // request id
   uint64 id = 1;
   // sender

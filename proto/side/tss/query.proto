@@ -41,19 +41,19 @@ service Query {
         option (google.api.http).get = "/side/tss/signing/requests";
     }
 
-    // ResharingRequest queries the resharing request by the given id.
-    rpc ResharingRequest(QueryResharingRequestRequest) returns (QueryResharingRequestResponse) {
-        option (google.api.http).get = "/side/tss/resharing/requests/{id}";
+    // RefreshingRequest queries the refreshing request by the given id.
+    rpc RefreshingRequest(QueryRefreshingRequestRequest) returns (QueryRefreshingRequestResponse) {
+        option (google.api.http).get = "/side/tss/refreshing/requests/{id}";
     }
 
-    // ResharingRequests queries the resharing requests by the given status.
-    rpc ResharingRequests(QueryResharingRequestsRequest) returns (QueryResharingRequestsResponse) {
-        option (google.api.http).get = "/side/tss/resharing/requests";
+    // RefreshingRequests queries the refreshing requests by the given status.
+    rpc RefreshingRequests(QueryRefreshingRequestsRequest) returns (QueryRefreshingRequestsResponse) {
+        option (google.api.http).get = "/side/tss/refreshing/requests";
     }
 
-    // ResharingCompletions queries resharing completions by the given request id.
-    rpc ResharingCompletions(QueryResharingCompletionsRequest) returns (QueryResharingCompletionsResponse) {
-        option (google.api.http).get = "/side/tss/resharing/completions/{id}";
+    // RefreshingCompletions queries refreshing completions by the given request id.
+    rpc RefreshingCompletions(QueryRefreshingCompletionsRequest) returns (QueryRefreshingCompletionsResponse) {
+        option (google.api.http).get = "/side/tss/refreshing/completions/{id}";
     }
 }
 
@@ -105,31 +105,31 @@ message QuerySigningRequestsResponse {
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryResharingRequestRequest {
+message QueryRefreshingRequestRequest {
     uint64 id = 1;
 }
 
-message QueryResharingRequestResponse {
-    ResharingRequest request = 1;
+message QueryRefreshingRequestResponse {
+    RefreshingRequest request = 1;
 }
 
-message QueryResharingRequestsRequest {
-    ResharingStatus status = 1;
+message QueryRefreshingRequestsRequest {
+    RefreshingStatus status = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-message QueryResharingRequestsResponse {
-    repeated ResharingRequest requests = 1;
+message QueryRefreshingRequestsResponse {
+    repeated RefreshingRequest requests = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryResharingCompletionsRequest {
+message QueryRefreshingCompletionsRequest {
     uint64 id = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-message QueryResharingCompletionsResponse {
-    repeated ResharingCompletion completions = 1;
+message QueryRefreshingCompletionsResponse {
+    repeated RefreshingCompletion completions = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

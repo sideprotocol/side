@@ -9,15 +9,15 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgCompleteResharing{}
+var _ sdk.Msg = &MsgCompleteRefreshing{}
 
-func NewMsgCompleteResharing(
+func NewMsgCompleteRefreshing(
 	sender string,
 	id uint64,
 	consensusPubKey string,
 	signature string,
-) *MsgCompleteResharing {
-	return &MsgCompleteResharing{
+) *MsgCompleteRefreshing {
+	return &MsgCompleteRefreshing{
 		Sender:          sender,
 		Id:              id,
 		ConsensusPubkey: consensusPubKey,
@@ -26,7 +26,7 @@ func NewMsgCompleteResharing(
 }
 
 // ValidateBasic performs basic message validation.
-func (m *MsgCompleteResharing) ValidateBasic() error {
+func (m *MsgCompleteRefreshing) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Sender); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}

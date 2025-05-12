@@ -73,8 +73,8 @@ func GetDKGCompletionSigMsg(id uint64, pubKeys []string) []byte {
 	return hash.Sha256(msg)
 }
 
-// GetResharingCompletionSigMsg gets the msg to be signed from the given data for the resharing completion
-func GetResharingCompletionSigMsg(id uint64) []byte {
+// GetRefreshingCompletionSigMsg gets the msg to be signed from the given data for the refreshing completion
+func GetRefreshingCompletionSigMsg(id uint64) []byte {
 	msg := make([]byte, 8)
 	binary.BigEndian.PutUint64(msg, id)
 
