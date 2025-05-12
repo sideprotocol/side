@@ -61,4 +61,6 @@ var (
 	ErrInvalidSignatures    = errorsmod.Register(ModuleName, 8002, "invalid signatures")
 	ErrInvalidSignature     = errorsmod.Register(ModuleName, 8003, "invalid signature")
 	ErrInvalidSigningIntent = errorsmod.Register(ModuleName, 8004, "invalid signing intent")
+
+	ErrInvalidPrice = errorsmod.Register(ModuleName, 9000, "invalid price")
 )

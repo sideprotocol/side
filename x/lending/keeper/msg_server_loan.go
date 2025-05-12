@@ -165,6 +165,11 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, types.ErrMismatchedBorrower
 	}
 
+	// NOTE: only can be authorized once for now
+	if loan.Status != types.LoanStatus_Requested {
+		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not requested")
+	}
+
 	pool := m.GetPool(ctx, loan.PoolId)
 	poolConfig := pool.Config
 
@@ -223,7 +228,9 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	// check if the authorization already rejected
 	if authorization.Status == types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED {
+		loan.Status = types.LoanStatus_Rejected
 		m.SetLoan(ctx, loan)
+
 		return nil, nil
 	}
 
@@ -238,6 +245,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 			m.Logger(ctx).Info("loan authorization rejected", "loan id", msg.LoanId, "authorization id", authorization.Id, "reason", errRejected)
 
 			loan.Authorizations[authorization.Id-1].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED
+			loan.Status = types.LoanStatus_Rejected
 			m.SetLoan(ctx, loan)
 
 			ctx.EventManager().EmitEvent(
@@ -245,6 +253,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 					types.EventTypeReject,
 					sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
 					sdk.NewAttribute(types.AttributeKeyAuthorizationId, fmt.Sprintf("%d", authorization.Id)),
+					sdk.NewAttribute(types.AttributeKeyReason, errRejected.Error()),
 				),
 			)
 		}
@@ -309,6 +318,11 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	loan.LiquidationPrice = liquidationPrice
 	loan.LiquidationEventId = liquidationEvent.Id
 
+	// set to authorized if not yet approved
+	if loan.Status != types.LoanStatus_Open {
+		loan.Status = types.LoanStatus_Authorized
+	}
+
 	m.SetLoan(ctx, loan)
 
 	return &types.MsgSubmitCetsResponse{}, nil
@@ -327,7 +341,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	}
 
 	loan := m.GetLoan(ctx, msg.Vault)
-	if loan.Status != types.LoanStatus_Requested {
+	if loan.Status != types.LoanStatus_Requested && loan.Status != types.LoanStatus_Authorized && loan.Status != types.LoanStatus_Rejected {
 		return nil, types.ErrInvalidLoanStatus
 	}
 
@@ -359,8 +373,11 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	depositLog.Status = types.DepositStatus_DEPOSIT_STATUS_VERIFIED
 	m.SetDepositLog(ctx, depositLog)
 
+	if loan.Status == types.LoanStatus_Rejected {
+		return nil, nil
+	}
+
 	authorizationId := depositLog.AuthorizationId
-	authorizationExists := m.HasAuthorization(ctx, msg.Vault, authorizationId)
 
 	var errRejected error
 
@@ -368,7 +385,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		if errRejected != nil {
 			m.Logger(ctx).Info("authorization rejected", "loan id", msg.Vault, "authorization id", authorizationId, "tx hash", depositTxHash, "reason", errRejected)
 
-			if authorizationExists {
+			if loan.Status == types.LoanStatus_Authorized {
 				m.UpdateAuthorization(ctx, loan, authorizationId, depositTxHash, types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED)
 			} else {
 				m.AddAuthorization(ctx, loan, depositTxHash, types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED)
@@ -379,6 +396,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 					types.EventTypeReject,
 					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
 					sdk.NewAttribute(types.AttributeKeyAuthorizationId, fmt.Sprintf("%d", authorizationId)),
+					sdk.NewAttribute(types.AttributeKeyReason, errRejected.Error()),
 				),
 			)
 		}
@@ -397,10 +415,11 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	}
 
 	// authorization submitted
-	if authorizationId == m.GetAuthorizationId(ctx, msg.Vault) {
+	if loan.Status == types.LoanStatus_Authorized {
 		currentPrice, err := m.GetPrice(ctx, types.GetPricePair(pool.Config))
 		if err != nil {
-			return nil, err
+			errRejected = types.ErrInvalidPrice
+			return nil, nil
 		}
 
 		// check if liquidation price reached
@@ -419,9 +438,9 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 				return nil, nil
 			}
 		}
+	} else {
+		m.AddAuthorization(ctx, loan, depositTxHash, types.AuthorizationStatus_AUTHORIZATION_STATUS_PENDING)
 	}
-
-	m.AddAuthorization(ctx, loan, depositTxHash, types.AuthorizationStatus_AUTHORIZATION_STATUS_PENDING)
 
 	return &types.MsgApproveResponse{}, nil
 }

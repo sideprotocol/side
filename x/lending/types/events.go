@@ -28,6 +28,7 @@ const (
 	AttributeKeyAmount = "amount"
 
 	AttributeKeyAuthorizationId = "authorization_id"
+	AttributeKeyReason          = "reason"
 
 	AttributeKeyDepositTxHash = "deposit_tx_hash"
 
