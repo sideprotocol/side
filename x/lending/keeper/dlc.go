@@ -39,8 +39,10 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	if loan.LiquidationEventId != 0 {
 		liquidationEvent = k.dlcKeeper.GetEvent(ctx, loan.LiquidationEventId)
 	} else if collateralAmount.Amount.IsPositive() {
-		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, loan.BorrowAmount.Amount, loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold)
-		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, types.GetPricePair(poolConfig), liquidationPrice.String())
+		pricePair := types.GetPricePair(poolConfig)
+
+		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(poolConfig.LendingAsset.Decimals), loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, k.dlcKeeper.PriceInterval(ctx, pricePair))
+		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, pricePair, liquidationPrice.String())
 	}
 
 	defaultLiquidationEvent := k.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)

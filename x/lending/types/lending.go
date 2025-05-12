@@ -56,14 +56,14 @@ func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
-func GetLiquidationPrice(collateralAmount sdkmath.Int, borrowAmount sdkmath.Int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32) sdkmath.LegacyDec {
+func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, precision sdkmath.LegacyDec) sdkmath.LegacyDec {
 	interest := GetTotalInterest(borrowAmount, maturity, borrowAPR, blocksPerYear)
-	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewInt(100000000)).Mul(Percent).Quo(sdkmath.NewInt(int64(lltv))).Quo(collateralAmount).Quo(sdkmath.NewInt(1000000))
+	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).Mul(Percent).ToLegacyDec().Quo(sdkmath.LegacyNewDec(int64(lltv))).QuoInt(collateralAmount).QuoInt(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals))
 
-	// price precision
-	precision := sdkmath.NewInt(100)
+	decimalsInt := sdkmath.NewIntWithDecimal(1, 0)
+	precisionInt := precision.MulInt(decimalsInt).TruncateInt()
 
-	return liquidationPrice.Quo(precision).Mul(precision).ToLegacyDec()
+	return liquidationPrice.MulInt(decimalsInt).TruncateInt().Quo(precisionInt).Mul(precisionInt).Quo(decimalsInt).ToLegacyDec()
 }
 
 // GetMaturityTime gets the actual maturity time according to the given maturity time

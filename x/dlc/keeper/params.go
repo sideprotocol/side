@@ -3,6 +3,7 @@ package keeper
 import (
 	"time"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/dlc/types"
@@ -16,6 +17,17 @@ func (k Keeper) PriceEventNonceQueueSize(ctx sdk.Context) uint32 {
 // PriceIntervals gets all supported price intervals
 func (k Keeper) PriceIntervals(ctx sdk.Context) []types.PriceInterval {
 	return k.GetParams(ctx).PriceIntervals
+}
+
+// PriceInterval gets the price interval by the given pair
+func (k Keeper) PriceInterval(ctx sdk.Context, pair string) sdkmath.LegacyDec {
+	for _, pi := range k.PriceIntervals(ctx) {
+		if pi.PricePair == pair {
+			return pi.Interval
+		}
+	}
+
+	return sdkmath.LegacyOneDec()
 }
 
 // DateEventNonceQueueSize gets the nonce queue size for the date events
