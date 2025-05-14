@@ -26,6 +26,10 @@ func (k Keeper) HandleAttestation(ctx sdk.Context, sender string, eventId uint64
 		return types.ErrAttestationAlreadyExists
 	}
 
+	if signature[0:64] != event.Nonce {
+		return errorsmod.Wrap(types.ErrInvalidSignature, "signature r does not match the event nonce")
+	}
+
 	pubKeyBytes, _ := hex.DecodeString(event.Pubkey)
 	sigBytes, _ := hex.DecodeString(signature)
 	msg := types.GetEventOutcomeHash(event, int(event.OutcomeIndex))
