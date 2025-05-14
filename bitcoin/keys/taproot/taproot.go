@@ -169,17 +169,6 @@ func (pubKey *PubKey) Address() crypto.Address {
 	witnessProg := schnorr.SerializePubKey(tp)
 
 	return crypto.Address(witnessProg)
-	// converted, err := bech32.ConvertBits(witnessProg, 8, 5, true)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// // Concatenate the witness version and program, and encode the resulting
-	// // bytes using bech32 encoding.
-	// combined := make([]byte, len(converted)+1)
-	// combined[0] = 0x1
-	// copy(combined[1:], converted)
-	// return crypto.Address(combined)
 
 }
 

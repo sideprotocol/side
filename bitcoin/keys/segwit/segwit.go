@@ -10,7 +10,6 @@ import (
 
 	secp256k1 "github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
-	"github.com/sideprotocol/side/bitcoin/keys"
 
 	"github.com/cometbft/cometbft/crypto"
 
@@ -163,33 +162,8 @@ func (pubKey *PubKey) Address() crypto.Address {
 
 	witnessProg := btcutil.Hash160(pubKey.Bytes())
 
-	bech32Address, err := btcutil.NewAddressWitnessPubKeyHash(witnessProg, keys.Network)
-	if err != nil {
-		panic(err)
-	}
-	println("bech32Address:", bech32Address.String())
-	// _, _, err1 := bech32.Decode(bech32Address.String(), 1024)
-	// if err1 != nil {
-	// 	panic(err1)
-	// }
-	// bech32Address.
-	// combined := make([]byte, len(witnessProg)+1)
-	// combined[0] = 0x0
-	// copy(combined[1:], bech32Address.ScriptAddress())
-	return crypto.Address(bech32Address.ScriptAddress())
+	return crypto.Address(witnessProg[:])
 
-	// converted, err := bech32.ConvertBits(witnessProgram, 8, 5, true)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// // Concatenate the witness version and program, and encode the resulting
-	// // bytes using bech32 encoding.
-	// combined := make([]byte, len(converted)+1)
-	// combined[0] = 0x0
-	// copy(combined[1:], converted)
-
-	// return crypto.Address(combined)
 }
 
 // Bytes returns the pubkey byte format.

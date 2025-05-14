@@ -35,9 +35,9 @@ func TestAddressEncodeDecode(t *testing.T) {
 		if strings.HasPrefix(a, "side") {
 			assert.Equal(t, 20, len(addr.Bytes()), a)
 		} else if strings.HasPrefix(a, "bc1q") {
-			assert.Equal(t, 33, len(addr.Bytes()), a)
+			assert.Equal(t, 20, len(addr.Bytes()), a)
 		} else {
-			assert.Equal(t, 53, len(addr.Bytes()), a)
+			assert.Equal(t, 32, len(addr.Bytes()), a)
 		}
 
 		text_addr := addr.String()
@@ -72,12 +72,18 @@ func TestGenKeys(t *testing.T) {
 	// assert.Equal(t, 53, len(a_str.Bytes()), text)
 	// assert.Equal(t, bte, a_str.Bytes())
 
+	// btcutil.DecodeAddress()
 	// println("taproot:", len(taproot.GenPrivKey().PubKey().Address()))
 	a := segwit.GenPrivKey().PubKey().Address()
 	t.Log("segwit:", len(a), sdk.AccAddress(a).String())
 
+	aa, _ := btcutil.NewAddressWitnessPubKeyHash(a.Bytes(), keys.Network)
+	t.Log("aa", aa.EncodeAddress())
+
 	b := taproot.GenPrivKey().PubKey().Address()
 	t.Log("taproot:", len(b), sdk.AccAddress(b).String())
+	bb, _ := btcutil.NewAddressTaproot(b.Bytes(), keys.Network)
+	t.Log("bb", bb.EncodeAddress())
 
 	// println("bech32:", text)
 	assert.Equal(t, true, false)
