@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/btcutil/bech32"
 	"github.com/btcsuite/btcd/chaincfg"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sideprotocol/side/bitcoin/keys"
 	"github.com/sideprotocol/side/bitcoin/keys/segwit"
 	"github.com/sideprotocol/side/bitcoin/keys/taproot"
 	"github.com/stretchr/testify/assert"
@@ -52,6 +52,7 @@ func TestGenKeys(t *testing.T) {
 	conf := sdk.GetConfig()
 	conf.SetBech32PrefixForAccount("side", "side")
 	conf.Seal()
+	keys.Network = &chaincfg.MainNetParams
 
 	// hash := btcutil.Hash160([]byte{0, 3, 3, 3, 3, 3})
 	hash := make([]byte, 32, 32)
@@ -59,35 +60,46 @@ func TestGenKeys(t *testing.T) {
 
 	// sh, err := btcutil.NewAddressScriptHashFromHash(hash, &chaincfg.MainNetParams)
 	// assert.NoError(t, err)
-	std, err := btcutil.NewAddressTaproot(hash, &chaincfg.MainNetParams)
+	std, err := btcutil.NewAddressTaproot(hash, keys.Network)
 	assert.NoError(t, err)
 	assert.Equal(t, 32, len(std.AddressSegWit.ScriptAddress()))
 	// println(std.ScriptAddress())
-	text := std.AddressSegWit.EncodeAddress()
-	_, bte, err := bech32.Decode(text)
-	assert.NoError(t, err)
-	assert.Equal(t, 53, len(bte), text)
-	a_str := sdk.MustAccAddressFromBech32(text)
-	assert.Equal(t, 53, len(a_str.Bytes()), text)
-	assert.Equal(t, bte, a_str.Bytes())
+	// text := std.AddressSegWit.EncodeAddress()
+	// _, bte, err := bech32.Decode(text)
+	// assert.NoError(t, err)
+	// assert.Equal(t, 53, len(bte), text)
+	// a_str := sdk.MustAccAddressFromBech32(text)
+	// assert.Equal(t, 53, len(a_str.Bytes()), text)
+	// assert.Equal(t, bte, a_str.Bytes())
 
-	addrs := []sdk.Address{sdk.AccAddress(taproot.GenPrivKey().PubKey().Address()), sdk.AccAddress(segwit.GenPrivKey().PubKey().Address())}
+	// println("taproot:", len(taproot.GenPrivKey().PubKey().Address()))
+	a := segwit.GenPrivKey().PubKey().Address()
+	t.Log("segwit:", len(a), sdk.AccAddress(a).String())
 
-	for _, a := range addrs {
-		assert.Equal(t, true, strings.HasPrefix(a.String(), "bc"), a.String())
-		if strings.HasPrefix(a.String(), "bc1p") {
-			assert.Equal(t, 53, len(a.Bytes()), a.String())
-			a2, err := sdk.AccAddressFromBech32(a.String())
-			assert.NoError(t, err)
-			assert.Equal(t, 53, len(a2.Bytes()))
-		} else {
-			assert.Equal(t, 33, len(a.Bytes()), a.String())
-		}
-		// a2, err := sdk.AccAddressFromBech32(a.String())
-		// assert.Equal(t, 53, len(a2.Bytes()))
-		// assert.NoError(t, err, a.String())
-		// assert.Equal(t, a.Bytes(), a2.Bytes(), a.String())
-	}
+	b := taproot.GenPrivKey().PubKey().Address()
+	t.Log("taproot:", len(b), sdk.AccAddress(b).String())
+
+	// println("bech32:", text)
+	assert.Equal(t, true, false)
+
+	// addrs := []sdk.Address{sdk.AccAddress(taproot.GenPrivKey().PubKey().Address()), sdk.AccAddress(segwit.GenPrivKey().PubKey().Address())}
+
+	// for _, a := range addrs {
+	// 	println(len(a.Bytes()), a.String())
+	// 	assert.Equal(t, true, strings.HasPrefix(a.String(), "bc"), a.String())
+	// 	if strings.HasPrefix(a.String(), "bc1p") {
+	// 		assert.Equal(t, 32, len(a.Bytes()), a.String())
+	// 		a2, err := sdk.AccAddressFromBech32(a.String())
+	// 		assert.NoError(t, err)
+	// 		assert.Equal(t, 32, len(a2.Bytes()))
+	// 	} else {
+	// 		assert.Equal(t, 33, len(a.Bytes()), a.String())
+	// 	}
+	// 	// a2, err := sdk.AccAddressFromBech32(a.String())
+	// 	// assert.Equal(t, 53, len(a2.Bytes()))
+	// 	// assert.NoError(t, err, a.String())
+	// 	// assert.Equal(t, a.Bytes(), a2.Bytes(), a.String())
+	// }
 }
 
 func TestValAddressEncodeDecode(t *testing.T) {

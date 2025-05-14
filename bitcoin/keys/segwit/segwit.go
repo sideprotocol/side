@@ -18,7 +18,6 @@ import (
 
 	//nolint: staticcheck
 
-	"github.com/cosmos/btcutil/bech32"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/types/errors"
@@ -168,11 +167,16 @@ func (pubKey *PubKey) Address() crypto.Address {
 	if err != nil {
 		panic(err)
 	}
-	_, bz, err1 := bech32.Decode(bech32Address.String(), 1023)
-	if err1 != nil {
-		panic(err1)
-	}
-	return crypto.Address(bz)
+	println("bech32Address:", bech32Address.String())
+	// _, _, err1 := bech32.Decode(bech32Address.String(), 1024)
+	// if err1 != nil {
+	// 	panic(err1)
+	// }
+	// bech32Address.
+	// combined := make([]byte, len(witnessProg)+1)
+	// combined[0] = 0x0
+	// copy(combined[1:], bech32Address.ScriptAddress())
+	return crypto.Address(bech32Address.ScriptAddress())
 
 	// converted, err := bech32.ConvertBits(witnessProgram, 8, 5, true)
 	// if err != nil {

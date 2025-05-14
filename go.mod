@@ -273,8 +273,8 @@ require (
 )
 
 replace (
-	github.com/cosmos/btcutil => github.com/sideprotocol/btcutil v0.1.1
-	// github.com/cosmos/btcutil => ../btcutil
+	// github.com/cosmos/btcutil => github.com/sideprotocol/btcutil v0.1.1
+	github.com/cosmos/btcutil => ../btcutil
 	// Fix upstream GHSA-h395-qcrw-5vmq and GHSA-3vp4-m3rf-835h vulnerabilities.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
