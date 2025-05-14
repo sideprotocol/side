@@ -2,8 +2,8 @@ package codec
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/sideprotocol/side/crypto/keys/segwit"
-	"github.com/sideprotocol/side/crypto/keys/taproot"
+	"github.com/sideprotocol/side/bitcoin/keys/segwit"
+	"github.com/sideprotocol/side/bitcoin/keys/taproot"
 )
 
 // RegisterCrypto registers all crypto dependency types with the provided Amino

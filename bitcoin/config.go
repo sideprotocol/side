@@ -2,18 +2,16 @@ package bitcoin
 
 import (
 	storetypes "cosmossdk.io/store/types"
-	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/sideprotocol/side/crypto/keys/segwit"
-	"github.com/sideprotocol/side/crypto/keys/taproot"
+	"github.com/sideprotocol/side/bitcoin/keys/segwit"
+	"github.com/sideprotocol/side/bitcoin/keys/taproot"
 )
 
 var (
-	Network       = &chaincfg.TestNet3Params
 	KeyringOption = func(options *keyring.Options) {
 		options.SupportedAlgos = keyring.SigningAlgoList{hd.Secp256k1, SegWit, Taproot}
 		options.SupportedAlgosLedger = keyring.SigningAlgoList{hd.Secp256k1}

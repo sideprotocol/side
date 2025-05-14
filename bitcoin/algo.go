@@ -7,8 +7,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/sideprotocol/side/crypto/keys/segwit"
-	"github.com/sideprotocol/side/crypto/keys/taproot"
+	"github.com/sideprotocol/side/bitcoin/keys/segwit"
+	"github.com/sideprotocol/side/bitcoin/keys/taproot"
 )
 
 const (

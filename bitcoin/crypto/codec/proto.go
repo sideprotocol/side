@@ -3,8 +3,8 @@ package codec
 import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/sideprotocol/side/crypto/keys/segwit"
-	"github.com/sideprotocol/side/crypto/keys/taproot"
+	"github.com/sideprotocol/side/bitcoin/keys/segwit"
+	"github.com/sideprotocol/side/bitcoin/keys/taproot"
 )
 
 // RegisterInterfaces registers the sdk.Tx interface.

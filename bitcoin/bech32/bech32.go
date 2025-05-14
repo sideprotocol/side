@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	// "github.com/cosmos/btcutil/bech32"
-
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/bech32"
 
-	"github.com/sideprotocol/side/bitcoin"
+	"github.com/sideprotocol/side/bitcoin/keys"
 )
 
 // ConvertAndEncode converts from a base256 encoded byte string to base32 encoded byte string and then to bech32.
@@ -19,10 +17,10 @@ func ConvertAndEncode(hrp string, data []byte) (string, error) {
 	// check if address is a taproot/sigwit address
 	if len(hrp) < 6 {
 		if len(data) == 32 { // taproot
-			return encodeSegWitAddress(bitcoin.Network.Bech32HRPSegwit, 1, data)
+			return encodeSegWitAddress(keys.Network.Bech32HRPSegwit, 1, data)
 		}
 		// segwit address
-		bitcoinBech32, err := bech32.Encode(bitcoin.Network.Bech32HRPSegwit, data)
+		bitcoinBech32, err := bech32.Encode(keys.Network.Bech32HRPSegwit, data)
 		if IsBitCoinAddr(bitcoinBech32) == "segwit" && err == nil {
 			return bitcoinBech32, err
 		}
@@ -42,11 +40,11 @@ func DecodeAndConvert(bech string) (string, []byte, error) {
 	addrType := IsBitCoinAddr(bech)
 
 	if addrType == "taproot" {
-		addr, err := btcutil.DecodeAddress(bech, bitcoin.Network)
+		addr, err := btcutil.DecodeAddress(bech, keys.Network)
 		if err != nil {
 			return "", nil, fmt.Errorf("decoding taproot bech32 failed: %w", err)
 		}
-		return bitcoin.Network.Bech32HRPSegwit, addr.ScriptAddress(), nil
+		return keys.Network.Bech32HRPSegwit, addr.ScriptAddress(), nil
 	} else if addrType == "segwit" {
 		hrp, data, err := bech32.Decode(bech)
 		if err != nil {
@@ -69,9 +67,9 @@ func DecodeAndConvert(bech string) (string, []byte, error) {
 }
 
 func IsBitCoinAddr(bech string) string {
-	if strings.HasPrefix(bech, bitcoin.Network.Bech32HRPSegwit+"1q") && len(bech) == 42 {
+	if strings.HasPrefix(bech, keys.Network.Bech32HRPSegwit+"1q") && len(bech) == 42 {
 		return "segwit"
-	} else if strings.HasPrefix(bech, bitcoin.Network.Bech32HRPSegwit+"1p") && len(bech) == 62 {
+	} else if strings.HasPrefix(bech, keys.Network.Bech32HRPSegwit+"1p") && len(bech) == 62 {
 		return "taproot"
 	}
 	return "cosmos"

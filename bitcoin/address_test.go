@@ -8,8 +8,8 @@ import (
 	"github.com/btcsuite/btcd/btcutil/bech32"
 	"github.com/btcsuite/btcd/chaincfg"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sideprotocol/side/crypto/keys/segwit"
-	"github.com/sideprotocol/side/crypto/keys/taproot"
+	"github.com/sideprotocol/side/bitcoin/keys/segwit"
+	"github.com/sideprotocol/side/bitcoin/keys/taproot"
 	"github.com/stretchr/testify/assert"
 )
 

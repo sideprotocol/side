@@ -18,7 +18,6 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
-	"github.com/cosmos/btcutil/bech32"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/types/errors"
@@ -153,7 +152,7 @@ var (
 
 // PubKeySize is comprised of 32 bytes for one field element
 // (the x-coordinate), plus one byte for the parity of the y-coordinate.
-const PubKeySize = 33
+const PubKeySize = 32
 
 // Address returns a Bitcoin style addresses: RIPEMD160(SHA256(pubkey))
 func (pubKey *PubKey) Address() crypto.Address {
@@ -169,17 +168,18 @@ func (pubKey *PubKey) Address() crypto.Address {
 	tp := txscript.ComputeTaprootKeyNoScript(pk)
 	witnessProg := schnorr.SerializePubKey(tp)
 
-	converted, err := bech32.ConvertBits(witnessProg, 8, 5, true)
-	if err != nil {
-		panic(err)
-	}
+	return crypto.Address(witnessProg)
+	// converted, err := bech32.ConvertBits(witnessProg, 8, 5, true)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	// Concatenate the witness version and program, and encode the resulting
-	// bytes using bech32 encoding.
-	combined := make([]byte, len(converted)+1)
-	combined[0] = 0x1
-	copy(combined[1:], converted)
-	return crypto.Address(combined)
+	// // Concatenate the witness version and program, and encode the resulting
+	// // bytes using bech32 encoding.
+	// combined := make([]byte, len(converted)+1)
+	// combined[0] = 0x1
+	// copy(combined[1:], converted)
+	// return crypto.Address(combined)
 
 }
 

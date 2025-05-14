@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	"github.com/sideprotocol/side/crypto/keys/segwit"
+	"github.com/sideprotocol/side/bitcoin/keys/segwit"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
