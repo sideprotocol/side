@@ -20,27 +20,32 @@ func (m *MsgRefresh) ValidateBasic() error {
 		return errorsmod.Wrap(ErrInvalidDKGs, "dkgs cannot be empty")
 	}
 
-	if len(m.RemovedParticipants) == 0 || len(m.NewParticipants) == 0 {
-		return errorsmod.Wrap(ErrInvalidParticipants, "removed or new participants cannot be empty")
+	if len(m.RemovedParticipants) == 0 {
+		return errorsmod.Wrap(ErrInvalidParticipants, "removed participants cannot be empty")
 	}
 
-	if len(m.RemovedParticipants) != len(m.NewParticipants) {
-		return errorsmod.Wrap(ErrInvalidParticipants, "the numbers of removed and new participants do not match")
+	if len(m.Thresholds) != len(m.DkgIds) {
+		return errorsmod.Wrap(ErrInvalidThresholds, "thresholds do not match dkgs")
 	}
 
-	participants := append(m.RemovedParticipants, m.NewParticipants...)
-	participantMap := make(map[string]bool)
+	for _, threshold := range m.Thresholds {
+		if threshold == 0 {
+			return errorsmod.Wrap(ErrInvalidThresholds, "threshold must be greater than 0")
+		}
+	}
 
-	for _, p := range participants {
+	participants := make(map[string]bool)
+
+	for _, p := range m.RemovedParticipants {
 		if pubKey, err := base64.StdEncoding.DecodeString(p); err != nil || len(pubKey) != ed25519.PubKeySize {
 			return errorsmod.Wrap(ErrInvalidParticipants, "invalid participant consensus pub key")
 		}
 
-		if participantMap[p] {
+		if participants[p] {
 			return errorsmod.Wrap(ErrInvalidParticipants, "duplicate participant")
 		}
 
-		participantMap[p] = true
+		participants[p] = true
 	}
 
 	if m.TimeoutDuration < 0 {

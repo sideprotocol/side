@@ -130,8 +130,8 @@ message RefreshingRequest {
   uint64 dkg_id = 2;
   // removed participant set
   repeated string removed_participants = 3;
-  // new participant set
-  repeated string new_participants = 4;
+  // new threshold
+  uint32 threshold = 4;
   // expiration time
   google.protobuf.Timestamp expiration_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   // status
