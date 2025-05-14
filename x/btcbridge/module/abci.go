@@ -167,34 +167,76 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 		return
 	}
 
+	// get fee rate
+	feeRate := k.GetFeeRate(ctx)
+	if err := k.CheckFeeRate(ctx, feeRate); err != nil {
+		return
+	}
+
+	protocolFee := sdk.NewInt64Coin(k.BtcDenom(ctx), k.ProtocolWithdrawFee(ctx))
+	protocoFeeCollector := sdk.MustAccAddressFromBech32(k.ProtocolFeeCollector(ctx))
+
 	// handle the IBC withdrawal request
 	for _, req := range pendingIBCWithdrawRequests {
-		var err error
-
 		address := sdk.MustAccAddressFromBech32(req.Address)
 		amount, _ := sdk.ParseCoinNormalized(req.Amount)
 
-		if k.ProtocolWithdrawFeeEnabled(ctx) {
-			// deduct the protocol fee and get the actual withdrawal amount
-			amount, err = k.HandleWithdrawProtocolFee(ctx, address, amount)
-			if err != nil {
-				k.Logger(ctx).Info("failed to handle protocol fee for ibc withdrawal", "address", address, "amount", amount, "err", err)
-				continue
-			}
-		}
+		// deduct protocol fee
+		withdrawAmount, err := amount.SafeSub(protocolFee)
+		if err != nil || withdrawAmount.Amount.Int64() < k.MinBTCWithdraw(ctx) || withdrawAmount.Amount.Int64() > k.MaxBTCWithdraw(ctx) {
+			k.Logger(ctx).Info("failed to perform withdrawal from IBC", "address", req.Address, "amount", req.Amount, "err", "invalid withdrawal amount")
 
-		withdrawRequest, err := k.HandleWithdrawal(ctx, req.Address, amount)
-		if err != nil {
-			k.Logger(ctx).Info("failed to handle ibc withdrawal", "address", address, "amount", amount, "err", err)
+			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
 			continue
 		}
+
+		// estimate the btc network fee
+		networkFee, err := k.EstimateWithdrawalNetworkFee(ctx, req.Address, withdrawAmount, feeRate.Value)
+		if err != nil {
+			k.Logger(ctx).Info("failed to estimate network fee for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "fee rate", feeRate.Value, "err", err)
+
+			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
+			continue
+		}
+
+		// deduct network fee
+		withdrawAmount, err = withdrawAmount.SafeSub(networkFee)
+		if err != nil || withdrawAmount.Amount.Int64() < k.MinBTCWithdraw(ctx) {
+			k.Logger(ctx).Info("failed to perform withdrawal from IBC", "address", req.Address, "amount", req.Amount, "fee rate", feeRate.Value, "network fee", networkFee, "err", "invalid withdrawal amount")
+
+			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
+			continue
+		}
+
+		// burn asset
+		if err := k.BurnAsset(ctx, req.Address, withdrawAmount.Add(networkFee)); err != nil {
+			k.Logger(ctx).Info("failed to burn asset for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "burned amount", withdrawAmount.Add(networkFee), "err", err)
+
+			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
+			continue
+		}
+
+		// transfer protocol fee to fee collector
+		if err := k.BankKeeper().SendCoins(ctx, address, protocoFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
+			k.Logger(ctx).Info("failed to transfer protocol fee for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "protocol fee", protocolFee, "err", err)
+
+			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
+			continue
+		}
+
+		// set the withdrawal request
+		withdrawRequest := k.NewWithdrawRequest(ctx, req.Address, withdrawAmount.String())
+		k.SetWithdrawRequest(ctx, withdrawRequest)
+
+		// add to the pending queue
+		k.AddToBtcWithdrawRequestQueue(ctx, withdrawRequest)
 
 		// remove from queue
 		k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
 
 		// Emit events
 		k.EmitEvent(ctx, req.Address,
-			sdk.NewAttribute("amount", amount.String()),
+			sdk.NewAttribute("amount", withdrawAmount.String()),
 			sdk.NewAttribute("sequence", fmt.Sprintf("%d", withdrawRequest.Sequence)),
 			sdk.NewAttribute("txid", withdrawRequest.Txid),
 			sdk.NewAttribute("channel_id", req.ChannelId),

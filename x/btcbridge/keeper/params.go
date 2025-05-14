@@ -43,6 +43,31 @@ func (k Keeper) ProtocolFeeCollector(ctx sdk.Context) string {
 	return k.GetParams(ctx).ProtocolFees.Collector
 }
 
+// ProtocolDepositFee gets the protocol fee for deposit
+func (k Keeper) ProtocolDepositFee(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).ProtocolFees.DepositFee
+}
+
+// ProtocolWithdrawFee gets the protocol fee for withdrawal
+func (k Keeper) ProtocolWithdrawFee(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).ProtocolFees.WithdrawFee
+}
+
+// MinBTCDeposit gets the minimum deposit amount for BTC
+func (k Keeper) MinBTCDeposit(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).ProtocolLimits.BtcMinDeposit
+}
+
+// MinBTCWithdraw gets the minimum withdrawal amount for BTC
+func (k Keeper) MinBTCWithdraw(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).ProtocolLimits.BtcMinWithdraw
+}
+
+// MaxBTCWithdraw gets the maximum withdrawal amount for BTC
+func (k Keeper) MaxBTCWithdraw(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).ProtocolLimits.BtcMaxWithdraw
+}
+
 // BtcDenom gets the btc denomination
 func (k Keeper) BtcDenom(ctx sdk.Context) string {
 	return k.GetParams(ctx).BtcVoucherDenom

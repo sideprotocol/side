@@ -175,12 +175,7 @@ func (k Keeper) IBCReceivePacketCallback(
 	ack ibcexported.Acknowledgement,
 	contractAddress string,
 ) error {
-	// check if the bridge withdrawal enabled
-	if !k.WithdrawEnabled(ctx) {
-		return nil
-	}
-
-	// parse the fungible token packet data
+	// check if the packet is sBTC token transfer and auto-pegout enabled
 	data, ok := tryGetFungibleTokenPacketData(packet)
 	if !ok || !k.CheckSBTCAutoPegOut(ctx, packet, data) {
 		return nil
