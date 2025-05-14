@@ -16,7 +16,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/crypto/schnorr"
+	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	"github.com/sideprotocol/side/x/lending/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
@@ -465,13 +465,17 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Tx)), true)
 
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
+	dcmPubKey, _ := hex.DecodeString(loan.DCM)
+
+	internalKey := types.GetInternalKey(borrowerPubKey, dcmPubKey)
+
 	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
 	sigHashes := []string{}
 
 	merkleTree := types.GetTapscriptTree(types.GetDLCTapscripts(m.GetDLCMeta(ctx, msg.LoanId)))
 	scriptProof := merkleTree.LeafMerkleProofs[0]
 
-	controlBlock, err := types.GetControlBlock(types.GetInternalKey(), scriptProof)
+	controlBlock, err := types.GetControlBlock(internalKey, scriptProof)
 	if err != nil {
 		return nil, err
 	}
@@ -510,7 +514,7 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 
 		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
 
-		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(types.GetInternalKey())
+		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(internalKey)
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,

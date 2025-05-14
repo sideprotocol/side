@@ -11,7 +11,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/crypto/hash"
+	"github.com/sideprotocol/side/bitcoin/crypto/hash"
 )
 
 const (

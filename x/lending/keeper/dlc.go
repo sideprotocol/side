@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"encoding/hex"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
@@ -33,7 +35,10 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	loan := k.GetLoan(ctx, loanId)
 	poolConfig := k.GetPool(ctx, loan.PoolId).Config
 
-	multisigScript, _ := types.CreateMultisigScript([]string{loan.BorrowerPubKey, loan.DCM})
+	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
+	dcmPubKey, _ := hex.DecodeString(loan.DCM)
+
+	multisigScript, _ := types.CreateMultisigScript([][]byte{borrowerPubKey, dcmPubKey})
 
 	var liquidationEvent *dlctypes.DLCEvent
 	if loan.LiquidationEventId != 0 {
