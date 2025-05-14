@@ -26,9 +26,6 @@ var (
 	// default confirmation depth for bitcoin withdrawal transactions
 	DefaultWithdrawConfirmationDepth = int32(6)
 
-	// default allowed maximum depth for bitcoin block reorganization
-	DefaultMaxReorgDepth = int32(6)
-
 	// default BTC voucher denom
 	DefaultBtcVoucherDenom = "sat"
 
@@ -56,7 +53,6 @@ func NewParams() Params {
 	return Params{
 		DepositConfirmationDepth:  DefaultDepositConfirmationDepth,
 		WithdrawConfirmationDepth: DefaultWithdrawConfirmationDepth,
-		MaxReorgDepth:             DefaultMaxReorgDepth,
 		MaxAcceptableBlockDepth:   100,
 		BtcVoucherDenom:           DefaultBtcVoucherDenom,
 		DepositEnabled:            true,
@@ -71,13 +67,13 @@ func NewParams() Params {
 			MaxBtcBatchWithdrawNum: DefaultMaxBtcBatchWithdrawNum,
 		},
 		ProtocolLimits: ProtocolLimits{
-			BtcMinDeposit:  50000,     // 0.0005 BTC
-			BtcMinWithdraw: 30000,     // 0.0003 BTC
+			BtcMinDeposit:  100000,    // 0.001 BTC
+			BtcMinWithdraw: 100000,    // 0.001 BTC
 			BtcMaxWithdraw: 500000000, // 5 BTC
 		},
 		ProtocolFees: ProtocolFees{
-			DepositFee:  8000,  // 0.00008 BTC
-			WithdrawFee: 12000, // 0.00012 BTC
+			DepositFee:  4000, // 0.00004 BTC
+			WithdrawFee: 6000, // 0.00006 BTC
 			Collector:   authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		},
 		TssParams: TSSParams{
@@ -94,7 +90,7 @@ func DefaultParams() Params {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if err := validateConfirmationAndReorgParams(p.DepositConfirmationDepth, p.WithdrawConfirmationDepth, p.MaxReorgDepth); err != nil {
+	if err := validateConfirmationParams(p.DepositConfirmationDepth, p.WithdrawConfirmationDepth); err != nil {
 		return err
 	}
 
@@ -189,14 +185,10 @@ func SelectVaultByPkScript(vaults []*Vault, pkScript []byte) *Vault {
 	return nil
 }
 
-// validateConfirmationAndReorgParams validates the given confirmation and reorg params
-func validateConfirmationAndReorgParams(depositConfirmationDepth int32, withdrawConfirmationDepth int32, maxReorgDepth int32) error {
+// validateConfirmationParams validates the given confirmation params
+func validateConfirmationParams(depositConfirmationDepth int32, withdrawConfirmationDepth int32) error {
 	if depositConfirmationDepth <= 0 || withdrawConfirmationDepth <= 0 {
 		return errorsmod.Wrapf(ErrInvalidParams, "confirmation depth must be greater than 0")
-	}
-
-	if maxReorgDepth <= 0 {
-		return errorsmod.Wrapf(ErrInvalidParams, "max reorg depth must be greater than 0")
 	}
 
 	return nil

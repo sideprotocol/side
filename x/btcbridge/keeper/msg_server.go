@@ -298,11 +298,11 @@ func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	req := &types.DKGCompletionRequest{
-		Id:               msg.Id,
-		Sender:           msg.Sender,
-		Vaults:           msg.Vaults,
-		ConsensusAddress: msg.ConsensusAddress,
-		Signature:        msg.Signature,
+		Id:              msg.Id,
+		Sender:          msg.Sender,
+		Vaults:          msg.Vaults,
+		ConsensusPubkey: msg.ConsensusPubkey,
+		Signature:       msg.Signature,
 	}
 
 	if err := m.Keeper.CompleteDKG(ctx, req); err != nil {

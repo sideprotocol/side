@@ -74,7 +74,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			)
 		} else if !currentPrice.IsZero() {
 			// check if the loan is to be liquidated
-			if currentPrice.LTE(loan.LiquidationPrice.ToLegacyDec()) {
+			if currentPrice.LTE(loan.LiquidationPrice) {
 				liquidationInterest = k.GetCurrentInterest(ctx, loan).Amount
 				loan.Status = types.LoanStatus_Liquidated
 

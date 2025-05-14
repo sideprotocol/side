@@ -34,7 +34,7 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdCompleteDKG())
 	cmd.AddCommand(CmdSubmitSignatures())
-	cmd.AddCommand(CmdCompleteResharing())
+	cmd.AddCommand(CmdCompleteRefreshing())
 
 	return cmd
 }
@@ -112,11 +112,11 @@ func CmdSubmitSignatures() *cobra.Command {
 	return cmd
 }
 
-// Complete resharing
-func CmdCompleteResharing() *cobra.Command {
+// Complete refreshing
+func CmdCompleteRefreshing() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "complete-resharing [id] [consensus pub key] [signature]",
-		Short: "Complete resharing with the corresponding signature",
+		Use:   "complete-refreshing [id] [consensus pub key] [signature]",
+		Short: "Complete refreshing with the corresponding signature",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -129,7 +129,7 @@ func CmdCompleteResharing() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCompleteResharing(
+			msg := types.NewMsgCompleteRefreshing(
 				clientCtx.GetFromAddress().String(),
 				id,
 				args[1],

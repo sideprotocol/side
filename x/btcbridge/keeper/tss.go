@@ -3,6 +3,7 @@ package keeper
 import (
 	"bytes"
 	"encoding/base64"
+	"slices"
 	"time"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -11,7 +12,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
@@ -41,6 +41,13 @@ func (k Keeper) SetDKGRequest(ctx sdk.Context, req *types.DKGRequest) {
 
 	bz := k.cdc.MustMarshal(req)
 	store.Set(types.DKGRequestKey(req.Id), bz)
+}
+
+// HasDKGRequest returns true if the given DKG request exists, false otherwise
+func (k Keeper) HasDKGRequest(ctx sdk.Context, id uint64) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.DKGRequestKey(id))
 }
 
 // GetDKGRequest gets the DKG request by the given id
@@ -128,14 +135,14 @@ func (k Keeper) SetDKGCompletionRequest(ctx sdk.Context, req *types.DKGCompletio
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(req)
-	store.Set(types.DKGCompletionRequestKey(req.Id, req.ConsensusAddress), bz)
+	store.Set(types.DKGCompletionRequestKey(req.Id, req.ConsensusPubkey), bz)
 }
 
 // HasDKGCompletionRequest returns true if the given completion request exists, false otherwise
-func (k Keeper) HasDKGCompletionRequest(ctx sdk.Context, id uint64, consAddress string) bool {
+func (k Keeper) HasDKGCompletionRequest(ctx sdk.Context, id uint64, consPubKey string) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.DKGCompletionRequestKey(id, consAddress))
+	return store.Has(types.DKGCompletionRequestKey(id, consPubKey))
 }
 
 // GetDKGCompletionRequests gets DKG completion requests by the given id
@@ -169,26 +176,11 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 
 // InitiateDKG initiates the DKG request by the specified params
 func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
+	baseParticipants := k.tssKeeper.GetParams(ctx).AllowedDkgParticipants
+
 	for _, p := range participants {
-		valAddr, _ := sdk.ValAddressFromBech32(p.OperatorAddress)
-
-		validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
-		if err != nil {
-			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "non validator")
-		}
-
-		pubKey, err := validator.ConsPubKey()
-		if err != nil {
-			return nil, err
-		}
-
-		pubKeyBytes, _ := base64.StdEncoding.DecodeString(p.ConsensusPubkey)
-		if !bytes.Equal(pubKeyBytes, pubKey.Bytes()) {
-			errorsmod.Wrap(types.ErrInvalidDKGParams, "incorrect consensus public key")
-		}
-
-		if validator.Status != stakingtypes.Bonded {
-			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "validator not bonded")
+		if !slices.Contains(baseParticipants, p.ConsensusPubkey) {
+			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "participant not authorized")
 		}
 	}
 
@@ -210,18 +202,18 @@ func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipan
 }
 
 // CompleteDKG completes the DKG request by the DKG participant
-// The DKG request will be completed when all participants submit the valid completion request before timeout
+// The DKG request will be finalized when all participants submit the valid completion request before timeout
 func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) error {
-	dkgReq := k.GetDKGRequest(ctx, req.Id)
-	if dkgReq == nil {
+	if !k.HasDKGRequest(ctx, req.Id) {
 		return types.ErrDKGRequestDoesNotExist
 	}
 
-	if !types.ParticipantExists(dkgReq.Participants, req.ConsensusAddress) {
+	dkgReq := k.GetDKGRequest(ctx, req.Id)
+	if !types.ParticipantExists(dkgReq.Participants, req.ConsensusPubkey) {
 		return types.ErrUnauthorizedDKGCompletionRequest
 	}
 
-	if k.HasDKGCompletionRequest(ctx, req.Id, req.ConsensusAddress) {
+	if k.HasDKGCompletionRequest(ctx, req.Id, req.ConsensusPubkey) {
 		return types.ErrDKGCompletionRequestExists
 	}
 
@@ -237,22 +229,9 @@ func (k Keeper) CompleteDKG(ctx sdk.Context, req *types.DKGCompletionRequest) er
 		return err
 	}
 
-	consAddress, _ := sdk.ConsAddressFromHex(req.ConsensusAddress)
-	validator, err := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddress)
-	if err != nil {
-		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "non validator")
-	}
+	pubKey, _ := base64.StdEncoding.DecodeString(req.ConsensusPubkey)
 
-	if validator.Status != stakingtypes.Bonded {
-		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "validator not bonded")
-	}
-
-	pubKey, err := validator.ConsPubKey()
-	if err != nil {
-		return err
-	}
-
-	if !types.VerifySignature(req.Signature, pubKey.Bytes(), req) {
+	if !types.VerifySignature(req.Signature, pubKey, req) {
 		return errorsmod.Wrap(types.ErrInvalidDKGCompletionRequest, "invalid signature")
 	}
 

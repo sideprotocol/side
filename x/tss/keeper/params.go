@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// DKGTimeoutPeriod gets the DKG timeout period
-func (k Keeper) DKGTimeoutPeriod(ctx sdk.Context) time.Duration {
-	return k.GetParams(ctx).DkgTimeoutPeriod
+// DKGTimeoutDuration gets the DKG timeout duration
+func (k Keeper) DKGTimeoutDuration(ctx sdk.Context) time.Duration {
+	return k.GetParams(ctx).DkgTimeoutDuration
 }

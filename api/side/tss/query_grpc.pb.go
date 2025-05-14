@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName               = "/side.tss.Query/Params"
-	Query_DKGRequest_FullMethodName           = "/side.tss.Query/DKGRequest"
-	Query_DKGRequests_FullMethodName          = "/side.tss.Query/DKGRequests"
-	Query_DKGCompletions_FullMethodName       = "/side.tss.Query/DKGCompletions"
-	Query_SigningRequest_FullMethodName       = "/side.tss.Query/SigningRequest"
-	Query_SigningRequests_FullMethodName      = "/side.tss.Query/SigningRequests"
-	Query_ResharingRequest_FullMethodName     = "/side.tss.Query/ResharingRequest"
-	Query_ResharingRequests_FullMethodName    = "/side.tss.Query/ResharingRequests"
-	Query_ResharingCompletions_FullMethodName = "/side.tss.Query/ResharingCompletions"
+	Query_Params_FullMethodName                = "/side.tss.Query/Params"
+	Query_DKGRequest_FullMethodName            = "/side.tss.Query/DKGRequest"
+	Query_DKGRequests_FullMethodName           = "/side.tss.Query/DKGRequests"
+	Query_DKGCompletions_FullMethodName        = "/side.tss.Query/DKGCompletions"
+	Query_SigningRequest_FullMethodName        = "/side.tss.Query/SigningRequest"
+	Query_SigningRequests_FullMethodName       = "/side.tss.Query/SigningRequests"
+	Query_RefreshingRequest_FullMethodName     = "/side.tss.Query/RefreshingRequest"
+	Query_RefreshingRequests_FullMethodName    = "/side.tss.Query/RefreshingRequests"
+	Query_RefreshingCompletions_FullMethodName = "/side.tss.Query/RefreshingCompletions"
 )
 
 // QueryClient is the client API for Query service.
@@ -46,12 +46,12 @@ type QueryClient interface {
 	SigningRequest(ctx context.Context, in *QuerySigningRequestRequest, opts ...grpc.CallOption) (*QuerySigningRequestResponse, error)
 	// SigningRequests queries the signing requests by the given params.
 	SigningRequests(ctx context.Context, in *QuerySigningRequestsRequest, opts ...grpc.CallOption) (*QuerySigningRequestsResponse, error)
-	// ResharingRequest queries the resharing request by the given id.
-	ResharingRequest(ctx context.Context, in *QueryResharingRequestRequest, opts ...grpc.CallOption) (*QueryResharingRequestResponse, error)
-	// ResharingRequests queries the resharing requests by the given status.
-	ResharingRequests(ctx context.Context, in *QueryResharingRequestsRequest, opts ...grpc.CallOption) (*QueryResharingRequestsResponse, error)
-	// ResharingCompletions queries resharing completions by the given request id.
-	ResharingCompletions(ctx context.Context, in *QueryResharingCompletionsRequest, opts ...grpc.CallOption) (*QueryResharingCompletionsResponse, error)
+	// RefreshingRequest queries the refreshing request by the given id.
+	RefreshingRequest(ctx context.Context, in *QueryRefreshingRequestRequest, opts ...grpc.CallOption) (*QueryRefreshingRequestResponse, error)
+	// RefreshingRequests queries the refreshing requests by the given status.
+	RefreshingRequests(ctx context.Context, in *QueryRefreshingRequestsRequest, opts ...grpc.CallOption) (*QueryRefreshingRequestsResponse, error)
+	// RefreshingCompletions queries refreshing completions by the given request id.
+	RefreshingCompletions(ctx context.Context, in *QueryRefreshingCompletionsRequest, opts ...grpc.CallOption) (*QueryRefreshingCompletionsResponse, error)
 }
 
 type queryClient struct {
@@ -116,27 +116,27 @@ func (c *queryClient) SigningRequests(ctx context.Context, in *QuerySigningReque
 	return out, nil
 }
 
-func (c *queryClient) ResharingRequest(ctx context.Context, in *QueryResharingRequestRequest, opts ...grpc.CallOption) (*QueryResharingRequestResponse, error) {
-	out := new(QueryResharingRequestResponse)
-	err := c.cc.Invoke(ctx, Query_ResharingRequest_FullMethodName, in, out, opts...)
+func (c *queryClient) RefreshingRequest(ctx context.Context, in *QueryRefreshingRequestRequest, opts ...grpc.CallOption) (*QueryRefreshingRequestResponse, error) {
+	out := new(QueryRefreshingRequestResponse)
+	err := c.cc.Invoke(ctx, Query_RefreshingRequest_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) ResharingRequests(ctx context.Context, in *QueryResharingRequestsRequest, opts ...grpc.CallOption) (*QueryResharingRequestsResponse, error) {
-	out := new(QueryResharingRequestsResponse)
-	err := c.cc.Invoke(ctx, Query_ResharingRequests_FullMethodName, in, out, opts...)
+func (c *queryClient) RefreshingRequests(ctx context.Context, in *QueryRefreshingRequestsRequest, opts ...grpc.CallOption) (*QueryRefreshingRequestsResponse, error) {
+	out := new(QueryRefreshingRequestsResponse)
+	err := c.cc.Invoke(ctx, Query_RefreshingRequests_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) ResharingCompletions(ctx context.Context, in *QueryResharingCompletionsRequest, opts ...grpc.CallOption) (*QueryResharingCompletionsResponse, error) {
-	out := new(QueryResharingCompletionsResponse)
-	err := c.cc.Invoke(ctx, Query_ResharingCompletions_FullMethodName, in, out, opts...)
+func (c *queryClient) RefreshingCompletions(ctx context.Context, in *QueryRefreshingCompletionsRequest, opts ...grpc.CallOption) (*QueryRefreshingCompletionsResponse, error) {
+	out := new(QueryRefreshingCompletionsResponse)
+	err := c.cc.Invoke(ctx, Query_RefreshingCompletions_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -159,12 +159,12 @@ type QueryServer interface {
 	SigningRequest(context.Context, *QuerySigningRequestRequest) (*QuerySigningRequestResponse, error)
 	// SigningRequests queries the signing requests by the given params.
 	SigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error)
-	// ResharingRequest queries the resharing request by the given id.
-	ResharingRequest(context.Context, *QueryResharingRequestRequest) (*QueryResharingRequestResponse, error)
-	// ResharingRequests queries the resharing requests by the given status.
-	ResharingRequests(context.Context, *QueryResharingRequestsRequest) (*QueryResharingRequestsResponse, error)
-	// ResharingCompletions queries resharing completions by the given request id.
-	ResharingCompletions(context.Context, *QueryResharingCompletionsRequest) (*QueryResharingCompletionsResponse, error)
+	// RefreshingRequest queries the refreshing request by the given id.
+	RefreshingRequest(context.Context, *QueryRefreshingRequestRequest) (*QueryRefreshingRequestResponse, error)
+	// RefreshingRequests queries the refreshing requests by the given status.
+	RefreshingRequests(context.Context, *QueryRefreshingRequestsRequest) (*QueryRefreshingRequestsResponse, error)
+	// RefreshingCompletions queries refreshing completions by the given request id.
+	RefreshingCompletions(context.Context, *QueryRefreshingCompletionsRequest) (*QueryRefreshingCompletionsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -190,14 +190,14 @@ func (UnimplementedQueryServer) SigningRequest(context.Context, *QuerySigningReq
 func (UnimplementedQueryServer) SigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SigningRequests not implemented")
 }
-func (UnimplementedQueryServer) ResharingRequest(context.Context, *QueryResharingRequestRequest) (*QueryResharingRequestResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ResharingRequest not implemented")
+func (UnimplementedQueryServer) RefreshingRequest(context.Context, *QueryRefreshingRequestRequest) (*QueryRefreshingRequestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshingRequest not implemented")
 }
-func (UnimplementedQueryServer) ResharingRequests(context.Context, *QueryResharingRequestsRequest) (*QueryResharingRequestsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ResharingRequests not implemented")
+func (UnimplementedQueryServer) RefreshingRequests(context.Context, *QueryRefreshingRequestsRequest) (*QueryRefreshingRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshingRequests not implemented")
 }
-func (UnimplementedQueryServer) ResharingCompletions(context.Context, *QueryResharingCompletionsRequest) (*QueryResharingCompletionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ResharingCompletions not implemented")
+func (UnimplementedQueryServer) RefreshingCompletions(context.Context, *QueryRefreshingCompletionsRequest) (*QueryRefreshingCompletionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshingCompletions not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -320,56 +320,56 @@ func _Query_SigningRequests_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_ResharingRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryResharingRequestRequest)
+func _Query_RefreshingRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRefreshingRequestRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).ResharingRequest(ctx, in)
+		return srv.(QueryServer).RefreshingRequest(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_ResharingRequest_FullMethodName,
+		FullMethod: Query_RefreshingRequest_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ResharingRequest(ctx, req.(*QueryResharingRequestRequest))
+		return srv.(QueryServer).RefreshingRequest(ctx, req.(*QueryRefreshingRequestRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_ResharingRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryResharingRequestsRequest)
+func _Query_RefreshingRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRefreshingRequestsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).ResharingRequests(ctx, in)
+		return srv.(QueryServer).RefreshingRequests(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_ResharingRequests_FullMethodName,
+		FullMethod: Query_RefreshingRequests_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ResharingRequests(ctx, req.(*QueryResharingRequestsRequest))
+		return srv.(QueryServer).RefreshingRequests(ctx, req.(*QueryRefreshingRequestsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_ResharingCompletions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryResharingCompletionsRequest)
+func _Query_RefreshingCompletions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRefreshingCompletionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).ResharingCompletions(ctx, in)
+		return srv.(QueryServer).RefreshingCompletions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_ResharingCompletions_FullMethodName,
+		FullMethod: Query_RefreshingCompletions_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ResharingCompletions(ctx, req.(*QueryResharingCompletionsRequest))
+		return srv.(QueryServer).RefreshingCompletions(ctx, req.(*QueryRefreshingCompletionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -406,16 +406,16 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_SigningRequests_Handler,
 		},
 		{
-			MethodName: "ResharingRequest",
-			Handler:    _Query_ResharingRequest_Handler,
+			MethodName: "RefreshingRequest",
+			Handler:    _Query_RefreshingRequest_Handler,
 		},
 		{
-			MethodName: "ResharingRequests",
-			Handler:    _Query_ResharingRequests_Handler,
+			MethodName: "RefreshingRequests",
+			Handler:    _Query_RefreshingRequests_Handler,
 		},
 		{
-			MethodName: "ResharingCompletions",
-			Handler:    _Query_ResharingCompletions_Handler,
+			MethodName: "RefreshingCompletions",
+			Handler:    _Query_RefreshingCompletions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -31,9 +31,9 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryDKGCompletions())
 	cmd.AddCommand(CmdQuerySigningRequest())
 	cmd.AddCommand(CmdQuerySigningRequests())
-	cmd.AddCommand(CmdQueryResharingRequest())
-	cmd.AddCommand(CmdQueryResharingRequests())
-	cmd.AddCommand(CmdQueryResharingCompletions())
+	cmd.AddCommand(CmdQueryRefreshingRequest())
+	cmd.AddCommand(CmdQueryRefreshingRequests())
+	cmd.AddCommand(CmdQueryRefreshingCompletions())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -226,10 +226,10 @@ func CmdQuerySigningRequests() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryResharingRequest() *cobra.Command {
+func CmdQueryRefreshingRequest() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "resharing-request [id]",
-		Short: "Query the resharing request by the given id",
+		Use:   "refreshing-request [id]",
+		Short: "Query the refreshing request by the given id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -244,7 +244,7 @@ func CmdQueryResharingRequest() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.ResharingRequest(cmd.Context(), &types.QueryResharingRequestRequest{Id: id})
+			res, err := queryClient.RefreshingRequest(cmd.Context(), &types.QueryRefreshingRequestRequest{Id: id})
 			if err != nil {
 				return err
 			}
@@ -258,10 +258,10 @@ func CmdQueryResharingRequest() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryResharingRequests() *cobra.Command {
+func CmdQueryRefreshingRequests() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "resharing-requests [status]",
-		Short: "Query resharing requests by the given status",
+		Use:   "refreshing-requests [status]",
+		Short: "Query refreshing requests by the given status",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -276,7 +276,7 @@ func CmdQueryResharingRequests() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.ResharingRequests(cmd.Context(), &types.QueryResharingRequestsRequest{Status: types.ResharingStatus(status)})
+			res, err := queryClient.RefreshingRequests(cmd.Context(), &types.QueryRefreshingRequestsRequest{Status: types.RefreshingStatus(status)})
 			if err != nil {
 				return err
 			}
@@ -290,10 +290,10 @@ func CmdQueryResharingRequests() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryResharingCompletions() *cobra.Command {
+func CmdQueryRefreshingCompletions() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "resharing-completions [id]",
-		Short: "Query resharing completions by the given resharing request id",
+		Use:   "refreshing-completions [id]",
+		Short: "Query refreshing completions by the given refreshing request id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -308,7 +308,7 @@ func CmdQueryResharingCompletions() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.ResharingCompletions(cmd.Context(), &types.QueryResharingCompletionsRequest{Id: id})
+			res, err := queryClient.RefreshingCompletions(cmd.Context(), &types.QueryRefreshingCompletionsRequest{Id: id})
 			if err != nil {
 				return err
 			}

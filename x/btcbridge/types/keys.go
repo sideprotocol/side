@@ -106,6 +106,6 @@ func DKGRequestKey(id uint64) []byte {
 	return append(DKGRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
-func DKGCompletionRequestKey(id uint64, consAddress string) []byte {
-	return append(append(DKGCompletionRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...), []byte(consAddress)...)
+func DKGCompletionRequestKey(id uint64, consPubKey string) []byte {
+	return append(append(DKGCompletionRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...), []byte(consPubKey)...)
 }

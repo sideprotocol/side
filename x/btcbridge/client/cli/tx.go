@@ -204,7 +204,7 @@ func CmdSubmitSignatures() *cobra.Command {
 // Complete DKG
 func CmdCompleteDKG() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "complete-dkg [id] [vaults] [validator-address] [signature]",
+		Use:   "complete-dkg [id] [vaults] [consensus pub key] [signature]",
 		Short: "Complete dkg request with new vaults",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {

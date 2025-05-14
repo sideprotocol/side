@@ -2,10 +2,12 @@ package types
 
 import (
 	"crypto/ed25519"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
 	"reflect"
 	"slices"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -49,10 +51,10 @@ func CheckDKGCompletions(completions []*DKGCompletion) bool {
 }
 
 // VerifySignature verifies the ed25519 signature against the given pub key and msg
-// Assume that the signature and pub key are hex encoded
+// Assume that the signature is hex encoded and the pub key is base64 encoded
 func VerifySignature(signature string, pubKey string, msg []byte) bool {
 	sigBytes, _ := hex.DecodeString(signature)
-	pubKeyBytes, _ := hex.DecodeString(pubKey)
+	pubKeyBytes, _ := base64.StdEncoding.DecodeString(pubKey)
 
 	return ed25519.Verify(pubKeyBytes, msg, sigBytes)
 }
@@ -71,8 +73,8 @@ func GetDKGCompletionSigMsg(id uint64, pubKeys []string) []byte {
 	return hash.Sha256(msg)
 }
 
-// GetResharingCompletionSigMsg gets the msg to be signed from the given data for the resharing completion
-func GetResharingCompletionSigMsg(id uint64) []byte {
+// GetRefreshingCompletionSigMsg gets the msg to be signed from the given data for the refreshing completion
+func GetRefreshingCompletionSigMsg(id uint64) []byte {
 	msg := make([]byte, 8)
 	binary.BigEndian.PutUint64(msg, id)
 
@@ -92,4 +94,13 @@ func GetSigningOption(signingType SigningType, options *SigningOptions) string {
 	default:
 		return ""
 	}
+}
+
+// GetExpirationTime gets the expiration time according to the given timeout duration
+func GetExpirationTime(currentTime time.Time, timeoutDuration time.Duration) time.Time {
+	if timeoutDuration == 0 {
+		return time.Time{}
+	}
+
+	return currentTime.Add(timeoutDuration)
 }

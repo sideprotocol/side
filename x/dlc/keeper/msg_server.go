@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"slices"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -38,6 +39,17 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if len(msg.Params.AllowedOracleParticipants) != 0 {
+		baseParticipants := m.tssKeeper.GetParams(ctx).AllowedDkgParticipants
+
+		for _, p := range msg.Params.AllowedOracleParticipants {
+			if !slices.Contains(baseParticipants, p) {
+				return nil, errorsmod.Wrap(types.ErrInvalidParams, "oracle participant not authorized")
+			}
+		}
+	}
+
 	m.SetParams(ctx, msg.Params)
 
 	return &types.MsgUpdateParamsResponse{}, nil

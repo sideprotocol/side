@@ -169,7 +169,7 @@ func (k Keeper) InitiateDKG(ctx sdk.Context, module string, ty string, intent in
 		Participants:   participants,
 		Threshold:      threshold,
 		BatchSize:      batchSize,
-		ExpirationTime: ctx.BlockTime().Add(k.DKGTimeoutPeriod(ctx)),
+		ExpirationTime: types.GetExpirationTime(ctx.BlockTime(), k.DKGTimeoutDuration(ctx)),
 		Status:         types.DKGStatus_DKG_STATUS_PENDING,
 	}
 

@@ -23,11 +23,13 @@ var (
 	ErrSigningRequestDoesNotExist = errorsmod.Register(ModuleName, 3000, "signing request does not exist")
 	ErrInvalidSigningStatus       = errorsmod.Register(ModuleName, 3001, "invalid signing status")
 
-	ErrInvalidParticipants              = errorsmod.Register(ModuleName, 4000, "invalid participants")
-	ErrResharingRequestDoesNotExist     = errorsmod.Register(ModuleName, 4001, "resharing request does not exist")
-	ErrInvalidResharingStatus           = errorsmod.Register(ModuleName, 4002, "invalid resharing status")
-	ErrResharingRequestExpired          = errorsmod.Register(ModuleName, 4003, "resharing request expired")
-	ErrResharingCompletionAlreadyExists = errorsmod.Register(ModuleName, 4004, "resharing completion already exists")
+	ErrInvalidDKGs                       = errorsmod.Register(ModuleName, 4000, "invalid dkgs")
+	ErrInvalidParticipants               = errorsmod.Register(ModuleName, 4001, "invalid participants")
+	ErrInvalidTimeoutDuration            = errorsmod.Register(ModuleName, 4002, "invalid timeout duration")
+	ErrRefreshingRequestDoesNotExist     = errorsmod.Register(ModuleName, 4003, "refreshing request does not exist")
+	ErrInvalidRefreshingStatus           = errorsmod.Register(ModuleName, 4004, "invalid refreshing status")
+	ErrRefreshingRequestExpired          = errorsmod.Register(ModuleName, 4005, "refreshing request expired")
+	ErrRefreshingCompletionAlreadyExists = errorsmod.Register(ModuleName, 4006, "refreshing completion already exists")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 5000, "invalid params")
 )

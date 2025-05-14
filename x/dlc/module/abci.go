@@ -33,17 +33,8 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		// get participants
-		participants, err := k.GetOracleParticipants(ctx)
-		if err != nil {
-			k.Logger(ctx).Info("failed to get oracle participants", "err", err)
-			return
-		}
-
-		threshold := len(participants) * 2 / 3
-
 		// initiate DKG
-		k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_PRICE_EVENT_NONCE)+int32(i), participants, uint32(threshold), k.NonceGenerationBatchSize(ctx))
+		k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_PRICE_EVENT_NONCE)+int32(i), k.GetOracleParticipants(ctx), k.OracleParticipantThreshold(ctx), k.NonceGenerationBatchSize(ctx))
 	}
 }
 
@@ -55,17 +46,8 @@ func generateDateEventNonces(ctx sdk.Context, k keeper.Keeper) {
 		return
 	}
 
-	// get participants
-	participants, err := k.GetOracleParticipants(ctx)
-	if err != nil {
-		k.Logger(ctx).Info("failed to get oracle participants", "err", err)
-		return
-	}
-
-	threshold := len(participants) * 2 / 3
-
 	// initiate DKG
-	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_DATE_EVENT_NONCE), participants, uint32(threshold), k.NonceGenerationBatchSize(ctx))
+	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_DATE_EVENT_NONCE), k.GetOracleParticipants(ctx), k.OracleParticipantThreshold(ctx), k.NonceGenerationBatchSize(ctx))
 }
 
 // generateLendingEventNonces generates nonces events for dlc lending events
@@ -76,15 +58,6 @@ func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
 		return
 	}
 
-	// get participants
-	participants, err := k.GetOracleParticipants(ctx)
-	if err != nil {
-		k.Logger(ctx).Info("failed to get oracle participants", "err", err)
-		return
-	}
-
-	threshold := len(participants) * 2 / 3
-
 	// initiate DKG
-	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_LENDING_EVENT_NONCE), participants, uint32(threshold), k.NonceGenerationBatchSize(ctx))
+	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_LENDING_EVENT_NONCE), k.GetOracleParticipants(ctx), k.OracleParticipantThreshold(ctx), k.NonceGenerationBatchSize(ctx))
 }

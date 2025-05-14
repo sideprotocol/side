@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/base64"
 	"encoding/hex"
 
 	errorsmod "cosmossdk.io/errors"
@@ -14,15 +15,15 @@ func NewMsgCompleteDKG(
 	sender string,
 	id uint64,
 	vaults []string,
-	consAddress string,
+	consPubKey string,
 	signature string,
 ) *MsgCompleteDKG {
 	return &MsgCompleteDKG{
-		Sender:           sender,
-		Id:               id,
-		Vaults:           vaults,
-		ConsensusAddress: consAddress,
-		Signature:        signature,
+		Sender:          sender,
+		Id:              id,
+		Vaults:          vaults,
+		ConsensusPubkey: consPubKey,
+		Signature:       signature,
 	}
 }
 
@@ -33,30 +34,35 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 	}
 
 	if len(m.Vaults) == 0 {
-		return ErrInvalidDKGCompletionRequest
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "vaults can not be empty")
 	}
 
 	vaults := make(map[string]bool)
 	for _, v := range m.Vaults {
 		_, err := sdk.AccAddressFromBech32(v)
 		if err != nil || vaults[v] {
-			return ErrInvalidDKGCompletionRequest
+			return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "invalid vault")
 		}
 
 		vaults[v] = true
 	}
 
-	if _, err := sdk.ConsAddressFromHex(m.ConsensusAddress); err != nil {
-		return ErrInvalidDKGCompletionRequest
+	consensusPubKey, err := base64.StdEncoding.DecodeString(m.ConsensusPubkey)
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "failed to decode the consensus pub key")
+	}
+
+	if len(consensusPubKey) != ed25519.PubKeySize {
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "incorrect consensus pub key size")
 	}
 
 	sigBytes, err := hex.DecodeString(m.Signature)
 	if err != nil {
-		return ErrInvalidDKGCompletionRequest
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "failed to decode signature")
 	}
 
 	if len(sigBytes) != ed25519.SignatureSize {
-		return ErrInvalidDKGCompletionRequest
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "invalid signature size")
 	}
 
 	return nil

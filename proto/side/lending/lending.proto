@@ -144,16 +144,20 @@ enum LoanStatus {
     Unspecified = 0;
     // Loan Requested
     Requested = 1;
+    // Loan Authorized
+    Authorized = 2;
+    // Loan Rejected
+    Rejected = 3;
     // Loan Open
-    Open = 2;
+    Open = 4;
     // Loan Repaid
-    Repaid = 3;
+    Repaid = 5;
     // Loan Defaulted
-    Defaulted = 4;
+    Defaulted = 6;
     // Loan Liquidated
-    Liquidated = 5;
+    Liquidated = 7;
     // Loan Closed
-    Closed = 6;
+    Closed = 8;
 }
 
 // Authorization Status
@@ -204,7 +208,8 @@ message Loan {
       (gogoproto.nullable)   = false
     ];
     string liquidation_price = 17 [
-      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable) = false
     ];
     uint64 liquidation_event_id = 18;

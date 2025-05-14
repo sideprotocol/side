@@ -1,11 +1,13 @@
 package types
 
 import (
+	"encoding/base64"
 	"strings"
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 )
 
 var (
@@ -27,17 +29,14 @@ var (
 	// default nonce queue size for lending events
 	DefaultLendingEventNonceQueueSize = uint32(1000)
 
-	// default oracle participant base number
-	DefaultOracleParticipantBaseNum = uint32(50)
-
-	// maximum oracle participant base number
-	MaxOracleParticipantBaseNum = uint32(100)
-
-	// default oracle participant number
-	DefaultOracleParticipantNum = uint32(21)
-
 	// minimum oracle participant number
 	MinOracleParticipantNum = uint32(3)
+
+	// default oracle participant number
+	DefaultOracleParticipantNum = uint32(3)
+
+	// default oracle participant threshold
+	DefaultOracleParticipantThreshold = uint32(2)
 
 	// default nonce generation batch size
 	DefaultNonceGenerationBatchSize = uint32(200)
@@ -56,8 +55,9 @@ func NewParams() Params {
 		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
 		DateInterval:               DefaultDateInterval,
 		LendingEventNonceQueueSize: DefaultLendingEventNonceQueueSize,
-		OracleParticipantBaseNum:   DefaultOracleParticipantBaseNum,
+		AllowedOracleParticipants:  []string{},
 		OracleParticipantNum:       DefaultOracleParticipantNum,
+		OracleParticipantThreshold: DefaultOracleParticipantThreshold,
 		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
 	}
 }
@@ -91,12 +91,20 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(ErrInvalidParams, "lending event nonce queue size must be greater than 0")
 	}
 
-	if p.OracleParticipantBaseNum > MaxOracleParticipantBaseNum {
-		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant base number can not be greater than %d", MaxOracleParticipantBaseNum)
+	if err := validateOracleParticipants(p.AllowedOracleParticipants); err != nil {
+		return err
 	}
 
-	if p.OracleParticipantNum < MinOracleParticipantNum || p.OracleParticipantNum > p.OracleParticipantBaseNum {
-		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number must be between [%d, %d]", MinOracleParticipantNum, p.OracleParticipantBaseNum)
+	if len(p.AllowedOracleParticipants) > 0 && p.OracleParticipantNum > uint32(len(p.AllowedOracleParticipants)) {
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number can not be greater than allowed oracle participant number %d", len(p.AllowedOracleParticipants))
+	}
+
+	if p.OracleParticipantNum < MinOracleParticipantNum {
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number can not be less than min oracle participant number %d", MinOracleParticipantNum)
+	}
+
+	if p.OracleParticipantThreshold == 0 || p.OracleParticipantThreshold > p.OracleParticipantNum {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid oracle participant threshold")
 	}
 
 	if p.NonceGenerationBatchSize < 2 {
@@ -118,6 +126,23 @@ func validatePriceInterval(priceInterval PriceInterval) error {
 
 	if !priceInterval.Interval.IsPositive() {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid price interval")
+	}
+
+	return nil
+}
+
+// validateOracleParticipants validates the given oracle participants
+// Note: the participant is the ed25519 consensus pub key
+func validateOracleParticipants(participants []string) error {
+	for _, p := range participants {
+		consensusPubKey, err := base64.StdEncoding.DecodeString(p)
+		if err != nil {
+			return errorsmod.Wrap(ErrInvalidParams, "failed to decode the participant consensus pub key")
+		}
+
+		if len(consensusPubKey) != ed25519.PubKeySize {
+			return errorsmod.Wrap(ErrInvalidParams, "incorrect participant consensus pub key size")
+		}
 	}
 
 	return nil

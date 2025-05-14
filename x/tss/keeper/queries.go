@@ -81,36 +81,36 @@ func (k Keeper) SigningRequests(goCtx context.Context, req *types.QuerySigningRe
 	return &types.QuerySigningRequestsResponse{Requests: k.GetSigningRequests(ctx, req.Status)}, nil
 }
 
-func (k Keeper) ResharingRequest(goCtx context.Context, req *types.QueryResharingRequestRequest) (*types.QueryResharingRequestResponse, error) {
+func (k Keeper) RefreshingRequest(goCtx context.Context, req *types.QueryRefreshingRequestRequest) (*types.QueryRefreshingRequestResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !k.HasResharingRequest(ctx, req.Id) {
-		return nil, status.Error(codes.NotFound, "resharing request does not exist")
+	if !k.HasRefreshingRequest(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "refreshing request does not exist")
 	}
 
-	return &types.QueryResharingRequestResponse{Request: k.GetResharingRequest(ctx, req.Id)}, nil
+	return &types.QueryRefreshingRequestResponse{Request: k.GetRefreshingRequest(ctx, req.Id)}, nil
 }
 
-func (k Keeper) ResharingRequests(goCtx context.Context, req *types.QueryResharingRequestsRequest) (*types.QueryResharingRequestsResponse, error) {
+func (k Keeper) RefreshingRequests(goCtx context.Context, req *types.QueryRefreshingRequestsRequest) (*types.QueryRefreshingRequestsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryResharingRequestsResponse{Requests: k.GetResharingRequests(ctx, req.Status)}, nil
+	return &types.QueryRefreshingRequestsResponse{Requests: k.GetRefreshingRequests(ctx, req.Status)}, nil
 }
 
-func (k Keeper) ResharingCompletions(goCtx context.Context, req *types.QueryResharingCompletionsRequest) (*types.QueryResharingCompletionsResponse, error) {
+func (k Keeper) RefreshingCompletions(goCtx context.Context, req *types.QueryRefreshingCompletionsRequest) (*types.QueryRefreshingCompletionsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryResharingCompletionsResponse{Completions: k.GetResharingCompletions(ctx, req.Id)}, nil
+	return &types.QueryRefreshingCompletionsResponse{Completions: k.GetRefreshingCompletions(ctx, req.Id)}, nil
 }
