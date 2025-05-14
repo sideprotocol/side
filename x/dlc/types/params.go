@@ -40,6 +40,9 @@ var (
 
 	// default nonce generation batch size
 	DefaultNonceGenerationBatchSize = uint32(200)
+
+	// default nonce generation interval in blocks
+	DefaultNonceGenerationInterval = int64(50) // 50 blocks
 )
 
 // NewParams creates a new Params instance
@@ -59,6 +62,7 @@ func NewParams() Params {
 		OracleParticipantNum:       DefaultOracleParticipantNum,
 		OracleParticipantThreshold: DefaultOracleParticipantThreshold,
 		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
+		NonceGenerationInterval:    DefaultNonceGenerationInterval,
 	}
 }
 
@@ -109,6 +113,10 @@ func (p Params) Validate() error {
 
 	if p.NonceGenerationBatchSize < 2 {
 		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation batch size can not be less than 2")
+	}
+
+	if p.NonceGenerationInterval <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation interval must be greater than 0")
 	}
 
 	return nil
