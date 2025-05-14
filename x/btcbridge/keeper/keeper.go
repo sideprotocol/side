@@ -26,11 +26,15 @@ type (
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
 
-		bankKeeper      types.BankKeeper
-		stakingKeeper   types.StakingKeeper
-		oracleKeeper    types.OracleKeeper
-		incentiveKeeper types.IncentiveKeeper
-		tssKeeper       types.TSSKeeper
+		bankKeeper        types.BankKeeper
+		stakingKeeper     types.StakingKeeper
+		oracleKeeper      types.OracleKeeper
+		incentiveKeeper   types.IncentiveKeeper
+		tssKeeper         types.TSSKeeper
+		ibcclientKeeper   types.IBCClientKeeper
+		ibcconnectionKeeper types.IBCConnectionKeeper
+		ibcchannelKeeper  types.IBCChannelKeeper
+		ibctransferKeeper types.IBCTransferKeeper
 
 		authority string
 	}
@@ -45,19 +49,27 @@ func NewKeeper(
 	oracleKeeper types.OracleKeeper,
 	incentiveKeeper types.IncentiveKeeper,
 	tssKeeper types.TSSKeeper,
+	ibcclientKeeper types.IBCClientKeeper,
+	ibcconnectionKeeper types.IBCConnectionKeeper,
+	ibcchannelKeeper types.IBCChannelKeeper,
+	ibctransferKeeper types.IBCTransferKeeper,
 	authority string,
 ) *Keeper {
 	return &Keeper{
-		cdc:             cdc,
-		storeKey:        storeKey,
-		memKey:          memKey,
-		bankKeeper:      bankKeeper,
-		stakingKeeper:   stakingKeeper,
-		oracleKeeper:    oracleKeeper,
-		incentiveKeeper: incentiveKeeper,
-		tssKeeper:       tssKeeper,
-		BaseUTXOKeeper:  *NewBaseUTXOKeeper(cdc, storeKey),
-		authority:       authority,
+		cdc:               cdc,
+		storeKey:          storeKey,
+		memKey:            memKey,
+		bankKeeper:        bankKeeper,
+		stakingKeeper:     stakingKeeper,
+		oracleKeeper:      oracleKeeper,
+		incentiveKeeper:   incentiveKeeper,
+		tssKeeper:         tssKeeper,
+		ibcclientKeeper:   ibcclientKeeper,
+		ibcconnectionKeeper: ibcconnectionKeeper,
+		ibcchannelKeeper:  ibcchannelKeeper,
+		ibctransferKeeper: ibctransferKeeper,
+		BaseUTXOKeeper:    *NewBaseUTXOKeeper(cdc, storeKey),
+		authority:         authority,
 	}
 }
 

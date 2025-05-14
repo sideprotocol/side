@@ -699,7 +699,7 @@ func (k Keeper) BurnBtcNetworkFee(ctx sdk.Context, sender string, packet string)
 }
 
 // handleWithdrawProtocolFee performs the protocol fee handling and returns the actual withdrawal amount
-func (k Keeper) handleWithdrawProtocolFee(ctx sdk.Context, sender sdk.AccAddress, amount sdk.Coin) (sdk.Coin, error) {
+func (k Keeper) HandleWithdrawProtocolFee(ctx sdk.Context, sender sdk.AccAddress, amount sdk.Coin) (sdk.Coin, error) {
 	params := k.GetParams(ctx)
 
 	protocolFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.ProtocolFees.WithdrawFee)

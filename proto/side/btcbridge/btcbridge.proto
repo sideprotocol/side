@@ -63,6 +63,14 @@ message WithdrawRequest {
   string txid = 4;
 }
 
+// Withdrawal request via IBC
+message IBCWithdrawRequest {
+  string channel_id = 1;
+  uint64 sequence = 2;
+  string address = 3;
+  string amount = 4;
+}
+
 // Bitcoin UTXO
 message UTXO {
   string txid = 1;

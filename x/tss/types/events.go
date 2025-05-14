@@ -31,7 +31,6 @@ const (
 
 	AttributeKeyDKGId               = "dkg_id"
 	AttributeKeyRemovedParticipants = "removed_participants"
-	AttributeKeyNewParticipants     = "new_participants"
 )
 
 const (
