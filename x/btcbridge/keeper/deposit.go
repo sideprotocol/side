@@ -21,14 +21,14 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 		return nil, nil, err
 	}
 
-	assetType, recipient, err := k.Mint(ctx, msg.Sender, tx, prevTx, uint64(k.oracleKeeper.GetBlockHeader(ctx, msg.Blockhash).Height))
+	assetType, recipient, amount, err := k.Mint(ctx, msg.Sender, tx, prevTx, uint64(k.oracleKeeper.GetBlockHeader(ctx, msg.Blockhash).Height))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	// hook
 	if assetType == types.AssetType_ASSET_TYPE_BTC {
-		if err := k.AfterDeposit(ctx, recipient.EncodeAddress()); err != nil {
+		if err := k.AfterDeposit(ctx, recipient.EncodeAddress(), *amount, tx.MsgTx()); err != nil {
 			return nil, nil, err
 		}
 	}
@@ -37,10 +37,10 @@ func (k Keeper) ProcessBitcoinDepositTransaction(ctx sdk.Context, msg *types.Msg
 }
 
 // Mint performs the minting operation of the voucher token
-func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btcutil.Tx, height uint64) (types.AssetType, btcutil.Address, error) {
+func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btcutil.Tx, height uint64) (types.AssetType, btcutil.Address, *sdk.Coin, error) {
 	hash := tx.Hash().String()
 	if k.existsInHistory(ctx, hash) {
-		return types.AssetType_ASSET_TYPE_UNSPECIFIED, nil, types.ErrTransactionAlreadyMinted
+		return types.AssetType_ASSET_TYPE_UNSPECIFIED, nil, nil, types.ErrTransactionAlreadyMinted
 	}
 
 	k.addToMintHistory(ctx, hash)
@@ -53,7 +53,7 @@ func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btc
 	// if the edict is not nil, it indicates that this is a legal runes deposit tx
 	edict, err := types.CheckRunesDepositTransaction(tx.MsgTx(), params.Vaults)
 	if err != nil {
-		return types.AssetType_ASSET_TYPE_UNSPECIFIED, nil, err
+		return types.AssetType_ASSET_TYPE_UNSPECIFIED, nil, nil, err
 	}
 
 	isRunes := edict != nil
@@ -65,52 +65,57 @@ func (k Keeper) Mint(ctx sdk.Context, sender string, tx *btcutil.Tx, prevTx *btc
 
 	// check if the sender is trusted to relay runes deposit
 	if isRunes && !k.IsTrustedNonBtcRelayer(ctx, sender) {
-		return assetType, nil, types.ErrUntrustedNonBtcRelayer
+		return assetType, nil, nil, types.ErrUntrustedNonBtcRelayer
 	}
 
 	// extract the recipient for minting voucher token
 	recipient, err := types.ExtractRecipientAddr(tx.MsgTx(), prevTx.MsgTx(), params.Vaults, isRunes, chainCfg)
 	if err != nil {
-		return assetType, nil, err
+		return assetType, nil, nil, err
 	}
+
+	var amount *sdk.Coin
 
 	if !isRunes {
 		out, vout, vault, err := k.getOutputForMintBTC(ctx, tx.MsgTx(), chainCfg)
 		if err != nil {
-			return assetType, nil, err
+			return assetType, nil, nil, err
 		}
 
-		if err := k.mintBTC(ctx, tx, height, recipient.EncodeAddress(), vault, out, vout, params.BtcVoucherDenom); err != nil {
-			return assetType, nil, err
+		amount, err = k.mintBTC(ctx, tx, height, recipient.EncodeAddress(), vault, out, vout, params.BtcVoucherDenom)
+		if err != nil {
+			return assetType, nil, nil, err
 		}
 	} else {
 		outs, vouts, vaults, err := k.getOutputsForMintRunes(ctx, tx.MsgTx(), edict, chainCfg)
 		if err != nil {
-			return assetType, nil, err
+			return assetType, nil, nil, err
 		}
 
-		if err := k.mintRunes(ctx, tx, height, recipient.EncodeAddress(), vaults, outs, vouts, edict.Id, edict.Amount); err != nil {
-			return assetType, nil, err
+		amount, err = k.mintRunes(ctx, tx, height, recipient.EncodeAddress(), vaults, outs, vouts, edict.Id, edict.Amount)
+		if err != nil {
+			return assetType, nil, nil, err
 		}
 	}
 
-	return assetType, recipient, nil
+	return assetType, recipient, amount, nil
 }
 
-func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vault string, out *wire.TxOut, vout int, denom string) error {
+func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vault string, out *wire.TxOut, vout int, denom string) (*sdk.Coin, error) {
 	amount := sdk.NewInt64Coin(denom, out.Value)
 
 	recipientAddr, err := sdk.AccAddressFromBech32(recipient)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(amount)); err != nil {
-		return err
+		return nil, err
 	}
 
-	if err := k.mintBTCWithProtocolFee(ctx, recipientAddr, amount); err != nil {
-		return err
+	actualAmount, err := k.mintBTCWithProtocolFee(ctx, recipientAddr, amount)
+	if err != nil {
+		return nil, err
 	}
 
 	utxo := types.UTXO{
@@ -125,28 +130,28 @@ func (k Keeper) mintBTC(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipien
 
 	k.saveUTXO(ctx, &utxo)
 
-	return nil
+	return actualAmount, nil
 }
 
-func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vaults []string, outs []*wire.TxOut, vouts []int, id *types.RuneId, amount string) error {
-	coins := sdk.NewCoins(sdk.NewCoin(id.Denom(), sdkmath.NewIntFromBigInt(types.RuneAmountFromString(amount).Big())))
+func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipient string, vaults []string, outs []*wire.TxOut, vouts []int, id *types.RuneId, amount string) (*sdk.Coin, error) {
+	coin := sdk.NewCoin(id.Denom(), sdkmath.NewIntFromBigInt(types.RuneAmountFromString(amount).Big()))
 
 	recipientAddr, err := sdk.AccAddressFromBech32(recipient)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, coins); err != nil {
-		return err
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(coin)); err != nil {
+		return nil, err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipientAddr, coins); err != nil {
-		return err
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipientAddr, sdk.NewCoins(coin)); err != nil {
+		return nil, err
 	}
 
 	if k.ProtocolDepositFeeEnabled(ctx) {
 		if err := k.handleRunesProtocolFee(ctx, tx.Hash().String(), height, outs[1], vouts[1], vaults[1]); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
@@ -166,35 +171,38 @@ func (k Keeper) mintRunes(ctx sdk.Context, tx *btcutil.Tx, height uint64, recipi
 
 	k.saveUTXO(ctx, &utxo)
 
-	return nil
+	return &coin, nil
 }
 
 // mintBTCWithProtocolFee performs btc minting along with the protocol fee handling
-func (k Keeper) mintBTCWithProtocolFee(ctx sdk.Context, recipient sdk.AccAddress, amount sdk.Coin) error {
+func (k Keeper) mintBTCWithProtocolFee(ctx sdk.Context, recipient sdk.AccAddress, amount sdk.Coin) (*sdk.Coin, error) {
 	params := k.GetParams(ctx)
 
 	var err error
-	depositAmount := amount
 
 	if k.ProtocolDepositFeeEnabled(ctx) {
 		protocolFee := sdk.NewInt64Coin(params.BtcVoucherDenom, params.ProtocolFees.DepositFee)
 		protocolFeeCollector := sdk.MustAccAddressFromBech32(params.ProtocolFees.Collector)
 
-		depositAmount, err = depositAmount.SafeSub(protocolFee)
+		amount, err = amount.SafeSub(protocolFee)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, protocolFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	if depositAmount.Amount.Int64() < params.ProtocolLimits.BtcMinDeposit {
-		return types.ErrInvalidDepositAmount
+	if amount.Amount.Int64() < params.ProtocolLimits.BtcMinDeposit {
+		return nil, types.ErrInvalidDepositAmount
 	}
 
-	return k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(depositAmount))
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(amount)); err != nil {
+		return nil, err
+	}
+
+	return &amount, nil
 }
 
 // handleRunesProtocolFee performs the protocol fee handling for runes deposit

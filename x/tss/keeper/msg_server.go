@@ -88,14 +88,19 @@ func (m msgServer) Refresh(goCtx context.Context, msg *types.MsgRefresh) (*types
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	for _, dkgId := range msg.DkgIds {
+	for i, dkgId := range msg.DkgIds {
 		if !m.HasDKGRequest(ctx, dkgId) {
-			return nil, errorsmod.Wrapf(types.ErrDKGRequestDoesNotExist, "%d", dkgId)
+			return nil, errorsmod.Wrapf(types.ErrDKGRequestDoesNotExist, "dkg %d", dkgId)
 		}
 
 		dkgRequest := m.GetDKGRequest(ctx, dkgId)
 		if dkgRequest.Status != types.DKGStatus_DKG_STATUS_COMPLETED {
 			return nil, errorsmod.Wrapf(types.ErrInvalidDKGStatus, "dkg %d not completed", dkgId)
+		}
+
+		remainingParticipantNum := len(dkgRequest.Participants) - len(msg.RemovedParticipants)
+		if remainingParticipantNum < types.MinDKGParticipantNum {
+			return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "remaining participants %d cannot be less than min participants %d", remainingParticipantNum, types.MinDKGParticipantNum)
 		}
 
 		for _, p := range msg.RemovedParticipants {
@@ -104,7 +109,11 @@ func (m msgServer) Refresh(goCtx context.Context, msg *types.MsgRefresh) (*types
 			}
 		}
 
-		m.InitiateRefreshingRequest(ctx, dkgId, msg.RemovedParticipants, msg.NewParticipants, msg.TimeoutDuration)
+		if msg.Thresholds[i] > uint32(remainingParticipantNum) {
+			return nil, errorsmod.Wrapf(types.ErrInvalidThresholds, "threshold %d cannot be greater than participants %d for dkg %d", msg.Thresholds[i], remainingParticipantNum, dkgId)
+		}
+
+		m.InitiateRefreshingRequest(ctx, dkgId, msg.RemovedParticipants, msg.Thresholds[i], msg.TimeoutDuration)
 	}
 
 	return &types.MsgRefreshResponse{}, nil

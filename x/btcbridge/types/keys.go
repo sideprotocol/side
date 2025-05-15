@@ -42,6 +42,8 @@ var (
 	DKGRequestKeyPrefix           = []byte{0x41} // prefix for each key to a DKG request
 	DKGCompletionRequestKeyPrefix = []byte{0x42} // prefix for each key to a DKG completion request
 	VaultVersionKey               = []byte{0x43} // key for vault version increased by 1 once updated
+
+	IBCWithdrawRequestQueueKeyPrefix = []byte{0x50} // prefix for BTC withdrawal request queue via IBC
 )
 
 func BtcWithdrawRequestKey(sequence uint64) []byte {
@@ -108,4 +110,8 @@ func DKGRequestKey(id uint64) []byte {
 
 func DKGCompletionRequestKey(id uint64, consPubKey string) []byte {
 	return append(append(DKGCompletionRequestKeyPrefix, sdk.Uint64ToBigEndian(id)...), []byte(consPubKey)...)
+}
+
+func IBCWithdrawRequestQueueKey(channelId string, sequence uint64) []byte {
+	return append(append(IBCWithdrawRequestQueueKeyPrefix, []byte(channelId)...), sdk.Uint64ToBigEndian(sequence)...)
 }

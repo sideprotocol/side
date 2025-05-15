@@ -61,4 +61,6 @@ var (
 	ErrInvalidPsbt                      = errorsmod.Register(ModuleName, 7108, "invalid psbt")
 
 	ErrInvalidConsolidation = errorsmod.Register(ModuleName, 8100, "invalid consolidation")
+
+	ErrInvalidIBCTransferScript = errorsmod.Register(ModuleName, 9000, "invalid deposit script for IBC transfer")
 )

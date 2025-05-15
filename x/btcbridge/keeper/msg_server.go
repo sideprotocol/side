@@ -159,7 +159,7 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 
 	if m.ProtocolWithdrawFeeEnabled(ctx) {
 		// deduct the protocol fee and get the actual withdrawal amount
-		amount, err = m.handleWithdrawProtocolFee(ctx, sender, amount)
+		amount, err = m.HandleWithdrawProtocolFee(ctx, sender, amount)
 		if err != nil {
 			return nil, err
 		}

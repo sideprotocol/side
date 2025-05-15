@@ -12,6 +12,7 @@ import (
 
 // EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+	handleIBCWithdrawRequests(ctx, k)
 	handleBtcWithdrawRequests(ctx, k)
 	handleDKGRequests(ctx, k)
 	handleVaultTransfer(ctx, k)
@@ -31,7 +32,7 @@ func handleBtcWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 		return
 	}
 
-	// get the pending btc withdrawal request
+	// get the pending btc withdrawal requests
 	pendingWithdrawRequests := k.GetPendingBtcWithdrawRequests(ctx, p.WithdrawParams.MaxBtcBatchWithdrawNum)
 	if len(pendingWithdrawRequests) == 0 {
 		return
@@ -155,5 +156,49 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 				k.Logger(ctx).Info("vaults transfer completed", "source version", sourceVersion, "destination version", destVersion)
 			}
 		}
+	}
+}
+
+// handleIBCWithdrawRequests handles BTC withdrawal requests via IBC
+func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
+	// get the pending IBC withdrawal requests
+	pendingIBCWithdrawRequests := k.GetPendingIBCWithdrawRequests(ctx, k.MaxBtcBatchWithdrawNum(ctx))
+	if len(pendingIBCWithdrawRequests) == 0 {
+		return
+	}
+
+	// handle the IBC withdrawal request
+	for _, req := range pendingIBCWithdrawRequests {
+		var err error
+
+		address := sdk.MustAccAddressFromBech32(req.Address)
+		amount, _ := sdk.ParseCoinNormalized(req.Amount)
+
+		if k.ProtocolWithdrawFeeEnabled(ctx) {
+			// deduct the protocol fee and get the actual withdrawal amount
+			amount, err = k.HandleWithdrawProtocolFee(ctx, address, amount)
+			if err != nil {
+				k.Logger(ctx).Info("failed to handle protocol fee for ibc withdrawal", "address", address, "amount", amount, "err", err)
+				continue
+			}
+		}
+
+		withdrawRequest, err := k.HandleWithdrawal(ctx, req.Address, amount)
+		if err != nil {
+			k.Logger(ctx).Info("failed to handle ibc withdrawal", "address", address, "amount", amount, "err", err)
+			continue
+		}
+
+		// remove from queue
+		k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
+
+		// Emit events
+		k.EmitEvent(ctx, req.Address,
+			sdk.NewAttribute("amount", amount.String()),
+			sdk.NewAttribute("sequence", fmt.Sprintf("%d", withdrawRequest.Sequence)),
+			sdk.NewAttribute("txid", withdrawRequest.Txid),
+			sdk.NewAttribute("channel_id", req.ChannelId),
+			sdk.NewAttribute("channel_sequence", fmt.Sprintf("%d", req.Sequence)),
+		)
 	}
 }
