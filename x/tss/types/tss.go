@@ -74,9 +74,15 @@ func GetDKGCompletionSigMsg(id uint64, pubKeys []string) []byte {
 }
 
 // GetRefreshingCompletionSigMsg gets the msg to be signed from the given data for the refreshing completion
-func GetRefreshingCompletionSigMsg(id uint64) []byte {
+// Assume that the given pub keys are hex encoded
+func GetRefreshingCompletionSigMsg(id uint64, pubKeys []string) []byte {
 	msg := make([]byte, 8)
 	binary.BigEndian.PutUint64(msg, id)
+
+	for _, pubKey := range pubKeys {
+		pubKeyBytes, _ := hex.DecodeString(pubKey)
+		msg = append(msg, pubKeyBytes...)
+	}
 
 	return hash.Sha256(msg)
 }

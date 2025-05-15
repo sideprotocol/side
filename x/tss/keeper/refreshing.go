@@ -215,7 +215,7 @@ func (k Keeper) CompleteRefreshing(ctx sdk.Context, sender string, id uint64, co
 		return types.ErrRefreshingCompletionAlreadyExists
 	}
 
-	if !types.VerifySignature(signature, consensusPubKey, types.GetRefreshingCompletionSigMsg(id)) {
+	if !types.VerifySignature(signature, consensusPubKey, types.GetRefreshingCompletionSigMsg(id, k.GetDKGPubKeys(ctx, refreshingRequest.DkgId))) {
 		return types.ErrInvalidSignature
 	}
 
