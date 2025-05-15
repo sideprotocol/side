@@ -86,7 +86,7 @@ func TestGenKeys(t *testing.T) {
 	t.Log("bb", bb.EncodeAddress())
 
 	// println("bech32:", text)
-	assert.Equal(t, true, false)
+	assert.Equal(t, sdk.AccAddress(b).String(), bb.EncodeAddress(), "bech32 address should be equal")
 
 	// addrs := []sdk.Address{sdk.AccAddress(taproot.GenPrivKey().PubKey().Address()), sdk.AccAddress(segwit.GenPrivKey().PubKey().Address())}
 
@@ -123,6 +123,7 @@ func TestValAddressEncodeDecode(t *testing.T) {
 		"sidevaloper1qqy3sqqmpv83xqcfry8qvyqazvqp6qqgru23y9q2q52swxggqg8sya58uzu",
 		"sidevaloper1qq0pkzghzcvsz8qwzcqq6xs6rv8qwxctzyzqq8shzy9qu8qhrcgsq8gftvt",
 		"sidevaloper1qqr3wzgzqvpqxycjzyr3kzcequxskxqxzydsjqgeqygq2xqxqgtpuaaajmf",
+		"sidevaloper1yezttrzdh00zmtzzfau9vuy360hxkjnl3gfxw2jzfqz67d8t8myq79pv5g",
 	}
 
 	for _, a := range vals {

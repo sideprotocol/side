@@ -46,6 +46,12 @@ func TestNumbers(t *testing.T) {
 func TestSegwit(t *testing.T) {
 	mnemonic := "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
 	seed := bip39.NewSeed(mnemonic, "")
+	expected_address := "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+
+	SIDE_HRP := "bc"
+	sdk.GetConfig().SetBech32PrefixForAccount(SIDE_HRP, SIDE_HRP)
+	sdk.GetConfig().Seal()
+	bech32.SIDE_HRP = SIDE_HRP
 
 	masterKey, chParams := hd.ComputeMastersFromSeed(seed)
 	derivedPrivKey, err := hd.DerivePrivateKeyForPath(masterKey, chParams, "m/84'/0'/0'/0/0")
@@ -62,9 +68,14 @@ func TestSegwit(t *testing.T) {
 	verify := pubKey.VerifySignature([]byte("1234"), sig)
 	assert.True(t, verify, "Verify should be true")
 
+	assert.Equal(t, 33, len(pubKey.Address().Bytes()), "Address length should be 33 bytes")
 	bech32Address, err := bech32.Encode("bc", pubKey.Address().Bytes())
 	// bech32Address, err := segwit.BitCoinAddr(pubKey.Bytes())
 	assert.NoError(t, err)
+
+	// bech32Address = sdk.AccAddress(pubKey.Address()).String()
+
+	require.Equal(t, expected_address, bech32Address, "Address should be equal to expected address")
 	t.Logf("Generated SegWit Address: %s", bech32Address)
 	// Check if the Bech32 encoded address has the correct prefix and structure.
 	assert.True(t, strings.HasPrefix(bech32Address, "bc1q"), "Address should start with 'bc1q'")
@@ -82,8 +93,7 @@ func TestSegwit(t *testing.T) {
 	//hrp, bz, err := bech32.Decode("bc1qc2zm9xeje96yh6st7wmy60mmsteemsm3tfr2tn", 1000)
 	assert.NoError(t, err)
 	println(hrp, bz)
-	sdk.GetConfig().SetBech32PrefixForAccount("bc", "bc")
-	sdk.GetConfig().Seal()
+
 	acc, err := sdk.AccAddressFromBech32(bech32Address)
 	require.NoError(t, err)
 	t.Logf("Generated SegWit Address: %s", acc)

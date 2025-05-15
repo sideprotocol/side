@@ -167,7 +167,6 @@ func (pubKey *PubKey) Address() crypto.Address {
 
 	tp := txscript.ComputeTaprootKeyNoScript(pk)
 	witnessProg := schnorr.SerializePubKey(tp)
-
 	return crypto.Address(witnessProg)
 
 }
