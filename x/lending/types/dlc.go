@@ -36,12 +36,22 @@ func BuildDLCMeta(depositTxs []*psbt.Packet, vaultPkScript []byte, liquidationCe
 		return nil, err
 	}
 
-	multisigScript, err := CreateMultisigScript([]string{borrowerPubKey, dcmPubKey})
+	borrowerPubKeyBytes, err := hex.DecodeString(borrowerPubKey)
+	if err != nil {
+		return nil, errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower public key")
+	}
+
+	dcmPubKeyBytes, err := hex.DecodeString(dcmPubKey)
+	if err != nil {
+		return nil, errorsmod.Wrap(ErrInvalidPubKey, "failed to decode dcm public key")
+	}
+
+	multisigScript, err := CreateMultisigScript([][]byte{borrowerPubKeyBytes, dcmPubKeyBytes})
 	if err != nil {
 		return nil, err
 	}
 
-	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubKey, finalTimeout)
+	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubKeyBytes, finalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +62,7 @@ func BuildDLCMeta(depositTxs []*psbt.Packet, vaultPkScript []byte, liquidationCe
 
 	multisigScriptProof := merkleTree.LeafMerkleProofs[0]
 
-	internalKey := GetInternalKey()
+	internalKey := GetInternalKey(borrowerPubKeyBytes, dcmPubKeyBytes)
 	controlBlock, err := GetControlBlock(internalKey, multisigScriptProof)
 	if err != nil {
 		return nil, err
@@ -192,12 +202,17 @@ func VerifyLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borro
 		return errorsmod.Wrap(ErrInvalidAdaptorSignatures, "incorrect signature number")
 	}
 
-	pubKeyBytes, err := hex.DecodeString(borrowerPubKey)
+	borrowerPubKeyBytes, err := hex.DecodeString(borrowerPubKey)
 	if err != nil {
 		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower public key")
 	}
 
-	script, err := CreateMultisigScript([]string{borrowerPubKey, dcmPubKey})
+	dcmPubKeyBytes, err := hex.DecodeString(dcmPubKey)
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode dcm public key")
+	}
+
+	script, err := CreateMultisigScript([][]byte{borrowerPubKeyBytes, dcmPubKeyBytes})
 	if err != nil {
 		return err
 	}
@@ -213,7 +228,7 @@ func VerifyLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borro
 			return errorsmod.Wrap(ErrInvalidAdaptorSignature, "failed to decode adaptor signature")
 		}
 
-		if !adaptor.Verify(sigBytes, sigHash, pubKeyBytes, adaptorPoint) {
+		if !adaptor.Verify(sigBytes, sigHash, borrowerPubKeyBytes, adaptorPoint) {
 			return ErrInvalidAdaptorSignature
 		}
 	}
@@ -263,12 +278,17 @@ func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 		return errorsmod.Wrap(ErrInvalidSignatures, "incorrect signature number")
 	}
 
-	pubKeyBytes, err := hex.DecodeString(borrowerPubKey)
+	borrowerPubKeyBytes, err := hex.DecodeString(borrowerPubKey)
 	if err != nil {
 		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower public key")
 	}
 
-	script, err := CreateMultisigScript([]string{borrowerPubKey, dcmPubKey})
+	dcmPubKeyBytes, err := hex.DecodeString(dcmPubKey)
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode dcm public key")
+	}
+
+	script, err := CreateMultisigScript([][]byte{borrowerPubKeyBytes, dcmPubKeyBytes})
 	if err != nil {
 		return err
 	}
@@ -284,7 +304,7 @@ func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 			return errorsmod.Wrap(ErrInvalidSignature, "failed to decode adaptor signature")
 		}
 
-		if !schnorr.Verify(sigBytes, sigHash, pubKeyBytes) {
+		if !schnorr.Verify(sigBytes, sigHash, borrowerPubKeyBytes) {
 			return ErrInvalidSignature
 		}
 	}

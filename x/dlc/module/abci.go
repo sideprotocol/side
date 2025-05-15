@@ -33,6 +33,14 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
+		// immediate generation required if there exist pending triggered price events
+		if k.GetTriggeredPriceEventQueueCount(ctx, pi.PricePair) == 0 {
+			// check block height
+			if ctx.BlockHeight()%k.NonceGenerationInterval(ctx) != 0 {
+				return
+			}
+		}
+
 		// initiate DKG
 		k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_PRICE_EVENT_NONCE)+int32(i), k.GetOracleParticipants(ctx), k.OracleParticipantThreshold(ctx), k.NonceGenerationBatchSize(ctx))
 	}
@@ -40,6 +48,11 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 
 // generateDateEventNonces generates nonces for dlc date events
 func generateDateEventNonces(ctx sdk.Context, k keeper.Keeper) {
+	// check block height
+	if ctx.BlockHeight()%k.NonceGenerationInterval(ctx) != 0 {
+		return
+	}
+
 	// check if date event nonces need to be generated
 	currentEventDate := k.GetCurrentEventDate(ctx)
 	if (currentEventDate-ctx.BlockTime().Unix())/k.DateInterval(ctx) >= int64(k.DateEventNonceQueueSize(ctx)) {
@@ -52,6 +65,11 @@ func generateDateEventNonces(ctx sdk.Context, k keeper.Keeper) {
 
 // generateLendingEventNonces generates nonces events for dlc lending events
 func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
+	// check block height
+	if ctx.BlockHeight()%k.NonceGenerationInterval(ctx) != 0 {
+		return
+	}
+
 	// check if lending event nonces need to be generated
 	pendingLendingEventCount := k.GetPendingLendingEventCount(ctx)
 	if pendingLendingEventCount >= k.LendingEventNonceQueueSize(ctx) {

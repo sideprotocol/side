@@ -26,15 +26,15 @@ type (
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
 
-		bankKeeper        types.BankKeeper
-		stakingKeeper     types.StakingKeeper
-		oracleKeeper      types.OracleKeeper
-		incentiveKeeper   types.IncentiveKeeper
-		tssKeeper         types.TSSKeeper
-		ibcclientKeeper   types.IBCClientKeeper
+		bankKeeper          types.BankKeeper
+		stakingKeeper       types.StakingKeeper
+		oracleKeeper        types.OracleKeeper
+		incentiveKeeper     types.IncentiveKeeper
+		tssKeeper           types.TSSKeeper
+		ibcclientKeeper     types.IBCClientKeeper
 		ibcconnectionKeeper types.IBCConnectionKeeper
-		ibcchannelKeeper  types.IBCChannelKeeper
-		ibctransferKeeper types.IBCTransferKeeper
+		ibcchannelKeeper    types.IBCChannelKeeper
+		ibctransferKeeper   types.IBCTransferKeeper
 
 		authority string
 	}
@@ -56,20 +56,20 @@ func NewKeeper(
 	authority string,
 ) *Keeper {
 	return &Keeper{
-		cdc:               cdc,
-		storeKey:          storeKey,
-		memKey:            memKey,
-		bankKeeper:        bankKeeper,
-		stakingKeeper:     stakingKeeper,
-		oracleKeeper:      oracleKeeper,
-		incentiveKeeper:   incentiveKeeper,
-		tssKeeper:         tssKeeper,
-		ibcclientKeeper:   ibcclientKeeper,
+		cdc:                 cdc,
+		storeKey:            storeKey,
+		memKey:              memKey,
+		bankKeeper:          bankKeeper,
+		stakingKeeper:       stakingKeeper,
+		oracleKeeper:        oracleKeeper,
+		incentiveKeeper:     incentiveKeeper,
+		tssKeeper:           tssKeeper,
+		ibcclientKeeper:     ibcclientKeeper,
 		ibcconnectionKeeper: ibcconnectionKeeper,
-		ibcchannelKeeper:  ibcchannelKeeper,
-		ibctransferKeeper: ibctransferKeeper,
-		BaseUTXOKeeper:    *NewBaseUTXOKeeper(cdc, storeKey),
-		authority:         authority,
+		ibcchannelKeeper:    ibcchannelKeeper,
+		ibctransferKeeper:   ibctransferKeeper,
+		BaseUTXOKeeper:      *NewBaseUTXOKeeper(cdc, storeKey),
+		authority:           authority,
 	}
 }
 
@@ -90,6 +90,10 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	bz := store.Get(types.ParamsStoreKey)
 	k.cdc.MustUnmarshal(bz, &params)
 	return params
+}
+
+func (k Keeper) BankKeeper() types.BankKeeper {
+	return k.bankKeeper
 }
 
 // ValidateTransaction validates the given transaction

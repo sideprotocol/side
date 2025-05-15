@@ -27,4 +27,5 @@ message Params {
     uint32 oracle_participant_num = 7;
     uint32 oracle_participant_threshold = 8;
     uint32 nonce_generation_batch_size = 9;
+    int64 nonce_generation_interval = 10;
 }

@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/hex"
 
+	"github.com/btcsuite/btcd/btcutil/psbt"
+
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
-	"github.com/btcsuite/btcd/btcutil/psbt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"

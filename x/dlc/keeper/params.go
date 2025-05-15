@@ -68,3 +68,8 @@ func (k Keeper) OracleParticipantThreshold(ctx sdk.Context) uint32 {
 func (k Keeper) NonceGenerationBatchSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).NonceGenerationBatchSize
 }
+
+// NonceGenerationInterval gets the nonce generation interval
+func (k Keeper) NonceGenerationInterval(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).NonceGenerationInterval
+}
