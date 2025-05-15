@@ -6,6 +6,7 @@ import (
 
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/cosmos/btcutil/bech32"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/bitcoin/keys/segwit"
@@ -18,6 +19,7 @@ func TestAddressEncodeDecode(t *testing.T) {
 	conf := sdk.GetConfig()
 	conf.SetBech32PrefixForAccount("side", "side")
 	conf.Seal()
+	bech32.BITCOIN_HRP = "bc"
 
 	adds := []string{
 		"side10d07y265gmmuvt4z0w9aw880jnsr700jwrwlg5",
