@@ -599,8 +599,9 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	m.SetLoan(ctx, loan)
 
 	repayment := &types.Repayment{
-		LoanId: msg.LoanId,
-		Amount: amount,
+		LoanId:   msg.LoanId,
+		Amount:   amount,
+		CreateAt: ctx.BlockTime(),
 	}
 	m.SetRepayment(ctx, repayment)
 
