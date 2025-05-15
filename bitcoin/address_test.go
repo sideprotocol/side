@@ -55,7 +55,7 @@ func TestGenKeys(t *testing.T) {
 	bitcoin.Network = &chaincfg.MainNetParams
 
 	// hash := btcutil.Hash160([]byte{0, 3, 3, 3, 3, 3})
-	hash := make([]byte, 32, 32)
+	hash := make([]byte, 32)
 	assert.Equal(t, 32, len(hash))
 
 	// sh, err := btcutil.NewAddressScriptHashFromHash(hash, &chaincfg.MainNetParams)
