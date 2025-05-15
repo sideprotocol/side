@@ -11,7 +11,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/crypto/adaptor"
+	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 )
 
 var _ sdk.Msg = &MsgSubmitCets{}

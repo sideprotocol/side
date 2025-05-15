@@ -155,7 +155,6 @@ import (
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	btccodec "github.com/sideprotocol/side/bitcoin/crypto/codec"
-	bitcoinkeys "github.com/sideprotocol/side/bitcoin/keys"
 )
 
 const (
@@ -338,7 +337,7 @@ func New(
 		SigningOptions: signing.Options{
 			AddressCodec: btcbridgecodec.NewBech32Codec(
 				sdk.GetConfig().GetBech32AccountAddrPrefix(),
-				bitcoinkeys.Network.Bech32HRPSegwit,
+				bitcoin.Network.Bech32HRPSegwit,
 			),
 			ValidatorAddressCodec: address.Bech32Codec{
 				Bech32Prefix: sdk.GetConfig().GetBech32ValidatorAddrPrefix(),
@@ -444,7 +443,7 @@ func New(
 		maccPerms,
 		btcbridgecodec.NewBech32Codec(
 			sdk.GetConfig().GetBech32AccountAddrPrefix(),
-			bitcoinkeys.Network.Bech32HRPSegwit,
+			bitcoin.Network.Bech32HRPSegwit,
 		),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
@@ -1132,7 +1131,7 @@ func (app *App) AutoCliOpts() autocli.AppOptions {
 		ModuleOptions: runtimeservices.ExtractAutoCLIOptions(app.ModuleManager.Modules),
 		AddressCodec: btcbridgecodec.NewBech32Codec(
 			sdk.GetConfig().GetBech32AccountAddrPrefix(),
-			bitcoinkeys.Network.Bech32HRPSegwit,
+			bitcoin.Network.Bech32HRPSegwit,
 		),
 		ValidatorAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		ConsensusAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),

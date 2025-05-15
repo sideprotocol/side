@@ -7,7 +7,7 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sideprotocol/side/bitcoin/keys"
+	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/bitcoin/keys/segwit"
 	"github.com/sideprotocol/side/bitcoin/keys/taproot"
 	"github.com/stretchr/testify/assert"
@@ -35,7 +35,7 @@ func TestAddressEncodeDecode(t *testing.T) {
 		if strings.HasPrefix(a, "side") {
 			assert.Equal(t, 20, len(addr.Bytes()), a)
 		} else if strings.HasPrefix(a, "bc1q") {
-			assert.Equal(t, 20, len(addr.Bytes()), a)
+			assert.Equal(t, 33, len(addr.Bytes()), a)
 		} else {
 			assert.Equal(t, 32, len(addr.Bytes()), a)
 		}
@@ -52,7 +52,7 @@ func TestGenKeys(t *testing.T) {
 	conf := sdk.GetConfig()
 	conf.SetBech32PrefixForAccount("side", "side")
 	conf.Seal()
-	keys.Network = &chaincfg.MainNetParams
+	bitcoin.Network = &chaincfg.MainNetParams
 
 	// hash := btcutil.Hash160([]byte{0, 3, 3, 3, 3, 3})
 	hash := make([]byte, 32, 32)
@@ -60,7 +60,7 @@ func TestGenKeys(t *testing.T) {
 
 	// sh, err := btcutil.NewAddressScriptHashFromHash(hash, &chaincfg.MainNetParams)
 	// assert.NoError(t, err)
-	std, err := btcutil.NewAddressTaproot(hash, keys.Network)
+	std, err := btcutil.NewAddressTaproot(hash, bitcoin.Network)
 	assert.NoError(t, err)
 	assert.Equal(t, 32, len(std.AddressSegWit.ScriptAddress()))
 	// println(std.ScriptAddress())
@@ -77,12 +77,12 @@ func TestGenKeys(t *testing.T) {
 	a := segwit.GenPrivKey().PubKey().Address()
 	t.Log("segwit:", len(a), sdk.AccAddress(a).String())
 
-	aa, _ := btcutil.NewAddressWitnessPubKeyHash(a.Bytes(), keys.Network)
-	t.Log("aa", aa.EncodeAddress())
+	// aa, _ := btcutil.NewAddressWitnessPubKeyHash(a.Bytes(), keys.Network)
+	// t.Log("aa", aa.EncodeAddress())
 
 	b := taproot.GenPrivKey().PubKey().Address()
 	t.Log("taproot:", len(b), sdk.AccAddress(b).String())
-	bb, _ := btcutil.NewAddressTaproot(b.Bytes(), keys.Network)
+	bb, _ := btcutil.NewAddressTaproot(b.Bytes(), bitcoin.Network)
 	t.Log("bb", bb.EncodeAddress())
 
 	// println("bech32:", text)
@@ -118,19 +118,24 @@ func TestValAddressEncodeDecode(t *testing.T) {
 	vals := []string{
 		// "sidevaloper1qqwpwrc0qs0pvrc6rvrsxrc2p583vqstpgdqxxsmzgp3y9gfpvqp7srxm9c", // error case
 		// "sidevaloper1qqgsc9gfrqfsyrgtp5wpjqgkqct3cqq4rq8pj9cspcgszzqtzv2ssmdxyv7",
-		"sidevaloper1pfakusycd3aful428aqm6ljclu36vk6rzxqvu72g9e7jzaukswgnqd7xhsc",
-		"sidevaloper1p8990duvf0d23jelthdl2qgwfrrylny5zul0awymk7j45cjtm52eqqq7yxc",
-		"sidevaloper1qfwqngtkrmlytqkqsd54k9t4htufp0hw9sndewh",
+		"sidevaloper1qq9qjpswp5t3j9c8pq93xrc7zsysqpq6r5dqvpczpqz3yzqfrqwsc0aalqh",
+		"sidevaloper1l90rhzz8tka095tpvhjgzamvsvxyqhu34e9335l9npy2zx83lmcq9y82l7",
+		"sidevaloper1qqy3sqqmpv83xqcfry8qvyqazvqp6qqgru23y9q2q52swxggqg8sya58uzu",
+		"sidevaloper1qq0pkzghzcvsz8qwzcqq6xs6rv8qwxctzyzqq8shzy9qu8qhrcgsq8gftvt",
+		"sidevaloper1qqr3wzgzqvpqxycjzyr3kzcequxskxqxzydsjqgeqygq2xqxqgtpuaaajmf",
 	}
 
 	for _, a := range vals {
 
 		addr, err := sdk.ValAddressFromBech32(a)
 		assert.NoError(t, err, "invalid address "+a)
+		t.Log("addr", addr.String())
 		if strings.HasPrefix(a, "sidevaloper1p") {
-			assert.Equal(t, 53, len(addr))
-		} else {
 			assert.Equal(t, 33, len(addr))
+		} else if strings.HasPrefix(a, "sidevaloper1q") {
+			assert.Equal(t, 33, len(addr))
+		} else {
+			assert.Equal(t, 32, len(addr))
 		}
 
 		text_addr := addr.String()

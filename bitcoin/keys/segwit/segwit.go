@@ -17,6 +17,7 @@ import (
 
 	//nolint: staticcheck
 
+	"github.com/cosmos/btcutil/bech32"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/types/errors"
@@ -162,7 +163,21 @@ func (pubKey *PubKey) Address() crypto.Address {
 
 	witnessProg := btcutil.Hash160(pubKey.Bytes())
 
-	return crypto.Address(witnessProg[:])
+	// return crypto.Address(witnessProg[:])
+	// The witness program is a 20-byte hash of the public key.
+	// To distiguish between segwit and cosmos addresses, we need to encode it.
+	converted, err := bech32.ConvertBits(witnessProg, 8, 5, true)
+	if err != nil {
+		panic(err)
+	}
+
+	// Concatenate the witness version and program, and encode the resulting
+	// bytes using bech32 encoding.
+	combined := make([]byte, len(converted)+1)
+	combined[0] = 0x0
+	copy(combined[1:], converted)
+
+	return crypto.Address(combined)
 
 }
 

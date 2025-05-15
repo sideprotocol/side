@@ -13,8 +13,8 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
-	"github.com/sideprotocol/side/crypto/adaptor"
-	"github.com/sideprotocol/side/crypto/schnorr"
+	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
+	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 )

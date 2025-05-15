@@ -9,7 +9,7 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/crypto/adaptor"
+	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"

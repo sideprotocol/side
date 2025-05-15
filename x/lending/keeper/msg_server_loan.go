@@ -16,7 +16,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/crypto/schnorr"
+	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	"github.com/sideprotocol/side/x/lending/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )

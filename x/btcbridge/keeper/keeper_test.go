@@ -20,7 +20,7 @@ import (
 
 	simapp "github.com/sideprotocol/side/app"
 	"github.com/sideprotocol/side/bitcoin"
-	"github.com/sideprotocol/side/crypto/keys/segwit"
+	"github.com/sideprotocol/side/bitcoin/keys/segwit"
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
