@@ -274,7 +274,7 @@ require (
 )
 
 replace (
-	github.com/cosmos/btcutil => github.com/sideprotocol/btcutil v0.1.1
+	github.com/cosmos/btcutil => github.com/sideprotocol/btcutil v0.1.2
 	// github.com/cosmos/btcutil => ../btcutil
 	// Fix upstream GHSA-h395-qcrw-5vmq and GHSA-3vp4-m3rf-835h vulnerabilities.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1

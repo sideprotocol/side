@@ -4,7 +4,7 @@ import (
 	"github.com/cosmos/btcutil/bech32"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/bitcoin/keys"
+	"github.com/sideprotocol/side/bitcoin"
 )
 
 func init() {
@@ -23,6 +23,6 @@ func init() {
 	// config.SetBtcChainCfg(&chaincfg.TestNet3Params)
 	config.Seal()
 
-	bech32.BITCOIN_HRP = keys.Network.Bech32HRPSegwit
+	bech32.BITCOIN_HRP = bitcoin.Network.Bech32HRPSegwit
 	bech32.SIDE_HRP = AccountAddressPrefix
 }
