@@ -14,8 +14,6 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
 
-	errorsmod "cosmossdk.io/errors"
-
 	"github.com/sideprotocol/side/bitcoin"
 )
 
@@ -72,16 +70,11 @@ func CreateTaprootAddress(internalKey *secp256k1.PublicKey, branches [][]byte, p
 	return address.EncodeAddress(), nil
 }
 
+// CreateVaultAddress creates the vault address with the given params
+// Assume that the given pub keys are valid
 func CreateVaultAddress(borrowerPubKey string, dcmPubKey string, finalTimeout int64) (string, error) {
-	borrowerPubKeyBytes, err := hex.DecodeString(borrowerPubKey)
-	if err != nil || len(borrowerPubKeyBytes) != schnorr.PubKeyBytesLen {
-		return "", errorsmod.Wrap(ErrInvalidPubKey, "invalid borrower pub key")
-	}
-
-	dcmPubKeyBytes, err := hex.DecodeString(dcmPubKey)
-	if err != nil || len(dcmPubKeyBytes) != schnorr.PubKeyBytesLen {
-		return "", errorsmod.Wrap(ErrInvalidPubKey, "invalid dcm pub key")
-	}
+	borrowerPubKeyBytes, _ := hex.DecodeString(borrowerPubKey)
+	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
 
 	// multisig script
 	multisigScript, err := CreateMultisigScript([][]byte{borrowerPubKeyBytes, dcmPubKeyBytes})

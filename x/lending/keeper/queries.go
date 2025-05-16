@@ -7,6 +7,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
@@ -66,6 +68,24 @@ func (k Keeper) PoolExchangeRate(goCtx context.Context, req *types.QueryPoolExch
 func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollateralAddressRequest) (*types.QueryCollateralAddressResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	borrowerPubKey, err := hex.DecodeString(req.BorrowerPubkey)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "failed to decode borrower pub key")
+	}
+
+	if _, err := schnorr.ParsePubKey(borrowerPubKey); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid borrower pub key")
+	}
+
+	dcmPubKey, err := hex.DecodeString(req.DCMPubKey)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "failed to decode dcm pub key")
+	}
+
+	if _, err := schnorr.ParsePubKey(dcmPubKey); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid dcm pub key")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
