@@ -42,7 +42,7 @@ func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 		if k.GetTriggeredPriceEventQueueCount(ctx, pi.PricePair) == 0 {
 			// check block height
 			if ctx.BlockHeight()%k.NonceGenerationInterval(ctx) != 0 {
-				return
+				continue
 			}
 		}
 
