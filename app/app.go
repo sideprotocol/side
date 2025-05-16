@@ -156,6 +156,8 @@ import (
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	btccodec "github.com/sideprotocol/side/bitcoin/crypto/codec"
+
+	upgradev2 "github.com/sideprotocol/side/app/upgrades/v2"
 )
 
 const (
@@ -994,6 +996,9 @@ func New(
 		panic(err)
 	}
 
+	// set upgrade handlers
+	app.SetUpgradeHandlers()
+
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.ModuleManager.Modules))
 
 	reflectionSvc, err := runtimeservices.NewReflectionService()
@@ -1285,6 +1290,25 @@ func BlockedAddresses() map[string]bool {
 	delete(modAccAddrs, authtypes.NewModuleAddress(incentivetypes.ModuleName).String())
 
 	return modAccAddrs
+}
+
+// SetUpgradeHandlers sets the upgrade handlers
+func (app *App) SetUpgradeHandlers() {
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev2.UpgradeName, upgradev2.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk: %v", err))
+	}
+
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	// register store loader for current upgrade
+	if upgradeInfo.Name == upgradev2.UpgradeName {
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgradev2.StoreUpgrades))
+	}
 }
 
 func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {
