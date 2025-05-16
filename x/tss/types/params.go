@@ -46,11 +46,11 @@ func (p Params) Validate() error {
 // Note: the participant is the ed25519 consensus pub key
 func validateDKGParticipants(participants []string) error {
 	if len(participants) == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "participants can not be empty")
+		return nil
 	}
 
 	if len(participants) < MinDKGParticipantNum {
-		return errorsmod.Wrapf(ErrInvalidParams, "participant number can not be less than min participant number %d", MinDKGParticipantNum)
+		return errorsmod.Wrapf(ErrInvalidParams, "number of participants cannot be less than min participant number %d", MinDKGParticipantNum)
 	}
 
 	for _, p := range participants {

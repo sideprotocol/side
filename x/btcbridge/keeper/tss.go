@@ -178,9 +178,11 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
 	baseParticipants := k.tssKeeper.GetParams(ctx).AllowedDkgParticipants
 
-	for _, p := range participants {
-		if !slices.Contains(baseParticipants, p.ConsensusPubkey) {
-			return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "participant not authorized")
+	if len(baseParticipants) != 0 {
+		for _, p := range participants {
+			if !slices.Contains(baseParticipants, p.ConsensusPubkey) {
+				return nil, errorsmod.Wrap(types.ErrInvalidDKGParams, "participant not authorized")
+			}
 		}
 	}
 

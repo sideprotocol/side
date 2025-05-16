@@ -9,6 +9,11 @@ import (
 
 // EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+	// check if there exist oracle participant base set
+	if len(k.OracleParticipantBaseSet(ctx)) == 0 {
+		return
+	}
+
 	generatePriceEventNonces(ctx, k)
 	generateDateEventNonces(ctx, k)
 	generateLendingEventNonces(ctx, k)

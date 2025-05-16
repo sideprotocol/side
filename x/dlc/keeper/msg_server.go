@@ -43,9 +43,11 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	if len(msg.Params.AllowedOracleParticipants) != 0 {
 		baseParticipants := m.tssKeeper.GetParams(ctx).AllowedDkgParticipants
 
-		for _, p := range msg.Params.AllowedOracleParticipants {
-			if !slices.Contains(baseParticipants, p) {
-				return nil, errorsmod.Wrap(types.ErrInvalidParams, "oracle participant not authorized")
+		if len(baseParticipants) != 0 {
+			for _, p := range msg.Params.AllowedOracleParticipants {
+				if !slices.Contains(baseParticipants, p) {
+					return nil, errorsmod.Wrap(types.ErrInvalidParams, "oracle participant not authorized")
+				}
 			}
 		}
 	}
