@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -281,4 +282,17 @@ func (k Keeper) QueryDKGCompletionRequests(goCtx context.Context, req *types.Que
 	requests := k.GetDKGCompletionRequests(ctx, req.Id)
 
 	return &types.QueryDKGCompletionRequestsResponse{Requests: requests}, nil
+}
+
+func (k Keeper) QueryIBCDepositScript(goCtx context.Context, req *types.QueryIBCDepositScriptRequest) (*types.QueryIBCDepositScriptResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	script, err := types.BuildIBCTransferScript(req.ChannelId, req.RecipientAddress)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	return &types.QueryIBCDepositScriptResponse{Script: hex.EncodeToString(script)}, nil
 }

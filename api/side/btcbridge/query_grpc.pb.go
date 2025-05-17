@@ -37,6 +37,7 @@ const (
 	Query_QueryDKGRequests_FullMethodName                   = "/side.btcbridge.Query/QueryDKGRequests"
 	Query_QueryAllDKGRequests_FullMethodName                = "/side.btcbridge.Query/QueryAllDKGRequests"
 	Query_QueryDKGCompletionRequests_FullMethodName         = "/side.btcbridge.Query/QueryDKGCompletionRequests"
+	Query_QueryIBCDepositScript_FullMethodName              = "/side.btcbridge.Query/QueryIBCDepositScript"
 )
 
 // QueryClient is the client API for Query service.
@@ -79,6 +80,8 @@ type QueryClient interface {
 	QueryAllDKGRequests(ctx context.Context, in *QueryAllDKGRequestsRequest, opts ...grpc.CallOption) (*QueryAllDKGRequestsResponse, error)
 	// QueryDKGCompletionRequests queries DKG completion requests by the given id.
 	QueryDKGCompletionRequests(ctx context.Context, in *QueryDKGCompletionRequestsRequest, opts ...grpc.CallOption) (*QueryDKGCompletionRequestsResponse, error)
+	// QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
+	QueryIBCDepositScript(ctx context.Context, in *QueryIBCDepositScriptRequest, opts ...grpc.CallOption) (*QueryIBCDepositScriptResponse, error)
 }
 
 type queryClient struct {
@@ -251,6 +254,15 @@ func (c *queryClient) QueryDKGCompletionRequests(ctx context.Context, in *QueryD
 	return out, nil
 }
 
+func (c *queryClient) QueryIBCDepositScript(ctx context.Context, in *QueryIBCDepositScriptRequest, opts ...grpc.CallOption) (*QueryIBCDepositScriptResponse, error) {
+	out := new(QueryIBCDepositScriptResponse)
+	err := c.cc.Invoke(ctx, Query_QueryIBCDepositScript_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -291,6 +303,8 @@ type QueryServer interface {
 	QueryAllDKGRequests(context.Context, *QueryAllDKGRequestsRequest) (*QueryAllDKGRequestsResponse, error)
 	// QueryDKGCompletionRequests queries DKG completion requests by the given id.
 	QueryDKGCompletionRequests(context.Context, *QueryDKGCompletionRequestsRequest) (*QueryDKGCompletionRequestsResponse, error)
+	// QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
+	QueryIBCDepositScript(context.Context, *QueryIBCDepositScriptRequest) (*QueryIBCDepositScriptResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -351,6 +365,9 @@ func (UnimplementedQueryServer) QueryAllDKGRequests(context.Context, *QueryAllDK
 }
 func (UnimplementedQueryServer) QueryDKGCompletionRequests(context.Context, *QueryDKGCompletionRequestsRequest) (*QueryDKGCompletionRequestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryDKGCompletionRequests not implemented")
+}
+func (UnimplementedQueryServer) QueryIBCDepositScript(context.Context, *QueryIBCDepositScriptRequest) (*QueryIBCDepositScriptResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryIBCDepositScript not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -689,6 +706,24 @@ func _Query_QueryDKGCompletionRequests_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_QueryIBCDepositScript_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryIBCDepositScriptRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryIBCDepositScript(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryIBCDepositScript_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryIBCDepositScript(ctx, req.(*QueryIBCDepositScriptRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -767,6 +802,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryDKGCompletionRequests",
 			Handler:    _Query_QueryDKGCompletionRequests_Handler,
+		},
+		{
+			MethodName: "QueryIBCDepositScript",
+			Handler:    _Query_QueryIBCDepositScript_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

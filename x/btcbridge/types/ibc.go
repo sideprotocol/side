@@ -19,6 +19,20 @@ const (
 	DefaultMaxIBCCallbackGas = uint64(1_000_000)
 )
 
+// BuildIBCTransferScript builds the script for IBC transfer with the given channel and recipient address
+func BuildIBCTransferScript(channelId string, recipient string) ([]byte, error) {
+	scriptBuilder := txscript.NewScriptBuilder()
+	scriptBuilder.AddOp(txscript.OP_RETURN)
+
+	// add magic number
+	scriptBuilder.AddOp(IBCTransferMagicNumber)
+
+	// add payload
+	scriptBuilder.AddData([]byte(channelId)).AddData([]byte(recipient))
+
+	return scriptBuilder.Script()
+}
+
 // GetIBCTransferScript gets the IBC transfer script from the given deposit tx
 func GetIBCTransferScript(depositTx *wire.MsgTx) []byte {
 	for _, out := range depositTx.TxOut {

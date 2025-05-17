@@ -83,6 +83,10 @@ service Query {
   rpc QueryDKGCompletionRequests(QueryDKGCompletionRequestsRequest) returns (QueryDKGCompletionRequestsResponse) {
     option (google.api.http).get = "/side/btcbridge/dkg/completion/request/{id}";
   }
+  // QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
+  rpc QueryIBCDepositScript(QueryIBCDepositScriptRequest) returns (QueryIBCDepositScriptResponse) {
+    option (google.api.http).get = "/side/btcbridge/deposit/ibc_script";
+  }
 }
 
 // QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method.
@@ -270,4 +274,15 @@ message QueryDKGCompletionRequestsRequest {
 // QueryDKGCompletionRequestsResponse is the response type for the Query/DKGCompletionRequests RPC method.
 message QueryDKGCompletionRequestsResponse {
   repeated DKGCompletionRequest requests = 1;
+}
+
+// QueryIBCDepositScriptRequest is the request type for the Query/IBCDepositScript RPC method.
+message QueryIBCDepositScriptRequest {
+  string channel_id = 1;
+  string recipient_address = 2;
+}
+
+// QueryIBCDepositScriptResponse is the response type for the Query/IBCDepositScript RPC method.
+message QueryIBCDepositScriptResponse {
+  string script = 1;
 }
