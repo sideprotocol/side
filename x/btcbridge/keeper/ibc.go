@@ -17,10 +17,10 @@ import (
 )
 
 // IBCTransfer performs the IBC transfer by the given params
-func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, token sdk.Coin, channelId string) error {
+func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, token sdk.Coin, channelId string) (uint64, error) {
 	clientHeight, err := k.GetClientHeight(ctx, k.IBCPortId(ctx), channelId)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	msg := &transfertypes.MsgTransfer{
@@ -34,11 +34,12 @@ func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, to
 		Memo:             types.DefaultMemo,
 	}
 
-	if _, err := k.ibctransferKeeper.Transfer(ctx, msg); err != nil {
-		return err
+	resp, err := k.ibctransferKeeper.Transfer(ctx, msg)
+	if err != nil {
+		return 0, err
 	}
 
-	return nil
+	return resp.Sequence, nil
 }
 
 // AddToIBCWithdrawRequestQueue adds the given withdrawal request to the IBC withdrawal queue for sBTC

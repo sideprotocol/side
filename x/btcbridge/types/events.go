@@ -4,6 +4,7 @@ package types
 const (
 	EventTypeInitiateDKG     = "initiate_dkg_bridge"
 	EventTypeInitiateSigning = "initiate_signing_bridge"
+	EventTypeIBCTransfer     = "ibc_transfer"
 
 	AttributeKeyId = "id"
 
@@ -14,6 +15,9 @@ const (
 
 	AttributeKeySigners   = "signers"
 	AttributeKeySigHashes = "sig_hashes"
+
+	AttributeKeyPacketSequence = "packet_sequence"
+	AttributeKeyErrorMsg       = "err_msg"
 )
 
 const (
