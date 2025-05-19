@@ -275,8 +275,10 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	pricePair := types.GetPricePair(poolConfig)
+	collateralDecimals := int(poolConfig.CollateralAsset.Decimals)
+	borrowDecimals := int(poolConfig.LendingAsset.Decimals)
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, int(poolConfig.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(poolConfig.LendingAsset.Decimals), loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, m.dlcKeeper.PriceInterval(ctx, pricePair))
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, m.dlcKeeper.PriceInterval(ctx, pricePair))
 	if !m.dlcKeeper.HasEventByPrice(ctx, pricePair, liquidationPrice.String()) {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 		return nil, nil
@@ -300,7 +302,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	// check LTV
-	if collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).ToLegacyDec().Mul(currentPrice).Quo(sdkmath.NewIntWithDecimal(1, 8).Mul(types.Percent).ToLegacyDec()).TruncateInt().LT(loan.BorrowAmount.Amount) {
+	if collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowDecimals)).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).ToLegacyDec().Mul(currentPrice).Quo(sdkmath.NewIntWithDecimal(1, collateralDecimals).Mul(types.Percent).ToLegacyDec()).TruncateInt().LT(loan.BorrowAmount.Amount) {
 		errRejected = types.ErrInsufficientCollateral
 		return nil, nil
 	}
