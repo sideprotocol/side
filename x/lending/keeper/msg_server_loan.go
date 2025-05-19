@@ -345,13 +345,13 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, types.ErrInvalidLoanStatus
 	}
 
-	// Do not validate tx for now
-	// if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, depositLog.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
-	// 	return nil, types.ErrInvalidProof
-	// }
+	// validate deposit tx
+	tx, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, msg.DepositTx, "", msg.BlockHash, msg.Proof, m.btcbridgeKeeper.DepositConfirmationDepth(ctx))
+	if err != nil {
+		return nil, errorsmod.Wrapf(types.ErrInvalidDepositTx, "failed to validate tx: %v", err)
+	}
 
-	depositTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
-	depositTxHash := depositTx.UnsignedTx.TxHash().String()
+	depositTxHash := tx.Hash().String()
 
 	var depositLog *types.DepositLog
 	if m.HasDepositLog(ctx, depositTxHash) {
