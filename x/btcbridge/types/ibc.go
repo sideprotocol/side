@@ -12,8 +12,8 @@ const (
 	// default memo for IBC transfer
 	DefaultMemo = "BTC bridge | Side Chain"
 
-	// flag to enable auto pegout
-	FlagAutoPegOut = "auto-pegout"
+	// callback address to enable auto pegout
+	CallbackAddress = "btcbridge"
 
 	// default max gas for IBC callback
 	DefaultMaxIBCCallbackGas = uint64(1_000_000)
