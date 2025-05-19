@@ -235,12 +235,15 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 		k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
 
 		// Emit events
-		k.EmitEvent(ctx, req.Address,
-			sdk.NewAttribute("amount", withdrawAmount.String()),
-			sdk.NewAttribute("sequence", fmt.Sprintf("%d", withdrawRequest.Sequence)),
-			sdk.NewAttribute("txid", withdrawRequest.Txid),
-			sdk.NewAttribute("channel_id", req.ChannelId),
-			sdk.NewAttribute("channel_sequence", fmt.Sprintf("%d", req.Sequence)),
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeIBCWithdraw,
+				sdk.NewAttribute(types.AttributeKeyAddress, req.Address),
+				sdk.NewAttribute(types.AttributeKeyAmount, withdrawAmount.String()),
+				sdk.NewAttribute(types.AttributeKeySequence, fmt.Sprintf("%d", withdrawRequest.Sequence)),
+				sdk.NewAttribute(types.AttributeKeyChannelId, req.ChannelId),
+				sdk.NewAttribute(types.AttributeKeyPacketSequence, fmt.Sprintf("%d", req.Sequence)),
+			),
 		)
 	}
 }

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"fmt"
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
@@ -54,6 +55,17 @@ func (k Keeper) AddToIBCWithdrawRequestQueue(ctx sdk.Context, channelId string, 
 	})
 
 	store.Set(types.IBCWithdrawRequestQueueKey(channelId, sequence), bz)
+
+	// Emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeIBCWithdrawQueue,
+			sdk.NewAttribute(types.AttributeKeyAddress, recipient),
+			sdk.NewAttribute(types.AttributeKeyAmount, sdk.NewInt64Coin(k.BtcDenom(ctx), amount).String()),
+			sdk.NewAttribute(types.AttributeKeyChannelId, channelId),
+			sdk.NewAttribute(types.AttributeKeyPacketSequence, fmt.Sprintf("%d", sequence)),
+		),
+	)
 }
 
 // RemoveFromIBCWithdrawRequestQueue removes the given IBC withdrawal request from the IBC withdrawal request queue
