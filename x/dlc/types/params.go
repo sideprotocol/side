@@ -21,7 +21,7 @@ var (
 	DefaultBTCUSDPriceInterval = sdkmath.LegacyNewDec(100)
 
 	// default nonce queue size for date events
-	DefaultDateEventNonceQueueSize = uint32(180)
+	DefaultDateEventNonceQueueSize = uint32(730) // 2 years
 
 	// default date interval
 	DefaultDateInterval = 24 * time.Hour // 1 day
