@@ -10,7 +10,9 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
+	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
 )
 
 var (
@@ -82,6 +84,16 @@ func AdaptorPointFromSecret(secret []byte) string {
 // GetPricePair gets the price pair from the given pool config
 func GetPricePair(poolConfig PoolConfig) string {
 	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol), strings.ToUpper(poolConfig.LendingAsset.PriceSymbol))
+}
+
+// ToLiquidationAssetMeta converts the given asset metadata to the corresponding liquidation asset metadata
+func ToLiquidationAssetMeta(metadata AssetMetadata) liquidationtypes.AssetMetadata {
+	return liquidationtypes.AssetMetadata{
+		Denom:       metadata.Denom,
+		Symbol:      metadata.Symbol,
+		PriceSymbol: metadata.PriceSymbol,
+		Decimals:    metadata.Decimals,
+	}
 }
 
 // HasSupplyCap returns true if the supply cap set in the given pool, false otherwise
