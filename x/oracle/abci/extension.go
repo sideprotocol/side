@@ -129,7 +129,7 @@ func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context, sideHeigh
 
 	confirmation := 6
 
-	bestHeight = bestHeight - int64(confirmation)
+	bestHeight = bestHeight - int64(confirmation) + 1
 	telemetry.SetGauge(float32(bestHeight), types.ModuleName, "bitcoin", "block_height")
 
 	hash, err := h.bitcoinClient.GetBlockHash(bestHeight)
