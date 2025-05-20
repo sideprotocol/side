@@ -17,6 +17,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
+	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
@@ -278,13 +279,21 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	collateralDecimals := int(poolConfig.CollateralAsset.Decimals)
 	borrowDecimals := int(poolConfig.LendingAsset.Decimals)
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, m.dlcKeeper.PriceInterval(ctx, pricePair))
-	if !m.dlcKeeper.HasEventByPrice(ctx, pricePair, liquidationPrice.String()) {
+	dlcPricePair, found := m.dlcKeeper.PricePair(ctx, pricePair)
+	if !found {
+		errRejected = errorsmod.Wrap(types.ErrInvalidPricePair, "price pair does not exist in dlc")
+		return nil, nil
+	}
+
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(dlcPricePair.Decimals), dlcPricePair.Interval)
+	normalizedLiquidationPrice := dlctypes.NormalizePrice(liquidationPrice, int(dlcPricePair.Decimals))
+
+	if !m.dlcKeeper.HasEventByPrice(ctx, pricePair, normalizedLiquidationPrice) {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 		return nil, nil
 	}
 
-	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, pricePair, liquidationPrice.String())
+	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, pricePair, normalizedLiquidationPrice)
 	if liquidationEvent.HasTriggered {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event has triggered")
 		return nil, nil

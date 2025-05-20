@@ -57,14 +57,14 @@ func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
-func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, precision sdkmath.LegacyDec) sdkmath.LegacyDec {
+func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, decimals int, precision sdkmath.LegacyDec) sdkmath.LegacyDec {
 	interest := GetTotalInterest(borrowAmount, maturity, borrowAPR, blocksPerYear)
 	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).Mul(Percent).ToLegacyDec().Quo(sdkmath.LegacyNewDec(int64(lltv))).QuoInt(collateralAmount).QuoInt(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals))
 
-	decimalsInt := sdkmath.NewIntWithDecimal(1, 0)
+	decimalsInt := sdkmath.NewIntWithDecimal(1, decimals)
 	precisionInt := precision.MulInt(decimalsInt).TruncateInt()
 
-	return liquidationPrice.MulInt(decimalsInt).TruncateInt().Quo(precisionInt).Mul(precisionInt).Quo(decimalsInt).ToLegacyDec()
+	return liquidationPrice.MulInt(decimalsInt).TruncateInt().Quo(precisionInt).Mul(precisionInt).ToLegacyDec().QuoInt(decimalsInt)
 }
 
 // GetMaturityTime gets the actual maturity time according to the given maturity time
@@ -74,11 +74,6 @@ func GetMaturityTime(originMaturityTime int64) int64 {
 	}
 
 	return time.Unix(originMaturityTime, 0).Truncate(24 * time.Hour).Add(24 * time.Hour).Unix()
-}
-
-// AdaptorPointFromSecret gets the corresponding adaptor point from the given secret
-func AdaptorPointFromSecret(secret []byte) string {
-	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
 }
 
 // GetPricePair gets the price pair from the given pool config
@@ -94,6 +89,11 @@ func ToLiquidationAssetMeta(metadata AssetMetadata) liquidationtypes.AssetMetada
 		PriceSymbol: metadata.PriceSymbol,
 		Decimals:    metadata.Decimals,
 	}
+}
+
+// AdaptorPointFromSecret gets the corresponding adaptor point from the given secret
+func AdaptorPointFromSecret(secret []byte) string {
+	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
 }
 
 // HasSupplyCap returns true if the supply cap set in the given pool, false otherwise

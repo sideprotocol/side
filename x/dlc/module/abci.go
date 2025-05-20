@@ -22,24 +22,24 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 // generatePriceEventNonces generates nonces for dlc price events
 func generatePriceEventNonces(ctx sdk.Context, k keeper.Keeper) {
 	// check all supported price pairs
-	for i, pi := range k.PriceIntervals(ctx) {
+	for i, p := range k.PricePairs(ctx) {
 		// get current price
-		currentPrice, err := k.GetPrice(ctx, pi.PricePair)
+		currentPrice, err := k.GetPrice(ctx, p.Pair)
 		if err != nil {
-			k.Logger(ctx).Info("failed to get price", "pair", pi.PricePair, "err", err)
+			k.Logger(ctx).Info("failed to get price", "pair", p.Pair, "err", err)
 			continue
 		}
 
 		nonceQueueSize := int64(k.PriceEventNonceQueueSize(ctx))
 
 		// check if price event nonces need to be generated
-		currentEventPrice := k.GetCurrentEventPrice(ctx, pi.PricePair)
-		if currentEventPrice.GTE(currentPrice.Add(pi.Interval.MulInt64(nonceQueueSize))) && k.GetTriggeredPriceEventQueueCount(ctx, pi.PricePair) == 0 {
+		currentEventPrice := k.GetCurrentEventPrice(ctx, p.Pair)
+		if currentEventPrice.GTE(currentPrice.Add(p.Interval.MulInt64(nonceQueueSize))) && k.GetTriggeredPriceEventQueueCount(ctx, p.Pair) == 0 {
 			continue
 		}
 
 		// immediate generation required if there exist pending triggered price events
-		if k.GetTriggeredPriceEventQueueCount(ctx, pi.PricePair) == 0 {
+		if k.GetTriggeredPriceEventQueueCount(ctx, p.Pair) == 0 {
 			// check block height
 			if ctx.BlockHeight()%k.NonceGenerationInterval(ctx) != 0 {
 				continue

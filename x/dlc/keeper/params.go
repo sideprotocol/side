@@ -14,16 +14,49 @@ func (k Keeper) PriceEventNonceQueueSize(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).PriceEventNonceQueueSize
 }
 
-// PriceIntervals gets all supported price intervals
-func (k Keeper) PriceIntervals(ctx sdk.Context) []types.PriceInterval {
-	return k.GetParams(ctx).PriceIntervals
+// PricePairs gets all supported price pairs
+func (k Keeper) PricePairs(ctx sdk.Context) []types.PricePair {
+	return k.GetParams(ctx).PricePairs
+}
+
+// PricePair gets the given price pair
+func (k Keeper) PricePair(ctx sdk.Context, pair string) (types.PricePair, bool) {
+	for _, p := range k.PricePairs(ctx) {
+		if p.Pair == pair {
+			return p, true
+		}
+	}
+
+	return types.PricePair{}, false
+}
+
+// PricePairByIndex gets the price pair by the given index
+func (k Keeper) PricePairByIndex(ctx sdk.Context, index int) (types.PricePair, bool) {
+	pricePairs := k.PricePairs(ctx)
+
+	if index > len(pricePairs)-1 || len(pricePairs[index].Pair) == 0 {
+		return types.PricePair{}, false
+	}
+
+	return pricePairs[index], true
+}
+
+// PriceDecimals gets the price decimals by the given pair
+func (k Keeper) PriceDecimals(ctx sdk.Context, pair string) int {
+	for _, p := range k.PricePairs(ctx) {
+		if p.Pair == pair {
+			return int(p.Decimals)
+		}
+	}
+
+	return 0
 }
 
 // PriceInterval gets the price interval by the given pair
 func (k Keeper) PriceInterval(ctx sdk.Context, pair string) sdkmath.LegacyDec {
-	for _, pi := range k.PriceIntervals(ctx) {
-		if pi.PricePair == pair {
-			return pi.Interval
+	for _, p := range k.PricePairs(ctx) {
+		if p.Pair == pair {
+			return p.Interval
 		}
 	}
 

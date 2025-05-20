@@ -17,6 +17,9 @@ var (
 	// BTCUSD price pair
 	BTCUSDPricePair = "BTCUSD"
 
+	// default price decimals for BTCUSD
+	DefaultBTCUSDPriceDecimals = int32(0)
+
 	// default price interval for BTCUSD
 	DefaultBTCUSDPriceInterval = sdkmath.LegacyNewDec(100)
 
@@ -49,10 +52,11 @@ var (
 func NewParams() Params {
 	return Params{
 		PriceEventNonceQueueSize: DefaultPriceEventNonceQueueSize,
-		PriceIntervals: []PriceInterval{
+		PricePairs: []PricePair{
 			{
-				PricePair: BTCUSDPricePair,
-				Interval:  DefaultBTCUSDPriceInterval,
+				Pair:     BTCUSDPricePair,
+				Decimals: DefaultBTCUSDPriceDecimals,
+				Interval: DefaultBTCUSDPriceInterval,
 			},
 		},
 		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
@@ -77,8 +81,8 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(ErrInvalidParams, "price event nonce queue size must be greater than 0")
 	}
 
-	for _, pi := range p.PriceIntervals {
-		if err := validatePriceInterval(pi); err != nil {
+	for _, pair := range p.PricePairs {
+		if err := validatePricePair(pair); err != nil {
 			return err
 		}
 	}
@@ -122,17 +126,21 @@ func (p Params) Validate() error {
 	return nil
 }
 
-// validatePriceInterval validates the given price interval
-func validatePriceInterval(priceInterval PriceInterval) error {
-	if len(priceInterval.PricePair) == 0 {
+// validatePricePair validates the given price pair
+func validatePricePair(p PricePair) error {
+	if len(p.Pair) == 0 {
 		return errorsmod.Wrap(ErrInvalidParams, "empty price pair")
 	}
 
-	if priceInterval.PricePair != strings.ToUpper(priceInterval.PricePair) {
+	if p.Pair != strings.ToUpper(p.Pair) {
 		return errorsmod.Wrap(ErrInvalidParams, "price pair must be in uppercase")
 	}
 
-	if !priceInterval.Interval.IsPositive() {
+	if p.Decimals < 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "invalid price decimals")
+	}
+
+	if !p.Interval.IsPositive() {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid price interval")
 	}
 

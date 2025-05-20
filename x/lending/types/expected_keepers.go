@@ -60,7 +60,7 @@ type LiquidationKeeper interface {
 
 // DLCKeeper defines the expected DLC keeper interface
 type DLCKeeper interface {
-	PriceInterval(ctx sdk.Context, pair string) sdkmath.LegacyDec
+	PricePair(ctx sdk.Context, pair string) (dlctypes.PricePair, bool)
 
 	HasEvent(ctx sdk.Context, id uint64) bool
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCEvent

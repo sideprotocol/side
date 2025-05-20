@@ -3,6 +3,7 @@ package keeper
 import (
 	"encoding/hex"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
@@ -44,10 +45,13 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	if loan.LiquidationEventId != 0 {
 		liquidationEvent = k.dlcKeeper.GetEvent(ctx, loan.LiquidationEventId)
 	} else if collateralAmount.Amount.IsPositive() {
-		pricePair := types.GetPricePair(poolConfig)
+		pricePair, found := k.dlcKeeper.PricePair(ctx, types.GetPricePair(poolConfig))
+		if !found {
+			return nil, errorsmod.Wrap(types.ErrInvalidPricePair, "price pair does not exist in dlc")
+		}
 
-		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(poolConfig.LendingAsset.Decimals), loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, k.dlcKeeper.PriceInterval(ctx, pricePair))
-		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, pricePair, liquidationPrice.String())
+		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(poolConfig.LendingAsset.Decimals), loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval)
+		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, pricePair.Pair, dlctypes.NormalizePrice(liquidationPrice, int(pricePair.Decimals)))
 	}
 
 	defaultLiquidationEvent := k.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)

@@ -127,11 +127,14 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	pricePair := types.GetPricePair(poolConfig)
+	pricePair, found := k.dlcKeeper.PricePair(ctx, types.GetPricePair(poolConfig))
+	if !found {
+		return nil, status.Error(codes.Internal, "price pair does not exist in dlc")
+	}
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, k.dlcKeeper.PriceInterval(ctx, pricePair))
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval)
 
-	event := k.dlcKeeper.GetEventByPrice(ctx, pricePair, liquidationPrice.String())
+	event := k.dlcKeeper.GetEventByPrice(ctx, pricePair.Pair, dlctypes.NormalizePrice(liquidationPrice, int(pricePair.Decimals)))
 	if event == nil {
 		return nil, status.Error(codes.NotFound, "liquidation event does not exist")
 	}
