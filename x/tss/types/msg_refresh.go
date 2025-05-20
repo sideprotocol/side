@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/base64"
+	"slices"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -28,10 +29,8 @@ func (m *MsgRefresh) ValidateBasic() error {
 		return errorsmod.Wrap(ErrInvalidThresholds, "thresholds do not match dkgs")
 	}
 
-	for _, threshold := range m.Thresholds {
-		if threshold == 0 {
-			return errorsmod.Wrap(ErrInvalidThresholds, "threshold must be greater than 0")
-		}
+	if slices.Contains(m.Thresholds, 0) {
+		return errorsmod.Wrap(ErrInvalidThresholds, "threshold must be greater than 0")
 	}
 
 	participants := make(map[string]bool)
