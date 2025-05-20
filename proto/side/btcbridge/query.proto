@@ -83,6 +83,18 @@ service Query {
   rpc QueryDKGCompletionRequests(QueryDKGCompletionRequestsRequest) returns (QueryDKGCompletionRequestsResponse) {
     option (google.api.http).get = "/side/btcbridge/dkg/completion/request/{id}";
   }
+  // QueryRefreshingRequest queries the refreshing request by the given id.
+  rpc QueryRefreshingRequest(QueryRefreshingRequestRequest) returns (QueryRefreshingRequestResponse) {
+      option (google.api.http).get = "/side/btcbridge/refreshing/requests/{id}";
+  }
+  // QueryRefreshingRequests queries the refreshing requests by the given status.
+  rpc QueryRefreshingRequests(QueryRefreshingRequestsRequest) returns (QueryRefreshingRequestsResponse) {
+      option (google.api.http).get = "/side/btcbridge/refreshing/requests";
+  }
+  // QueryRefreshingCompletions queries refreshing completions by the given request id.
+  rpc QueryRefreshingCompletions(QueryRefreshingCompletionsRequest) returns (QueryRefreshingCompletionsResponse) {
+      option (google.api.http).get = "/side/btcbridge/refreshing/completions/{id}";
+  }
   // QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
   rpc QueryIBCDepositScript(QueryIBCDepositScriptRequest) returns (QueryIBCDepositScriptResponse) {
     option (google.api.http).get = "/side/btcbridge/deposit/ibc_script";
@@ -274,6 +286,34 @@ message QueryDKGCompletionRequestsRequest {
 // QueryDKGCompletionRequestsResponse is the response type for the Query/DKGCompletionRequests RPC method.
 message QueryDKGCompletionRequestsResponse {
   repeated DKGCompletionRequest requests = 1;
+}
+
+message QueryRefreshingRequestRequest {
+    uint64 id = 1;
+}
+
+message QueryRefreshingRequestResponse {
+    RefreshingRequest request = 1;
+}
+
+message QueryRefreshingRequestsRequest {
+    RefreshingStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryRefreshingRequestsResponse {
+    repeated RefreshingRequest requests = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryRefreshingCompletionsRequest {
+    uint64 id = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryRefreshingCompletionsResponse {
+    repeated RefreshingCompletion completions = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryIBCDepositScriptRequest is the request type for the Query/IBCDepositScript RPC method.

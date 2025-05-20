@@ -18,7 +18,7 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	if len(m.Participants) == 0 || m.Threshold == 0 || m.Threshold > uint32(len(m.Participants)) {
+	if len(m.Participants) == 0 || len(m.Participants) < MinDKGParticipantNum || m.Threshold == 0 || m.Threshold > uint32(len(m.Participants)) {
 		return ErrInvalidDKGParams
 	}
 

@@ -181,3 +181,43 @@ message DKGCompletionRequest {
   // hex encoded participant signature
   string signature = 5;
 }
+
+// Refreshing Status
+enum RefreshingStatus {
+  // REFRESHING_STATUS_UNSPECIFIED defines the unknown refreshing status
+  REFRESHING_STATUS_UNSPECIFIED = 0;
+  // REFRESHING_STATUS_PENDING defines the status of the refreshing request which is pending
+  REFRESHING_STATUS_PENDING = 1;
+  // REFRESHING_STATUS_COMPLETED defines the status of the refreshing request which is completed
+  REFRESHING_STATUS_COMPLETED = 2;
+  // REFRESHING_STATUS_TIMEDOUT defines the status of the refreshing request which timed out
+  REFRESHING_STATUS_TIMEDOUT = 3;
+}
+
+// Refreshing Request
+message RefreshingRequest {
+  // request id
+  uint64 id = 1;
+  // request id of the DKG corresponding to the key shares to be refreshed
+  uint64 dkg_id = 2;
+  // removed participant set
+  repeated string removed_participants = 3;
+  // new threshold
+  uint32 threshold = 4;
+  // expiration time
+  google.protobuf.Timestamp expiration_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // status
+  RefreshingStatus status = 6;
+}
+
+// Refreshing Completion
+message RefreshingCompletion {
+  // request id
+  uint64 id = 1;
+  // sender
+  string sender = 2;
+  // participant consensus pub key
+  string consensus_pubkey = 3;
+  // hex encoded participant signature
+  string signature = 4;
+}

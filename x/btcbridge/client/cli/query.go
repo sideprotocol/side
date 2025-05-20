@@ -36,6 +36,9 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryUTXOStats())
 	cmd.AddCommand(CmdQueryDKGRequests())
 	cmd.AddCommand(CmdQueryDKGCompletionRequests())
+	cmd.AddCommand(CmdQueryRefreshingRequest())
+	cmd.AddCommand(CmdQueryRefreshingRequests())
+	cmd.AddCommand(CmdQueryRefreshingCompletions())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -342,6 +345,102 @@ func CmdQueryDKGCompletionRequests() *cobra.Command {
 			}
 
 			res, err := queryClient.QueryDKGCompletionRequests(cmd.Context(), &types.QueryDKGCompletionRequestsRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRefreshingRequest() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "refreshing-request [id]",
+		Short: "Query the refreshing request by the given id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryRefreshingRequest(cmd.Context(), &types.QueryRefreshingRequestRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRefreshingRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "refreshing-requests [status]",
+		Short: "Query refreshing requests by the given status",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			status, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryRefreshingRequests(cmd.Context(), &types.QueryRefreshingRequestsRequest{Status: types.RefreshingStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRefreshingCompletions() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "refreshing-completions [id]",
+		Short: "Query refreshing completions by the given refreshing request id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryRefreshingCompletions(cmd.Context(), &types.QueryRefreshingCompletionsRequest{Id: id})
 			if err != nil {
 				return err
 			}
