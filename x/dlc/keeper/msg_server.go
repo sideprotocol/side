@@ -41,7 +41,7 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if len(msg.Params.AllowedOracleParticipants) != 0 {
-		baseParticipants := m.tssKeeper.GetParams(ctx).AllowedDkgParticipants
+		baseParticipants := m.tssKeeper.AllowedDKGParticipants(ctx)
 
 		if len(baseParticipants) != 0 {
 			for _, p := range msg.Params.AllowedOracleParticipants {

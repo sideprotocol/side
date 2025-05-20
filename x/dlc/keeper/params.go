@@ -51,7 +51,7 @@ func (k Keeper) OracleParticipantBaseSet(ctx sdk.Context) []string {
 		return k.GetParams(ctx).AllowedOracleParticipants
 	}
 
-	return k.tssKeeper.GetParams(ctx).AllowedDkgParticipants
+	return k.tssKeeper.AllowedDKGParticipants(ctx)
 }
 
 // OracleParticipantNum gets the oracle participant number

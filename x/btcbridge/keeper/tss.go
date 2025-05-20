@@ -176,7 +176,7 @@ func (k Keeper) IterateDKGCompletionRequests(ctx sdk.Context, id uint64, cb func
 
 // InitiateDKG initiates the DKG request by the specified params
 func (k Keeper) InitiateDKG(ctx sdk.Context, participants []*types.DKGParticipant, threshold uint32, vaultTypes []types.AssetType, enableTransfer bool, targetUtxoNum uint32) (*types.DKGRequest, error) {
-	baseParticipants := k.tssKeeper.GetParams(ctx).AllowedDkgParticipants
+	baseParticipants := k.tssKeeper.AllowedDKGParticipants(ctx)
 
 	if len(baseParticipants) != 0 {
 		for _, p := range participants {

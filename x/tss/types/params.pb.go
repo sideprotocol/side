@@ -29,8 +29,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	AllowedDkgParticipants []string      `protobuf:"bytes,1,rep,name=allowed_dkg_participants,json=allowedDkgParticipants,proto3" json:"allowed_dkg_participants,omitempty"`
-	DkgTimeoutDuration     time.Duration `protobuf:"bytes,2,opt,name=dkg_timeout_duration,json=dkgTimeoutDuration,proto3,stdduration" json:"dkg_timeout_duration"`
+	AllowedDkgParticipants []DKGParticipant `protobuf:"bytes,1,rep,name=allowed_dkg_participants,json=allowedDkgParticipants,proto3" json:"allowed_dkg_participants"`
+	DkgTimeoutDuration     time.Duration    `protobuf:"bytes,2,opt,name=dkg_timeout_duration,json=dkgTimeoutDuration,proto3,stdduration" json:"dkg_timeout_duration"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -66,7 +66,7 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetAllowedDkgParticipants() []string {
+func (m *Params) GetAllowedDkgParticipants() []DKGParticipant {
 	if m != nil {
 		return m.AllowedDkgParticipants
 	}
@@ -80,31 +80,91 @@ func (m *Params) GetDkgTimeoutDuration() time.Duration {
 	return 0
 }
 
+// DKG Participant
+type DKGParticipant struct {
+	// the optional moniker
+	Moniker string `protobuf:"bytes,1,opt,name=moniker,proto3" json:"moniker,omitempty"`
+	// participant consensus pub key
+	ConsensusPubkey string `protobuf:"bytes,2,opt,name=consensus_pubkey,json=consensusPubkey,proto3" json:"consensus_pubkey,omitempty"`
+}
+
+func (m *DKGParticipant) Reset()         { *m = DKGParticipant{} }
+func (m *DKGParticipant) String() string { return proto.CompactTextString(m) }
+func (*DKGParticipant) ProtoMessage()    {}
+func (*DKGParticipant) Descriptor() ([]byte, []int) {
+	return fileDescriptor_132faddf72ffea9f, []int{1}
+}
+func (m *DKGParticipant) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DKGParticipant) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DKGParticipant.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DKGParticipant) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DKGParticipant.Merge(m, src)
+}
+func (m *DKGParticipant) XXX_Size() int {
+	return m.Size()
+}
+func (m *DKGParticipant) XXX_DiscardUnknown() {
+	xxx_messageInfo_DKGParticipant.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DKGParticipant proto.InternalMessageInfo
+
+func (m *DKGParticipant) GetMoniker() string {
+	if m != nil {
+		return m.Moniker
+	}
+	return ""
+}
+
+func (m *DKGParticipant) GetConsensusPubkey() string {
+	if m != nil {
+		return m.ConsensusPubkey
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*Params)(nil), "side.tss.Params")
+	proto.RegisterType((*DKGParticipant)(nil), "side.tss.DKGParticipant")
 }
 
 func init() { proto.RegisterFile("side/tss/params.proto", fileDescriptor_132faddf72ffea9f) }
 
 var fileDescriptor_132faddf72ffea9f = []byte{
-	// 261 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x90, 0xb1, 0x4e, 0xc3, 0x30,
-	0x10, 0x86, 0x63, 0x90, 0xaa, 0x12, 0xb6, 0xa8, 0xa0, 0xd0, 0xc1, 0xad, 0x98, 0x32, 0xd9, 0x12,
-	0x2c, 0xcc, 0x55, 0x1f, 0xa0, 0xaa, 0x60, 0x61, 0x89, 0x9c, 0xd8, 0x18, 0x2b, 0x49, 0xcf, 0x8a,
-	0x2f, 0x02, 0xde, 0x82, 0x11, 0xde, 0xa8, 0x63, 0x47, 0x26, 0x40, 0xc9, 0x8b, 0xa0, 0x38, 0x2d,
-	0xea, 0xe6, 0xbb, 0xcf, 0xff, 0x7f, 0xbf, 0xfe, 0xf0, 0xc2, 0x19, 0xa9, 0x38, 0x3a, 0xc7, 0xad,
-	0xa8, 0x45, 0xe5, 0x98, 0xad, 0x01, 0x21, 0x1a, 0xf7, 0x6b, 0x86, 0xce, 0x4d, 0x27, 0x1a, 0x34,
-	0xf8, 0x25, 0xef, 0x5f, 0x03, 0x9f, 0x52, 0x0d, 0xa0, 0x4b, 0xc5, 0xfd, 0x94, 0x35, 0x4f, 0x5c,
-	0x36, 0xb5, 0x40, 0x03, 0x9b, 0x81, 0x5f, 0x7f, 0x92, 0x70, 0xb4, 0xf2, 0x86, 0xd1, 0x5d, 0x18,
-	0x8b, 0xb2, 0x84, 0x17, 0x25, 0x53, 0x59, 0xe8, 0xd4, 0x8a, 0x1a, 0x4d, 0x6e, 0xac, 0xd8, 0xa0,
-	0x8b, 0xc9, 0xfc, 0x34, 0x39, 0x5b, 0x5f, 0xee, 0xf9, 0xb2, 0xd0, 0xab, 0x23, 0x1a, 0x3d, 0x84,
-	0x93, 0x5e, 0x81, 0xa6, 0x52, 0xd0, 0x60, 0x7a, 0x38, 0x11, 0x9f, 0xcc, 0x49, 0x72, 0x7e, 0x73,
-	0xc5, 0x86, 0x0c, 0xec, 0x90, 0x81, 0x2d, 0xf7, 0x1f, 0x16, 0xe3, 0xed, 0xf7, 0x2c, 0xf8, 0xf8,
-	0x99, 0x91, 0x75, 0x24, 0x0b, 0x7d, 0x3f, 0xe8, 0xff, 0xe9, 0x62, 0xdb, 0x52, 0xb2, 0x6b, 0x29,
-	0xf9, 0x6d, 0x29, 0x79, 0xef, 0x68, 0xb0, 0xeb, 0x68, 0xf0, 0xd5, 0xd1, 0xe0, 0x31, 0xd1, 0x06,
-	0x9f, 0x9b, 0x8c, 0xe5, 0x50, 0xf1, 0xbe, 0x00, 0xef, 0x9c, 0x43, 0xe9, 0x07, 0xfe, 0xea, 0x6b,
-	0xc2, 0x37, 0xab, 0x5c, 0x36, 0xf2, 0xe8, 0xf6, 0x2f, 0x00, 0x00, 0xff, 0xff, 0xeb, 0x3b, 0x81,
-	0xeb, 0x3f, 0x01, 0x00, 0x00,
+	// 330 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x91, 0xcd, 0x4e, 0xe3, 0x30,
+	0x14, 0x85, 0xe3, 0x99, 0x51, 0xa7, 0x75, 0xa5, 0x19, 0x14, 0x15, 0x14, 0xba, 0x70, 0xab, 0xae,
+	0xc2, 0xc6, 0x96, 0xca, 0x1b, 0x44, 0x95, 0x58, 0xb0, 0xa9, 0x22, 0x2a, 0x21, 0x36, 0x51, 0x7e,
+	0x8c, 0xb1, 0xf2, 0x73, 0xa3, 0xd8, 0x11, 0xf4, 0x2d, 0x58, 0xf2, 0x2a, 0xbc, 0x41, 0x97, 0x5d,
+	0xb2, 0x02, 0xd4, 0xbe, 0x08, 0x8a, 0xd3, 0xf0, 0xb3, 0xcb, 0x39, 0xe7, 0xde, 0x73, 0x3f, 0xc5,
+	0xf8, 0x58, 0xc9, 0x84, 0x33, 0xad, 0x14, 0x2b, 0xc3, 0x2a, 0xcc, 0x15, 0x2d, 0x2b, 0xd0, 0x60,
+	0xf7, 0x1b, 0x9b, 0x6a, 0xa5, 0xc6, 0x23, 0x01, 0x02, 0x8c, 0xc9, 0x9a, 0xaf, 0x36, 0x1f, 0x13,
+	0x01, 0x20, 0x32, 0xce, 0x8c, 0x8a, 0xea, 0x5b, 0x96, 0xd4, 0x55, 0xa8, 0x25, 0x14, 0x6d, 0x3e,
+	0x7b, 0x46, 0xb8, 0xb7, 0x34, 0x85, 0xf6, 0x35, 0x76, 0xc2, 0x2c, 0x83, 0x7b, 0x9e, 0x04, 0x49,
+	0x2a, 0x82, 0x32, 0xac, 0xb4, 0x8c, 0x65, 0x19, 0x16, 0x5a, 0x39, 0x68, 0xfa, 0xdb, 0x1d, 0xce,
+	0x1d, 0xda, 0x5d, 0xa3, 0x8b, 0xcb, 0x8b, 0xe5, 0xd7, 0x80, 0xf7, 0x67, 0xf3, 0x3a, 0xb1, 0xfc,
+	0x93, 0xc3, 0xfe, 0x22, 0x15, 0xdf, 0x42, 0x65, 0xaf, 0xf0, 0xa8, 0x69, 0xd4, 0x32, 0xe7, 0x50,
+	0xeb, 0xa0, 0x43, 0x70, 0x7e, 0x4d, 0x91, 0x3b, 0x9c, 0x9f, 0xd2, 0x96, 0x91, 0x76, 0x8c, 0x74,
+	0x71, 0x18, 0xf0, 0xfa, 0x4d, 0xed, 0xd3, 0xdb, 0x04, 0xf9, 0x76, 0x92, 0x8a, 0xab, 0x76, 0xbf,
+	0x4b, 0x67, 0x2b, 0xfc, 0xef, 0x27, 0x86, 0xed, 0xe0, 0xbf, 0x39, 0x14, 0x32, 0xe5, 0x95, 0x83,
+	0xa6, 0xc8, 0x1d, 0xf8, 0x9d, 0xb4, 0xcf, 0xf0, 0x51, 0x0c, 0x85, 0xe2, 0x85, 0xaa, 0x55, 0x50,
+	0xd6, 0x51, 0xca, 0xd7, 0xe6, 0xfc, 0xc0, 0xff, 0xff, 0xe9, 0x2f, 0x8d, 0xed, 0x79, 0x9b, 0x1d,
+	0x41, 0xdb, 0x1d, 0x41, 0xef, 0x3b, 0x82, 0x1e, 0xf7, 0xc4, 0xda, 0xee, 0x89, 0xf5, 0xb2, 0x27,
+	0xd6, 0x8d, 0x2b, 0xa4, 0xbe, 0xab, 0x23, 0x1a, 0x43, 0xce, 0x9a, 0x3f, 0x61, 0x80, 0x63, 0xc8,
+	0x8c, 0x60, 0x0f, 0xe6, 0x75, 0xf4, 0xba, 0xe4, 0x2a, 0xea, 0x99, 0xe8, 0xfc, 0x23, 0x00, 0x00,
+	0xff, 0xff, 0x74, 0x36, 0x7b, 0x49, 0xb6, 0x01, 0x00, 0x00,
 }
 
 func (m *Params) Marshal() (dAtA []byte, err error) {
@@ -137,12 +197,54 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	dAtA[i] = 0x12
 	if len(m.AllowedDkgParticipants) > 0 {
 		for iNdEx := len(m.AllowedDkgParticipants) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.AllowedDkgParticipants[iNdEx])
-			copy(dAtA[i:], m.AllowedDkgParticipants[iNdEx])
-			i = encodeVarintParams(dAtA, i, uint64(len(m.AllowedDkgParticipants[iNdEx])))
+			{
+				size, err := m.AllowedDkgParticipants[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintParams(dAtA, i, uint64(size))
+			}
 			i--
 			dAtA[i] = 0xa
 		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DKGParticipant) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DKGParticipant) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DKGParticipant) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ConsensusPubkey) > 0 {
+		i -= len(m.ConsensusPubkey)
+		copy(dAtA[i:], m.ConsensusPubkey)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.ConsensusPubkey)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Moniker) > 0 {
+		i -= len(m.Moniker)
+		copy(dAtA[i:], m.Moniker)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.Moniker)))
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -165,13 +267,30 @@ func (m *Params) Size() (n int) {
 	var l int
 	_ = l
 	if len(m.AllowedDkgParticipants) > 0 {
-		for _, s := range m.AllowedDkgParticipants {
-			l = len(s)
+		for _, e := range m.AllowedDkgParticipants {
+			l = e.Size()
 			n += 1 + l + sovParams(uint64(l))
 		}
 	}
 	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.DkgTimeoutDuration)
 	n += 1 + l + sovParams(uint64(l))
+	return n
+}
+
+func (m *DKGParticipant) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Moniker)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = len(m.ConsensusPubkey)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
 	return n
 }
 
@@ -214,7 +333,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AllowedDkgParticipants", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -224,23 +343,25 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthParams
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthParams
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AllowedDkgParticipants = append(m.AllowedDkgParticipants, string(dAtA[iNdEx:postIndex]))
+			m.AllowedDkgParticipants = append(m.AllowedDkgParticipants, DKGParticipant{})
+			if err := m.AllowedDkgParticipants[len(m.AllowedDkgParticipants)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -274,6 +395,120 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.DkgTimeoutDuration, dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipParams(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthParams
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DKGParticipant) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowParams
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DKGParticipant: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DKGParticipant: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Moniker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Moniker = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConsensusPubkey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ConsensusPubkey = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
