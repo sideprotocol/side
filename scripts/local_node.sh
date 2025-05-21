@@ -4,7 +4,7 @@ KEYS=("validator" "test")
 CHAINID="devnet"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
-DENOM_STR="uside,sat,uusdc,uusdt"
+DENOM_STR="uside,sat,uusdc,uusdt,ueth"
 INITIAL_ACCOUNT_STR=""
 set -f
 IFS=,
@@ -23,6 +23,9 @@ RUNES_VAULT=()
 TRUSTED_NON_BTC_RELAYER=""
 TRUSTED_FEE_PROVIDER=""
 PROTOCOL_FEE_COLLECTOR=""
+
+# tss params
+ALLOWED_DKG_PARTICIPANTS="" # [{"moniker":"<moniker 1>","consensus_pubkey":"<pub key 1>"},{"moniker":"<moniker 2>","consensus_pubkey":"<pub key 2>"},{"moniker":"<moniker 3>","consensus_pubkey":"<pub key 3>"}]
 
 # gov params
 GOV_VOTING_PERIOD="60s"
@@ -99,9 +102,8 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	jq --arg denom "${DENOMS[0]}" '.app_state["crisis"]["constant_fee"]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg denom "${DENOMS[0]}" '.app_state["gov"]["params"]["min_deposit"][0]["denom"]=$denom' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	jq --argjson parts '[{"moniker":"test-1","consensus_pubkey":"zDvxJmKTMThNIgebwh4UKSfTbY2F42I/3/NLK6mqpVQ="},{"moniker":"test-2","consensus_pubkey":"PBG7W03PMbtz3hs98yNzq8BZPEXZ3hLzMWcb57ioNV0="},{"moniker":"test-3","consensus_pubkey":"s0+II5UGAq0vSvYUY1vdy8Sp5Mrdew+7H4pZG+eQJII="}]' '.app_state["tss"]["params"]["allowed_dkg_participants"]=$parts' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	
-	# Set gas limit in genesis
+	# Set consensus params in genesis
 	jq --arg max_gas "$MAX_GAS" '.consensus["params"]["block"]["max_gas"]=$max_gas' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq --arg height "3" '.consensus["params"]["abci"]["vote_extensions_enable_height"]=$height' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 
@@ -138,6 +140,11 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	# set protocol fee collector
 	if [ -n "$PROTOCOL_FEE_COLLECTOR" ]; then
 	    jq --arg fee_collector "$PROTOCOL_FEE_COLLECTOR" '.app_state["btcbridge"]["params"]["protocol_fees"]["collector"]=$fee_collector' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+    fi
+
+	# set allowed dkg participants
+	if [ -n "$ALLOWED_DKG_PARTICIPANTS" ]; then
+	    jq --argjson participants "$ALLOWED_DKG_PARTICIPANTS" '.app_state["tss"]["params"]["allowed_dkg_participants"]=$participants' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
     fi
 
 	# set custom pruning settings
