@@ -705,6 +705,7 @@ func New(
 		app.BankKeeper,
 		app.OracleKeeper,
 		app.TSSKeeper,
+		app.BtcBridgeKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 

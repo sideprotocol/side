@@ -85,7 +85,9 @@ type DLCKeeper interface {
 type BtcBridgeKeeper interface {
 	DepositConfirmationDepth(ctx sdk.Context) int32
 	ValidateTransaction(ctx sdk.Context, tx string, prevTx string, blockHash string, proof []string, confirmationDepth int32) (*btcutil.Tx, *btcutil.Tx, error)
+
 	GetFeeRate(ctx sdk.Context) *btcbridgetypes.FeeRate
+	CheckFeeRate(ctx sdk.Context, feeRate *btcbridgetypes.FeeRate) error
 }
 
 // TSSKeeper defines the expected TSS keeper interface
