@@ -27,14 +27,15 @@ func (m msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		return nil, types.ErrPoolAlreadyExists
 	}
 
-	if m.bankKeeper.HasSupply(ctx, msg.Id) {
-		return nil, errorsmod.Wrapf(types.ErrInvalidPoolId, "denom %s already exists", msg.Id)
+	sTokenDenom := types.STokenDenom(msg.Id)
+	if m.bankKeeper.HasSupply(ctx, sTokenDenom) {
+		return nil, errorsmod.Wrapf(types.ErrInvalidPoolId, "denom %s already exists", sTokenDenom)
 	}
 
 	pool := &types.LendingPool{
 		Id:           msg.Id,
 		Supply:       sdk.NewCoin(msg.Config.LendingAsset.Denom, sdkmath.ZeroInt()),
-		TotalSTokens: sdk.NewCoin(msg.Id, sdkmath.ZeroInt()),
+		TotalSTokens: sdk.NewCoin(sTokenDenom, sdkmath.ZeroInt()),
 		Tranches:     types.NewTranches(msg.Config.Tranches),
 		Config:       msg.Config,
 		Status:       types.PoolStatus_INACTIVE,
@@ -88,7 +89,7 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 
 	m.SetPool(ctx, pool)
 
-	sTokens := sdk.NewCoin(pool.Id, sTokenAmount)
+	sTokens := sdk.NewCoin(types.STokenDenom(pool.Id), sTokenAmount)
 
 	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Lender), types.ModuleName, sdk.NewCoins(msg.Amount)); err != nil {
 		return nil, err
@@ -119,11 +120,12 @@ func (m msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasPool(ctx, msg.STokens.Denom) {
+	poolId := types.PoolIdFromSTokenDenom(msg.STokens.Denom)
+	if !m.HasPool(ctx, poolId) {
 		return nil, types.ErrPoolDoesNotExist
 	}
 
-	pool := m.GetPool(ctx, msg.STokens.Denom)
+	pool := m.GetPool(ctx, poolId)
 	if pool.Status != types.PoolStatus_ACTIVE {
 		return nil, types.ErrPoolNotActive
 	}

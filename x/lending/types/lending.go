@@ -16,6 +16,9 @@ import (
 )
 
 var (
+	// denom prefix for sToken
+	S_TOKEN_DENOM_PREFIX = "s"
+
 	// OneYear represents the seconds in one year
 	OneYear = 365 * 24 * 3600
 
@@ -79,6 +82,16 @@ func GetMaturityTime(originMaturityTime int64) int64 {
 // GetPricePair gets the price pair from the given pool config
 func GetPricePair(poolConfig PoolConfig) string {
 	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol), strings.ToUpper(poolConfig.LendingAsset.PriceSymbol))
+}
+
+// STokenDenom returns the sToken denom from the given pool id
+func STokenDenom(poolId string) string {
+	return fmt.Sprintf("%s%s", S_TOKEN_DENOM_PREFIX, poolId)
+}
+
+// PoolIdFromSTokenDenom returns the pool id from the given sToken denom
+func PoolIdFromSTokenDenom(denom string) string {
+	return strings.TrimPrefix(denom, S_TOKEN_DENOM_PREFIX)
 }
 
 // ToLiquidationAssetMeta converts the given asset metadata to the corresponding liquidation asset metadata
