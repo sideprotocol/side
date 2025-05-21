@@ -21,7 +21,7 @@ const (
 var (
 	ParamsStoreKey = []byte{0x01}
 
-	BtcFeeRateKey = []byte{0x10} // key for the bitcoin network fee rate
+	BtcFeeRateKey = []byte{0x13} // key for the bitcoin network fee rate
 
 	BtcWithdrawRequestSequenceKey       = []byte{0x20} // key for the withdrawal request sequence
 	BtcWithdrawRequestKeyPrefix         = []byte{0x21} // prefix for each key to a withdrawal request
