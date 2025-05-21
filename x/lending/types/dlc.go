@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/hex"
+	"slices"
 
 	btcschnorr "github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -162,14 +163,36 @@ func VerifyCets(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey 
 
 // VerifyLiquidationCet verifies the given liquidation cet and corresponding adaptor signatures
 func VerifyLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, dcmPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte) error {
-	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCET)), true)
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidCET, "failed to deserialize cet")
+	}
+
+	dcmPkScript, err := GetPkScriptFromPubKey(dcmPubKey)
 	if err != nil {
 		return err
 	}
 
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCET)), true)
+	if len(p.UnsignedTx.TxOut) != 1 || !bytes.Equal(p.UnsignedTx.TxOut[0].PkScript, dcmPkScript) {
+		return errorsmod.Wrap(ErrInvalidCET, "incorrect tx out")
+	}
+
+	if btcbridgetypes.IsDustOut(p.UnsignedTx.TxOut[0]) {
+		return errorsmod.Wrap(ErrInvalidCET, "dust tx out")
+	}
+
+	fee, err := p.GetTxFee()
+	if err != nil || int64(fee) < btcbridgetypes.GetTxVirtualSize(p.UnsignedTx, nil) {
+		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
+	}
+
+	if err := btcbridgetypes.CheckTransactionWeight(p.UnsignedTx, nil); err != nil {
+		return err
+	}
+
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
-		return ErrInvalidCET
+		return err
 	}
 
 	if len(p.UnsignedTx.TxIn) != len(vaultUtxos) {
@@ -238,14 +261,27 @@ func VerifyLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borro
 
 // VerifyRepaymentCet verifies the given repayment cet and corresponding signatures
 func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, dcmPubKey string, repaymentCet string, signatures []string) error {
-	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet)), true)
 	if err != nil {
+		return errorsmod.Wrap(ErrInvalidCET, "failed to deserialize cet")
+	}
+
+	if slices.ContainsFunc(p.UnsignedTx.TxOut, btcbridgetypes.IsDustOut) {
+		return errorsmod.Wrap(ErrInvalidCET, "dust tx out")
+	}
+
+	fee, err := p.GetTxFee()
+	if err != nil || int64(fee) < btcbridgetypes.GetTxVirtualSize(p.UnsignedTx, nil) {
+		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
+	}
+
+	if err := btcbridgetypes.CheckTransactionWeight(p.UnsignedTx, nil); err != nil {
 		return err
 	}
 
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet)), true)
+	vaultUtxos, err := getVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
-		return ErrInvalidCET
+		return err
 	}
 
 	if len(p.UnsignedTx.TxIn) != len(vaultUtxos) {
