@@ -17,11 +17,24 @@ type msgServer struct {
 
 // CreateDCM implements types.MsgServer.
 func (m msgServer) CreateDCM(goCtx context.Context, msg *types.MsgCreateDCM) (*types.MsgCreateDCMResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	baseParticipants := m.tssKeeper.AllowedDKGParticipants(ctx)
+	if len(baseParticipants) != 0 {
+		for _, p := range msg.Participants {
+			if !slices.Contains(baseParticipants, p) {
+				return nil, errorsmod.Wrap(types.ErrInvalidParticipants, "participant not authorized")
+			}
+		}
+	}
 
 	m.tssKeeper.InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_DCM, int32(types.DKGIntent_DKG_INTENT_DEFAULT), msg.Participants, msg.Threshold, 1)
 

@@ -10,18 +10,6 @@ import (
 
 var _ sdk.Msg = &MsgCreateDCM{}
 
-func NewMsgCreateDCM(
-	authority string,
-	participants []string,
-	threshold uint32,
-) *MsgCreateDCM {
-	return &MsgCreateDCM{
-		Authority:    authority,
-		Participants: participants,
-		Threshold:    threshold,
-	}
-}
-
 // ValidateBasic performs basic MsgCreateDCM message validation.
 func (m *MsgCreateDCM) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
