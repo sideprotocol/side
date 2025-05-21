@@ -23,8 +23,7 @@ var (
 	Permille = math.NewInt(1000)
 
 	ParamsKey       = []byte{0x01}
-	PriceKey        = []byte{0x02}
-	RedemptionIdKey = []byte{0x03}
+	RedemptionIdKey = []byte{0x02}
 
 	PoolKeyPrefix            = []byte{0x10}
 	LoanKeyPrefix            = []byte{0x11}

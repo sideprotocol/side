@@ -40,7 +40,6 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdApprove())
 	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
-	cmd.AddCommand(CmdSubmitPrice())
 
 	return cmd
 }
@@ -279,35 +278,6 @@ func CmdRepay() *cobra.Command {
 			}
 
 			msg := types.NewMsgRepay(
-				clientCtx.GetFromAddress().String(),
-				args[0],
-			)
-
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdSubmitPrice() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "submit-price [price]",
-		Short: "Submit BTCUSD price for testing",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgSubmitPrice(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 			)

@@ -53,8 +53,6 @@ type LiquidationKeeper interface {
 
 	CreateLiquidation(ctx sdk.Context, liquidation *liquidationtypes.Liquidation) *liquidationtypes.Liquidation
 
-	SetPrice(ctx sdk.Context, pair string, price string)
-
 	SetLiquidatedDebtHandler(handler liquidationtypes.LiquidatedDebtHandler)
 }
 
@@ -77,8 +75,6 @@ type DLCKeeper interface {
 
 	SetEvent(ctx sdk.Context, event *dlctypes.DLCEvent)
 	TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int)
-
-	SetPrice(ctx sdk.Context, pair string, price string)
 }
 
 // BtcBridgeKeeper defines the expected BtcBridge keeper interface

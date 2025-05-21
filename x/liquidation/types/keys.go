@@ -26,8 +26,6 @@ var (
 	LiquidationKeyPrefix                    = []byte{0x10} // prefix for each key to a liquidation
 	LiquidationRecordKeyPrefix              = []byte{0x11} // prefix for each key to a liquidation record
 	LiquidationRecordByLiquidationKeyPrefix = []byte{0x12} // prefix for each key to a liquidation record by liquidation
-
-	PriceKeyPrefix = []byte{0x20} // key prefix for the price
 )
 
 func LiquidationKey(id uint64) []byte {
@@ -42,8 +40,4 @@ func LiquidationRecordByLiquidationKey(liquidationId uint64, recordId uint64) []
 	key := append(LiquidationRecordByLiquidationKeyPrefix, sdk.Uint64ToBigEndian(liquidationId)...)
 
 	return append(key, sdk.Uint64ToBigEndian(recordId)...)
-}
-
-func PriceKey(pair string) []byte {
-	return append(PriceKeyPrefix, []byte(pair)...)
 }

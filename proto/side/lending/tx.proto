@@ -23,9 +23,6 @@ service Msg {
     rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
 
-    // SubmitPrice submits the price for testing 
-    rpc SubmitPrice(MsgSubmitPrice) returns (MsgSubmitPriceResponse);
-
     // UpdateParams defines a governance operation for updating the x/lending module
     // parameters. The authority defaults to the x/gov module account.
     //
@@ -144,15 +141,6 @@ message MsgRedeem {
 message MsgRedeemResponse {
 
 }
-
-message MsgSubmitPrice {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    string price = 2;
-}
-
-message MsgSubmitPriceResponse{}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

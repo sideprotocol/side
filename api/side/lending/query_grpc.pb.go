@@ -34,7 +34,6 @@ const (
 	Query_Redemption_FullMethodName        = "/side.lending.Query/Redemption"
 	Query_Repayment_FullMethodName         = "/side.lending.Query/Repayment"
 	Query_CurrentInterest_FullMethodName   = "/side.lending.Query/CurrentInterest"
-	Query_Price_FullMethodName             = "/side.lending.Query/Price"
 )
 
 // QueryClient is the client API for Query service.
@@ -57,8 +56,6 @@ type QueryClient interface {
 	Redemption(ctx context.Context, in *QueryRedemptionRequest, opts ...grpc.CallOption) (*QueryRedemptionResponse, error)
 	Repayment(ctx context.Context, in *QueryRepaymentRequest, opts ...grpc.CallOption) (*QueryRepaymentResponse, error)
 	CurrentInterest(ctx context.Context, in *QueryCurrentInterestRequest, opts ...grpc.CallOption) (*QueryCurrentInterestResponse, error)
-	// Price queries the current price by the given pair.
-	Price(ctx context.Context, in *QueryPriceRequest, opts ...grpc.CallOption) (*QueryPriceResponse, error)
 }
 
 type queryClient struct {
@@ -204,15 +201,6 @@ func (c *queryClient) CurrentInterest(ctx context.Context, in *QueryCurrentInter
 	return out, nil
 }
 
-func (c *queryClient) Price(ctx context.Context, in *QueryPriceRequest, opts ...grpc.CallOption) (*QueryPriceResponse, error) {
-	out := new(QueryPriceResponse)
-	err := c.cc.Invoke(ctx, Query_Price_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -233,8 +221,6 @@ type QueryServer interface {
 	Redemption(context.Context, *QueryRedemptionRequest) (*QueryRedemptionResponse, error)
 	Repayment(context.Context, *QueryRepaymentRequest) (*QueryRepaymentResponse, error)
 	CurrentInterest(context.Context, *QueryCurrentInterestRequest) (*QueryCurrentInterestResponse, error)
-	// Price queries the current price by the given pair.
-	Price(context.Context, *QueryPriceRequest) (*QueryPriceResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -286,9 +272,6 @@ func (UnimplementedQueryServer) Repayment(context.Context, *QueryRepaymentReques
 }
 func (UnimplementedQueryServer) CurrentInterest(context.Context, *QueryCurrentInterestRequest) (*QueryCurrentInterestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CurrentInterest not implemented")
-}
-func (UnimplementedQueryServer) Price(context.Context, *QueryPriceRequest) (*QueryPriceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Price not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -573,24 +556,6 @@ func _Query_CurrentInterest_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Price_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryPriceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Price(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_Price_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Price(ctx, req.(*QueryPriceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -657,10 +622,6 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CurrentInterest",
 			Handler:    _Query_CurrentInterest_Handler,
-		},
-		{
-			MethodName: "Price",
-			Handler:    _Query_Price_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
