@@ -20,9 +20,8 @@ var (
 	ErrInvalidDepositTransaction = errorsmod.Register(ModuleName, 2108, "invalid deposit transaction")
 	ErrInvalidDepositAmount      = errorsmod.Register(ModuleName, 2109, "invalid deposit amount")
 	ErrDepositNotEnabled         = errorsmod.Register(ModuleName, 2110, "deposit not enabled")
-	ErrUntrustedBtcRelayer       = errorsmod.Register(ModuleName, 2111, "untrusted btc relayer")
-	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2112, "untrusted non btc relayer")
-	ErrUntrustedFeeProvider      = errorsmod.Register(ModuleName, 2113, "untrusted fee provider")
+	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2111, "untrusted non btc relayer")
+	ErrUntrustedFeeProvider      = errorsmod.Register(ModuleName, 2112, "untrusted fee provider")
 
 	ErrInvalidWithdrawAmount        = errorsmod.Register(ModuleName, 3100, "invalid withdrawal amount")
 	ErrInvalidBtcAddress            = errorsmod.Register(ModuleName, 3101, "invalid btc address")

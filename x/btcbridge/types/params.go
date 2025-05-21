@@ -20,11 +20,10 @@ import (
 )
 
 var (
-
-	// default confirmation depth for bitcoin deposit transactions
+	// default confirmation depth relative to oracle for bitcoin deposit transactions
 	DefaultDepositConfirmationDepth = int32(1)
 
-	// default confirmation depth for bitcoin withdrawal transactions
+	// default confirmation depth relative to oracle for bitcoin withdrawal transactions
 	DefaultWithdrawConfirmationDepth = int32(1)
 
 	// default BTC voucher denom
@@ -55,7 +54,7 @@ var (
 	DefaultIBCTimeoutHeightOffset = uint64(0)
 
 	// default IBC timeout duration
-	DefaultIBCTimeoutDuration = time.Duration(86400) * time.Second // 1 day
+	DefaultIBCTimeoutDuration = time.Duration(3600) * time.Second // 1 hour
 )
 
 // NewParams creates a new Params instance
