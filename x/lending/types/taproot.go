@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/hex"
-	"fmt"
 
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 
@@ -173,14 +172,13 @@ func GetPkScriptFromAddress(address string) ([]byte, error) {
 }
 
 // GetPkScriptFromPubKey gets the pk script from the given taproot pubkey
-// Assume that the given pubkey is 32 bytes w/o 0x prefix
 func GetPkScriptFromPubKey(pubKeyHex string) ([]byte, error) {
-	pubKey, err := hex.DecodeString(fmt.Sprintf("02%s", pubKeyHex))
+	pubKey, err := hex.DecodeString(pubKeyHex)
 	if err != nil {
 		return nil, err
 	}
 
-	parsedPubKey, err := secp256k1.ParsePubKey(pubKey)
+	parsedPubKey, err := schnorr.ParsePubKey(pubKey)
 	if err != nil {
 		return nil, err
 	}
@@ -192,12 +190,12 @@ func GetPkScriptFromPubKey(pubKeyHex string) ([]byte, error) {
 
 // GetNUMSPoint gets the NUMS point
 func GetNUMSPoint() *btcec.PublicKey {
-	pointBytes, err := hex.DecodeString(fmt.Sprintf("02%s", NUMS_POINT))
+	pointBytes, err := hex.DecodeString(NUMS_POINT)
 	if err != nil {
 		panic(err)
 	}
 
-	point, err := btcec.ParsePubKey(pointBytes)
+	point, err := schnorr.ParsePubKey(pointBytes)
 	if err != nil {
 		panic(err)
 	}
