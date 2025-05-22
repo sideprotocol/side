@@ -72,18 +72,22 @@ enum SigningStatus {
 enum SigningType {
     // SIGNING_TYPE_SCHNORR defines the common schnorr signing
     SIGNING_TYPE_SCHNORR = 0;
+    // SIGNING_TYPE_SCHNORR_WITH_TWEAK defines the schnorr signing with tweak
+    SIGNING_TYPE_SCHNORR_WITH_TWEAK = 1;
     // SIGNING_TYPE_SCHNORR_WITH_COMMITMENT defines the schnorr signing with commitment
-    SIGNING_TYPE_SCHNORR_WITH_COMMITMENT = 1;
+    SIGNING_TYPE_SCHNORR_WITH_COMMITMENT = 2;
     // SIGNING_TYPE_SCHNORR_ADAPTOR defines the schnorr adaptor signing
-    SIGNING_TYPE_SCHNORR_ADAPTOR = 2;
+    SIGNING_TYPE_SCHNORR_ADAPTOR = 3;
 }
 
 // Signing Options
 message SigningOptions {
+    // optional tweak
+    string tweak = 1;
     // optional public nonce, i.e. commitment
-    string nonce = 1;
+    string nonce = 2;
     // optional adaptor point
-    string adaptor_point = 2;
+    string adaptor_point = 3;
 }
 
 // Signing Request

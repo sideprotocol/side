@@ -35,6 +35,7 @@ func (k Keeper) HandleSettlementSignatures(ctx sdk.Context, sender string, liqui
 	}
 
 	dcmPubKey, _ := hex.DecodeString(liquidation.DCM)
+	verificationKey := types.GetTaprootOutKey(dcmPubKey)
 
 	for i, input := range settlementTxPsbt.Inputs {
 		sigHash, err := types.CalcTaprootSigHash(settlementTxPsbt, i, input.SighashType)
@@ -44,7 +45,7 @@ func (k Keeper) HandleSettlementSignatures(ctx sdk.Context, sender string, liqui
 
 		sigBytes, _ := hex.DecodeString(signatures[i])
 
-		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
+		if !schnorr.Verify(sigBytes, sigHash, verificationKey) {
 			return types.ErrInvalidSignature
 		}
 

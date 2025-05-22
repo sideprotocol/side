@@ -55,6 +55,6 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 		k.SetLiquidation(ctx, liquidation)
 
 		// initiate signing request via TSS
-		k.TSSKeeper().InitiateSigningRequest(ctx, types.ModuleName, types.ToScopedId(liquidation.Id), tsstypes.SigningType_SIGNING_TYPE_SCHNORR, int32(types.SigningIntent_SIGNING_INTENT_DEFAULT), liquidation.DCM, sigHashes, nil)
+		k.TSSKeeper().InitiateSigningRequest(ctx, types.ModuleName, types.ToScopedId(liquidation.Id), tsstypes.SigningType_SIGNING_TYPE_SCHNORR_WITH_TWEAK, int32(types.SigningIntent_SIGNING_INTENT_DEFAULT), liquidation.DCM, sigHashes, &tsstypes.SigningOptions{Tweak: ""})
 	}
 }

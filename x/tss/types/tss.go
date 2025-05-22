@@ -91,6 +91,9 @@ func GetRefreshingCompletionSigMsg(id uint64, pubKeys []string) []byte {
 // Assume that the options match the signing type
 func GetSigningOption(signingType SigningType, options *SigningOptions) string {
 	switch signingType {
+	case SigningType_SIGNING_TYPE_SCHNORR_WITH_TWEAK:
+		return options.Tweak
+
 	case SigningType_SIGNING_TYPE_SCHNORR_WITH_COMMITMENT:
 		return options.Nonce
 
