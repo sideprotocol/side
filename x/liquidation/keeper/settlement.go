@@ -10,11 +10,11 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	"github.com/sideprotocol/side/x/liquidation/types"
 )
 
 // HandleSettlementSignatures handles the settlement tx signatures
+// Assume that signatures have already been verified
 func (k Keeper) HandleSettlementSignatures(ctx sdk.Context, sender string, liquidationId uint64, signatures []string) error {
 	if !k.HasLiquidation(ctx, liquidationId) {
 		return types.ErrLiquidationDoesNotExist
@@ -30,25 +30,8 @@ func (k Keeper) HandleSettlementSignatures(ctx sdk.Context, sender string, liqui
 		return err
 	}
 
-	if len(signatures) != len(settlementTxPsbt.Inputs) {
-		return errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
-	}
-
-	dcmPubKey, _ := hex.DecodeString(liquidation.DCM)
-	verificationKey := types.GetTaprootOutKey(dcmPubKey)
-
-	for i, input := range settlementTxPsbt.Inputs {
-		sigHash, err := types.CalcTaprootSigHash(settlementTxPsbt, i, input.SighashType)
-		if err != nil {
-			return err
-		}
-
+	for i := range settlementTxPsbt.Inputs {
 		sigBytes, _ := hex.DecodeString(signatures[i])
-
-		if !schnorr.Verify(sigBytes, sigHash, verificationKey) {
-			return types.ErrInvalidSignature
-		}
-
 		settlementTxPsbt.Inputs[i].TaprootKeySpendSig = sigBytes
 	}
 

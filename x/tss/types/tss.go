@@ -9,6 +9,10 @@ import (
 	"slices"
 	"time"
 
+	"github.com/btcsuite/btcd/btcec/v2"
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
+	"github.com/btcsuite/btcd/txscript"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/hash"
@@ -103,6 +107,15 @@ func GetSigningOption(signingType SigningType, options *SigningOptions) string {
 	default:
 		return ""
 	}
+}
+
+// GetTweakedPubKey gets the tweaked pub key by the given tweak
+// Assume that the given pub key is valid
+func GetTweakedPubKey(pubKeyBytes []byte, tweak []byte) []byte {
+	pubKey, _ := btcec.ParsePubKey(pubKeyBytes)
+	tweakedPubKey := txscript.ComputeTaprootOutputKey(pubKey, tweak)
+
+	return schnorr.SerializePubKey(tweakedPubKey)
 }
 
 // GetExpirationTime gets the expiration time according to the given timeout duration
