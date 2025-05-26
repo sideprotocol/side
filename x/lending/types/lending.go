@@ -28,13 +28,13 @@ var (
 
 // GetExchangeRate calculates the sToken exchange rate according to the given params
 // Formula:
-// exchange rate = (totalAvailable + total borrowed) / totalSTokens
-func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalSTokens sdkmath.Int) sdkmath.LegacyDec {
+// exchange rate = (totalAvailable + total borrowed - total reserve) / totalSTokens
+func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalReserve sdkmath.Int, totalSTokens sdkmath.Int) sdkmath.LegacyDec {
 	if totalSTokens.IsZero() {
 		return sdkmath.LegacyOneDec()
 	}
 
-	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed)).Quo(totalSTokens.ToLegacyDec())
+	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed).Sub(totalReserve)).Quo(totalSTokens.ToLegacyDec())
 }
 
 // GetInterest calculates the loan interest based on the given borrow index
