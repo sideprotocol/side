@@ -53,15 +53,17 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if len(msg.Params.AllowedOracleParticipants) != 0 {
-		baseParticipants := m.tssKeeper.AllowedDKGParticipants(ctx)
+	baseParticipants := m.tssKeeper.AllowedDKGParticipants(ctx)
 
-		if len(baseParticipants) != 0 {
-			for _, p := range msg.Params.AllowedOracleParticipants {
-				if !slices.Contains(baseParticipants, p) {
-					return nil, errorsmod.Wrap(types.ErrInvalidParams, "oracle participant not authorized")
-				}
+	if len(msg.Params.AllowedOracleParticipants) != 0 && len(baseParticipants) != 0 {
+		for _, p := range msg.Params.AllowedOracleParticipants {
+			if !slices.Contains(baseParticipants, p) {
+				return nil, errorsmod.Wrap(types.ErrInvalidParams, "oracle participant not authorized")
 			}
+		}
+	} else if len(baseParticipants) != 0 {
+		if msg.Params.OracleParticipantNum > uint32(len(baseParticipants)) {
+			return nil, errorsmod.Wrapf(types.ErrInvalidParams, "oracle participant number cannot be greater than allowed participant number %d", len(baseParticipants))
 		}
 	}
 
