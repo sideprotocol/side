@@ -62,7 +62,7 @@ func initAppConfig() (string, interface{}) {
 	// lru_size = 0`
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
 [oracle]
-# Validator node should set this to true
+# If this node will act as a validator, set to true. For non-validator (full) nodes, set to false.
 enable = true
 
 bitcoin_rpc = ""
