@@ -324,6 +324,9 @@ type App struct {
 
 	// module configurator
 	configurator module.Configurator
+
+	// vote extension handler
+	voteExtensionHandler oracleabci.PriceOracleVoteExtHandler
 }
 
 // New returns a reference to an initialized blockchain app
@@ -1020,7 +1023,7 @@ func New(
 	app.MountTransientStores(tkeys)
 	app.MountMemoryStores(memKeys)
 
-	// initialize BaseApp
+	// create ante handler
 	anteHandler, err := ante.NewAnteHandler(
 		ante.HandlerOptions{
 			AccountKeeper:   app.AccountKeeper,
@@ -1034,20 +1037,20 @@ func New(
 		panic(fmt.Errorf("failed to create AnteHandler: %w", err))
 	}
 
+	// create vote extension handler
+	app.voteExtensionHandler = oracleabci.NewPriceOracleVoteExtHandler(app.Logger(), app.StakingKeeper, app.OracleKeeper, &oracleConfig)
+
+	// initialize BaseApp
 	app.SetAnteHandler(anteHandler)
 	app.SetInitChainer(app.InitChainer)
 	app.SetPreBlocker(app.PreBlocker)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
 
-	voteExtHander := oracleabci.NewPriceOracleVoteExtHandler(app.Logger(), app.StakingKeeper, app.OracleKeeper, &oracleConfig)
-	// propHandler := oracle.NewProposalHandler(app.Logger(), app.StakingKeeper)
-
-	app.SetExtendVoteHandler(voteExtHander.ExtendVoteHandler())
-	app.SetVerifyVoteExtensionHandler(voteExtHander.VerifyVoteExtensionHandler())
-	app.SetPrepareProposal(voteExtHander.PrepareProposal())
-	app.SetProcessProposal(voteExtHander.ProcessProposal())
-	app.SetPreBlocker(voteExtHander.PreBlocker)
+	app.SetExtendVoteHandler(app.voteExtensionHandler.ExtendVoteHandler())
+	app.SetVerifyVoteExtensionHandler(app.voteExtensionHandler.VerifyVoteExtensionHandler())
+	app.SetPrepareProposal(app.voteExtensionHandler.PrepareProposal())
+	app.SetProcessProposal(app.voteExtensionHandler.ProcessProposal())
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
@@ -1066,8 +1069,18 @@ func New(
 func (app *App) Name() string { return app.BaseApp.Name() }
 
 // PreBlocker application updates every pre block
-func (app *App) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
-	return app.ModuleManager.PreBlock(ctx)
+func (app *App) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+	res, err := app.ModuleManager.PreBlock(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = app.voteExtensionHandler.PreBlocker(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // BeginBlocker application updates every begin block
