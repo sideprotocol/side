@@ -14,9 +14,10 @@ type Keeper struct {
 	storeKey storetypes.StoreKey
 	memKey   storetypes.StoreKey
 
-	bankKeeper   types.BankKeeper
-	oracleKeeper types.OracleKeeper
-	tssKeeper    types.TSSKeeper
+	bankKeeper      types.BankKeeper
+	oracleKeeper    types.OracleKeeper
+	tssKeeper       types.TSSKeeper
+	btcbridgeKeeper types.BtcBridgeKeeper
 
 	liquidatedDebtHandler types.LiquidatedDebtHandler
 
@@ -30,16 +31,18 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	oracleKeeper types.OracleKeeper,
 	tssKeeper types.TSSKeeper,
+	btcbridgeKeeper types.BtcBridgeKeeper,
 	authority string,
 ) *Keeper {
 	k := &Keeper{
-		cdc:          cdc,
-		storeKey:     storeKey,
-		memKey:       memKey,
-		bankKeeper:   bankKeeper,
-		oracleKeeper: oracleKeeper,
-		tssKeeper:    tssKeeper,
-		authority:    authority,
+		cdc:             cdc,
+		storeKey:        storeKey,
+		memKey:          memKey,
+		bankKeeper:      bankKeeper,
+		oracleKeeper:    oracleKeeper,
+		tssKeeper:       tssKeeper,
+		btcbridgeKeeper: btcbridgeKeeper,
+		authority:       authority,
 	}
 
 	// register signing request completed handler
@@ -79,6 +82,10 @@ func (k Keeper) OracleKeeper() types.OracleKeeper {
 
 func (k Keeper) TSSKeeper() types.TSSKeeper {
 	return k.tssKeeper
+}
+
+func (k Keeper) BtcBridgeKeeper() types.BtcBridgeKeeper {
+	return k.btcbridgeKeeper
 }
 
 func (k Keeper) LiquidatedDebtHandler() types.LiquidatedDebtHandler {

@@ -28,10 +28,13 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "liquidation debt amount must be greater or equal than minimum liquidation factor")
 	}
 
-	currentPrice, err := k.GetPrice(ctx, "BTCUSD")
+	currentPrice, err := k.GetPrice(ctx, types.GetPricePair(liquidation))
 	if err != nil {
 		return nil, types.ErrInvalidPrice
 	}
+
+	collateralDecimals := int(liquidation.CollateralAsset.Decimals)
+	debtDecimals := int(liquidation.DebtAsset.Decimals)
 
 	// check remaining debt amount
 	remainingDebtAmount := liquidation.DebtAmount.Sub(liquidation.LiquidatedDebtAmount)
@@ -40,13 +43,13 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 	}
 
 	// calculate collateral amount
-	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, collateralDecimals)).Quo(sdkmath.NewIntWithDecimal(1, debtDecimals)).ToLegacyDec().Quo(currentPrice).TruncateInt()
 
 	// check remaining collateral amount
 	remainingCollateralAmount := liquidation.ActualCollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
 	if remainingCollateralAmount.Amount.LT(collateralAmount) {
 		collateralAmount = remainingCollateralAmount.Amount
-		debtAmount.Amount = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Mul(currentPrice).QuoInt(sdkmath.NewIntWithDecimal(1, 8)).TruncateInt()
+		debtAmount.Amount = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, debtDecimals)).ToLegacyDec().Mul(currentPrice).QuoInt(sdkmath.NewIntWithDecimal(1, collateralDecimals)).TruncateInt()
 	}
 
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(liquidator), types.ModuleName, sdk.NewCoins(debtAmount)); err != nil {
@@ -57,7 +60,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 
 	// calculate bonus
 	bonusAmountInDebt := debtAmount.Amount.Mul(sdkmath.NewInt(int64(k.LiquidationBonusFactor(ctx)))).Quo(sdkmath.NewInt(1000))
-	bonusAmount := bonusAmountInDebt.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+	bonusAmount := bonusAmountInDebt.Mul(sdkmath.NewIntWithDecimal(1, collateralDecimals)).Quo(sdkmath.NewIntWithDecimal(1, debtDecimals)).ToLegacyDec().Quo(currentPrice).TruncateInt()
 
 	// check if there is left collateral for bonus
 	if bonusAmount.GT(remainingCollateralAmount.Amount) {

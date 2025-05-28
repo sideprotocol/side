@@ -25,7 +25,7 @@ type StakingKeeper interface {
 
 // TSSKeeper defines the expected TSS keeper interface
 type TSSKeeper interface {
-	GetParams(ctx sdk.Context) tsstypes.Params
+	AllowedDKGParticipants(ctx sdk.Context) []string
 
 	InitiateDKG(ctx sdk.Context, module string, ty string, intent int32, participants []string, threshold uint32, batchSize uint32) *tsstypes.DKGRequest
 	InitiateSigningRequest(ctx sdk.Context, module string, scopedId string, ty tsstypes.SigningType, intent int32, pubKey string, sigHashes []string, options *tsstypes.SigningOptions) *tsstypes.SigningRequest

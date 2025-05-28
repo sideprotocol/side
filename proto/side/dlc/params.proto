@@ -7,9 +7,10 @@ import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
-message PriceInterval {
-    string price_pair = 1;
-    string interval = 2 [
+message PricePair {
+    string pair = 1;
+    int32 decimals = 2;
+    string interval = 3 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable)   = false
@@ -19,7 +20,7 @@ message PriceInterval {
 // Params defines the parameters for the module.
 message Params {
     uint32 price_event_nonce_queue_size = 1;
-    repeated PriceInterval price_intervals = 2 [(gogoproto.nullable) = false];
+    repeated PricePair price_pairs = 2 [(gogoproto.nullable) = false];
     uint32 date_event_nonce_queue_size = 3;
     google.protobuf.Duration date_interval = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
     uint32 lending_event_nonce_queue_size = 5;

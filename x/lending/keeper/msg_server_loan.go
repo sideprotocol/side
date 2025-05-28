@@ -17,6 +17,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
+	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
@@ -275,14 +276,24 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	pricePair := types.GetPricePair(poolConfig)
+	collateralDecimals := int(poolConfig.CollateralAsset.Decimals)
+	borrowDecimals := int(poolConfig.LendingAsset.Decimals)
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, int(poolConfig.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(poolConfig.LendingAsset.Decimals), loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, m.dlcKeeper.PriceInterval(ctx, pricePair))
-	if !m.dlcKeeper.HasEventByPrice(ctx, pricePair, liquidationPrice.String()) {
+	dlcPricePair, found := m.dlcKeeper.PricePair(ctx, pricePair)
+	if !found {
+		errRejected = errorsmod.Wrap(types.ErrInvalidPricePair, "price pair does not exist in dlc")
+		return nil, nil
+	}
+
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(dlcPricePair.Decimals), dlcPricePair.Interval)
+	normalizedLiquidationPrice := dlctypes.NormalizePrice(liquidationPrice, int(dlcPricePair.Decimals))
+
+	if !m.dlcKeeper.HasEventByPrice(ctx, pricePair, normalizedLiquidationPrice) {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
 		return nil, nil
 	}
 
-	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, pricePair, liquidationPrice.String())
+	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, pricePair, normalizedLiquidationPrice)
 	if liquidationEvent.HasTriggered {
 		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event has triggered")
 		return nil, nil
@@ -300,7 +311,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	// check LTV
-	if collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).ToLegacyDec().Mul(currentPrice).Quo(sdkmath.NewIntWithDecimal(1, 8).Mul(types.Percent).ToLegacyDec()).TruncateInt().LT(loan.BorrowAmount.Amount) {
+	if collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowDecimals)).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).ToLegacyDec().Mul(currentPrice).Quo(sdkmath.NewIntWithDecimal(1, collateralDecimals).Mul(types.Percent).ToLegacyDec()).TruncateInt().LT(loan.BorrowAmount.Amount) {
 		errRejected = types.ErrInsufficientCollateral
 		return nil, nil
 	}
@@ -345,13 +356,13 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		return nil, types.ErrInvalidLoanStatus
 	}
 
-	// Do not validate tx for now
-	// if _, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, depositLog.DepositTx, "", msg.BlockHash, msg.Proof); err != nil {
-	// 	return nil, types.ErrInvalidProof
-	// }
+	// validate deposit tx
+	tx, _, err := m.btcbridgeKeeper.ValidateTransaction(ctx, msg.DepositTx, "", msg.BlockHash, msg.Proof, m.btcbridgeKeeper.DepositConfirmationDepth(ctx))
+	if err != nil {
+		return nil, errorsmod.Wrapf(types.ErrInvalidDepositTx, "failed to validate tx: %v", err)
+	}
 
-	depositTx, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.DepositTx)), true)
-	depositTxHash := depositTx.UnsignedTx.TxHash().String()
+	depositTxHash := tx.Hash().String()
 
 	var depositLog *types.DepositLog
 	if m.HasDepositLog(ctx, depositTxHash) {

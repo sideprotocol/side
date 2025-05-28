@@ -17,6 +17,17 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 	// get completed liquidations
 	liquidations := k.GetLiquidations(ctx, types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED)
+	if len(liquidations) == 0 {
+		return
+	}
+
+	// get fee rate
+	feeRate := k.BtcBridgeKeeper().GetFeeRate(ctx)
+	if err := k.BtcBridgeKeeper().CheckFeeRate(ctx, feeRate); err != nil {
+		k.Logger(ctx).Info("Failed to get fee rate to handle liquidation", "err", err)
+
+		return
+	}
 
 	for _, liquidation := range liquidations {
 		// handle liquidated debt(repay the lending pool)
@@ -28,9 +39,9 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 		}
 
 		// build settlement tx
-		settlementTx, txHash, sigHashes, changeAmount, err := types.BuildSettlementTransaction(liquidation, k.GetLiquidationRecords(ctx, liquidation.Id), k.ProtocolLiquidationFeeCollector(ctx), 5)
+		settlementTx, txHash, sigHashes, changeAmount, err := types.BuildSettlementTransaction(liquidation, k.GetLiquidationRecords(ctx, liquidation.Id), k.ProtocolLiquidationFeeCollector(ctx), feeRate.Value)
 		if err != nil {
-			k.Logger(ctx).Info("Failed to build settlement transaction", "liquidation id", liquidation.Id, "err", err)
+			k.Logger(ctx).Info("Failed to build settlement transaction", "liquidation id", liquidation.Id, "fee rate", feeRate.Value, "err", err)
 
 			continue
 		}
@@ -44,6 +55,6 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 		k.SetLiquidation(ctx, liquidation)
 
 		// initiate signing request via TSS
-		k.TSSKeeper().InitiateSigningRequest(ctx, types.ModuleName, types.ToScopedId(liquidation.Id), tsstypes.SigningType_SIGNING_TYPE_SCHNORR, int32(types.SigningIntent_SIGNING_INTENT_DEFAULT), liquidation.DCM, sigHashes, nil)
+		k.TSSKeeper().InitiateSigningRequest(ctx, types.ModuleName, types.ToScopedId(liquidation.Id), tsstypes.SigningType_SIGNING_TYPE_SCHNORR_WITH_TWEAK, int32(types.SigningIntent_SIGNING_INTENT_DEFAULT), liquidation.DCM, sigHashes, &tsstypes.SigningOptions{Tweak: ""})
 	}
 }

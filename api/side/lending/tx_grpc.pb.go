@@ -28,7 +28,6 @@ const (
 	Msg_Approve_FullMethodName          = "/side.lending.Msg/Approve"
 	Msg_Redeem_FullMethodName           = "/side.lending.Msg/Redeem"
 	Msg_Repay_FullMethodName            = "/side.lending.Msg/Repay"
-	Msg_SubmitPrice_FullMethodName      = "/side.lending.Msg/SubmitPrice"
 	Msg_UpdateParams_FullMethodName     = "/side.lending.Msg/UpdateParams"
 )
 
@@ -45,8 +44,6 @@ type MsgClient interface {
 	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
 	Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
-	// SubmitPrice submits the price for testing
-	SubmitPrice(ctx context.Context, in *MsgSubmitPrice, opts ...grpc.CallOption) (*MsgSubmitPriceResponse, error)
 	// UpdateParams defines a governance operation for updating the x/lending module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -143,15 +140,6 @@ func (c *msgClient) Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOp
 	return out, nil
 }
 
-func (c *msgClient) SubmitPrice(ctx context.Context, in *MsgSubmitPrice, opts ...grpc.CallOption) (*MsgSubmitPriceResponse, error) {
-	out := new(MsgSubmitPriceResponse)
-	err := c.cc.Invoke(ctx, Msg_SubmitPrice_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	out := new(MsgUpdateParamsResponse)
 	err := c.cc.Invoke(ctx, Msg_UpdateParams_FullMethodName, in, out, opts...)
@@ -174,8 +162,6 @@ type MsgServer interface {
 	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
 	Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
-	// SubmitPrice submits the price for testing
-	SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error)
 	// UpdateParams defines a governance operation for updating the x/lending module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -214,9 +200,6 @@ func (UnimplementedMsgServer) Redeem(context.Context, *MsgRedeem) (*MsgRedeemRes
 }
 func (UnimplementedMsgServer) Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Repay not implemented")
-}
-func (UnimplementedMsgServer) SubmitPrice(context.Context, *MsgSubmitPrice) (*MsgSubmitPriceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitPrice not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -396,24 +379,6 @@ func _Msg_Repay_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SubmitPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSubmitPrice)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SubmitPrice(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_SubmitPrice_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SubmitPrice(ctx, req.(*MsgSubmitPrice))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -474,10 +439,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Repay",
 			Handler:    _Msg_Repay_Handler,
-		},
-		{
-			MethodName: "SubmitPrice",
-			Handler:    _Msg_SubmitPrice_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

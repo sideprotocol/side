@@ -59,13 +59,12 @@ func (k Keeper) HandleNonce(ctx sdk.Context, oraclePubKey string, nonce string, 
 	switch eventType {
 	case types.DlcEventType_PRICE:
 		pricePairIndex := int(intent) - int(types.DKGIntent_DKG_INTENT_PRICE_EVENT_NONCE)
-		priceIntervals := k.PriceIntervals(ctx)
-		if len(priceIntervals) < pricePairIndex+1 || len(priceIntervals[pricePairIndex].PricePair) == 0 {
+		pricePair, found := k.PricePairByIndex(ctx, pricePairIndex)
+		if !found {
 			return errorsmod.Wrap(types.ErrInvalidDKGIntent, "price pair does not exist")
 		}
 
-		priceInterval := priceIntervals[pricePairIndex]
-		pair := priceInterval.PricePair
+		pair := pricePair.Pair
 
 		if k.GetTriggeredPriceEventQueueCount(ctx, pair) > 0 {
 			triggeredPriceEvent := k.GetTriggeredPriceEventFromQueue(ctx, pair)
@@ -81,13 +80,13 @@ func (k Keeper) HandleNonce(ctx sdk.Context, oraclePubKey string, nonce string, 
 
 		currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
 
-		triggerPrice := currentEventPrice.Add(priceInterval.Interval)
+		triggerPrice := types.NormalizePrice(currentEventPrice.Add(pricePair.Interval), int(pricePair.Decimals))
 
-		dlcEvent.Description = fmt.Sprintf("price event at price %s for pair %s", triggerPrice.String(), pair)
-		dlcEvent.Outcomes = append(dlcEvent.Outcomes, types.FormatPrice(triggerPrice.String(), pair))
+		dlcEvent.Description = fmt.Sprintf("price event at price %s for pair %s", triggerPrice, pair)
+		dlcEvent.Outcomes = append(dlcEvent.Outcomes, types.FormatPrice(triggerPrice, pair))
 
-		k.SetEventByPrice(ctx, pair, triggerPrice.String(), dlcEvent)
-		k.SetCurrentEventPrice(ctx, pair, triggerPrice.String())
+		k.SetEventByPrice(ctx, pair, triggerPrice, dlcEvent)
+		k.SetCurrentEventPrice(ctx, pair, triggerPrice)
 
 	case types.DlcEventType_DATE:
 		currentEventDate := k.GetCurrentEventDate(ctx)

@@ -20,12 +20,11 @@ import (
 )
 
 var (
+	// default confirmation depth relative to oracle for bitcoin deposit transactions
+	DefaultDepositConfirmationDepth = int32(1)
 
-	// default confirmation depth for bitcoin deposit transactions
-	DefaultDepositConfirmationDepth = int32(6)
-
-	// default confirmation depth for bitcoin withdrawal transactions
-	DefaultWithdrawConfirmationDepth = int32(6)
+	// default confirmation depth relative to oracle for bitcoin withdrawal transactions
+	DefaultWithdrawConfirmationDepth = int32(1)
 
 	// default BTC voucher denom
 	DefaultBtcVoucherDenom = "sat"
@@ -52,10 +51,10 @@ var (
 	DefaultIBCPortId = "transfer"
 
 	// default IBC timeout height offset
-	DefaultIBCTimeoutHeightOffset = uint64(1000)
+	DefaultIBCTimeoutHeightOffset = uint64(0)
 
 	// default IBC timeout duration
-	DefaultIBCTimeoutDuration = time.Duration(10) * time.Minute // 10 mins
+	DefaultIBCTimeoutDuration = time.Duration(3600) * time.Second // 1 hour
 )
 
 // NewParams creates a new Params instance
@@ -327,7 +326,7 @@ func validateTSSParams(params *TSSParams) error {
 // validateIBCParams validates the given IBC params
 func validateIBCParams(params *IBCParams) error {
 	if err := ibchost.PortIdentifierValidator(params.PortId); err != nil {
-		return errorsmod.Wrapf(ErrInvalidParams, "invalid IBC port: %v", err)
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid IBC port id: %v", err)
 	}
 
 	if params.TimeoutDuration < 0 {

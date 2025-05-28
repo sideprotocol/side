@@ -40,6 +40,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdWithdrawToBitcoin())
 	cmd.AddCommand(CmdSubmitSignatures())
 	cmd.AddCommand(CmdCompleteDKG())
+	cmd.AddCommand(CmdCompleteRefreshing())
 
 	return cmd
 }
@@ -226,6 +227,43 @@ func CmdCompleteDKG() *cobra.Command {
 				vaults,
 				args[2],
 				args[3],
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// Complete refreshing
+func CmdCompleteRefreshing() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "complete-refreshing [id] [consensus pub key] [signature]",
+		Short: "Complete refreshing with the corresponding signature",
+		Args:  cobra.ExactArgs(3),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgCompleteRefreshing(
+				clientCtx.GetFromAddress().String(),
+				id,
+				args[1],
+				args[2],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

@@ -29,6 +29,8 @@ const (
 	Msg_ConsolidateVaults_FullMethodName           = "/side.btcbridge.Msg/ConsolidateVaults"
 	Msg_InitiateDKG_FullMethodName                 = "/side.btcbridge.Msg/InitiateDKG"
 	Msg_CompleteDKG_FullMethodName                 = "/side.btcbridge.Msg/CompleteDKG"
+	Msg_Refresh_FullMethodName                     = "/side.btcbridge.Msg/Refresh"
+	Msg_CompleteRefreshing_FullMethodName          = "/side.btcbridge.Msg/CompleteRefreshing"
 	Msg_TransferVault_FullMethodName               = "/side.btcbridge.Msg/TransferVault"
 	Msg_UpdateParams_FullMethodName                = "/side.btcbridge.Msg/UpdateParams"
 )
@@ -56,6 +58,10 @@ type MsgClient interface {
 	InitiateDKG(ctx context.Context, in *MsgInitiateDKG, opts ...grpc.CallOption) (*MsgInitiateDKGResponse, error)
 	// CompleteDKG completes the given DKG request.
 	CompleteDKG(ctx context.Context, in *MsgCompleteDKG, opts ...grpc.CallOption) (*MsgCompleteDKGResponse, error)
+	// Refresh refreshes key shares.
+	Refresh(ctx context.Context, in *MsgRefresh, opts ...grpc.CallOption) (*MsgRefreshResponse, error)
+	// CompleteRefreshing completes the given refreshing request by the participant.
+	CompleteRefreshing(ctx context.Context, in *MsgCompleteRefreshing, opts ...grpc.CallOption) (*MsgCompleteRefreshingResponse, error)
 	// TransferVault transfers the vault asset from the source version to the destination version.
 	TransferVault(ctx context.Context, in *MsgTransferVault, opts ...grpc.CallOption) (*MsgTransferVaultResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
@@ -163,6 +169,24 @@ func (c *msgClient) CompleteDKG(ctx context.Context, in *MsgCompleteDKG, opts ..
 	return out, nil
 }
 
+func (c *msgClient) Refresh(ctx context.Context, in *MsgRefresh, opts ...grpc.CallOption) (*MsgRefreshResponse, error) {
+	out := new(MsgRefreshResponse)
+	err := c.cc.Invoke(ctx, Msg_Refresh_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CompleteRefreshing(ctx context.Context, in *MsgCompleteRefreshing, opts ...grpc.CallOption) (*MsgCompleteRefreshingResponse, error) {
+	out := new(MsgCompleteRefreshingResponse)
+	err := c.cc.Invoke(ctx, Msg_CompleteRefreshing_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) TransferVault(ctx context.Context, in *MsgTransferVault, opts ...grpc.CallOption) (*MsgTransferVaultResponse, error) {
 	out := new(MsgTransferVaultResponse)
 	err := c.cc.Invoke(ctx, Msg_TransferVault_FullMethodName, in, out, opts...)
@@ -204,6 +228,10 @@ type MsgServer interface {
 	InitiateDKG(context.Context, *MsgInitiateDKG) (*MsgInitiateDKGResponse, error)
 	// CompleteDKG completes the given DKG request.
 	CompleteDKG(context.Context, *MsgCompleteDKG) (*MsgCompleteDKGResponse, error)
+	// Refresh refreshes key shares.
+	Refresh(context.Context, *MsgRefresh) (*MsgRefreshResponse, error)
+	// CompleteRefreshing completes the given refreshing request by the participant.
+	CompleteRefreshing(context.Context, *MsgCompleteRefreshing) (*MsgCompleteRefreshingResponse, error)
 	// TransferVault transfers the vault asset from the source version to the destination version.
 	TransferVault(context.Context, *MsgTransferVault) (*MsgTransferVaultResponse, error)
 	// UpdateParams defines a governance operation for updating the x/btcbridge module
@@ -247,6 +275,12 @@ func (UnimplementedMsgServer) InitiateDKG(context.Context, *MsgInitiateDKG) (*Ms
 }
 func (UnimplementedMsgServer) CompleteDKG(context.Context, *MsgCompleteDKG) (*MsgCompleteDKGResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CompleteDKG not implemented")
+}
+func (UnimplementedMsgServer) Refresh(context.Context, *MsgRefresh) (*MsgRefreshResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
+}
+func (UnimplementedMsgServer) CompleteRefreshing(context.Context, *MsgCompleteRefreshing) (*MsgCompleteRefreshingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompleteRefreshing not implemented")
 }
 func (UnimplementedMsgServer) TransferVault(context.Context, *MsgTransferVault) (*MsgTransferVaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TransferVault not implemented")
@@ -447,6 +481,42 @@ func _Msg_CompleteDKG_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRefresh)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).Refresh(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_Refresh_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).Refresh(ctx, req.(*MsgRefresh))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CompleteRefreshing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCompleteRefreshing)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CompleteRefreshing(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CompleteRefreshing_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CompleteRefreshing(ctx, req.(*MsgCompleteRefreshing))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_TransferVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgTransferVault)
 	if err := dec(in); err != nil {
@@ -529,6 +599,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CompleteDKG",
 			Handler:    _Msg_CompleteDKG_Handler,
+		},
+		{
+			MethodName: "Refresh",
+			Handler:    _Msg_Refresh_Handler,
+		},
+		{
+			MethodName: "CompleteRefreshing",
+			Handler:    _Msg_CompleteRefreshing_Handler,
 		},
 		{
 			MethodName: "TransferVault",

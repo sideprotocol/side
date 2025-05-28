@@ -1,16 +1,12 @@
 package keeper
 
 import (
-	"bytes"
 	"encoding/hex"
-
-	"github.com/btcsuite/btcd/btcutil/psbt"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
@@ -44,6 +40,7 @@ func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId strin
 }
 
 // HandleRepaymentAdaptorSignatures handles repayment adaptor signatures
+// Assume that signatures have already been verified
 func (k Keeper) HandleRepaymentAdaptorSignatures(ctx sdk.Context, loanId string, adaptorSignatures []string) error {
 	if !k.HasLoan(ctx, loanId) {
 		return types.ErrLoanDoesNotExist
@@ -55,32 +52,8 @@ func (k Keeper) HandleRepaymentAdaptorSignatures(ctx sdk.Context, loanId string,
 	}
 
 	dlcMeta := k.GetDLCMeta(ctx, loanId)
-
-	repaymentCet := dlcMeta.RepaymentCet
-	if len(repaymentCet.DCMAdaptorSignatures) != 0 {
+	if len(dlcMeta.RepaymentCet.DCMAdaptorSignatures) != 0 {
 		return types.ErrRepaymentAdaptorSigsAlreadyExist
-	}
-
-	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet.Tx)), true)
-	if len(adaptorSignatures) != len(p.Inputs) {
-		return errorsmod.Wrap(types.ErrInvalidAdaptorSignatures, "mismatched adaptor signature number")
-	}
-
-	script, _ := hex.DecodeString(dlcMeta.MultisigScript)
-	adaptorPoint, _ := k.GetRepaymentCetAdaptorPoint(ctx, loanId)
-	dcmPubKey, _ := hex.DecodeString(loan.DCM)
-
-	for i, input := range p.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
-		if err != nil {
-			return err
-		}
-
-		adaptorSigBytes, _ := hex.DecodeString(adaptorSignatures[i])
-
-		if !adaptor.Verify(adaptorSigBytes, sigHash, dcmPubKey, adaptorPoint) {
-			return types.ErrInvalidAdaptorSignature
-		}
 	}
 
 	dlcMeta.RepaymentCet.DCMAdaptorSignatures = adaptorSignatures

@@ -8,14 +8,13 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
 
-	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
 // HandleRedemptionSignatures handles the redemption signatures
+// Assume that signatures have already been verified
 func (k Keeper) HandleRedemptionSignatures(ctx sdk.Context, id uint64, signatures []string) error {
 	if !k.HasRedemption(ctx, id) {
 		return types.ErrRedemptionDoesNotExist
@@ -29,9 +28,6 @@ func (k Keeper) HandleRedemptionSignatures(ctx sdk.Context, id uint64, signature
 	loan := k.GetLoan(ctx, redemption.LoanId)
 
 	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(redemption.Tx)), true)
-	if len(signatures) != len(p.Inputs) {
-		return errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
-	}
 
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
 	dcmPubKey, _ := hex.DecodeString(loan.DCM)
@@ -42,17 +38,7 @@ func (k Keeper) HandleRedemptionSignatures(ctx sdk.Context, id uint64, signature
 	for i, ti := range p.UnsignedTx.TxIn {
 		prevTxHash := ti.PreviousOutPoint.Hash.String()
 
-		sigHash, err := types.CalcTapscriptSigHash(p, i, types.DefaultSigHashType, script)
-		if err != nil {
-			return err
-		}
-
 		sigBytes, _ := hex.DecodeString(signatures[i])
-
-		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
-			return types.ErrInvalidSignature
-		}
-
 		borrowerSig, _ := hex.DecodeString(redemption.Signatures[i])
 
 		p.Inputs[i].TaprootScriptSpendSig = []*psbt.TaprootScriptSpendSig{

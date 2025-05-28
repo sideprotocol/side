@@ -10,10 +10,15 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
+	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
 )
 
 var (
+	// denom prefix for sToken
+	S_TOKEN_DENOM_PREFIX = "s"
+
 	// OneYear represents the seconds in one year
 	OneYear = 365 * 24 * 3600
 
@@ -23,13 +28,13 @@ var (
 
 // GetExchangeRate calculates the sToken exchange rate according to the given params
 // Formula:
-// exchange rate = (totalAvailable + total borrowed) / totalSTokens
-func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalSTokens sdkmath.Int) sdkmath.LegacyDec {
+// exchange rate = (totalAvailable + total borrowed - total reserve) / totalSTokens
+func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalReserve sdkmath.Int, totalSTokens sdkmath.Int) sdkmath.LegacyDec {
 	if totalSTokens.IsZero() {
 		return sdkmath.LegacyOneDec()
 	}
 
-	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed)).Quo(totalSTokens.ToLegacyDec())
+	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed).Sub(totalReserve)).Quo(totalSTokens.ToLegacyDec())
 }
 
 // GetInterest calculates the loan interest based on the given borrow index
@@ -55,14 +60,14 @@ func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
-func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, precision sdkmath.LegacyDec) sdkmath.LegacyDec {
+func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, decimals int, precision sdkmath.LegacyDec) sdkmath.LegacyDec {
 	interest := GetTotalInterest(borrowAmount, maturity, borrowAPR, blocksPerYear)
 	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).Mul(Percent).ToLegacyDec().Quo(sdkmath.LegacyNewDec(int64(lltv))).QuoInt(collateralAmount).QuoInt(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals))
 
-	decimalsInt := sdkmath.NewIntWithDecimal(1, 0)
+	decimalsInt := sdkmath.NewIntWithDecimal(1, decimals)
 	precisionInt := precision.MulInt(decimalsInt).TruncateInt()
 
-	return liquidationPrice.MulInt(decimalsInt).TruncateInt().Quo(precisionInt).Mul(precisionInt).Quo(decimalsInt).ToLegacyDec()
+	return liquidationPrice.MulInt(decimalsInt).TruncateInt().Quo(precisionInt).Mul(precisionInt).ToLegacyDec().QuoInt(decimalsInt)
 }
 
 // GetMaturityTime gets the actual maturity time according to the given maturity time
@@ -74,14 +79,34 @@ func GetMaturityTime(originMaturityTime int64) int64 {
 	return time.Unix(originMaturityTime, 0).Truncate(24 * time.Hour).Add(24 * time.Hour).Unix()
 }
 
-// AdaptorPointFromSecret gets the corresponding adaptor point from the given secret
-func AdaptorPointFromSecret(secret []byte) string {
-	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
-}
-
 // GetPricePair gets the price pair from the given pool config
 func GetPricePair(poolConfig PoolConfig) string {
 	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol), strings.ToUpper(poolConfig.LendingAsset.PriceSymbol))
+}
+
+// STokenDenom returns the sToken denom from the given pool id
+func STokenDenom(poolId string) string {
+	return fmt.Sprintf("%s%s", S_TOKEN_DENOM_PREFIX, poolId)
+}
+
+// PoolIdFromSTokenDenom returns the pool id from the given sToken denom
+func PoolIdFromSTokenDenom(denom string) string {
+	return strings.TrimPrefix(denom, S_TOKEN_DENOM_PREFIX)
+}
+
+// ToLiquidationAssetMeta converts the given asset metadata to the corresponding liquidation asset metadata
+func ToLiquidationAssetMeta(metadata AssetMetadata) liquidationtypes.AssetMetadata {
+	return liquidationtypes.AssetMetadata{
+		Denom:       metadata.Denom,
+		Symbol:      metadata.Symbol,
+		PriceSymbol: metadata.PriceSymbol,
+		Decimals:    metadata.Decimals,
+	}
+}
+
+// AdaptorPointFromSecret gets the corresponding adaptor point from the given secret
+func AdaptorPointFromSecret(secret []byte) string {
+	return hex.EncodeToString(adaptor.SecretToPubKey(secret))
 }
 
 // HasSupplyCap returns true if the supply cap set in the given pool, false otherwise

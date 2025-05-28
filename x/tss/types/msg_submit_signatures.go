@@ -3,12 +3,8 @@ package types
 import (
 	"encoding/hex"
 
-	"github.com/btcsuite/btcd/btcec/v2/schnorr"
-
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 )
 
 var _ sdk.Msg = &MsgSubmitSignatures{}
@@ -41,18 +37,7 @@ func (m *MsgSubmitSignatures) ValidateBasic() error {
 			return errorsmod.Wrap(ErrInvalidSignature, "failed to decode the signature")
 		}
 
-		switch len(sigBytes) {
-		case SchnorrSignatureSize:
-			if _, err := schnorr.ParseSignature(sigBytes); err != nil {
-				return errorsmod.Wrap(ErrInvalidSignature, "invalid schnorr signature")
-			}
-
-		case SchnorrAdaptorSignatureSize:
-			if _, err := adaptor.ParseSignature(sigBytes); err != nil {
-				return errorsmod.Wrap(ErrInvalidSignature, "invalid schnorr adaptor signature")
-			}
-
-		default:
+		if len(sigBytes) != SchnorrSignatureSize && len(sigBytes) != SchnorrAdaptorSignatureSize {
 			return errorsmod.Wrap(ErrInvalidSignature, "invalid signature size")
 		}
 	}

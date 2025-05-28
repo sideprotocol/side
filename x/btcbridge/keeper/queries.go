@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -281,4 +282,51 @@ func (k Keeper) QueryDKGCompletionRequests(goCtx context.Context, req *types.Que
 	requests := k.GetDKGCompletionRequests(ctx, req.Id)
 
 	return &types.QueryDKGCompletionRequestsResponse{Requests: requests}, nil
+}
+
+func (k Keeper) QueryRefreshingRequest(goCtx context.Context, req *types.QueryRefreshingRequestRequest) (*types.QueryRefreshingRequestResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasRefreshingRequest(ctx, req.Id) {
+		return nil, status.Error(codes.NotFound, "refreshing request does not exist")
+	}
+
+	return &types.QueryRefreshingRequestResponse{Request: k.GetRefreshingRequest(ctx, req.Id)}, nil
+}
+
+func (k Keeper) QueryRefreshingRequests(goCtx context.Context, req *types.QueryRefreshingRequestsRequest) (*types.QueryRefreshingRequestsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryRefreshingRequestsResponse{Requests: k.GetRefreshingRequests(ctx, req.Status)}, nil
+}
+
+func (k Keeper) QueryRefreshingCompletions(goCtx context.Context, req *types.QueryRefreshingCompletionsRequest) (*types.QueryRefreshingCompletionsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryRefreshingCompletionsResponse{Completions: k.GetRefreshingCompletions(ctx, req.Id)}, nil
+}
+
+func (k Keeper) QueryIBCDepositScript(goCtx context.Context, req *types.QueryIBCDepositScriptRequest) (*types.QueryIBCDepositScriptResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	script, err := types.BuildIBCTransferScript(req.ChannelId, req.RecipientAddress)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	return &types.QueryIBCDepositScriptResponse{Script: hex.EncodeToString(script)}, nil
 }

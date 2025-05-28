@@ -9,6 +9,10 @@ import (
 	"slices"
 	"time"
 
+	"github.com/btcsuite/btcd/btcec/v2"
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
+	"github.com/btcsuite/btcd/txscript"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/hash"
@@ -74,9 +78,15 @@ func GetDKGCompletionSigMsg(id uint64, pubKeys []string) []byte {
 }
 
 // GetRefreshingCompletionSigMsg gets the msg to be signed from the given data for the refreshing completion
-func GetRefreshingCompletionSigMsg(id uint64) []byte {
+// Assume that the given pub keys are hex encoded
+func GetRefreshingCompletionSigMsg(id uint64, pubKeys []string) []byte {
 	msg := make([]byte, 8)
 	binary.BigEndian.PutUint64(msg, id)
+
+	for _, pubKey := range pubKeys {
+		pubKeyBytes, _ := hex.DecodeString(pubKey)
+		msg = append(msg, pubKeyBytes...)
+	}
 
 	return hash.Sha256(msg)
 }
@@ -85,6 +95,9 @@ func GetRefreshingCompletionSigMsg(id uint64) []byte {
 // Assume that the options match the signing type
 func GetSigningOption(signingType SigningType, options *SigningOptions) string {
 	switch signingType {
+	case SigningType_SIGNING_TYPE_SCHNORR_WITH_TWEAK:
+		return options.Tweak
+
 	case SigningType_SIGNING_TYPE_SCHNORR_WITH_COMMITMENT:
 		return options.Nonce
 
@@ -94,6 +107,15 @@ func GetSigningOption(signingType SigningType, options *SigningOptions) string {
 	default:
 		return ""
 	}
+}
+
+// GetTweakedPubKey gets the tweaked pub key by the given tweak
+// Assume that the given pub key is valid
+func GetTweakedPubKey(pubKeyBytes []byte, tweak []byte) []byte {
+	pubKey, _ := btcec.ParsePubKey(pubKeyBytes)
+	tweakedPubKey := txscript.ComputeTaprootOutputKey(pubKey, tweak)
+
+	return schnorr.SerializePubKey(tweakedPubKey)
 }
 
 // GetExpirationTime gets the expiration time according to the given timeout duration

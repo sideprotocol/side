@@ -17,11 +17,24 @@ type msgServer struct {
 
 // CreateDCM implements types.MsgServer.
 func (m msgServer) CreateDCM(goCtx context.Context, msg *types.MsgCreateDCM) (*types.MsgCreateDCMResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	baseParticipants := m.tssKeeper.AllowedDKGParticipants(ctx)
+	if len(baseParticipants) != 0 {
+		for _, p := range msg.Participants {
+			if !slices.Contains(baseParticipants, p) {
+				return nil, errorsmod.Wrap(types.ErrInvalidParticipants, "participant not authorized")
+			}
+		}
+	}
 
 	m.tssKeeper.InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_DCM, int32(types.DKGIntent_DKG_INTENT_DEFAULT), msg.Participants, msg.Threshold, 1)
 
@@ -40,13 +53,17 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if len(msg.Params.AllowedOracleParticipants) != 0 {
-		baseParticipants := m.tssKeeper.GetParams(ctx).AllowedDkgParticipants
+	baseParticipants := m.tssKeeper.AllowedDKGParticipants(ctx)
 
+	if len(msg.Params.AllowedOracleParticipants) != 0 && len(baseParticipants) != 0 {
 		for _, p := range msg.Params.AllowedOracleParticipants {
 			if !slices.Contains(baseParticipants, p) {
 				return nil, errorsmod.Wrap(types.ErrInvalidParams, "oracle participant not authorized")
 			}
+		}
+	} else if len(baseParticipants) != 0 {
+		if msg.Params.OracleParticipantNum > uint32(len(baseParticipants)) {
+			return nil, errorsmod.Wrapf(types.ErrInvalidParams, "oracle participant number cannot be greater than allowed participant number %d", len(baseParticipants))
 		}
 	}
 
