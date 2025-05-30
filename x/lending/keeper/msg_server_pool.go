@@ -65,7 +65,7 @@ func (m msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 		return nil, types.ErrPoolPaused
 	}
 
-	if msg.Amount.Denom != pool.Supply.Denom {
+	if msg.Amount.Denom != pool.Config.LendingAsset.Denom {
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched denom")
 	}
 

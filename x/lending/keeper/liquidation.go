@@ -60,6 +60,16 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 	pool := k.GetPool(ctx, loan.PoolId)
 
 	interest := k.GetCurrentInterest(ctx, loan).Amount
+
+	principal := sdk.NewCoin(debtAmount.Denom, sdkmath.ZeroInt())
+	if debtAmount.Amount.GT(interest) {
+		// split debt to principal and interest
+		principal = debtAmount.SubAmount(interest)
+	} else {
+		// consider debt as interest
+		interest = debtAmount.Amount
+	}
+
 	protocolFee := types.GetProtocolFee(interest, pool.Config.ReserveFactor)
 
 	referralFee := sdkmath.ZeroInt()
@@ -67,11 +77,6 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 	if protocolFee.IsPositive() && types.HasReferralFee(loan, pool) {
 		referralFee = protocolFee.Mul(sdkmath.NewInt(int64(pool.Config.ReferralFeeFactor))).Quo(types.Permille)
 		actualProtocolFee = protocolFee.Sub(referralFee)
-	}
-
-	if debtAmount.Amount.LTE(interest) {
-		// TODO
-		return nil
 	}
 
 	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, moduleAccount, types.ModuleName, sdk.NewCoins(debtAmount.SubAmount(protocolFee))); err != nil {
@@ -90,7 +95,7 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 		}
 	}
 
-	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, debtAmount.SubAmount(interest), interest, protocolFee, actualProtocolFee)
+	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, principal, interest, protocolFee, actualProtocolFee)
 
 	k.DeductLiquidationAccruedInterest(ctx, loan)
 
