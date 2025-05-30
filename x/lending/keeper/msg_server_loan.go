@@ -282,8 +282,8 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	return &types.MsgSubmitCetsResponse{}, nil
 }
 
-// Approve implements types.MsgServer.
-func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types.MsgApproveResponse, error) {
+// SubmitDepositTransaction implements types.MsgServer.
+func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.MsgSubmitDepositTransaction) (*types.MsgSubmitDepositTransactionResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
@@ -325,7 +325,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 	depositLog.Status = types.DepositStatus_DEPOSIT_STATUS_VERIFIED
 	m.SetDepositLog(ctx, depositLog)
 
-	return &types.MsgApproveResponse{}, nil
+	return &types.MsgSubmitDepositTransactionResponse{}, nil
 }
 
 // Redeem implements types.MsgServer.
