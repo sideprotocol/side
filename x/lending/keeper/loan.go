@@ -57,6 +57,23 @@ func (k Keeper) GetLoans(ctx sdk.Context, status types.LoanStatus) []*types.Loan
 	return loans
 }
 
+// GetPendingLoans gets the requested or authorized loans
+func (k Keeper) GetPendingLoans(ctx sdk.Context) []*types.Loan {
+	var loans []*types.Loan
+
+	requestedLoans := k.GetLoans(ctx, types.LoanStatus_Requested)
+	if len(requestedLoans) != 0 {
+		loans = append(loans, requestedLoans...)
+	}
+
+	authorizedLoans := k.GetLoans(ctx, types.LoanStatus_Authorized)
+	if len(authorizedLoans) != 0 {
+		loans = append(loans, authorizedLoans...)
+	}
+
+	return loans
+}
+
 // GetAllLoans returns all loans
 func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 	var loans []*types.Loan

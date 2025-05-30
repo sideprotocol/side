@@ -79,6 +79,11 @@ func GetMaturityTime(originMaturityTime int64) int64 {
 	return time.Unix(originMaturityTime, 0).Truncate(24 * time.Hour).Add(24 * time.Hour).Unix()
 }
 
+// CheckLTV returns true if the collateral amount and borrow amount satisfy the max LTV limitation by the given price, false otherwise
+func CheckLTV(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maxLTV uint32, price sdkmath.LegacyDec) bool {
+	return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(maxLTV))).ToLegacyDec().Mul(price).Quo(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals).Mul(Percent).ToLegacyDec()).TruncateInt().GTE(borrowAmount)
+}
+
 // GetPricePair gets the price pair from the given pool config
 func GetPricePair(poolConfig PoolConfig) string {
 	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol), strings.ToUpper(poolConfig.LendingAsset.PriceSymbol))
