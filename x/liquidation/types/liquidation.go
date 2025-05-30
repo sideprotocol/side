@@ -11,6 +11,9 @@ import (
 const (
 	// network fee reserve for liquidation settlement
 	LiquidationNetworkFeeReserve = int64(10000)
+
+	// default dust output value
+	DefaultDustOutValue = int64(546)
 )
 
 // LiquidatedDebtHandler defines the handler to perform liquidated debt handling

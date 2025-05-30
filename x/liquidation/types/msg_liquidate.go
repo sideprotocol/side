@@ -25,6 +25,10 @@ func (m *MsgLiquidate) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
+	if !IsValidBtcAddress(m.Liquidator) {
+		return errorsmod.Wrap(ErrInvalidSender, "liquidator address must be a valid btc address")
+	}
+
 	if !m.DebtAmount.IsValid() || !m.DebtAmount.IsPositive() {
 		return errorsmod.Wrap(ErrInvalidAmount, "invalid debt amount")
 	}

@@ -7,10 +7,11 @@ import (
 )
 
 var (
-	ErrInvalidAmount            = errorsmod.Register(ModuleName, 1100, "invalid amount")
-	ErrLiquidationDoesNotExist  = errorsmod.Register(ModuleName, 1101, "liquidation does not exist")
-	ErrInvalidLiquidationStatus = errorsmod.Register(ModuleName, 1102, "invalid liquidation status")
-	ErrInvalidPrice             = errorsmod.Register(ModuleName, 1103, "invalid price")
+	ErrInvalidSender            = errorsmod.Register(ModuleName, 1100, "invalid sender")
+	ErrInvalidAmount            = errorsmod.Register(ModuleName, 1101, "invalid amount")
+	ErrLiquidationDoesNotExist  = errorsmod.Register(ModuleName, 1102, "liquidation does not exist")
+	ErrInvalidLiquidationStatus = errorsmod.Register(ModuleName, 1103, "invalid liquidation status")
+	ErrInvalidPrice             = errorsmod.Register(ModuleName, 1104, "invalid price")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 2100, "invalid params")
 

@@ -178,22 +178,21 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			debtDenom := pool.Config.LendingAsset.Denom
 
 			liquidation := k.LiquidationKeeper().CreateLiquidation(ctx, &liquidationtypes.Liquidation{
-				LoanId:                       loan.VaultAddress,
-				Debtor:                       loan.Borrower,
-				DCM:                          loan.DCM,
-				CollateralAmount:             sdk.NewCoin(collateralDenom, loan.CollateralAmount),
-				ActualCollateralAmount:       sdk.NewCoin(collateralDenom, sdkmath.NewInt(types.GetLiquidationCetOutput(liquidationCet))),
-				DebtAmount:                   sdk.NewCoin(debtDenom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
-				CollateralAsset:              types.ToLiquidationAssetMeta(pool.Config.CollateralAsset),
-				DebtAsset:                    types.ToLiquidationAssetMeta(pool.Config.LendingAsset),
-				LiquidationPrice:             currentPrice,
-				LiquidationTime:              ctx.BlockTime(),
-				LiquidatedCollateralAmount:   sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
-				LiquidatedDebtAmount:         sdk.NewCoin(debtDenom, sdkmath.ZeroInt()),
-				LiquidationBonusAmount:       sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
-				ProtocolLiquidationFee:       sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
-				UnliquidatedCollateralAmount: sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
-				LiquidationCet:               liquidationCet,
+				LoanId:                     loan.VaultAddress,
+				Debtor:                     loan.Borrower,
+				DCM:                        loan.DCM,
+				CollateralAmount:           sdk.NewCoin(collateralDenom, loan.CollateralAmount),
+				ActualCollateralAmount:     sdk.NewCoin(collateralDenom, sdkmath.NewInt(types.GetLiquidationCetOutput(liquidationCet))),
+				DebtAmount:                 sdk.NewCoin(debtDenom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
+				CollateralAsset:            types.ToLiquidationAssetMeta(pool.Config.CollateralAsset),
+				DebtAsset:                  types.ToLiquidationAssetMeta(pool.Config.LendingAsset),
+				LiquidationPrice:           currentPrice,
+				LiquidationTime:            ctx.BlockTime(),
+				LiquidatedCollateralAmount: sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+				LiquidatedDebtAmount:       sdk.NewCoin(debtDenom, sdkmath.ZeroInt()),
+				LiquidationBonusAmount:     sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+				ProtocolLiquidationFee:     sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+				LiquidationCet:             liquidationCet,
 			})
 
 			// update loan

@@ -7,6 +7,7 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/btcsuite/btcd/mempool"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 
@@ -190,6 +191,23 @@ func AddUTXOToTx(tx *wire.MsgTx, utxo *btcbridgetypes.UTXO) {
 	txIn.PreviousOutPoint = *wire.NewOutPoint(hash, uint32(utxo.Vout))
 
 	tx.AddTxIn(txIn)
+}
+
+// IsDustOut returns true if the given output is dust, false otherwise
+// Assume that the given address is valid
+func IsDustOut(value int64, address string) bool {
+	addr, _ := btcutil.DecodeAddress(address, bitcoin.Network)
+	pkScript, _ := txscript.PayToAddrScript(addr)
+
+	out := wire.NewTxOut(value, pkScript)
+
+	return !btcbridgetypes.IsOpReturnOutput(out) && mempool.IsDust(out, btcbridgetypes.MinRelayFee)
+}
+
+// IsValidBtcAddress returns true if the given address is a standard bitcoin address, false otherwise
+func IsValidBtcAddress(address string) bool {
+	_, err := btcutil.DecodeAddress(address, bitcoin.Network)
+	return err == nil
 }
 
 // CalcTaprootSigHash computes the sig hash of the given input
