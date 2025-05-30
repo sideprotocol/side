@@ -8,6 +8,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+const (
+	// network fee reserve for liquidation settlement
+	LiquidationNetworkFeeReserve = int64(10000)
+)
+
 // LiquidatedDebtHandler defines the handler to perform liquidated debt handling
 type LiquidatedDebtHandler func(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin) error
 
