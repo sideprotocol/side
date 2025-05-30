@@ -23,8 +23,6 @@ const (
 
 	AttributeKeyLoanId = "loan_id"
 	AttributeKeyId     = "id"
-
-	AttributeKeySender = "sender"
 	AttributeKeyAmount = "amount"
 
 	AttributeKeyAuthorizationId = "authorization_id"

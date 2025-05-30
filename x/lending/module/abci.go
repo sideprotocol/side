@@ -21,12 +21,89 @@ func BeginBlocker(ctx sdk.Context, k keeper.Keeper) {
 
 // EndBlocker called at the end of each block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+	handlePendingLoans(ctx, k)
 	handleActiveLoans(ctx, k)
 
 	handleLiquidatedLoans(ctx, k)
 	handleDefaultedLoans(ctx, k)
 
 	handleRepayments(ctx, k)
+}
+
+// handleActiveLoans handles pending loans
+func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) {
+	// handler on loan rejected
+	rejectHandler := func(loan *types.Loan, authorizationId uint64, reason error) {
+		if authorizationId > 0 {
+			loan.Authorizations[authorizationId-1].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED
+		}
+
+		loan.Status = types.LoanStatus_Rejected
+		k.SetLoan(ctx, loan)
+
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeReject,
+				sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+				sdk.NewAttribute(types.AttributeKeyAuthorizationId, fmt.Sprintf("%d", authorizationId)),
+				sdk.NewAttribute(types.AttributeKeyReason, reason.Error()),
+			),
+		)
+	}
+
+	// get all pending loans
+	loans := k.GetPendingLoans(ctx)
+
+	for _, loan := range loans {
+		pool := k.GetPool(ctx, loan.PoolId)
+		authorizationId := k.GetAuthorizationId(ctx, loan.VaultAddress)
+
+		// check if the maturity time already reached
+		if ctx.BlockTime().Unix() >= loan.MaturityTime {
+			rejectHandler(loan, authorizationId, types.ErrMaturityTimeReached)
+			continue
+		}
+
+		if authorizationId > 0 {
+			// get the current price
+			currentPrice, err := k.GetPrice(ctx, types.GetPricePair(pool.Config))
+			if err != nil {
+				continue
+			}
+
+			// check if liquidation price reached
+			if currentPrice.LTE(loan.LiquidationPrice) {
+				rejectHandler(loan, authorizationId, types.ErrLiquidationPriceReached)
+				continue
+			}
+
+			// try to approve loan if all deposit txs verified
+			if k.DepositsVerified(ctx, k.GetAuthorization(ctx, loan.VaultAddress, authorizationId)) {
+				// check LTV
+				if !types.CheckLTV(loan.CollateralAmount, int(pool.Config.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(pool.Config.LendingAsset.Decimals), pool.Config.MaxLtv, currentPrice) {
+					rejectHandler(loan, authorizationId, types.ErrInsufficientCollateral)
+					continue
+				}
+
+				// check if the borrow cap already reached
+				if err := types.CheckBorrowCap(pool, loan.BorrowAmount.Amount); err != nil {
+					rejectHandler(loan, authorizationId, err)
+					continue
+				}
+
+				// approve loan
+				if err := k.HandleApproval(ctx, loan); err != nil {
+					rejectHandler(loan, authorizationId, err)
+					continue
+				}
+
+				// set the authorization status
+				loan := k.GetLoan(ctx, loan.VaultAddress)
+				loan.Authorizations[authorizationId].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_AUTHORIZED
+				k.SetLoan(ctx, loan)
+			}
+		}
+	}
 }
 
 // handleActiveLoans handles active loans

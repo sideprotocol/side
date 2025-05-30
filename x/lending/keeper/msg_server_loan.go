@@ -168,7 +168,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	// NOTE: only can be authorized once for now
 	if loan.Status != types.LoanStatus_Requested {
-		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not requested")
+		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan non requested")
 	}
 
 	pool := m.GetPool(ctx, loan.PoolId)
@@ -197,13 +197,13 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount can not be zero")
 	}
 
+	// build DLC metadata
 	dlcMeta, err := types.BuildDLCMeta(depositTxs, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
 
-	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
-
+	// create authorization
 	authorization := m.CreateAuthorization(ctx, msg.LoanId, depositTxHashes)
 
 	for i, depositTx := range msg.DepositTxs {
@@ -219,32 +219,15 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		}
 	}
 
+	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
+
 	loan.CollateralAmount = collateralAmount
-
-	// check if the authorization already exists via possible deposit txs submission
-	if m.HasAuthorization(ctx, msg.LoanId, authorization.Id) {
-		authorization.Status = m.GetAuthorization(ctx, msg.LoanId, authorization.Id).Status
-		loan.Authorizations[authorization.Id-1] = *authorization
-	}
-
-	// check if the authorization already rejected
-	if authorization.Status == types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED {
-		loan.Status = types.LoanStatus_Rejected
-		m.SetLoan(ctx, loan)
-
-		return nil, nil
-	}
-
-	if !m.HasAuthorization(ctx, msg.LoanId, authorization.Id) {
-		loan.Authorizations = append(loan.Authorizations, *authorization)
-	}
+	loan.Authorizations = append(loan.Authorizations, *authorization)
 
 	var errRejected error
 
 	defer func() {
 		if errRejected != nil {
-			m.Logger(ctx).Info("loan authorization rejected", "loan id", msg.LoanId, "authorization id", authorization.Id, "reason", errRejected)
-
 			loan.Authorizations[authorization.Id-1].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED
 			loan.Status = types.LoanStatus_Rejected
 			m.SetLoan(ctx, loan)
@@ -259,21 +242,6 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 			)
 		}
 	}()
-
-	if ctx.BlockTime().Unix() >= loan.MaturityTime {
-		errRejected = types.ErrMaturityTimeReached
-		return nil, nil
-	}
-
-	if pool.AvailableAmount.LT(loan.BorrowAmount.Amount) {
-		errRejected = types.ErrInsufficientLiquidity
-		return nil, nil
-	}
-
-	if err := types.CheckBorrowCap(pool, loan.BorrowAmount.Amount); err != nil {
-		errRejected = types.ErrBorrowCapExceeded
-		return nil, nil
-	}
 
 	pricePair := types.GetPricePair(poolConfig)
 	collateralDecimals := int(poolConfig.CollateralAsset.Decimals)
@@ -305,35 +273,10 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, err
 	}
 
-	currentPrice, err := m.GetPrice(ctx, pricePair)
-	if err != nil {
-		return nil, err
-	}
-
-	// check LTV
-	if collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowDecimals)).Mul(sdkmath.NewInt(int64(poolConfig.MaxLtv))).ToLegacyDec().Mul(currentPrice).Quo(sdkmath.NewIntWithDecimal(1, collateralDecimals).Mul(types.Percent).ToLegacyDec()).TruncateInt().LT(loan.BorrowAmount.Amount) {
-		errRejected = types.ErrInsufficientCollateral
-		return nil, nil
-	}
-
-	// if all deposit txs already verified, approve the loan
-	if m.DepositsVerified(ctx, authorization) {
-		if err := m.HandleApproval(ctx, msg.Borrower, loan); err != nil {
-			errRejected = err
-			return nil, nil
-		} else {
-			loan.Authorizations[authorization.Id-1].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_AUTHORIZED
-		}
-	}
-
 	loan.LiquidationPrice = liquidationPrice
 	loan.LiquidationEventId = liquidationEvent.Id
 
-	// set to authorized if not yet approved
-	if loan.Status != types.LoanStatus_Open {
-		loan.Status = types.LoanStatus_Authorized
-	}
-
+	loan.Status = types.LoanStatus_Authorized
 	m.SetLoan(ctx, loan)
 
 	return &types.MsgSubmitCetsResponse{}, nil
@@ -370,9 +313,7 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 		if depositLog.Status != types.DepositStatus_DEPOSIT_STATUS_PENDING {
 			return nil, errorsmod.Wrap(types.ErrInvalidDepositTx, "deposit tx not pending")
 		}
-	}
-
-	if !m.HasDepositLog(ctx, depositTxHash) {
+	} else {
 		depositLog = &types.DepositLog{
 			Txid:            depositTxHash,
 			VaultAddress:    msg.Vault,
@@ -383,75 +324,6 @@ func (m msgServer) Approve(goCtx context.Context, msg *types.MsgApprove) (*types
 
 	depositLog.Status = types.DepositStatus_DEPOSIT_STATUS_VERIFIED
 	m.SetDepositLog(ctx, depositLog)
-
-	if loan.Status == types.LoanStatus_Rejected {
-		return nil, nil
-	}
-
-	authorizationId := depositLog.AuthorizationId
-
-	var errRejected error
-
-	defer func() {
-		if errRejected != nil {
-			m.Logger(ctx).Info("authorization rejected", "loan id", msg.Vault, "authorization id", authorizationId, "tx hash", depositTxHash, "reason", errRejected)
-
-			if loan.Status == types.LoanStatus_Authorized {
-				m.UpdateAuthorization(ctx, loan, authorizationId, depositTxHash, types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED)
-			} else {
-				m.AddAuthorization(ctx, loan, depositTxHash, types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED)
-			}
-
-			ctx.EventManager().EmitEvent(
-				sdk.NewEvent(
-					types.EventTypeReject,
-					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-					sdk.NewAttribute(types.AttributeKeyAuthorizationId, fmt.Sprintf("%d", authorizationId)),
-					sdk.NewAttribute(types.AttributeKeyReason, errRejected.Error()),
-				),
-			)
-		}
-	}()
-
-	if ctx.BlockTime().Unix() >= loan.MaturityTime {
-		errRejected = types.ErrMaturityTimeReached
-		return nil, nil
-	}
-
-	pool := m.GetPool(ctx, loan.PoolId)
-
-	if err := types.CheckBorrowCap(pool, loan.BorrowAmount.Amount); err != nil {
-		errRejected = types.ErrBorrowCapExceeded
-		return nil, nil
-	}
-
-	// authorization submitted
-	if loan.Status == types.LoanStatus_Authorized {
-		currentPrice, err := m.GetPrice(ctx, types.GetPricePair(pool.Config))
-		if err != nil {
-			errRejected = types.ErrInvalidPrice
-			return nil, nil
-		}
-
-		// check if liquidation price reached
-		if currentPrice.LTE(loan.LiquidationPrice) {
-			errRejected = types.ErrLiquidationPriceReached
-			return nil, nil
-		}
-
-		// approve loan if all deposit txs verified
-		if m.DepositsVerified(ctx, m.GetAuthorization(ctx, msg.Vault, authorizationId)) {
-			if err := m.HandleApproval(ctx, msg.Relayer, loan); err != nil {
-				errRejected = err
-				return nil, nil
-			} else {
-				loan.Authorizations[authorizationId-1].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_AUTHORIZED
-				return nil, nil
-			}
-		}
-	} else {
-		m.AddAuthorization(ctx, loan, depositTxHash, types.AuthorizationStatus_AUTHORIZATION_STATUS_PENDING)
-	}
 
 	return &types.MsgApproveResponse{}, nil
 }
@@ -471,6 +343,10 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 	loan := m.GetLoan(ctx, msg.LoanId)
 	if msg.Borrower != loan.Borrower {
 		return nil, types.ErrMismatchedBorrower
+	}
+
+	if loan.Status != types.LoanStatus_Rejected {
+		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not rejected")
 	}
 
 	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Tx)), true)
@@ -505,11 +381,6 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		// check deposit status
 		if depositLog.Status != types.DepositStatus_DEPOSIT_STATUS_VERIFIED {
 			return nil, errorsmod.Wrap(types.ErrInvalidDepositTx, "deposit tx non verified")
-		}
-
-		// check authorization status
-		if m.GetAuthorization(ctx, msg.LoanId, depositLog.AuthorizationId).Status != types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED {
-			return nil, errorsmod.Wrap(types.ErrInvalidDepositTx, "authorization not rejected")
 		}
 
 		sigBytes, _ := hex.DecodeString(msg.Signatures[i])
