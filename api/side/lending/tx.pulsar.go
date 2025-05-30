@@ -7074,80 +7074,80 @@ func (x *fastReflection_MsgSubmitCetsResponse) ProtoMethods() *protoiface.Method
 	}
 }
 
-var _ protoreflect.List = (*_MsgApprove_5_list)(nil)
+var _ protoreflect.List = (*_MsgSubmitDepositTransaction_5_list)(nil)
 
-type _MsgApprove_5_list struct {
+type _MsgSubmitDepositTransaction_5_list struct {
 	list *[]string
 }
 
-func (x *_MsgApprove_5_list) Len() int {
+func (x *_MsgSubmitDepositTransaction_5_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_MsgApprove_5_list) Get(i int) protoreflect.Value {
+func (x *_MsgSubmitDepositTransaction_5_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_MsgApprove_5_list) Set(i int, value protoreflect.Value) {
+func (x *_MsgSubmitDepositTransaction_5_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_MsgApprove_5_list) Append(value protoreflect.Value) {
+func (x *_MsgSubmitDepositTransaction_5_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_MsgApprove_5_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message MsgApprove at list field Proof as it is not of Message kind"))
+func (x *_MsgSubmitDepositTransaction_5_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgSubmitDepositTransaction at list field Proof as it is not of Message kind"))
 }
 
-func (x *_MsgApprove_5_list) Truncate(n int) {
+func (x *_MsgSubmitDepositTransaction_5_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_MsgApprove_5_list) NewElement() protoreflect.Value {
+func (x *_MsgSubmitDepositTransaction_5_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_MsgApprove_5_list) IsValid() bool {
+func (x *_MsgSubmitDepositTransaction_5_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_MsgApprove            protoreflect.MessageDescriptor
-	fd_MsgApprove_relayer    protoreflect.FieldDescriptor
-	fd_MsgApprove_vault      protoreflect.FieldDescriptor
-	fd_MsgApprove_deposit_tx protoreflect.FieldDescriptor
-	fd_MsgApprove_block_hash protoreflect.FieldDescriptor
-	fd_MsgApprove_proof      protoreflect.FieldDescriptor
+	md_MsgSubmitDepositTransaction            protoreflect.MessageDescriptor
+	fd_MsgSubmitDepositTransaction_relayer    protoreflect.FieldDescriptor
+	fd_MsgSubmitDepositTransaction_vault      protoreflect.FieldDescriptor
+	fd_MsgSubmitDepositTransaction_deposit_tx protoreflect.FieldDescriptor
+	fd_MsgSubmitDepositTransaction_block_hash protoreflect.FieldDescriptor
+	fd_MsgSubmitDepositTransaction_proof      protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgApprove = File_side_lending_tx_proto.Messages().ByName("MsgApprove")
-	fd_MsgApprove_relayer = md_MsgApprove.Fields().ByName("relayer")
-	fd_MsgApprove_vault = md_MsgApprove.Fields().ByName("vault")
-	fd_MsgApprove_deposit_tx = md_MsgApprove.Fields().ByName("deposit_tx")
-	fd_MsgApprove_block_hash = md_MsgApprove.Fields().ByName("block_hash")
-	fd_MsgApprove_proof = md_MsgApprove.Fields().ByName("proof")
+	md_MsgSubmitDepositTransaction = File_side_lending_tx_proto.Messages().ByName("MsgSubmitDepositTransaction")
+	fd_MsgSubmitDepositTransaction_relayer = md_MsgSubmitDepositTransaction.Fields().ByName("relayer")
+	fd_MsgSubmitDepositTransaction_vault = md_MsgSubmitDepositTransaction.Fields().ByName("vault")
+	fd_MsgSubmitDepositTransaction_deposit_tx = md_MsgSubmitDepositTransaction.Fields().ByName("deposit_tx")
+	fd_MsgSubmitDepositTransaction_block_hash = md_MsgSubmitDepositTransaction.Fields().ByName("block_hash")
+	fd_MsgSubmitDepositTransaction_proof = md_MsgSubmitDepositTransaction.Fields().ByName("proof")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgApprove)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgSubmitDepositTransaction)(nil)
 
-type fastReflection_MsgApprove MsgApprove
+type fastReflection_MsgSubmitDepositTransaction MsgSubmitDepositTransaction
 
-func (x *MsgApprove) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgApprove)(x)
+func (x *MsgSubmitDepositTransaction) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitDepositTransaction)(x)
 }
 
-func (x *MsgApprove) slowProtoReflect() protoreflect.Message {
+func (x *MsgSubmitDepositTransaction) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7159,43 +7159,43 @@ func (x *MsgApprove) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgApprove_messageType fastReflection_MsgApprove_messageType
-var _ protoreflect.MessageType = fastReflection_MsgApprove_messageType{}
+var _fastReflection_MsgSubmitDepositTransaction_messageType fastReflection_MsgSubmitDepositTransaction_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitDepositTransaction_messageType{}
 
-type fastReflection_MsgApprove_messageType struct{}
+type fastReflection_MsgSubmitDepositTransaction_messageType struct{}
 
-func (x fastReflection_MsgApprove_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgApprove)(nil)
+func (x fastReflection_MsgSubmitDepositTransaction_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitDepositTransaction)(nil)
 }
-func (x fastReflection_MsgApprove_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgApprove)
+func (x fastReflection_MsgSubmitDepositTransaction_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitDepositTransaction)
 }
-func (x fastReflection_MsgApprove_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgApprove
+func (x fastReflection_MsgSubmitDepositTransaction_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitDepositTransaction
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgApprove) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgApprove
+func (x *fastReflection_MsgSubmitDepositTransaction) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitDepositTransaction
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgApprove) Type() protoreflect.MessageType {
-	return _fastReflection_MsgApprove_messageType
+func (x *fastReflection_MsgSubmitDepositTransaction) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitDepositTransaction_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgApprove) New() protoreflect.Message {
-	return new(fastReflection_MsgApprove)
+func (x *fastReflection_MsgSubmitDepositTransaction) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitDepositTransaction)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgApprove) Interface() protoreflect.ProtoMessage {
-	return (*MsgApprove)(x)
+func (x *fastReflection_MsgSubmitDepositTransaction) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitDepositTransaction)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -7203,34 +7203,34 @@ func (x *fastReflection_MsgApprove) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgApprove) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgSubmitDepositTransaction) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Relayer != "" {
 		value := protoreflect.ValueOfString(x.Relayer)
-		if !f(fd_MsgApprove_relayer, value) {
+		if !f(fd_MsgSubmitDepositTransaction_relayer, value) {
 			return
 		}
 	}
 	if x.Vault != "" {
 		value := protoreflect.ValueOfString(x.Vault)
-		if !f(fd_MsgApprove_vault, value) {
+		if !f(fd_MsgSubmitDepositTransaction_vault, value) {
 			return
 		}
 	}
 	if x.DepositTx != "" {
 		value := protoreflect.ValueOfString(x.DepositTx)
-		if !f(fd_MsgApprove_deposit_tx, value) {
+		if !f(fd_MsgSubmitDepositTransaction_deposit_tx, value) {
 			return
 		}
 	}
 	if x.BlockHash != "" {
 		value := protoreflect.ValueOfString(x.BlockHash)
-		if !f(fd_MsgApprove_block_hash, value) {
+		if !f(fd_MsgSubmitDepositTransaction_block_hash, value) {
 			return
 		}
 	}
 	if len(x.Proof) != 0 {
-		value := protoreflect.ValueOfList(&_MsgApprove_5_list{list: &x.Proof})
-		if !f(fd_MsgApprove_proof, value) {
+		value := protoreflect.ValueOfList(&_MsgSubmitDepositTransaction_5_list{list: &x.Proof})
+		if !f(fd_MsgSubmitDepositTransaction_proof, value) {
 			return
 		}
 	}
@@ -7247,23 +7247,23 @@ func (x *fastReflection_MsgApprove) Range(f func(protoreflect.FieldDescriptor, p
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgApprove) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgSubmitDepositTransaction) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.lending.MsgApprove.relayer":
+	case "side.lending.MsgSubmitDepositTransaction.relayer":
 		return x.Relayer != ""
-	case "side.lending.MsgApprove.vault":
+	case "side.lending.MsgSubmitDepositTransaction.vault":
 		return x.Vault != ""
-	case "side.lending.MsgApprove.deposit_tx":
+	case "side.lending.MsgSubmitDepositTransaction.deposit_tx":
 		return x.DepositTx != ""
-	case "side.lending.MsgApprove.block_hash":
+	case "side.lending.MsgSubmitDepositTransaction.block_hash":
 		return x.BlockHash != ""
-	case "side.lending.MsgApprove.proof":
+	case "side.lending.MsgSubmitDepositTransaction.proof":
 		return len(x.Proof) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApprove"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransaction"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApprove does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransaction does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7273,23 +7273,23 @@ func (x *fastReflection_MsgApprove) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgApprove) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgSubmitDepositTransaction) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.lending.MsgApprove.relayer":
+	case "side.lending.MsgSubmitDepositTransaction.relayer":
 		x.Relayer = ""
-	case "side.lending.MsgApprove.vault":
+	case "side.lending.MsgSubmitDepositTransaction.vault":
 		x.Vault = ""
-	case "side.lending.MsgApprove.deposit_tx":
+	case "side.lending.MsgSubmitDepositTransaction.deposit_tx":
 		x.DepositTx = ""
-	case "side.lending.MsgApprove.block_hash":
+	case "side.lending.MsgSubmitDepositTransaction.block_hash":
 		x.BlockHash = ""
-	case "side.lending.MsgApprove.proof":
+	case "side.lending.MsgSubmitDepositTransaction.proof":
 		x.Proof = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApprove"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransaction"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApprove does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransaction does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7299,31 +7299,31 @@ func (x *fastReflection_MsgApprove) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgApprove) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitDepositTransaction) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.lending.MsgApprove.relayer":
+	case "side.lending.MsgSubmitDepositTransaction.relayer":
 		value := x.Relayer
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgApprove.vault":
+	case "side.lending.MsgSubmitDepositTransaction.vault":
 		value := x.Vault
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgApprove.deposit_tx":
+	case "side.lending.MsgSubmitDepositTransaction.deposit_tx":
 		value := x.DepositTx
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgApprove.block_hash":
+	case "side.lending.MsgSubmitDepositTransaction.block_hash":
 		value := x.BlockHash
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgApprove.proof":
+	case "side.lending.MsgSubmitDepositTransaction.proof":
 		if len(x.Proof) == 0 {
-			return protoreflect.ValueOfList(&_MsgApprove_5_list{})
+			return protoreflect.ValueOfList(&_MsgSubmitDepositTransaction_5_list{})
 		}
-		listValue := &_MsgApprove_5_list{list: &x.Proof}
+		listValue := &_MsgSubmitDepositTransaction_5_list{list: &x.Proof}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApprove"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransaction"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApprove does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransaction does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -7337,25 +7337,25 @@ func (x *fastReflection_MsgApprove) Get(descriptor protoreflect.FieldDescriptor)
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgApprove) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgSubmitDepositTransaction) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.lending.MsgApprove.relayer":
+	case "side.lending.MsgSubmitDepositTransaction.relayer":
 		x.Relayer = value.Interface().(string)
-	case "side.lending.MsgApprove.vault":
+	case "side.lending.MsgSubmitDepositTransaction.vault":
 		x.Vault = value.Interface().(string)
-	case "side.lending.MsgApprove.deposit_tx":
+	case "side.lending.MsgSubmitDepositTransaction.deposit_tx":
 		x.DepositTx = value.Interface().(string)
-	case "side.lending.MsgApprove.block_hash":
+	case "side.lending.MsgSubmitDepositTransaction.block_hash":
 		x.BlockHash = value.Interface().(string)
-	case "side.lending.MsgApprove.proof":
+	case "side.lending.MsgSubmitDepositTransaction.proof":
 		lv := value.List()
-		clv := lv.(*_MsgApprove_5_list)
+		clv := lv.(*_MsgSubmitDepositTransaction_5_list)
 		x.Proof = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApprove"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransaction"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApprove does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransaction does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7369,61 +7369,61 @@ func (x *fastReflection_MsgApprove) Set(fd protoreflect.FieldDescriptor, value p
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgApprove) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitDepositTransaction) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgApprove.proof":
+	case "side.lending.MsgSubmitDepositTransaction.proof":
 		if x.Proof == nil {
 			x.Proof = []string{}
 		}
-		value := &_MsgApprove_5_list{list: &x.Proof}
+		value := &_MsgSubmitDepositTransaction_5_list{list: &x.Proof}
 		return protoreflect.ValueOfList(value)
-	case "side.lending.MsgApprove.relayer":
-		panic(fmt.Errorf("field relayer of message side.lending.MsgApprove is not mutable"))
-	case "side.lending.MsgApprove.vault":
-		panic(fmt.Errorf("field vault of message side.lending.MsgApprove is not mutable"))
-	case "side.lending.MsgApprove.deposit_tx":
-		panic(fmt.Errorf("field deposit_tx of message side.lending.MsgApprove is not mutable"))
-	case "side.lending.MsgApprove.block_hash":
-		panic(fmt.Errorf("field block_hash of message side.lending.MsgApprove is not mutable"))
+	case "side.lending.MsgSubmitDepositTransaction.relayer":
+		panic(fmt.Errorf("field relayer of message side.lending.MsgSubmitDepositTransaction is not mutable"))
+	case "side.lending.MsgSubmitDepositTransaction.vault":
+		panic(fmt.Errorf("field vault of message side.lending.MsgSubmitDepositTransaction is not mutable"))
+	case "side.lending.MsgSubmitDepositTransaction.deposit_tx":
+		panic(fmt.Errorf("field deposit_tx of message side.lending.MsgSubmitDepositTransaction is not mutable"))
+	case "side.lending.MsgSubmitDepositTransaction.block_hash":
+		panic(fmt.Errorf("field block_hash of message side.lending.MsgSubmitDepositTransaction is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApprove"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransaction"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApprove does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransaction does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgApprove) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitDepositTransaction) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgApprove.relayer":
+	case "side.lending.MsgSubmitDepositTransaction.relayer":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgApprove.vault":
+	case "side.lending.MsgSubmitDepositTransaction.vault":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgApprove.deposit_tx":
+	case "side.lending.MsgSubmitDepositTransaction.deposit_tx":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgApprove.block_hash":
+	case "side.lending.MsgSubmitDepositTransaction.block_hash":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgApprove.proof":
+	case "side.lending.MsgSubmitDepositTransaction.proof":
 		list := []string{}
-		return protoreflect.ValueOfList(&_MsgApprove_5_list{list: &list})
+		return protoreflect.ValueOfList(&_MsgSubmitDepositTransaction_5_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApprove"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransaction"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApprove does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransaction does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgApprove) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgSubmitDepositTransaction) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgApprove", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgSubmitDepositTransaction", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -7431,7 +7431,7 @@ func (x *fastReflection_MsgApprove) WhichOneof(d protoreflect.OneofDescriptor) p
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgApprove) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgSubmitDepositTransaction) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -7442,7 +7442,7 @@ func (x *fastReflection_MsgApprove) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgApprove) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgSubmitDepositTransaction) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -7454,7 +7454,7 @@ func (x *fastReflection_MsgApprove) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgApprove) IsValid() bool {
+func (x *fastReflection_MsgSubmitDepositTransaction) IsValid() bool {
 	return x != nil
 }
 
@@ -7464,9 +7464,9 @@ func (x *fastReflection_MsgApprove) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgApprove) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgSubmitDepositTransaction) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgApprove)
+		x := input.Message.Interface().(*MsgSubmitDepositTransaction)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7510,7 +7510,7 @@ func (x *fastReflection_MsgApprove) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgApprove)
+		x := input.Message.Interface().(*MsgSubmitDepositTransaction)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7577,7 +7577,7 @@ func (x *fastReflection_MsgApprove) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgApprove)
+		x := input.Message.Interface().(*MsgSubmitDepositTransaction)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7609,10 +7609,10 @@ func (x *fastReflection_MsgApprove) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgApprove: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitDepositTransaction: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgApprove: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitDepositTransaction: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -7811,23 +7811,23 @@ func (x *fastReflection_MsgApprove) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgApproveResponse protoreflect.MessageDescriptor
+	md_MsgSubmitDepositTransactionResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
-	md_MsgApproveResponse = File_side_lending_tx_proto.Messages().ByName("MsgApproveResponse")
+	md_MsgSubmitDepositTransactionResponse = File_side_lending_tx_proto.Messages().ByName("MsgSubmitDepositTransactionResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgApproveResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgSubmitDepositTransactionResponse)(nil)
 
-type fastReflection_MsgApproveResponse MsgApproveResponse
+type fastReflection_MsgSubmitDepositTransactionResponse MsgSubmitDepositTransactionResponse
 
-func (x *MsgApproveResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgApproveResponse)(x)
+func (x *MsgSubmitDepositTransactionResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgSubmitDepositTransactionResponse)(x)
 }
 
-func (x *MsgApproveResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgSubmitDepositTransactionResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_side_lending_tx_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7839,43 +7839,43 @@ func (x *MsgApproveResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgApproveResponse_messageType fastReflection_MsgApproveResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgApproveResponse_messageType{}
+var _fastReflection_MsgSubmitDepositTransactionResponse_messageType fastReflection_MsgSubmitDepositTransactionResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgSubmitDepositTransactionResponse_messageType{}
 
-type fastReflection_MsgApproveResponse_messageType struct{}
+type fastReflection_MsgSubmitDepositTransactionResponse_messageType struct{}
 
-func (x fastReflection_MsgApproveResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgApproveResponse)(nil)
+func (x fastReflection_MsgSubmitDepositTransactionResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgSubmitDepositTransactionResponse)(nil)
 }
-func (x fastReflection_MsgApproveResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgApproveResponse)
+func (x fastReflection_MsgSubmitDepositTransactionResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitDepositTransactionResponse)
 }
-func (x fastReflection_MsgApproveResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgApproveResponse
+func (x fastReflection_MsgSubmitDepositTransactionResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitDepositTransactionResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgApproveResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgApproveResponse
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgSubmitDepositTransactionResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgApproveResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgApproveResponse_messageType
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgSubmitDepositTransactionResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgApproveResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgApproveResponse)
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgSubmitDepositTransactionResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgApproveResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgApproveResponse)(x)
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgSubmitDepositTransactionResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -7883,7 +7883,7 @@ func (x *fastReflection_MsgApproveResponse) Interface() protoreflect.ProtoMessag
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgApproveResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -7897,13 +7897,13 @@ func (x *fastReflection_MsgApproveResponse) Range(f func(protoreflect.FieldDescr
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgApproveResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApproveResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransactionResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApproveResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransactionResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7913,13 +7913,13 @@ func (x *fastReflection_MsgApproveResponse) Has(fd protoreflect.FieldDescriptor)
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgApproveResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApproveResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransactionResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApproveResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransactionResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7929,13 +7929,13 @@ func (x *fastReflection_MsgApproveResponse) Clear(fd protoreflect.FieldDescripto
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgApproveResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApproveResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransactionResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApproveResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransactionResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -7949,13 +7949,13 @@ func (x *fastReflection_MsgApproveResponse) Get(descriptor protoreflect.FieldDes
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgApproveResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApproveResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransactionResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApproveResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransactionResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -7969,36 +7969,36 @@ func (x *fastReflection_MsgApproveResponse) Set(fd protoreflect.FieldDescriptor,
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgApproveResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApproveResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransactionResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApproveResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransactionResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgApproveResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApproveResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgSubmitDepositTransactionResponse"))
 		}
-		panic(fmt.Errorf("message side.lending.MsgApproveResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message side.lending.MsgSubmitDepositTransactionResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgApproveResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgApproveResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgSubmitDepositTransactionResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -8006,7 +8006,7 @@ func (x *fastReflection_MsgApproveResponse) WhichOneof(d protoreflect.OneofDescr
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgApproveResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -8017,7 +8017,7 @@ func (x *fastReflection_MsgApproveResponse) GetUnknown() protoreflect.RawFields 
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgApproveResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -8029,7 +8029,7 @@ func (x *fastReflection_MsgApproveResponse) SetUnknown(fields protoreflect.RawFi
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgApproveResponse) IsValid() bool {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -8039,9 +8039,9 @@ func (x *fastReflection_MsgApproveResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgApproveResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgSubmitDepositTransactionResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgApproveResponse)
+		x := input.Message.Interface().(*MsgSubmitDepositTransactionResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -8063,7 +8063,7 @@ func (x *fastReflection_MsgApproveResponse) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgApproveResponse)
+		x := input.Message.Interface().(*MsgSubmitDepositTransactionResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -8093,7 +8093,7 @@ func (x *fastReflection_MsgApproveResponse) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgApproveResponse)
+		x := input.Message.Interface().(*MsgSubmitDepositTransactionResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -8125,10 +8125,10 @@ func (x *fastReflection_MsgApproveResponse) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgApproveResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitDepositTransactionResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgApproveResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgSubmitDepositTransactionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -11503,7 +11503,7 @@ func (*MsgSubmitCetsResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{13}
 }
 
-type MsgApprove struct {
+type MsgSubmitDepositTransaction struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -11515,8 +11515,8 @@ type MsgApprove struct {
 	Proof     []string `protobuf:"bytes,5,rep,name=proof,proto3" json:"proof,omitempty"`
 }
 
-func (x *MsgApprove) Reset() {
-	*x = MsgApprove{}
+func (x *MsgSubmitDepositTransaction) Reset() {
+	*x = MsgSubmitDepositTransaction{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -11524,60 +11524,60 @@ func (x *MsgApprove) Reset() {
 	}
 }
 
-func (x *MsgApprove) String() string {
+func (x *MsgSubmitDepositTransaction) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgApprove) ProtoMessage() {}
+func (*MsgSubmitDepositTransaction) ProtoMessage() {}
 
-// Deprecated: Use MsgApprove.ProtoReflect.Descriptor instead.
-func (*MsgApprove) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgSubmitDepositTransaction.ProtoReflect.Descriptor instead.
+func (*MsgSubmitDepositTransaction) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *MsgApprove) GetRelayer() string {
+func (x *MsgSubmitDepositTransaction) GetRelayer() string {
 	if x != nil {
 		return x.Relayer
 	}
 	return ""
 }
 
-func (x *MsgApprove) GetVault() string {
+func (x *MsgSubmitDepositTransaction) GetVault() string {
 	if x != nil {
 		return x.Vault
 	}
 	return ""
 }
 
-func (x *MsgApprove) GetDepositTx() string {
+func (x *MsgSubmitDepositTransaction) GetDepositTx() string {
 	if x != nil {
 		return x.DepositTx
 	}
 	return ""
 }
 
-func (x *MsgApprove) GetBlockHash() string {
+func (x *MsgSubmitDepositTransaction) GetBlockHash() string {
 	if x != nil {
 		return x.BlockHash
 	}
 	return ""
 }
 
-func (x *MsgApprove) GetProof() []string {
+func (x *MsgSubmitDepositTransaction) GetProof() []string {
 	if x != nil {
 		return x.Proof
 	}
 	return nil
 }
 
-type MsgApproveResponse struct {
+type MsgSubmitDepositTransactionResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgApproveResponse) Reset() {
-	*x = MsgApproveResponse{}
+func (x *MsgSubmitDepositTransactionResponse) Reset() {
+	*x = MsgSubmitDepositTransactionResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_side_lending_tx_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -11585,14 +11585,14 @@ func (x *MsgApproveResponse) Reset() {
 	}
 }
 
-func (x *MsgApproveResponse) String() string {
+func (x *MsgSubmitDepositTransactionResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgApproveResponse) ProtoMessage() {}
+func (*MsgSubmitDepositTransactionResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgApproveResponse.ProtoReflect.Descriptor instead.
-func (*MsgApproveResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgSubmitDepositTransactionResponse.ProtoReflect.Descriptor instead.
+func (*MsgSubmitDepositTransactionResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{15}
 }
 
@@ -11936,109 +11936,114 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x65, 0x6e, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0d, 0x82,
 	0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x17, 0x0a, 0x15,
 	0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x9e, 0x01, 0x0a, 0x0a, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70,
-	0x72, 0x6f, 0x76, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x14,
-	0x0a, 0x05, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76,
-	0x61, 0x75, 0x6c, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f,
-	0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69,
-	0x74, 0x54, 0x78, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61, 0x73,
-	0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61,
-	0x73, 0x68, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x18, 0x05, 0x20, 0x03, 0x28,
-	0x09, 0x52, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x72,
-	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x22, 0x14, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70,
-	0x72, 0x6f, 0x76, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f, 0x0a, 0x09,
-	0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72,
-	0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72,
-	0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x0e,
-	0x0a, 0x02, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74, 0x78, 0x12, 0x1e,
-	0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03,
-	0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0d,
-	0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x13, 0x0a,
-	0x11, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x4b, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x50,
-	0x72, 0x69, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x14, 0x0a, 0x05,
-	0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x69,
-	0x63, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22,
-	0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x50, 0x72, 0x69, 0x63,
-	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a, 0x0f, 0x4d, 0x73, 0x67,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1c, 0x0a, 0x09,
-	0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x32, 0x0a, 0x06, 0x70, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x0e,
-	0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0x19,
-	0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xf9, 0x06, 0x0a, 0x03, 0x4d, 0x73,
-	0x67, 0x12, 0x4e, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12,
-	0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
-	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x23, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x54, 0x0a, 0x0c, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
-	0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x52, 0x65, 0x6d, 0x6f, 0x76,
-	0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d,
-	0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x28, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52,
-	0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x21, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x1a, 0x29, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x41, 0x70, 0x70, 0x6c,
-	0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c,
-	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4e, 0x0a, 0x0a, 0x53, 0x75, 0x62,
-	0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
-	0x43, 0x65, 0x74, 0x73, 0x1a, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a, 0x07, 0x41, 0x70, 0x70,
-	0x72, 0x6f, 0x76, 0x65, 0x12, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x1a, 0x20,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xaf, 0x01, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62,
+	0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12,
+	0x14, 0x0a, 0x05, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05,
+	0x76, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x5f, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x54, 0x78, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61,
+	0x73, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48,
+	0x61, 0x73, 0x68, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x18, 0x05, 0x20, 0x03,
+	0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07,
+	0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x22, 0x25, 0x0a, 0x23, 0x4d, 0x73, 0x67, 0x53, 0x75,
+	0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73,
+	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f,
+	0x0a, 0x09, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12, 0x1a, 0x0a, 0x08, 0x62,
+	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62,
+	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f,
+	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64,
+	0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74, 0x78,
+	0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x04,
+	0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
+	0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22,
+	0x13, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4b, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69,
+	0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x14,
+	0x0a, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70,
+	0x72, 0x69, 0x63, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x50, 0x72,
+	0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a, 0x0f, 0x4d,
+	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1c,
+	0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x32, 0x0a, 0x06,
+	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x3a, 0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79,
+	0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xac, 0x07, 0x0a, 0x03,
+	0x4d, 0x73, 0x67, 0x12, 0x4e, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f,
+	0x6c, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x23,
 	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
-	0x67, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x42, 0x0a, 0x06, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12, 0x17, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64,
-	0x65, 0x65, 0x6d, 0x1a, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x52, 0x65, 0x70, 0x61, 0x79, 0x12, 0x16, 0x2e,
+	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x0c, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x52, 0x65, 0x6d,
+	0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x20, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52,
+	0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x28,
+	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
+	0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x21, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x1a,
+	0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
+	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66,
+	0x69, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x41, 0x70,
+	0x70, 0x6c, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70,
+	0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4e, 0x0a, 0x0a, 0x53,
+	0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d,
+	0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x1a, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43,
+	0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x18, 0x53,
+	0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61, 0x6e,
+	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
+	0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
+	0x6f, 0x6e, 0x1a, 0x31, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x42, 0x0a, 0x06, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12,
+	0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
+	0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x1a, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65,
+	0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x52, 0x65, 0x70,
+	0x61, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70,
+	0x61, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x53, 0x75,
+	0x62, 0x6d, 0x69, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x1c, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d,
+	0x69, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x1a, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
+	0x50, 0x72, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a,
+	0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1d, 0x2e,
 	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
-	0x52, 0x65, 0x70, 0x61, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x50,
-	0x72, 0x69, 0x63, 0x65, 0x12, 0x1c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x50, 0x72, 0x69,
-	0x63, 0x65, 0x1a, 0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61,
-	0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05,
-	0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x9b, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72,
-	0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
-	0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73,
-	0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64,
-	0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65,
-	0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c,
-	0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64,
-	0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x25, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x9b, 0x01, 0x0a, 0x10, 0x63,
+	0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42,
+	0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64,
+	0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa,
+	0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02,
+	0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18,
+	0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42,
+	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a,
+	0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -12055,31 +12060,31 @@ func file_side_lending_tx_proto_rawDescGZIP() []byte {
 
 var file_side_lending_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_side_lending_tx_proto_goTypes = []interface{}{
-	(*MsgCreatePool)(nil),               // 0: side.lending.MsgCreatePool
-	(*MsgCreatePoolResponse)(nil),       // 1: side.lending.MsgCreatePoolResponse
-	(*MsgUpdatePoolConfig)(nil),         // 2: side.lending.MsgUpdatePoolConfig
-	(*MsgUpdatePoolConfigResponse)(nil), // 3: side.lending.MsgUpdatePoolConfigResponse
-	(*MsgRepay)(nil),                    // 4: side.lending.MsgRepay
-	(*MsgRepayResponse)(nil),            // 5: side.lending.MsgRepayResponse
-	(*MsgAddLiquidity)(nil),             // 6: side.lending.MsgAddLiquidity
-	(*MsgAddLiquidityResponse)(nil),     // 7: side.lending.MsgAddLiquidityResponse
-	(*MsgRemoveLiquidity)(nil),          // 8: side.lending.MsgRemoveLiquidity
-	(*MsgRemoveLiquidityResponse)(nil),  // 9: side.lending.MsgRemoveLiquidityResponse
-	(*MsgApply)(nil),                    // 10: side.lending.MsgApply
-	(*MsgApplyResponse)(nil),            // 11: side.lending.MsgApplyResponse
-	(*MsgSubmitCets)(nil),               // 12: side.lending.MsgSubmitCets
-	(*MsgSubmitCetsResponse)(nil),       // 13: side.lending.MsgSubmitCetsResponse
-	(*MsgApprove)(nil),                  // 14: side.lending.MsgApprove
-	(*MsgApproveResponse)(nil),          // 15: side.lending.MsgApproveResponse
-	(*MsgRedeem)(nil),                   // 16: side.lending.MsgRedeem
-	(*MsgRedeemResponse)(nil),           // 17: side.lending.MsgRedeemResponse
-	(*MsgSubmitPrice)(nil),              // 18: side.lending.MsgSubmitPrice
-	(*MsgSubmitPriceResponse)(nil),      // 19: side.lending.MsgSubmitPriceResponse
-	(*MsgUpdateParams)(nil),             // 20: side.lending.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil),     // 21: side.lending.MsgUpdateParamsResponse
-	(*PoolConfig)(nil),                  // 22: side.lending.PoolConfig
-	(*v1beta1.Coin)(nil),                // 23: cosmos.base.v1beta1.Coin
-	(*Params)(nil),                      // 24: side.lending.Params
+	(*MsgCreatePool)(nil),                       // 0: side.lending.MsgCreatePool
+	(*MsgCreatePoolResponse)(nil),               // 1: side.lending.MsgCreatePoolResponse
+	(*MsgUpdatePoolConfig)(nil),                 // 2: side.lending.MsgUpdatePoolConfig
+	(*MsgUpdatePoolConfigResponse)(nil),         // 3: side.lending.MsgUpdatePoolConfigResponse
+	(*MsgRepay)(nil),                            // 4: side.lending.MsgRepay
+	(*MsgRepayResponse)(nil),                    // 5: side.lending.MsgRepayResponse
+	(*MsgAddLiquidity)(nil),                     // 6: side.lending.MsgAddLiquidity
+	(*MsgAddLiquidityResponse)(nil),             // 7: side.lending.MsgAddLiquidityResponse
+	(*MsgRemoveLiquidity)(nil),                  // 8: side.lending.MsgRemoveLiquidity
+	(*MsgRemoveLiquidityResponse)(nil),          // 9: side.lending.MsgRemoveLiquidityResponse
+	(*MsgApply)(nil),                            // 10: side.lending.MsgApply
+	(*MsgApplyResponse)(nil),                    // 11: side.lending.MsgApplyResponse
+	(*MsgSubmitCets)(nil),                       // 12: side.lending.MsgSubmitCets
+	(*MsgSubmitCetsResponse)(nil),               // 13: side.lending.MsgSubmitCetsResponse
+	(*MsgSubmitDepositTransaction)(nil),         // 14: side.lending.MsgSubmitDepositTransaction
+	(*MsgSubmitDepositTransactionResponse)(nil), // 15: side.lending.MsgSubmitDepositTransactionResponse
+	(*MsgRedeem)(nil),                           // 16: side.lending.MsgRedeem
+	(*MsgRedeemResponse)(nil),                   // 17: side.lending.MsgRedeemResponse
+	(*MsgSubmitPrice)(nil),                      // 18: side.lending.MsgSubmitPrice
+	(*MsgSubmitPriceResponse)(nil),              // 19: side.lending.MsgSubmitPriceResponse
+	(*MsgUpdateParams)(nil),                     // 20: side.lending.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil),             // 21: side.lending.MsgUpdateParamsResponse
+	(*PoolConfig)(nil),                          // 22: side.lending.PoolConfig
+	(*v1beta1.Coin)(nil),                        // 23: cosmos.base.v1beta1.Coin
+	(*Params)(nil),                              // 24: side.lending.Params
 }
 var file_side_lending_tx_proto_depIdxs = []int32{
 	22, // 0: side.lending.MsgCreatePool.config:type_name -> side.lending.PoolConfig
@@ -12094,7 +12099,7 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	2,  // 9: side.lending.Msg.UpdatePoolConfig:input_type -> side.lending.MsgUpdatePoolConfig
 	10, // 10: side.lending.Msg.Apply:input_type -> side.lending.MsgApply
 	12, // 11: side.lending.Msg.SubmitCets:input_type -> side.lending.MsgSubmitCets
-	14, // 12: side.lending.Msg.Approve:input_type -> side.lending.MsgApprove
+	14, // 12: side.lending.Msg.SubmitDepositTransaction:input_type -> side.lending.MsgSubmitDepositTransaction
 	16, // 13: side.lending.Msg.Redeem:input_type -> side.lending.MsgRedeem
 	4,  // 14: side.lending.Msg.Repay:input_type -> side.lending.MsgRepay
 	18, // 15: side.lending.Msg.SubmitPrice:input_type -> side.lending.MsgSubmitPrice
@@ -12105,7 +12110,7 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	3,  // 20: side.lending.Msg.UpdatePoolConfig:output_type -> side.lending.MsgUpdatePoolConfigResponse
 	11, // 21: side.lending.Msg.Apply:output_type -> side.lending.MsgApplyResponse
 	13, // 22: side.lending.Msg.SubmitCets:output_type -> side.lending.MsgSubmitCetsResponse
-	15, // 23: side.lending.Msg.Approve:output_type -> side.lending.MsgApproveResponse
+	15, // 23: side.lending.Msg.SubmitDepositTransaction:output_type -> side.lending.MsgSubmitDepositTransactionResponse
 	17, // 24: side.lending.Msg.Redeem:output_type -> side.lending.MsgRedeemResponse
 	5,  // 25: side.lending.Msg.Repay:output_type -> side.lending.MsgRepayResponse
 	19, // 26: side.lending.Msg.SubmitPrice:output_type -> side.lending.MsgSubmitPriceResponse
@@ -12294,7 +12299,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgApprove); i {
+			switch v := v.(*MsgSubmitDepositTransaction); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -12306,7 +12311,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgApproveResponse); i {
+			switch v := v.(*MsgSubmitDepositTransactionResponse); i {
 			case 0:
 				return &v.state
 			case 1:

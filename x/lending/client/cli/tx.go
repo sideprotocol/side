@@ -37,7 +37,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdRemoveLiquidity())
 	cmd.AddCommand(CmdApply())
 	cmd.AddCommand(CmdSubmitCets())
-	cmd.AddCommand(CmdApprove())
+	cmd.AddCommand(CmdSubmitDepositTransaction())
 	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
 	cmd.AddCommand(CmdSubmitPrice())
@@ -204,10 +204,10 @@ func CmdSubmitCets() *cobra.Command {
 	return cmd
 }
 
-func CmdApprove() *cobra.Command {
+func CmdSubmitDepositTransaction() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "approve [vault] [deposit tx] [block hash] [proof]",
-		Short: "Approve loan with the deposit tx",
+		Use:   "submit-deposit-tx [vault] [deposit tx] [block hash] [proof]",
+		Short: "Submit the deposit tx along with the corresponding vault and proof",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -215,7 +215,7 @@ func CmdApprove() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgApprove(
+			msg := types.NewMsgSubmitDepositTransaction(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				args[1],

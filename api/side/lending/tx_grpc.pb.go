@@ -19,17 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_CreatePool_FullMethodName       = "/side.lending.Msg/CreatePool"
-	Msg_AddLiquidity_FullMethodName     = "/side.lending.Msg/AddLiquidity"
-	Msg_RemoveLiquidity_FullMethodName  = "/side.lending.Msg/RemoveLiquidity"
-	Msg_UpdatePoolConfig_FullMethodName = "/side.lending.Msg/UpdatePoolConfig"
-	Msg_Apply_FullMethodName            = "/side.lending.Msg/Apply"
-	Msg_SubmitCets_FullMethodName       = "/side.lending.Msg/SubmitCets"
-	Msg_Approve_FullMethodName          = "/side.lending.Msg/Approve"
-	Msg_Redeem_FullMethodName           = "/side.lending.Msg/Redeem"
-	Msg_Repay_FullMethodName            = "/side.lending.Msg/Repay"
-	Msg_SubmitPrice_FullMethodName      = "/side.lending.Msg/SubmitPrice"
-	Msg_UpdateParams_FullMethodName     = "/side.lending.Msg/UpdateParams"
+	Msg_CreatePool_FullMethodName               = "/side.lending.Msg/CreatePool"
+	Msg_AddLiquidity_FullMethodName             = "/side.lending.Msg/AddLiquidity"
+	Msg_RemoveLiquidity_FullMethodName          = "/side.lending.Msg/RemoveLiquidity"
+	Msg_UpdatePoolConfig_FullMethodName         = "/side.lending.Msg/UpdatePoolConfig"
+	Msg_Apply_FullMethodName                    = "/side.lending.Msg/Apply"
+	Msg_SubmitCets_FullMethodName               = "/side.lending.Msg/SubmitCets"
+	Msg_SubmitDepositTransaction_FullMethodName = "/side.lending.Msg/SubmitDepositTransaction"
+	Msg_Redeem_FullMethodName                   = "/side.lending.Msg/Redeem"
+	Msg_Repay_FullMethodName                    = "/side.lending.Msg/Repay"
+	Msg_SubmitPrice_FullMethodName              = "/side.lending.Msg/SubmitPrice"
+	Msg_UpdateParams_FullMethodName             = "/side.lending.Msg/UpdateParams"
 )
 
 // MsgClient is the client API for Msg service.
@@ -42,7 +42,7 @@ type MsgClient interface {
 	UpdatePoolConfig(ctx context.Context, in *MsgUpdatePoolConfig, opts ...grpc.CallOption) (*MsgUpdatePoolConfigResponse, error)
 	Apply(ctx context.Context, in *MsgApply, opts ...grpc.CallOption) (*MsgApplyResponse, error)
 	SubmitCets(ctx context.Context, in *MsgSubmitCets, opts ...grpc.CallOption) (*MsgSubmitCetsResponse, error)
-	Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error)
+	SubmitDepositTransaction(ctx context.Context, in *MsgSubmitDepositTransaction, opts ...grpc.CallOption) (*MsgSubmitDepositTransactionResponse, error)
 	Redeem(ctx context.Context, in *MsgRedeem, opts ...grpc.CallOption) (*MsgRedeemResponse, error)
 	Repay(ctx context.Context, in *MsgRepay, opts ...grpc.CallOption) (*MsgRepayResponse, error)
 	// SubmitPrice submits the price for testing
@@ -116,9 +116,9 @@ func (c *msgClient) SubmitCets(ctx context.Context, in *MsgSubmitCets, opts ...g
 	return out, nil
 }
 
-func (c *msgClient) Approve(ctx context.Context, in *MsgApprove, opts ...grpc.CallOption) (*MsgApproveResponse, error) {
-	out := new(MsgApproveResponse)
-	err := c.cc.Invoke(ctx, Msg_Approve_FullMethodName, in, out, opts...)
+func (c *msgClient) SubmitDepositTransaction(ctx context.Context, in *MsgSubmitDepositTransaction, opts ...grpc.CallOption) (*MsgSubmitDepositTransactionResponse, error) {
+	out := new(MsgSubmitDepositTransactionResponse)
+	err := c.cc.Invoke(ctx, Msg_SubmitDepositTransaction_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +171,7 @@ type MsgServer interface {
 	UpdatePoolConfig(context.Context, *MsgUpdatePoolConfig) (*MsgUpdatePoolConfigResponse, error)
 	Apply(context.Context, *MsgApply) (*MsgApplyResponse, error)
 	SubmitCets(context.Context, *MsgSubmitCets) (*MsgSubmitCetsResponse, error)
-	Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error)
+	SubmitDepositTransaction(context.Context, *MsgSubmitDepositTransaction) (*MsgSubmitDepositTransactionResponse, error)
 	Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error)
 	Repay(context.Context, *MsgRepay) (*MsgRepayResponse, error)
 	// SubmitPrice submits the price for testing
@@ -206,8 +206,8 @@ func (UnimplementedMsgServer) Apply(context.Context, *MsgApply) (*MsgApplyRespon
 func (UnimplementedMsgServer) SubmitCets(context.Context, *MsgSubmitCets) (*MsgSubmitCetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitCets not implemented")
 }
-func (UnimplementedMsgServer) Approve(context.Context, *MsgApprove) (*MsgApproveResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Approve not implemented")
+func (UnimplementedMsgServer) SubmitDepositTransaction(context.Context, *MsgSubmitDepositTransaction) (*MsgSubmitDepositTransactionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitDepositTransaction not implemented")
 }
 func (UnimplementedMsgServer) Redeem(context.Context, *MsgRedeem) (*MsgRedeemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Redeem not implemented")
@@ -342,20 +342,20 @@ func _Msg_SubmitCets_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_Approve_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgApprove)
+func _Msg_SubmitDepositTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitDepositTransaction)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).Approve(ctx, in)
+		return srv.(MsgServer).SubmitDepositTransaction(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_Approve_FullMethodName,
+		FullMethod: Msg_SubmitDepositTransaction_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Approve(ctx, req.(*MsgApprove))
+		return srv.(MsgServer).SubmitDepositTransaction(ctx, req.(*MsgSubmitDepositTransaction))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -464,8 +464,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitCets_Handler,
 		},
 		{
-			MethodName: "Approve",
-			Handler:    _Msg_Approve_Handler,
+			MethodName: "SubmitDepositTransaction",
+			Handler:    _Msg_SubmitDepositTransaction_Handler,
 		},
 		{
 			MethodName: "Redeem",

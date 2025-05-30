@@ -11,10 +11,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgApprove{}
+var _ sdk.Msg = &MsgSubmitDepositTransaction{}
 
-func NewMsgApprove(relayer string, vault string, depositTx string, blockHash string, proof []string) *MsgApprove {
-	return &MsgApprove{
+func NewMsgSubmitDepositTransaction(relayer string, vault string, depositTx string, blockHash string, proof []string) *MsgSubmitDepositTransaction {
+	return &MsgSubmitDepositTransaction{
 		Relayer:   relayer,
 		Vault:     vault,
 		DepositTx: depositTx,
@@ -23,8 +23,8 @@ func NewMsgApprove(relayer string, vault string, depositTx string, blockHash str
 	}
 }
 
-// ValidateBasic performs basic MsgApprove message validation.
-func (m *MsgApprove) ValidateBasic() error {
+// ValidateBasic performs basic MsgSubmitDepositTransaction message validation.
+func (m *MsgSubmitDepositTransaction) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Relayer); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
