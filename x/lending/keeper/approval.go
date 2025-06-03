@@ -33,6 +33,10 @@ func (k Keeper) HandleApproval(ctx sdk.Context, loan *types.Loan) error {
 	// update pool
 	k.AfterPoolBorrowed(ctx, loan.PoolId, loan.Maturity, loan.BorrowAmount)
 
+	// update the starting borrow index
+	tranche, _ := types.GetTranche(pool.Tranches, loan.Maturity)
+	loan.StartBorrowIndex = tranche.BorrowIndex
+
 	loan.DisburseAt = ctx.BlockTime()
 	loan.Status = types.LoanStatus_Open
 	k.SetLoan(ctx, loan)
