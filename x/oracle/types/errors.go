@@ -16,5 +16,5 @@ var (
 	ErrInvalidBlockHeaders = errorsmod.Register(ModuleName, 1101, "invalid block headers")
 	ErrInvalidReorgDepth   = errorsmod.Register(ModuleName, 1102, "invalid reorg depth")
 
-	ErrInsufficientVotingPower = errorsmod.Register(ModuleName, 1102, "insufficient voting power")
+	ErrInsufficientVotingPower = errorsmod.Register(ModuleName, 1200, "insufficient voting power")
 )
