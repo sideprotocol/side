@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"slices"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/lending/types"
@@ -75,11 +73,6 @@ func (k Keeper) DepositsVerified(ctx sdk.Context, authorization *types.Authoriza
 	return true
 }
 
-// HasDeposit returns true if the given deposit tx exists in the specified authorization, false otherwise
-func (k Keeper) HasDeposit(ctx sdk.Context, depositTxHash string, authorization *types.Authorization) bool {
-	return slices.Contains(authorization.DepositTxs, depositTxHash)
-}
-
 // CreateAuthorization creates a new authorization from the given loan id and deposit txs
 func (k Keeper) CreateAuthorization(ctx sdk.Context, loanId string, depositTxHashes []string) *types.Authorization {
 	return &types.Authorization{
@@ -87,29 +80,4 @@ func (k Keeper) CreateAuthorization(ctx sdk.Context, loanId string, depositTxHas
 		DepositTxs: depositTxHashes,
 		Status:     types.AuthorizationStatus_AUTHORIZATION_STATUS_PENDING,
 	}
-}
-
-// AddAuthorization adds a new authorization to the given loan
-func (k Keeper) AddAuthorization(ctx sdk.Context, loan *types.Loan, depositTxHash string, status types.AuthorizationStatus) {
-	loan.Authorizations = append(loan.Authorizations, types.Authorization{
-		Id:         uint64(len(loan.Authorizations)) + 1,
-		DepositTxs: []string{depositTxHash},
-		Status:     status,
-	})
-
-	k.SetLoan(ctx, loan)
-}
-
-// UpdateAuthorization updates the specified authorization
-// Assume that the given authorization exists
-func (k Keeper) UpdateAuthorization(ctx sdk.Context, loan *types.Loan, authorizationId uint64, depositTxHash string, status types.AuthorizationStatus) {
-	authorization := loan.Authorizations[authorizationId-1]
-
-	if !k.HasDeposit(ctx, depositTxHash, &authorization) {
-		loan.Authorizations[authorizationId-1].DepositTxs = append(loan.Authorizations[authorizationId-1].DepositTxs, depositTxHash)
-	}
-
-	loan.Authorizations[authorizationId-1].Status = status
-
-	k.SetLoan(ctx, loan)
 }

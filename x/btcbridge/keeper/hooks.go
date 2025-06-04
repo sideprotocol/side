@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	"github.com/btcsuite/btcd/wire"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -18,10 +20,25 @@ func (k Keeper) AfterDeposit(ctx sdk.Context, addr string, amount sdk.Coin, tx *
 	// perform IBC transfer if enabled
 	script := types.GetIBCTransferScript(tx)
 	if len(script) != 0 {
+		var sequence uint64
+		var errMsg string
+
 		channelId, recipient, err := types.ParseIBCTransferScript(script)
 		if err == nil {
-			_ = k.IBCTransfer(ctx, addr, recipient, amount, channelId)
+			sequence, err = k.IBCTransfer(ctx, addr, recipient, amount, channelId)
 		}
+
+		if err != nil {
+			errMsg = err.Error()
+		}
+
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeIBCTransfer,
+				sdk.NewAttribute(types.AttributeKeyPacketSequence, fmt.Sprintf("%d", sequence)),
+				sdk.NewAttribute(types.AttributeKeyErrorMsg, errMsg),
+			),
+		)
 	}
 
 	return nil

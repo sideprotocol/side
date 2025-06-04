@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
 
+	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
@@ -39,4 +40,10 @@ type TSSKeeper interface {
 	InitiateSigningRequest(ctx sdk.Context, module string, scopedId string, ty tsstypes.SigningType, intent int32, pubKey string, sigHashes []string, options *tsstypes.SigningOptions) *tsstypes.SigningRequest
 
 	RegisterSigningRequestCompletedHandler(module string, handler tsstypes.SigningRequestCompletedHandler)
+}
+
+// BtcBridgeKeeper defines the expected BtcBridge keeper interface
+type BtcBridgeKeeper interface {
+	GetFeeRate(ctx sdk.Context) *btcbridgetypes.FeeRate
+	CheckFeeRate(ctx sdk.Context, feeRate *btcbridgetypes.FeeRate) error
 }

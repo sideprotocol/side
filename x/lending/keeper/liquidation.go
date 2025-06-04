@@ -1,20 +1,15 @@
 package keeper
 
 import (
-	"bytes"
-	"encoding/hex"
-
-	"github.com/btcsuite/btcd/btcutil/psbt"
-
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
 // HandleLiquidationSignatures handles the liquidation signatures
+// Assume that signatures have already been verified
 func (k Keeper) HandleLiquidationSignatures(ctx sdk.Context, loanId string, signatures []string) error {
 	if !k.HasLoan(ctx, loanId) {
 		return types.ErrLoanDoesNotExist
@@ -30,27 +25,6 @@ func (k Keeper) HandleLiquidationSignatures(ctx sdk.Context, loanId string, sign
 		return types.ErrLiquidationSignaturesAlreadyExist
 	}
 
-	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet.Tx)), true)
-	if len(signatures) != len(p.Inputs) {
-		return errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
-	}
-
-	script, _ := hex.DecodeString(dlcMeta.MultisigScript)
-	dcmPubKey, _ := hex.DecodeString(loan.DCM)
-
-	for i, input := range p.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
-		if err != nil {
-			return err
-		}
-
-		sigBytes, _ := hex.DecodeString(signatures[i])
-
-		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
-			return types.ErrInvalidSignature
-		}
-	}
-
 	dlcMeta.LiquidationCet.DCMSignatures = signatures
 	k.SetDLCMeta(ctx, loanId, dlcMeta)
 
@@ -58,6 +32,7 @@ func (k Keeper) HandleLiquidationSignatures(ctx sdk.Context, loanId string, sign
 }
 
 // handleDefaultLiquidationSignatures handles the default liquidation signatures
+// Assume that signatures have already been verified
 func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loanId string, signatures []string) error {
 	if !k.HasLoan(ctx, loanId) {
 		return types.ErrLoanDoesNotExist
@@ -73,27 +48,6 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loanId strin
 		return types.ErrLiquidationSignaturesAlreadyExist
 	}
 
-	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.DefaultLiquidationCet.Tx)), true)
-	if len(signatures) != len(p.Inputs) {
-		return errorsmod.Wrap(types.ErrInvalidSignatures, "mismatched signature number")
-	}
-
-	script, _ := hex.DecodeString(dlcMeta.MultisigScript)
-	dcmPubKey, _ := hex.DecodeString(loan.DCM)
-
-	for i, input := range p.Inputs {
-		sigHash, err := types.CalcTapscriptSigHash(p, i, input.SighashType, script)
-		if err != nil {
-			return err
-		}
-
-		sigBytes, _ := hex.DecodeString(signatures[i])
-
-		if !schnorr.Verify(sigBytes, sigHash, dcmPubKey) {
-			return types.ErrInvalidSignature
-		}
-	}
-
 	dlcMeta.DefaultLiquidationCet.DCMSignatures = signatures
 	k.SetDLCMeta(ctx, loanId, dlcMeta)
 
@@ -106,6 +60,16 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 	pool := k.GetPool(ctx, loan.PoolId)
 
 	interest := k.GetCurrentInterest(ctx, loan).Amount
+
+	principal := sdk.NewCoin(debtAmount.Denom, sdkmath.ZeroInt())
+	if debtAmount.Amount.GT(interest) {
+		// split debt to principal and interest
+		principal = debtAmount.SubAmount(interest)
+	} else {
+		// consider debt as interest
+		interest = debtAmount.Amount
+	}
+
 	protocolFee := types.GetProtocolFee(interest, pool.Config.ReserveFactor)
 
 	referralFee := sdkmath.ZeroInt()
@@ -113,11 +77,6 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 	if protocolFee.IsPositive() && types.HasReferralFee(loan, pool) {
 		referralFee = protocolFee.Mul(sdkmath.NewInt(int64(pool.Config.ReferralFeeFactor))).Quo(types.Permille)
 		actualProtocolFee = protocolFee.Sub(referralFee)
-	}
-
-	if debtAmount.Amount.LTE(interest) {
-		// TODO
-		return nil
 	}
 
 	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, moduleAccount, types.ModuleName, sdk.NewCoins(debtAmount.SubAmount(protocolFee))); err != nil {
@@ -136,7 +95,7 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 		}
 	}
 
-	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, debtAmount.SubAmount(interest), interest, protocolFee, actualProtocolFee)
+	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, principal, interest, protocolFee, actualProtocolFee)
 
 	k.DeductLiquidationAccruedInterest(ctx, loan)
 

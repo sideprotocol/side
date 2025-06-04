@@ -58,6 +58,12 @@ func (m msgServer) SubmitSignatures(goCtx context.Context, msg *types.MsgSubmitS
 		return nil, errorsmod.Wrap(types.ErrInvalidSigningStatus, "signing request non pending")
 	}
 
+	// verify signatures
+	if err := m.VerifySignatures(ctx, req, msg.Signatures); err != nil {
+		return nil, err
+	}
+
+	// callback to the module handler
 	if err := m.GetSigningRequestCompletedHandler(req.Module)(ctx, msg.Sender, req.Id, req.ScopedId, req.Type, req.Intent, req.PubKey, msg.Signatures); err != nil {
 		return nil, err
 	}

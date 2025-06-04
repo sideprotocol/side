@@ -12,12 +12,26 @@ const (
 	// default memo for IBC transfer
 	DefaultMemo = "BTC bridge | Side Chain"
 
-	// flag to enable auto pegout
-	FlagAutoPegOut = "auto-pegout"
+	// callback address to enable auto pegout
+	CallbackAddress = "btcbridge"
 
 	// default max gas for IBC callback
 	DefaultMaxIBCCallbackGas = uint64(1_000_000)
 )
+
+// BuildIBCTransferScript builds the script for IBC transfer with the given channel and recipient address
+func BuildIBCTransferScript(channelId string, recipient string) ([]byte, error) {
+	scriptBuilder := txscript.NewScriptBuilder()
+	scriptBuilder.AddOp(txscript.OP_RETURN)
+
+	// add magic number
+	scriptBuilder.AddOp(IBCTransferMagicNumber)
+
+	// add payload
+	scriptBuilder.AddData([]byte(channelId)).AddData([]byte(recipient))
+
+	return scriptBuilder.Script()
+}
 
 // GetIBCTransferScript gets the IBC transfer script from the given deposit tx
 func GetIBCTransferScript(depositTx *wire.MsgTx) []byte {

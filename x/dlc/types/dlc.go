@@ -6,9 +6,13 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/shopspring/decimal"
+
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
+
+	sdkmath "cosmossdk.io/math"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/hash"
 )
@@ -79,6 +83,21 @@ func GetSignaturePoint(pubKeyBytes []byte, nonceBytes []byte, msg []byte) ([]byt
 	return btcec.JacobianToByteSlice(sG), nil
 }
 
+// NormalizePrice normalizes the price with the given decimals
+func NormalizePrice(price sdkmath.LegacyDec, decimals int) string {
+	decimalsInt := sdkmath.NewIntWithDecimal(1, decimals)
+
+	// no error here
+	newPrice, _ := decimal.NewFromString(price.MulInt(decimalsInt).TruncateInt().ToLegacyDec().QuoInt(decimalsInt).String())
+
+	return newPrice.String()
+}
+
+// FormatPrice formats the price with the given pair
+func FormatPrice(price string, pair string) string {
+	return fmt.Sprintf("%s%s%s", price, PriceSeparator, pair)
+}
+
 // GetPricePairFromOutcome gets the price pair from the given price event outcome
 //
 // The outcome format for price event is as follows:
@@ -97,11 +116,6 @@ func GetPricePairFromOutcome(outcome string) string {
 // Assume that the outcome is valid
 func GetPriceFromOutcome(outcome string) string {
 	return strings.Split(outcome, PriceSeparator)[0]
-}
-
-// FormatPrice formats the price with the given pair
-func FormatPrice(price string, pair string) string {
-	return fmt.Sprintf("%s%s%s", price, PriceSeparator, pair)
 }
 
 // GetEventTypeFromIntent gets the event type from the given nonce DKG intent

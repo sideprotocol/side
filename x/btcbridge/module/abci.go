@@ -12,9 +12,12 @@ import (
 
 // EndBlocker called at every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+	handleDKGRequests(ctx, k)
+	handleRefreshingRequests(ctx, k)
+
 	handleIBCWithdrawRequests(ctx, k)
 	handleBtcWithdrawRequests(ctx, k)
-	handleDKGRequests(ctx, k)
+
 	handleVaultTransfer(ctx, k)
 }
 
@@ -235,12 +238,56 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 		k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
 
 		// Emit events
-		k.EmitEvent(ctx, req.Address,
-			sdk.NewAttribute("amount", withdrawAmount.String()),
-			sdk.NewAttribute("sequence", fmt.Sprintf("%d", withdrawRequest.Sequence)),
-			sdk.NewAttribute("txid", withdrawRequest.Txid),
-			sdk.NewAttribute("channel_id", req.ChannelId),
-			sdk.NewAttribute("channel_sequence", fmt.Sprintf("%d", req.Sequence)),
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeIBCWithdraw,
+				sdk.NewAttribute(types.AttributeKeyAddress, req.Address),
+				sdk.NewAttribute(types.AttributeKeyAmount, withdrawAmount.String()),
+				sdk.NewAttribute(types.AttributeKeySequence, fmt.Sprintf("%d", withdrawRequest.Sequence)),
+				sdk.NewAttribute(types.AttributeKeyChannelId, req.ChannelId),
+				sdk.NewAttribute(types.AttributeKeyPacketSequence, fmt.Sprintf("%d", req.Sequence)),
+			),
+		)
+	}
+}
+
+// handleRefreshingRequests performs the key refreshing request handling
+func handleRefreshingRequests(ctx sdk.Context, k keeper.Keeper) {
+	// get pending refreshing requests
+	requests := k.GetPendingRefreshingRequests(ctx)
+
+	for _, req := range requests {
+		// check if the refreshing request expired
+		if !req.ExpirationTime.IsZero() && !ctx.BlockTime().Before(req.ExpirationTime) {
+			req.Status = types.RefreshingStatus_REFRESHING_STATUS_TIMEDOUT
+			k.SetRefreshingRequest(ctx, req)
+
+			continue
+		}
+
+		// check refreshing completions
+		completions := k.GetRefreshingCompletions(ctx, req.Id)
+		if len(completions) != len(k.GetRefreshingParticipants(ctx, req)) {
+			continue
+		}
+
+		// update status
+		req.Status = types.RefreshingStatus_REFRESHING_STATUS_COMPLETED
+		k.SetRefreshingRequest(ctx, req)
+
+		// update DKG participants and threshold
+		dkgRequest := k.GetDKGRequest(ctx, req.DkgId)
+		dkgRequest.Participants = k.GetRefreshingParticipants(ctx, req)
+		dkgRequest.Threshold = req.Threshold
+		k.SetDKGRequest(ctx, dkgRequest)
+
+		// Emit events
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeRefreshingCompleted,
+				sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", req.Id)),
+				sdk.NewAttribute(types.AttributeKeyDKGId, fmt.Sprintf("%d", req.DkgId)),
+			),
 		)
 	}
 }

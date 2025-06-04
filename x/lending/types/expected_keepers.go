@@ -53,14 +53,12 @@ type LiquidationKeeper interface {
 
 	CreateLiquidation(ctx sdk.Context, liquidation *liquidationtypes.Liquidation) *liquidationtypes.Liquidation
 
-	SetPrice(ctx sdk.Context, pair string, price string)
-
 	SetLiquidatedDebtHandler(handler liquidationtypes.LiquidatedDebtHandler)
 }
 
 // DLCKeeper defines the expected DLC keeper interface
 type DLCKeeper interface {
-	PriceInterval(ctx sdk.Context, pair string) sdkmath.LegacyDec
+	PricePair(ctx sdk.Context, pair string) (dlctypes.PricePair, bool)
 
 	HasEvent(ctx sdk.Context, id uint64) bool
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCEvent
@@ -77,14 +75,15 @@ type DLCKeeper interface {
 
 	SetEvent(ctx sdk.Context, event *dlctypes.DLCEvent)
 	TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int)
-
-	SetPrice(ctx sdk.Context, pair string, price string)
 }
 
 // BtcBridgeKeeper defines the expected BtcBridge keeper interface
 type BtcBridgeKeeper interface {
+	DepositConfirmationDepth(ctx sdk.Context) int32
 	ValidateTransaction(ctx sdk.Context, tx string, prevTx string, blockHash string, proof []string, confirmationDepth int32) (*btcutil.Tx, *btcutil.Tx, error)
+
 	GetFeeRate(ctx sdk.Context) *btcbridgetypes.FeeRate
+	CheckFeeRate(ctx sdk.Context, feeRate *btcbridgetypes.FeeRate) error
 }
 
 // TSSKeeper defines the expected TSS keeper interface

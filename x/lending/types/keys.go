@@ -8,12 +8,16 @@ import (
 const (
 	// ModuleName defines the module name
 	ModuleName = "lending"
+
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
+
 	// RouterKey defines the module's message routing key
 	RouterKey = ModuleName
+
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_lending"
+
 	// RepaymentEscrowAccount defines a escrow account for repayment
 	RepaymentEscrowAccount = ModuleName + "_escrow"
 )
@@ -23,8 +27,7 @@ var (
 	Permille = math.NewInt(1000)
 
 	ParamsKey       = []byte{0x01}
-	PriceKey        = []byte{0x02}
-	RedemptionIdKey = []byte{0x03}
+	RedemptionIdKey = []byte{0x02}
 
 	PoolKeyPrefix            = []byte{0x10}
 	LoanKeyPrefix            = []byte{0x11}

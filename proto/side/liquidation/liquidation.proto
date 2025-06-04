@@ -8,8 +8,11 @@ import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/sideprotocol/side/x/liquidation/types";
 
-enum AssetType {
-    ASSET_TYPE_BITCOIN = 0;
+message AssetMetadata {
+    string denom = 1;
+    string symbol = 2;
+    string price_symbol = 3;
+    int32 decimals = 4;
 }
 
 enum LiquidationStatus {
@@ -28,21 +31,23 @@ message Liquidation {
     cosmos.base.v1beta1.Coin collateral_amount = 5 [(gogoproto.nullable) = false];
     cosmos.base.v1beta1.Coin actual_collateral_amount = 6 [(gogoproto.nullable) = false];
     cosmos.base.v1beta1.Coin debt_amount = 7 [(gogoproto.nullable) = false];
-    string liquidated_price = 8 [
+    AssetMetadata collateral_asset = 8 [(gogoproto.nullable) = false];
+    AssetMetadata debt_asset = 9 [(gogoproto.nullable) = false];
+    string liquidation_price = 10 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable)   = false
     ];
-    google.protobuf.Timestamp liquidated_time = 9 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    cosmos.base.v1beta1.Coin liquidated_collateral_amount = 10 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin liquidated_debt_amount = 11 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin liquidation_bonus_amount = 12 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin protocol_liquidation_fee = 13 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin unliquidated_collateral_amount = 14 [(gogoproto.nullable) = false];
-    string liquidation_cet = 15;
-    string settlement_tx = 16;
-    string settlement_tx_id = 17;
-    LiquidationStatus status = 18;
+    google.protobuf.Timestamp liquidation_time = 11 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    cosmos.base.v1beta1.Coin liquidated_collateral_amount = 12 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin liquidated_debt_amount = 13 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin liquidation_bonus_amount = 14 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin protocol_liquidation_fee = 15 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin unliquidated_collateral_amount = 16 [(gogoproto.nullable) = false];
+    string liquidation_cet = 17;
+    string settlement_tx = 18;
+    string settlement_tx_id = 19;
+    LiquidationStatus status = 20;
 }
 
 message LiquidationRecord {

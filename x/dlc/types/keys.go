@@ -43,8 +43,6 @@ var (
 	AttestationByEventKeyPrefix            = []byte{0x24} // prefix for each key to an attestation by event
 	TriggeredPriceEventQueueKeyPrefix      = []byte{0x25} // key prefix for triggered price event queue
 	TriggeredPriceEventQueueCountKeyPrefix = []byte{0x26} // key prefix for triggered price event queue count
-
-	PriceKeyPrefix = []byte{0x30} // key prefix for the price
 )
 
 func OracleKey(id uint64) []byte {
@@ -109,8 +107,4 @@ func TriggeredPriceEventQueueKey(pair string, eventId uint64) []byte {
 
 func TriggeredPriceEventQueueCountKey(pair string) []byte {
 	return append(TriggeredPriceEventQueueCountKeyPrefix, []byte(pair)...)
-}
-
-func PriceKey(pair string) []byte {
-	return append(PriceKeyPrefix, []byte(pair)...)
 }

@@ -13,7 +13,6 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
-	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
@@ -67,7 +66,7 @@ type IncentiveKeeper interface {
 
 // TSSKeeper defines the expected TSS keeper interfaces
 type TSSKeeper interface {
-	GetParams(ctx sdk.Context) tsstypes.Params
+	AllowedDKGParticipants(ctx sdk.Context) []string
 }
 
 // IBCClientKeeper defines the expected IBC client keeper

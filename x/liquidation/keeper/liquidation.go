@@ -20,33 +20,49 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, errorsmod.Wrap(types.ErrInvalidLiquidationStatus, "non liquidating status")
 	}
 
-	if debtAmount.Denom != liquidation.DebtAmount.Denom {
+	if debtAmount.Denom != liquidation.DebtAsset.Denom {
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "mismatched debt amount denom")
 	}
 
-	if debtAmount.Amount.LT(liquidation.DebtAmount.Amount.Mul(sdkmath.NewInt(int64(k.MinLiquidationFactor(ctx)))).Quo(sdkmath.NewInt(1000))) {
-		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "liquidation debt amount must be greater or equal than minimum liquidation factor")
+	remainingCollateralAmount := liquidation.UnliquidatedCollateralAmount
+	remainingDebtAmount := liquidation.DebtAmount.Sub(liquidation.LiquidatedDebtAmount)
+
+	// check if there is no collateral or debt remaining
+	if remainingCollateralAmount.Amount.IsZero() || remainingDebtAmount.Amount.IsZero() {
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "no collateral or debt remaining")
 	}
 
-	currentPrice, err := k.GetPrice(ctx, "BTCUSD")
-	if err != nil {
-		return nil, types.ErrInvalidPrice
-	}
+	// minimum liquidation debt amount if the remaining debt amount is sufficient
+	minLiquidationDebtAmount := liquidation.DebtAmount.Amount.Mul(sdkmath.NewInt(int64(k.MinLiquidationFactor(ctx)))).Quo(sdkmath.NewInt(1000))
 
 	// check remaining debt amount
-	remainingDebtAmount := liquidation.DebtAmount.Sub(liquidation.LiquidatedDebtAmount)
+	if remainingDebtAmount.Amount.GTE(minLiquidationDebtAmount) && debtAmount.Amount.LT(minLiquidationDebtAmount) {
+		return nil, errorsmod.Wrapf(types.ErrInvalidAmount, "liquidation debt amount must be greater than or equal to the minimum liquidation debt amount %s", minLiquidationDebtAmount)
+	}
+
+	if remainingDebtAmount.Amount.LT(minLiquidationDebtAmount) && debtAmount.Amount.LT(remainingDebtAmount.Amount) {
+		return nil, errorsmod.Wrapf(types.ErrInvalidAmount, "liquidation debt amount must be greater than or equal to the remaining debt amount %s", remainingDebtAmount.Amount)
+	}
+
 	if remainingDebtAmount.IsLT(debtAmount) {
 		debtAmount = remainingDebtAmount
 	}
 
+	currentPrice, err := k.GetPrice(ctx, types.GetPricePair(liquidation))
+	if err != nil {
+		return nil, types.ErrInvalidPrice
+	}
+
+	collateralDecimals := int(liquidation.CollateralAsset.Decimals)
+	debtDecimals := int(liquidation.DebtAsset.Decimals)
+
 	// calculate collateral amount
-	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+	collateralAmount := debtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, collateralDecimals)).Quo(sdkmath.NewIntWithDecimal(1, debtDecimals)).ToLegacyDec().Quo(currentPrice).TruncateInt()
 
 	// check remaining collateral amount
-	remainingCollateralAmount := liquidation.ActualCollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
 	if remainingCollateralAmount.Amount.LT(collateralAmount) {
 		collateralAmount = remainingCollateralAmount.Amount
-		debtAmount.Amount = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Mul(currentPrice).QuoInt(sdkmath.NewIntWithDecimal(1, 8)).TruncateInt()
+		debtAmount.Amount = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, debtDecimals)).ToLegacyDec().Mul(currentPrice).QuoInt(sdkmath.NewIntWithDecimal(1, collateralDecimals)).TruncateInt()
 	}
 
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(liquidator), types.ModuleName, sdk.NewCoins(debtAmount)); err != nil {
@@ -57,38 +73,38 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 
 	// calculate bonus
 	bonusAmountInDebt := debtAmount.Amount.Mul(sdkmath.NewInt(int64(k.LiquidationBonusFactor(ctx)))).Quo(sdkmath.NewInt(1000))
-	bonusAmount := bonusAmountInDebt.Mul(sdkmath.NewIntWithDecimal(1, 8)).Quo(sdkmath.NewIntWithDecimal(1, 6)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+	bonusAmount := bonusAmountInDebt.Mul(sdkmath.NewIntWithDecimal(1, collateralDecimals)).Quo(sdkmath.NewIntWithDecimal(1, debtDecimals)).ToLegacyDec().Quo(currentPrice).TruncateInt()
 
 	// check if there is left collateral for bonus
 	if bonusAmount.GT(remainingCollateralAmount.Amount) {
 		bonusAmount = remainingCollateralAmount.Amount
 	}
 
+	// check if the total received collateral amount is dust
+	if types.IsDustOut(collateralAmount.Add(bonusAmount).Int64(), liquidator) {
+		return nil, errorsmod.Wrapf(types.ErrInvalidAmount, "dust collateral amount %s", collateralAmount)
+	}
+
 	protocolLiquidationFee := bonusAmount.Mul(sdkmath.NewInt(int64(k.ProtocolLiquidationFeeFactor(ctx)))).Quo(sdkmath.NewInt(1000))
+
+	liquidation.LiquidatedCollateralAmount = liquidation.LiquidatedCollateralAmount.AddAmount(collateralAmount).AddAmount(bonusAmount)
+	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)
+	liquidation.LiquidationBonusAmount = liquidation.LiquidationBonusAmount.AddAmount(bonusAmount)
+	liquidation.ProtocolLiquidationFee = liquidation.ProtocolLiquidationFee.AddAmount(protocolLiquidationFee)
+	liquidation.UnliquidatedCollateralAmount = liquidation.UnliquidatedCollateralAmount.SubAmount(collateralAmount).SubAmount(bonusAmount)
 
 	record := &types.LiquidationRecord{
 		Id:               k.IncrementLiquidationRecordId(ctx),
 		LiquidationId:    liquidationId,
 		Liquidator:       liquidator,
 		DebtAmount:       debtAmount,
-		CollateralAmount: sdk.NewCoin(liquidation.CollateralAmount.Denom, collateralAmount),
-		BonusAmount:      sdk.NewCoin(liquidation.CollateralAmount.Denom, bonusAmount.Sub(protocolLiquidationFee)),
+		CollateralAmount: sdk.NewCoin(liquidation.CollateralAsset.Denom, collateralAmount),
+		BonusAmount:      sdk.NewCoin(liquidation.CollateralAsset.Denom, bonusAmount.Sub(protocolLiquidationFee)),
 		Time:             ctx.BlockTime(),
 	}
 
-	liquidation.LiquidatedCollateralAmount = liquidation.LiquidatedCollateralAmount.AddAmount(collateralAmount).AddAmount(bonusAmount)
-	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)
-	liquidation.LiquidationBonusAmount = liquidation.LiquidationBonusAmount.AddAmount(bonusAmount)
-	liquidation.ProtocolLiquidationFee = liquidation.ProtocolLiquidationFee.AddAmount(protocolLiquidationFee)
-	liquidation.UnliquidatedCollateralAmount = liquidation.ActualCollateralAmount.Sub(liquidation.LiquidatedCollateralAmount)
-
-	remainingCollateralAmount = liquidation.ActualCollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(10000))
-	if remainingCollateralAmount.Amount.IsZero() || liquidation.LiquidatedDebtAmount.Amount.Equal(liquidation.DebtAmount.Amount) {
-		liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED
-	}
-
-	k.SetLiquidationRecord(ctx, record)
 	k.SetLiquidation(ctx, liquidation)
+	k.SetLiquidationRecord(ctx, record)
 
 	return record, nil
 }
@@ -145,6 +161,9 @@ func (k Keeper) SetLiquidation(ctx sdk.Context, liquidation *types.Liquidation) 
 func (k Keeper) CreateLiquidation(ctx sdk.Context, liquidation *types.Liquidation) *types.Liquidation {
 	// set the id
 	liquidation.Id = k.IncrementLiquidationId(ctx)
+
+	// initialize the unliquidated collateral amount
+	liquidation.UnliquidatedCollateralAmount = liquidation.ActualCollateralAmount.Sub(liquidation.LiquidatedCollateralAmount).SubAmount(sdkmath.NewInt(types.LiquidationNetworkFeeReserve))
 
 	// set the status to liquidating
 	liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATING

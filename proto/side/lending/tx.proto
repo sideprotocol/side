@@ -19,12 +19,9 @@ service Msg {
     rpc UpdatePoolConfig(MsgUpdatePoolConfig) returns (MsgUpdatePoolConfigResponse);
     rpc Apply(MsgApply) returns (MsgApplyResponse);
     rpc SubmitCets(MsgSubmitCets) returns (MsgSubmitCetsResponse);
-    rpc Approve(MsgApprove) returns (MsgApproveResponse);
+    rpc SubmitDepositTransaction(MsgSubmitDepositTransaction) returns (MsgSubmitDepositTransactionResponse);
     rpc Redeem(MsgRedeem) returns (MsgRedeemResponse);
     rpc Repay(MsgRepay) returns (MsgRepayResponse);
-
-    // SubmitPrice submits the price for testing 
-    rpc SubmitPrice(MsgSubmitPrice) returns (MsgSubmitPriceResponse);
 
     // UpdateParams defines a governance operation for updating the x/lending module
     // parameters. The authority defaults to the x/gov module account.
@@ -114,11 +111,9 @@ message MsgSubmitCets {
     repeated string repayment_signatures = 8;
 }
 
-message MsgSubmitCetsResponse {
+message MsgSubmitCetsResponse {}
 
-}
-
-message MsgApprove {
+message MsgSubmitDepositTransaction {
     option (cosmos.msg.v1.signer) = "relayer";
     
     string relayer = 1;
@@ -128,9 +123,7 @@ message MsgApprove {
     repeated string proof = 5;
 }
 
-message MsgApproveResponse {
-
-}
+message MsgSubmitDepositTransactionResponse {}
 
 message MsgRedeem {
     option (cosmos.msg.v1.signer) = "borrower";
@@ -141,18 +134,7 @@ message MsgRedeem {
     repeated string signatures = 4;
 }
 
-message MsgRedeemResponse {
-
-}
-
-message MsgSubmitPrice {
-    option (cosmos.msg.v1.signer) = "sender";
-
-    string sender = 1;
-    string price = 2;
-}
-
-message MsgSubmitPriceResponse{}
+message MsgRedeemResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

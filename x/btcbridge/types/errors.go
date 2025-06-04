@@ -20,9 +20,8 @@ var (
 	ErrInvalidDepositTransaction = errorsmod.Register(ModuleName, 2108, "invalid deposit transaction")
 	ErrInvalidDepositAmount      = errorsmod.Register(ModuleName, 2109, "invalid deposit amount")
 	ErrDepositNotEnabled         = errorsmod.Register(ModuleName, 2110, "deposit not enabled")
-	ErrUntrustedBtcRelayer       = errorsmod.Register(ModuleName, 2111, "untrusted btc relayer")
-	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2112, "untrusted non btc relayer")
-	ErrUntrustedFeeProvider      = errorsmod.Register(ModuleName, 2113, "untrusted fee provider")
+	ErrUntrustedNonBtcRelayer    = errorsmod.Register(ModuleName, 2111, "untrusted non btc relayer")
+	ErrUntrustedFeeProvider      = errorsmod.Register(ModuleName, 2112, "untrusted fee provider")
 
 	ErrInvalidWithdrawAmount        = errorsmod.Register(ModuleName, 3100, "invalid withdrawal amount")
 	ErrInvalidBtcAddress            = errorsmod.Register(ModuleName, 3101, "invalid btc address")
@@ -62,5 +61,17 @@ var (
 
 	ErrInvalidConsolidation = errorsmod.Register(ModuleName, 8100, "invalid consolidation")
 
-	ErrInvalidIBCTransferScript = errorsmod.Register(ModuleName, 9000, "invalid deposit script for IBC transfer")
+	ErrInvalidDKGs                       = errorsmod.Register(ModuleName, 9000, "invalid dkgs")
+	ErrInvalidParticipants               = errorsmod.Register(ModuleName, 9001, "invalid participants")
+	ErrInvalidThresholds                 = errorsmod.Register(ModuleName, 9002, "invalid thresholds")
+	ErrInvalidTimeoutDuration            = errorsmod.Register(ModuleName, 9003, "invalid timeout duration")
+	ErrInvalidPubKey                     = errorsmod.Register(ModuleName, 9004, "invalid pub key")
+	ErrInvalidDKGStatus                  = errorsmod.Register(ModuleName, 9005, "invalid dkg status")
+	ErrRefreshingRequestDoesNotExist     = errorsmod.Register(ModuleName, 9006, "refreshing request does not exist")
+	ErrInvalidRefreshingStatus           = errorsmod.Register(ModuleName, 9007, "invalid refreshing status")
+	ErrRefreshingRequestExpired          = errorsmod.Register(ModuleName, 9008, "refreshing request expired")
+	ErrUnauthorizedParticipant           = errorsmod.Register(ModuleName, 9009, "unauthorized participant")
+	ErrRefreshingCompletionAlreadyExists = errorsmod.Register(ModuleName, 9010, "refreshing completion already exists")
+
+	ErrInvalidIBCTransferScript = errorsmod.Register(ModuleName, 10000, "invalid deposit script for IBC transfer")
 )

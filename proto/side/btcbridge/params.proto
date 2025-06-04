@@ -7,6 +7,42 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sideprotocol/side/x/btcbridge/types";
 
+// ParamsV1 defines the v1 parameters for the module.
+message ParamsV1 {
+  // The minimum number of confirmations required for the deposit transactions
+  int32 deposit_confirmation_depth = 1;
+  // The minimum number of confirmations required for the withdrawal transactions
+  int32 withdraw_confirmation_depth = 2;
+  // The allowed maximum depth for bitcoin block reorganization
+  int32 max_reorg_depth = 3;
+  // Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
+  uint64 max_acceptable_block_depth = 4;
+  // The denomination of the voucher
+  string btc_voucher_denom = 5;
+  // Indicates if deposit is enabled
+  bool deposit_enabled = 6;
+  // Indicates if withdrawal is enabled
+  bool withdraw_enabled = 7;
+  // Trusted relayers to submit bitcoin block headers
+  repeated string trusted_btc_relayers = 8;
+  // Trusted relayers for non-btc asset deposit
+  repeated string trusted_non_btc_relayers = 9;
+  // Trusted fee providers to submit bitcoin fee rate
+  repeated string trusted_fee_providers = 10;
+  // Period of validity for the fee rate
+  int64 fee_rate_validity_period = 11;
+  // Asset vaults
+  repeated Vault vaults = 12;
+  // Withdrawal params
+  WithdrawParams withdraw_params = 13 [(gogoproto.nullable) = false];
+  // Protocol limitations
+  ProtocolLimits protocol_limits = 14 [(gogoproto.nullable) = false];
+  // Protocol fees
+  ProtocolFees protocol_fees = 15 [(gogoproto.nullable) = false];
+  // TSS params
+  TSSParams tss_params = 16 [(gogoproto.nullable) = false];
+}
+
 // Params defines the parameters for the module.
 message Params {
   // The minimum number of confirmations required for the deposit transactions

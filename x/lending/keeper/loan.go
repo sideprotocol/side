@@ -57,6 +57,23 @@ func (k Keeper) GetLoans(ctx sdk.Context, status types.LoanStatus) []*types.Loan
 	return loans
 }
 
+// GetPendingLoans gets the requested or authorized loans
+func (k Keeper) GetPendingLoans(ctx sdk.Context) []*types.Loan {
+	var loans []*types.Loan
+
+	requestedLoans := k.GetLoans(ctx, types.LoanStatus_Requested)
+	if len(requestedLoans) != 0 {
+		loans = append(loans, requestedLoans...)
+	}
+
+	authorizedLoans := k.GetLoans(ctx, types.LoanStatus_Authorized)
+	if len(authorizedLoans) != 0 {
+		loans = append(loans, authorizedLoans...)
+	}
+
+	return loans
+}
+
 // GetAllLoans returns all loans
 func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 	var loans []*types.Loan
@@ -186,6 +203,9 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 	var interest sdkmath.Int
 
 	switch loan.Status {
+	case types.LoanStatus_Open:
+		interest = types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, k.GetCurrentBorrowIndex(ctx, loan))
+
 	case types.LoanStatus_Repaid, types.LoanStatus_Closed:
 		repayment := k.GetRepayment(ctx, loan.VaultAddress)
 		interest = repayment.Amount.Sub(loan.BorrowAmount).Amount
@@ -198,7 +218,7 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 		interest = liquidation.DebtAmount.Amount.Sub(loan.BorrowAmount.Amount)
 
 	default:
-		interest = types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, k.GetCurrentBorrowIndex(ctx, loan))
+		interest = sdkmath.ZeroInt()
 	}
 
 	return sdk.NewCoin(loan.BorrowAmount.Denom, interest)

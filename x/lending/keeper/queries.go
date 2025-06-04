@@ -7,6 +7,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
@@ -57,7 +59,7 @@ func (k Keeper) PoolExchangeRate(goCtx context.Context, req *types.QueryPoolExch
 
 	pool := k.GetPool(ctx, req.PoolId)
 
-	exchangeRate := types.GetExchangeRate(pool.AvailableAmount, pool.TotalBorrowed, pool.TotalSTokens.Amount)
+	exchangeRate := types.GetExchangeRate(pool.AvailableAmount, pool.TotalBorrowed, pool.TotalReserve, pool.TotalSTokens.Amount)
 
 	return &types.QueryPoolExchangeRateResponse{ExchangeRate: exchangeRate.String()}, nil
 }
@@ -66,6 +68,24 @@ func (k Keeper) PoolExchangeRate(goCtx context.Context, req *types.QueryPoolExch
 func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollateralAddressRequest) (*types.QueryCollateralAddressResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	borrowerPubKey, err := hex.DecodeString(req.BorrowerPubkey)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "failed to decode borrower pub key")
+	}
+
+	if _, err := schnorr.ParsePubKey(borrowerPubKey); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid borrower pub key")
+	}
+
+	dcmPubKey, err := hex.DecodeString(req.DCMPubKey)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "failed to decode dcm pub key")
+	}
+
+	if _, err := schnorr.ParsePubKey(dcmPubKey); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid dcm pub key")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
@@ -107,11 +127,14 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	pricePair := types.GetPricePair(poolConfig)
+	pricePair, found := k.dlcKeeper.PricePair(ctx, types.GetPricePair(poolConfig))
+	if !found {
+		return nil, status.Error(codes.Internal, "price pair does not exist in dlc")
+	}
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, k.dlcKeeper.PriceInterval(ctx, pricePair))
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval)
 
-	event := k.dlcKeeper.GetEventByPrice(ctx, pricePair, liquidationPrice.String())
+	event := k.dlcKeeper.GetEventByPrice(ctx, pricePair.Pair, dlctypes.NormalizePrice(liquidationPrice, int(pricePair.Decimals)))
 	if event == nil {
 		return nil, status.Error(codes.NotFound, "liquidation event does not exist")
 	}
@@ -301,21 +324,6 @@ func (k Keeper) CurrentInterest(goCtx context.Context, req *types.QueryCurrentIn
 	return &types.QueryCurrentInterestResponse{
 		Interest: currentInterest,
 	}, nil
-}
-
-func (k Keeper) Price(goCtx context.Context, req *types.QueryPriceRequest) (*types.QueryPriceResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	price, err := k.GetPrice(ctx, req.Pair)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	return &types.QueryPriceResponse{Price: price.String()}, nil
 }
 
 // Params implements types.QueryServer.

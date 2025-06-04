@@ -48,6 +48,7 @@ func LiquidationKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		app.BankKeeper,
 		app.OracleKeeper,
 		app.TSSKeeper,
+		app.BtcBridgeKeeper,
 		authority,
 	)
 

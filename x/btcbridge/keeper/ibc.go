@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"fmt"
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
@@ -17,10 +18,10 @@ import (
 )
 
 // IBCTransfer performs the IBC transfer by the given params
-func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, token sdk.Coin, channelId string) error {
+func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, token sdk.Coin, channelId string) (uint64, error) {
 	clientHeight, err := k.GetClientHeight(ctx, k.IBCPortId(ctx), channelId)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	msg := &transfertypes.MsgTransfer{
@@ -34,11 +35,12 @@ func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, to
 		Memo:             types.DefaultMemo,
 	}
 
-	if _, err := k.ibctransferKeeper.Transfer(ctx, msg); err != nil {
-		return err
+	resp, err := k.ibctransferKeeper.Transfer(ctx, msg)
+	if err != nil {
+		return 0, err
 	}
 
-	return nil
+	return resp.Sequence, nil
 }
 
 // AddToIBCWithdrawRequestQueue adds the given withdrawal request to the IBC withdrawal queue for sBTC
@@ -53,6 +55,17 @@ func (k Keeper) AddToIBCWithdrawRequestQueue(ctx sdk.Context, channelId string, 
 	})
 
 	store.Set(types.IBCWithdrawRequestQueueKey(channelId, sequence), bz)
+
+	// Emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeIBCWithdrawQueue,
+			sdk.NewAttribute(types.AttributeKeyAddress, recipient),
+			sdk.NewAttribute(types.AttributeKeyAmount, sdk.NewInt64Coin(k.BtcDenom(ctx), amount).String()),
+			sdk.NewAttribute(types.AttributeKeyChannelId, channelId),
+			sdk.NewAttribute(types.AttributeKeyPacketSequence, fmt.Sprintf("%d", sequence)),
+		),
+	)
 }
 
 // RemoveFromIBCWithdrawRequestQueue removes the given IBC withdrawal request from the IBC withdrawal request queue
@@ -92,8 +105,8 @@ func (k Keeper) IterateIBCWithdrawRequestQueue(ctx sdk.Context, cb func(req *typ
 	}
 }
 
-// CheckSBTCAutoPegOut returns true if the given packet is to receive native sBTC and auto-pegout enabled, false otherwise
-func (k Keeper) CheckSBTCAutoPegOut(ctx sdk.Context, packet ibcexported.PacketI, data transfertypes.FungibleTokenPacketData) bool {
+// CheckSBTC returns true if the given packet is to receive native sBTC, false otherwise
+func (k Keeper) CheckSBTC(ctx sdk.Context, packet ibcexported.PacketI, data transfertypes.FungibleTokenPacketData) bool {
 	// check if the receiving chain is source
 	if !transfertypes.ReceiverChainIsSource(packet.GetSourcePort(), packet.GetSourceChannel(), data.Denom) {
 		return false
@@ -105,7 +118,7 @@ func (k Keeper) CheckSBTCAutoPegOut(ctx sdk.Context, packet ibcexported.PacketI,
 	// remove sender prefix
 	unprefixedDenom := data.Denom[len(prefix):]
 
-	return unprefixedDenom == k.BtcDenom(ctx) && data.Memo == types.FlagAutoPegOut
+	return unprefixedDenom == k.BtcDenom(ctx)
 }
 
 // GetClientHeight gets the current client height by the given source port and channel
@@ -175,6 +188,11 @@ func (k Keeper) IBCReceivePacketCallback(
 	ack ibcexported.Acknowledgement,
 	contractAddress string,
 ) error {
+	// check if the callback address is the expected address
+	if contractAddress != types.CallbackAddress {
+		return nil
+	}
+
 	// check if withdrawal is enabled
 	if !k.WithdrawEnabled(ctx) {
 		return nil
@@ -182,7 +200,7 @@ func (k Keeper) IBCReceivePacketCallback(
 
 	// check if the packet is sBTC token transfer and auto-pegout enabled
 	data, ok := tryGetFungibleTokenPacketData(packet)
-	if !ok || !k.CheckSBTCAutoPegOut(ctx, packet, data) {
+	if !ok || !k.CheckSBTC(ctx, packet, data) {
 		return nil
 	}
 

@@ -11,10 +11,13 @@ import (
 const (
 	// ModuleName defines the module name
 	ModuleName = "oracle"
+
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
+
 	// RouterKey defines the module's message routing key
 	RouterKey = ModuleName
+
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_" + ModuleName
 
@@ -29,14 +32,15 @@ const (
 )
 
 var (
-	Percent        = math.NewInt(100)
-	Permille       = math.NewInt(1000)
-	ParamsStoreKey = []byte{0x1}
+	Percent  = math.NewInt(100)
+	Permille = math.NewInt(1000)
 
-	PriceKeyPrefix            = []byte{0x07}
-	BitcoinHeaderPrefix       = []byte{0x10}
-	BitcoinHeaderHeightPrefix = []byte{0x11} // prefix for each key to a block hash, for a height
-	BitcoinBestBlockHeaderKey = []byte{0x12} // key for the best block height
+	ParamsStoreKey = []byte{0x01}
+
+	PriceKeyPrefix            = []byte{0x10}
+	BitcoinHeaderPrefix       = []byte{0x11}
+	BitcoinHeaderHeightPrefix = []byte{0x12} // prefix for each key to a block hash, for a height
+	BitcoinBestBlockHeaderKey = []byte{0x13} // key for the best block height
 
 	PRICE_CACHE    = make(map[string]map[string]Price) // symbol, exchange, price[]
 	PriceMu        sync.RWMutex

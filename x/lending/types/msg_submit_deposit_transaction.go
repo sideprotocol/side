@@ -2,18 +2,19 @@ package types
 
 import (
 	"bytes"
+	"encoding/base64"
 
-	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/btcsuite/btcd/wire"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgApprove{}
+var _ sdk.Msg = &MsgSubmitDepositTransaction{}
 
-func NewMsgApprove(relayer string, vault string, depositTx string, blockHash string, proof []string) *MsgApprove {
-	return &MsgApprove{
+func NewMsgSubmitDepositTransaction(relayer string, vault string, depositTx string, blockHash string, proof []string) *MsgSubmitDepositTransaction {
+	return &MsgSubmitDepositTransaction{
 		Relayer:   relayer,
 		Vault:     vault,
 		DepositTx: depositTx,
@@ -22,8 +23,8 @@ func NewMsgApprove(relayer string, vault string, depositTx string, blockHash str
 	}
 }
 
-// ValidateBasic performs basic MsgApprove message validation.
-func (m *MsgApprove) ValidateBasic() error {
+// ValidateBasic performs basic MsgSubmitDepositTransaction message validation.
+func (m *MsgSubmitDepositTransaction) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Relayer); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
@@ -33,15 +34,21 @@ func (m *MsgApprove) ValidateBasic() error {
 		return ErrInvalidVault
 	}
 
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(m.DepositTx)), true)
+	txBytes, err := base64.StdEncoding.DecodeString(m.DepositTx)
 	if err != nil {
 		return errorsmod.Wrap(ErrInvalidDepositTx, "failed to decode deposit tx")
 	}
 
+	var tx wire.MsgTx
+	if err := tx.Deserialize(bytes.NewReader(txBytes)); err != nil {
+		return errorsmod.Wrap(ErrInvalidDepositTx, "failed to deserialize deposit tx")
+	}
+
 	vaultFound := false
-	for _, out := range p.UnsignedTx.TxOut {
+	for _, out := range tx.TxOut {
 		if bytes.Equal(out.PkScript, vaultPkScript) {
 			vaultFound = true
+			break
 		}
 	}
 

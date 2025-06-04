@@ -9001,6 +9001,1353 @@ func (x *fastReflection_DKGCompletionRequest) ProtoMethods() *protoiface.Methods
 	}
 }
 
+var _ protoreflect.List = (*_RefreshingRequest_3_list)(nil)
+
+type _RefreshingRequest_3_list struct {
+	list *[]string
+}
+
+func (x *_RefreshingRequest_3_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_RefreshingRequest_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_RefreshingRequest_3_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_RefreshingRequest_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_RefreshingRequest_3_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message RefreshingRequest at list field RemovedParticipants as it is not of Message kind"))
+}
+
+func (x *_RefreshingRequest_3_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_RefreshingRequest_3_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_RefreshingRequest_3_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_RefreshingRequest                      protoreflect.MessageDescriptor
+	fd_RefreshingRequest_id                   protoreflect.FieldDescriptor
+	fd_RefreshingRequest_dkg_id               protoreflect.FieldDescriptor
+	fd_RefreshingRequest_removed_participants protoreflect.FieldDescriptor
+	fd_RefreshingRequest_threshold            protoreflect.FieldDescriptor
+	fd_RefreshingRequest_expiration_time      protoreflect.FieldDescriptor
+	fd_RefreshingRequest_status               protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_btcbridge_btcbridge_proto_init()
+	md_RefreshingRequest = File_side_btcbridge_btcbridge_proto.Messages().ByName("RefreshingRequest")
+	fd_RefreshingRequest_id = md_RefreshingRequest.Fields().ByName("id")
+	fd_RefreshingRequest_dkg_id = md_RefreshingRequest.Fields().ByName("dkg_id")
+	fd_RefreshingRequest_removed_participants = md_RefreshingRequest.Fields().ByName("removed_participants")
+	fd_RefreshingRequest_threshold = md_RefreshingRequest.Fields().ByName("threshold")
+	fd_RefreshingRequest_expiration_time = md_RefreshingRequest.Fields().ByName("expiration_time")
+	fd_RefreshingRequest_status = md_RefreshingRequest.Fields().ByName("status")
+}
+
+var _ protoreflect.Message = (*fastReflection_RefreshingRequest)(nil)
+
+type fastReflection_RefreshingRequest RefreshingRequest
+
+func (x *RefreshingRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_RefreshingRequest)(x)
+}
+
+func (x *RefreshingRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_btcbridge_btcbridge_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_RefreshingRequest_messageType fastReflection_RefreshingRequest_messageType
+var _ protoreflect.MessageType = fastReflection_RefreshingRequest_messageType{}
+
+type fastReflection_RefreshingRequest_messageType struct{}
+
+func (x fastReflection_RefreshingRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_RefreshingRequest)(nil)
+}
+func (x fastReflection_RefreshingRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_RefreshingRequest)
+}
+func (x fastReflection_RefreshingRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_RefreshingRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_RefreshingRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_RefreshingRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_RefreshingRequest) Type() protoreflect.MessageType {
+	return _fastReflection_RefreshingRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_RefreshingRequest) New() protoreflect.Message {
+	return new(fastReflection_RefreshingRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_RefreshingRequest) Interface() protoreflect.ProtoMessage {
+	return (*RefreshingRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_RefreshingRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_RefreshingRequest_id, value) {
+			return
+		}
+	}
+	if x.DkgId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.DkgId)
+		if !f(fd_RefreshingRequest_dkg_id, value) {
+			return
+		}
+	}
+	if len(x.RemovedParticipants) != 0 {
+		value := protoreflect.ValueOfList(&_RefreshingRequest_3_list{list: &x.RemovedParticipants})
+		if !f(fd_RefreshingRequest_removed_participants, value) {
+			return
+		}
+	}
+	if x.Threshold != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.Threshold)
+		if !f(fd_RefreshingRequest_threshold, value) {
+			return
+		}
+	}
+	if x.ExpirationTime != nil {
+		value := protoreflect.ValueOfMessage(x.ExpirationTime.ProtoReflect())
+		if !f(fd_RefreshingRequest_expiration_time, value) {
+			return
+		}
+	}
+	if x.Status != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
+		if !f(fd_RefreshingRequest_status, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_RefreshingRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingRequest.id":
+		return x.Id != uint64(0)
+	case "side.btcbridge.RefreshingRequest.dkg_id":
+		return x.DkgId != uint64(0)
+	case "side.btcbridge.RefreshingRequest.removed_participants":
+		return len(x.RemovedParticipants) != 0
+	case "side.btcbridge.RefreshingRequest.threshold":
+		return x.Threshold != uint32(0)
+	case "side.btcbridge.RefreshingRequest.expiration_time":
+		return x.ExpirationTime != nil
+	case "side.btcbridge.RefreshingRequest.status":
+		return x.Status != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingRequest"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RefreshingRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingRequest.id":
+		x.Id = uint64(0)
+	case "side.btcbridge.RefreshingRequest.dkg_id":
+		x.DkgId = uint64(0)
+	case "side.btcbridge.RefreshingRequest.removed_participants":
+		x.RemovedParticipants = nil
+	case "side.btcbridge.RefreshingRequest.threshold":
+		x.Threshold = uint32(0)
+	case "side.btcbridge.RefreshingRequest.expiration_time":
+		x.ExpirationTime = nil
+	case "side.btcbridge.RefreshingRequest.status":
+		x.Status = 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingRequest"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_RefreshingRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.btcbridge.RefreshingRequest.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	case "side.btcbridge.RefreshingRequest.dkg_id":
+		value := x.DkgId
+		return protoreflect.ValueOfUint64(value)
+	case "side.btcbridge.RefreshingRequest.removed_participants":
+		if len(x.RemovedParticipants) == 0 {
+			return protoreflect.ValueOfList(&_RefreshingRequest_3_list{})
+		}
+		listValue := &_RefreshingRequest_3_list{list: &x.RemovedParticipants}
+		return protoreflect.ValueOfList(listValue)
+	case "side.btcbridge.RefreshingRequest.threshold":
+		value := x.Threshold
+		return protoreflect.ValueOfUint32(value)
+	case "side.btcbridge.RefreshingRequest.expiration_time":
+		value := x.ExpirationTime
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.btcbridge.RefreshingRequest.status":
+		value := x.Status
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingRequest"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RefreshingRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingRequest.id":
+		x.Id = value.Uint()
+	case "side.btcbridge.RefreshingRequest.dkg_id":
+		x.DkgId = value.Uint()
+	case "side.btcbridge.RefreshingRequest.removed_participants":
+		lv := value.List()
+		clv := lv.(*_RefreshingRequest_3_list)
+		x.RemovedParticipants = *clv.list
+	case "side.btcbridge.RefreshingRequest.threshold":
+		x.Threshold = uint32(value.Uint())
+	case "side.btcbridge.RefreshingRequest.expiration_time":
+		x.ExpirationTime = value.Message().Interface().(*timestamppb.Timestamp)
+	case "side.btcbridge.RefreshingRequest.status":
+		x.Status = (RefreshingStatus)(value.Enum())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingRequest"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RefreshingRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingRequest.removed_participants":
+		if x.RemovedParticipants == nil {
+			x.RemovedParticipants = []string{}
+		}
+		value := &_RefreshingRequest_3_list{list: &x.RemovedParticipants}
+		return protoreflect.ValueOfList(value)
+	case "side.btcbridge.RefreshingRequest.expiration_time":
+		if x.ExpirationTime == nil {
+			x.ExpirationTime = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.ExpirationTime.ProtoReflect())
+	case "side.btcbridge.RefreshingRequest.id":
+		panic(fmt.Errorf("field id of message side.btcbridge.RefreshingRequest is not mutable"))
+	case "side.btcbridge.RefreshingRequest.dkg_id":
+		panic(fmt.Errorf("field dkg_id of message side.btcbridge.RefreshingRequest is not mutable"))
+	case "side.btcbridge.RefreshingRequest.threshold":
+		panic(fmt.Errorf("field threshold of message side.btcbridge.RefreshingRequest is not mutable"))
+	case "side.btcbridge.RefreshingRequest.status":
+		panic(fmt.Errorf("field status of message side.btcbridge.RefreshingRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingRequest"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_RefreshingRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingRequest.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.btcbridge.RefreshingRequest.dkg_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.btcbridge.RefreshingRequest.removed_participants":
+		list := []string{}
+		return protoreflect.ValueOfList(&_RefreshingRequest_3_list{list: &list})
+	case "side.btcbridge.RefreshingRequest.threshold":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.btcbridge.RefreshingRequest.expiration_time":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.btcbridge.RefreshingRequest.status":
+		return protoreflect.ValueOfEnum(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingRequest"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_RefreshingRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.RefreshingRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_RefreshingRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RefreshingRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_RefreshingRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_RefreshingRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*RefreshingRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
+		if x.DkgId != 0 {
+			n += 1 + runtime.Sov(uint64(x.DkgId))
+		}
+		if len(x.RemovedParticipants) > 0 {
+			for _, s := range x.RemovedParticipants {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Threshold != 0 {
+			n += 1 + runtime.Sov(uint64(x.Threshold))
+		}
+		if x.ExpirationTime != nil {
+			l = options.Size(x.ExpirationTime)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*RefreshingRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x30
+		}
+		if x.ExpirationTime != nil {
+			encoded, err := options.Marshal(x.ExpirationTime)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if x.Threshold != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Threshold))
+			i--
+			dAtA[i] = 0x20
+		}
+		if len(x.RemovedParticipants) > 0 {
+			for iNdEx := len(x.RemovedParticipants) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.RemovedParticipants[iNdEx])
+				copy(dAtA[i:], x.RemovedParticipants[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RemovedParticipants[iNdEx])))
+				i--
+				dAtA[i] = 0x1a
+			}
+		}
+		if x.DkgId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.DkgId))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*RefreshingRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: RefreshingRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: RefreshingRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DkgId", wireType)
+				}
+				x.DkgId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.DkgId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RemovedParticipants", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.RemovedParticipants = append(x.RemovedParticipants, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+				}
+				x.Threshold = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Threshold |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExpirationTime", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.ExpirationTime == nil {
+					x.ExpirationTime = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ExpirationTime); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 6:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= RefreshingStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_RefreshingCompletion                  protoreflect.MessageDescriptor
+	fd_RefreshingCompletion_id               protoreflect.FieldDescriptor
+	fd_RefreshingCompletion_sender           protoreflect.FieldDescriptor
+	fd_RefreshingCompletion_consensus_pubkey protoreflect.FieldDescriptor
+	fd_RefreshingCompletion_signature        protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_btcbridge_btcbridge_proto_init()
+	md_RefreshingCompletion = File_side_btcbridge_btcbridge_proto.Messages().ByName("RefreshingCompletion")
+	fd_RefreshingCompletion_id = md_RefreshingCompletion.Fields().ByName("id")
+	fd_RefreshingCompletion_sender = md_RefreshingCompletion.Fields().ByName("sender")
+	fd_RefreshingCompletion_consensus_pubkey = md_RefreshingCompletion.Fields().ByName("consensus_pubkey")
+	fd_RefreshingCompletion_signature = md_RefreshingCompletion.Fields().ByName("signature")
+}
+
+var _ protoreflect.Message = (*fastReflection_RefreshingCompletion)(nil)
+
+type fastReflection_RefreshingCompletion RefreshingCompletion
+
+func (x *RefreshingCompletion) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_RefreshingCompletion)(x)
+}
+
+func (x *RefreshingCompletion) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_btcbridge_btcbridge_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_RefreshingCompletion_messageType fastReflection_RefreshingCompletion_messageType
+var _ protoreflect.MessageType = fastReflection_RefreshingCompletion_messageType{}
+
+type fastReflection_RefreshingCompletion_messageType struct{}
+
+func (x fastReflection_RefreshingCompletion_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_RefreshingCompletion)(nil)
+}
+func (x fastReflection_RefreshingCompletion_messageType) New() protoreflect.Message {
+	return new(fastReflection_RefreshingCompletion)
+}
+func (x fastReflection_RefreshingCompletion_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_RefreshingCompletion
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_RefreshingCompletion) Descriptor() protoreflect.MessageDescriptor {
+	return md_RefreshingCompletion
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_RefreshingCompletion) Type() protoreflect.MessageType {
+	return _fastReflection_RefreshingCompletion_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_RefreshingCompletion) New() protoreflect.Message {
+	return new(fastReflection_RefreshingCompletion)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_RefreshingCompletion) Interface() protoreflect.ProtoMessage {
+	return (*RefreshingCompletion)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_RefreshingCompletion) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_RefreshingCompletion_id, value) {
+			return
+		}
+	}
+	if x.Sender != "" {
+		value := protoreflect.ValueOfString(x.Sender)
+		if !f(fd_RefreshingCompletion_sender, value) {
+			return
+		}
+	}
+	if x.ConsensusPubkey != "" {
+		value := protoreflect.ValueOfString(x.ConsensusPubkey)
+		if !f(fd_RefreshingCompletion_consensus_pubkey, value) {
+			return
+		}
+	}
+	if x.Signature != "" {
+		value := protoreflect.ValueOfString(x.Signature)
+		if !f(fd_RefreshingCompletion_signature, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_RefreshingCompletion) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingCompletion.id":
+		return x.Id != uint64(0)
+	case "side.btcbridge.RefreshingCompletion.sender":
+		return x.Sender != ""
+	case "side.btcbridge.RefreshingCompletion.consensus_pubkey":
+		return x.ConsensusPubkey != ""
+	case "side.btcbridge.RefreshingCompletion.signature":
+		return x.Signature != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingCompletion"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingCompletion does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RefreshingCompletion) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingCompletion.id":
+		x.Id = uint64(0)
+	case "side.btcbridge.RefreshingCompletion.sender":
+		x.Sender = ""
+	case "side.btcbridge.RefreshingCompletion.consensus_pubkey":
+		x.ConsensusPubkey = ""
+	case "side.btcbridge.RefreshingCompletion.signature":
+		x.Signature = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingCompletion"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingCompletion does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_RefreshingCompletion) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.btcbridge.RefreshingCompletion.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	case "side.btcbridge.RefreshingCompletion.sender":
+		value := x.Sender
+		return protoreflect.ValueOfString(value)
+	case "side.btcbridge.RefreshingCompletion.consensus_pubkey":
+		value := x.ConsensusPubkey
+		return protoreflect.ValueOfString(value)
+	case "side.btcbridge.RefreshingCompletion.signature":
+		value := x.Signature
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingCompletion"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingCompletion does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RefreshingCompletion) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingCompletion.id":
+		x.Id = value.Uint()
+	case "side.btcbridge.RefreshingCompletion.sender":
+		x.Sender = value.Interface().(string)
+	case "side.btcbridge.RefreshingCompletion.consensus_pubkey":
+		x.ConsensusPubkey = value.Interface().(string)
+	case "side.btcbridge.RefreshingCompletion.signature":
+		x.Signature = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingCompletion"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingCompletion does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RefreshingCompletion) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingCompletion.id":
+		panic(fmt.Errorf("field id of message side.btcbridge.RefreshingCompletion is not mutable"))
+	case "side.btcbridge.RefreshingCompletion.sender":
+		panic(fmt.Errorf("field sender of message side.btcbridge.RefreshingCompletion is not mutable"))
+	case "side.btcbridge.RefreshingCompletion.consensus_pubkey":
+		panic(fmt.Errorf("field consensus_pubkey of message side.btcbridge.RefreshingCompletion is not mutable"))
+	case "side.btcbridge.RefreshingCompletion.signature":
+		panic(fmt.Errorf("field signature of message side.btcbridge.RefreshingCompletion is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingCompletion"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingCompletion does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_RefreshingCompletion) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.btcbridge.RefreshingCompletion.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.btcbridge.RefreshingCompletion.sender":
+		return protoreflect.ValueOfString("")
+	case "side.btcbridge.RefreshingCompletion.consensus_pubkey":
+		return protoreflect.ValueOfString("")
+	case "side.btcbridge.RefreshingCompletion.signature":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.btcbridge.RefreshingCompletion"))
+		}
+		panic(fmt.Errorf("message side.btcbridge.RefreshingCompletion does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_RefreshingCompletion) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.btcbridge.RefreshingCompletion", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_RefreshingCompletion) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_RefreshingCompletion) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_RefreshingCompletion) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_RefreshingCompletion) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*RefreshingCompletion)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
+		l = len(x.Sender)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ConsensusPubkey)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Signature)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*RefreshingCompletion)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Signature) > 0 {
+			i -= len(x.Signature)
+			copy(dAtA[i:], x.Signature)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Signature)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.ConsensusPubkey) > 0 {
+			i -= len(x.ConsensusPubkey)
+			copy(dAtA[i:], x.ConsensusPubkey)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ConsensusPubkey)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Sender) > 0 {
+			i -= len(x.Sender)
+			copy(dAtA[i:], x.Sender)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*RefreshingCompletion)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: RefreshingCompletion: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: RefreshingCompletion: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ConsensusPubkey", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ConsensusPubkey = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Signature", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Signature = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -9133,6 +10480,63 @@ func (x DKGRequestStatus) Number() protoreflect.EnumNumber {
 // Deprecated: Use DKGRequestStatus.Descriptor instead.
 func (DKGRequestStatus) EnumDescriptor() ([]byte, []int) {
 	return file_side_btcbridge_btcbridge_proto_rawDescGZIP(), []int{1}
+}
+
+// Refreshing Status
+type RefreshingStatus int32
+
+const (
+	// REFRESHING_STATUS_UNSPECIFIED defines the unknown refreshing status
+	RefreshingStatus_REFRESHING_STATUS_UNSPECIFIED RefreshingStatus = 0
+	// REFRESHING_STATUS_PENDING defines the status of the refreshing request which is pending
+	RefreshingStatus_REFRESHING_STATUS_PENDING RefreshingStatus = 1
+	// REFRESHING_STATUS_COMPLETED defines the status of the refreshing request which is completed
+	RefreshingStatus_REFRESHING_STATUS_COMPLETED RefreshingStatus = 2
+	// REFRESHING_STATUS_TIMEDOUT defines the status of the refreshing request which timed out
+	RefreshingStatus_REFRESHING_STATUS_TIMEDOUT RefreshingStatus = 3
+)
+
+// Enum value maps for RefreshingStatus.
+var (
+	RefreshingStatus_name = map[int32]string{
+		0: "REFRESHING_STATUS_UNSPECIFIED",
+		1: "REFRESHING_STATUS_PENDING",
+		2: "REFRESHING_STATUS_COMPLETED",
+		3: "REFRESHING_STATUS_TIMEDOUT",
+	}
+	RefreshingStatus_value = map[string]int32{
+		"REFRESHING_STATUS_UNSPECIFIED": 0,
+		"REFRESHING_STATUS_PENDING":     1,
+		"REFRESHING_STATUS_COMPLETED":   2,
+		"REFRESHING_STATUS_TIMEDOUT":    3,
+	}
+)
+
+func (x RefreshingStatus) Enum() *RefreshingStatus {
+	p := new(RefreshingStatus)
+	*p = x
+	return p
+}
+
+func (x RefreshingStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RefreshingStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_side_btcbridge_btcbridge_proto_enumTypes[2].Descriptor()
+}
+
+func (RefreshingStatus) Type() protoreflect.EnumType {
+	return &file_side_btcbridge_btcbridge_proto_enumTypes[2]
+}
+
+func (x RefreshingStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RefreshingStatus.Descriptor instead.
+func (RefreshingStatus) EnumDescriptor() ([]byte, []int) {
+	return file_side_btcbridge_btcbridge_proto_rawDescGZIP(), []int{2}
 }
 
 // Fee rate
@@ -10043,6 +11447,152 @@ func (x *DKGCompletionRequest) GetSignature() string {
 	return ""
 }
 
+// Refreshing Request
+type RefreshingRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// request id
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// request id of the DKG corresponding to the key shares to be refreshed
+	DkgId uint64 `protobuf:"varint,2,opt,name=dkg_id,json=dkgId,proto3" json:"dkg_id,omitempty"`
+	// removed participant set
+	RemovedParticipants []string `protobuf:"bytes,3,rep,name=removed_participants,json=removedParticipants,proto3" json:"removed_participants,omitempty"`
+	// new threshold
+	Threshold uint32 `protobuf:"varint,4,opt,name=threshold,proto3" json:"threshold,omitempty"`
+	// expiration time
+	ExpirationTime *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=expiration_time,json=expirationTime,proto3" json:"expiration_time,omitempty"`
+	// status
+	Status RefreshingStatus `protobuf:"varint,6,opt,name=status,proto3,enum=side.btcbridge.RefreshingStatus" json:"status,omitempty"`
+}
+
+func (x *RefreshingRequest) Reset() {
+	*x = RefreshingRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_btcbridge_btcbridge_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RefreshingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RefreshingRequest) ProtoMessage() {}
+
+// Deprecated: Use RefreshingRequest.ProtoReflect.Descriptor instead.
+func (*RefreshingRequest) Descriptor() ([]byte, []int) {
+	return file_side_btcbridge_btcbridge_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *RefreshingRequest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *RefreshingRequest) GetDkgId() uint64 {
+	if x != nil {
+		return x.DkgId
+	}
+	return 0
+}
+
+func (x *RefreshingRequest) GetRemovedParticipants() []string {
+	if x != nil {
+		return x.RemovedParticipants
+	}
+	return nil
+}
+
+func (x *RefreshingRequest) GetThreshold() uint32 {
+	if x != nil {
+		return x.Threshold
+	}
+	return 0
+}
+
+func (x *RefreshingRequest) GetExpirationTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpirationTime
+	}
+	return nil
+}
+
+func (x *RefreshingRequest) GetStatus() RefreshingStatus {
+	if x != nil {
+		return x.Status
+	}
+	return RefreshingStatus_REFRESHING_STATUS_UNSPECIFIED
+}
+
+// Refreshing Completion
+type RefreshingCompletion struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// request id
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// sender
+	Sender string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
+	// participant consensus pub key
+	ConsensusPubkey string `protobuf:"bytes,3,opt,name=consensus_pubkey,json=consensusPubkey,proto3" json:"consensus_pubkey,omitempty"`
+	// hex encoded participant signature
+	Signature string `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
+}
+
+func (x *RefreshingCompletion) Reset() {
+	*x = RefreshingCompletion{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_btcbridge_btcbridge_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RefreshingCompletion) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RefreshingCompletion) ProtoMessage() {}
+
+// Deprecated: Use RefreshingCompletion.ProtoReflect.Descriptor instead.
+func (*RefreshingCompletion) Descriptor() ([]byte, []int) {
+	return file_side_btcbridge_btcbridge_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *RefreshingCompletion) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *RefreshingCompletion) GetSender() string {
+	if x != nil {
+		return x.Sender
+	}
+	return ""
+}
+
+func (x *RefreshingCompletion) GetConsensusPubkey() string {
+	if x != nil {
+		return x.ConsensusPubkey
+	}
+	return ""
+}
+
+func (x *RefreshingCompletion) GetSignature() string {
+	if x != nil {
+		return x.Signature
+	}
+	return ""
+}
+
 var File_side_btcbridge_btcbridge_proto protoreflect.FileDescriptor
 
 var file_side_btcbridge_btcbridge_proto_rawDesc = []byte{
@@ -10201,40 +11751,76 @@ var file_side_btcbridge_btcbridge_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x50,
 	0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
 	0x72, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x2a, 0xa4, 0x01, 0x0a, 0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x53,
-	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1e, 0x0a, 0x1a, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47,
-	0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46,
-	0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x1a, 0x0a, 0x16, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47,
-	0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10,
-	0x01, 0x12, 0x1e, 0x0a, 0x1a, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41,
-	0x54, 0x55, 0x53, 0x5f, 0x42, 0x52, 0x4f, 0x41, 0x44, 0x43, 0x41, 0x53, 0x54, 0x45, 0x44, 0x10,
-	0x02, 0x12, 0x1c, 0x0a, 0x18, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41,
-	0x54, 0x55, 0x53, 0x5f, 0x43, 0x4f, 0x4e, 0x46, 0x49, 0x52, 0x4d, 0x45, 0x44, 0x10, 0x03, 0x12,
-	0x19, 0x0a, 0x15, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55,
-	0x53, 0x5f, 0x46, 0x41, 0x49, 0x4c, 0x45, 0x44, 0x10, 0x04, 0x2a, 0xb8, 0x01, 0x0a, 0x10, 0x44,
-	0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12,
-	0x22, 0x0a, 0x1e, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51, 0x55, 0x45, 0x53, 0x54, 0x5f, 0x53,
-	0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45,
-	0x44, 0x10, 0x00, 0x12, 0x1e, 0x0a, 0x1a, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51, 0x55, 0x45,
-	0x53, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e,
-	0x47, 0x10, 0x01, 0x12, 0x20, 0x0a, 0x1c, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51, 0x55, 0x45,
-	0x53, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x43, 0x4f, 0x4d, 0x50, 0x4c, 0x45,
-	0x54, 0x45, 0x44, 0x10, 0x02, 0x12, 0x1d, 0x0a, 0x19, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51,
-	0x55, 0x45, 0x53, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x46, 0x41, 0x49, 0x4c,
-	0x45, 0x44, 0x10, 0x03, 0x12, 0x1f, 0x0a, 0x1b, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51, 0x55,
-	0x45, 0x53, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x54, 0x49, 0x4d, 0x45, 0x44,
-	0x4f, 0x55, 0x54, 0x10, 0x04, 0x42, 0xae, 0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0e, 0x42, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2f,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xa2,
-	0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x42, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xca, 0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74,
-	0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xe2, 0x02, 0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42,
-	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
-	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x42, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x75, 0x72, 0x65, 0x22, 0x94, 0x02, 0x0a, 0x11, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69,
+	0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x15, 0x0a, 0x06, 0x64, 0x6b, 0x67,
+	0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x64, 0x6b, 0x67, 0x49, 0x64,
+	0x12, 0x31, 0x0a, 0x14, 0x72, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x64, 0x5f, 0x70, 0x61, 0x72, 0x74,
+	0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x13,
+	0x72, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x64, 0x50, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61,
+	0x6e, 0x74, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c,
+	0x64, 0x12, 0x4d, 0x0a, 0x0f, 0x65, 0x78, 0x70, 0x69, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
+	0x74, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d,
+	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01,
+	0x52, 0x0e, 0x65, 0x78, 0x70, 0x69, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d, 0x65,
+	0x12, 0x38, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x2e, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x87, 0x01, 0x0a, 0x14, 0x52,
+	0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x29, 0x0a, 0x10, 0x63,
+	0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73,
+	0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74,
+	0x75, 0x72, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61,
+	0x74, 0x75, 0x72, 0x65, 0x2a, 0xa4, 0x01, 0x0a, 0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1e, 0x0a, 0x1a, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e,
+	0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49,
+	0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x1a, 0x0a, 0x16, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e,
+	0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47,
+	0x10, 0x01, 0x12, 0x1e, 0x0a, 0x1a, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54,
+	0x41, 0x54, 0x55, 0x53, 0x5f, 0x42, 0x52, 0x4f, 0x41, 0x44, 0x43, 0x41, 0x53, 0x54, 0x45, 0x44,
+	0x10, 0x02, 0x12, 0x1c, 0x0a, 0x18, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54,
+	0x41, 0x54, 0x55, 0x53, 0x5f, 0x43, 0x4f, 0x4e, 0x46, 0x49, 0x52, 0x4d, 0x45, 0x44, 0x10, 0x03,
+	0x12, 0x19, 0x0a, 0x15, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54,
+	0x55, 0x53, 0x5f, 0x46, 0x41, 0x49, 0x4c, 0x45, 0x44, 0x10, 0x04, 0x2a, 0xb8, 0x01, 0x0a, 0x10,
+	0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x12, 0x22, 0x0a, 0x1e, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51, 0x55, 0x45, 0x53, 0x54, 0x5f,
+	0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49,
+	0x45, 0x44, 0x10, 0x00, 0x12, 0x1e, 0x0a, 0x1a, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51, 0x55,
+	0x45, 0x53, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49,
+	0x4e, 0x47, 0x10, 0x01, 0x12, 0x20, 0x0a, 0x1c, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51, 0x55,
+	0x45, 0x53, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x43, 0x4f, 0x4d, 0x50, 0x4c,
+	0x45, 0x54, 0x45, 0x44, 0x10, 0x02, 0x12, 0x1d, 0x0a, 0x19, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45,
+	0x51, 0x55, 0x45, 0x53, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x46, 0x41, 0x49,
+	0x4c, 0x45, 0x44, 0x10, 0x03, 0x12, 0x1f, 0x0a, 0x1b, 0x44, 0x4b, 0x47, 0x5f, 0x52, 0x45, 0x51,
+	0x55, 0x45, 0x53, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x54, 0x49, 0x4d, 0x45,
+	0x44, 0x4f, 0x55, 0x54, 0x10, 0x04, 0x2a, 0x95, 0x01, 0x0a, 0x10, 0x52, 0x65, 0x66, 0x72, 0x65,
+	0x73, 0x68, 0x69, 0x6e, 0x67, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x21, 0x0a, 0x1d, 0x52,
+	0x45, 0x46, 0x52, 0x45, 0x53, 0x48, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53,
+	0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x1d,
+	0x0a, 0x19, 0x52, 0x45, 0x46, 0x52, 0x45, 0x53, 0x48, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41,
+	0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12, 0x1f, 0x0a,
+	0x1b, 0x52, 0x45, 0x46, 0x52, 0x45, 0x53, 0x48, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41, 0x54,
+	0x55, 0x53, 0x5f, 0x43, 0x4f, 0x4d, 0x50, 0x4c, 0x45, 0x54, 0x45, 0x44, 0x10, 0x02, 0x12, 0x1e,
+	0x0a, 0x1a, 0x52, 0x45, 0x46, 0x52, 0x45, 0x53, 0x48, 0x49, 0x4e, 0x47, 0x5f, 0x53, 0x54, 0x41,
+	0x54, 0x55, 0x53, 0x5f, 0x54, 0x49, 0x4d, 0x45, 0x44, 0x4f, 0x55, 0x54, 0x10, 0x03, 0x42, 0xae,
+	0x01, 0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x62, 0x74, 0x63, 0x62,
+	0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
+	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
+	0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c,
+	0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x62,
+	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02,
+	0x0e, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0xca,
+	0x02, 0x0e, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65,
+	0xe2, 0x02, 0x1a, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67,
+	0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0f,
+	0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x42, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -10249,46 +11835,51 @@ func file_side_btcbridge_btcbridge_proto_rawDescGZIP() []byte {
 	return file_side_btcbridge_btcbridge_proto_rawDescData
 }
 
-var file_side_btcbridge_btcbridge_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_side_btcbridge_btcbridge_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_side_btcbridge_btcbridge_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_side_btcbridge_btcbridge_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_side_btcbridge_btcbridge_proto_goTypes = []interface{}{
 	(SigningStatus)(0),            // 0: side.btcbridge.SigningStatus
 	(DKGRequestStatus)(0),         // 1: side.btcbridge.DKGRequestStatus
-	(*FeeRate)(nil),               // 2: side.btcbridge.FeeRate
-	(*SigningRequest)(nil),        // 3: side.btcbridge.SigningRequest
-	(*CompactSigningRequest)(nil), // 4: side.btcbridge.CompactSigningRequest
-	(*WithdrawRequest)(nil),       // 5: side.btcbridge.WithdrawRequest
-	(*IBCWithdrawRequest)(nil),    // 6: side.btcbridge.IBCWithdrawRequest
-	(*UTXO)(nil),                  // 7: side.btcbridge.UTXO
-	(*RuneBalance)(nil),           // 8: side.btcbridge.RuneBalance
-	(*RuneId)(nil),                // 9: side.btcbridge.RuneId
-	(*Edict)(nil),                 // 10: side.btcbridge.Edict
-	(*BtcConsolidation)(nil),      // 11: side.btcbridge.BtcConsolidation
-	(*RunesConsolidation)(nil),    // 12: side.btcbridge.RunesConsolidation
-	(*DKGParticipant)(nil),        // 13: side.btcbridge.DKGParticipant
-	(*DKGRequest)(nil),            // 14: side.btcbridge.DKGRequest
-	(*DKGCompletionRequest)(nil),  // 15: side.btcbridge.DKGCompletionRequest
-	(AssetType)(0),                // 16: side.btcbridge.AssetType
-	(*timestamppb.Timestamp)(nil), // 17: google.protobuf.Timestamp
+	(RefreshingStatus)(0),         // 2: side.btcbridge.RefreshingStatus
+	(*FeeRate)(nil),               // 3: side.btcbridge.FeeRate
+	(*SigningRequest)(nil),        // 4: side.btcbridge.SigningRequest
+	(*CompactSigningRequest)(nil), // 5: side.btcbridge.CompactSigningRequest
+	(*WithdrawRequest)(nil),       // 6: side.btcbridge.WithdrawRequest
+	(*IBCWithdrawRequest)(nil),    // 7: side.btcbridge.IBCWithdrawRequest
+	(*UTXO)(nil),                  // 8: side.btcbridge.UTXO
+	(*RuneBalance)(nil),           // 9: side.btcbridge.RuneBalance
+	(*RuneId)(nil),                // 10: side.btcbridge.RuneId
+	(*Edict)(nil),                 // 11: side.btcbridge.Edict
+	(*BtcConsolidation)(nil),      // 12: side.btcbridge.BtcConsolidation
+	(*RunesConsolidation)(nil),    // 13: side.btcbridge.RunesConsolidation
+	(*DKGParticipant)(nil),        // 14: side.btcbridge.DKGParticipant
+	(*DKGRequest)(nil),            // 15: side.btcbridge.DKGRequest
+	(*DKGCompletionRequest)(nil),  // 16: side.btcbridge.DKGCompletionRequest
+	(*RefreshingRequest)(nil),     // 17: side.btcbridge.RefreshingRequest
+	(*RefreshingCompletion)(nil),  // 18: side.btcbridge.RefreshingCompletion
+	(AssetType)(0),                // 19: side.btcbridge.AssetType
+	(*timestamppb.Timestamp)(nil), // 20: google.protobuf.Timestamp
 }
 var file_side_btcbridge_btcbridge_proto_depIdxs = []int32{
-	16, // 0: side.btcbridge.SigningRequest.type:type_name -> side.btcbridge.AssetType
-	17, // 1: side.btcbridge.SigningRequest.creation_time:type_name -> google.protobuf.Timestamp
+	19, // 0: side.btcbridge.SigningRequest.type:type_name -> side.btcbridge.AssetType
+	20, // 1: side.btcbridge.SigningRequest.creation_time:type_name -> google.protobuf.Timestamp
 	0,  // 2: side.btcbridge.SigningRequest.status:type_name -> side.btcbridge.SigningStatus
-	16, // 3: side.btcbridge.CompactSigningRequest.type:type_name -> side.btcbridge.AssetType
-	17, // 4: side.btcbridge.CompactSigningRequest.creation_time:type_name -> google.protobuf.Timestamp
+	19, // 3: side.btcbridge.CompactSigningRequest.type:type_name -> side.btcbridge.AssetType
+	20, // 4: side.btcbridge.CompactSigningRequest.creation_time:type_name -> google.protobuf.Timestamp
 	0,  // 5: side.btcbridge.CompactSigningRequest.status:type_name -> side.btcbridge.SigningStatus
-	8,  // 6: side.btcbridge.UTXO.runes:type_name -> side.btcbridge.RuneBalance
-	9,  // 7: side.btcbridge.Edict.id:type_name -> side.btcbridge.RuneId
-	13, // 8: side.btcbridge.DKGRequest.participants:type_name -> side.btcbridge.DKGParticipant
-	16, // 9: side.btcbridge.DKGRequest.vault_types:type_name -> side.btcbridge.AssetType
-	17, // 10: side.btcbridge.DKGRequest.expiration:type_name -> google.protobuf.Timestamp
+	9,  // 6: side.btcbridge.UTXO.runes:type_name -> side.btcbridge.RuneBalance
+	10, // 7: side.btcbridge.Edict.id:type_name -> side.btcbridge.RuneId
+	14, // 8: side.btcbridge.DKGRequest.participants:type_name -> side.btcbridge.DKGParticipant
+	19, // 9: side.btcbridge.DKGRequest.vault_types:type_name -> side.btcbridge.AssetType
+	20, // 10: side.btcbridge.DKGRequest.expiration:type_name -> google.protobuf.Timestamp
 	1,  // 11: side.btcbridge.DKGRequest.status:type_name -> side.btcbridge.DKGRequestStatus
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	20, // 12: side.btcbridge.RefreshingRequest.expiration_time:type_name -> google.protobuf.Timestamp
+	2,  // 13: side.btcbridge.RefreshingRequest.status:type_name -> side.btcbridge.RefreshingStatus
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_side_btcbridge_btcbridge_proto_init() }
@@ -10466,14 +12057,38 @@ func file_side_btcbridge_btcbridge_proto_init() {
 				return nil
 			}
 		}
+		file_side_btcbridge_btcbridge_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RefreshingRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_btcbridge_btcbridge_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RefreshingCompletion); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_btcbridge_btcbridge_proto_rawDesc,
-			NumEnums:      2,
-			NumMessages:   14,
+			NumEnums:      3,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
