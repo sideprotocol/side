@@ -27,9 +27,6 @@ type PriceOracleVoteExtHandler struct {
 	currentBlock    int64 // current block height
 	lastPriceSyncTS int64 // last time we synced prices
 	bitcoinClient   *rpcclient.Client
-	// providerTimeout time.Duration // timeout for fetching prices from providers
-	// providers       map[string]Provider              // mapping of provider name to provider (e.g. Binance -> BinanceProvider)
-	// providerPairs   map[string][]keeper.CurrencyPair // mapping of provider name to supported pairs (e.g. Binance -> [ATOM/USD])
 
 	Keeper keeper.Keeper // keeper of our oracle module
 	config *types.OracleConfig
@@ -63,7 +60,7 @@ func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 		if !h.config.Enable || !voteExtensionEnabled(ctx, req.Height) {
 			return &abci.ResponseExtendVote{}, nil
 		}
-		// here we'd have a helper function that gets all the prices and does a weighted average using the volume of each market
+		// here we'd have a helper function that gets all the prices and does a weighted average
 
 		prices := h.getAllVolumeWeightedPrices()
 		h.lastPriceSyncTS = req.Time.UnixMilli()
@@ -97,7 +94,6 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 
 		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", hex.EncodeToString(req.ValidatorAddress))
 		var voteExt types.OracleVoteExtension
-		// err := json.Unmarshal(req.VoteExtension, &voteExt)
 		err := voteExt.Unmarshal(req.VoteExtension)
 		if err != nil {
 			return nil, fmt.Errorf("failed to unmarshal vote extension: %w", err)
@@ -224,7 +220,6 @@ func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]stri
 		} else {
 			h.logger.Error("Invalid Source Price", "symbol", symbol, "price", price)
 		}
-
 	}
 
 	return textPrices
@@ -244,22 +239,17 @@ func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 
 			extInfo := req.LocalLastCommit
 			bz, err := extInfo.Marshal()
-
-			// NOTE: We use stdlib JSON encoding, but an application may choose to use
-			// a performant mechanism. This is for demo purposes only.
-			// bz, err := json.Marshal(injectedVoteExtTx)
 			if err != nil {
 				h.logger.Error("failed to encode injected vote extension tx", "err", err)
 				return nil, errors.New("failed to encode injected vote extension tx")
 			}
 
 			// Inject a "fake" tx into the proposal s.t. validators can decode, verify,
-			// and store the canonical stake-weighted average prices.
+			// and store the canonical stake-weighted average prices and block headers.
 			proposalTxs = append([][]byte{bz}, proposalTxs...)
 		}
 
 		// proceed with normal block proposal construction, e.g. POB, normal txs, etc...
-
 		return &abci.ResponsePrepareProposal{
 			Txs: proposalTxs,
 		}, nil
@@ -286,17 +276,6 @@ func (h *PriceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler
 		if err != nil {
 			return nil, err
 		}
-
-		// Verify the proposer's stake-weighted oracle prices by computing the same
-		// calculation and comparing the results. We omit verification for brevity
-		// and demo purposes.
-		// stakeWeightedPrices, err := h.computeStakeWeightedOraclePrices(ctx, injectedVoteExtTx)
-		// if err != nil {
-		// 	return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
-		// }
-		// if err := compareOraclePrices(injectedVoteExtTx.StakeWeightedPrices, stakeWeightedPrices); err != nil {
-		// 	return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
-		// }
 
 		return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_ACCEPT}, nil
 	}
@@ -340,13 +319,6 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 	return res, nil
 }
 
-// func (h *PriceOracleVoteExtHandler) selectBlockHeaders(extInfo *abci.ExtendedCommitInfo) error {
-// 	for i, v := range extInfo.Votes {
-// 		if v.VoteExtension
-// 	}
-// 	return nil
-// }
-
 func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, []*types.BlockHeader, error) {
 	var totalStake int64
 
@@ -361,7 +333,6 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 		}
 
 		var voteExt types.OracleVoteExtension
-		// if err := json.Unmarshal(v.VoteExtension, &voteExt); err != nil {
 		if err := voteExt.Unmarshal(v.VoteExtension); err != nil {
 			h.logger.Error("failed to decode vote extension", "err", err, "validator", fmt.Sprintf("%x", v.Validator.Address))
 			return nil, nil, err
@@ -376,10 +347,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 		//
 		// NOTE: These are the prices computed at the PREVIOUS height, i.e. H-1
 		for base, price := range voteExt.Prices {
-			// Only compute stake-weighted average for supported pairs.
-			//
-			// NOTE: VerifyVoteExtension should be sufficient to ensure that only
-			// supported pairs are supplied, but we add this here for demo purposes.
+
 			stakePrice, err := math.LegacyNewDecFromStr(price)
 			if err != nil {
 				continue
@@ -411,7 +379,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 	}
 
 	if totalStake == 0 {
-		return nil, nil, nil
+		return nil, nil, types.ErrInsufficientVotingPower
 	}
 
 	// finalize average by dividing by total stake, i.e. total weights
@@ -440,15 +408,3 @@ func voteExtensionEnabled(ctx sdk.Context, height int64) bool {
 
 	return consParams.Abci != nil && height > consParams.Abci.VoteExtensionsEnableHeight && consParams.Abci.VoteExtensionsEnableHeight != 0
 }
-
-// func compareOraclePrices(p1, p2 map[string]math.LegacyDec) error {
-// 	if len(p1) != len(p2) {
-// 		return fmt.Errorf("price maps are different, length %s != length %s", slices.Collect(maps.Keys(p1)), slices.Collect(maps.Keys(p2)))
-// 	}
-// 	for k, v := range p1 {
-// 		if v2, ok := p2[k]; !ok || !v.Equal(v2) {
-// 			return fmt.Errorf("[%s] prices are different, %s!=%s", k, v, v2)
-// 		}
-// 	}
-// 	return nil
-// }
