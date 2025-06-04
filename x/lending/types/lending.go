@@ -80,13 +80,21 @@ func GetMaturityTime(originMaturityTime int64) int64 {
 }
 
 // CheckLTV returns true if the collateral amount and borrow amount satisfy the max LTV limitation by the given price, false otherwise
-func CheckLTV(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maxLTV uint32, price sdkmath.LegacyDec) bool {
-	return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(maxLTV))).ToLegacyDec().Mul(price).Quo(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals).Mul(Percent).ToLegacyDec()).TruncateInt().GTE(borrowAmount)
+func CheckLTV(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maxLTV uint32, price sdkmath.LegacyDec, collateralIsBaseAsset bool) bool {
+	if collateralIsBaseAsset {
+		return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(maxLTV))).ToLegacyDec().Mul(price).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).QuoInt(Percent).TruncateInt().GTE(borrowAmount)
+	}
+
+	return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(maxLTV))).ToLegacyDec().Quo(price).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).QuoInt(Percent).TruncateInt().GTE(borrowAmount)
 }
 
 // GetPricePair gets the price pair from the given pool config
 func GetPricePair(poolConfig PoolConfig) string {
-	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol), strings.ToUpper(poolConfig.LendingAsset.PriceSymbol))
+	if poolConfig.CollateralAsset.IsBasePriceAsset {
+		return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol), strings.ToUpper(poolConfig.LendingAsset.PriceSymbol))
+	}
+
+	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.LendingAsset.PriceSymbol), strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol))
 }
 
 // STokenDenom returns the sToken denom from the given pool id
@@ -102,10 +110,11 @@ func PoolIdFromSTokenDenom(denom string) string {
 // ToLiquidationAssetMeta converts the given asset metadata to the corresponding liquidation asset metadata
 func ToLiquidationAssetMeta(metadata AssetMetadata) liquidationtypes.AssetMetadata {
 	return liquidationtypes.AssetMetadata{
-		Denom:       metadata.Denom,
-		Symbol:      metadata.Symbol,
-		PriceSymbol: metadata.PriceSymbol,
-		Decimals:    metadata.Decimals,
+		Denom:            metadata.Denom,
+		Symbol:           metadata.Symbol,
+		Decimals:         metadata.Decimals,
+		PriceSymbol:      metadata.PriceSymbol,
+		IsBasePriceAsset: metadata.IsBasePriceAsset,
 	}
 }
 
@@ -216,11 +225,7 @@ func NewTranches(trancheConfigs []PoolTrancheConfig) []PoolTranche {
 
 // ValidatePoolConfig validates the given pool config
 func ValidatePoolConfig(config PoolConfig) error {
-	if err := validateAssetMetadata(config.CollateralAsset); err != nil {
-		return err
-	}
-
-	if err := validateAssetMetadata(config.LendingAsset); err != nil {
+	if err := validateAssetsMetadata(config.CollateralAsset, config.LendingAsset); err != nil {
 		return err
 	}
 
@@ -279,6 +284,24 @@ func ValidatePoolConfig(config PoolConfig) error {
 	return nil
 }
 
+// validateAssetsMetadata validates the given assets metadata
+func validateAssetsMetadata(collateralAsset AssetMetadata, lendingAsset AssetMetadata) error {
+	if err := validateAssetMetadata(collateralAsset); err != nil {
+		return err
+	}
+
+	if err := validateAssetMetadata(lendingAsset); err != nil {
+		return err
+	}
+
+	if collateralAsset.IsBasePriceAsset == lendingAsset.IsBasePriceAsset {
+		return errorsmod.Wrapf(ErrInvalidPoolConfig, "conflicting base price asset")
+	}
+
+	return nil
+}
+
+// validateAssetMetadata validates the given asset metadata
 func validateAssetMetadata(metadata AssetMetadata) error {
 	if err := sdk.ValidateDenom(metadata.Denom); err != nil {
 		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset denom")
@@ -288,12 +311,12 @@ func validateAssetMetadata(metadata AssetMetadata) error {
 		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset symbol")
 	}
 
-	if len(metadata.PriceSymbol) == 0 {
-		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset price symbol")
-	}
-
 	if metadata.Decimals < 0 {
 		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset decimals")
+	}
+
+	if len(metadata.PriceSymbol) == 0 {
+		return errorsmod.Wrapf(ErrInvalidPoolConfig, "invalid asset price symbol")
 	}
 
 	return nil

@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -21,7 +22,29 @@ type LiquidatedDebtHandler func(ctx sdk.Context, liquidationId uint64, loanId st
 
 // GetPricePair gets the price pair of the given liquidation
 func GetPricePair(liquidation *Liquidation) string {
-	return fmt.Sprintf("%s%s", strings.ToUpper(liquidation.CollateralAsset.PriceSymbol), strings.ToUpper(liquidation.DebtAsset.PriceSymbol))
+	if liquidation.CollateralAsset.IsBasePriceAsset {
+		return fmt.Sprintf("%s%s", strings.ToUpper(liquidation.CollateralAsset.PriceSymbol), strings.ToUpper(liquidation.DebtAsset.PriceSymbol))
+	}
+
+	return fmt.Sprintf("%s%s", strings.ToUpper(liquidation.DebtAsset.PriceSymbol), strings.ToUpper(liquidation.CollateralAsset.PriceSymbol))
+}
+
+// GetCollateralAmount calculates the corresponding collateral amount according to the given debt amount and price
+func GetCollateralAmount(debtAmount sdkmath.Int, debtAssetDecimals int, collateralAssetDecimals int, price sdkmath.LegacyDec, collateralIsBaseAsset bool) sdkmath.Int {
+	if collateralIsBaseAsset {
+		return debtAmount.Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).Quo(sdkmath.NewIntWithDecimal(1, debtAssetDecimals)).ToLegacyDec().Quo(price).TruncateInt()
+	}
+
+	return debtAmount.Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).ToLegacyDec().Mul(price).QuoInt(sdkmath.NewIntWithDecimal(1, debtAssetDecimals)).TruncateInt()
+}
+
+// GetDebtAmount calculates the corresponding debt amount according to the given collateral amount and price
+func GetDebtAmount(collateralAmount sdkmath.Int, collateralAssetDecimals int, debtAssetDecimals int, price sdkmath.LegacyDec, collateralIsBaseAsset bool) sdkmath.Int {
+	if collateralIsBaseAsset {
+		return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, debtAssetDecimals)).ToLegacyDec().Mul(price).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).TruncateInt()
+	}
+
+	return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, debtAssetDecimals)).Quo(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).ToLegacyDec().Quo(price).TruncateInt()
 }
 
 // ToScopedId converts the given local id to the scoped id
