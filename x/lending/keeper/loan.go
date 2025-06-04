@@ -203,6 +203,9 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 	var interest sdkmath.Int
 
 	switch loan.Status {
+	case types.LoanStatus_Open:
+		interest = types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, k.GetCurrentBorrowIndex(ctx, loan))
+
 	case types.LoanStatus_Repaid, types.LoanStatus_Closed:
 		repayment := k.GetRepayment(ctx, loan.VaultAddress)
 		interest = repayment.Amount.Sub(loan.BorrowAmount).Amount
@@ -215,7 +218,7 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 		interest = liquidation.DebtAmount.Amount.Sub(loan.BorrowAmount.Amount)
 
 	default:
-		interest = types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, k.GetCurrentBorrowIndex(ctx, loan))
+		interest = sdkmath.ZeroInt()
 	}
 
 	return sdk.NewCoin(loan.BorrowAmount.Denom, interest)
