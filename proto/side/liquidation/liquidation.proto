@@ -11,8 +11,9 @@ option go_package = "github.com/sideprotocol/side/x/liquidation/types";
 message AssetMetadata {
     string denom = 1;
     string symbol = 2;
-    string price_symbol = 3;
-    int32 decimals = 4;
+    int32 decimals = 3;
+    string price_symbol = 4;
+    bool is_base_price_asset = 5;
 }
 
 enum LiquidationStatus {
