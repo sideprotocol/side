@@ -369,7 +369,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 
 		h.logger.Warn("extension", "validator", hex.EncodeToString(v.Validator.Address), "extension", voteExt)
 
-		// totalStake += v.Validator.Power
+		totalStake += v.Validator.Power
 
 		// Compute stake-weighted average of prices for each supported pair, i.e.
 		// (P1)(W1) + (P2)(W2) + ... + (Pn)(Wn) / (W1 + W2 + ... + Wn)
