@@ -205,11 +205,11 @@ func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]stri
 	symbolPrices := types.GetPrices(h.lastPriceSyncTS)
 	for symbol, prices := range symbolPrices {
 		if len(prices) > 0 {
-			sum := math.LegacyNewDec(0)
+			sum := math.LegacyZeroDec()
 			for _, p := range prices {
 				sum = sum.Add(p)
 			}
-			if avg := sum.QuoInt64(int64(len(prices))); avg.GT(math.LegacyNewDec(0)) {
+			if avg := sum.QuoInt64(int64(len(prices))); avg.GT(math.LegacyZeroDec()) {
 				avgPrices[symbol] = avg
 			}
 		}
@@ -219,7 +219,12 @@ func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]stri
 
 	textPrices := make(map[string]string)
 	for symbol, price := range avgPrices {
-		textPrices[symbol] = price.String()
+		if price.GT(math.LegacyZeroDec()) {
+			textPrices[symbol] = price.String()
+		} else {
+			h.logger.Error("Invalid Source Price", "symbol", symbol, "price", price)
+		}
+
 	}
 
 	return textPrices
@@ -320,7 +325,9 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 	}
 
 	for symbol, price := range prices {
-		h.Keeper.SetPrice(ctx, symbol, price.String())
+		if price.GT(math.LegacyZeroDec()) {
+			h.Keeper.SetPrice(ctx, symbol, price.String())
+		}
 	}
 
 	err = h.Keeper.SetBlockHeaders(ctx, headers)
