@@ -80,7 +80,7 @@ func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) {
 			// try to approve loan if all deposit txs verified
 			if k.DepositsVerified(ctx, k.GetAuthorization(ctx, loan.VaultAddress, authorizationId)) {
 				// check LTV
-				if !types.CheckLTV(loan.CollateralAmount, int(pool.Config.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(pool.Config.LendingAsset.Decimals), pool.Config.MaxLtv, currentPrice) {
+				if !types.CheckLTV(loan.CollateralAmount, int(pool.Config.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(pool.Config.LendingAsset.Decimals), pool.Config.MaxLtv, currentPrice, pool.Config.CollateralAsset.IsBasePriceAsset) {
 					rejectHandler(loan, authorizationId, types.ErrInsufficientCollateral)
 					continue
 				}

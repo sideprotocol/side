@@ -59,9 +59,10 @@ func handlePendingLiquidations(ctx sdk.Context, k keeper.Keeper) {
 
 		collateralDecimals := int(liquidation.CollateralAsset.Decimals)
 		debtDecimals := int(liquidation.DebtAsset.Decimals)
+		collateralIsBaseAsset := liquidation.CollateralAsset.IsBasePriceAsset
 
 		// check if the collateral amount corresponding to the remaining debt amount is dust
-		collateralAmount := remainingDebtAmount.Amount.Mul(sdkmath.NewIntWithDecimal(1, collateralDecimals)).Quo(sdkmath.NewIntWithDecimal(1, debtDecimals)).ToLegacyDec().Quo(currentPrice).TruncateInt()
+		collateralAmount := types.GetCollateralAmount(remainingDebtAmount.Amount, debtDecimals, collateralDecimals, currentPrice, collateralIsBaseAsset)
 		if collateralAmount.Int64() < types.DefaultDustOutValue {
 			k.Logger(ctx).Info("collateral amount corresponding to the remaining debt amount is dust value", "remaining debt amount", remainingDebtAmount, "collateral amount", collateralAmount, "price", currentPrice)
 

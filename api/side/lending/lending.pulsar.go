@@ -18,11 +18,12 @@ import (
 )
 
 var (
-	md_AssetMetadata              protoreflect.MessageDescriptor
-	fd_AssetMetadata_denom        protoreflect.FieldDescriptor
-	fd_AssetMetadata_symbol       protoreflect.FieldDescriptor
-	fd_AssetMetadata_price_symbol protoreflect.FieldDescriptor
-	fd_AssetMetadata_decimals     protoreflect.FieldDescriptor
+	md_AssetMetadata                     protoreflect.MessageDescriptor
+	fd_AssetMetadata_denom               protoreflect.FieldDescriptor
+	fd_AssetMetadata_symbol              protoreflect.FieldDescriptor
+	fd_AssetMetadata_decimals            protoreflect.FieldDescriptor
+	fd_AssetMetadata_price_symbol        protoreflect.FieldDescriptor
+	fd_AssetMetadata_is_base_price_asset protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -30,8 +31,9 @@ func init() {
 	md_AssetMetadata = File_side_lending_lending_proto.Messages().ByName("AssetMetadata")
 	fd_AssetMetadata_denom = md_AssetMetadata.Fields().ByName("denom")
 	fd_AssetMetadata_symbol = md_AssetMetadata.Fields().ByName("symbol")
-	fd_AssetMetadata_price_symbol = md_AssetMetadata.Fields().ByName("price_symbol")
 	fd_AssetMetadata_decimals = md_AssetMetadata.Fields().ByName("decimals")
+	fd_AssetMetadata_price_symbol = md_AssetMetadata.Fields().ByName("price_symbol")
+	fd_AssetMetadata_is_base_price_asset = md_AssetMetadata.Fields().ByName("is_base_price_asset")
 }
 
 var _ protoreflect.Message = (*fastReflection_AssetMetadata)(nil)
@@ -111,15 +113,21 @@ func (x *fastReflection_AssetMetadata) Range(f func(protoreflect.FieldDescriptor
 			return
 		}
 	}
+	if x.Decimals != int32(0) {
+		value := protoreflect.ValueOfInt32(x.Decimals)
+		if !f(fd_AssetMetadata_decimals, value) {
+			return
+		}
+	}
 	if x.PriceSymbol != "" {
 		value := protoreflect.ValueOfString(x.PriceSymbol)
 		if !f(fd_AssetMetadata_price_symbol, value) {
 			return
 		}
 	}
-	if x.Decimals != int32(0) {
-		value := protoreflect.ValueOfInt32(x.Decimals)
-		if !f(fd_AssetMetadata_decimals, value) {
+	if x.IsBasePriceAsset != false {
+		value := protoreflect.ValueOfBool(x.IsBasePriceAsset)
+		if !f(fd_AssetMetadata_is_base_price_asset, value) {
 			return
 		}
 	}
@@ -142,10 +150,12 @@ func (x *fastReflection_AssetMetadata) Has(fd protoreflect.FieldDescriptor) bool
 		return x.Denom != ""
 	case "side.lending.AssetMetadata.symbol":
 		return x.Symbol != ""
-	case "side.lending.AssetMetadata.price_symbol":
-		return x.PriceSymbol != ""
 	case "side.lending.AssetMetadata.decimals":
 		return x.Decimals != int32(0)
+	case "side.lending.AssetMetadata.price_symbol":
+		return x.PriceSymbol != ""
+	case "side.lending.AssetMetadata.is_base_price_asset":
+		return x.IsBasePriceAsset != false
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AssetMetadata"))
@@ -166,10 +176,12 @@ func (x *fastReflection_AssetMetadata) Clear(fd protoreflect.FieldDescriptor) {
 		x.Denom = ""
 	case "side.lending.AssetMetadata.symbol":
 		x.Symbol = ""
-	case "side.lending.AssetMetadata.price_symbol":
-		x.PriceSymbol = ""
 	case "side.lending.AssetMetadata.decimals":
 		x.Decimals = int32(0)
+	case "side.lending.AssetMetadata.price_symbol":
+		x.PriceSymbol = ""
+	case "side.lending.AssetMetadata.is_base_price_asset":
+		x.IsBasePriceAsset = false
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AssetMetadata"))
@@ -192,12 +204,15 @@ func (x *fastReflection_AssetMetadata) Get(descriptor protoreflect.FieldDescript
 	case "side.lending.AssetMetadata.symbol":
 		value := x.Symbol
 		return protoreflect.ValueOfString(value)
-	case "side.lending.AssetMetadata.price_symbol":
-		value := x.PriceSymbol
-		return protoreflect.ValueOfString(value)
 	case "side.lending.AssetMetadata.decimals":
 		value := x.Decimals
 		return protoreflect.ValueOfInt32(value)
+	case "side.lending.AssetMetadata.price_symbol":
+		value := x.PriceSymbol
+		return protoreflect.ValueOfString(value)
+	case "side.lending.AssetMetadata.is_base_price_asset":
+		value := x.IsBasePriceAsset
+		return protoreflect.ValueOfBool(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AssetMetadata"))
@@ -222,10 +237,12 @@ func (x *fastReflection_AssetMetadata) Set(fd protoreflect.FieldDescriptor, valu
 		x.Denom = value.Interface().(string)
 	case "side.lending.AssetMetadata.symbol":
 		x.Symbol = value.Interface().(string)
-	case "side.lending.AssetMetadata.price_symbol":
-		x.PriceSymbol = value.Interface().(string)
 	case "side.lending.AssetMetadata.decimals":
 		x.Decimals = int32(value.Int())
+	case "side.lending.AssetMetadata.price_symbol":
+		x.PriceSymbol = value.Interface().(string)
+	case "side.lending.AssetMetadata.is_base_price_asset":
+		x.IsBasePriceAsset = value.Bool()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AssetMetadata"))
@@ -250,10 +267,12 @@ func (x *fastReflection_AssetMetadata) Mutable(fd protoreflect.FieldDescriptor) 
 		panic(fmt.Errorf("field denom of message side.lending.AssetMetadata is not mutable"))
 	case "side.lending.AssetMetadata.symbol":
 		panic(fmt.Errorf("field symbol of message side.lending.AssetMetadata is not mutable"))
-	case "side.lending.AssetMetadata.price_symbol":
-		panic(fmt.Errorf("field price_symbol of message side.lending.AssetMetadata is not mutable"))
 	case "side.lending.AssetMetadata.decimals":
 		panic(fmt.Errorf("field decimals of message side.lending.AssetMetadata is not mutable"))
+	case "side.lending.AssetMetadata.price_symbol":
+		panic(fmt.Errorf("field price_symbol of message side.lending.AssetMetadata is not mutable"))
+	case "side.lending.AssetMetadata.is_base_price_asset":
+		panic(fmt.Errorf("field is_base_price_asset of message side.lending.AssetMetadata is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AssetMetadata"))
@@ -271,10 +290,12 @@ func (x *fastReflection_AssetMetadata) NewField(fd protoreflect.FieldDescriptor)
 		return protoreflect.ValueOfString("")
 	case "side.lending.AssetMetadata.symbol":
 		return protoreflect.ValueOfString("")
-	case "side.lending.AssetMetadata.price_symbol":
-		return protoreflect.ValueOfString("")
 	case "side.lending.AssetMetadata.decimals":
 		return protoreflect.ValueOfInt32(int32(0))
+	case "side.lending.AssetMetadata.price_symbol":
+		return protoreflect.ValueOfString("")
+	case "side.lending.AssetMetadata.is_base_price_asset":
+		return protoreflect.ValueOfBool(false)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.AssetMetadata"))
@@ -352,12 +373,15 @@ func (x *fastReflection_AssetMetadata) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if x.Decimals != 0 {
+			n += 1 + runtime.Sov(uint64(x.Decimals))
+		}
 		l = len(x.PriceSymbol)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Decimals != 0 {
-			n += 1 + runtime.Sov(uint64(x.Decimals))
+		if x.IsBasePriceAsset {
+			n += 2
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -388,17 +412,27 @@ func (x *fastReflection_AssetMetadata) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Decimals != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Decimals))
+		if x.IsBasePriceAsset {
 			i--
-			dAtA[i] = 0x20
+			if x.IsBasePriceAsset {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x28
 		}
 		if len(x.PriceSymbol) > 0 {
 			i -= len(x.PriceSymbol)
 			copy(dAtA[i:], x.PriceSymbol)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PriceSymbol)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
+		}
+		if x.Decimals != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Decimals))
+			i--
+			dAtA[i] = 0x18
 		}
 		if len(x.Symbol) > 0 {
 			i -= len(x.Symbol)
@@ -528,6 +562,25 @@ func (x *fastReflection_AssetMetadata) ProtoMethods() *protoiface.Methods {
 				x.Symbol = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Decimals", wireType)
+				}
+				x.Decimals = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Decimals |= int32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PriceSymbol", wireType)
 				}
@@ -559,11 +612,11 @@ func (x *fastReflection_AssetMetadata) ProtoMethods() *protoiface.Methods {
 				}
 				x.PriceSymbol = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 4:
+			case 5:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Decimals", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IsBasePriceAsset", wireType)
 				}
-				x.Decimals = 0
+				var v int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -573,11 +626,12 @@ func (x *fastReflection_AssetMetadata) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Decimals |= int32(b&0x7F) << shift
+					v |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				x.IsBasePriceAsset = bool(v != 0)
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -12598,15 +12652,17 @@ func (SigningIntent) EnumDescriptor() ([]byte, []int) {
 	return file_side_lending_lending_proto_rawDescGZIP(), []int{5}
 }
 
+// Asset metadata
 type AssetMetadata struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Denom       string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
-	Symbol      string `protobuf:"bytes,2,opt,name=symbol,proto3" json:"symbol,omitempty"`
-	PriceSymbol string `protobuf:"bytes,3,opt,name=price_symbol,json=priceSymbol,proto3" json:"price_symbol,omitempty"`
-	Decimals    int32  `protobuf:"varint,4,opt,name=decimals,proto3" json:"decimals,omitempty"`
+	Denom            string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
+	Symbol           string `protobuf:"bytes,2,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	Decimals         int32  `protobuf:"varint,3,opt,name=decimals,proto3" json:"decimals,omitempty"`
+	PriceSymbol      string `protobuf:"bytes,4,opt,name=price_symbol,json=priceSymbol,proto3" json:"price_symbol,omitempty"`
+	IsBasePriceAsset bool   `protobuf:"varint,5,opt,name=is_base_price_asset,json=isBasePriceAsset,proto3" json:"is_base_price_asset,omitempty"`
 }
 
 func (x *AssetMetadata) Reset() {
@@ -12643,6 +12699,13 @@ func (x *AssetMetadata) GetSymbol() string {
 	return ""
 }
 
+func (x *AssetMetadata) GetDecimals() int32 {
+	if x != nil {
+		return x.Decimals
+	}
+	return 0
+}
+
 func (x *AssetMetadata) GetPriceSymbol() string {
 	if x != nil {
 		return x.PriceSymbol
@@ -12650,11 +12713,11 @@ func (x *AssetMetadata) GetPriceSymbol() string {
 	return ""
 }
 
-func (x *AssetMetadata) GetDecimals() int32 {
+func (x *AssetMetadata) GetIsBasePriceAsset() bool {
 	if x != nil {
-		return x.Decimals
+		return x.IsBasePriceAsset
 	}
-	return 0
+	return false
 }
 
 // Pool tranche config
@@ -13839,15 +13902,18 @@ var file_side_lending_lending_proto_rawDesc = []byte{
 	0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x73, 0x69,
 	0x64, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x62, 0x74, 0x63,
-	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x7c, 0x0a, 0x0d,
-	0x41, 0x73, 0x73, 0x65, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12, 0x14, 0x0a,
-	0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x64, 0x65,
-	0x6e, 0x6f, 0x6d, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x12, 0x21, 0x0a, 0x0c, 0x70,
-	0x72, 0x69, 0x63, 0x65, 0x5f, 0x73, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x0b, 0x70, 0x72, 0x69, 0x63, 0x65, 0x53, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x12, 0x1a,
-	0x0a, 0x08, 0x64, 0x65, 0x63, 0x69, 0x6d, 0x61, 0x6c, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05,
-	0x52, 0x08, 0x64, 0x65, 0x63, 0x69, 0x6d, 0x61, 0x6c, 0x73, 0x22, 0x8d, 0x01, 0x0a, 0x11, 0x50,
+	0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xab, 0x01, 0x0a,
+	0x0d, 0x41, 0x73, 0x73, 0x65, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12, 0x14,
+	0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x64,
+	0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x12, 0x1a, 0x0a, 0x08,
+	0x64, 0x65, 0x63, 0x69, 0x6d, 0x61, 0x6c, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08,
+	0x64, 0x65, 0x63, 0x69, 0x6d, 0x61, 0x6c, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x72, 0x69, 0x63,
+	0x65, 0x5f, 0x73, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b,
+	0x70, 0x72, 0x69, 0x63, 0x65, 0x53, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x12, 0x2d, 0x0a, 0x13, 0x69,
+	0x73, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x5f, 0x61, 0x73, 0x73,
+	0x65, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x10, 0x69, 0x73, 0x42, 0x61, 0x73, 0x65,
+	0x50, 0x72, 0x69, 0x63, 0x65, 0x41, 0x73, 0x73, 0x65, 0x74, 0x22, 0x8d, 0x01, 0x0a, 0x11, 0x50,
 	0x6f, 0x6f, 0x6c, 0x54, 0x72, 0x61, 0x6e, 0x63, 0x68, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
 	0x12, 0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x03, 0x52, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x12, 0x2c, 0x0a, 0x0a,
