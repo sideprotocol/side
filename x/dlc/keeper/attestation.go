@@ -1,17 +1,14 @@
 package keeper
 
 import (
-	"encoding/hex"
-
-	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
 // HandleAttestation performs the attestation handling
+// Assume that the signature has already been verified
 func (k Keeper) HandleAttestation(ctx sdk.Context, sender string, eventId uint64, signature string) error {
 	if !k.HasEvent(ctx, eventId) {
 		return types.ErrEventDoesNotExist
@@ -24,18 +21,6 @@ func (k Keeper) HandleAttestation(ctx sdk.Context, sender string, eventId uint64
 
 	if k.HasAttestationByEvent(ctx, eventId) {
 		return types.ErrAttestationAlreadyExists
-	}
-
-	if signature[0:64] != event.Nonce {
-		return errorsmod.Wrap(types.ErrInvalidSignature, "signature r does not match the event nonce")
-	}
-
-	pubKeyBytes, _ := hex.DecodeString(event.Pubkey)
-	sigBytes, _ := hex.DecodeString(signature)
-	msg := types.GetEventOutcomeHash(event, int(event.OutcomeIndex))
-
-	if !schnorr.Verify(sigBytes, msg, pubKeyBytes) {
-		return errorsmod.Wrap(types.ErrInvalidSignature, "failed to verify the signature")
 	}
 
 	attestation := types.DLCAttestation{

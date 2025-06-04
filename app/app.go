@@ -156,6 +156,8 @@ import (
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	btccodec "github.com/sideprotocol/side/bitcoin/crypto/codec"
+
+	upgradev2 "github.com/sideprotocol/side/app/upgrades/v2"
 )
 
 const (
@@ -322,6 +324,9 @@ type App struct {
 
 	// module configurator
 	configurator module.Configurator
+
+	// vote extension handler
+	voteExtensionHandler oracleabci.PriceOracleVoteExtHandler
 }
 
 // New returns a reference to an initialized blockchain app
@@ -584,7 +589,6 @@ func New(
 		scopedTransferKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	transferModule := transfer.NewAppModule(app.TransferKeeper)
 
 	app.ICAHostKeeper = icahostkeeper.NewKeeper(
 		appCodec, keys[icahosttypes.StoreKey],
@@ -704,6 +708,7 @@ func New(
 		app.BankKeeper,
 		app.OracleKeeper,
 		app.TSSKeeper,
+		app.BtcBridgeKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
@@ -775,6 +780,7 @@ func New(
 	// )
 
 	var transferStack ibcporttypes.IBCModule
+	transferStack = transfer.NewIBCModule(app.TransferKeeper)
 	transferStack = ibcfee.NewIBCMiddleware(transferStack, app.IBCFeeKeeper)
 	transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCFeeKeeper, app.BtcBridgeKeeper, btcbridgetypes.DefaultMaxIBCCallbackGas)
 	// Since the callbacks middleware itself is an ics4wrapper, it needs to be passed to the transfer keeper
@@ -832,7 +838,7 @@ func New(
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
-		transferModule,
+		transfer.NewAppModule(app.TransferKeeper),
 		ibcFeeModule,
 		icaModule,
 		ibctm.AppModule{},
@@ -994,6 +1000,9 @@ func New(
 		panic(err)
 	}
 
+	// set upgrade handlers
+	app.SetUpgradeHandlers()
+
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.ModuleManager.Modules))
 
 	reflectionSvc, err := runtimeservices.NewReflectionService()
@@ -1014,7 +1023,7 @@ func New(
 	app.MountTransientStores(tkeys)
 	app.MountMemoryStores(memKeys)
 
-	// initialize BaseApp
+	// create ante handler
 	anteHandler, err := ante.NewAnteHandler(
 		ante.HandlerOptions{
 			AccountKeeper:   app.AccountKeeper,
@@ -1028,20 +1037,20 @@ func New(
 		panic(fmt.Errorf("failed to create AnteHandler: %w", err))
 	}
 
+	// create vote extension handler
+	app.voteExtensionHandler = oracleabci.NewPriceOracleVoteExtHandler(app.Logger(), app.StakingKeeper, app.OracleKeeper, &oracleConfig)
+
+	// initialize BaseApp
 	app.SetAnteHandler(anteHandler)
 	app.SetInitChainer(app.InitChainer)
 	app.SetPreBlocker(app.PreBlocker)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
 
-	voteExtHander := oracleabci.NewPriceOracleVoteExtHandler(app.Logger(), app.StakingKeeper, app.OracleKeeper, &oracleConfig)
-	// propHandler := oracle.NewProposalHandler(app.Logger(), app.StakingKeeper)
-
-	app.SetExtendVoteHandler(voteExtHander.ExtendVoteHandler())
-	app.SetVerifyVoteExtensionHandler(voteExtHander.VerifyVoteExtensionHandler())
-	app.SetPrepareProposal(voteExtHander.PrepareProposal())
-	app.SetProcessProposal(voteExtHander.ProcessProposal())
-	app.SetPreBlocker(voteExtHander.PreBlocker)
+	app.SetExtendVoteHandler(app.voteExtensionHandler.ExtendVoteHandler())
+	app.SetVerifyVoteExtensionHandler(app.voteExtensionHandler.VerifyVoteExtensionHandler())
+	app.SetPrepareProposal(app.voteExtensionHandler.PrepareProposal())
+	app.SetProcessProposal(app.voteExtensionHandler.ProcessProposal())
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
@@ -1060,8 +1069,18 @@ func New(
 func (app *App) Name() string { return app.BaseApp.Name() }
 
 // PreBlocker application updates every pre block
-func (app *App) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
-	return app.ModuleManager.PreBlock(ctx)
+func (app *App) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+	res, err := app.ModuleManager.PreBlock(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = app.voteExtensionHandler.PreBlocker(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // BeginBlocker application updates every begin block
@@ -1285,6 +1304,25 @@ func BlockedAddresses() map[string]bool {
 	delete(modAccAddrs, authtypes.NewModuleAddress(incentivetypes.ModuleName).String())
 
 	return modAccAddrs
+}
+
+// SetUpgradeHandlers sets the upgrade handlers
+func (app *App) SetUpgradeHandlers() {
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev2.UpgradeName, upgradev2.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk: %v", err))
+	}
+
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	// register store loader for current upgrade
+	if upgradeInfo.Name == upgradev2.UpgradeName {
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgradev2.StoreUpgrades))
+	}
 }
 
 func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {

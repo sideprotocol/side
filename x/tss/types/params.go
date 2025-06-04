@@ -6,9 +6,13 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 var (
+	// maximum moniker size
+	MaxMonikerLength = stakingtypes.MaxMonikerLength
+
 	// minimum DKG participant number
 	MinDKGParticipantNum = 3
 
@@ -19,7 +23,7 @@ var (
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		AllowedDkgParticipants: []string{},
+		AllowedDkgParticipants: []DKGParticipant{},
 		DkgTimeoutDuration:     DefaultDKGTimeoutDuration,
 	}
 }
@@ -44,17 +48,23 @@ func (p Params) Validate() error {
 
 // validateDKGParticipants validates the given DKG participants
 // Note: the participant is the ed25519 consensus pub key
-func validateDKGParticipants(participants []string) error {
+func validateDKGParticipants(participants []DKGParticipant) error {
 	if len(participants) == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "participants can not be empty")
+		return nil
 	}
 
 	if len(participants) < MinDKGParticipantNum {
-		return errorsmod.Wrapf(ErrInvalidParams, "participant number can not be less than min participant number %d", MinDKGParticipantNum)
+		return errorsmod.Wrapf(ErrInvalidParams, "number of participants cannot be less than min participant number %d", MinDKGParticipantNum)
 	}
 
+	participantMap := make(map[string]bool)
+
 	for _, p := range participants {
-		consensusPubKey, err := base64.StdEncoding.DecodeString(p)
+		if len(p.Moniker) > MaxMonikerLength {
+			return errorsmod.Wrapf(ErrInvalidParams, "moniker size cannot be greater than %d", MaxMonikerLength)
+		}
+
+		consensusPubKey, err := base64.StdEncoding.DecodeString(p.ConsensusPubkey)
 		if err != nil {
 			return errorsmod.Wrap(ErrInvalidParams, "failed to decode the participant consensus pub key")
 		}
@@ -62,6 +72,12 @@ func validateDKGParticipants(participants []string) error {
 		if len(consensusPubKey) != ed25519.PubKeySize {
 			return errorsmod.Wrap(ErrInvalidParams, "incorrect participant consensus pub key size")
 		}
+
+		if participantMap[p.ConsensusPubkey] {
+			return errorsmod.Wrap(ErrInvalidParams, "duplicate participant")
+		}
+
+		participantMap[p.ConsensusPubkey] = true
 	}
 
 	return nil

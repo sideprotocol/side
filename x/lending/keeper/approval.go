@@ -7,7 +7,7 @@ import (
 )
 
 // HandleApproval performs the loan approval
-func (k Keeper) HandleApproval(ctx sdk.Context, sender string, loan *types.Loan) error {
+func (k Keeper) HandleApproval(ctx sdk.Context, loan *types.Loan) error {
 	pool := k.GetPool(ctx, loan.PoolId)
 	if pool.AvailableAmount.LT(loan.BorrowAmount.Amount) {
 		return types.ErrInsufficientLiquidity
@@ -33,6 +33,10 @@ func (k Keeper) HandleApproval(ctx sdk.Context, sender string, loan *types.Loan)
 	// update pool
 	k.AfterPoolBorrowed(ctx, loan.PoolId, loan.Maturity, loan.BorrowAmount)
 
+	// update the starting borrow index
+	tranche, _ := types.GetTranche(pool.Tranches, loan.Maturity)
+	loan.StartBorrowIndex = tranche.BorrowIndex
+
 	loan.DisburseAt = ctx.BlockTime()
 	loan.Status = types.LoanStatus_Open
 	k.SetLoan(ctx, loan)
@@ -40,7 +44,6 @@ func (k Keeper) HandleApproval(ctx sdk.Context, sender string, loan *types.Loan)
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeApprove,
-			sdk.NewAttribute(types.AttributeKeySender, sender),
 			sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
 			sdk.NewAttribute(types.AttributeKeyAmount, amount.String()),
 		),

@@ -4,6 +4,7 @@ package side.btcbridge;
 
 import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
 import "side/btcbridge/params.proto";
 import "side/btcbridge/btcbridge.proto";
 
@@ -32,6 +33,10 @@ service Msg {
   rpc InitiateDKG (MsgInitiateDKG) returns (MsgInitiateDKGResponse);
   // CompleteDKG completes the given DKG request.
   rpc CompleteDKG (MsgCompleteDKG) returns (MsgCompleteDKGResponse);
+  // Refresh refreshes key shares.
+  rpc Refresh(MsgRefresh) returns (MsgRefreshResponse);
+  // CompleteRefreshing completes the given refreshing request by the participant.
+  rpc CompleteRefreshing(MsgCompleteRefreshing) returns (MsgCompleteRefreshingResponse);
   // TransferVault transfers the vault asset from the source version to the destination version.
   rpc TransferVault (MsgTransferVault) returns (MsgTransferVaultResponse);
   // UpdateParams defines a governance operation for updating the x/btcbridge module
@@ -194,6 +199,42 @@ message MsgCompleteDKG {
 
 // MsgCompleteDKGResponse defines the Msg/CompleteDKG response type.
 message MsgCompleteDKGResponse {}
+
+// MsgRefresh defines the Msg/Refresh request type.
+message MsgRefresh {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // list of DKGs corresponding to key shares to be refreshed
+  repeated uint64 dkg_ids = 2;
+  // removed participant set
+  repeated string removed_participants = 3;
+  // new threshold set corresponding to the DKGs
+  repeated uint32 thresholds = 4;
+  // timeout duration per DKG refreshing
+  google.protobuf.Duration timeout_duration = 5 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// MsgRefreshResponse defines the Msg/Refresh response type.
+message MsgRefreshResponse {}
+
+// MsgCompleteRefreshing defines the Msg/CompleteRefreshing request type.
+message MsgCompleteRefreshing {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  // sender
+  string sender = 1;
+  // request id
+  uint64 id = 2;
+  // participant consensus pub key
+  string consensus_pubkey = 3;
+  // hex encoded participant signature
+  string signature = 4;
+}
+
+// MsgCompleteRefreshingResponse defines the Msg/CompleteRefreshing response type.
+message MsgCompleteRefreshingResponse {}
 
 // MsgTransferVault is the Msg/TransferVault request type.
 message MsgTransferVault {

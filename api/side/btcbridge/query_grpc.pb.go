@@ -37,6 +37,10 @@ const (
 	Query_QueryDKGRequests_FullMethodName                   = "/side.btcbridge.Query/QueryDKGRequests"
 	Query_QueryAllDKGRequests_FullMethodName                = "/side.btcbridge.Query/QueryAllDKGRequests"
 	Query_QueryDKGCompletionRequests_FullMethodName         = "/side.btcbridge.Query/QueryDKGCompletionRequests"
+	Query_QueryRefreshingRequest_FullMethodName             = "/side.btcbridge.Query/QueryRefreshingRequest"
+	Query_QueryRefreshingRequests_FullMethodName            = "/side.btcbridge.Query/QueryRefreshingRequests"
+	Query_QueryRefreshingCompletions_FullMethodName         = "/side.btcbridge.Query/QueryRefreshingCompletions"
+	Query_QueryIBCDepositScript_FullMethodName              = "/side.btcbridge.Query/QueryIBCDepositScript"
 )
 
 // QueryClient is the client API for Query service.
@@ -79,6 +83,14 @@ type QueryClient interface {
 	QueryAllDKGRequests(ctx context.Context, in *QueryAllDKGRequestsRequest, opts ...grpc.CallOption) (*QueryAllDKGRequestsResponse, error)
 	// QueryDKGCompletionRequests queries DKG completion requests by the given id.
 	QueryDKGCompletionRequests(ctx context.Context, in *QueryDKGCompletionRequestsRequest, opts ...grpc.CallOption) (*QueryDKGCompletionRequestsResponse, error)
+	// QueryRefreshingRequest queries the refreshing request by the given id.
+	QueryRefreshingRequest(ctx context.Context, in *QueryRefreshingRequestRequest, opts ...grpc.CallOption) (*QueryRefreshingRequestResponse, error)
+	// QueryRefreshingRequests queries the refreshing requests by the given status.
+	QueryRefreshingRequests(ctx context.Context, in *QueryRefreshingRequestsRequest, opts ...grpc.CallOption) (*QueryRefreshingRequestsResponse, error)
+	// QueryRefreshingCompletions queries refreshing completions by the given request id.
+	QueryRefreshingCompletions(ctx context.Context, in *QueryRefreshingCompletionsRequest, opts ...grpc.CallOption) (*QueryRefreshingCompletionsResponse, error)
+	// QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
+	QueryIBCDepositScript(ctx context.Context, in *QueryIBCDepositScriptRequest, opts ...grpc.CallOption) (*QueryIBCDepositScriptResponse, error)
 }
 
 type queryClient struct {
@@ -251,6 +263,42 @@ func (c *queryClient) QueryDKGCompletionRequests(ctx context.Context, in *QueryD
 	return out, nil
 }
 
+func (c *queryClient) QueryRefreshingRequest(ctx context.Context, in *QueryRefreshingRequestRequest, opts ...grpc.CallOption) (*QueryRefreshingRequestResponse, error) {
+	out := new(QueryRefreshingRequestResponse)
+	err := c.cc.Invoke(ctx, Query_QueryRefreshingRequest_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) QueryRefreshingRequests(ctx context.Context, in *QueryRefreshingRequestsRequest, opts ...grpc.CallOption) (*QueryRefreshingRequestsResponse, error) {
+	out := new(QueryRefreshingRequestsResponse)
+	err := c.cc.Invoke(ctx, Query_QueryRefreshingRequests_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) QueryRefreshingCompletions(ctx context.Context, in *QueryRefreshingCompletionsRequest, opts ...grpc.CallOption) (*QueryRefreshingCompletionsResponse, error) {
+	out := new(QueryRefreshingCompletionsResponse)
+	err := c.cc.Invoke(ctx, Query_QueryRefreshingCompletions_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) QueryIBCDepositScript(ctx context.Context, in *QueryIBCDepositScriptRequest, opts ...grpc.CallOption) (*QueryIBCDepositScriptResponse, error) {
+	out := new(QueryIBCDepositScriptResponse)
+	err := c.cc.Invoke(ctx, Query_QueryIBCDepositScript_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -291,6 +339,14 @@ type QueryServer interface {
 	QueryAllDKGRequests(context.Context, *QueryAllDKGRequestsRequest) (*QueryAllDKGRequestsResponse, error)
 	// QueryDKGCompletionRequests queries DKG completion requests by the given id.
 	QueryDKGCompletionRequests(context.Context, *QueryDKGCompletionRequestsRequest) (*QueryDKGCompletionRequestsResponse, error)
+	// QueryRefreshingRequest queries the refreshing request by the given id.
+	QueryRefreshingRequest(context.Context, *QueryRefreshingRequestRequest) (*QueryRefreshingRequestResponse, error)
+	// QueryRefreshingRequests queries the refreshing requests by the given status.
+	QueryRefreshingRequests(context.Context, *QueryRefreshingRequestsRequest) (*QueryRefreshingRequestsResponse, error)
+	// QueryRefreshingCompletions queries refreshing completions by the given request id.
+	QueryRefreshingCompletions(context.Context, *QueryRefreshingCompletionsRequest) (*QueryRefreshingCompletionsResponse, error)
+	// QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
+	QueryIBCDepositScript(context.Context, *QueryIBCDepositScriptRequest) (*QueryIBCDepositScriptResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -351,6 +407,18 @@ func (UnimplementedQueryServer) QueryAllDKGRequests(context.Context, *QueryAllDK
 }
 func (UnimplementedQueryServer) QueryDKGCompletionRequests(context.Context, *QueryDKGCompletionRequestsRequest) (*QueryDKGCompletionRequestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryDKGCompletionRequests not implemented")
+}
+func (UnimplementedQueryServer) QueryRefreshingRequest(context.Context, *QueryRefreshingRequestRequest) (*QueryRefreshingRequestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryRefreshingRequest not implemented")
+}
+func (UnimplementedQueryServer) QueryRefreshingRequests(context.Context, *QueryRefreshingRequestsRequest) (*QueryRefreshingRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryRefreshingRequests not implemented")
+}
+func (UnimplementedQueryServer) QueryRefreshingCompletions(context.Context, *QueryRefreshingCompletionsRequest) (*QueryRefreshingCompletionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryRefreshingCompletions not implemented")
+}
+func (UnimplementedQueryServer) QueryIBCDepositScript(context.Context, *QueryIBCDepositScriptRequest) (*QueryIBCDepositScriptResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryIBCDepositScript not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -689,6 +757,78 @@ func _Query_QueryDKGCompletionRequests_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_QueryRefreshingRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRefreshingRequestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryRefreshingRequest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryRefreshingRequest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryRefreshingRequest(ctx, req.(*QueryRefreshingRequestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_QueryRefreshingRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRefreshingRequestsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryRefreshingRequests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryRefreshingRequests_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryRefreshingRequests(ctx, req.(*QueryRefreshingRequestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_QueryRefreshingCompletions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRefreshingCompletionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryRefreshingCompletions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryRefreshingCompletions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryRefreshingCompletions(ctx, req.(*QueryRefreshingCompletionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_QueryIBCDepositScript_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryIBCDepositScriptRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryIBCDepositScript(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryIBCDepositScript_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryIBCDepositScript(ctx, req.(*QueryIBCDepositScriptRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -767,6 +907,22 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryDKGCompletionRequests",
 			Handler:    _Query_QueryDKGCompletionRequests_Handler,
+		},
+		{
+			MethodName: "QueryRefreshingRequest",
+			Handler:    _Query_QueryRefreshingRequest_Handler,
+		},
+		{
+			MethodName: "QueryRefreshingRequests",
+			Handler:    _Query_QueryRefreshingRequests_Handler,
+		},
+		{
+			MethodName: "QueryRefreshingCompletions",
+			Handler:    _Query_QueryRefreshingCompletions_Handler,
+		},
+		{
+			MethodName: "QueryIBCDepositScript",
+			Handler:    _Query_QueryIBCDepositScript_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

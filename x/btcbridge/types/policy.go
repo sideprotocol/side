@@ -9,7 +9,7 @@ import (
 
 const (
 	// maximum allowed number of the non-vault outputs for the btc deposit transaction
-	MaxNonVaultOutNum = 1
+	MaxNonVaultOutNum = 2
 
 	// maximum allowed number of the non-vault outputs for the runes deposit transaction
 	RunesMaxNonVaultOutNum = 3
@@ -40,6 +40,11 @@ func ExtractCommonRecipientAddr(tx *wire.MsgTx, prevTx *wire.MsgTx, vaults []*Va
 
 	// extract from the tx out which is a non-vault address
 	for _, out := range tx.TxOut {
+		if IsOpReturnOutput(out) {
+			nonVaultOutCount++
+			continue
+		}
+
 		pkScript, err := txscript.ParsePkScript(out.PkScript)
 		if err != nil {
 			return nil, err

@@ -317,6 +317,74 @@ func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG)
 	return &types.MsgCompleteDKGResponse{}, nil
 }
 
+// Refresh refreshes the key shares
+func (m msgServer) Refresh(goCtx context.Context, msg *types.MsgRefresh) (*types.MsgRefreshResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	for i, dkgId := range msg.DkgIds {
+		if !m.HasDKGRequest(ctx, dkgId) {
+			return nil, errorsmod.Wrapf(types.ErrDKGRequestDoesNotExist, "dkg %d", dkgId)
+		}
+
+		dkgRequest := m.GetDKGRequest(ctx, dkgId)
+		if dkgRequest.Status != types.DKGRequestStatus_DKG_REQUEST_STATUS_COMPLETED {
+			return nil, errorsmod.Wrapf(types.ErrInvalidDKGStatus, "dkg %d not completed", dkgId)
+		}
+
+		remainingParticipantNum := len(dkgRequest.Participants) - len(msg.RemovedParticipants)
+		if remainingParticipantNum < types.MinDKGParticipantNum {
+			return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "remaining participants %d cannot be less than min participants %d", remainingParticipantNum, types.MinDKGParticipantNum)
+		}
+
+		for _, p := range msg.RemovedParticipants {
+			if !types.ParticipantExists(dkgRequest.Participants, p) {
+				return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "participant %s does not exist for dkg %d", p, dkgId)
+			}
+		}
+
+		if msg.Thresholds[i] > uint32(remainingParticipantNum) {
+			return nil, errorsmod.Wrapf(types.ErrInvalidThresholds, "threshold %d cannot be greater than participants %d for dkg %d", msg.Thresholds[i], remainingParticipantNum, dkgId)
+		}
+
+		m.InitiateRefreshingRequest(ctx, dkgId, msg.RemovedParticipants, msg.Thresholds[i], msg.TimeoutDuration)
+	}
+
+	return &types.MsgRefreshResponse{}, nil
+}
+
+// CompleteRefreshing completes the refreshing request by the participant
+func (m msgServer) CompleteRefreshing(goCtx context.Context, msg *types.MsgCompleteRefreshing) (*types.MsgCompleteRefreshingResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := m.Keeper.CompleteRefreshing(ctx, msg.Sender, msg.Id, msg.ConsensusPubkey, msg.Signature); err != nil {
+		return nil, err
+	}
+
+	// Emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeCompleteRefreshing,
+			sdk.NewAttribute(types.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", msg.Id)),
+			sdk.NewAttribute(types.AttributeKeyParticipant, msg.ConsensusPubkey),
+		),
+	)
+
+	return &types.MsgCompleteRefreshingResponse{}, nil
+}
+
 // TransferVault performs the vault asset transfer from the source version to the destination version
 func (m msgServer) TransferVault(goCtx context.Context, msg *types.MsgTransferVault) (*types.MsgTransferVaultResponse, error) {
 	if m.authority != msg.Authority {

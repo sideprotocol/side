@@ -2,11 +2,13 @@ package types
 
 import (
 	"crypto/ed25519"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
 	"reflect"
+	time "time"
 
-	"github.com/cometbft/cometbft/crypto"
+	"github.com/sideprotocol/side/bitcoin/crypto/hash"
 )
 
 // ParticipantExists returns true if the given participant is included in the authorized participants, false otherwise
@@ -48,26 +50,40 @@ func CheckDKGCompletionRequests(requests []*DKGCompletionRequest) bool {
 	return true
 }
 
-// VerifySignature verifies the given signature against the given DKG completion request
-func VerifySignature(signature string, pubKey []byte, req *DKGCompletionRequest) bool {
-	sig, err := hex.DecodeString(signature)
-	if err != nil {
-		return false
-	}
+// VerifySignature verifies the ed25519 signature against the given pub key and msg
+// Assume that the signature is hex encoded and the pub key is base64 encoded
+func VerifySignature(signature string, pubKey string, msg []byte) bool {
+	sigBytes, _ := hex.DecodeString(signature)
+	pubKeyBytes, _ := base64.StdEncoding.DecodeString(pubKey)
 
-	sigMsg := GetSigMsgFromDKGCompletionReq(req)
-
-	return ed25519.Verify(pubKey, sigMsg, sig)
+	return ed25519.Verify(pubKeyBytes, msg, sigBytes)
 }
 
-// GetSigMsgFromDKGCompletionReq gets the msg to be signed from the given DKG completion request
-func GetSigMsgFromDKGCompletionReq(req *DKGCompletionRequest) []byte {
-	rawMsg := make([]byte, 8)
-	binary.BigEndian.PutUint64(rawMsg, req.Id)
+// GetDKGCompletionSigMsg gets the msg to be signed from the given DKG completion request
+func GetDKGCompletionSigMsg(req *DKGCompletionRequest) []byte {
+	msg := make([]byte, 8)
+	binary.BigEndian.PutUint64(msg, req.Id)
 
 	for _, v := range req.Vaults {
-		rawMsg = append(rawMsg, []byte(v)...)
+		msg = append(msg, []byte(v)...)
 	}
 
-	return crypto.Sha256(rawMsg)
+	return hash.Sha256(msg)
+}
+
+// GetRefreshingCompletionSigMsg gets the msg to be signed from the given data for the refreshing completion
+func GetRefreshingCompletionSigMsg(id uint64) []byte {
+	msg := make([]byte, 8)
+	binary.BigEndian.PutUint64(msg, id)
+
+	return hash.Sha256(msg)
+}
+
+// GetExpirationTime gets the expiration time according to the given timeout duration
+func GetExpirationTime(currentTime time.Time, timeoutDuration time.Duration) time.Time {
+	if timeoutDuration == 0 {
+		return time.Time{}
+	}
+
+	return currentTime.Add(timeoutDuration)
 }

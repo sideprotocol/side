@@ -37,10 +37,9 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdRemoveLiquidity())
 	cmd.AddCommand(CmdApply())
 	cmd.AddCommand(CmdSubmitCets())
-	cmd.AddCommand(CmdApprove())
+	cmd.AddCommand(CmdSubmitDepositTransaction())
 	cmd.AddCommand(CmdRedeem())
 	cmd.AddCommand(CmdRepay())
-	cmd.AddCommand(CmdSubmitPrice())
 
 	return cmd
 }
@@ -204,10 +203,10 @@ func CmdSubmitCets() *cobra.Command {
 	return cmd
 }
 
-func CmdApprove() *cobra.Command {
+func CmdSubmitDepositTransaction() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "approve [vault] [deposit tx] [block hash] [proof]",
-		Short: "Approve loan with the deposit tx",
+		Use:   "submit-deposit-tx [vault] [deposit tx] [block hash] [proof]",
+		Short: "Submit the deposit tx along with the corresponding vault and proof",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -215,7 +214,7 @@ func CmdApprove() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgApprove(
+			msg := types.NewMsgSubmitDepositTransaction(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				args[1],
@@ -279,35 +278,6 @@ func CmdRepay() *cobra.Command {
 			}
 
 			msg := types.NewMsgRepay(
-				clientCtx.GetFromAddress().String(),
-				args[0],
-			)
-
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdSubmitPrice() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "submit-price [price]",
-		Short: "Submit BTCUSD price for testing",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgSubmitPrice(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 			)
