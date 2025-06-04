@@ -103,10 +103,10 @@ func CheckLTV(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowA
 // GetPricePair gets the price pair from the given pool config
 func GetPricePair(poolConfig PoolConfig) string {
 	if poolConfig.CollateralAsset.IsBasePriceAsset {
-		return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol), strings.ToUpper(poolConfig.LendingAsset.PriceSymbol))
+		return fmt.Sprintf("%s%s", poolConfig.CollateralAsset.PriceSymbol, poolConfig.LendingAsset.PriceSymbol)
 	}
 
-	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.LendingAsset.PriceSymbol), strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol))
+	return fmt.Sprintf("%s%s", poolConfig.LendingAsset.PriceSymbol, poolConfig.CollateralAsset.PriceSymbol)
 }
 
 // FormatPrice formats the given price

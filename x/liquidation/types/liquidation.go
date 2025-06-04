@@ -3,7 +3,6 @@ package types
 import (
 	"fmt"
 	"strconv"
-	"strings"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -23,10 +22,10 @@ type LiquidatedDebtHandler func(ctx sdk.Context, liquidationId uint64, loanId st
 // GetPricePair gets the price pair of the given liquidation
 func GetPricePair(liquidation *Liquidation) string {
 	if liquidation.CollateralAsset.IsBasePriceAsset {
-		return fmt.Sprintf("%s%s", strings.ToUpper(liquidation.CollateralAsset.PriceSymbol), strings.ToUpper(liquidation.DebtAsset.PriceSymbol))
+		return fmt.Sprintf("%s%s", liquidation.CollateralAsset.PriceSymbol, liquidation.DebtAsset.PriceSymbol)
 	}
 
-	return fmt.Sprintf("%s%s", strings.ToUpper(liquidation.DebtAsset.PriceSymbol), strings.ToUpper(liquidation.CollateralAsset.PriceSymbol))
+	return fmt.Sprintf("%s%s", liquidation.DebtAsset.PriceSymbol, liquidation.CollateralAsset.PriceSymbol)
 }
 
 // GetCollateralAmount calculates the corresponding collateral amount according to the given debt amount and price
