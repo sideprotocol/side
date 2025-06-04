@@ -30,7 +30,7 @@ var (
 	SymbolMap    = map[string]string{
 		"BTCUSDT": types.BTCUSD,
 	}
-	URL          = "wss://stream.binance.com:443/stream?streams=btcusdt@miniTicker/atomusdt@miniTicker"
+	URL          = "wss://stream.binance.com:443/stream?streams=btcusdt@miniTicker/ethbtc@miniTicker"
 	SubscribeMsg = ""
 )
 
