@@ -351,7 +351,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 	var totalStake int64
 
 	stakeWeightedPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE)) // base -> average stake-weighted price
-	stakeWeightedVotingPower := make(map[string]int64, len(types.PRICE_CACHE))
+	stakeWeightedVotingPower := make(map[string]math.LegacyDec, len(types.PRICE_CACHE))
 	blockHeaders := make(map[string][]*types.BlockHeader)
 	headerStakes := make(map[string]int64)
 
@@ -389,10 +389,10 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 			}
 			if _, ok := stakeWeightedPrices[base]; ok {
 				stakeWeightedPrices[base] = stakeWeightedPrices[base].Add(stakePrice.MulInt64(v.Validator.Power))
-				stakeWeightedVotingPower[base] += v.Validator.Power
+				stakeWeightedVotingPower[base] = stakeWeightedVotingPower[base].Add(math.LegacyNewDec(v.Validator.Power))
 			} else {
 				stakeWeightedPrices[base] = stakePrice.MulInt64(v.Validator.Power)
-				stakeWeightedVotingPower[base] += v.Validator.Power
+				stakeWeightedVotingPower[base] = math.LegacyNewDec(v.Validator.Power)
 			}
 		}
 
@@ -418,7 +418,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 	for base, price := range stakeWeightedPrices {
 		if price.GT(math.LegacyZeroDec()) {
 			if vp, ok := stakeWeightedVotingPower[base]; ok {
-				stakeWeightedPrices[base] = price.QuoInt64(vp)
+				stakeWeightedPrices[base] = price.Quo(vp)
 			}
 		} else {
 			h.logger.Error("Got invalid price.", "symbal", base, "price", price)
