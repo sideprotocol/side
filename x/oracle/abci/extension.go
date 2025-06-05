@@ -71,9 +71,10 @@ func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 			h.logger.Error("failed to fetch bitcoin headers", "error", err)
 		}
 		voteExt := types.OracleVoteExtension{
-			Height: req.Height,
-			Prices: prices,
-			Blocks: headers,
+			Height:   req.Height,
+			Prices:   prices,
+			Blocks:   headers,
+			HasError: err != nil,
 		}
 
 		bz, err := voteExt.Marshal()
@@ -101,6 +102,16 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 
 		if voteExt.Height != req.Height {
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
+		}
+
+		for _, symbol := range types.SupportedPairs {
+			if _, ok := voteExt.Prices[symbol]; !ok {
+				return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+			}
+		}
+
+		if voteExt.HasError {
+			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
 		}
 
 		for _, blk := range voteExt.Blocks {

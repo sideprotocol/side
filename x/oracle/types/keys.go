@@ -29,9 +29,10 @@ const (
 )
 
 var (
-	Percent        = math.NewInt(100)
-	Permille       = math.NewInt(1000)
-	ParamsStoreKey = []byte{0x1}
+	SupportedPairs = []string{BTCUSD}
+
+	Percent  = math.NewInt(100)
+	Permille = math.NewInt(1000)
 
 	PriceKeyPrefix            = []byte{0x07}
 	BitcoinHeaderPrefix       = []byte{0x10}
