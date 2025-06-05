@@ -387,7 +387,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 	// finalize average by dividing by total stake, i.e. total weights
 	for base, price := range stakeWeightedPrices {
 		if price.GT(math.LegacyZeroDec()) {
-			if vp, ok := stakeWeightedVotingPower[base]; ok {
+			if vp, ok := stakeWeightedVotingPower[base]; ok && vp.RoundInt64()*3 > totalStake*2 {
 				stakeWeightedPrices[base] = price.Quo(vp)
 			}
 		} else {
