@@ -104,9 +104,11 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
 		}
 
-		for _, symbol := range types.SupportedPairs {
-			if _, ok := voteExt.Prices[symbol]; !ok {
-				return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+		if len(voteExt.Prices) > 0 {
+			for _, symbol := range types.SupportedPairs {
+				if _, ok := voteExt.Prices[symbol]; !ok {
+					return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+				}
 			}
 		}
 
