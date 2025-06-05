@@ -18,7 +18,8 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_" + ModuleName
 
-	BTCUSD = "BTCUSD"
+	BTCUSD      = "BTCUSD"
+	NULL_SYMBOL = "_"
 
 	flagOracleEnable         = "oracle.enable"
 	flagOracleBitcoinRpc     = "oracle.bitcoin_rpc"
