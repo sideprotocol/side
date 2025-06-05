@@ -22,11 +22,12 @@ import (
 )
 
 type PriceOracleVoteExtHandler struct {
-	valStore        baseapp.ValidatorStore // to get the current validators' pubkeys
-	logger          log.Logger
-	currentBlock    int64 // current block height
-	lastPriceSyncTS int64 // last time we synced prices
-	bitcoinClient   *rpcclient.Client
+	valStore          baseapp.ValidatorStore // to get the current validators' pubkeys
+	logger            log.Logger
+	currentBlock      int64 // current block height
+	lastPriceSyncTS   int64 // last time we synced prices
+	bitcoinClient     *rpcclient.Client
+	emptyPriceCounter map[string]int64
 
 	Keeper keeper.Keeper // keeper of our oracle module
 	config *types.OracleConfig
@@ -45,12 +46,13 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 	}
 
 	return PriceOracleVoteExtHandler{
-		logger:        logger,
-		currentBlock:  0,
-		valStore:      valStore,
-		Keeper:        oracleKeeper,
-		bitcoinClient: client,
-		config:        config,
+		logger:            logger,
+		currentBlock:      0,
+		valStore:          valStore,
+		Keeper:            oracleKeeper,
+		bitcoinClient:     client,
+		config:            config,
+		emptyPriceCounter: make(map[string]int64, 100),
 	}
 }
 
@@ -93,7 +95,8 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 		}
 
-		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", hex.EncodeToString(req.ValidatorAddress))
+		validator := hex.EncodeToString(req.ValidatorAddress)
+		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", validator)
 		var voteExt types.OracleVoteExtension
 		err := voteExt.Unmarshal(req.VoteExtension)
 		if err != nil {
@@ -109,6 +112,16 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 				if _, ok := voteExt.Prices[symbol]; !ok {
 					return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
 				}
+			}
+			h.emptyPriceCounter[validator] = 0
+		} else {
+			if count, ok := h.emptyPriceCounter[validator]; ok {
+				h.emptyPriceCounter[validator] = count + 1
+				if count+1 >= 5 {
+					return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+				}
+			} else {
+				h.emptyPriceCounter[validator] = 1
 			}
 		}
 
