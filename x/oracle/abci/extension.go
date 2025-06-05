@@ -105,16 +105,16 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
 		}
 
-		if len(voteExt.Prices) > 0 {
-			// check if a fack price is existing.
-			if _, ok := voteExt.Prices[types.NULL_SYMBOL]; !ok {
-				return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-			}
-		}
+		// if len(voteExt.Prices) > 0 {
+		// 	// check if a fack price is existing.
+		// 	if _, ok := voteExt.Prices[types.NULL_SYMBOL]; !ok {
+		// 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+		// 	}
+		// }
 
-		if voteExt.HasError {
-			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-		}
+		// if voteExt.HasError {
+		// 	return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+		// }
 
 		for _, blk := range voteExt.Blocks {
 			if err = blk.Validate(); err != nil {
