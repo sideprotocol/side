@@ -32,6 +32,8 @@ const (
 )
 
 var (
+	SupportedPairs = []string{BTCUSD}
+
 	Percent  = math.NewInt(100)
 	Permille = math.NewInt(1000)
 
