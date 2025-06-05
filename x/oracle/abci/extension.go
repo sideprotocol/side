@@ -22,12 +22,11 @@ import (
 )
 
 type PriceOracleVoteExtHandler struct {
-	valStore          baseapp.ValidatorStore // to get the current validators' pubkeys
-	logger            log.Logger
-	currentBlock      int64 // current block height
-	lastPriceSyncTS   int64 // last time we synced prices
-	bitcoinClient     *rpcclient.Client
-	emptyPriceCounter map[string]int64
+	valStore        baseapp.ValidatorStore // to get the current validators' pubkeys
+	logger          log.Logger
+	currentBlock    int64 // current block height
+	lastPriceSyncTS int64 // last time we synced prices
+	bitcoinClient   *rpcclient.Client
 
 	Keeper keeper.Keeper // keeper of our oracle module
 	config *types.OracleConfig
@@ -46,13 +45,12 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 	}
 
 	return PriceOracleVoteExtHandler{
-		logger:            logger,
-		currentBlock:      0,
-		valStore:          valStore,
-		Keeper:            oracleKeeper,
-		bitcoinClient:     client,
-		config:            config,
-		emptyPriceCounter: make(map[string]int64, 100),
+		logger:        logger,
+		currentBlock:  0,
+		valStore:      valStore,
+		Keeper:        oracleKeeper,
+		bitcoinClient: client,
+		config:        config,
 	}
 }
 
@@ -103,36 +101,8 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 			return nil, fmt.Errorf("failed to unmarshal vote extension: %w", err)
 		}
 
-		if validator == "124d60f38832a9a99971b514bef88fdd3fb68863" {
-			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-		}
-
 		if voteExt.Height != req.Height {
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
-		}
-
-		// if len(voteExt.Prices) > 0 {
-		// 	for _, symbol := range types.SupportedPairs {
-		// 		if _, ok := voteExt.Prices[symbol]; !ok {
-		// 			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-		// 		}
-		// 	}
-		// 	h.emptyPriceCounter[validator] = 0
-		// } else {
-		// 	if count, ok := h.emptyPriceCounter[validator]; ok {
-		// 		h.emptyPriceCounter[validator] = count + 1
-		// 		h.logger.Error("VerifyVoteExtensionHandler Price Error", "validator", validator, "count", count)
-		// 		if count+1 >= 5 {
-		// 			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-		// 		}
-		// 	} else {
-		// 		h.logger.Error("VerifyVoteExtensionHandler Price Error", "validator", validator)
-		// 		h.emptyPriceCounter[validator] = 1
-		// 	}
-		// }
-
-		if voteExt.HasError {
-			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
 		}
 
 		for _, blk := range voteExt.Blocks {
