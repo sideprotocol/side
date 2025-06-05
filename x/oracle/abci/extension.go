@@ -117,10 +117,12 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 		} else {
 			if count, ok := h.emptyPriceCounter[validator]; ok {
 				h.emptyPriceCounter[validator] = count + 1
+				h.logger.Error("VerifyVoteExtensionHandler Price Error", "validator", validator, "count", count)
 				if count+1 >= 5 {
 					return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
 				}
 			} else {
+				h.logger.Error("VerifyVoteExtensionHandler Price Error", "validator", validator)
 				h.emptyPriceCounter[validator] = 1
 			}
 		}
