@@ -32,4 +32,5 @@ message OracleVoteExtension {
   int64 height = 1;
   map<string, string> prices = 2 [(gogoproto.nullable) = false];
   repeated BlockHeader blocks = 3;
+  bool has_error = 4;
 }
