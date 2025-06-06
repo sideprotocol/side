@@ -99,7 +99,7 @@ func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) {
 
 				// set the authorization status
 				loan := k.GetLoan(ctx, loan.VaultAddress)
-				loan.Authorizations[authorizationId].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_AUTHORIZED
+				loan.Authorizations[authorizationId-1].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_AUTHORIZED
 				k.SetLoan(ctx, loan)
 			}
 		}
