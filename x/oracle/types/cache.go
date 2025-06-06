@@ -1,6 +1,8 @@
 package types
 
-import "cosmossdk.io/math"
+import (
+	"cosmossdk.io/math"
+)
 
 type Price struct {
 	Symbol string `json:"symbol"`
@@ -24,6 +26,25 @@ func CachePrice(exchange string, price Price) {
 		v[exchange] = price
 		PRICE_CACHE[price.Symbol] = v
 	}
+
+	// a null price is used to identify whether price provider is working
+	nullPrice := nullPrice(price.Time)
+	if v, ok := PRICE_CACHE[nullPrice.Symbol]; ok {
+		v[exchange] = nullPrice
+		PRICE_CACHE[nullPrice.Symbol] = v
+	} else {
+		v = make(map[string]Price)
+		v[exchange] = nullPrice
+		PRICE_CACHE[nullPrice.Symbol] = v
+	}
+}
+
+func nullPrice(pTime int64) Price {
+	return Price{
+		Symbol: NULL_SYMBOL,
+		Price:  "0",
+		Time:   pTime,
+	}
 }
 
 func GetPrices(lastBlockTime int64) map[string][]math.LegacyDec {
@@ -34,7 +55,7 @@ func GetPrices(lastBlockTime int64) map[string][]math.LegacyDec {
 	symbolPrices := make(map[string][]math.LegacyDec)
 	for symbol, pairs := range PRICE_CACHE {
 		for _, price := range pairs {
-			if price.Time > lastBlockTime { // skip
+			if price.Time > lastBlockTime {
 				p, err := math.LegacyNewDecFromStr(price.Price)
 				if err == nil {
 					symbolPrices[symbol] = append(symbolPrices[symbol], p)
