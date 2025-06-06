@@ -298,9 +298,9 @@ func CmdRepay() *cobra.Command {
 
 func CmdSubmitPrice() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-price [price]",
-		Short: "Submit BTCUSD price for testing",
-		Args:  cobra.ExactArgs(1),
+		Use:   "submit-price [pair][price]",
+		Short: "Submit price for testing",
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -310,6 +310,7 @@ func CmdSubmitPrice() *cobra.Command {
 			msg := types.NewMsgSubmitPrice(
 				clientCtx.GetFromAddress().String(),
 				args[0],
+				args[1],
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

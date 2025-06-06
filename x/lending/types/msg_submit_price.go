@@ -10,9 +10,10 @@ import (
 
 var _ sdk.Msg = &MsgSubmitPrice{}
 
-func NewMsgSubmitPrice(sender string, price string) *MsgSubmitPrice {
+func NewMsgSubmitPrice(sender string, pair string, price string) *MsgSubmitPrice {
 	return &MsgSubmitPrice{
 		Sender: sender,
+		Pair:   pair,
 		Price:  price,
 	}
 }
@@ -21,6 +22,10 @@ func NewMsgSubmitPrice(sender string, price string) *MsgSubmitPrice {
 func (m *MsgSubmitPrice) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Sender); err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
+	}
+
+	if len(m.Pair) == 0 {
+		return fmt.Errorf("invalid price pair")
 	}
 
 	_, err := sdkmath.LegacyNewDecFromStr(m.Price)

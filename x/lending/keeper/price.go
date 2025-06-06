@@ -9,15 +9,15 @@ import (
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
-func (k Keeper) SetPrice(ctx sdk.Context, price string) {
+func (k Keeper) SetPrice(ctx sdk.Context, pair string, price string) {
 	store := ctx.KVStore(k.storeKey)
 
 	if sdkmath.LegacyMustNewDecFromStr(price).IsZero() {
-		store.Delete(types.PriceKey)
+		store.Delete(types.PriceKey(pair))
 		return
 	}
 
-	store.Set(types.PriceKey, []byte(price))
+	store.Set(types.PriceKey(pair), []byte(price))
 }
 
 func (k Keeper) GetPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error) {
@@ -32,7 +32,7 @@ func (k Keeper) GetPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error
 func (k Keeper) GetLocalPrice(ctx sdk.Context, pair string) (sdkmath.LegacyDec, error) {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := store.Get(types.PriceKey)
+	bz := store.Get(types.PriceKey(pair))
 	if bz == nil {
 		return sdkmath.LegacyDec{}, fmt.Errorf("no price set")
 	}

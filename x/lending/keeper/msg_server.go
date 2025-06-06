@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"strings"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,9 +23,11 @@ func (m msgServer) SubmitPrice(goCtx context.Context, msg *types.MsgSubmitPrice)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	m.SetPrice(ctx, msg.Price)
-	m.dlcKeeper.SetPrice(ctx, "BTCUSD", msg.Price)
-	m.liquidationKeeper.SetPrice(ctx, "BTCUSD", msg.Price)
+	pair := strings.ToUpper(msg.Pair)
+
+	m.SetPrice(ctx, pair, msg.Price)
+	m.dlcKeeper.SetPrice(ctx, pair, msg.Price)
+	m.liquidationKeeper.SetPrice(ctx, pair, msg.Price)
 
 	return &types.MsgSubmitPriceResponse{}, nil
 }

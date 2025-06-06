@@ -23,7 +23,7 @@ var (
 	Permille = math.NewInt(1000)
 
 	ParamsKey       = []byte{0x01}
-	PriceKey        = []byte{0x02}
+	PriceKeyPrefix  = []byte{0x02}
 	RedemptionIdKey = []byte{0x03}
 
 	PoolKeyPrefix            = []byte{0x10}
@@ -66,4 +66,8 @@ func RepaymentKey(loanId string) []byte {
 
 func RedemptionKey(id uint64) []byte {
 	return append(RedemptionKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+}
+
+func PriceKey(pair string) []byte {
+	return append(PriceKeyPrefix, []byte(pair)...)
 }
