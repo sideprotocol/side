@@ -132,7 +132,7 @@ func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidat
 		return nil, status.Error(codes.Internal, "price pair does not exist in dlc")
 	}
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval, poolConfig.CollateralAsset.IsBasePriceAsset)
 
 	event := k.dlcKeeper.GetEventByPrice(ctx, pricePair.Pair, dlctypes.NormalizePrice(liquidationPrice, int(pricePair.Decimals)))
 	if event == nil {

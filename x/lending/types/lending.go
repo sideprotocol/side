@@ -59,10 +59,19 @@ func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
 
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
 // Formula:
+// 1. collateral is the base price asset:
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
-func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, decimals int, precision sdkmath.LegacyDec) sdkmath.LegacyDec {
+// 2. collateral is NOT the base price asset:
+// liquidation price = collateral amount * lltv / (borrow amount + interest)
+func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, decimals int, precision sdkmath.LegacyDec, collateralIsBaseAsset bool) sdkmath.LegacyDec {
 	interest := GetTotalInterest(borrowAmount, maturity, borrowAPR, blocksPerYear)
-	liquidationPrice := borrowAmount.Add(interest).Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).Mul(Percent).ToLegacyDec().Quo(sdkmath.LegacyNewDec(int64(lltv))).QuoInt(collateralAmount).QuoInt(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals))
+
+	var liquidationPrice sdkmath.LegacyDec
+	if collateralIsBaseAsset {
+		liquidationPrice = borrowAmount.Add(interest).Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).Mul(Percent).ToLegacyDec().QuoInt(sdkmath.NewInt(int64(lltv))).QuoInt(collateralAmount).QuoInt(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals))
+	} else {
+		liquidationPrice = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(lltv))).ToLegacyDec().QuoInt(Percent).QuoInt(borrowAmount.Add(interest)).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals))
+	}
 
 	decimalsInt := sdkmath.NewIntWithDecimal(1, decimals)
 	precisionInt := precision.MulInt(decimalsInt).TruncateInt()
