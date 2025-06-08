@@ -50,7 +50,7 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 			return nil, errorsmod.Wrap(types.ErrInvalidPricePair, "price pair does not exist in dlc")
 		}
 
-		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(poolConfig.LendingAsset.Decimals), loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval)
+		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(poolConfig.LendingAsset.Decimals), loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval, poolConfig.CollateralAsset.IsBasePriceAsset)
 		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, pricePair.Pair, dlctypes.NormalizePrice(liquidationPrice, int(pricePair.Decimals)))
 	}
 

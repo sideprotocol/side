@@ -243,6 +243,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	pricePair := types.GetPricePair(poolConfig)
 	collateralDecimals := int(poolConfig.CollateralAsset.Decimals)
 	borrowDecimals := int(poolConfig.LendingAsset.Decimals)
+	collateralIsBaseAsset := poolConfig.CollateralAsset.IsBasePriceAsset
 
 	dlcPricePair, found := m.dlcKeeper.PricePair(ctx, pricePair)
 	if !found {
@@ -250,7 +251,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, nil
 	}
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(dlcPricePair.Decimals), dlcPricePair.Interval)
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(dlcPricePair.Decimals), dlcPricePair.Interval, collateralIsBaseAsset)
 	normalizedLiquidationPrice := dlctypes.NormalizePrice(liquidationPrice, int(dlcPricePair.Decimals))
 
 	if !m.dlcKeeper.HasEventByPrice(ctx, pricePair, normalizedLiquidationPrice) {
