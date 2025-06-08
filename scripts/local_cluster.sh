@@ -156,6 +156,8 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 			continue
 		fi
 
+		sed -i.bak "s/localhost:9090/localhost:909${i}/g" $APP_TOML
+
 		sed -i.bak "s/127.0.0.1:26657/0.0.0.0:26${i}57/g" $CONFIG
 		sed -i.bak "s/127.0.0.1:26658/127.0.0.1:26${i}28/g" $CONFIG
 		sed -i.bak "s/0.0.0.0:26656/0.0.0.0:26${i}56/g" $CONFIG
