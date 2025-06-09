@@ -1,7 +1,12 @@
 #!/bin/bash
 
-N=4
-KEYS=("v1" "v2" "v3" "v4")
+N=3
+START=2 # start all node
+# START=3 # skip validator 2
+if [[ -n "$1" ]]; then
+    START=$((START + $1))
+fi
+
 CHAINID="devnet"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
@@ -39,13 +44,6 @@ LOGLEVEL="info"
 # Set dedicated home directory for the $BINARY instance
 HOMEDIR="$HOME/testnet"
 
-# Path variables
-# CONFIG=$HOMEDIR/config/config.toml
-# APP_TOML=$HOMEDIR/config/app.toml
-
-# GENESIS=$HOMEDIR/config/genesis.json
-# TMP_GENESIS=$HOMEDIR/config/tmp_genesis.json
-
 # validate dependencies are installed
 command -v jq >/dev/null 2>&1 || {
 	echo >&2 "jq not installed. More info: https://stedolan.github.io/jq/download/"
@@ -69,6 +67,7 @@ else
 	overwrite="Y"
 fi
 
+APPHOME="$HOMEDIR/side1"
 
 # Setup local node if overwrite is set to Yes, otherwise skip setup
 if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
@@ -78,7 +77,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	# Set moniker and chain-id for Cascadia (Moniker can be anything, chain-id must be an integer)
 	for ((i=1; i<=N; i++)); do
 
-		APPHOME="$HOMEDIR/side$i"
+		APPHOME="${APPHOME%?}$i"
 		$BINARY init "$MONIKER #$i" -o --chain-id $CHAINID --home $APPHOME --default-denom "${DENOMS[0]}" &> /dev/null
 		
 		CONFIG=$APPHOME/config/config.toml
@@ -90,6 +89,9 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		sed -i.bak "s/bitcoin_rpc = \"\"/bitcoin_rpc = \"192.248.150.102:18332\"/g" $APP_TOML
 		sed -i.bak "s/bitcoin_rpc_user = \"\"/bitcoin_rpc_user = \"side\"/g" $APP_TOML
 		sed -i.bak "s/bitcoin_rpc_password = \"\"/bitcoin_rpc_password = \"12345678\"/g" $APP_TOML
+
+		sed -i.bak 's/addr_book_strict = true/addr_book_strict = false/g' $CONFIG
+		sed -i.bak 's/allow_duplicate_ip = false/allow_duplicate_ip = true/g' $CONFIG
 
 		if [[ $i -eq 1 ]]; then
 
@@ -167,7 +169,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		cp -f "${APPHOME%?}1/config/genesis.json" "$APPHOME/config/genesis.json"
 		cp -r "${APPHOME%?}1/keyring-$KEYRING" "$APPHOME/keyring-$KEYRING" 
 
-		$BINARY genesis gentx v$i ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home $APPHOME --p2p-port "26${i}56" --ip 127.0.0.1
+		$BINARY genesis gentx v$i ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home $APPHOME --p2p-port "26${i}56"
 		cp -r "$APPHOME/config/gentx/" "${APPHOME%?}1/config/gentx"
 
 	done
@@ -182,29 +184,6 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		shasum ${APPHOME%?}$i/config/genesis.json
 	done
 
-	# exit 0
-	# $BINARY genesis gentx "${KEYS[1]}" ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity 666AC57CC678BEC4 --website="https://side.one" --home $HOMEDIR2 --p2p-port 26626
-	# $BINARY genesis gentx "${KEYS[2]}" ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home $HOMEDIR3 --p2p-port 26636
-	# $BINARY genesis gentx "${KEYS[3]}" ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home $HOMEDIR4 --p2p-port 26646
-
-	# cp -r "$HOMEDIR2/config/gentx/" "$HOMEDIR/config/gentx"
-	# cp -r "$HOMEDIR3/config/gentx/" "$HOMEDIR/config/gentx"
-	# cp -r "$HOMEDIR4/config/gentx/" "$HOMEDIR/config/gentx"
-
-	# # Collect genesis tx
-	# $BINARY genesis collect-gentxs --home  &> /dev/null
-	# echo "Genesis transactions collected"
-
-	# Run this to ensure everything worked and that the genesis file is setup correctly
-	# $BINARY genesis validate --home "$HOMEDIR"
-
-	# cp -f "$HOMEDIR/config/genesis.json" "$HOMEDIR2/config"
-	# cp -f "$HOMEDIR/config/genesis.json" "$HOMEDIR3/config"
-	# cp -f "$HOMEDIR/config/genesis.json" "$HOMEDIR4/config"
-
-	if [[ $1 == "pending" ]]; then
-		echo "pending mode is on, please wait for the first block committed."
-	fi
 fi
 
 # Cleanup function to run on Ctrl-C
@@ -219,7 +198,7 @@ cleanup() {
 # Trap SIGINT (Ctrl-C)
 trap cleanup SIGINT
 
-for ((i=2; i<=N; i++)); do
+for ((i=START; i<=N; i++)); do
 	$BINARY start --home ${APPHOME%?}$i > "$HOMEDIR/output$i.log" 2>&1 &
 done
 

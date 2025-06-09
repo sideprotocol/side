@@ -57,17 +57,28 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 
-		if !h.config.Enable || !voteExtensionEnabled(ctx, req.Height) {
+		if req.Height < ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight {
 			return &abci.ResponseExtendVote{}, nil
 		}
+
+		h.logger.Warn("Prepare vote extension")
 		// here we'd have a helper function that gets all the prices and does a weighted average
 
+		// var prices map[string]string
+		// for {
+		// 	prices = h.getAllVolumeWeightedPrices()
+		// 	if len(prices) > 0 {
+		// 		break
+		// 	}
+		// 	time.Sleep(time.Second * 2)
+		// }
+		// prices := make(map[string]string)
 		prices := h.getAllVolumeWeightedPrices()
 		h.lastPriceSyncTS = req.Time.UnixMilli()
 
 		headers, err := h.getBitcoinHeaders(ctx, req.Height)
 		if err != nil {
-			//return nil, fmt.Errorf("failed to fetch bitcoin headers: %w", err)
+			// return nil, fmt.Errorf("failed to fetch bitcoin headers: %w", err)
 			h.logger.Error("failed to fetch bitcoin headers", "error", err)
 		}
 		voteExt := types.OracleVoteExtension{
@@ -89,8 +100,14 @@ func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHandler {
 	return func(ctx sdk.Context, req *abci.RequestVerifyVoteExtension) (*abci.ResponseVerifyVoteExtension, error) {
 
+		h.logger.Warn("VerifyVoteExtensionHandler", "height", req.Height, "validator", hex.EncodeToString(req.ValidatorAddress), "extenstion", hex.EncodeToString(req.VoteExtension))
+
 		if !voteExtensionEnabled(ctx, req.Height) {
 			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
+		}
+
+		if len(req.VoteExtension) == 0 {
+			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
 		}
 
 		validator := hex.EncodeToString(req.ValidatorAddress)
@@ -103,6 +120,12 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 
 		if voteExt.Height != req.Height {
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
+		}
+
+		if len(voteExt.Prices) == 0 {
+			h.logger.Error("VerifyVoteExtensionHandler", "height", req.Height, "validator", validator, "Price", len(voteExt.Prices))
+			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+			// return nil, fmt.Errorf("invalid price length %d", len(voteExt.Prices))
 		}
 
 		// if len(voteExt.Prices) > 0 {
@@ -251,6 +274,21 @@ func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 				return nil, errors.New("failed to encode injected vote extension tx")
 			}
 
+			for _, vote := range extInfo.Votes {
+
+				if vote.BlockIdFlag == cmtproto.BlockIDFlagCommit {
+					var voteExt types.OracleVoteExtension
+					if err := voteExt.Unmarshal(vote.VoteExtension); err != nil {
+						h.logger.Error("failed to decode vote extension", "err", err, "validator", fmt.Sprintf("%x", vote.Validator.Address))
+						return nil, err
+					}
+					if len(voteExt.Prices) == 0 {
+						h.logger.Error("Empty Oracle Prices")
+						return nil, fmt.Errorf("invalid price length: 0")
+					}
+				}
+			}
+
 			// Inject a "fake" tx into the proposal s.t. validators can decode, verify,
 			// and store the canonical stake-weighted average prices and block headers.
 			proposalTxs = append([][]byte{bz}, proposalTxs...)
@@ -265,6 +303,7 @@ func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 
 func (h *PriceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
+
 		if !voteExtensionEnabled(ctx, req.Height) {
 			return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_ACCEPT}, nil
 		}
@@ -281,7 +320,21 @@ func (h *PriceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler
 
 		err := baseapp.ValidateVoteExtensions(ctx, h.valStore, req.Height, ctx.ChainID(), injectedVoteExtTx)
 		if err != nil {
-			return nil, err
+			return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, err
+		}
+
+		for _, vote := range injectedVoteExtTx.Votes {
+
+			if vote.BlockIdFlag == cmtproto.BlockIDFlagCommit {
+				var voteExt types.OracleVoteExtension
+				if err := voteExt.Unmarshal(vote.VoteExtension); err != nil {
+					h.logger.Error("failed to decode vote extension", "err", err, "validator", fmt.Sprintf("%x", vote.Validator.Address))
+					return nil, err
+				}
+				if len(voteExt.Prices) == 0 {
+					return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
+				}
+			}
 		}
 
 		return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_ACCEPT}, nil
