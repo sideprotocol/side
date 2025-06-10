@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -143,7 +144,7 @@ func (k Keeper) VerifySignatures(ctx sdk.Context, signingRequest *types.SigningR
 
 	for i, signature := range signatures {
 		sigBytes, _ := hex.DecodeString(signature)
-		sigHash, _ := hex.DecodeString(signingRequest.SigHashes[i])
+		sigHash, _ := base64.StdEncoding.DecodeString(signingRequest.SigHashes[i])
 
 		switch signingRequest.Type {
 		case types.SigningType_SIGNING_TYPE_SCHNORR:
