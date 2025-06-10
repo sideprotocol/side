@@ -72,7 +72,7 @@ func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) {
 			}
 
 			// check if liquidation price reached
-			if currentPrice.LTE(loan.LiquidationPrice) {
+			if types.ToBeLiquidated(currentPrice, loan.LiquidationPrice, pool.Config.CollateralAsset.IsBasePriceAsset) {
 				rejectHandler(loan, authorizationId, types.ErrLiquidationPriceReached)
 				continue
 			}
@@ -151,7 +151,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			)
 		} else if !currentPrice.IsZero() {
 			// check if the loan is to be liquidated
-			if currentPrice.LTE(loan.LiquidationPrice) {
+			if types.ToBeLiquidated(currentPrice, loan.LiquidationPrice, pool.Config.CollateralAsset.IsBasePriceAsset) {
 				liquidationInterest = k.GetCurrentInterest(ctx, loan).Amount
 				loan.Status = types.LoanStatus_Liquidated
 

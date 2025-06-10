@@ -88,6 +88,15 @@ func GetMaturityTime(originMaturityTime int64) int64 {
 	return time.Unix(originMaturityTime, 0).Truncate(24 * time.Hour).Add(24 * time.Hour).Unix()
 }
 
+// ToBeLiquidated returns true if the given price satisfies the liquidation price, false otherwise
+func ToBeLiquidated(price sdkmath.LegacyDec, liquidationPrice sdkmath.LegacyDec, collateralIsBaseAsset bool) bool {
+	if collateralIsBaseAsset {
+		return price.LTE(liquidationPrice)
+	}
+
+	return price.GTE(liquidationPrice)
+}
+
 // CheckLTV returns true if the collateral amount and borrow amount satisfy the max LTV limitation by the given price, false otherwise
 func CheckLTV(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maxLTV uint32, price sdkmath.LegacyDec, collateralIsBaseAsset bool) bool {
 	if collateralIsBaseAsset {
