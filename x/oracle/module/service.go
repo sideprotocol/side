@@ -2,9 +2,11 @@ package oracle
 
 import (
 	"context"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
+	"github.com/sideprotocol/side/x/oracle/abci"
 	"github.com/sideprotocol/side/x/oracle/providers/binance"
 	"github.com/sideprotocol/side/x/oracle/providers/bitget"
 	"github.com/sideprotocol/side/x/oracle/providers/bybit"
@@ -12,11 +14,16 @@ import (
 	"github.com/sideprotocol/side/x/oracle/providers/okex"
 	"github.com/sideprotocol/side/x/oracle/types"
 	"golang.org/x/sync/errgroup"
+
+	"github.com/cometbft/cometbft/privval"
 )
 
 // Start Oracle Price Service
 // Subscrible Prices from providers
 func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context, g *errgroup.Group) error {
+
+	pv := privval.LoadFilePV(svrCtx.Config.PrivValidatorKeyFile(), svrCtx.Config.PrivValidatorStateFile())
+	abci.LOCAL_ADDRESS = strings.ToLower(pv.GetAddress().String())
 
 	if types.StartProviders {
 

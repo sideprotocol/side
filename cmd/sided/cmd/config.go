@@ -70,7 +70,6 @@ bitcoin_rpc_user = ""
 bitcoin_rpc_password = ""
 http_post_mode = true
 disable_tls = true
-
 `
 
 	return customAppTemplate, customAppConfig

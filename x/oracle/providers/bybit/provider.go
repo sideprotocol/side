@@ -18,7 +18,7 @@ var (
     "op": "subscribe",
     "args": [
         "tickers.BTCUSDT",
-		"tickers.ATOMUSDT"
+		"tickers.ETHBTC"
     ]
 }`
 	SymbolMap = map[string]string{

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-N=3
+N=4
 START=2 # start all node
 # START=3 # skip validator 2
 if [[ -n "$1" ]]; then
