@@ -214,7 +214,7 @@ func (h *PriceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler
 					h.logger.Error("failed to decode vote extension", "err", err, "validator", fmt.Sprintf("%x", vote.Validator.Address))
 					return nil, err
 				}
-				if voteExt.Proposer != hex.EncodeToString(vote.Validator.Address) && len(voteExt.Prices) == 0 {
+				if voteExt.Proposer != hex.EncodeToString(vote.Validator.Address) && (len(voteExt.Prices) == 0 || voteExt.Blocks.Best == 0) {
 					return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
 				}
 			}
