@@ -20,7 +20,7 @@ func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context
 
 	if types.StartProviders {
 
-		svrCtx.Logger.Info("price service", "module", "oracle", "msg", "Start Oracle Price Subscriber")
+		svrCtx.Logger.With("module", types.ModuleName).Info("price service", "module", "oracle", "msg", "Start Oracle Price Subscriber")
 
 		go binance.Subscribe(svrCtx, ctx)
 		go okex.Subscribe(svrCtx, ctx)
@@ -33,7 +33,7 @@ func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context
 		// g.Go(func() error { return bybit.Subscribe(svrCtx, ctx) })
 		// g.Go(func() error { return bitget.Subscribe(svrCtx, ctx) })
 	} else {
-		svrCtx.Logger.Warn("Price service is disabled. It is required if your node is a validator. ")
+		svrCtx.Logger.With("module", types.ModuleName).Warn("Price service is disabled. It is required if your node is a validator. ")
 	}
 
 	return nil
