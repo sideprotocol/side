@@ -170,7 +170,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		cp -r "${APPHOME%?}1/keyring-$KEYRING" "$APPHOME/keyring-$KEYRING" 
 
 		$BINARY genesis gentx v$i ${INITIAL_SUPPLY%?}${DENOMS[0]} --keyring-backend $KEYRING --chain-id $CHAINID --identity "666AC57CC678BEC4" --website="https://side.one" --home $APPHOME --p2p-port "26${i}56"
-		cp -r "$APPHOME/config/gentx/" "${APPHOME%?}1/config/gentx"
+		cp -r "$APPHOME/config/gentx/." "${APPHOME%?}1/config/gentx/"
 
 	done
 
