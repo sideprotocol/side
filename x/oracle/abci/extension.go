@@ -383,7 +383,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 	finalPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE))
 	for base, price := range stakeWeightedPrices {
 		if price.GT(math.LegacyZeroDec()) {
-			if vp, ok := stakeWeightedVotingPower[base]; ok && vp.RoundInt64()*3 > totalStake*2 {
+			if vp, ok := stakeWeightedVotingPower[base]; ok && vp.RoundInt64()*2 >= totalStake {
 				finalPrices[base] = price.Quo(vp)
 			}
 		} else {
@@ -393,7 +393,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 
 	headers := []*types.BlockHeader{}
 	for key, power := range headerStakes {
-		if selected, ok := blockHeaders[key]; ok && power*3 > totalStake*2 {
+		if selected, ok := blockHeaders[key]; ok && power*2 > totalStake {
 			headers = append(headers, selected...)
 			break
 		}
