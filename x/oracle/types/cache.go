@@ -26,25 +26,6 @@ func CachePrice(exchange string, price Price) {
 		v[exchange] = price
 		PRICE_CACHE[price.Symbol] = v
 	}
-
-	// a null price is used to identify whether price provider is working
-	nullPrice := nullPrice(price.Time)
-	if v, ok := PRICE_CACHE[nullPrice.Symbol]; ok {
-		v[exchange] = nullPrice
-		PRICE_CACHE[nullPrice.Symbol] = v
-	} else {
-		v = make(map[string]Price)
-		v[exchange] = nullPrice
-		PRICE_CACHE[nullPrice.Symbol] = v
-	}
-}
-
-func nullPrice(pTime int64) Price {
-	return Price{
-		Symbol: NULL_SYMBOL,
-		Price:  "0",
-		Time:   pTime,
-	}
 }
 
 func GetPrices(lastBlockTime int64) map[string][]math.LegacyDec {
@@ -65,15 +46,3 @@ func GetPrices(lastBlockTime int64) map[string][]math.LegacyDec {
 	}
 	return symbolPrices
 }
-
-// func setMapValue(target map[string][]Price, ex string, p Price) {
-// 	if list, ok := target[ex]; ok {
-// 		if len(list) > 100 {
-// 			list = list[100:]
-// 		}
-// 		list = append(list, p)
-// 		target[ex] = list
-// 	} else {
-// 		target[ex] = []Price{p}
-// 	}
-// }

@@ -45,7 +45,7 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 	}
 
 	return PriceOracleVoteExtHandler{
-		logger:        logger,
+		logger:        logger.With("module", types.ModuleName),
 		currentBlock:  0,
 		valStore:      valStore,
 		Keeper:        oracleKeeper,
@@ -94,7 +94,6 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 		}
 
 		validator := hex.EncodeToString(req.ValidatorAddress)
-		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", validator)
 		var voteExt types.OracleVoteExtension
 		err := voteExt.Unmarshal(req.VoteExtension)
 		if err != nil {
@@ -105,16 +104,7 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
 		}
 
-		// if len(voteExt.Prices) > 0 {
-		// 	// check if a fack price is existing.
-		// 	if _, ok := voteExt.Prices[types.NULL_SYMBOL]; !ok {
-		// 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-		// 	}
-		// }
-
-		// if voteExt.HasError {
-		// 	return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-		// }
+		h.logger.Debug("verify", "height", req.Height, "validator", validator, "prices", voteExt.Prices, "blocks", voteExt.Blocks)
 
 		for _, blk := range voteExt.Blocks {
 			if err = blk.Validate(); err != nil {
@@ -222,7 +212,7 @@ func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]stri
 		}
 	}
 
-	h.logger.Info("AvgPrice", "prices", avgPrices)
+	h.logger.Debug("avg exchange prices", "prices", avgPrices)
 
 	textPrices := make(map[string]string)
 	for symbol, price := range avgPrices {
@@ -321,7 +311,7 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 		return nil, err
 	}
 
-	h.logger.Warn("Oracle Final States", "price", prices)
+	h.logger.Info("Oracle Final States", "price", prices, "headers", headers)
 
 	return res, nil
 }
@@ -345,7 +335,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 			return nil, nil, err
 		}
 
-		h.logger.Warn("extension", "validator", hex.EncodeToString(v.Validator.Address), "extension", voteExt)
+		h.logger.Debug("received", "validator", hex.EncodeToString(v.Validator.Address), "extension", voteExt)
 
 		totalStake += v.Validator.Power
 
@@ -390,10 +380,11 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 	}
 
 	// finalize average by dividing by total stake, i.e. total weights
+	finalPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE))
 	for base, price := range stakeWeightedPrices {
 		if price.GT(math.LegacyZeroDec()) {
 			if vp, ok := stakeWeightedVotingPower[base]; ok && vp.RoundInt64()*3 > totalStake*2 {
-				stakeWeightedPrices[base] = price.Quo(vp)
+				finalPrices[base] = price.Quo(vp)
 			}
 		} else {
 			h.logger.Error("Got invalid price.", "symbal", base, "price", price)
@@ -407,7 +398,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 			break
 		}
 	}
-	return stakeWeightedPrices, headers, nil
+	return finalPrices, headers, nil
 }
 
 func voteExtensionEnabled(ctx sdk.Context, height int64) bool {
