@@ -393,7 +393,7 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 
 	headers := []*types.BlockHeader{}
 	for key, power := range headerStakes {
-		if selected, ok := blockHeaders[key]; ok && power*2 > totalStake {
+		if selected, ok := blockHeaders[key]; ok && power*2 >= totalStake {
 			headers = append(headers, selected...)
 			break
 		}
