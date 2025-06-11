@@ -27,10 +27,15 @@ message BlockHeader {
   int32 ntx = 9;
 }
 
+message Blocks {
+  int64 best = 1;
+  repeated BlockHeader headers = 2;
+}
+
 // Oracle Vote Extenstion
 message OracleVoteExtension {
   int64 height = 1;
-  map<string, string> prices = 2 [(gogoproto.nullable) = false];
-  repeated BlockHeader blocks = 3;
-  bool has_error = 4;
+  Blocks blocks = 2;
+  map<string, string> prices = 3 [(gogoproto.nullable) = false];
+  string proposer = 4;
 }

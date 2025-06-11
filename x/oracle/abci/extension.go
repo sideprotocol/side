@@ -32,6 +32,8 @@ type PriceOracleVoteExtHandler struct {
 	config *types.OracleConfig
 }
 
+var LOCAL_ADDRESS = ""
+
 func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorStore, oracleKeeper keeper.Keeper, config *types.OracleConfig) PriceOracleVoteExtHandler {
 	client, err := rpcclient.New(&rpcclient.ConnConfig{
 		Host:         config.BitcoinRpc,
@@ -45,7 +47,7 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 	}
 
 	return PriceOracleVoteExtHandler{
-		logger:        logger,
+		logger:        logger.With("module", types.ModuleName),
 		currentBlock:  0,
 		valStore:      valStore,
 		Keeper:        oracleKeeper,
@@ -57,24 +59,34 @@ func NewPriceOracleVoteExtHandler(logger log.Logger, valStore baseapp.ValidatorS
 func (h *PriceOracleVoteExtHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 
-		if !h.config.Enable || !voteExtensionEnabled(ctx, req.Height) {
+		if req.Height < ctx.ConsensusParams().Abci.VoteExtensionsEnableHeight {
 			return &abci.ResponseExtendVote{}, nil
 		}
-		// here we'd have a helper function that gets all the prices and does a weighted average
 
-		prices := h.getAllVolumeWeightedPrices()
-		h.lastPriceSyncTS = req.Time.UnixMilli()
+		proposer := hex.EncodeToString(req.ProposerAddress)
 
-		headers, err := h.getBitcoinHeaders(ctx, req.Height)
+		var prices map[string]string
+		blocks := newBlock(0, nil)
+		// prices = h.getAllVolumeWeightedPrices()
+		for {
+			prices = h.getAllVolumeWeightedPrices()
+			if len(prices) > 0 {
+				break
+			}
+			time.Sleep(time.Second * 2)
+		}
+		height, headers, err := h.getBitcoinHeaders(ctx, req.Height)
 		if err != nil {
-			//return nil, fmt.Errorf("failed to fetch bitcoin headers: %w", err)
 			h.logger.Error("failed to fetch bitcoin headers", "error", err)
 		}
+		blocks = newBlock(height, headers)
+		h.lastPriceSyncTS = req.Time.UnixMilli()
+
 		voteExt := types.OracleVoteExtension{
 			Height:   req.Height,
 			Prices:   prices,
-			Blocks:   headers,
-			HasError: err != nil,
+			Blocks:   &blocks,
+			Proposer: proposer,
 		}
 
 		bz, err := voteExt.Marshal()
@@ -93,8 +105,12 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 		}
 
+		if len(req.VoteExtension) == 0 {
+			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+		}
+
 		validator := hex.EncodeToString(req.ValidatorAddress)
-		h.logger.Info("VerifyVoteExtensionHandler", "height", req.Height, "validator", validator)
+
 		var voteExt types.OracleVoteExtension
 		err := voteExt.Unmarshal(req.VoteExtension)
 		if err != nil {
@@ -105,131 +121,21 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
 		}
 
-		// if len(voteExt.Prices) > 0 {
-		// 	// check if a fack price is existing.
-		// 	if _, ok := voteExt.Prices[types.NULL_SYMBOL]; !ok {
-		// 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-		// 	}
-		// }
+		if voteExt.Proposer != validator && (len(voteExt.Prices) == 0 || voteExt.Blocks.Best == 0) {
+			h.logger.Error("verification failed", "height", voteExt.Blocks.Best, "validator", validator, "Price", len(voteExt.Prices), "proposer", voteExt.Proposer)
+			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+		}
 
-		// if voteExt.HasError {
-		// 	return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
-		// }
+		h.logger.Debug("verification succeeded", "height", voteExt.Blocks.Best, "validator", validator, "Price", len(voteExt.Prices), "proposer", voteExt.Proposer)
 
-		for _, blk := range voteExt.Blocks {
+		for _, blk := range voteExt.Blocks.Headers {
 			if err = blk.Validate(); err != nil {
-				return nil, types.ErrInvalidBlockHeader
+				return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
 			}
 		}
 
 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 	}
-}
-
-func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context, sideHeight int64) ([]*types.BlockHeader, error) {
-	// skip
-	if sideHeight%2 == 0 {
-		return nil, nil
-	}
-
-	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), "fetch blocks")
-
-	bestHeight, err := h.bitcoinClient.GetBlockCount()
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
-	}
-
-	confirmation := 6
-
-	bestHeight = bestHeight - int64(confirmation) + 1
-	telemetry.SetGauge(float32(bestHeight), types.ModuleName, "bitcoin", "block_height")
-
-	hash, err := h.bitcoinClient.GetBlockHash(bestHeight)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch best block header: %w", err)
-	}
-
-	best, err := h.bitcoinClient.GetBlockHeaderVerbose(hash)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch header: %w", err)
-	}
-
-	localBest := h.Keeper.GetBestBlockHeader(ctx)
-
-	headers := []*types.BlockHeader{}
-	// sync if block header
-	if localBest == nil || localBest.Height == 0 || localBest.Hash == best.PreviousHash {
-
-		header := types.BlockHeader{
-			Version:           best.Version,
-			Hash:              best.Hash,
-			Height:            best.Height,
-			PreviousBlockHash: best.PreviousHash,
-			MerkleRoot:        best.MerkleRoot,
-			Nonce:             best.Nonce,
-			Bits:              best.Bits,
-			Time:              best.Time,
-		}
-		return append(headers, &header), nil
-	} else if localBest.Hash == hash.String() {
-		// skip sync if synced to the latest
-		return nil, nil
-	}
-
-	count := localBest.Height + 1
-	for {
-		if count > int32(bestHeight) || count > localBest.Height+10 {
-			break
-		}
-		hash, err := h.bitcoinClient.GetBlockHash(int64(count))
-		if err != nil {
-			return nil, fmt.Errorf("failed to fetch best block header: %w", err)
-		}
-
-		bh, err := h.bitcoinClient.GetBlockHeaderVerbose(hash)
-		if err != nil {
-			return nil, fmt.Errorf("failed to fetch header: %w", err)
-		}
-
-		header := types.BlockHeader{
-			Version:           bh.Version,
-			Hash:              bh.Hash,
-			Height:            bh.Height,
-			PreviousBlockHash: bh.PreviousHash,
-			MerkleRoot:        bh.MerkleRoot,
-			Nonce:             bh.Nonce,
-			Bits:              bh.Bits,
-			Time:              bh.Time,
-		}
-		headers = append(headers, &header)
-		count++
-	}
-
-	return headers, nil
-}
-
-func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]string {
-
-	avgPrices := make(map[string]math.LegacyDec)
-	symbolPrices := types.GetPrices(h.lastPriceSyncTS)
-	for symbol, prices := range symbolPrices {
-		if len(prices) > 0 {
-			sum := math.LegacyZeroDec()
-			for _, p := range prices {
-				sum = sum.Add(p)
-			}
-			avgPrices[symbol] = sum.QuoInt64(int64(len(prices)))
-		}
-	}
-
-	h.logger.Info("AvgPrice", "prices", avgPrices)
-
-	textPrices := make(map[string]string)
-	for symbol, price := range avgPrices {
-		textPrices[symbol] = price.String()
-	}
-
-	return textPrices
 }
 
 func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler {
@@ -251,6 +157,21 @@ func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 				return nil, errors.New("failed to encode injected vote extension tx")
 			}
 
+			for _, vote := range extInfo.Votes {
+
+				if vote.BlockIdFlag == cmtproto.BlockIDFlagCommit {
+					var voteExt types.OracleVoteExtension
+					if err := voteExt.Unmarshal(vote.VoteExtension); err != nil {
+						h.logger.Error("failed to decode vote extension", "err", err, "validator", fmt.Sprintf("%x", vote.Validator.Address))
+						return nil, err
+					}
+					length := len(voteExt.Prices)
+					if voteExt.Proposer != hex.EncodeToString(vote.Validator.Address) && (length == 0 || voteExt.Blocks.Best == 0) {
+						return nil, fmt.Errorf("invalid oracle data: prices(%d), bitcoin height %d", length, voteExt.Blocks.Best)
+					}
+				}
+			}
+
 			// Inject a "fake" tx into the proposal s.t. validators can decode, verify,
 			// and store the canonical stake-weighted average prices and block headers.
 			proposalTxs = append([][]byte{bz}, proposalTxs...)
@@ -265,6 +186,7 @@ func (h *PriceOracleVoteExtHandler) PrepareProposal() sdk.PrepareProposalHandler
 
 func (h *PriceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
+
 		if !voteExtensionEnabled(ctx, req.Height) {
 			return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_ACCEPT}, nil
 		}
@@ -281,7 +203,21 @@ func (h *PriceOracleVoteExtHandler) ProcessProposal() sdk.ProcessProposalHandler
 
 		err := baseapp.ValidateVoteExtensions(ctx, h.valStore, req.Height, ctx.ChainID(), injectedVoteExtTx)
 		if err != nil {
-			return nil, err
+			return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, err
+		}
+
+		for _, vote := range injectedVoteExtTx.Votes {
+
+			if vote.BlockIdFlag == cmtproto.BlockIDFlagCommit {
+				var voteExt types.OracleVoteExtension
+				if err := voteExt.Unmarshal(vote.VoteExtension); err != nil {
+					h.logger.Error("failed to decode vote extension", "err", err, "validator", fmt.Sprintf("%x", vote.Validator.Address))
+					return nil, err
+				}
+				if voteExt.Proposer != hex.EncodeToString(vote.Validator.Address) && (len(voteExt.Prices) == 0 || voteExt.Blocks.Best == 0) {
+					return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
+				}
+			}
 		}
 
 		return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_ACCEPT}, nil
@@ -305,7 +241,7 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 		return nil, err
 	}
 
-	prices, headers, err := h.extractPricesAndBlockHeaders(ctx, injectedVoteExtTx)
+	count, prices, headers, err := h.extractPricesAndBlockHeaders(ctx, injectedVoteExtTx)
 	if err != nil {
 		return nil, err
 	}
@@ -321,19 +257,127 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 		return nil, err
 	}
 
-	h.logger.Warn("Oracle Final States", "price", prices)
+	h.logger.Info("Oracle Final States", "price", prices, "headers", headers, "votes", count)
 
 	return res, nil
 }
 
-func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, commit abci.ExtendedCommitInfo) (map[string]math.LegacyDec, []*types.BlockHeader, error) {
+func (h *PriceOracleVoteExtHandler) getBitcoinHeaders(ctx sdk.Context, sideHeight int64) (int64, []*types.BlockHeader, error) {
+	// skip
+	if sideHeight%2 == 0 {
+		return 1, nil, nil
+	}
+
+	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), "fetch blocks")
+
+	bestHeight, err := h.bitcoinClient.GetBlockCount()
+	if err != nil {
+		return 0, nil, fmt.Errorf("failed to fetch best block header: %w", err)
+	}
+
+	confirmation := 6
+
+	bestHeight = bestHeight - int64(confirmation) + 1
+	telemetry.SetGauge(float32(bestHeight), types.ModuleName, "bitcoin", "block_height")
+
+	hash, err := h.bitcoinClient.GetBlockHash(bestHeight)
+	if err != nil {
+		return 0, nil, fmt.Errorf("failed to fetch best block header: %w", err)
+	}
+
+	best, err := h.bitcoinClient.GetBlockHeaderVerbose(hash)
+	if err != nil {
+		return 0, nil, fmt.Errorf("failed to fetch header: %w", err)
+	}
+
+	localBest := h.Keeper.GetBestBlockHeader(ctx)
+
+	headers := []*types.BlockHeader{}
+	// sync if block header
+	if localBest == nil || localBest.Height == 0 || localBest.Hash == best.PreviousHash {
+
+		header := types.BlockHeader{
+			Version:           best.Version,
+			Hash:              best.Hash,
+			Height:            best.Height,
+			PreviousBlockHash: best.PreviousHash,
+			MerkleRoot:        best.MerkleRoot,
+			Nonce:             best.Nonce,
+			Bits:              best.Bits,
+			Time:              best.Time,
+		}
+		return bestHeight, append(headers, &header), nil
+	} else if localBest.Hash == hash.String() {
+		// skip sync if synced to the latest
+		return bestHeight, nil, nil
+	}
+
+	count := localBest.Height + 1
+	for {
+		if count > int32(bestHeight) || count > localBest.Height+10 {
+			break
+		}
+		hash, err := h.bitcoinClient.GetBlockHash(int64(count))
+		if err != nil {
+			return 0, nil, fmt.Errorf("failed to fetch best block header: %w", err)
+		}
+
+		bh, err := h.bitcoinClient.GetBlockHeaderVerbose(hash)
+		if err != nil {
+			return 0, nil, fmt.Errorf("failed to fetch header: %w", err)
+		}
+
+		header := types.BlockHeader{
+			Version:           bh.Version,
+			Hash:              bh.Hash,
+			Height:            bh.Height,
+			PreviousBlockHash: bh.PreviousHash,
+			MerkleRoot:        bh.MerkleRoot,
+			Nonce:             bh.Nonce,
+			Bits:              bh.Bits,
+			Time:              bh.Time,
+		}
+		headers = append(headers, &header)
+		count++
+	}
+
+	return bestHeight, headers, nil
+}
+
+func (h *PriceOracleVoteExtHandler) getAllVolumeWeightedPrices() map[string]string {
+
+	avgPrices := make(map[string]math.LegacyDec)
+	symbolPrices := types.GetPrices(h.lastPriceSyncTS)
+	for symbol, prices := range symbolPrices {
+		if len(prices) > 0 {
+			sum := math.LegacyZeroDec()
+			for _, p := range prices {
+				sum = sum.Add(p)
+			}
+			avgPrices[symbol] = sum.QuoInt64(int64(len(prices)))
+		}
+	}
+
+	h.logger.Debug("average prices from exchanges", "prices", avgPrices)
+
+	textPrices := make(map[string]string)
+	for symbol, price := range avgPrices {
+		textPrices[symbol] = price.String()
+	}
+
+	return textPrices
+}
+
+func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, commit abci.ExtendedCommitInfo) (int, map[string]math.LegacyDec, []*types.BlockHeader, error) {
 	var totalStake int64
 
 	stakeWeightedPrices := make(map[string]math.LegacyDec, len(types.PRICE_CACHE)) // base -> average stake-weighted price
 	stakeWeightedVotingPower := make(map[string]math.LegacyDec, len(types.PRICE_CACHE))
+	finalPrice := make(map[string]math.LegacyDec, len(types.PRICE_CACHE))
 	blockHeaders := make(map[string][]*types.BlockHeader)
 	headerStakes := make(map[string]int64)
 
+	count := 0
 	for _, v := range commit.Votes {
 		if v.BlockIdFlag != cmtproto.BlockIDFlagCommit {
 			continue
@@ -342,10 +386,10 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 		var voteExt types.OracleVoteExtension
 		if err := voteExt.Unmarshal(v.VoteExtension); err != nil {
 			h.logger.Error("failed to decode vote extension", "err", err, "validator", fmt.Sprintf("%x", v.Validator.Address))
-			return nil, nil, err
+			return count, nil, nil, err
 		}
 
-		h.logger.Warn("extension", "validator", hex.EncodeToString(v.Validator.Address), "extension", voteExt)
+		h.logger.Debug("received", "validator", hex.EncodeToString(v.Validator.Address), "extension", voteExt)
 
 		totalStake += v.Validator.Power
 
@@ -372,28 +416,29 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 		}
 
 		sha := sha256.New()
-		for _, block := range voteExt.Blocks {
+		for _, block := range voteExt.Blocks.Headers {
 			sha.Write([]byte(block.Hash))
 		}
 		key := fmt.Sprintf("%x", sha.Sum(nil))
 
-		blockHeaders[key] = voteExt.Blocks
+		blockHeaders[key] = voteExt.Blocks.Headers
 		if power, ok := headerStakes[key]; ok {
 			headerStakes[key] = power + v.Validator.Power
 		} else {
 			headerStakes[key] = v.Validator.Power
 		}
+		count++
 	}
 
 	if totalStake == 0 {
-		return nil, nil, types.ErrInsufficientVotingPower
+		return count, nil, nil, types.ErrInsufficientVotingPower
 	}
 
 	// finalize average by dividing by total stake, i.e. total weights
 	for base, price := range stakeWeightedPrices {
 		if price.GT(math.LegacyZeroDec()) {
-			if vp, ok := stakeWeightedVotingPower[base]; ok && vp.RoundInt64()*3 > totalStake*2 {
-				stakeWeightedPrices[base] = price.Quo(vp)
+			if vp, ok := stakeWeightedVotingPower[base]; ok && vp.RoundInt64()*2 >= totalStake {
+				finalPrice[base] = price.Quo(vp)
 			}
 		} else {
 			h.logger.Error("Got invalid price.", "symbal", base, "price", price)
@@ -402,16 +447,24 @@ func (h *PriceOracleVoteExtHandler) extractPricesAndBlockHeaders(_ sdk.Context, 
 
 	headers := []*types.BlockHeader{}
 	for key, power := range headerStakes {
-		if selected, ok := blockHeaders[key]; ok && power*3 > totalStake*2 {
+		if selected, ok := blockHeaders[key]; ok && power*2 >= totalStake {
 			headers = append(headers, selected...)
 			break
 		}
 	}
-	return stakeWeightedPrices, headers, nil
+
+	return count, finalPrice, headers, nil
 }
 
 func voteExtensionEnabled(ctx sdk.Context, height int64) bool {
 	consParams := ctx.ConsensusParams()
 
 	return consParams.Abci != nil && height > consParams.Abci.VoteExtensionsEnableHeight && consParams.Abci.VoteExtensionsEnableHeight != 0
+}
+
+func newBlock(best int64, headers []*types.BlockHeader) types.Blocks {
+	return types.Blocks{
+		Best:    best,
+		Headers: headers,
+	}
 }
