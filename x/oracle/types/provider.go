@@ -34,10 +34,10 @@ func Subscribe(provider string, svrCtx *server.Context, ctx context.Context, url
 				if c, _, err = websocket.DefaultDialer.Dial(url, nil); err == nil {
 					reconnect = false
 					sendMessage(c, msg)
-					svrCtx.Logger.Info("connected price provider", "url", url)
+					svrCtx.Logger.With("module", ModuleName).Info("connected price provider", "url", url)
 					break
 				} else {
-					svrCtx.Logger.Error("re-connecting...", "error", err, "provider", provider)
+					svrCtx.Logger.With("module", ModuleName).Error("re-connecting...", "error", err, "provider", provider)
 				}
 			}
 		}
@@ -48,7 +48,7 @@ func Subscribe(provider string, svrCtx *server.Context, ctx context.Context, url
 				CachePrice(provider, p)
 			}
 		} else {
-			svrCtx.Logger.Error("provider disconnected", "error", err, "provider", provider)
+			svrCtx.Logger.With("module", ModuleName).Error("provider disconnected", "error", err, "provider", provider)
 			c.Close()
 			reconnect = true
 		}

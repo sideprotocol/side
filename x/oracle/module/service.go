@@ -27,8 +27,6 @@ func Start(svrCtx *server.Context, clientCtx client.Context, ctx context.Context
 
 	if types.StartProviders {
 
-		svrCtx.Logger.Info("price service", "module", "oracle", "msg", "Start Oracle Price Subscriber")
-
 		go binance.Subscribe(svrCtx, ctx)
 		go okex.Subscribe(svrCtx, ctx)
 		go coinbase.Subscribe(svrCtx, ctx)

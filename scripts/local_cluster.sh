@@ -203,4 +203,4 @@ for ((i=START; i<=N; i++)); do
 done
 
 # Start the node (remove the --pruning=nothing flag if historical queries are not needed)
-$BINARY start --log_level info --minimum-gas-prices=0.0001${DENOMS[0]} --home ${APPHOME%?}1
+$BINARY start --log_level "*:info,oracle:debug" --minimum-gas-prices=0.0001${DENOMS[0]} --home ${APPHOME%?}1
