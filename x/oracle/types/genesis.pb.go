@@ -23,7 +23,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// GenesisState defines the lending module's genesis state.
+// GenesisState defines the oracle module's genesis state.
 type GenesisState struct {
 	Params Params         `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
 	Prices []*OraclePrice `protobuf:"bytes,2,rep,name=prices,proto3" json:"prices,omitempty"`

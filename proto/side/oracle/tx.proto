@@ -23,16 +23,16 @@ service Msg {
 // Since: cosmos-sdk 0.47
 message MsgUpdateParams {
     option (cosmos.msg.v1.signer) = "authority";
-  
+
     // authority is the address that controls the module (defaults to x/gov unless overwritten).
     string authority = 1;
-  
+
     // params defines the x/oracle parameters to be updated.
     //
     // NOTE: All parameters must be supplied.
     Params params = 2 [(gogoproto.nullable) = false];
   }
-  
+
   // MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
   //
   // Since: cosmos-sdk 0.47
