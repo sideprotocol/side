@@ -305,8 +305,10 @@ func handleRefreshingRequests(ctx sdk.Context, k keeper.Keeper) {
 // updateRateLimit updates the rate limit
 func updateRateLimit(ctx sdk.Context, k keeper.Keeper) {
 	if !k.HasRateLimit(ctx) {
-		// initialize the rate limit
-		k.SetRateLimit(ctx, k.NewRateLimit(ctx))
+		if k.RateLimitParamsSet(ctx) {
+			// initialize the rate limit if the params are set
+			k.SetRateLimit(ctx, k.NewRateLimit(ctx))
+		}
 
 		return
 	}

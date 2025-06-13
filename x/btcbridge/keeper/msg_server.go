@@ -429,8 +429,10 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	m.SetParams(ctx, msg.Params)
 
-	// update total quotas of the rate limit
-	m.UpdateRateLimitTotalQuotas(ctx, m.GlobalRateLimitSupplyPercentageQuota(ctx), m.AddressRateLimitQuota(ctx))
+	// update total quotas of the rate limit if any
+	if m.HasRateLimit(ctx) {
+		m.UpdateRateLimitTotalQuotas(ctx, m.GlobalRateLimitSupplyPercentageQuota(ctx), m.AddressRateLimitQuota(ctx))
+	}
 
 	return &types.MsgUpdateParamsResponse{}, nil
 }
