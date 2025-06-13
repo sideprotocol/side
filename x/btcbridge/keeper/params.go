@@ -78,6 +78,12 @@ func (k Keeper) MaxBtcBatchWithdrawNum(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).WithdrawParams.MaxBtcBatchWithdrawNum
 }
 
+// RateLimitParamsSet returns true if the rate limit params are set, false otherwise
+func (k Keeper) RateLimitParamsSet(ctx sdk.Context) bool {
+	// check if the global rate limit period is set (or address rate limit period)
+	return k.GetParams(ctx).RateLimitParams.GlobalRateLimitParams.Period > 0
+}
+
 // GlobalRateLimitPeriod gets the period of the global rate limit
 func (k Keeper) GlobalRateLimitPeriod(ctx sdk.Context) time.Duration {
 	return k.GetParams(ctx).RateLimitParams.GlobalRateLimitParams.Period
