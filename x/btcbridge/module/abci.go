@@ -10,13 +10,15 @@ import (
 	"github.com/sideprotocol/side/x/btcbridge/types"
 )
 
-// EndBlocker called at every block
+// EndBlocker called at the end of every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handleDKGRequests(ctx, k)
 	handleRefreshingRequests(ctx, k)
 
 	handleIBCWithdrawRequests(ctx, k)
 	handleBtcWithdrawRequests(ctx, k)
+
+	updateRateLimit(ctx, k)
 
 	handleVaultTransfer(ctx, k)
 }
@@ -211,6 +213,14 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
+		// handle rate limit
+		if err := k.HandleRateLimit(ctx, req.Address, amount); err != nil {
+			k.Logger(ctx).Info("failed to perform withdrawal from IBC", "address", req.Address, "amount", req.Amount, "err", err)
+
+			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
+			continue
+		}
+
 		// burn asset
 		if err := k.BurnAsset(ctx, req.Address, withdrawAmount.Add(networkFee)); err != nil {
 			k.Logger(ctx).Info("failed to burn asset for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "burned amount", withdrawAmount.Add(networkFee), "err", err)
@@ -290,4 +300,32 @@ func handleRefreshingRequests(ctx sdk.Context, k keeper.Keeper) {
 			),
 		)
 	}
+}
+
+// updateRateLimit updates the rate limit
+func updateRateLimit(ctx sdk.Context, k keeper.Keeper) {
+	if !k.HasRateLimit(ctx) {
+		// initialize the rate limit
+		k.SetRateLimit(ctx, k.NewRateLimit(ctx))
+
+		return
+	}
+
+	rateLimit := k.GetRateLimit(ctx)
+
+	// if the current global rate limit epoch has ended, proceed to the next one
+	if !ctx.BlockTime().Before(rateLimit.GlobalRateLimit.EndTime) {
+		rateLimit.GlobalRateLimit = k.NewGlobalRateLimit(ctx)
+	}
+
+	// if the current per address rate limit epoch has ended, proceed to the next one
+	if !ctx.BlockTime().Before(rateLimit.AddressRateLimit.EndTime) {
+		// remove the current address rate limit details
+		k.RemoveAllAddressRateLimitDetails(ctx)
+
+		rateLimit.AddressRateLimit = k.NewAddressRateLimit(ctx)
+	}
+
+	// update rate limit
+	k.SetRateLimit(ctx, rateLimit)
 }

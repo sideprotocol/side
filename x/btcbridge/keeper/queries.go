@@ -330,3 +330,44 @@ func (k Keeper) QueryIBCDepositScript(goCtx context.Context, req *types.QueryIBC
 
 	return &types.QueryIBCDepositScriptResponse{Script: hex.EncodeToString(script)}, nil
 }
+
+func (k Keeper) QueryRateLimit(goCtx context.Context, req *types.QueryRateLimitRequest) (*types.QueryRateLimitResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasRateLimit(ctx) {
+		return nil, status.Error(codes.NotFound, "rate limit does not exist")
+	}
+
+	return &types.QueryRateLimitResponse{RateLimit: k.GetRateLimit(ctx)}, nil
+}
+
+func (k Keeper) QueryRateLimitByAddress(goCtx context.Context, req *types.QueryRateLimitByAddressRequest) (*types.QueryRateLimitByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(req.Address); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid address")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasRateLimit(ctx) {
+		return nil, status.Error(codes.NotFound, "rate limit does not exist")
+	}
+
+	addressRateLimit := k.GetRateLimit(ctx).AddressRateLimit
+	rateLimitDetails := k.GetAddressRateLimitDetails(ctx, req.Address)
+
+	return &types.QueryRateLimitByAddressResponse{
+		Address:   req.Address,
+		StartTime: addressRateLimit.StartTime,
+		EndTime:   addressRateLimit.EndTime,
+		Quota:     addressRateLimit.Quota,
+		Used:      rateLimitDetails.Used,
+	}, nil
+}

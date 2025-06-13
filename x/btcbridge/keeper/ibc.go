@@ -204,15 +204,20 @@ func (k Keeper) IBCReceivePacketCallback(
 		return nil
 	}
 
+	// check if the recipient address is valid btc address
+	if !types.IsValidBtcAddress(data.Receiver) {
+		return nil
+	}
+
 	// check amount
 	amount, ok := sdkmath.NewIntFromString(data.Amount)
 	if !ok || !amount.IsInt64() {
 		return nil
 	}
 
-	// check if the recipient address is valid btc address
-	if !types.IsValidBtcAddress(data.Receiver) {
-		return nil
+	// check rate limit
+	if err := k.CheckRateLimit(ctx, data.Receiver, amount.Int64()); err != nil {
+		return err
 	}
 
 	// add to IBC withdrawal request queue

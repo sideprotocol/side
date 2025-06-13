@@ -38,6 +38,7 @@ var (
 	ErrSigningRequestDoesNotExist   = errorsmod.Register(ModuleName, 3112, "signing request does not exist")
 	ErrSigningRequestConfirmed      = errorsmod.Register(ModuleName, 3113, "signing request has been confirmed")
 	ErrWithdrawNotEnabled           = errorsmod.Register(ModuleName, 3114, "withdrawal not enabled")
+	ErrRateLimitReached             = errorsmod.Register(ModuleName, 3115, "rate limit reached")
 
 	ErrUTXODoesNotExist = errorsmod.Register(ModuleName, 4100, "utxo does not exist")
 	ErrUTXOLocked       = errorsmod.Register(ModuleName, 4101, "utxo locked")

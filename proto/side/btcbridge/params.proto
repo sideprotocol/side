@@ -75,6 +75,8 @@ message Params {
   TSSParams tss_params = 14 [(gogoproto.nullable) = false];
   // IBC params
   IBCParams ibc_params = 15 [(gogoproto.nullable) = false];
+  // Rate limit params
+  RateLimitParams rate_limit_params = 16 [(gogoproto.nullable) = false];
 }
 
 // AssetType defines the type of asset
@@ -128,6 +130,30 @@ message ProtocolFees {
   int64 withdraw_fee = 2;
   // Protocol fee collector
   string collector = 3;
+}
+
+// RateLimitParams defines the params related to the rate limit for BTC withdrawal
+message RateLimitParams {
+  // Global rate limit params
+  GlobalRateLimitParams global_rate_limit_params = 1 [(gogoproto.nullable) = false];
+  // Per address rate limit params
+  AddressRateLimitParams address_rate_limit_params = 2 [(gogoproto.nullable) = false];
+}
+
+// GlobalRateLimitParams defines the global rate limit params
+message GlobalRateLimitParams {
+  // Duration of each rate limit epoch
+  google.protobuf.Duration period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  // Maximum withdrawable supply percentage during the rate limit period; 100 means no limit
+  uint32 supply_percentage_quota = 2;
+}
+
+// AddressRateLimitParams defines the per address rate limit params
+message AddressRateLimitParams {
+  // Duration of each rate limit epoch
+  google.protobuf.Duration period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  // Maximum withdrawable amount during the rate limit period; 0 means no limit
+  int64 quota = 2;
 }
 
 // TSSParams defines the params related to TSS

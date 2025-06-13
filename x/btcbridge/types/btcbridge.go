@@ -18,3 +18,13 @@ func (req *SigningRequest) Compact() *CompactSigningRequest {
 		Status:       req.Status,
 	}
 }
+
+// GlobalRateLimitEnabled returns true if the global rate limit is enabled, false otherwise
+func GlobalRateLimitEnabled(rateLimit *RateLimit) bool {
+	return rateLimit.GlobalRateLimit.Quota > 0
+}
+
+// AddressRateLimitEnabled returns true if the per address rate limit is enabled, false otherwise
+func AddressRateLimitEnabled(rateLimit *RateLimit) bool {
+	return rateLimit.AddressRateLimit.Quota > 0
+}

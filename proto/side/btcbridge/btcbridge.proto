@@ -71,6 +71,42 @@ message IBCWithdrawRequest {
   string amount = 4;
 }
 
+// Rate limit for BTC withdrawal
+message RateLimit {
+  GlobalRateLimit global_rate_limit = 1 [(gogoproto.nullable) = false];
+  AddressRateLimit address_rate_limit = 2 [(gogoproto.nullable) = false];
+}
+
+// Global rate limit for BTC withdrawal
+message GlobalRateLimit {
+  // Starting time for the current epoch
+  google.protobuf.Timestamp start_time = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // End time for the current epoch
+  google.protobuf.Timestamp end_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // Maximum withdrawable amount for the current epoch; 0 means no limit
+  int64 quota = 3;
+  // Used quota currently
+  int64 used = 4;
+}
+
+// Per address rate limit for BTC withdrawal
+message AddressRateLimit {
+  // Starting time for the current epoch
+  google.protobuf.Timestamp start_time = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // End time for the current epoch
+  google.protobuf.Timestamp end_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // Maximum withdrawable amount for the current epoch; 0 means no limit
+  int64 quota = 3;
+}
+
+// Per address rate limit details
+message AddressRateLimitDetails {
+  // Address
+  string address = 1;
+  // Used quota currently
+  int64 used = 2;
+}
+
 // Bitcoin UTXO
 message UTXO {
   string txid = 1;

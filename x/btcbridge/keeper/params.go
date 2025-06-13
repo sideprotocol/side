@@ -78,6 +78,26 @@ func (k Keeper) MaxBtcBatchWithdrawNum(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).WithdrawParams.MaxBtcBatchWithdrawNum
 }
 
+// GlobalRateLimitPeriod gets the period of the global rate limit
+func (k Keeper) GlobalRateLimitPeriod(ctx sdk.Context) time.Duration {
+	return k.GetParams(ctx).RateLimitParams.GlobalRateLimitParams.Period
+}
+
+// GlobalRateLimitSupplyPercentageQuota gets the supply percentage quota of the global rate limit
+func (k Keeper) GlobalRateLimitSupplyPercentageQuota(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).RateLimitParams.GlobalRateLimitParams.SupplyPercentageQuota
+}
+
+// AddressRateLimitPeriod gets the period of the per address rate limit
+func (k Keeper) AddressRateLimitPeriod(ctx sdk.Context) time.Duration {
+	return k.GetParams(ctx).RateLimitParams.AddressRateLimitParams.Period
+}
+
+// AddressRateLimitQuota gets the quota of the per address rate limit
+func (k Keeper) AddressRateLimitQuota(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).RateLimitParams.AddressRateLimitParams.Quota
+}
+
 // IBCPortId gets the IBC port id
 func (k Keeper) IBCPortId(ctx sdk.Context) string {
 	return k.GetParams(ctx).IbcParams.PortId

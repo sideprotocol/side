@@ -37,6 +37,7 @@ type BankKeeper interface {
 	BurnCoins(ctx context.Context, moduleName string, amounts sdk.Coins) error
 
 	HasSupply(ctx context.Context, denom string) bool
+	GetSupply(ctx context.Context, denom string) sdk.Coin
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
 }
 
