@@ -315,7 +315,24 @@ func updateRateLimit(ctx sdk.Context, k keeper.Keeper) {
 
 	// if the current global rate limit epoch has ended, proceed to the next one
 	if !ctx.BlockTime().Before(rateLimit.GlobalRateLimit.EndTime) {
-		rateLimit.GlobalRateLimit = k.NewGlobalRateLimit(ctx)
+		globalRateLimit := rateLimit.GlobalRateLimit
+		newGlobalRateLimit := k.NewGlobalRateLimit(ctx)
+
+		rateLimit.GlobalRateLimit = newGlobalRateLimit
+
+		// emit events
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeGlobalRateLimitUpdated,
+				sdk.NewAttribute(types.AttributeKeyPreviousStartTime, globalRateLimit.StartTime.String()),
+				sdk.NewAttribute(types.AttributeKeyPreviousEndTime, globalRateLimit.EndTime.String()),
+				sdk.NewAttribute(types.AttributeKeyPreviousQuota, fmt.Sprintf("%d", globalRateLimit.Quota)),
+				sdk.NewAttribute(types.AttributeKeyPreviousUsed, fmt.Sprintf("%d", globalRateLimit.Used)),
+				sdk.NewAttribute(types.AttributeKeyStartTime, newGlobalRateLimit.StartTime.String()),
+				sdk.NewAttribute(types.AttributeKeyEndTime, newGlobalRateLimit.EndTime.String()),
+				sdk.NewAttribute(types.AttributeKeyQuota, fmt.Sprintf("%d", newGlobalRateLimit.Quota)),
+			),
+		)
 	}
 
 	// if the current per address rate limit epoch has ended, proceed to the next one
