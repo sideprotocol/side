@@ -32,6 +32,9 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 		k.SetVaultVersion(ctx, vaults[len(vaults)-1].Version)
 	}
+
+	// set the rate limit
+	k.SetRateLimit(ctx, k.NewRateLimit(ctx))
 }
 
 // ExportGenesis returns the module's exported genesis

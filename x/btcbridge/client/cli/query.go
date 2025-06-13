@@ -39,6 +39,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryRefreshingRequest())
 	cmd.AddCommand(CmdQueryRefreshingRequests())
 	cmd.AddCommand(CmdQueryRefreshingCompletions())
+	cmd.AddCommand(CmdQueryRateLimit())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -441,6 +442,42 @@ func CmdQueryRefreshingCompletions() *cobra.Command {
 			}
 
 			res, err := queryClient.QueryRefreshingCompletions(cmd.Context(), &types.QueryRefreshingCompletionsRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRateLimit() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "rate-limit [address]",
+		Short: "Query the current rate limit with the optional address",
+		Args:  cobra.MaximumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if len(args) > 0 {
+				res, err := queryClient.QueryRateLimitByAddress(cmd.Context(), &types.QueryRateLimitByAddressRequest{Address: args[0]})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			res, err := queryClient.QueryRateLimit(cmd.Context(), &types.QueryRateLimitRequest{})
 			if err != nil {
 				return err
 			}

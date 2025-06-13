@@ -3,6 +3,7 @@ package side.btcbridge;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "side/btcbridge/params.proto";
 import "side/btcbridge/btcbridge.proto";
@@ -98,6 +99,14 @@ service Query {
   // QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
   rpc QueryIBCDepositScript(QueryIBCDepositScriptRequest) returns (QueryIBCDepositScriptResponse) {
     option (google.api.http).get = "/side/btcbridge/deposit/ibc_script";
+  }
+  // QueryRateLimit queries the current rate limit
+  rpc QueryRateLimit(QueryRateLimitRequest) returns (QueryRateLimitResponse) {
+    option (google.api.http).get = "/side/btcbridge/rate_limit";
+  }
+  // QueryRateLimitByAddress queries the current rate limit by the given address
+  rpc QueryRateLimitByAddress(QueryRateLimitByAddressRequest) returns (QueryRateLimitByAddressResponse) {
+    option (google.api.http).get = "/side/btcbridge/rate_limit/address/{address}";
   }
 }
 
@@ -325,4 +334,32 @@ message QueryIBCDepositScriptRequest {
 // QueryIBCDepositScriptResponse is the response type for the Query/IBCDepositScript RPC method.
 message QueryIBCDepositScriptResponse {
   string script = 1;
+}
+
+// QueryRateLimitRequest is the request type for the Query/RateLimit RPC method.
+message QueryRateLimitRequest {
+}
+
+// QueryRateLimitResponse is the response type for the Query/RateLimit RPC method.
+message QueryRateLimitResponse {
+  RateLimit rate_limit = 1;
+}
+
+// QueryRateLimitByAddressRequest is the request type for the Query/RateLimitByAddress RPC method.
+message QueryRateLimitByAddressRequest {
+  string address = 1;
+}
+
+// QueryRateLimitByAddressResponse is the response type for the Query/RateLimitByAddress RPC method.
+message QueryRateLimitByAddressResponse {
+  // Address
+  string address = 1;
+  // Starting time for the current epoch
+  google.protobuf.Timestamp start_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // End time for the current epoch
+  google.protobuf.Timestamp end_time = 3 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // Maximum withdrawable amount for the current epoch; 0 means no limit
+  int64 quota = 4;
+  // Used quota currently
+  int64 used = 5;
 }

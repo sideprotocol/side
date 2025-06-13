@@ -48,6 +48,9 @@ var (
 	RefreshingCompletionKeyPrefix = []byte{0x52} // key prefix for the refreshing completion
 
 	IBCWithdrawRequestQueueKeyPrefix = []byte{0x60} // prefix for BTC withdrawal request queue via IBC
+
+	RateLimitKey                = []byte{0x70} // key for the rate limit
+	RateLimitByAddressKeyPrefix = []byte{0x71} // key prefix for the rate limit by address
 )
 
 func BtcWithdrawRequestKey(sequence uint64) []byte {
@@ -126,4 +129,8 @@ func RefreshingCompletionKey(id uint64, consPubKey string) []byte {
 
 func IBCWithdrawRequestQueueKey(channelId string, sequence uint64) []byte {
 	return append(append(IBCWithdrawRequestQueueKeyPrefix, []byte(channelId)...), sdk.Uint64ToBigEndian(sequence)...)
+}
+
+func RateLimitByAddressKey(address string) []byte {
+	return append(RateLimitByAddressKeyPrefix, []byte(address)...)
 }

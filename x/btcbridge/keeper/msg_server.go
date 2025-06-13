@@ -157,6 +157,11 @@ func (m msgServer) WithdrawToBitcoin(goCtx context.Context, msg *types.MsgWithdr
 		return nil, err
 	}
 
+	// handle rate limit
+	if err := m.HandleRateLimit(ctx, msg.Sender, amount); err != nil {
+		return nil, err
+	}
+
 	if m.ProtocolWithdrawFeeEnabled(ctx) {
 		// deduct the protocol fee and get the actual withdrawal amount
 		amount, err = m.HandleWithdrawProtocolFee(ctx, sender, amount)
@@ -423,6 +428,9 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	m.SetParams(ctx, msg.Params)
+
+	// update total quotas of the rate limit
+	m.UpdateRateLimitTotalQuotas(ctx, m.GlobalRateLimitSupplyPercentageQuota(ctx), m.AddressRateLimitQuota(ctx))
 
 	return &types.MsgUpdateParamsResponse{}, nil
 }

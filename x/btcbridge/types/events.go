@@ -2,14 +2,15 @@ package types
 
 // BtcBridge module event types and attribute keys
 const (
-	EventTypeInitiateDKG         = "initiate_dkg_bridge"
-	EventTypeInitiateSigning     = "initiate_signing_bridge"
-	EventTypeInitiateRefreshing  = "initiate_refreshing_bridge"
-	EventTypeCompleteRefreshing  = "complete_refreshing_bridge"
-	EventTypeRefreshingCompleted = "refreshing_completed_bridge"
-	EventTypeIBCTransfer         = "ibc_transfer_bridge"
-	EventTypeIBCWithdrawQueue    = "ibc_withdraw_queue"
-	EventTypeIBCWithdraw         = "ibc_withdraw"
+	EventTypeInitiateDKG            = "initiate_dkg_bridge"
+	EventTypeInitiateSigning        = "initiate_signing_bridge"
+	EventTypeInitiateRefreshing     = "initiate_refreshing_bridge"
+	EventTypeCompleteRefreshing     = "complete_refreshing_bridge"
+	EventTypeRefreshingCompleted    = "refreshing_completed_bridge"
+	EventTypeIBCTransfer            = "ibc_transfer_bridge"
+	EventTypeIBCWithdrawQueue       = "ibc_withdraw_queue"
+	EventTypeIBCWithdraw            = "ibc_withdraw"
+	EventTypeGlobalRateLimitUpdated = "global_rate_limit_updated"
 
 	AttributeKeyId = "id"
 
@@ -34,6 +35,14 @@ const (
 
 	AttributeKeySender      = "sender"
 	AttributeKeyParticipant = "participant"
+
+	AttributeKeyPreviousStartTime = "previous_start_time"
+	AttributeKeyPreviousEndTime   = "previous_end_time"
+	AttributeKeyPreviousQuota     = "previous_quota"
+	AttributeKeyPreviousUsed      = "previous_used"
+	AttributeKeyStartTime         = "start_time"
+	AttributeKeyEndTime           = "end_time"
+	AttributeKeyQuota             = "quota"
 )
 
 const (

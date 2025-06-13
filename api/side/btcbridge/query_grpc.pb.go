@@ -41,6 +41,8 @@ const (
 	Query_QueryRefreshingRequests_FullMethodName            = "/side.btcbridge.Query/QueryRefreshingRequests"
 	Query_QueryRefreshingCompletions_FullMethodName         = "/side.btcbridge.Query/QueryRefreshingCompletions"
 	Query_QueryIBCDepositScript_FullMethodName              = "/side.btcbridge.Query/QueryIBCDepositScript"
+	Query_QueryRateLimit_FullMethodName                     = "/side.btcbridge.Query/QueryRateLimit"
+	Query_QueryRateLimitByAddress_FullMethodName            = "/side.btcbridge.Query/QueryRateLimitByAddress"
 )
 
 // QueryClient is the client API for Query service.
@@ -91,6 +93,10 @@ type QueryClient interface {
 	QueryRefreshingCompletions(ctx context.Context, in *QueryRefreshingCompletionsRequest, opts ...grpc.CallOption) (*QueryRefreshingCompletionsResponse, error)
 	// QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
 	QueryIBCDepositScript(ctx context.Context, in *QueryIBCDepositScriptRequest, opts ...grpc.CallOption) (*QueryIBCDepositScriptResponse, error)
+	// QueryRateLimit queries the current rate limit
+	QueryRateLimit(ctx context.Context, in *QueryRateLimitRequest, opts ...grpc.CallOption) (*QueryRateLimitResponse, error)
+	// QueryRateLimitByAddress queries the current rate limit by the given address
+	QueryRateLimitByAddress(ctx context.Context, in *QueryRateLimitByAddressRequest, opts ...grpc.CallOption) (*QueryRateLimitByAddressResponse, error)
 }
 
 type queryClient struct {
@@ -299,6 +305,24 @@ func (c *queryClient) QueryIBCDepositScript(ctx context.Context, in *QueryIBCDep
 	return out, nil
 }
 
+func (c *queryClient) QueryRateLimit(ctx context.Context, in *QueryRateLimitRequest, opts ...grpc.CallOption) (*QueryRateLimitResponse, error) {
+	out := new(QueryRateLimitResponse)
+	err := c.cc.Invoke(ctx, Query_QueryRateLimit_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) QueryRateLimitByAddress(ctx context.Context, in *QueryRateLimitByAddressRequest, opts ...grpc.CallOption) (*QueryRateLimitByAddressResponse, error) {
+	out := new(QueryRateLimitByAddressResponse)
+	err := c.cc.Invoke(ctx, Query_QueryRateLimitByAddress_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -347,6 +371,10 @@ type QueryServer interface {
 	QueryRefreshingCompletions(context.Context, *QueryRefreshingCompletionsRequest) (*QueryRefreshingCompletionsResponse, error)
 	// QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
 	QueryIBCDepositScript(context.Context, *QueryIBCDepositScriptRequest) (*QueryIBCDepositScriptResponse, error)
+	// QueryRateLimit queries the current rate limit
+	QueryRateLimit(context.Context, *QueryRateLimitRequest) (*QueryRateLimitResponse, error)
+	// QueryRateLimitByAddress queries the current rate limit by the given address
+	QueryRateLimitByAddress(context.Context, *QueryRateLimitByAddressRequest) (*QueryRateLimitByAddressResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -419,6 +447,12 @@ func (UnimplementedQueryServer) QueryRefreshingCompletions(context.Context, *Que
 }
 func (UnimplementedQueryServer) QueryIBCDepositScript(context.Context, *QueryIBCDepositScriptRequest) (*QueryIBCDepositScriptResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryIBCDepositScript not implemented")
+}
+func (UnimplementedQueryServer) QueryRateLimit(context.Context, *QueryRateLimitRequest) (*QueryRateLimitResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryRateLimit not implemented")
+}
+func (UnimplementedQueryServer) QueryRateLimitByAddress(context.Context, *QueryRateLimitByAddressRequest) (*QueryRateLimitByAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryRateLimitByAddress not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -829,6 +863,42 @@ func _Query_QueryIBCDepositScript_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_QueryRateLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRateLimitRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryRateLimit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryRateLimit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryRateLimit(ctx, req.(*QueryRateLimitRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_QueryRateLimitByAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRateLimitByAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).QueryRateLimitByAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_QueryRateLimitByAddress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).QueryRateLimitByAddress(ctx, req.(*QueryRateLimitByAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -923,6 +993,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryIBCDepositScript",
 			Handler:    _Query_QueryIBCDepositScript_Handler,
+		},
+		{
+			MethodName: "QueryRateLimit",
+			Handler:    _Query_QueryRateLimit_Handler,
+		},
+		{
+			MethodName: "QueryRateLimitByAddress",
+			Handler:    _Query_QueryRateLimitByAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

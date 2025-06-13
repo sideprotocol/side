@@ -41,6 +41,15 @@ var (
 	// default maximum number of btc batch withdrawal per batch
 	DefaultMaxBtcBatchWithdrawNum = uint32(100)
 
+	// default period for rate limit
+	DefaultRateLimitPeriod = 30 * time.Hour // 30 hours
+
+	// default supply percentage quota for global rate limit
+	DefaultGlobalRateLimitSupplyPercentageQuota = uint32(5) // 5% sBTC supply
+
+	// default quota for per address rate limit
+	DefaultAddressRateLimitQuota = int64(50000000) // 0.5 BTC
+
 	// default DKG timeout period
 	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
 
@@ -84,6 +93,16 @@ func NewParams() Params {
 			DepositFee:  4000, // 0.00004 BTC
 			WithdrawFee: 6000, // 0.00006 BTC
 			Collector:   authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		},
+		RateLimitParams: RateLimitParams{
+			GlobalRateLimitParams: GlobalRateLimitParams{
+				Period:                DefaultRateLimitPeriod,
+				SupplyPercentageQuota: DefaultGlobalRateLimitSupplyPercentageQuota,
+			},
+			AddressRateLimitParams: AddressRateLimitParams{
+				Period: DefaultRateLimitPeriod,
+				Quota:  DefaultAddressRateLimitQuota,
+			},
 		},
 		TssParams: TSSParams{
 			DkgTimeoutPeriod:                  DefaultDKGTimeoutPeriod,
@@ -133,6 +152,10 @@ func (p Params) Validate() error {
 	}
 
 	if err := validateProtocolParams(&p.ProtocolLimits, &p.ProtocolFees); err != nil {
+		return err
+	}
+
+	if err := validateRateLimitParams(&p.RateLimitParams); err != nil {
 		return err
 	}
 
@@ -305,6 +328,23 @@ func validateProtocolParams(protocolLimits *ProtocolLimits, protocolFees *Protoc
 		if err != nil {
 			return errorsmod.Wrapf(ErrInvalidParams, "invalid protocol fee collector")
 		}
+	}
+
+	return nil
+}
+
+// validateRateLimitParams validates the given rate limit params
+func validateRateLimitParams(params *RateLimitParams) error {
+	if params.GlobalRateLimitParams.Period <= 0 || params.AddressRateLimitParams.Period <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid rate limit period")
+	}
+
+	if params.GlobalRateLimitParams.SupplyPercentageQuota == 0 || params.GlobalRateLimitParams.SupplyPercentageQuota > 100 {
+		return errorsmod.Wrapf(ErrInvalidParams, "global supply percentage quota must be between (0, 100]")
+	}
+
+	if params.AddressRateLimitParams.Quota < 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "per address quota cannot be negative")
 	}
 
 	return nil
