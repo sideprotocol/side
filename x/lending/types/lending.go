@@ -207,6 +207,15 @@ func CheckBorrowAmountLimit(pool *LendingPool, borrowAmount sdkmath.Int) error {
 	return nil
 }
 
+// CollateralRedeemable returns true if the collateral is redeemable, false otherwise
+func CollateralRedeemable(loan *Loan) bool {
+	if len(loan.Authorizations) > 0 {
+		return loan.Status == LoanStatus_Rejected
+	}
+
+	return loan.Status == LoanStatus_Requested || loan.Status == LoanStatus_Rejected
+}
+
 // GetTrancheConfig gets the corresponding tranche config according to the given maturity
 func GetTrancheConfig(tranches []PoolTrancheConfig, maturity int64) (*PoolTrancheConfig, bool) {
 	for _, tranche := range tranches {
