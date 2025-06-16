@@ -386,7 +386,7 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 
 		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
 
-		p.Inputs[i].TaprootInternalKey = internalKey[1:]
+		p.Inputs[i].TaprootInternalKey = internalKey
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,

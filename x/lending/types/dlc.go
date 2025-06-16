@@ -10,7 +10,6 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
-	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 
 	errorsmod "cosmossdk.io/errors"
 
@@ -75,6 +74,7 @@ func BuildDLCMeta(depositTxs []*psbt.Packet, vaultPkScript []byte, liquidationCe
 	repaymentScriptProof := merkleTree.LeafMerkleProofs[1]
 
 	internalKey := GetInternalKey(borrowerPubKeyBytes, dcmPubKeyBytes)
+	internalKeyBytes := btcschnorr.SerializePubKey(internalKey)
 
 	liquidationScriptControlBlock, err := GetControlBlock(internalKey, liquidationScriptProof)
 	if err != nil {
@@ -88,7 +88,7 @@ func BuildDLCMeta(depositTxs []*psbt.Packet, vaultPkScript []byte, liquidationCe
 
 	for i := range liquidationCetPsbt.Inputs {
 		liquidationCetPsbt.Inputs[i].SighashType = txscript.SigHashDefault
-		liquidationCetPsbt.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(internalKey)
+		liquidationCetPsbt.Inputs[i].TaprootInternalKey = internalKeyBytes
 		liquidationCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: liquidationScriptControlBlock,
@@ -100,7 +100,7 @@ func BuildDLCMeta(depositTxs []*psbt.Packet, vaultPkScript []byte, liquidationCe
 
 	for i := range repaymentCetPsbt.Inputs {
 		repaymentCetPsbt.Inputs[i].SighashType = txscript.SigHashDefault
-		repaymentCetPsbt.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(internalKey)
+		repaymentCetPsbt.Inputs[i].TaprootInternalKey = internalKeyBytes
 		repaymentCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: repaymentScriptControlBlock,
@@ -125,7 +125,7 @@ func BuildDLCMeta(depositTxs []*psbt.Packet, vaultPkScript []byte, liquidationCe
 		return nil, err
 	}
 
-	timeoutRefundTx, err := CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey.SerializeCompressed(), [][]byte{liquidationScript, repaymentScript, timeoutRefundScript}, 1)
+	timeoutRefundTx, err := CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKeyBytes, [][]byte{liquidationScript, repaymentScript, timeoutRefundScript}, 1)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +145,7 @@ func BuildDLCMeta(depositTxs []*psbt.Packet, vaultPkScript []byte, liquidationCe
 		},
 		TimeoutRefundTx:     timeoutRefundTx,
 		VaultUtxos:          vaultUtxos,
-		InternalKey:         hex.EncodeToString(internalKey.SerializeCompressed()),
+		InternalKey:         hex.EncodeToString(internalKeyBytes),
 		LiquidationScript:   hex.EncodeToString(liquidationScript),
 		RepaymentScript:     hex.EncodeToString(repaymentScript),
 		TimeoutRefundScript: hex.EncodeToString(timeoutRefundScript),
@@ -378,7 +378,7 @@ func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPk
 		return "", err
 	}
 
-	internalKey, err := secp256k1.ParsePubKey(internalKeyBytes)
+	internalKey, err := btcschnorr.ParsePubKey(internalKeyBytes)
 	if err != nil {
 		return "", err
 	}
@@ -392,7 +392,7 @@ func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPk
 	}
 
 	for i := range p.Inputs {
-		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(internalKey)
+		p.Inputs[i].TaprootInternalKey = internalKeyBytes
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,
@@ -422,7 +422,7 @@ func CreateRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 		return "", err
 	}
 
-	internalKey, err := secp256k1.ParsePubKey(internalKeyBytes)
+	internalKey, err := btcschnorr.ParsePubKey(internalKeyBytes)
 	if err != nil {
 		return "", err
 	}
@@ -436,7 +436,7 @@ func CreateRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 	}
 
 	for i := range p.Inputs {
-		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(internalKey)
+		p.Inputs[i].TaprootInternalKey = internalKeyBytes
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,
@@ -466,7 +466,7 @@ func CreateDefaultLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte
 		return "", err
 	}
 
-	internalKey, err := secp256k1.ParsePubKey(internalKeyBytes)
+	internalKey, err := btcschnorr.ParsePubKey(internalKeyBytes)
 	if err != nil {
 		return "", err
 	}
@@ -480,7 +480,7 @@ func CreateDefaultLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte
 	}
 
 	for i := range p.Inputs {
-		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(internalKey)
+		p.Inputs[i].TaprootInternalKey = internalKeyBytes
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,
@@ -510,7 +510,7 @@ func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []b
 		return "", err
 	}
 
-	internalKey, err := secp256k1.ParsePubKey(internalKeyBytes)
+	internalKey, err := btcschnorr.ParsePubKey(internalKeyBytes)
 	if err != nil {
 		return "", err
 	}
@@ -524,7 +524,7 @@ func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []b
 	}
 
 	for i := range p.Inputs {
-		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(internalKey)
+		p.Inputs[i].TaprootInternalKey = internalKeyBytes
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,
