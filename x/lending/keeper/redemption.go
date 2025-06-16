@@ -32,14 +32,13 @@ func (k Keeper) HandleRedemptionSignatures(ctx sdk.Context, id uint64, signature
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
 	dcmPubKey, _ := hex.DecodeString(loan.DCM)
 
-	script, _ := hex.DecodeString(k.GetDLCMeta(ctx, redemption.LoanId).MultisigScript)
-	leafHash := txscript.NewBaseTapLeaf(script).TapHash()
-
 	for i, ti := range p.UnsignedTx.TxIn {
 		prevTxHash := ti.PreviousOutPoint.Hash.String()
 
 		sigBytes, _ := hex.DecodeString(signatures[i])
 		borrowerSig, _ := hex.DecodeString(redemption.Signatures[i])
+
+		leafHash := txscript.NewBaseTapLeaf(p.Inputs[i].TaprootLeafScript[0].Script).TapHash()
 
 		p.Inputs[i].TaprootScriptSpendSig = []*psbt.TaprootScriptSpendSig{
 			{
@@ -85,6 +84,16 @@ func (k Keeper) HandleRedemptionSignatures(ctx sdk.Context, id uint64, signature
 	)
 
 	return nil
+}
+
+// GetRedemptionScript gets the script along with the corresponding control block for redemption
+func (k Keeper) GetRedemptionScript(ctx sdk.Context, loanId string) ([]byte, []byte) {
+	repaymentCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(k.GetDLCMeta(ctx, loanId).RepaymentCet.Tx)), true)
+
+	script := repaymentCet.Inputs[0].TaprootLeafScript[0].Script
+	controlBlock := repaymentCet.Inputs[0].TaprootLeafScript[0].ControlBlock
+
+	return script, controlBlock
 }
 
 // GetRedemptionId gets the current redemption id

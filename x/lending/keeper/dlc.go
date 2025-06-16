@@ -37,9 +37,11 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	poolConfig := k.GetPool(ctx, loan.PoolId).Config
 
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
+	borrowerAuthPubKey, _ := hex.DecodeString(loan.BorrowerAuthPubKey)
 	dcmPubKey, _ := hex.DecodeString(loan.DCM)
 
-	multisigScript, _ := types.CreateMultisigScript([][]byte{borrowerPubKey, dcmPubKey})
+	liquidationScript, _ := types.CreateMultisigScript([][]byte{borrowerAuthPubKey, dcmPubKey})
+	repaymentScript, _ := types.CreateMultisigScript([][]byte{borrowerPubKey, dcmPubKey})
 
 	var liquidationEvent *dlctypes.DLCEvent
 	if loan.LiquidationEventId != 0 {
@@ -57,9 +59,9 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	defaultLiquidationEvent := k.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
 	repaymentEvent := k.dlcKeeper.GetEvent(ctx, loan.RepaymentEventId)
 
-	liquidationCetInfo, _ := types.GetCetInfo(liquidationEvent, 0, multisigScript)
-	defaultLiquidationCetInfo, _ := types.GetCetInfo(defaultLiquidationEvent, 0, multisigScript)
-	repaymentCetInfo, _ := types.GetCetInfo(repaymentEvent, 0, multisigScript)
+	liquidationCetInfo, _ := types.GetCetInfo(liquidationEvent, 0, liquidationScript)
+	defaultLiquidationCetInfo, _ := types.GetCetInfo(defaultLiquidationEvent, 0, liquidationScript)
+	repaymentCetInfo, _ := types.GetCetInfo(repaymentEvent, 0, repaymentScript)
 
 	return []*types.CetInfo{
 		liquidationCetInfo,

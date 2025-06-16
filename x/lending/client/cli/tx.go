@@ -115,39 +115,40 @@ func CmdRemoveLiquidity() *cobra.Command {
 
 func CmdApply() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "apply [btc public key] [pool id] [borrow amount] [maturity] [dcm id] [referrer]",
+		Use:   "apply [borrower pub key] [borrower auth pub key] [pool id] [borrow amount] [maturity] [dcm id] [referrer]",
 		Short: "Apply loan with the related params",
-		Args:  cobra.RangeArgs(5, 6),
+		Args:  cobra.RangeArgs(6, 7),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			borrowAmount, err := sdk.ParseCoinNormalized(args[2])
+			borrowAmount, err := sdk.ParseCoinNormalized(args[3])
 			if err != nil {
 				return err
 			}
 
-			maturity, err := strconv.ParseInt(args[3], 10, 64)
+			maturity, err := strconv.ParseInt(args[4], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			dcmId, err := strconv.ParseUint(args[4], 10, 64)
+			dcmId, err := strconv.ParseUint(args[5], 10, 64)
 			if err != nil {
 				return err
 			}
 
 			referrer := ""
-			if len(args) == 6 {
-				referrer = args[5]
+			if len(args) == 7 {
+				referrer = args[6]
 			}
 
 			msg := types.NewMsgApply(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 				args[1],
+				args[2],
 				borrowAmount,
 				maturity,
 				dcmId,

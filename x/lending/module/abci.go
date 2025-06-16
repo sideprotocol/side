@@ -256,7 +256,7 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		// build signed liquidation cet if both borrower adapted signatures(obviously exist) and DCM signatures already exist
 		if len(dlcMeta.LiquidationCet.DCMSignatures) != 0 {
-			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.LiquidationCet.Tx, loan.BorrowerPubKey, dlcMeta.LiquidationCet.BorrowerAdaptedSignatures, loan.DCM, dlcMeta.LiquidationCet.DCMSignatures)
+			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.LiquidationCet.Tx, loan.BorrowerAuthPubKey, dlcMeta.LiquidationCet.BorrowerAdaptedSignatures, loan.DCM, dlcMeta.LiquidationCet.DCMSignatures)
 			if err != nil {
 				k.Logger(ctx).Info("failed to build signed liquidation cet", "loan id", loan.VaultAddress, "err", err)
 			} else {
@@ -314,7 +314,7 @@ func handleDefaultedLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		// build signed default liquidation cet if both borrower adapted signatures(obviously exist) and DCM signatures already exist
 		if len(dlcMeta.DefaultLiquidationCet.DCMSignatures) != 0 {
-			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.DefaultLiquidationCet.Tx, loan.BorrowerPubKey, dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures, loan.DCM, dlcMeta.DefaultLiquidationCet.DCMSignatures)
+			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.DefaultLiquidationCet.Tx, loan.BorrowerAuthPubKey, dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures, loan.DCM, dlcMeta.DefaultLiquidationCet.DCMSignatures)
 			if err != nil {
 				k.Logger(ctx).Info("failed to build signed default liquidation cet", "loan id", loan.VaultAddress, "err", err)
 			} else {
