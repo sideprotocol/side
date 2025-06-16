@@ -133,8 +133,9 @@ message QueryLoanCetInfosResponse {
 
 message QueryCollateralAddressRequest{
     string borrower_pubkey = 1;
-    string dcm_pubkey = 2 [(gogoproto.customname) = "DCMPubKey"];
-    uint64 maturity_time = 3;
+    string borrower_auth_pubkey = 2;
+    string dcm_pubkey = 3 [(gogoproto.customname) = "DCMPubKey"];
+    uint64 maturity_time = 4;
 }
 
 message QueryCollateralAddressResponse{

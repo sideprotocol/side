@@ -183,50 +183,51 @@ message Loan {
     string vault_address = 1; // id
     string borrower = 2;
     string borrowerPubKey = 3;
-    string dcm = 4 [(gogoproto.customname) = "DCM"];
-    int64 maturity_time = 5;
-    int64 final_timeout = 6;
-    string pool_id = 7;
-    cosmos.base.v1beta1.Coin borrow_amount = 8 [(gogoproto.nullable) = false];
-    cosmos.base.v1beta1.Coin request_fee = 9 [(gogoproto.nullable) = false];
-    string origination_fee = 10 [
+    string borrowerAuthPubKey = 4;
+    string dcm = 5 [(gogoproto.customname) = "DCM"];
+    int64 maturity_time = 6;
+    int64 final_timeout = 7;
+    string pool_id = 8;
+    cosmos.base.v1beta1.Coin borrow_amount = 9 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin request_fee = 10 [(gogoproto.nullable) = false];
+    string origination_fee = 11 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string interest = 11 [
+    string interest = 12 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    string protocol_fee = 12 [
+    string protocol_fee = 13 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    int64 maturity = 13;
-    uint32 borrow_apr = 14 [(gogoproto.customname) = "BorrowAPR"];
-    int64 min_maturity = 15;
-    string start_borrow_index = 16 [
+    int64 maturity = 14;
+    uint32 borrow_apr = 15 [(gogoproto.customname) = "BorrowAPR"];
+    int64 min_maturity = 16;
+    string start_borrow_index = 17 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable)   = false
     ];
-    string liquidation_price = 17 [
+    string liquidation_price = 18 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_event_id = 18;
-    uint64 default_liquidation_event_id = 19;
-    uint64 repayment_event_id = 20;
-    repeated Authorization authorizations = 21 [(gogoproto.nullable) = false];
-    string collateral_amount = 22 [
+    uint64 liquidation_event_id = 19;
+    uint64 default_liquidation_event_id = 20;
+    uint64 repayment_event_id = 21;
+    repeated Authorization authorizations = 22 [(gogoproto.nullable) = false];
+    string collateral_amount = 23 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_id = 23;
-    string referrer = 24;
-    google.protobuf.Timestamp create_at = 25 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 26 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 27;
+    uint64 liquidation_id = 24;
+    string referrer = 25;
+    google.protobuf.Timestamp create_at = 26 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 27 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 28;
 }
 
 enum CetType {
@@ -265,8 +266,9 @@ message DLCMeta {
     string timeout_refund_tx = 4;
     repeated side.btcbridge.UTXO vault_utxos = 5;
     string internal_key = 6;
-    string multisig_script = 7;
-    string timeout_refund_script = 8;
+    string liquidation_script = 7;
+    string repayment_script = 8;
+    string timeout_refund_script = 9;
 }
 
 enum DepositStatus {

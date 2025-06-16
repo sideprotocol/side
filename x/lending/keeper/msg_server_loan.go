@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"time"
 
-	btcschnorr "github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
 
@@ -78,7 +77,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	maturityTime := types.GetMaturityTime(originMaturityTime)
 	finalTimeout := originMaturityTime + m.FinalTimeoutDuration(ctx)
 
-	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, dcm.Pubkey, finalTimeout)
+	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, msg.BorrowerAuthPubkey, dcm.Pubkey, finalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -110,6 +109,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		VaultAddress:              vault,
 		Borrower:                  msg.Borrower,
 		BorrowerPubKey:            msg.BorrowerPubkey,
+		BorrowerAuthPubKey:        msg.BorrowerAuthPubkey,
 		DCM:                       dcm.Pubkey,
 		MaturityTime:              maturityTime,
 		FinalTimeout:              finalTimeout,
@@ -195,7 +195,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	// build DLC metadata
-	dlcMeta, err := types.BuildDLCMeta(depositTxs, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
+	dlcMeta, err := types.BuildDLCMeta(depositTxs, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +267,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	defaultLiquidationEvent := m.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
 
-	if err := types.VerifyCets(depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+	if err := types.VerifyCets(depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
 		return nil, err
 	}
 
@@ -351,20 +351,11 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Tx)), true)
 
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
-	dcmPubKey, _ := hex.DecodeString(loan.DCM)
 
-	internalKey := types.GetInternalKey(borrowerPubKey, dcmPubKey)
+	internalKey, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).InternalKey)
+	script, controlBlock := m.GetRedemptionScript(ctx, msg.LoanId)
 
-	script, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).MultisigScript)
 	sigHashes := []string{}
-
-	merkleTree := types.GetTapscriptTree(types.GetDLCTapscripts(m.GetDLCMeta(ctx, msg.LoanId)))
-	scriptProof := merkleTree.LeafMerkleProofs[0]
-
-	controlBlock, err := types.GetControlBlock(internalKey, scriptProof)
-	if err != nil {
-		return nil, err
-	}
 
 	for i, ti := range p.UnsignedTx.TxIn {
 		prevTxHash := ti.PreviousOutPoint.Hash.String()
@@ -395,7 +386,7 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 
 		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
 
-		p.Inputs[i].TaprootInternalKey = btcschnorr.SerializePubKey(internalKey)
+		p.Inputs[i].TaprootInternalKey = internalKey[1:]
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,

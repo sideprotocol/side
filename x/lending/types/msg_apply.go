@@ -11,15 +11,16 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgApply(borrower string, borrowerPubkey string, poolId string, borrowAmount sdk.Coin, maturity int64, dcmId uint64, referrer string) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, borrowerAuthPubkey string, poolId string, borrowAmount sdk.Coin, maturity int64, dcmId uint64, referrer string) *MsgApply {
 	return &MsgApply{
-		Borrower:       borrower,
-		BorrowerPubkey: borrowerPubkey,
-		PoolId:         poolId,
-		BorrowAmount:   borrowAmount,
-		Maturity:       maturity,
-		DCMId:          dcmId,
-		Referrer:       referrer,
+		Borrower:           borrower,
+		BorrowerPubkey:     borrowerPubkey,
+		BorrowerAuthPubkey: borrowerAuthPubkey,
+		PoolId:             poolId,
+		BorrowAmount:       borrowAmount,
+		Maturity:           maturity,
+		DCMId:              dcmId,
+		Referrer:           referrer,
 	}
 }
 
@@ -36,6 +37,15 @@ func (m *MsgApply) ValidateBasic() error {
 
 	if _, err := schnorr.ParsePubKey(pubKeyBytes); err != nil {
 		return errorsmod.Wrap(ErrInvalidPubKey, "invalid borrower public key")
+	}
+
+	authPubKeyBytes, err := hex.DecodeString(m.BorrowerAuthPubkey)
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower auth public key")
+	}
+
+	if _, err := schnorr.ParsePubKey(authPubKeyBytes); err != nil {
+		return errorsmod.Wrap(ErrInvalidPubKey, "invalid borrower auth public key")
 	}
 
 	if len(m.PoolId) == 0 {

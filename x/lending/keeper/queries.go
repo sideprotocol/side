@@ -79,6 +79,15 @@ func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollate
 		return nil, status.Error(codes.InvalidArgument, "invalid borrower pub key")
 	}
 
+	borrowerAuthPubKey, err := hex.DecodeString(req.BorrowerAuthPubkey)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "failed to decode borrower auth pub key")
+	}
+
+	if _, err := schnorr.ParsePubKey(borrowerAuthPubKey); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid borrower auth pub key")
+	}
+
 	dcmPubKey, err := hex.DecodeString(req.DCMPubKey)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, "failed to decode dcm pub key")
@@ -90,7 +99,7 @@ func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollate
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	collateralAddr, err := types.CreateVaultAddress(req.BorrowerPubkey, req.DCMPubKey, int64(req.MaturityTime)+k.FinalTimeoutDuration(ctx))
+	collateralAddr, err := types.CreateVaultAddress(req.BorrowerPubkey, req.BorrowerAuthPubkey, req.DCMPubKey, int64(req.MaturityTime)+k.FinalTimeoutDuration(ctx))
 	if err != nil {
 		return nil, err
 	}

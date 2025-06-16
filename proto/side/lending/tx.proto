@@ -89,11 +89,12 @@ message MsgApply {
 
     string borrower = 1;
     string borrower_pubkey = 2;
-    string pool_id = 3;
-    cosmos.base.v1beta1.Coin borrow_amount = 4 [(gogoproto.nullable) = false];
-    int64 maturity = 5;
-    uint64 dcm_id = 6 [(gogoproto.customname) = "DCMId"];
-    string referrer = 7;
+    string borrower_auth_pubkey = 3;
+    string pool_id = 4;
+    cosmos.base.v1beta1.Coin borrow_amount = 5 [(gogoproto.nullable) = false];
+    int64 maturity = 6;
+    uint64 dcm_id = 7 [(gogoproto.customname) = "DCMId"];
+    string referrer = 8;
 }
 
 message MsgApplyResponse {}
