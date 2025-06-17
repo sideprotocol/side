@@ -19,7 +19,7 @@ func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) error {
 	}
 
 	oracle := &types.DLCOracle{
-		Id:     k.IncrementDCMId(ctx),
+		Id:     k.IncrementOracleId(ctx),
 		Pubkey: pubKey,
 		Time:   ctx.BlockTime(),
 		Status: types.DLCOracleStatus_Oracle_status_Enable,
