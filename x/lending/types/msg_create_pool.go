@@ -13,7 +13,7 @@ func (m *MsgCreatePool) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	if err := sdk.ValidateDenom(m.Id); err != nil {
+	if err := sdk.ValidateDenom(STokenDenom(m.Id)); err != nil {
 		return errorsmod.Wrapf(ErrInvalidPoolId, "%v", err)
 	}
 
