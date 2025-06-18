@@ -65,27 +65,29 @@ func migrateLoans(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 		// update loan
 		store.Set(types.LoanKey(loan.VaultAddress), cdc.MustMarshal(loan))
 
-		// decode dlc meta to v1
-		dlcMetaBz := store.Get(types.DLCMetaKey(loan.VaultAddress))
-		var dlcMetaV1 types.DLCMetaV1
-		cdc.MustUnmarshal(dlcMetaBz, &dlcMetaV1)
+		// migrate the corresponding dlc meta if any
+		if store.Has(types.DLCMetaKey(loan.VaultAddress)) {
+			dlcMetaBz := store.Get(types.DLCMetaKey(loan.VaultAddress))
+			var dlcMetaV1 types.DLCMetaV1
+			cdc.MustUnmarshal(dlcMetaBz, &dlcMetaV1)
 
-		internalKey, _ := hex.DecodeString(dlcMetaV1.InternalKey)
+			internalKey, _ := hex.DecodeString(dlcMetaV1.InternalKey)
 
-		// build new dlc meta
-		dlcMeta := &types.DLCMeta{
-			LiquidationCet:        dlcMetaV1.LiquidationCet,
-			DefaultLiquidationCet: dlcMetaV1.DefaultLiquidationCet,
-			RepaymentCet:          dlcMetaV1.RepaymentCet,
-			TimeoutRefundTx:       dlcMetaV1.TimeoutRefundTx,
-			VaultUtxos:            dlcMetaV1.VaultUtxos,
-			InternalKey:           hex.EncodeToString(internalKey[1:]),
-			LiquidationScript:     dlcMetaV1.MultisigScript,
-			RepaymentScript:       dlcMetaV1.MultisigScript,
-			TimeoutRefundScript:   dlcMetaV1.TimeoutRefundScript,
+			// build new dlc meta
+			dlcMeta := &types.DLCMeta{
+				LiquidationCet:        dlcMetaV1.LiquidationCet,
+				DefaultLiquidationCet: dlcMetaV1.DefaultLiquidationCet,
+				RepaymentCet:          dlcMetaV1.RepaymentCet,
+				TimeoutRefundTx:       dlcMetaV1.TimeoutRefundTx,
+				VaultUtxos:            dlcMetaV1.VaultUtxos,
+				InternalKey:           hex.EncodeToString(internalKey[1:]),
+				LiquidationScript:     dlcMetaV1.MultisigScript,
+				RepaymentScript:       dlcMetaV1.MultisigScript,
+				TimeoutRefundScript:   dlcMetaV1.TimeoutRefundScript,
+			}
+
+			// update dlc meta
+			store.Set(types.DLCMetaKey(loan.VaultAddress), cdc.MustMarshal(dlcMeta))
 		}
-
-		// update dlc meta
-		store.Set(types.DLCMetaKey(loan.VaultAddress), cdc.MustMarshal(dlcMeta))
 	}
 }
