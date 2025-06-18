@@ -46,9 +46,8 @@ func PriceTable(n math.Int) []math.LegacyDec {
 		adjust = adjust.MulInt64(10)
 	}
 	for range -n.Int64() {
-		adjust = adjust.Mul(math.LegacyMustNewDecFromStr("0.1"))
+		adjust = adjust.QuoInt64(10)
 	}
-	println("digt", n.String())
 	for {
 		i = i.Sub(base_interval)
 		prices = append(prices, i.Mul(adjust).QuoInt64(1000))
