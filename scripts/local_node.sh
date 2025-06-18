@@ -5,7 +5,7 @@ CHAINID="devnet"
 MONIKER="Side Labs"
 BINARY="$HOME/go/bin/sided"
 DENOM_STR="uside,sat,uusdc,uusdt,ueth"
-INITIAL_ACCOUNT_STR=""
+INITIAL_ACCOUNT_STR="side1yjepcvxl7fredrxxythv6nq3w9walel3ktpkrw"
 set -f
 IFS=,
 DENOMS=($DENOM_STR)
