@@ -31,6 +31,7 @@ const (
 	Query_LoanCetInfos_FullMethodName      = "/side.lending.Query/LoanCetInfos"
 	Query_LoanDlcMeta_FullMethodName       = "/side.lending.Query/LoanDlcMeta"
 	Query_LoanAuthorization_FullMethodName = "/side.lending.Query/LoanAuthorization"
+	Query_LoanDeposits_FullMethodName      = "/side.lending.Query/LoanDeposits"
 	Query_Redemption_FullMethodName        = "/side.lending.Query/Redemption"
 	Query_Repayment_FullMethodName         = "/side.lending.Query/Repayment"
 	Query_CurrentInterest_FullMethodName   = "/side.lending.Query/CurrentInterest"
@@ -53,6 +54,7 @@ type QueryClient interface {
 	LoanCetInfos(ctx context.Context, in *QueryLoanCetInfosRequest, opts ...grpc.CallOption) (*QueryLoanCetInfosResponse, error)
 	LoanDlcMeta(ctx context.Context, in *QueryLoanDlcMetaRequest, opts ...grpc.CallOption) (*QueryLoanDlcMetaResponse, error)
 	LoanAuthorization(ctx context.Context, in *QueryLoanAuthorizationRequest, opts ...grpc.CallOption) (*QueryLoanAuthorizationResponse, error)
+	LoanDeposits(ctx context.Context, in *QueryLoanDepositsRequest, opts ...grpc.CallOption) (*QueryLoanDepositsResponse, error)
 	Redemption(ctx context.Context, in *QueryRedemptionRequest, opts ...grpc.CallOption) (*QueryRedemptionResponse, error)
 	Repayment(ctx context.Context, in *QueryRepaymentRequest, opts ...grpc.CallOption) (*QueryRepaymentResponse, error)
 	CurrentInterest(ctx context.Context, in *QueryCurrentInterestRequest, opts ...grpc.CallOption) (*QueryCurrentInterestResponse, error)
@@ -174,6 +176,15 @@ func (c *queryClient) LoanAuthorization(ctx context.Context, in *QueryLoanAuthor
 	return out, nil
 }
 
+func (c *queryClient) LoanDeposits(ctx context.Context, in *QueryLoanDepositsRequest, opts ...grpc.CallOption) (*QueryLoanDepositsResponse, error) {
+	out := new(QueryLoanDepositsResponse)
+	err := c.cc.Invoke(ctx, Query_LoanDeposits_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) Redemption(ctx context.Context, in *QueryRedemptionRequest, opts ...grpc.CallOption) (*QueryRedemptionResponse, error) {
 	out := new(QueryRedemptionResponse)
 	err := c.cc.Invoke(ctx, Query_Redemption_FullMethodName, in, out, opts...)
@@ -218,6 +229,7 @@ type QueryServer interface {
 	LoanCetInfos(context.Context, *QueryLoanCetInfosRequest) (*QueryLoanCetInfosResponse, error)
 	LoanDlcMeta(context.Context, *QueryLoanDlcMetaRequest) (*QueryLoanDlcMetaResponse, error)
 	LoanAuthorization(context.Context, *QueryLoanAuthorizationRequest) (*QueryLoanAuthorizationResponse, error)
+	LoanDeposits(context.Context, *QueryLoanDepositsRequest) (*QueryLoanDepositsResponse, error)
 	Redemption(context.Context, *QueryRedemptionRequest) (*QueryRedemptionResponse, error)
 	Repayment(context.Context, *QueryRepaymentRequest) (*QueryRepaymentResponse, error)
 	CurrentInterest(context.Context, *QueryCurrentInterestRequest) (*QueryCurrentInterestResponse, error)
@@ -263,6 +275,9 @@ func (UnimplementedQueryServer) LoanDlcMeta(context.Context, *QueryLoanDlcMetaRe
 }
 func (UnimplementedQueryServer) LoanAuthorization(context.Context, *QueryLoanAuthorizationRequest) (*QueryLoanAuthorizationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoanAuthorization not implemented")
+}
+func (UnimplementedQueryServer) LoanDeposits(context.Context, *QueryLoanDepositsRequest) (*QueryLoanDepositsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoanDeposits not implemented")
 }
 func (UnimplementedQueryServer) Redemption(context.Context, *QueryRedemptionRequest) (*QueryRedemptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Redemption not implemented")
@@ -502,6 +517,24 @@ func _Query_LoanAuthorization_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_LoanDeposits_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLoanDepositsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).LoanDeposits(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_LoanDeposits_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).LoanDeposits(ctx, req.(*QueryLoanDepositsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_Redemption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryRedemptionRequest)
 	if err := dec(in); err != nil {
@@ -610,6 +643,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoanAuthorization",
 			Handler:    _Query_LoanAuthorization_Handler,
+		},
+		{
+			MethodName: "LoanDeposits",
+			Handler:    _Query_LoanDeposits_Handler,
 		},
 		{
 			MethodName: "Redemption",
