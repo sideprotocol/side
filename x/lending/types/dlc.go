@@ -355,11 +355,11 @@ func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 
 		sigBytes, err := hex.DecodeString(signature)
 		if err != nil {
-			return errorsmod.Wrap(ErrInvalidSignature, "failed to decode adaptor signature")
+			return errorsmod.Wrap(ErrInvalidSignature, "failed to decode signature")
 		}
 
 		if !schnorr.Verify(sigBytes, sigHash, borrowerPubKeyBytes) {
-			return ErrInvalidSignature
+			return errorsmod.Wrap(ErrInvalidSignature, "invalid repayment cet signature")
 		}
 	}
 
@@ -609,7 +609,7 @@ func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []stri
 }
 
 // GetCetInfo gets the cet info from the given event and script
-func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte) (*CetInfo, error) {
+func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte, controlBlock []byte) (*CetInfo, error) {
 	if event == nil {
 		return nil, nil
 	}
@@ -624,6 +624,7 @@ func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte) (*Cet
 		OutcomeIndex:   uint32(outcomeIndex),
 		SignaturePoint: hex.EncodeToString(signaturePoint),
 		Script:         hex.EncodeToString(script),
+		ControlBlock:   hex.EncodeToString(controlBlock),
 	}, nil
 }
 
