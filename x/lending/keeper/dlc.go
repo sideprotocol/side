@@ -42,6 +42,24 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 
 	liquidationScript, _ := types.CreateMultisigScript([][]byte{borrowerAuthPubKey, dcmPubKey})
 	repaymentScript, _ := types.CreateMultisigScript([][]byte{borrowerPubKey, dcmPubKey})
+	timeRefundScript, _ := types.CreatePubKeyTimeLockScript(borrowerPubKey, loan.FinalTimeout)
+
+	merkleTree := types.GetTapscriptTree([][]byte{liquidationScript, repaymentScript, timeRefundScript})
+
+	liquidationScriptProof := merkleTree.LeafMerkleProofs[0]
+	repaymentScriptProof := merkleTree.LeafMerkleProofs[1]
+
+	internalKey := types.GetInternalKey(borrowerPubKey, dcmPubKey)
+
+	liquidationScriptControlBlock, err := types.GetControlBlock(internalKey, liquidationScriptProof)
+	if err != nil {
+		return nil, err
+	}
+
+	repaymentScriptControlBlock, err := types.GetControlBlock(internalKey, repaymentScriptProof)
+	if err != nil {
+		return nil, err
+	}
 
 	var liquidationEvent *dlctypes.DLCEvent
 	if loan.LiquidationEventId != 0 {
@@ -59,9 +77,9 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	defaultLiquidationEvent := k.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
 	repaymentEvent := k.dlcKeeper.GetEvent(ctx, loan.RepaymentEventId)
 
-	liquidationCetInfo, _ := types.GetCetInfo(liquidationEvent, 0, liquidationScript)
-	defaultLiquidationCetInfo, _ := types.GetCetInfo(defaultLiquidationEvent, 0, liquidationScript)
-	repaymentCetInfo, _ := types.GetCetInfo(repaymentEvent, 0, repaymentScript)
+	liquidationCetInfo, _ := types.GetCetInfo(liquidationEvent, 0, liquidationScript, liquidationScriptControlBlock)
+	defaultLiquidationCetInfo, _ := types.GetCetInfo(defaultLiquidationEvent, 0, liquidationScript, liquidationScriptControlBlock)
+	repaymentCetInfo, _ := types.GetCetInfo(repaymentEvent, 0, repaymentScript, repaymentScriptControlBlock)
 
 	return []*types.CetInfo{
 		liquidationCetInfo,
