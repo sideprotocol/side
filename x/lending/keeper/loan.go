@@ -163,6 +163,38 @@ func (k Keeper) GetDepositLog(ctx sdk.Context, txid string) *types.DepositLog {
 	return &depositLog
 }
 
+// GetDepositLogs gets deposit logs by the given loan
+func (k Keeper) GetDepositLogs(ctx sdk.Context, loanId string) []*types.DepositLog {
+	var depositLogs []*types.DepositLog
+
+	k.IterateDepositLogs(ctx, func(depositLog *types.DepositLog) (stop bool) {
+		if depositLog.VaultAddress == loanId {
+			depositLogs = append(depositLogs, depositLog)
+		}
+
+		return false
+	})
+
+	return depositLogs
+}
+
+// IterateDepositLogs iterates through all deposit logs
+func (k Keeper) IterateDepositLogs(ctx sdk.Context, cb func(depositLog *types.DepositLog) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.DepositLogKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var depositLog types.DepositLog
+		k.cdc.MustUnmarshal(iterator.Value(), &depositLog)
+
+		if cb(&depositLog) {
+			break
+		}
+	}
+}
+
 // SetRepayment sets the given repayment
 func (k Keeper) SetRepayment(ctx sdk.Context, repayment *types.Repayment) {
 	store := ctx.KVStore(k.storeKey)

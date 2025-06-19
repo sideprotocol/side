@@ -282,6 +282,21 @@ func (k Keeper) LoanAuthorization(goCtx context.Context, req *types.QueryLoanAut
 	}, nil
 }
 
+// LoanDeposits implements types.QueryServer.
+func (k Keeper) LoanDeposits(goCtx context.Context, req *types.QueryLoanDepositsRequest) (*types.QueryLoanDepositsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasLoan(ctx, req.LoanId) {
+		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
+	}
+
+	return &types.QueryLoanDepositsResponse{Deposits: k.GetDepositLogs(ctx, req.LoanId)}, nil
+}
+
 // Redemption implements types.QueryServer.
 func (k Keeper) Redemption(goCtx context.Context, req *types.QueryRedemptionRequest) (*types.QueryRedemptionResponse, error) {
 	if req == nil {
