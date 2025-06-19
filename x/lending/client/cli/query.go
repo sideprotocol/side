@@ -36,6 +36,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryLoansByAddress())
 	cmd.AddCommand(CmdQueryLoanCetInfos())
 	cmd.AddCommand(CmdQueryDlcMeta())
+	cmd.AddCommand(CmdQueryDeposits())
 	cmd.AddCommand(CmdQueryRedemption())
 	cmd.AddCommand(CmdQueryRepayment())
 	cmd.AddCommand(CmdQueryCurrentInterest())
@@ -374,6 +375,33 @@ func CmdQueryDlcMeta() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.LoanDlcMeta(cmd.Context(), &types.QueryLoanDlcMetaRequest{LoanId: args[0]})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryDeposits() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "deposits [loan id]",
+		Short: "Query all deposit txs of the given loan",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.LoanDeposits(cmd.Context(), &types.QueryLoanDepositsRequest{LoanId: args[0]})
 			if err != nil {
 				return err
 			}
