@@ -18,7 +18,7 @@ func (k Keeper) HandleApproval(ctx sdk.Context, loan *types.Loan) error {
 		return err
 	}
 
-	if types.HasOriginationFee(pool) {
+	if loan.OriginationFee.IsPositive() {
 		originationFee := sdk.NewCoin(loan.BorrowAmount.Denom, loan.OriginationFee)
 		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(k.OriginationFeeCollector(ctx)), sdk.NewCoins(originationFee)); err != nil {
 			return err
@@ -33,9 +33,13 @@ func (k Keeper) HandleApproval(ctx sdk.Context, loan *types.Loan) error {
 	// update pool
 	k.AfterPoolBorrowed(ctx, loan.PoolId, loan.Maturity, loan.BorrowAmount)
 
-	// update the starting borrow index
+	// update starting borrow index
 	tranche, _ := types.GetTranche(pool.Tranches, loan.Maturity)
 	loan.StartBorrowIndex = tranche.BorrowIndex
+
+	// update total interest and protocol fee
+	loan.Interest = types.GetTotalInterest(loan.BorrowAmount.Amount, loan.MaturityTime-ctx.BlockTime().Unix(), loan.BorrowAPR, k.GetBlocksPerYear(ctx))
+	loan.ProtocolFee = types.GetProtocolFee(loan.Interest, pool.Config.ReserveFactor)
 
 	loan.DisburseAt = ctx.BlockTime()
 	loan.Status = types.LoanStatus_Open
