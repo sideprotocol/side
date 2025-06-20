@@ -9,7 +9,6 @@ import (
 	"slices"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/txscript"
 
@@ -112,7 +111,7 @@ func GetSigningOption(signingType SigningType, options *SigningOptions) string {
 // GetTweakedPubKey gets the tweaked pub key by the given tweak
 // Assume that the given pub key is valid
 func GetTweakedPubKey(pubKeyBytes []byte, tweak []byte) []byte {
-	pubKey, _ := btcec.ParsePubKey(pubKeyBytes)
+	pubKey, _ := schnorr.ParsePubKey(pubKeyBytes)
 	tweakedPubKey := txscript.ComputeTaprootOutputKey(pubKey, tweak)
 
 	return schnorr.SerializePubKey(tweakedPubKey)
