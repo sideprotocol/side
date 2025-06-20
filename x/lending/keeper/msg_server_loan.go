@@ -338,9 +338,8 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		return nil, types.ErrMismatchedBorrower
 	}
 
-	// check if the collateral is redeemable
-	if !types.CollateralRedeemable(loan) {
-		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan collateral not redeemable")
+	if loan.Status != types.LoanStatus_Rejected {
+		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not rejected")
 	}
 
 	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Tx)), true)
