@@ -55,9 +55,9 @@ func CreatePubKeyTimeLockScript(pubKey []byte, lockTime int64) ([]byte, error) {
 	return builder.Script()
 }
 
-// Create Taproot address with complex script branches
-func CreateTaprootAddress(internalKey *secp256k1.PublicKey, branches [][]byte, params *chaincfg.Params) (string, error) {
-	tapScriptTree := GetTapscriptTree(branches)
+// CreateTaprootAddress creates the taproot address with the given internal key and scripts
+func CreateTaprootAddress(internalKey *secp256k1.PublicKey, scripts [][]byte, params *chaincfg.Params) (string, error) {
+	tapScriptTree := GetTapscriptTree(scripts)
 	scriptRoot := tapScriptTree.RootNode.TapHash()
 
 	taprootOutKey := txscript.ComputeTaprootOutputKey(internalKey, scriptRoot[:])
@@ -75,37 +75,51 @@ func CreateTaprootAddress(internalKey *secp256k1.PublicKey, branches [][]byte, p
 // Assume that the given pub keys are valid
 func CreateVaultAddress(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, finalTimeout int64) (string, error) {
 	borrowerPubKeyBytes, _ := hex.DecodeString(borrowerPubKey)
+	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
+
+	internalKey := GetInternalKey(borrowerPubKeyBytes, dcmPubKeyBytes)
+
+	liquidationScript, repaymentScript, timeoutRefundScript, err := GetVaultScripts(borrowerPubKey, borrowerAuthPubKey, dcmPubKey, finalTimeout)
+	if err != nil {
+		return "", err
+	}
+
+	scripts := [][]byte{liquidationScript, repaymentScript, timeoutRefundScript}
+
+	vaultAddress, err := CreateTaprootAddress(internalKey, scripts, bitcoin.Network)
+	if err != nil {
+		return "", err
+	}
+
+	return vaultAddress, nil
+}
+
+// GetVaultScripts gets the scripts associated the underlying vault address from the given params
+// Assume that the given pub keys are valid
+func GetVaultScripts(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, finalTimeout int64) ([]byte, []byte, []byte, error) {
+	borrowerPubKeyBytes, _ := hex.DecodeString(borrowerPubKey)
 	borrowerAuthPubKeyBytes, _ := hex.DecodeString(borrowerAuthPubKey)
 	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
 
 	// liquidation script
 	liquidationScript, err := CreateMultisigScript([][]byte{borrowerAuthPubKeyBytes, dcmPubKeyBytes})
 	if err != nil {
-		return "", err
+		return nil, nil, nil, err
 	}
 
 	// repayment script
 	repaymentScript, err := CreateMultisigScript([][]byte{borrowerPubKeyBytes, dcmPubKeyBytes})
 	if err != nil {
-		return "", err
+		return nil, nil, nil, err
 	}
 
 	// refund script
 	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubKeyBytes, finalTimeout)
 	if err != nil {
-		return "", err
+		return nil, nil, nil, err
 	}
 
-	// Combine branches
-	branches := [][]byte{liquidationScript, repaymentScript, timeoutRefundScript}
-
-	// Generate Taproot address
-	taprootAddress, err := CreateTaprootAddress(GetInternalKey(borrowerPubKeyBytes, dcmPubKeyBytes), branches, bitcoin.Network)
-	if err != nil {
-		return "", err
-	}
-
-	return taprootAddress, nil
+	return liquidationScript, repaymentScript, timeoutRefundScript, nil
 }
 
 // GetInternalKey gets the pub key used for taproot address generation
