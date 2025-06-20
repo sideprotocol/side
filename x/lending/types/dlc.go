@@ -165,15 +165,15 @@ func VerifyCets(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey 
 	}
 
 	if err := VerifyLiquidationCet(depositTxs, vaultPkScript, borrowerAuthPubKey, dcmPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint); err != nil {
-		return err
+		return errorsmod.Wrapf(ErrInvalidCET, "invalid liquidation cet: %v", err)
 	}
 
 	if err := VerifyLiquidationCet(depositTxs, vaultPkScript, borrowerAuthPubKey, dcmPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint); err != nil {
-		return err
+		return errorsmod.Wrapf(ErrInvalidCET, "invalid default liquidation cet: %v", err)
 	}
 
 	if err := VerifyRepaymentCet(depositTxs, vaultPkScript, borrowerPubKey, dcmPubKey, repaymentCet, repaymentSignatures); err != nil {
-		return err
+		return errorsmod.Wrapf(ErrInvalidCET, "invalid repayment cet: %v", err)
 	}
 
 	return nil
@@ -359,7 +359,7 @@ func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 		}
 
 		if !schnorr.Verify(sigBytes, sigHash, borrowerPubKeyBytes) {
-			return errorsmod.Wrap(ErrInvalidSignature, "invalid repayment cet signature")
+			return ErrInvalidSignature
 		}
 	}
 
