@@ -86,6 +86,11 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, types.ErrDuplicatedVault
 	}
 
+	dlcMeta, err := types.BuildDLCMeta(msg.BorrowerPubkey, msg.BorrowerAuthPubkey, dcm.Pubkey, finalTimeout)
+	if err != nil {
+		return nil, err
+	}
+
 	if !m.dlcKeeper.HasEventByDate(ctx, maturityTime) {
 		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "default liquidation event does not exist")
 	}
@@ -128,7 +133,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	m.SetLoanByAddress(ctx, loan)
 
 	// set dlc meta
-	m.SetDLCMeta(ctx, vault, types.NewDLCMeta(loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, loan.FinalTimeout))
+	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventTypeApply,
@@ -343,16 +348,14 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan collateral not redeemable")
 	}
 
+	dlcMeta := m.GetDLCMeta(ctx, msg.LoanId)
+
 	p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(msg.Tx)), true)
 
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
 
-	internalKey, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).InternalKey)
-
-	script, controlBlock, err := m.GetRedemptionScript(ctx, msg.LoanId)
-	if err != nil {
-		return nil, err
-	}
+	internalKey, _ := hex.DecodeString(dlcMeta.InternalKey)
+	script, controlBlock, _ := types.UnwrapLeafScript(dlcMeta.RepaymentScript)
 
 	sigHashes := []string{}
 

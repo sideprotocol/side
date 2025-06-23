@@ -236,12 +236,17 @@ enum CetType {
   REPAYMENT = 2;
 }
 
+// LeafScript defines the tap leaf script
+message LeafScript {
+  string script = 1;
+  string control_block = 2;
+}
+
 message CetInfo {
   uint64 event_id = 1;
   uint32 outcome_index = 2;
   string signature_point = 3;
-  string script = 4;
-  string control_block = 5;
+  LeafScript script = 4 [(gogoproto.nullable) = false];
 }
 
 message LiquidationCet {
@@ -267,9 +272,9 @@ message DLCMeta {
     string timeout_refund_tx = 4;
     repeated side.btcbridge.UTXO vault_utxos = 5;
     string internal_key = 6;
-    string liquidation_script = 7;
-    string repayment_script = 8;
-    string timeout_refund_script = 9;
+    LeafScript liquidation_script = 7 [(gogoproto.nullable) = false];
+    LeafScript repayment_script = 8 [(gogoproto.nullable) = false];
+    LeafScript timeout_refund_script = 9 [(gogoproto.nullable) = false];
 }
 
 enum DepositStatus {

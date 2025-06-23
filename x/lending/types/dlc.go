@@ -19,9 +19,9 @@ import (
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 )
 
-// NewDLCMeta creates the new dlc meta from the given params
+// BuildDLCMeta builds the dlc meta from the given params
 // Assume that the given params are valid
-func NewDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, finalTimeout int64) *DLCMeta {
+func BuildDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, finalTimeout int64) (*DLCMeta, error) {
 	borrowerPubKeyBytes, _ := hex.DecodeString(borrowerPubKey)
 	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
 
@@ -29,12 +29,33 @@ func NewDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey stri
 
 	liquidationScript, repaymentScript, timeoutRefundScript, _ := GetVaultScripts(borrowerPubKey, borrowerAuthPubKey, dcmPubKey, finalTimeout)
 
+	tapScriptTree := GetTapScriptTree([][]byte{liquidationScript, repaymentScript, timeoutRefundScript})
+
+	liquidationScriptProof := tapScriptTree.LeafMerkleProofs[0]
+	repaymentScriptProof := tapScriptTree.LeafMerkleProofs[1]
+	timeoutRefundScriptProof := tapScriptTree.LeafMerkleProofs[2]
+
+	liquidationScriptControlBlock, err := GetControlBlock(internalKey, liquidationScriptProof)
+	if err != nil {
+		return nil, err
+	}
+
+	repaymentScriptControlBlock, err := GetControlBlock(internalKey, repaymentScriptProof)
+	if err != nil {
+		return nil, err
+	}
+
+	timeoutRefundScriptControlBlock, err := GetControlBlock(internalKey, timeoutRefundScriptProof)
+	if err != nil {
+		return nil, err
+	}
+
 	return &DLCMeta{
 		InternalKey:         hex.EncodeToString(btcschnorr.SerializePubKey(internalKey)),
-		LiquidationScript:   hex.EncodeToString(liquidationScript),
-		RepaymentScript:     hex.EncodeToString(repaymentScript),
-		TimeoutRefundScript: hex.EncodeToString(timeoutRefundScript),
-	}
+		LiquidationScript:   GetLeafScript(liquidationScript, liquidationScriptControlBlock),
+		RepaymentScript:     GetLeafScript(repaymentScript, repaymentScriptControlBlock),
+		TimeoutRefundScript: GetLeafScript(timeoutRefundScript, timeoutRefundScriptControlBlock),
+	}, nil
 }
 
 // VerifyCets verifies the given cets
@@ -252,8 +273,13 @@ func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 }
 
 // CreateLiquidationCET creates the liquidation cet
-func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, leafScript LeafScript, feeRate int64) (string, error) {
 	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
+	if err != nil {
+		return "", err
+	}
+
+	script, controlBlock, err := UnwrapLeafScript(leafScript)
 	if err != nil {
 		return "", err
 	}
@@ -263,25 +289,12 @@ func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPk
 		return "", err
 	}
 
-	internalKey, err := btcschnorr.ParsePubKey(internalKeyBytes)
-	if err != nil {
-		return "", err
-	}
-
-	merkleTree := GetTapscriptTree(tapscripts)
-	liquidationScriptProof := merkleTree.LeafMerkleProofs[0]
-
-	controlBlock, err := GetControlBlock(internalKey, liquidationScriptProof)
-	if err != nil {
-		return "", err
-	}
-
 	for i := range p.Inputs {
 		p.Inputs[i].TaprootInternalKey = internalKeyBytes
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,
-				Script:       tapscripts[0],
+				Script:       script,
 				LeafVersion:  txscript.BaseLeafVersion,
 			},
 		}
@@ -296,8 +309,13 @@ func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPk
 }
 
 // CreateRepaymentCet creates the repayment cet
-func CreateRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+func CreateRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, leafScript LeafScript, feeRate int64) (string, error) {
 	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
+	if err != nil {
+		return "", err
+	}
+
+	script, controlBlock, err := UnwrapLeafScript(leafScript)
 	if err != nil {
 		return "", err
 	}
@@ -307,69 +325,12 @@ func CreateRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 		return "", err
 	}
 
-	internalKey, err := btcschnorr.ParsePubKey(internalKeyBytes)
-	if err != nil {
-		return "", err
-	}
-
-	merkleTree := GetTapscriptTree(tapscripts)
-	repaymentScriptProof := merkleTree.LeafMerkleProofs[1]
-
-	controlBlock, err := GetControlBlock(internalKey, repaymentScriptProof)
-	if err != nil {
-		return "", err
-	}
-
 	for i := range p.Inputs {
 		p.Inputs[i].TaprootInternalKey = internalKeyBytes
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,
-				Script:       tapscripts[1],
-				LeafVersion:  txscript.BaseLeafVersion,
-			},
-		}
-	}
-
-	psbtB64, err := p.B64Encode()
-	if err != nil {
-		return "", err
-	}
-
-	return psbtB64, nil
-}
-
-// CreateDefaultLiquidationCet creates the default liquidation cet
-func CreateDefaultLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
-	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
-	if err != nil {
-		return "", err
-	}
-
-	p, err := BuildPsbt(vaultUtxos, dcmPkScript, feeRate)
-	if err != nil {
-		return "", err
-	}
-
-	internalKey, err := btcschnorr.ParsePubKey(internalKeyBytes)
-	if err != nil {
-		return "", err
-	}
-
-	merkleTree := GetTapscriptTree(tapscripts)
-	liquidationScriptProof := merkleTree.LeafMerkleProofs[0]
-
-	controlBlock, err := GetControlBlock(internalKey, liquidationScriptProof)
-	if err != nil {
-		return "", err
-	}
-
-	for i := range p.Inputs {
-		p.Inputs[i].TaprootInternalKey = internalKeyBytes
-		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
-			{
-				ControlBlock: controlBlock,
-				Script:       tapscripts[0],
+				Script:       script,
 				LeafVersion:  txscript.BaseLeafVersion,
 			},
 		}
@@ -384,8 +345,13 @@ func CreateDefaultLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte
 }
 
 // CreateTimeoutRefundTransaction creates the timeout refund tx
-func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, tapscripts [][]byte, feeRate int64) (string, error) {
+func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, leafScript LeafScript, feeRate int64) (string, error) {
 	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
+	if err != nil {
+		return "", err
+	}
+
+	script, controlBlock, err := UnwrapLeafScript(leafScript)
 	if err != nil {
 		return "", err
 	}
@@ -395,25 +361,12 @@ func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []b
 		return "", err
 	}
 
-	internalKey, err := btcschnorr.ParsePubKey(internalKeyBytes)
-	if err != nil {
-		return "", err
-	}
-
-	merkleTree := GetTapscriptTree(tapscripts)
-	timeoutRefundScriptProof := merkleTree.LeafMerkleProofs[2]
-
-	controlBlock, err := GetControlBlock(internalKey, timeoutRefundScriptProof)
-	if err != nil {
-		return "", err
-	}
-
 	for i := range p.Inputs {
 		p.Inputs[i].TaprootInternalKey = internalKeyBytes
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: controlBlock,
-				Script:       tapscripts[2],
+				Script:       script,
 				LeafVersion:  txscript.BaseLeafVersion,
 			},
 		}
@@ -508,8 +461,7 @@ func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte, contr
 		EventId:        event.Id,
 		OutcomeIndex:   uint32(outcomeIndex),
 		SignaturePoint: hex.EncodeToString(signaturePoint),
-		Script:         hex.EncodeToString(script),
-		ControlBlock:   hex.EncodeToString(controlBlock),
+		Script:         GetLeafScript(script, controlBlock),
 	}, nil
 }
 
@@ -520,7 +472,7 @@ func GetLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 		return nil, err
 	}
 
-	script, err := hex.DecodeString(dlcMeta.LiquidationScript)
+	script, err := hex.DecodeString(dlcMeta.LiquidationScript.Script)
 	if err != nil {
 		return nil, err
 	}
@@ -546,7 +498,7 @@ func GetDefaultLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 		return nil, err
 	}
 
-	script, err := hex.DecodeString(dlcMeta.LiquidationScript)
+	script, err := hex.DecodeString(dlcMeta.LiquidationScript.Script)
 	if err != nil {
 		return nil, err
 	}
@@ -572,7 +524,7 @@ func GetRepaymentCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 		return nil, err
 	}
 
-	script, err := hex.DecodeString(dlcMeta.RepaymentScript)
+	script, err := hex.DecodeString(dlcMeta.RepaymentScript.Script)
 	if err != nil {
 		return nil, err
 	}
@@ -599,14 +551,27 @@ func GetLiquidationCetOutput(liquidationCet string) int64 {
 	return p.UnsignedTx.TxOut[0].Value
 }
 
-// GetDLCTapscripts gets the tap scripts from the given dlc meta
-// Assume that the dlc meta is valid
-func GetDLCTapscripts(dlcMeta *DLCMeta) [][]byte {
-	liquidationScript, _ := hex.DecodeString(dlcMeta.LiquidationScript)
-	repaymentScript, _ := hex.DecodeString(dlcMeta.RepaymentScript)
-	timeoutRefundScript, _ := hex.DecodeString(dlcMeta.TimeoutRefundScript)
+// GetLeafScript gets a leaf script from the given script and control block
+func GetLeafScript(script []byte, controlBlock []byte) LeafScript {
+	return LeafScript{
+		Script:       hex.EncodeToString(script),
+		ControlBlock: hex.EncodeToString(controlBlock),
+	}
+}
 
-	return [][]byte{liquidationScript, repaymentScript, timeoutRefundScript}
+// UnwrapLeafScript unwraps the given leaf script
+func UnwrapLeafScript(leafScript LeafScript) ([]byte, []byte, error) {
+	script, err := hex.DecodeString(leafScript.Script)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	controlBlock, err := hex.DecodeString(leafScript.ControlBlock)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return script, controlBlock, nil
 }
 
 // GetVaultUtxos gets the vault utxos from the given deposit txs
