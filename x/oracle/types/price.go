@@ -59,6 +59,22 @@ func PriceTable(n math.Int) []math.LegacyDec {
 	return prices
 }
 
+func ComputeLiquidatePrice(price math.LegacyDec, up bool) math.LegacyDec {
+	adjust := math.LegacyMustNewDecFromStr("0.005") // price precision
+	n := digitOrZeroCount(price)
+	for range n.Int64() {
+		adjust = adjust.MulInt64(10)
+	}
+	for range -n.Int64() {
+		adjust = adjust.QuoInt64(10)
+	}
+
+	if up {
+		return price.Quo(adjust).TruncateDec().Mul(adjust)
+	}
+	return price.Add(adjust).Quo(adjust).TruncateDec().Mul(adjust)
+}
+
 func ComputePriceTable(n math.LegacyDec, up bool) []math.LegacyDec {
 
 	filtered := []math.LegacyDec{}
