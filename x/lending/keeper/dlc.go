@@ -100,7 +100,13 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 		return err
 	}
 
-	timeoutRefundTx, err := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey, dlcMeta.TimeoutRefundScript, 1)
+	// get fee rate
+	feeRate := k.BtcBridgeKeeper().GetFeeRate(ctx)
+	if feeRate.Value == 0 {
+		feeRate.Value = types.DefaultFeeRate
+	}
+
+	timeoutRefundTx, err := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey, dlcMeta.TimeoutRefundScript, feeRate.Value)
 	if err != nil {
 		return err
 	}
