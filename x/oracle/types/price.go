@@ -8,6 +8,15 @@ import (
 	"cosmossdk.io/math"
 )
 
+type PRICE int
+
+const (
+	// usd based price: BTC/USDT, BTC/USDC
+	U_PRICE PRICE = iota
+	// btc based price: ETH/BTC, ATOM/BTC
+	BTC_PRICE
+)
+
 // digitOrZeroCount returns:
 // - If n > 1: the number of digits in n
 // - If 0 < n <= 1: the number of zeros after the decimal point before the first non-zero digit
@@ -59,7 +68,7 @@ func PriceTable(n math.Int) []math.LegacyDec {
 	return prices
 }
 
-func ComputeLiquidatePrice(price math.LegacyDec, up bool) math.LegacyDec {
+func ComputeLiquidatePrice(price math.LegacyDec, typ PRICE) math.LegacyDec {
 	adjust := math.LegacyMustNewDecFromStr("0.005") // price precision
 	n := digitOrZeroCount(price)
 	for range n.Int64() {
@@ -69,16 +78,16 @@ func ComputeLiquidatePrice(price math.LegacyDec, up bool) math.LegacyDec {
 		adjust = adjust.QuoInt64(10)
 	}
 
-	if up {
+	if typ == BTC_PRICE {
 		return price.Quo(adjust).TruncateDec().Mul(adjust)
 	}
 	return price.Add(adjust).Quo(adjust).TruncateDec().Mul(adjust)
 }
 
-func ComputePriceTable(n math.LegacyDec, up bool) []math.LegacyDec {
+func ComputePriceTable(n math.LegacyDec, typ PRICE) []math.LegacyDec {
 
 	filtered := []math.LegacyDec{}
-	if up {
+	if typ == BTC_PRICE {
 		threshold := n.Mul(math.LegacyMustNewDecFromStr("1.1"))
 		c := digitOrZeroCount(threshold)
 		prices := PriceTable(c)
@@ -89,7 +98,7 @@ func ComputePriceTable(n math.LegacyDec, up bool) []math.LegacyDec {
 				filtered = append(filtered, price)
 			}
 		}
-	} else {
+	} else if typ == U_PRICE {
 		threshold := n.Mul(math.LegacyMustNewDecFromStr("0.9"))
 		c := digitOrZeroCount(threshold)
 		prices := PriceTable(c)
