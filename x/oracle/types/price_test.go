@@ -51,7 +51,7 @@ func TestComputeLiquidatePrice(t *testing.T) {
 	}
 	for _, p := range testCases {
 		// x
-		pt := types.ComputeLiquidatePrice(p, true)
+		pt := types.ComputeLiquidatePrice(p, types.U_PRICE)
 		fmt.Printf("n: %g, pt: %v\n", p.MustFloat64(), pt)
 
 	}
@@ -76,7 +76,7 @@ func TestComputePriceUp(t *testing.T) {
 	}
 	for _, p := range testCases {
 		// x
-		pt := types.ComputePriceTable(p, true)
+		pt := types.ComputePriceTable(p, types.U_PRICE)
 		fmt.Printf("n: %g, len, %d pt: %v\n", p.MustFloat64(), len(pt), pt)
 
 	}
