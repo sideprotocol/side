@@ -127,6 +127,9 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	m.SetLoan(ctx, loan)
 	m.SetLoanByAddress(ctx, loan)
 
+	// set dlc meta
+	m.SetDLCMeta(ctx, vault, types.NewDLCMeta(loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, loan.FinalTimeout))
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventTypeApply,
 			sdk.NewAttribute(types.AttributeKeyVault, loan.VaultAddress),
@@ -189,9 +192,8 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount can not be zero")
 	}
 
-	// build DLC metadata
-	dlcMeta, err := types.BuildDLCMeta(depositTxs, vaultPkScript, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, loan.MaturityTime, loan.FinalTimeout)
-	if err != nil {
+	// update dlc meta
+	if err := m.UpdateDLCMeta(ctx, msg.LoanId, depositTxs, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
 		return nil, err
 	}
 
@@ -210,8 +212,6 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 			m.SetDepositLog(ctx, depositLog)
 		}
 	}
-
-	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
 	loan.CollateralAmount = collateralAmount
 	loan.Authorizations = append(loan.Authorizations, *authorization)
@@ -348,7 +348,11 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
 
 	internalKey, _ := hex.DecodeString(m.GetDLCMeta(ctx, msg.LoanId).InternalKey)
-	script, controlBlock := m.GetRedemptionScript(ctx, msg.LoanId)
+
+	script, controlBlock, err := m.GetRedemptionScript(ctx, msg.LoanId)
+	if err != nil {
+		return nil, err
+	}
 
 	sigHashes := []string{}
 
