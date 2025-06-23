@@ -24,6 +24,9 @@ var (
 
 	// initial borrow index
 	InitialBorrowIndex = sdkmath.LegacyOneDec()
+
+	// default fee rate
+	DefaultFeeRate = int64(1)
 )
 
 // GetExchangeRate calculates the sToken exchange rate according to the given params
