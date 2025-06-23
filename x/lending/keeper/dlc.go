@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/hex"
 
-	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
 
@@ -57,33 +56,14 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 		return err
 	}
 
-	liquidationScript, _ := hex.DecodeString(dlcMeta.LiquidationScript)
-	repaymentScript, _ := hex.DecodeString(dlcMeta.RepaymentScript)
-	timeoutRefundScript, _ := hex.DecodeString(dlcMeta.TimeoutRefundScript)
+	internalKey, _ := hex.DecodeString(dlcMeta.InternalKey)
 
-	merkleTree := types.GetTapscriptTree([][]byte{
-		liquidationScript, repaymentScript, timeoutRefundScript,
-	})
-
-	liquidationScriptProof := merkleTree.LeafMerkleProofs[0]
-	repaymentScriptProof := merkleTree.LeafMerkleProofs[1]
-
-	internalKeyBytes, _ := hex.DecodeString(dlcMeta.InternalKey)
-	internalKey, _ := schnorr.ParsePubKey(internalKeyBytes)
-
-	liquidationScriptControlBlock, err := types.GetControlBlock(internalKey, liquidationScriptProof)
-	if err != nil {
-		return err
-	}
-
-	repaymentScriptControlBlock, err := types.GetControlBlock(internalKey, repaymentScriptProof)
-	if err != nil {
-		return err
-	}
+	liquidationScript, liquidationScriptControlBlock, _ := types.UnwrapLeafScript(dlcMeta.LiquidationScript)
+	repaymentScript, repaymentScriptControlBlock, _ := types.UnwrapLeafScript(dlcMeta.RepaymentScript)
 
 	for i := range liquidationCetPsbt.Inputs {
 		liquidationCetPsbt.Inputs[i].SighashType = txscript.SigHashDefault
-		liquidationCetPsbt.Inputs[i].TaprootInternalKey = internalKeyBytes
+		liquidationCetPsbt.Inputs[i].TaprootInternalKey = internalKey
 		liquidationCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: liquidationScriptControlBlock,
@@ -95,7 +75,7 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 
 	for i := range repaymentCetPsbt.Inputs {
 		repaymentCetPsbt.Inputs[i].SighashType = txscript.SigHashDefault
-		repaymentCetPsbt.Inputs[i].TaprootInternalKey = internalKeyBytes
+		repaymentCetPsbt.Inputs[i].TaprootInternalKey = internalKey
 		repaymentCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
 				ControlBlock: repaymentScriptControlBlock,
@@ -120,7 +100,7 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 		return err
 	}
 
-	timeoutRefundTx, err := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKeyBytes, [][]byte{liquidationScript, repaymentScript, timeoutRefundScript}, 1)
+	timeoutRefundTx, err := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey, dlcMeta.TimeoutRefundScript, 1)
 	if err != nil {
 		return err
 	}
@@ -153,27 +133,8 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 	dlcMeta := k.GetDLCMeta(ctx, loanId)
 	poolConfig := k.GetPool(ctx, loan.PoolId).Config
 
-	liquidationScript, _ := hex.DecodeString(dlcMeta.LiquidationScript)
-	repaymentScript, _ := hex.DecodeString(dlcMeta.RepaymentScript)
-	timeoutRefundScript, _ := hex.DecodeString(dlcMeta.TimeoutRefundScript)
-
-	merkleTree := types.GetTapscriptTree([][]byte{liquidationScript, repaymentScript, timeoutRefundScript})
-
-	liquidationScriptProof := merkleTree.LeafMerkleProofs[0]
-	repaymentScriptProof := merkleTree.LeafMerkleProofs[1]
-
-	internalKeyBytes, _ := hex.DecodeString(dlcMeta.InternalKey)
-	internalKey, _ := schnorr.ParsePubKey(internalKeyBytes)
-
-	liquidationScriptControlBlock, err := types.GetControlBlock(internalKey, liquidationScriptProof)
-	if err != nil {
-		return nil, err
-	}
-
-	repaymentScriptControlBlock, err := types.GetControlBlock(internalKey, repaymentScriptProof)
-	if err != nil {
-		return nil, err
-	}
+	liquidationScript, liquidationScriptControlBlock, _ := types.UnwrapLeafScript(dlcMeta.LiquidationScript)
+	repaymentScript, repaymentScriptControlBlock, _ := types.UnwrapLeafScript(dlcMeta.RepaymentScript)
 
 	var liquidationEvent *dlctypes.DLCEvent
 	if loan.LiquidationEventId != 0 {
