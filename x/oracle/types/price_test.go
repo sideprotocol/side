@@ -26,7 +26,7 @@ func TestComputePrice(t *testing.T) {
 	}
 	for _, p := range testCases {
 		// x
-		pt := types.ComputePriceTable(p, false)
+		pt := types.ComputePriceTable(p, types.U_PRICE)
 		fmt.Printf("n: %g, len, %d pt: %v\n", p.MustFloat64(), len(pt), pt)
 
 	}
@@ -76,7 +76,7 @@ func TestComputePriceUp(t *testing.T) {
 	}
 	for _, p := range testCases {
 		// x
-		pt := types.ComputePriceTable(p, types.U_PRICE)
+		pt := types.ComputePriceTable(p, types.BTC_PRICE)
 		fmt.Printf("n: %g, len, %d pt: %v\n", p.MustFloat64(), len(pt), pt)
 
 	}
