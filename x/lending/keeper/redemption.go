@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
 
@@ -87,13 +88,33 @@ func (k Keeper) HandleRedemptionSignatures(ctx sdk.Context, id uint64, signature
 }
 
 // GetRedemptionScript gets the script along with the corresponding control block for redemption
-func (k Keeper) GetRedemptionScript(ctx sdk.Context, loanId string) ([]byte, []byte) {
-	repaymentCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(k.GetDLCMeta(ctx, loanId).RepaymentCet.Tx)), true)
+func (k Keeper) GetRedemptionScript(ctx sdk.Context, loanId string) ([]byte, []byte, error) {
+	dlcMeta := k.GetDLCMeta(ctx, loanId)
+	if len(dlcMeta.RepaymentCet.Tx) > 0 {
+		repaymentCet, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.RepaymentCet.Tx)), true)
 
-	script := repaymentCet.Inputs[0].TaprootLeafScript[0].Script
-	controlBlock := repaymentCet.Inputs[0].TaprootLeafScript[0].ControlBlock
+		script := repaymentCet.Inputs[0].TaprootLeafScript[0].Script
+		controlBlock := repaymentCet.Inputs[0].TaprootLeafScript[0].ControlBlock
 
-	return script, controlBlock
+		return script, controlBlock, nil
+	}
+
+	liquidationScript, _ := hex.DecodeString(dlcMeta.LiquidationScript)
+	repaymentScript, _ := hex.DecodeString(dlcMeta.RepaymentScript)
+	timeoutRefundScript, _ := hex.DecodeString(dlcMeta.TimeoutRefundScript)
+
+	merkleTree := types.GetTapscriptTree([][]byte{liquidationScript, repaymentScript, timeoutRefundScript})
+	repaymentScriptProof := merkleTree.LeafMerkleProofs[1]
+
+	internalKeyBytes, _ := hex.DecodeString(dlcMeta.InternalKey)
+	internalKey, _ := schnorr.ParsePubKey(internalKeyBytes)
+
+	repaymentScriptControlBlock, err := types.GetControlBlock(internalKey, repaymentScriptProof)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return repaymentScript, repaymentScriptControlBlock, nil
 }
 
 // GetRedemptionId gets the current redemption id

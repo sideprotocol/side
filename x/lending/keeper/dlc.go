@@ -1,7 +1,12 @@
 package keeper
 
 import (
+	"bytes"
 	"encoding/hex"
+
+	"github.com/btcsuite/btcd/btcec/v2/schnorr"
+	"github.com/btcsuite/btcd/btcutil/psbt"
+	"github.com/btcsuite/btcd/txscript"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -30,26 +35,135 @@ func (k Keeper) GetDLCMeta(ctx sdk.Context, loanId string) *types.DLCMeta {
 	return &dlcMeta
 }
 
-// GetCetInfos gets the related cet infos of the given loan
-// Assume that the loan exists
-func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk.Coin) ([]*types.CetInfo, error) {
+// UpdateDLCMeta updates the dlc meta of the given loan with the given params
+func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt.Packet, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
 	loan := k.GetLoan(ctx, loanId)
-	poolConfig := k.GetPool(ctx, loan.PoolId).Config
+	dlcMeta := k.GetDLCMeta(ctx, loanId)
 
-	borrowerPubKey, _ := hex.DecodeString(loan.BorrowerPubKey)
-	borrowerAuthPubKey, _ := hex.DecodeString(loan.BorrowerAuthPubKey)
-	dcmPubKey, _ := hex.DecodeString(loan.DCM)
+	vaultPkScript, _ := types.GetPkScriptFromAddress(loanId)
 
-	liquidationScript, _ := types.CreateMultisigScript([][]byte{borrowerAuthPubKey, dcmPubKey})
-	repaymentScript, _ := types.CreateMultisigScript([][]byte{borrowerPubKey, dcmPubKey})
-	timeRefundScript, _ := types.CreatePubKeyTimeLockScript(borrowerPubKey, loan.FinalTimeout)
+	vaultUtxos, err := types.GetVaultUtxos(depositTxs, vaultPkScript)
+	if err != nil {
+		return err
+	}
 
-	merkleTree := types.GetTapscriptTree([][]byte{liquidationScript, repaymentScript, timeRefundScript})
+	liquidationCetPsbt, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCet)), true)
+	if err != nil {
+		return err
+	}
+
+	repaymentCetPsbt, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet)), true)
+	if err != nil {
+		return err
+	}
+
+	liquidationScript, _ := hex.DecodeString(dlcMeta.LiquidationScript)
+	repaymentScript, _ := hex.DecodeString(dlcMeta.RepaymentScript)
+	timeoutRefundScript, _ := hex.DecodeString(dlcMeta.TimeoutRefundScript)
+
+	merkleTree := types.GetTapscriptTree([][]byte{
+		liquidationScript, repaymentScript, timeoutRefundScript,
+	})
 
 	liquidationScriptProof := merkleTree.LeafMerkleProofs[0]
 	repaymentScriptProof := merkleTree.LeafMerkleProofs[1]
 
-	internalKey := types.GetInternalKey(borrowerPubKey, dcmPubKey)
+	internalKeyBytes, _ := hex.DecodeString(dlcMeta.InternalKey)
+	internalKey, _ := schnorr.ParsePubKey(internalKeyBytes)
+
+	liquidationScriptControlBlock, err := types.GetControlBlock(internalKey, liquidationScriptProof)
+	if err != nil {
+		return err
+	}
+
+	repaymentScriptControlBlock, err := types.GetControlBlock(internalKey, repaymentScriptProof)
+	if err != nil {
+		return err
+	}
+
+	for i := range liquidationCetPsbt.Inputs {
+		liquidationCetPsbt.Inputs[i].SighashType = txscript.SigHashDefault
+		liquidationCetPsbt.Inputs[i].TaprootInternalKey = internalKeyBytes
+		liquidationCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
+			{
+				ControlBlock: liquidationScriptControlBlock,
+				Script:       liquidationScript,
+				LeafVersion:  txscript.BaseLeafVersion,
+			},
+		}
+	}
+
+	for i := range repaymentCetPsbt.Inputs {
+		repaymentCetPsbt.Inputs[i].SighashType = txscript.SigHashDefault
+		repaymentCetPsbt.Inputs[i].TaprootInternalKey = internalKeyBytes
+		repaymentCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
+			{
+				ControlBlock: repaymentScriptControlBlock,
+				Script:       repaymentScript,
+				LeafVersion:  txscript.BaseLeafVersion,
+			},
+		}
+	}
+
+	liquidationCet, err = liquidationCetPsbt.B64Encode()
+	if err != nil {
+		return err
+	}
+
+	repaymentCet, err = repaymentCetPsbt.B64Encode()
+	if err != nil {
+		return err
+	}
+
+	borrowerPkScript, err := types.GetPkScriptFromPubKey(loan.BorrowerPubKey)
+	if err != nil {
+		return err
+	}
+
+	timeoutRefundTx, err := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKeyBytes, [][]byte{liquidationScript, repaymentScript, timeoutRefundScript}, 1)
+	if err != nil {
+		return err
+	}
+
+	// update dlc meta
+	dlcMeta.LiquidationCet = types.LiquidationCet{
+		Tx:                        liquidationCet,
+		BorrowerAdaptorSignatures: liquidationAdaptorSignatures,
+	}
+	dlcMeta.DefaultLiquidationCet = types.LiquidationCet{
+		Tx:                        liquidationCet,
+		BorrowerAdaptorSignatures: defaultLiquidationAdaptorSignatures,
+	}
+	dlcMeta.RepaymentCet = types.RepaymentCet{
+		Tx:                 repaymentCet,
+		BorrowerSignatures: repaymentSignatures,
+	}
+	dlcMeta.TimeoutRefundTx = timeoutRefundTx
+	dlcMeta.VaultUtxos = vaultUtxos
+
+	k.SetDLCMeta(ctx, loanId, dlcMeta)
+
+	return nil
+}
+
+// GetCetInfos gets the related cet infos of the given loan
+// Assume that the loan exists
+func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk.Coin) ([]*types.CetInfo, error) {
+	loan := k.GetLoan(ctx, loanId)
+	dlcMeta := k.GetDLCMeta(ctx, loanId)
+	poolConfig := k.GetPool(ctx, loan.PoolId).Config
+
+	liquidationScript, _ := hex.DecodeString(dlcMeta.LiquidationScript)
+	repaymentScript, _ := hex.DecodeString(dlcMeta.RepaymentScript)
+	timeoutRefundScript, _ := hex.DecodeString(dlcMeta.TimeoutRefundScript)
+
+	merkleTree := types.GetTapscriptTree([][]byte{liquidationScript, repaymentScript, timeoutRefundScript})
+
+	liquidationScriptProof := merkleTree.LeafMerkleProofs[0]
+	repaymentScriptProof := merkleTree.LeafMerkleProofs[1]
+
+	internalKeyBytes, _ := hex.DecodeString(dlcMeta.InternalKey)
+	internalKey, _ := schnorr.ParsePubKey(internalKeyBytes)
 
 	liquidationScriptControlBlock, err := types.GetControlBlock(internalKey, liquidationScriptProof)
 	if err != nil {
