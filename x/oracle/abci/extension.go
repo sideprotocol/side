@@ -305,6 +305,7 @@ func (h *PriceOracleVoteExtHandler) PreBlocker(ctx sdk.Context, req *abci.Reques
 			h.Keeper.SetPrice(ctx, symbol, price.String())
 		}
 	}
+	h.Keeper.SetPrice(ctx, "sBTC/BTC", "1.0")
 
 	err = h.Keeper.SetBlockHeaders(ctx, headers)
 	if err != nil {
