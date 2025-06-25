@@ -5,11 +5,11 @@ import (
 	fmt "fmt"
 	"strconv"
 	"strings"
-	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/shopspring/decimal"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
@@ -25,8 +25,11 @@ var (
 	// initial borrow index
 	InitialBorrowIndex = sdkmath.LegacyOneDec()
 
-	// default fee rate
-	DefaultFeeRate = int64(1)
+	// price separator
+	PriceSeparator = " "
+
+	// price precision
+	PricePrecision = "0.001"
 )
 
 // GetExchangeRate calculates the sToken exchange rate according to the given params
@@ -66,7 +69,7 @@ func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
 // 2. collateral is NOT the base price asset:
 // liquidation price = collateral amount * lltv / (borrow amount + interest)
-func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, decimals int, precision sdkmath.LegacyDec, collateralIsBaseAsset bool) sdkmath.LegacyDec {
+func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, collateralIsBaseAsset bool) sdkmath.LegacyDec {
 	interest := GetTotalInterest(borrowAmount, maturity, borrowAPR, blocksPerYear)
 
 	var liquidationPrice sdkmath.LegacyDec
@@ -76,19 +79,7 @@ func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals i
 		liquidationPrice = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(lltv))).ToLegacyDec().QuoInt(Percent).QuoInt(borrowAmount.Add(interest)).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals))
 	}
 
-	decimalsInt := sdkmath.NewIntWithDecimal(1, decimals)
-	precisionInt := precision.MulInt(decimalsInt).TruncateInt()
-
-	return liquidationPrice.MulInt(decimalsInt).TruncateInt().Quo(precisionInt).Mul(precisionInt).ToLegacyDec().QuoInt(decimalsInt)
-}
-
-// GetMaturityTime gets the actual maturity time according to the given maturity time
-func GetMaturityTime(originMaturityTime int64) int64 {
-	if originMaturityTime%(24*int64(time.Hour)) == 0 {
-		return originMaturityTime
-	}
-
-	return time.Unix(originMaturityTime, 0).Truncate(24 * time.Hour).Add(24 * time.Hour).Unix()
+	return NormalizePrice(liquidationPrice, collateralIsBaseAsset)
 }
 
 // ToBeLiquidated returns true if the given price satisfies the liquidation price, false otherwise
@@ -116,6 +107,34 @@ func GetPricePair(poolConfig PoolConfig) string {
 	}
 
 	return fmt.Sprintf("%s%s", strings.ToUpper(poolConfig.LendingAsset.PriceSymbol), strings.ToUpper(poolConfig.CollateralAsset.PriceSymbol))
+}
+
+// FormatPrice formats the given price
+// Assume that the given price is valid
+func FormatPrice(price sdkmath.LegacyDec, pair string) string {
+	decimalPrice, _ := decimal.NewFromString(price.String())
+
+	return fmt.Sprintf("%s%s%s", decimalPrice.String(), PriceSeparator, pair)
+}
+
+// NormalizePrice normalizes the given price
+func NormalizePrice(price sdkmath.LegacyDec, collateralIsBaseAsset bool) sdkmath.LegacyDec {
+	adjust := sdkmath.LegacyMustNewDecFromStr(PricePrecision)
+	n := digitOrZeroCount(price)
+
+	for range n.Int64() {
+		adjust = adjust.MulInt64(10)
+	}
+
+	for range -n.Int64() {
+		adjust = adjust.QuoInt64(10)
+	}
+
+	if !collateralIsBaseAsset {
+		return price.Quo(adjust).TruncateDec().Mul(adjust)
+	}
+
+	return price.Add(adjust).Quo(adjust).TruncateDec().Mul(adjust)
 }
 
 // STokenDenom returns the sToken denom from the given pool id

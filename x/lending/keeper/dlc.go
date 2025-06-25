@@ -3,14 +3,13 @@ package keeper
 import (
 	"bytes"
 	"encoding/hex"
+	"fmt"
 
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
 
-	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
@@ -132,35 +131,40 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 	return nil
 }
 
+// UpdateDLCEvent updates the dlc event of the given loan
+func (k Keeper) UpdateDLCEvent(ctx sdk.Context, loanId string) {
+	loan := k.GetLoan(ctx, loanId)
+	pool := k.GetPool(ctx, loan.PoolId)
+
+	dlcEvent := k.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
+
+	// update description
+	dlcEvent.Description = fmt.Sprintf("DLC event for loan %s", loanId)
+
+	// update outcomes
+	dlcEvent.Outcomes = []string{
+		fmt.Sprintf("Liquidated at %s", types.FormatPrice(loan.LiquidationPrice, types.GetPricePair(pool.Config))),
+		fmt.Sprintf("Default liquidated at %d", loan.MaturityTime),
+		"Repaid",
+	}
+
+	k.dlcKeeper.SetEvent(ctx, dlcEvent)
+}
+
 // GetCetInfos gets the related cet infos of the given loan
 // Assume that the loan exists
-func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk.Coin) ([]*types.CetInfo, error) {
+func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string) ([]*types.CetInfo, error) {
 	loan := k.GetLoan(ctx, loanId)
 	dlcMeta := k.GetDLCMeta(ctx, loanId)
-	poolConfig := k.GetPool(ctx, loan.PoolId).Config
 
 	liquidationScript, liquidationScriptControlBlock, _ := types.UnwrapLeafScript(dlcMeta.LiquidationScript)
 	repaymentScript, repaymentScriptControlBlock, _ := types.UnwrapLeafScript(dlcMeta.RepaymentScript)
 
-	var liquidationEvent *dlctypes.DLCEvent
-	if loan.LiquidationEventId != 0 {
-		liquidationEvent = k.dlcKeeper.GetEvent(ctx, loan.LiquidationEventId)
-	} else if collateralAmount.Amount.IsPositive() {
-		pricePair, found := k.dlcKeeper.PricePair(ctx, types.GetPricePair(poolConfig))
-		if !found {
-			return nil, errorsmod.Wrap(types.ErrInvalidPricePair, "price pair does not exist in dlc")
-		}
+	dlcEvent := k.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
 
-		liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(poolConfig.LendingAsset.Decimals), loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval, poolConfig.CollateralAsset.IsBasePriceAsset)
-		liquidationEvent = k.dlcKeeper.GetEventByPrice(ctx, pricePair.Pair, dlctypes.NormalizePrice(liquidationPrice, int(pricePair.Decimals)))
-	}
-
-	defaultLiquidationEvent := k.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
-	repaymentEvent := k.dlcKeeper.GetEvent(ctx, loan.RepaymentEventId)
-
-	liquidationCetInfo, _ := types.GetCetInfo(liquidationEvent, 0, liquidationScript, liquidationScriptControlBlock)
-	defaultLiquidationCetInfo, _ := types.GetCetInfo(defaultLiquidationEvent, 0, liquidationScript, liquidationScriptControlBlock)
-	repaymentCetInfo, _ := types.GetCetInfo(repaymentEvent, 0, repaymentScript, repaymentScriptControlBlock)
+	liquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.LiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock)
+	defaultLiquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.DefaultLiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock)
+	repaymentCetInfo, _ := types.GetCetInfo(dlcEvent, types.RepaidOutcomeIndex, repaymentScript, repaymentScriptControlBlock)
 
 	return []*types.CetInfo{
 		liquidationCetInfo,

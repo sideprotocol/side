@@ -30,7 +30,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryPools())
 	cmd.AddCommand(CmdQueryPoolExchangeRate())
 	cmd.AddCommand(CmdQueryCollateralAddress())
-	cmd.AddCommand(CmdQueryLiquidationEvent())
+	cmd.AddCommand(CmdQueryDlcEventCount())
 	cmd.AddCommand(CmdQueryLoan())
 	cmd.AddCommand(CmdQueryLoans())
 	cmd.AddCommand(CmdQueryLoansByAddress())
@@ -193,11 +193,11 @@ func CmdQueryCollateralAddress() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryLiquidationEvent() *cobra.Command {
+func CmdQueryDlcEventCount() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "liquidation-event [pool id] [collateral amount] [borrow amount] [maturity]",
-		Short: "Query the corresponding liquidation event according to the given params",
-		Args:  cobra.ExactArgs(4),
+		Use:   "dlc-event-count",
+		Short: "Query the available DLC event count",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -206,17 +206,7 @@ func CmdQueryLiquidationEvent() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			maturity, err := strconv.ParseInt(args[3], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			res, err := queryClient.LiquidationEvent(cmd.Context(), &types.QueryLiquidationEventRequest{
-				PoolId:           args[0],
-				CollateralAmount: args[1],
-				BorrowAmount:     args[2],
-				Maturity:         maturity,
-			})
+			res, err := queryClient.DlcEventCount(cmd.Context(), &types.QueryDlcEventCountRequest{})
 			if err != nil {
 				return err
 			}
@@ -328,9 +318,9 @@ func CmdQueryLoansByAddress() *cobra.Command {
 
 func CmdQueryLoanCetInfos() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cet-infos [loan id] [collateral amount]",
-		Short: "Query the liquidation CET info according to the given loan id or collateral amount",
-		Args:  cobra.RangeArgs(1, 2),
+		Use:   "cet-infos [loan id]",
+		Short: "Query the CET infos according to the given loan id",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -339,14 +329,8 @@ func CmdQueryLoanCetInfos() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			collateralAmount := ""
-			if len(args) == 2 {
-				collateralAmount = args[1]
-			}
-
 			res, err := queryClient.LoanCetInfos(cmd.Context(), &types.QueryLoanCetInfosRequest{
-				LoanId:           args[0],
-				CollateralAmount: collateralAmount,
+				LoanId: args[0],
 			})
 			if err != nil {
 				return err

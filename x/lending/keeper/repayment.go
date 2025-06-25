@@ -107,7 +107,7 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 // Assume that the loan exists
 func (k Keeper) GetRepaymentCetAdaptorPoint(ctx sdk.Context, loanId string) ([]byte, error) {
 	loan := k.GetLoan(ctx, loanId)
-	repaymentEvent := k.dlcKeeper.GetEvent(ctx, loan.RepaymentEventId)
+	dlcEvent := k.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
 
-	return dlctypes.GetSignaturePointFromEvent(repaymentEvent, 0)
+	return dlctypes.GetSignaturePointFromEvent(dlcEvent, types.RepaidOutcomeIndex)
 }

@@ -58,14 +58,9 @@ type LiquidationKeeper interface {
 
 // DLCKeeper defines the expected DLC keeper interface
 type DLCKeeper interface {
-	PricePair(ctx sdk.Context, pair string) (dlctypes.PricePair, bool)
-
 	HasEvent(ctx sdk.Context, id uint64) bool
 	GetEvent(ctx sdk.Context, id uint64) *dlctypes.DLCEvent
-	HasEventByPrice(ctx sdk.Context, pair string, price string) bool
-	GetEventByPrice(ctx sdk.Context, pair string, price string) *dlctypes.DLCEvent
-	HasEventByDate(ctx sdk.Context, date int64) bool
-	GetEventByDate(ctx sdk.Context, date int64) *dlctypes.DLCEvent
+	GetPendingLendingEventCount(ctx sdk.Context) uint64
 	GetAvailableLendingEvent(ctx sdk.Context) *dlctypes.DLCEvent
 
 	GetAttestationByEvent(ctx sdk.Context, eventId uint64) *dlctypes.DLCAttestation

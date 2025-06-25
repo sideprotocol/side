@@ -77,18 +77,6 @@ func EventKey(id uint64) []byte {
 	return append(EventKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
-func EventByPriceKey(pair string, price string) []byte {
-	return append(append(EventByPriceKeyPrefix, []byte(pair)...), []byte(price)...)
-}
-
-func EventByDateKey(date int64) []byte {
-	return append(EventByDateKeyPrefix, sdk.Uint64ToBigEndian(uint64(date))...)
-}
-
-func CurrentEventPriceKey(pair string) []byte {
-	return append(CurrentEventPriceKeyPrefix, []byte(pair)...)
-}
-
 func PendingLendingEventKey(id uint64) []byte {
 	return append(PendingLendingEventKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
@@ -99,12 +87,4 @@ func AttestationKey(id uint64) []byte {
 
 func AttestationByEventKey(eventId uint64) []byte {
 	return append(AttestationByEventKeyPrefix, sdk.Uint64ToBigEndian(eventId)...)
-}
-
-func TriggeredPriceEventQueueKey(pair string, eventId uint64) []byte {
-	return append(append(TriggeredPriceEventQueueKeyPrefix, []byte(pair)...), sdk.Uint64ToBigEndian(eventId)...)
-}
-
-func TriggeredPriceEventQueueCountKey(pair string) []byte {
-	return append(TriggeredPriceEventQueueCountKeyPrefix, []byte(pair)...)
 }

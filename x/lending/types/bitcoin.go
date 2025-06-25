@@ -15,6 +15,9 @@ const (
 
 	// default sig hash type
 	DefaultSigHashType = txscript.SigHashDefault
+
+	// default fee rate
+	DefaultFeeRate = int64(1)
 )
 
 // BuildPsbt builds a psbt from the given params

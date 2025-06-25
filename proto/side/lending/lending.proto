@@ -215,19 +215,17 @@ message Loan {
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_event_id = 19;
-    uint64 default_liquidation_event_id = 20;
-    uint64 repayment_event_id = 21;
-    repeated Authorization authorizations = 22 [(gogoproto.nullable) = false];
-    string collateral_amount = 23 [
+    uint64 dlc_event_id = 19;
+    repeated Authorization authorizations = 20 [(gogoproto.nullable) = false];
+    string collateral_amount = 21 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_id = 24;
-    string referrer = 25;
-    google.protobuf.Timestamp create_at = 26 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 27 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 28;
+    uint64 liquidation_id = 22;
+    string referrer = 23;
+    google.protobuf.Timestamp create_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 25 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 26;
 }
 
 enum CetType {

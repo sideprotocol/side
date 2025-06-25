@@ -19,6 +19,17 @@ import (
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 )
 
+const (
+	// outcome index for liquidated
+	LiquidatedOutcomeIndex = 0
+
+	// outcome index for default liquidated
+	DefaultLiquidatedOutcomeIndex = 1
+
+	// outcome index for repaid
+	RepaidOutcomeIndex = 2
+)
+
 // BuildDLCMeta builds the dlc meta from the given params
 // Assume that the given params are valid
 func BuildDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, finalTimeout int64) (*DLCMeta, error) {
@@ -59,13 +70,13 @@ func BuildDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey st
 }
 
 // VerifyCets verifies the given cets
-func VerifyCets(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, liquidationEvent *dlctypes.DLCEvent, defaultLiquidationEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
-	liquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(liquidationEvent, 0)
+func VerifyCets(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, dlcEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
+	liquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(dlcEvent, LiquidatedOutcomeIndex)
 	if err != nil {
 		return err
 	}
 
-	defaultLiquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(defaultLiquidationEvent, 0)
+	defaultLiquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(dlcEvent, DefaultLiquidatedOutcomeIndex)
 	if err != nil {
 		return err
 	}

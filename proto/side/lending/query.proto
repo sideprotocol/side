@@ -33,8 +33,8 @@ service Query {
         option (google.api.http).get = "/side/lending/collateral/address";
     }
 
-    rpc LiquidationEvent(QueryLiquidationEventRequest) returns (QueryLiquidationEventResponse) {
-        option (google.api.http).get = "/side/lending/liquidation/event";
+    rpc DlcEventCount(QueryDlcEventCountRequest) returns (QueryDlcEventCountResponse) {
+        option (google.api.http).get = "/side/lending/dlc/event/count";
     }
 
     rpc Loan(QueryLoanRequest) returns (QueryLoanResponse) {
@@ -109,24 +109,14 @@ message QueryPoolExchangeRateResponse {
     string exchange_rate = 1;
 }
 
-message QueryLiquidationEventRequest {
-    string pool_id = 1;
-    string collateral_amount = 2;
-    string borrow_amount = 3;
-    int64 maturity = 4;
-}
+message QueryDlcEventCountRequest {}
 
-message QueryLiquidationEventResponse {
-    uint64 event_id = 1;
-    string oracle_pubkey = 2;
-    string nonce = 3;
-    string price = 4;
-    string signature_point = 5;
+message QueryDlcEventCountResponse {
+   uint64 count = 1;
 }
 
 message QueryLoanCetInfosRequest {
     string loan_id = 1;
-    string collateral_amount = 2;
 }
 
 message QueryLoanCetInfosResponse {

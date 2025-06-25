@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -34,44 +33,6 @@ func (k Keeper) IncrementEventId(ctx sdk.Context) uint64 {
 	return id
 }
 
-// GetCurrentEventPrice gets the current event price
-func (k Keeper) GetCurrentEventPrice(ctx sdk.Context, pair string) sdkmath.LegacyDec {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := store.Get(types.CurrentEventPriceKey(pair))
-	if bz == nil {
-		return sdkmath.LegacyZeroDec()
-	}
-
-	return sdkmath.LegacyMustNewDecFromStr(string(bz))
-}
-
-// SetCurrentEventPrice sets the current event price for the given pair
-func (k Keeper) SetCurrentEventPrice(ctx sdk.Context, pair string, price string) {
-	store := ctx.KVStore(k.storeKey)
-
-	store.Set(types.CurrentEventPriceKey(pair), []byte(price))
-}
-
-// GetCurrentEventDate gets the current event date
-func (k Keeper) GetCurrentEventDate(ctx sdk.Context) int64 {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := store.Get(types.CurrentEventDateKey)
-	if bz == nil {
-		return 0
-	}
-
-	return int64(sdk.BigEndianToUint64(bz))
-}
-
-// SetCurrentEventDate sets the current event date
-func (k Keeper) SetCurrentEventDate(ctx sdk.Context, date int64) {
-	store := ctx.KVStore(k.storeKey)
-
-	store.Set(types.CurrentEventDateKey, sdk.Uint64ToBigEndian(uint64(date)))
-}
-
 // HasEvent returns true if the given event exists, false otherwise
 func (k Keeper) HasEvent(ctx sdk.Context, id uint64) bool {
 	store := ctx.KVStore(k.storeKey)
@@ -90,44 +51,6 @@ func (k Keeper) GetEvent(ctx sdk.Context, id uint64) *types.DLCEvent {
 	return &event
 }
 
-// HasEventByPrice returns true if the given price event exists, false otherwise
-func (k Keeper) HasEventByPrice(ctx sdk.Context, pair string, price string) bool {
-	store := ctx.KVStore(k.storeKey)
-
-	return store.Has(types.EventByPriceKey(pair, price))
-}
-
-// GetEventByPrice gets the event by the given price
-func (k Keeper) GetEventByPrice(ctx sdk.Context, pair string, price string) *types.DLCEvent {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := store.Get(types.EventByPriceKey(pair, price))
-	if bz == nil {
-		return nil
-	}
-
-	return k.GetEvent(ctx, sdk.BigEndianToUint64(bz))
-}
-
-// HasEventByDate returns true if the given date event exists, false otherwise
-func (k Keeper) HasEventByDate(ctx sdk.Context, date int64) bool {
-	store := ctx.KVStore(k.storeKey)
-
-	return store.Has(types.EventByDateKey(date))
-}
-
-// GetEventByDate gets the event by the given date
-func (k Keeper) GetEventByDate(ctx sdk.Context, date int64) *types.DLCEvent {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := store.Get(types.EventByDateKey(date))
-	if bz == nil {
-		return nil
-	}
-
-	return k.GetEvent(ctx, sdk.BigEndianToUint64(bz))
-}
-
 // SetEvent sets the given event
 func (k Keeper) SetEvent(ctx sdk.Context, event *types.DLCEvent) {
 	store := ctx.KVStore(k.storeKey)
@@ -137,27 +60,13 @@ func (k Keeper) SetEvent(ctx sdk.Context, event *types.DLCEvent) {
 	store.Set(types.EventKey(event.Id), bz)
 }
 
-// SetEventByPrice sets the event by the given price
-func (k Keeper) SetEventByPrice(ctx sdk.Context, pair string, price string, event *types.DLCEvent) {
-	store := ctx.KVStore(k.storeKey)
-
-	store.Set(types.EventByPriceKey(pair, price), sdk.Uint64ToBigEndian(event.Id))
-}
-
-// SetEventByDate sets the event by the given date
-func (k Keeper) SetEventByDate(ctx sdk.Context, date int64, event *types.DLCEvent) {
-	store := ctx.KVStore(k.storeKey)
-
-	store.Set(types.EventByDateKey(date), sdk.Uint64ToBigEndian(event.Id))
-}
-
 // GetPendingLendingEventCount gets the pending lending event count
-func (k Keeper) GetPendingLendingEventCount(ctx sdk.Context) uint32 {
+func (k Keeper) GetPendingLendingEventCount(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.PendingLendingEventCountKey)
 
-	return uint32(sdk.BigEndianToUint64(bz))
+	return sdk.BigEndianToUint64(bz)
 }
 
 // IncreasePendingLendingEventCount increases the pending lending event count by 1
@@ -166,7 +75,7 @@ func (k Keeper) IncreasePendingLendingEventCount(ctx sdk.Context) {
 
 	count := k.GetPendingLendingEventCount(ctx)
 
-	store.Set(types.PendingLendingEventCountKey, sdk.Uint64ToBigEndian(uint64(count+1)))
+	store.Set(types.PendingLendingEventCountKey, sdk.Uint64ToBigEndian(count+1))
 }
 
 // DecreasePendingLendingEventCount decreases the pending lending event count by 1
@@ -178,7 +87,7 @@ func (k Keeper) DecreasePendingLendingEventCount(ctx sdk.Context) {
 		return
 	}
 
-	store.Set(types.PendingLendingEventCountKey, sdk.Uint64ToBigEndian(uint64(count-1)))
+	store.Set(types.PendingLendingEventCountKey, sdk.Uint64ToBigEndian(count-1))
 }
 
 // AddLendingEventToPendingQueue adds the specified lending event to the pending queue
@@ -215,74 +124,6 @@ func (k Keeper) GetAvailableLendingEvent(ctx sdk.Context) *types.DLCEvent {
 	return lendingEvent
 }
 
-// GetTriggeredPriceEventQueueCount gets the triggered price event queue count by the given pair
-func (k Keeper) GetTriggeredPriceEventQueueCount(ctx sdk.Context, pair string) uint32 {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := store.Get(types.TriggeredPriceEventQueueCountKey(pair))
-
-	return uint32(sdk.BigEndianToUint64(bz))
-}
-
-// IncreaseTriggeredPriceEventQueueCount increases the triggered price event queue count by 1
-func (k Keeper) IncreaseTriggeredPriceEventQueueCount(ctx sdk.Context, pair string) {
-	store := ctx.KVStore(k.storeKey)
-
-	count := k.GetTriggeredPriceEventQueueCount(ctx, pair)
-
-	store.Set(types.TriggeredPriceEventQueueCountKey(pair), sdk.Uint64ToBigEndian(uint64(count+1)))
-}
-
-// DecreaseTriggeredPriceEventQueueCount decreases the triggered price event queue count by 1
-func (k Keeper) DecreaseTriggeredPriceEventQueueCount(ctx sdk.Context, pair string) {
-	store := ctx.KVStore(k.storeKey)
-
-	count := k.GetTriggeredPriceEventQueueCount(ctx, pair)
-	if count == 0 {
-		return
-	}
-
-	store.Set(types.TriggeredPriceEventQueueCountKey(pair), sdk.Uint64ToBigEndian(uint64(count-1)))
-}
-
-// AddPriceEventToTriggeredQueue adds the specified price event to the triggered queue
-func (k Keeper) AddPriceEventToTriggeredQueue(ctx sdk.Context, event *types.DLCEvent) {
-	store := ctx.KVStore(k.storeKey)
-
-	pair := types.GetPricePairFromOutcome(event.Outcomes[event.OutcomeIndex])
-
-	store.Set(types.TriggeredPriceEventQueueKey(pair, event.Id), []byte{})
-
-	k.IncreaseTriggeredPriceEventQueueCount(ctx, pair)
-}
-
-// RemovePriceEventFromTriggeredQueue removes the specified price event from the triggered queue
-func (k Keeper) RemovePriceEventFromTriggeredQueue(ctx sdk.Context, event *types.DLCEvent) {
-	store := ctx.KVStore(k.storeKey)
-
-	pair := types.GetPricePairFromOutcome(event.Outcomes[event.OutcomeIndex])
-
-	store.Delete(types.TriggeredPriceEventQueueKey(pair, event.Id))
-
-	k.DecreaseTriggeredPriceEventQueueCount(ctx, pair)
-}
-
-// GetTriggeredPriceEventFromQueue gets a triggered price event by the given pair and removes it from the queue if any
-func (k Keeper) GetTriggeredPriceEventFromQueue(ctx sdk.Context, pair string) *types.DLCEvent {
-	var priceEvent *types.DLCEvent
-
-	k.IterateTriggeredPriceEventQueue(ctx, pair, func(event *types.DLCEvent) (stop bool) {
-		priceEvent = event
-		return true
-	})
-
-	if priceEvent != nil {
-		k.RemovePriceEventFromTriggeredQueue(ctx, priceEvent)
-	}
-
-	return priceEvent
-}
-
 // TriggerDLCEvent triggers the given event
 func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 	event := k.GetEvent(ctx, id)
@@ -292,10 +133,6 @@ func (k Keeper) TriggerDLCEvent(ctx sdk.Context, id uint64, outcomeIndex int) {
 	event.TriggerAt = ctx.BlockTime()
 
 	k.SetEvent(ctx, event)
-
-	if event.Type == types.DlcEventType_PRICE {
-		k.AddPriceEventToTriggeredQueue(ctx, event)
-	}
 
 	k.tssKeeper.InitiateSigningRequest(
 		ctx,
@@ -387,26 +224,6 @@ func (k Keeper) IteratePendingLendingEvents(ctx sdk.Context, cb func(event *type
 		key := iterator.Key()
 
 		event := k.GetEvent(ctx, sdk.BigEndianToUint64(key[1:]))
-
-		if cb(event) {
-			break
-		}
-	}
-}
-
-// IterateTriggeredPriceEventQueue iterates through the triggered price event queue by the given pair
-func (k Keeper) IterateTriggeredPriceEventQueue(ctx sdk.Context, pair string, cb func(event *types.DLCEvent) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-
-	prefix := append(types.TriggeredPriceEventQueueKeyPrefix, []byte(pair)...)
-
-	iterator := storetypes.KVStorePrefixIterator(store, prefix)
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		key := iterator.Key()
-
-		event := k.GetEvent(ctx, sdk.BigEndianToUint64(key[len(prefix):]))
 
 		if cb(event) {
 			break

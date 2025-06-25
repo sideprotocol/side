@@ -16,7 +16,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
-	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
@@ -73,9 +72,8 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	dcm := m.dlcKeeper.GetDCM(ctx, msg.DCMId)
 
-	originMaturityTime := ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity) * time.Second).Unix()
-	maturityTime := types.GetMaturityTime(originMaturityTime)
-	finalTimeout := originMaturityTime + m.FinalTimeoutDuration(ctx)
+	maturityTime := ctx.BlockTime().Add(time.Duration(trancheConfig.Maturity) * time.Second).Unix()
+	finalTimeout := maturityTime + m.FinalTimeoutDuration(ctx)
 
 	vault, err := types.CreateVaultAddress(msg.BorrowerPubkey, msg.BorrowerAuthPubkey, dcm.Pubkey, finalTimeout)
 	if err != nil {
@@ -91,42 +89,30 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		return nil, err
 	}
 
-	if !m.dlcKeeper.HasEventByDate(ctx, maturityTime) {
-		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "default liquidation event does not exist")
+	dlcEvent := m.dlcKeeper.GetAvailableLendingEvent(ctx)
+	if dlcEvent == nil {
+		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "no available dlc lending event")
 	}
-
-	defaultLiquidationEvent := m.dlcKeeper.GetEventByDate(ctx, maturityTime)
-
-	repaymentEvent := m.dlcKeeper.GetAvailableLendingEvent(ctx)
-	if repaymentEvent == nil {
-		return nil, errorsmod.Wrap(types.ErrInvalidEvent, "no available event for repayment")
-	}
-
-	// update repayment event
-	repaymentEvent.Description = fmt.Sprintf("repayment event for loan %s", vault)
-	repaymentEvent.Outcomes = []string{vault}
-	m.dlcKeeper.SetEvent(ctx, repaymentEvent)
 
 	loan := &types.Loan{
-		VaultAddress:              vault,
-		Borrower:                  msg.Borrower,
-		BorrowerPubKey:            msg.BorrowerPubkey,
-		BorrowerAuthPubKey:        msg.BorrowerAuthPubkey,
-		DCM:                       dcm.Pubkey,
-		MaturityTime:              maturityTime,
-		FinalTimeout:              finalTimeout,
-		PoolId:                    msg.PoolId,
-		BorrowAmount:              msg.BorrowAmount,
-		RequestFee:                poolConfig.RequestFee,
-		OriginationFee:            poolConfig.OriginationFee,
-		Maturity:                  trancheConfig.Maturity,
-		BorrowAPR:                 trancheConfig.BorrowAPR,
-		MinMaturity:               trancheConfig.Maturity * int64(trancheConfig.MinMaturityFactor) / 1000,
-		DefaultLiquidationEventId: defaultLiquidationEvent.Id,
-		RepaymentEventId:          repaymentEvent.Id,
-		Referrer:                  msg.Referrer,
-		CreateAt:                  ctx.BlockTime(),
-		Status:                    types.LoanStatus_Requested,
+		VaultAddress:       vault,
+		Borrower:           msg.Borrower,
+		BorrowerPubKey:     msg.BorrowerPubkey,
+		BorrowerAuthPubKey: msg.BorrowerAuthPubkey,
+		DCM:                dcm.Pubkey,
+		MaturityTime:       maturityTime,
+		FinalTimeout:       finalTimeout,
+		PoolId:             msg.PoolId,
+		BorrowAmount:       msg.BorrowAmount,
+		RequestFee:         poolConfig.RequestFee,
+		OriginationFee:     poolConfig.OriginationFee,
+		Maturity:           trancheConfig.Maturity,
+		BorrowAPR:          trancheConfig.BorrowAPR,
+		MinMaturity:        trancheConfig.Maturity * int64(trancheConfig.MinMaturityFactor) / 1000,
+		DlcEventId:         dlcEvent.Id,
+		Referrer:           msg.Referrer,
+		CreateAt:           ctx.BlockTime(),
+		Status:             types.LoanStatus_Requested,
 	}
 
 	m.SetLoan(ctx, loan)
@@ -197,6 +183,13 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount can not be zero")
 	}
 
+	dlcEvent := m.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
+
+	// verify cets
+	if err := types.VerifyCets(depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, dlcEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+		return nil, err
+	}
+
 	// update dlc meta
 	if err := m.UpdateDLCMeta(ctx, msg.LoanId, depositTxs, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
 		return nil, err
@@ -218,64 +211,22 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		}
 	}
 
-	loan.CollateralAmount = collateralAmount
-	loan.Authorizations = append(loan.Authorizations, *authorization)
-
-	var errRejected error
-
-	defer func() {
-		if errRejected != nil {
-			loan.Authorizations[authorization.Id-1].Status = types.AuthorizationStatus_AUTHORIZATION_STATUS_REJECTED
-			loan.Status = types.LoanStatus_Rejected
-			m.SetLoan(ctx, loan)
-
-			ctx.EventManager().EmitEvent(
-				sdk.NewEvent(
-					types.EventTypeReject,
-					sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
-					sdk.NewAttribute(types.AttributeKeyAuthorizationId, fmt.Sprintf("%d", authorization.Id)),
-					sdk.NewAttribute(types.AttributeKeyReason, errRejected.Error()),
-				),
-			)
-		}
-	}()
-
-	pricePair := types.GetPricePair(poolConfig)
 	collateralDecimals := int(poolConfig.CollateralAsset.Decimals)
 	borrowDecimals := int(poolConfig.LendingAsset.Decimals)
 	collateralIsBaseAsset := poolConfig.CollateralAsset.IsBasePriceAsset
 
-	dlcPricePair, found := m.dlcKeeper.PricePair(ctx, pricePair)
-	if !found {
-		errRejected = errorsmod.Wrap(types.ErrInvalidPricePair, "price pair does not exist in dlc")
-		return nil, nil
-	}
+	// calculate liquidation price
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, collateralIsBaseAsset)
 
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(dlcPricePair.Decimals), dlcPricePair.Interval, collateralIsBaseAsset)
-	normalizedLiquidationPrice := dlctypes.NormalizePrice(liquidationPrice, int(dlcPricePair.Decimals))
-
-	if !m.dlcKeeper.HasEventByPrice(ctx, pricePair, normalizedLiquidationPrice) {
-		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event does not exist")
-		return nil, nil
-	}
-
-	liquidationEvent := m.dlcKeeper.GetEventByPrice(ctx, pricePair, normalizedLiquidationPrice)
-	if liquidationEvent.HasTriggered {
-		errRejected = errorsmod.Wrap(types.ErrInvalidEvent, "liquidation event has triggered")
-		return nil, nil
-	}
-
-	defaultLiquidationEvent := m.dlcKeeper.GetEvent(ctx, loan.DefaultLiquidationEventId)
-
-	if err := types.VerifyCets(depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, liquidationEvent, defaultLiquidationEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
-		return nil, err
-	}
-
+	// update loan
+	loan.Authorizations = append(loan.Authorizations, *authorization)
+	loan.CollateralAmount = collateralAmount
 	loan.LiquidationPrice = liquidationPrice
-	loan.LiquidationEventId = liquidationEvent.Id
-
 	loan.Status = types.LoanStatus_Authorized
 	m.SetLoan(ctx, loan)
+
+	// update dlc event
+	m.UpdateDLCEvent(ctx, msg.LoanId)
 
 	return &types.MsgSubmitCetsResponse{}, nil
 }

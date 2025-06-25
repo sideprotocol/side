@@ -11,7 +11,6 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
@@ -107,59 +106,15 @@ func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollate
 	return &types.QueryCollateralAddressResponse{Address: collateralAddr}, nil
 }
 
-// LiquidationEvent implements types.QueryServer.
-func (k Keeper) LiquidationEvent(goCtx context.Context, req *types.QueryLiquidationEventRequest) (*types.QueryLiquidationEventResponse, error) {
+// DlcEventCount implements types.QueryServer.
+func (k Keeper) DlcEventCount(goCtx context.Context, req *types.QueryDlcEventCountRequest) (*types.QueryDlcEventCountResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !k.HasPool(ctx, req.PoolId) {
-		return nil, status.Error(codes.InvalidArgument, "pool does not exist")
-	}
-
-	poolConfig := k.GetPool(ctx, req.PoolId).Config
-
-	trancheConfig, found := types.GetTrancheConfig(poolConfig.Tranches, req.Maturity)
-	if !found {
-		return nil, status.Error(codes.InvalidArgument, "maturity does not exit")
-	}
-
-	collateralAmount, err := sdk.ParseCoinNormalized(req.CollateralAmount)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	borrowedAmount, err := sdk.ParseCoinNormalized(req.BorrowAmount)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	pricePair, found := k.dlcKeeper.PricePair(ctx, types.GetPricePair(poolConfig))
-	if !found {
-		return nil, status.Error(codes.Internal, "price pair does not exist in dlc")
-	}
-
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, int(pricePair.Decimals), pricePair.Interval, poolConfig.CollateralAsset.IsBasePriceAsset)
-
-	event := k.dlcKeeper.GetEventByPrice(ctx, pricePair.Pair, dlctypes.NormalizePrice(liquidationPrice, int(pricePair.Decimals)))
-	if event == nil {
-		return nil, status.Error(codes.NotFound, "liquidation event does not exist")
-	}
-
-	signaturePoint, err := dlctypes.GetSignaturePointFromEvent(event, 0)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	return &types.QueryLiquidationEventResponse{
-		EventId:        event.Id,
-		OraclePubkey:   event.Pubkey,
-		Nonce:          event.Nonce,
-		Price:          liquidationPrice.String(),
-		SignaturePoint: hex.EncodeToString(signaturePoint),
-	}, nil
+	return &types.QueryDlcEventCountResponse{Count: k.dlcKeeper.GetPendingLendingEventCount(ctx)}, nil
 }
 
 // Loan implements types.QueryServer.
@@ -221,17 +176,7 @@ func (k Keeper) LoanCetInfos(goCtx context.Context, req *types.QueryLoanCetInfos
 		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
 	}
 
-	var err error
-	var collateralAmount sdk.Coin
-
-	if len(req.CollateralAmount) > 0 {
-		collateralAmount, err = sdk.ParseCoinNormalized(req.CollateralAmount)
-		if err != nil {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
-	}
-
-	cetInfos, err := k.GetCetInfos(ctx, req.LoanId, collateralAmount)
+	cetInfos, err := k.GetCetInfos(ctx, req.LoanId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
