@@ -2,8 +2,6 @@ package keeper
 
 import (
 	"encoding/hex"
-	"fmt"
-	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
@@ -57,50 +55,9 @@ func (k Keeper) HandleNonce(ctx sdk.Context, oraclePubKey string, nonce string, 
 	}
 
 	switch eventType {
-	case types.DlcEventType_PRICE:
-		pricePairIndex := int(intent) - int(types.DKGIntent_DKG_INTENT_PRICE_EVENT_NONCE)
-		pricePair, found := k.PricePairByIndex(ctx, pricePairIndex)
-		if !found {
-			return errorsmod.Wrap(types.ErrInvalidDKGIntent, "price pair does not exist")
-		}
-
-		pair := pricePair.Pair
-
-		if k.GetTriggeredPriceEventQueueCount(ctx, pair) > 0 {
-			triggeredPriceEvent := k.GetTriggeredPriceEventFromQueue(ctx, pair)
-
-			dlcEvent.Description = triggeredPriceEvent.Description
-			dlcEvent.Outcomes = triggeredPriceEvent.Outcomes
-
-			triggerPrice := types.GetPriceFromOutcome(triggeredPriceEvent.Outcomes[triggeredPriceEvent.OutcomeIndex])
-			k.SetEventByPrice(ctx, pair, triggerPrice, dlcEvent)
-
-			break
-		}
-
-		currentEventPrice := k.GetCurrentEventPrice(ctx, pair)
-
-		triggerPrice := types.NormalizePrice(currentEventPrice.Add(pricePair.Interval), int(pricePair.Decimals))
-
-		dlcEvent.Description = fmt.Sprintf("price event at price %s for pair %s", triggerPrice, pair)
-		dlcEvent.Outcomes = append(dlcEvent.Outcomes, types.FormatPrice(triggerPrice, pair))
-
-		k.SetEventByPrice(ctx, pair, triggerPrice, dlcEvent)
-		k.SetCurrentEventPrice(ctx, pair, triggerPrice)
-
-	case types.DlcEventType_DATE:
-		currentEventDate := k.GetCurrentEventDate(ctx)
-		if currentEventDate == 0 {
-			currentEventDate = ctx.BlockTime().Truncate(24 * time.Hour).Unix()
-		}
-
-		triggerDate := currentEventDate + k.DateInterval(ctx)
-
-		dlcEvent.Description = fmt.Sprintf("date event at date %d", triggerDate)
-		dlcEvent.Outcomes = append(dlcEvent.Outcomes, fmt.Sprintf("%d", triggerDate))
-
-		k.SetEventByDate(ctx, triggerDate, dlcEvent)
-		k.SetCurrentEventDate(ctx, triggerDate)
+	case types.DlcEventType_PRICE, types.DlcEventType_DATE:
+		// not implemented currently
+		return nil
 
 	case types.DlcEventType_LENDING:
 		// description and outcomes will be updated when bound to a loan

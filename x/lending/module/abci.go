@@ -116,7 +116,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 		var sigHashes []string
 		var signingIntent int32
 
-		var triggeredEventId uint64
+		var outcomeIndex int
 
 		var liquidationInterest sdkmath.Int
 
@@ -137,7 +137,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 			liquidationCet = dlcMeta.DefaultLiquidationCet.Tx
 			signingIntent = int32(types.SigningIntent_SIGNING_INTENT_DEFAULT_LIQUIDATION)
-			triggeredEventId = loan.DefaultLiquidationEventId
+			outcomeIndex = types.DefaultLiquidatedOutcomeIndex
 
 			// get default liquidation cet sig hashes; no error
 			sigHashes, _ = types.GetDefaultLiquidationCetSigHashes(dlcMeta)
@@ -157,7 +157,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 				liquidationCet = dlcMeta.LiquidationCet.Tx
 				signingIntent = int32(types.SigningIntent_SIGNING_INTENT_LIQUIDATION)
-				triggeredEventId = loan.LiquidationEventId
+				outcomeIndex = types.LiquidatedOutcomeIndex
 
 				// get liquidation cet sig hashes; no error
 				sigHashes, _ = types.GetLiquidationCetSigHashes(dlcMeta)
@@ -200,8 +200,8 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			k.SetLoan(ctx, loan)
 
 			// trigger dlc event if not triggered yet
-			if !k.DLCKeeper().GetEvent(ctx, triggeredEventId).HasTriggered {
-				k.DLCKeeper().TriggerDLCEvent(ctx, triggeredEventId, 0)
+			if !k.DLCKeeper().GetEvent(ctx, loan.DlcEventId).HasTriggered {
+				k.DLCKeeper().TriggerDLCEvent(ctx, loan.DlcEventId, outcomeIndex)
 			}
 
 			// initiate signing request
@@ -234,7 +234,7 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 		// check if the borrower adapted signatures already exist
 		if len(dlcMeta.LiquidationCet.BorrowerAdaptedSignatures) == 0 {
 			// check if the event attestation has been submitted
-			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.LiquidationEventId)
+			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.DlcEventId)
 			if attestation == nil {
 				continue
 			}
@@ -292,7 +292,7 @@ func handleDefaultedLoans(ctx sdk.Context, k keeper.Keeper) {
 		// check if the borrower adapted signatures already exist
 		if len(dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures) == 0 {
 			// check if the event attestation has been submitted
-			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.DefaultLiquidationEventId)
+			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.DlcEventId)
 			if attestation == nil {
 				continue
 			}
@@ -341,9 +341,9 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 	loans := k.GetLoans(ctx, types.LoanStatus_Repaid)
 
 	for _, loan := range loans {
-		// trigger dlc repayment event if not triggered yet
-		if !k.DLCKeeper().GetEvent(ctx, loan.RepaymentEventId).HasTriggered {
-			k.DLCKeeper().TriggerDLCEvent(ctx, loan.RepaymentEventId, 0)
+		// trigger dlc event if not triggered yet
+		if !k.DLCKeeper().GetEvent(ctx, loan.DlcEventId).HasTriggered {
+			k.DLCKeeper().TriggerDLCEvent(ctx, loan.DlcEventId, types.RepaidOutcomeIndex)
 			continue
 		}
 
@@ -360,7 +360,7 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 
 		if len(dlcMeta.RepaymentCet.DCMAdaptedSignatures) == 0 {
 			// check if the event attestation has been submitted
-			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.RepaymentEventId)
+			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.DlcEventId)
 			if attestation == nil {
 				continue
 			}

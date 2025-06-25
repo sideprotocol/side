@@ -2,35 +2,20 @@ package types
 
 import (
 	"encoding/base64"
-	"strings"
-	"time"
 
 	errorsmod "cosmossdk.io/errors"
-	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 )
 
 var (
-	// default nonce queue size for price events
-	DefaultPriceEventNonceQueueSize = uint32(20)
+	// default nonce queue size
+	DefaultNonceQueueSize = uint32(1000)
 
-	// BTCUSD price pair
-	BTCUSDPricePair = "BTCUSD"
+	// default nonce generation batch size
+	DefaultNonceGenerationBatchSize = uint32(200)
 
-	// default price decimals for BTCUSD
-	DefaultBTCUSDPriceDecimals = int32(0)
-
-	// default price interval for BTCUSD
-	DefaultBTCUSDPriceInterval = sdkmath.LegacyNewDec(100)
-
-	// default nonce queue size for date events
-	DefaultDateEventNonceQueueSize = uint32(730) // 2 years
-
-	// default date interval
-	DefaultDateInterval = 24 * time.Hour // 1 day
-
-	// default nonce queue size for lending events
-	DefaultLendingEventNonceQueueSize = uint32(1000)
+	// default nonce generation interval in blocks
+	DefaultNonceGenerationInterval = int64(50) // 50 blocks
 
 	// minimum oracle participant number
 	MinOracleParticipantNum = uint32(3)
@@ -40,33 +25,17 @@ var (
 
 	// default oracle participant threshold
 	DefaultOracleParticipantThreshold = uint32(2)
-
-	// default nonce generation batch size
-	DefaultNonceGenerationBatchSize = uint32(200)
-
-	// default nonce generation interval in blocks
-	DefaultNonceGenerationInterval = int64(50) // 50 blocks
 )
 
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		PriceEventNonceQueueSize: DefaultPriceEventNonceQueueSize,
-		PricePairs: []PricePair{
-			{
-				Pair:     BTCUSDPricePair,
-				Decimals: DefaultBTCUSDPriceDecimals,
-				Interval: DefaultBTCUSDPriceInterval,
-			},
-		},
-		DateEventNonceQueueSize:    DefaultDateEventNonceQueueSize,
-		DateInterval:               DefaultDateInterval,
-		LendingEventNonceQueueSize: DefaultLendingEventNonceQueueSize,
+		NonceQueueSize:             DefaultNonceQueueSize,
+		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
+		NonceGenerationInterval:    DefaultNonceGenerationInterval,
 		AllowedOracleParticipants:  []string{},
 		OracleParticipantNum:       DefaultOracleParticipantNum,
 		OracleParticipantThreshold: DefaultOracleParticipantThreshold,
-		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
-		NonceGenerationInterval:    DefaultNonceGenerationInterval,
 	}
 }
 
@@ -77,26 +46,16 @@ func DefaultParams() Params {
 
 // Validate validates params
 func (p Params) Validate() error {
-	if p.PriceEventNonceQueueSize == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "price event nonce queue size must be greater than 0")
+	if p.NonceQueueSize == 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "nonce queue size must be greater than 0")
 	}
 
-	for _, pair := range p.PricePairs {
-		if err := validatePricePair(pair); err != nil {
-			return err
-		}
+	if p.NonceGenerationBatchSize < 2 {
+		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation batch size can not be less than 2")
 	}
 
-	if p.DateEventNonceQueueSize == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "date event nonce queue size must be greater than 0")
-	}
-
-	if p.DateInterval <= 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "date interval must be greater than 0")
-	}
-
-	if p.LendingEventNonceQueueSize == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "lending event nonce queue size must be greater than 0")
+	if p.NonceGenerationInterval <= 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation interval must be greater than 0")
 	}
 
 	if err := validateOracleParticipants(p.AllowedOracleParticipants); err != nil {
@@ -113,35 +72,6 @@ func (p Params) Validate() error {
 
 	if p.OracleParticipantThreshold == 0 || p.OracleParticipantThreshold > p.OracleParticipantNum {
 		return errorsmod.Wrapf(ErrInvalidParams, "invalid oracle participant threshold")
-	}
-
-	if p.NonceGenerationBatchSize < 2 {
-		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation batch size can not be less than 2")
-	}
-
-	if p.NonceGenerationInterval <= 0 {
-		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation interval must be greater than 0")
-	}
-
-	return nil
-}
-
-// validatePricePair validates the given price pair
-func validatePricePair(p PricePair) error {
-	if len(p.Pair) == 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "empty price pair")
-	}
-
-	if p.Pair != strings.ToUpper(p.Pair) {
-		return errorsmod.Wrap(ErrInvalidParams, "price pair must be in uppercase")
-	}
-
-	if p.Decimals < 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "invalid price decimals")
-	}
-
-	if !p.Interval.IsPositive() {
-		return errorsmod.Wrap(ErrInvalidParams, "invalid price interval")
 	}
 
 	return nil

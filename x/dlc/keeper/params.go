@@ -1,81 +1,22 @@
 package keeper
 
 import (
-	"time"
-
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/sideprotocol/side/x/dlc/types"
 )
 
-// PriceEventNonceQueueSize gets the nonce queue size for the price events
-func (k Keeper) PriceEventNonceQueueSize(ctx sdk.Context) uint32 {
-	return k.GetParams(ctx).PriceEventNonceQueueSize
+// EventNonceQueueSize gets the nonce queue size
+func (k Keeper) NonceQueueSize(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).NonceQueueSize
 }
 
-// PricePairs gets all supported price pairs
-func (k Keeper) PricePairs(ctx sdk.Context) []types.PricePair {
-	return k.GetParams(ctx).PricePairs
+// NonceGenerationBatchSize gets the nonce generation batch size
+func (k Keeper) NonceGenerationBatchSize(ctx sdk.Context) uint32 {
+	return k.GetParams(ctx).NonceGenerationBatchSize
 }
 
-// PricePair gets the given price pair
-func (k Keeper) PricePair(ctx sdk.Context, pair string) (types.PricePair, bool) {
-	for _, p := range k.PricePairs(ctx) {
-		if p.Pair == pair {
-			return p, true
-		}
-	}
-
-	return types.PricePair{}, false
-}
-
-// PricePairByIndex gets the price pair by the given index
-func (k Keeper) PricePairByIndex(ctx sdk.Context, index int) (types.PricePair, bool) {
-	pricePairs := k.PricePairs(ctx)
-
-	if index > len(pricePairs)-1 || len(pricePairs[index].Pair) == 0 {
-		return types.PricePair{}, false
-	}
-
-	return pricePairs[index], true
-}
-
-// PriceDecimals gets the price decimals by the given pair
-func (k Keeper) PriceDecimals(ctx sdk.Context, pair string) int {
-	for _, p := range k.PricePairs(ctx) {
-		if p.Pair == pair {
-			return int(p.Decimals)
-		}
-	}
-
-	return 0
-}
-
-// PriceInterval gets the price interval by the given pair
-func (k Keeper) PriceInterval(ctx sdk.Context, pair string) sdkmath.LegacyDec {
-	for _, p := range k.PricePairs(ctx) {
-		if p.Pair == pair {
-			return p.Interval
-		}
-	}
-
-	return sdkmath.LegacyOneDec()
-}
-
-// DateEventNonceQueueSize gets the nonce queue size for the date events
-func (k Keeper) DateEventNonceQueueSize(ctx sdk.Context) uint32 {
-	return k.GetParams(ctx).DateEventNonceQueueSize
-}
-
-// DateInterval gets the date interval for the date events in seconds
-func (k Keeper) DateInterval(ctx sdk.Context) int64 {
-	return int64(k.GetParams(ctx).DateInterval / time.Second)
-}
-
-// LendingEventNonceQueueSize gets the nonce queue size for the lending events
-func (k Keeper) LendingEventNonceQueueSize(ctx sdk.Context) uint32 {
-	return k.GetParams(ctx).LendingEventNonceQueueSize
+// NonceGenerationInterval gets the nonce generation interval
+func (k Keeper) NonceGenerationInterval(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).NonceGenerationInterval
 }
 
 // OracleParticipantBaseSet gets the oracle participant base set
@@ -95,14 +36,4 @@ func (k Keeper) OracleParticipantNum(ctx sdk.Context) uint32 {
 // OracleParticipantThreshold gets the oracle participant threshold
 func (k Keeper) OracleParticipantThreshold(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).OracleParticipantThreshold
-}
-
-// NonceGenerationBatchSize gets the nonce generation batch size
-func (k Keeper) NonceGenerationBatchSize(ctx sdk.Context) uint32 {
-	return k.GetParams(ctx).NonceGenerationBatchSize
-}
-
-// NonceGenerationInterval gets the nonce generation interval
-func (k Keeper) NonceGenerationInterval(ctx sdk.Context) int64 {
-	return k.GetParams(ctx).NonceGenerationInterval
 }
