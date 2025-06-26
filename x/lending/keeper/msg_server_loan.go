@@ -121,6 +121,9 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	// set dlc meta
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
+	// update dlc event
+	m.UpdateDLCEvent(ctx, loan.VaultAddress)
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventTypeApply,
 			sdk.NewAttribute(types.AttributeKeyVault, loan.VaultAddress),
@@ -224,9 +227,6 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	loan.LiquidationPrice = liquidationPrice
 	loan.Status = types.LoanStatus_Authorized
 	m.SetLoan(ctx, loan)
-
-	// update dlc event
-	m.UpdateDLCEvent(ctx, msg.LoanId)
 
 	return &types.MsgSubmitCetsResponse{}, nil
 }
