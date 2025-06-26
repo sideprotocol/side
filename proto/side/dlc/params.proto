@@ -16,3 +16,27 @@ message Params {
     uint32 oracle_participant_num = 5;
     uint32 oracle_participant_threshold = 6;
 }
+
+message PricePair {
+    string pair = 1;
+    int32 decimals = 2;
+    string interval = 3 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+}
+
+// ParamsV1 defines the v1 parameters for the module.
+message ParamsV1 {
+    uint32 price_event_nonce_queue_size = 1;
+    repeated PricePair price_pairs = 2 [(gogoproto.nullable) = false];
+    uint32 date_event_nonce_queue_size = 3;
+    google.protobuf.Duration date_interval = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    uint32 lending_event_nonce_queue_size = 5;
+    repeated string allowed_oracle_participants = 6;
+    uint32 oracle_participant_num = 7;
+    uint32 oracle_participant_threshold = 8;
+    uint32 nonce_generation_batch_size = 9;
+    int64 nonce_generation_interval = 10;
+}
