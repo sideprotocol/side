@@ -138,7 +138,8 @@ func (k Keeper) LiquidationPrice(goCtx context.Context, req *types.QueryLiquidat
 	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, poolConfig.CollateralAsset.IsBasePriceAsset)
 
 	return &types.QueryLiquidationPriceResponse{
-		LiquidationPrice: types.FormatPrice(liquidationPrice, types.GetPricePair(poolConfig)),
+		Price: types.FormatPrice(liquidationPrice),
+		Pair:  types.GetPricePair(poolConfig),
 	}, nil
 }
 

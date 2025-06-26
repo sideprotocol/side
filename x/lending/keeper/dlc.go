@@ -143,7 +143,7 @@ func (k Keeper) UpdateDLCEvent(ctx sdk.Context, loanId string) {
 
 	// update outcomes
 	dlcEvent.Outcomes = []string{
-		fmt.Sprintf("Liquidated at %s", types.FormatPrice(loan.LiquidationPrice, types.GetPricePair(pool.Config))),
+		fmt.Sprintf("Liquidated at %s", types.FormatPriceWithPair(loan.LiquidationPrice, types.GetPricePair(pool.Config))),
 		fmt.Sprintf("Default liquidated at %d", loan.MaturityTime),
 		"Repaid",
 	}
