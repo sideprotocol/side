@@ -30,6 +30,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryPools())
 	cmd.AddCommand(CmdQueryPoolExchangeRate())
 	cmd.AddCommand(CmdQueryCollateralAddress())
+	cmd.AddCommand(CmdQueryLiquidationPrice())
 	cmd.AddCommand(CmdQueryDlcEventCount())
 	cmd.AddCommand(CmdQueryLoan())
 	cmd.AddCommand(CmdQueryLoans())
@@ -179,6 +180,43 @@ func CmdQueryCollateralAddress() *cobra.Command {
 				BorrowerPubkey: args[0],
 				DCMPubKey:      args[1],
 				MaturityTime:   maturityTime,
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryLiquidationPrice() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "liquidation-price [pool id] [collateral amount] [borrow amount] [maturity]",
+		Short: "Query the liquidation price according to the given params",
+		Args:  cobra.ExactArgs(4),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			maturity, err := strconv.ParseInt(args[3], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.LiquidationPrice(cmd.Context(), &types.QueryLiquidationPriceRequest{
+				PoolId:           args[0],
+				CollateralAmount: args[1],
+				BorrowAmount:     args[2],
+				Maturity:         maturity,
 			})
 			if err != nil {
 				return err

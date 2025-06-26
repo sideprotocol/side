@@ -24,6 +24,7 @@ const (
 	Query_Pools_FullMethodName             = "/side.lending.Query/Pools"
 	Query_PoolExchangeRate_FullMethodName  = "/side.lending.Query/PoolExchangeRate"
 	Query_CollateralAddress_FullMethodName = "/side.lending.Query/CollateralAddress"
+	Query_LiquidationPrice_FullMethodName  = "/side.lending.Query/LiquidationPrice"
 	Query_DlcEventCount_FullMethodName     = "/side.lending.Query/DlcEventCount"
 	Query_Loan_FullMethodName              = "/side.lending.Query/Loan"
 	Query_Loans_FullMethodName             = "/side.lending.Query/Loans"
@@ -47,6 +48,7 @@ type QueryClient interface {
 	Pools(ctx context.Context, in *QueryPoolsRequest, opts ...grpc.CallOption) (*QueryPoolsResponse, error)
 	PoolExchangeRate(ctx context.Context, in *QueryPoolExchangeRateRequest, opts ...grpc.CallOption) (*QueryPoolExchangeRateResponse, error)
 	CollateralAddress(ctx context.Context, in *QueryCollateralAddressRequest, opts ...grpc.CallOption) (*QueryCollateralAddressResponse, error)
+	LiquidationPrice(ctx context.Context, in *QueryLiquidationPriceRequest, opts ...grpc.CallOption) (*QueryLiquidationPriceResponse, error)
 	DlcEventCount(ctx context.Context, in *QueryDlcEventCountRequest, opts ...grpc.CallOption) (*QueryDlcEventCountResponse, error)
 	Loan(ctx context.Context, in *QueryLoanRequest, opts ...grpc.CallOption) (*QueryLoanResponse, error)
 	Loans(ctx context.Context, in *QueryLoansRequest, opts ...grpc.CallOption) (*QueryLoansResponse, error)
@@ -107,6 +109,15 @@ func (c *queryClient) PoolExchangeRate(ctx context.Context, in *QueryPoolExchang
 func (c *queryClient) CollateralAddress(ctx context.Context, in *QueryCollateralAddressRequest, opts ...grpc.CallOption) (*QueryCollateralAddressResponse, error) {
 	out := new(QueryCollateralAddressResponse)
 	err := c.cc.Invoke(ctx, Query_CollateralAddress_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) LiquidationPrice(ctx context.Context, in *QueryLiquidationPriceRequest, opts ...grpc.CallOption) (*QueryLiquidationPriceResponse, error) {
+	out := new(QueryLiquidationPriceResponse)
+	err := c.cc.Invoke(ctx, Query_LiquidationPrice_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -222,6 +233,7 @@ type QueryServer interface {
 	Pools(context.Context, *QueryPoolsRequest) (*QueryPoolsResponse, error)
 	PoolExchangeRate(context.Context, *QueryPoolExchangeRateRequest) (*QueryPoolExchangeRateResponse, error)
 	CollateralAddress(context.Context, *QueryCollateralAddressRequest) (*QueryCollateralAddressResponse, error)
+	LiquidationPrice(context.Context, *QueryLiquidationPriceRequest) (*QueryLiquidationPriceResponse, error)
 	DlcEventCount(context.Context, *QueryDlcEventCountRequest) (*QueryDlcEventCountResponse, error)
 	Loan(context.Context, *QueryLoanRequest) (*QueryLoanResponse, error)
 	Loans(context.Context, *QueryLoansRequest) (*QueryLoansResponse, error)
@@ -254,6 +266,9 @@ func (UnimplementedQueryServer) PoolExchangeRate(context.Context, *QueryPoolExch
 }
 func (UnimplementedQueryServer) CollateralAddress(context.Context, *QueryCollateralAddressRequest) (*QueryCollateralAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CollateralAddress not implemented")
+}
+func (UnimplementedQueryServer) LiquidationPrice(context.Context, *QueryLiquidationPriceRequest) (*QueryLiquidationPriceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LiquidationPrice not implemented")
 }
 func (UnimplementedQueryServer) DlcEventCount(context.Context, *QueryDlcEventCountRequest) (*QueryDlcEventCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DlcEventCount not implemented")
@@ -387,6 +402,24 @@ func _Query_CollateralAddress_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).CollateralAddress(ctx, req.(*QueryCollateralAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_LiquidationPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLiquidationPriceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).LiquidationPrice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_LiquidationPrice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).LiquidationPrice(ctx, req.(*QueryLiquidationPriceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -615,6 +648,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CollateralAddress",
 			Handler:    _Query_CollateralAddress_Handler,
+		},
+		{
+			MethodName: "LiquidationPrice",
+			Handler:    _Query_LiquidationPrice_Handler,
 		},
 		{
 			MethodName: "DlcEventCount",

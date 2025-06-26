@@ -33,6 +33,10 @@ service Query {
         option (google.api.http).get = "/side/lending/collateral/address";
     }
 
+    rpc LiquidationPrice(QueryLiquidationPriceRequest) returns (QueryLiquidationPriceResponse) {
+        option (google.api.http).get = "/side/lending/liquidation/price";
+    }
+
     rpc DlcEventCount(QueryDlcEventCountRequest) returns (QueryDlcEventCountResponse) {
         option (google.api.http).get = "/side/lending/dlc/event/count";
     }
@@ -107,6 +111,17 @@ message QueryPoolExchangeRateRequest {
 // QueryPoolExchangeRateResponse is response type for the Query/PoolExchangeRate RPC method.
 message QueryPoolExchangeRateResponse {
     string exchange_rate = 1;
+}
+
+message QueryLiquidationPriceRequest {
+    string pool_id = 1;
+    string collateral_amount = 2;
+    string borrow_amount = 3;
+    int64 maturity = 4;
+}
+
+message QueryLiquidationPriceResponse {
+    string liquidation_price = 1;
 }
 
 message QueryDlcEventCountRequest {}
