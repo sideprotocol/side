@@ -25,9 +25,6 @@ var (
 	// initial borrow index
 	InitialBorrowIndex = sdkmath.LegacyOneDec()
 
-	// price separator
-	PriceSeparator = " "
-
 	// price precision
 	PricePrecision = "0.001"
 )
@@ -114,7 +111,7 @@ func GetPricePair(poolConfig PoolConfig) string {
 func FormatPrice(price sdkmath.LegacyDec, pair string) string {
 	decimalPrice, _ := decimal.NewFromString(price.String())
 
-	return fmt.Sprintf("%s%s%s", decimalPrice.String(), PriceSeparator, pair)
+	return fmt.Sprintf("%s%s", decimalPrice.String(), pair)
 }
 
 // NormalizePrice normalizes the given price
