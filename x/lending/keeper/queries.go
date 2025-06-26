@@ -106,6 +106,42 @@ func (k Keeper) CollateralAddress(goCtx context.Context, req *types.QueryCollate
 	return &types.QueryCollateralAddressResponse{Address: collateralAddr}, nil
 }
 
+// LiquidationPrice implements types.QueryServer.
+func (k Keeper) LiquidationPrice(goCtx context.Context, req *types.QueryLiquidationPriceRequest) (*types.QueryLiquidationPriceResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasPool(ctx, req.PoolId) {
+		return nil, status.Error(codes.InvalidArgument, "pool does not exist")
+	}
+
+	poolConfig := k.GetPool(ctx, req.PoolId).Config
+
+	trancheConfig, found := types.GetTrancheConfig(poolConfig.Tranches, req.Maturity)
+	if !found {
+		return nil, status.Error(codes.InvalidArgument, "maturity does not exit")
+	}
+
+	collateralAmount, err := sdk.ParseCoinNormalized(req.CollateralAmount)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	borrowedAmount, err := sdk.ParseCoinNormalized(req.BorrowAmount)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	liquidationPrice := types.GetLiquidationPrice(collateralAmount.Amount, int(poolConfig.CollateralAsset.Decimals), borrowedAmount.Amount, int(poolConfig.LendingAsset.Decimals), trancheConfig.Maturity, trancheConfig.BorrowAPR, k.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, poolConfig.CollateralAsset.IsBasePriceAsset)
+
+	return &types.QueryLiquidationPriceResponse{
+		LiquidationPrice: types.FormatPrice(liquidationPrice, types.GetPricePair(poolConfig)),
+	}, nil
+}
+
 // DlcEventCount implements types.QueryServer.
 func (k Keeper) DlcEventCount(goCtx context.Context, req *types.QueryDlcEventCountRequest) (*types.QueryDlcEventCountResponse, error) {
 	if req == nil {
