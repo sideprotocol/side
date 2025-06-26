@@ -134,7 +134,6 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 // UpdateDLCEvent updates the dlc event of the given loan
 func (k Keeper) UpdateDLCEvent(ctx sdk.Context, loanId string) {
 	loan := k.GetLoan(ctx, loanId)
-	pool := k.GetPool(ctx, loan.PoolId)
 
 	dlcEvent := k.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
 
@@ -143,8 +142,8 @@ func (k Keeper) UpdateDLCEvent(ctx sdk.Context, loanId string) {
 
 	// update outcomes
 	dlcEvent.Outcomes = []string{
-		fmt.Sprintf("Liquidated at %s", types.FormatPriceWithPair(loan.LiquidationPrice, types.GetPricePair(pool.Config))),
-		fmt.Sprintf("Default liquidated at %d", loan.MaturityTime),
+		"Liquidated",
+		"Default liquidated",
 		"Repaid",
 	}
 
