@@ -408,9 +408,11 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan not open")
 	}
 
-	if ctx.BlockTime().Unix()-loan.DisburseAt.Unix() < loan.MinMaturity {
-		return nil, types.ErrMinMaturityNotReached
-	}
+	// check if the min maturity reached
+	// commented out for now
+	// if ctx.BlockTime().Unix()-loan.DisburseAt.Unix() < loan.MinMaturity {
+	// 	return nil, types.ErrMinMaturityNotReached
+	// }
 
 	interest := m.GetCurrentInterest(ctx, loan)
 	amount := loan.BorrowAmount.Add(interest)
