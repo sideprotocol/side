@@ -6,10 +6,11 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/shopspring/decimal"
+
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/shopspring/decimal"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
@@ -108,10 +109,16 @@ func GetPricePair(poolConfig PoolConfig) string {
 
 // FormatPrice formats the given price
 // Assume that the given price is valid
-func FormatPrice(price sdkmath.LegacyDec, pair string) string {
+func FormatPrice(price sdkmath.LegacyDec) string {
 	decimalPrice, _ := decimal.NewFromString(price.String())
 
-	return fmt.Sprintf("%s%s", decimalPrice.String(), pair)
+	return decimalPrice.String()
+}
+
+// FormatPrice formats the given price with the specified pair
+// Assume that the given price is valid
+func FormatPriceWithPair(price sdkmath.LegacyDec, pair string) string {
+	return fmt.Sprintf("%s%s", FormatPrice(price), pair)
 }
 
 // NormalizePrice normalizes the given price
