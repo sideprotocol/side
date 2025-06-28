@@ -65,6 +65,11 @@ service Query {
     rpc DCMs(QueryDCMsRequest) returns (QueryDCMsResponse) {
         option (google.api.http).get = "/side/dlc/dcms";
     }
+
+    // OracleParticipantLiveness queries the oracle participant liveness
+    rpc OracleParticipantLiveness(QueryOracleParticipantLivenessRequest) returns (QueryOracleParticipantLivenessResponse) {
+        option (google.api.http).get = "/side/dlc/oracle_participant_liveness";
+    }
 }
 
 message QueryAttestationRequest {
@@ -159,6 +164,15 @@ message QueryEventsRequest {
 message QueryEventsResponse {
     repeated DLCEvent events = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryOracleParticipantLivenessRequest {
+    string consensus_pubkey = 1;
+    bool alive = 2;
+}
+
+message QueryOracleParticipantLivenessResponse {
+    repeated OracleParticipantLiveness participant_livenesses = 1;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.

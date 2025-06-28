@@ -69,6 +69,9 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 
 	m.SetParams(ctx, msg.Params)
 
+	// update oracle participants liveness on params changed
+	m.UpdateOracleParticipantsLiveness(ctx, m.OracleParticipantBaseSet(ctx))
+
 	return &types.MsgUpdateParamsResponse{}, nil
 }
 

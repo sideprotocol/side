@@ -69,6 +69,18 @@ message DLCAttestation {
     google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
+// Oracle participant liveness
+message OracleParticipantLiveness {
+  // consensus pub key
+  string consensus_pubkey = 1;
+  // Indicates if the participant is alive
+  bool is_alive = 2;
+  // Id of the last participating DKG
+  uint64 last_dkg_id = 3;
+  // last block height at which the participant was active
+  int64 last_block_height = 4;
+}
+
 // Signing intent
 enum SigningIntent {
     SIGNING_INTENT_DEFAULT = 0;

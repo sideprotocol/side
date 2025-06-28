@@ -30,6 +30,8 @@ type TSSKeeper interface {
 	InitiateDKG(ctx sdk.Context, module string, ty string, intent int32, participants []string, threshold uint32, batchSize uint32) *tsstypes.DKGRequest
 	InitiateSigningRequest(ctx sdk.Context, module string, scopedId string, ty tsstypes.SigningType, intent int32, pubKey string, sigHashes []string, options *tsstypes.SigningOptions) *tsstypes.SigningRequest
 
+	RegisterDKGCompletionReceivedHandler(module string, handler tsstypes.DKGCompletionReceivedHandler)
 	RegisterDKGRequestCompletedHandler(module string, handler tsstypes.DKGRequestCompletedHandler)
+	RegisterDKGRequestTimeoutHandler(module string, handler tsstypes.DKGRequestTimeoutHandler)
 	RegisterSigningRequestCompletedHandler(module string, handler tsstypes.SigningRequestCompletedHandler)
 }

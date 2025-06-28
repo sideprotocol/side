@@ -28,6 +28,13 @@ func (m msgServer) CompleteDKG(goCtx context.Context, msg *types.MsgCompleteDKG)
 		return nil, err
 	}
 
+	dkgRequest := m.GetDKGRequest(ctx, msg.Id)
+
+	// callback to the module handler
+	if err := m.GetDKGCompletionReceivedHandler(dkgRequest.Module)(ctx, dkgRequest.Id, dkgRequest.Type, dkgRequest.Intent, msg.ConsensusPubkey); err != nil {
+		return nil, err
+	}
+
 	// Emit events
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(

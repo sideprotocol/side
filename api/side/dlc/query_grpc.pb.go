@@ -19,17 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName             = "/side.dlc.Query/Params"
-	Query_Event_FullMethodName              = "/side.dlc.Query/Event"
-	Query_Events_FullMethodName             = "/side.dlc.Query/Events"
-	Query_Attestation_FullMethodName        = "/side.dlc.Query/Attestation"
-	Query_AttestationByEvent_FullMethodName = "/side.dlc.Query/AttestationByEvent"
-	Query_Attestations_FullMethodName       = "/side.dlc.Query/Attestations"
-	Query_Nonce_FullMethodName              = "/side.dlc.Query/Nonce"
-	Query_Nonces_FullMethodName             = "/side.dlc.Query/Nonces"
-	Query_CountNonces_FullMethodName        = "/side.dlc.Query/CountNonces"
-	Query_Oracles_FullMethodName            = "/side.dlc.Query/Oracles"
-	Query_DCMs_FullMethodName               = "/side.dlc.Query/DCMs"
+	Query_Params_FullMethodName                    = "/side.dlc.Query/Params"
+	Query_Event_FullMethodName                     = "/side.dlc.Query/Event"
+	Query_Events_FullMethodName                    = "/side.dlc.Query/Events"
+	Query_Attestation_FullMethodName               = "/side.dlc.Query/Attestation"
+	Query_AttestationByEvent_FullMethodName        = "/side.dlc.Query/AttestationByEvent"
+	Query_Attestations_FullMethodName              = "/side.dlc.Query/Attestations"
+	Query_Nonce_FullMethodName                     = "/side.dlc.Query/Nonce"
+	Query_Nonces_FullMethodName                    = "/side.dlc.Query/Nonces"
+	Query_CountNonces_FullMethodName               = "/side.dlc.Query/CountNonces"
+	Query_Oracles_FullMethodName                   = "/side.dlc.Query/Oracles"
+	Query_DCMs_FullMethodName                      = "/side.dlc.Query/DCMs"
+	Query_OracleParticipantLiveness_FullMethodName = "/side.dlc.Query/OracleParticipantLiveness"
 )
 
 // QueryClient is the client API for Query service.
@@ -58,6 +59,8 @@ type QueryClient interface {
 	Oracles(ctx context.Context, in *QueryOraclesRequest, opts ...grpc.CallOption) (*QueryOraclesResponse, error)
 	// DCMs query DCMs by the given status.
 	DCMs(ctx context.Context, in *QueryDCMsRequest, opts ...grpc.CallOption) (*QueryDCMsResponse, error)
+	// OracleParticipantLiveness queries the oracle participant liveness
+	OracleParticipantLiveness(ctx context.Context, in *QueryOracleParticipantLivenessRequest, opts ...grpc.CallOption) (*QueryOracleParticipantLivenessResponse, error)
 }
 
 type queryClient struct {
@@ -167,6 +170,15 @@ func (c *queryClient) DCMs(ctx context.Context, in *QueryDCMsRequest, opts ...gr
 	return out, nil
 }
 
+func (c *queryClient) OracleParticipantLiveness(ctx context.Context, in *QueryOracleParticipantLivenessRequest, opts ...grpc.CallOption) (*QueryOracleParticipantLivenessResponse, error) {
+	out := new(QueryOracleParticipantLivenessResponse)
+	err := c.cc.Invoke(ctx, Query_OracleParticipantLiveness_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -193,6 +205,8 @@ type QueryServer interface {
 	Oracles(context.Context, *QueryOraclesRequest) (*QueryOraclesResponse, error)
 	// DCMs query DCMs by the given status.
 	DCMs(context.Context, *QueryDCMsRequest) (*QueryDCMsResponse, error)
+	// OracleParticipantLiveness queries the oracle participant liveness
+	OracleParticipantLiveness(context.Context, *QueryOracleParticipantLivenessRequest) (*QueryOracleParticipantLivenessResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -232,6 +246,9 @@ func (UnimplementedQueryServer) Oracles(context.Context, *QueryOraclesRequest) (
 }
 func (UnimplementedQueryServer) DCMs(context.Context, *QueryDCMsRequest) (*QueryDCMsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DCMs not implemented")
+}
+func (UnimplementedQueryServer) OracleParticipantLiveness(context.Context, *QueryOracleParticipantLivenessRequest) (*QueryOracleParticipantLivenessResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OracleParticipantLiveness not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -444,6 +461,24 @@ func _Query_DCMs_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_OracleParticipantLiveness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOracleParticipantLivenessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OracleParticipantLiveness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_OracleParticipantLiveness_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OracleParticipantLiveness(ctx, req.(*QueryOracleParticipantLivenessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -494,6 +529,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DCMs",
 			Handler:    _Query_DCMs_Handler,
+		},
+		{
+			MethodName: "OracleParticipantLiveness",
+			Handler:    _Query_OracleParticipantLiveness_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
