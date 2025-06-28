@@ -134,3 +134,25 @@ func (k Keeper) Attestations(goCtx context.Context, req *types.QueryAttestations
 
 	return &types.QueryAttestationsResponse{Attestations: k.GetAttestations(ctx)}, nil
 }
+
+func (k Keeper) OracleParticipantLiveness(goCtx context.Context, req *types.QueryOracleParticipantLivenessRequest) (*types.QueryOracleParticipantLivenessResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	participantsLiveness := []*types.OracleParticipantLiveness{}
+
+	if len(req.ConsensusPubkey) != 0 {
+		if !k.HasOracleParticipantLiveness(ctx, req.ConsensusPubkey) {
+			return nil, status.Error(codes.NotFound, "oracle participant liveness does not exist")
+		}
+
+		participantsLiveness = append(participantsLiveness, k.GetOracleParticipantLiveness(ctx, req.ConsensusPubkey))
+	} else {
+		participantsLiveness = k.GetOracleParticipantsLiveness(ctx, req.Alive)
+	}
+
+	return &types.QueryOracleParticipantLivenessResponse{ParticipantLivenesses: participantsLiveness}, nil
+}

@@ -43,6 +43,8 @@ var (
 	AttestationByEventKeyPrefix            = []byte{0x24} // prefix for each key to an attestation by event
 	TriggeredPriceEventQueueKeyPrefix      = []byte{0x25} // key prefix for triggered price event queue
 	TriggeredPriceEventQueueCountKeyPrefix = []byte{0x26} // key prefix for triggered price event queue count
+
+	OracleParticipantLivenessKeyPrefix = []byte{0x30} // key prefix for oracle participant liveness
 )
 
 func OracleKey(id uint64) []byte {
@@ -87,4 +89,8 @@ func AttestationKey(id uint64) []byte {
 
 func AttestationByEventKey(eventId uint64) []byte {
 	return append(AttestationByEventKeyPrefix, sdk.Uint64ToBigEndian(eventId)...)
+}
+
+func OracleParticipantLivenessKey(consPubKey string) []byte {
+	return append(OracleParticipantLivenessKeyPrefix, []byte(consPubKey)...)
 }

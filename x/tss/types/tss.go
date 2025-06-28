@@ -25,8 +25,14 @@ const (
 	SchnorrAdaptorSignatureSize = 65
 )
 
+// DKGCompletionReceivedHandler defines the callback handler on the DKG completion received
+type DKGCompletionReceivedHandler func(ctx sdk.Context, id uint64, ty string, intent int32, participant string) error
+
 // DKGRequestCompletedHandler defines the callback handler on the DKG request completed
 type DKGRequestCompletedHandler func(ctx sdk.Context, id uint64, ty string, intent int32, pubKeys []string) error
+
+// DKGRequestTimeoutHandler defines the callback handler on the DKG request timed out
+type DKGRequestTimeoutHandler func(ctx sdk.Context, id uint64, ty string, intent int32, absentParticipants []string) error
 
 // SigningRequestCompletedHandler defines the callback handler on the signing request completed
 type SigningRequestCompletedHandler func(ctx sdk.Context, sender string, id uint64, scopedId string, ty SigningType, intent int32, pubKey string, signatures []string) error
