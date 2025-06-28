@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strconv"
 
@@ -39,6 +40,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryAttestation())
 	cmd.AddCommand(CmdQueryAttestationByEvent())
 	cmd.AddCommand(CmdQueryAttestations())
+	cmd.AddCommand(CmdQueryOracleParticipantLiveness())
 	// this line is used by starport scaffolding # 1
 
 	return cmd
@@ -348,6 +350,52 @@ func CmdQueryAttestations() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.Attestations(cmd.Context(), &types.QueryAttestationsRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryOracleParticipantLiveness() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "oracle-participant-liveness [ consensus pub key | liveness status (true|false)",
+		Short: "Query oracle participant liveness with the consensus pub key or liveness status",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			_, err = base64.StdEncoding.DecodeString(args[0])
+			if err != nil {
+				alive, err := strconv.ParseBool(args[0])
+				if err != nil {
+					return fmt.Errorf("neither consensus pub key nor liveness status provided")
+				}
+
+				res, err := queryClient.OracleParticipantLiveness(cmd.Context(), &types.QueryOracleParticipantLivenessRequest{
+					Alive: alive,
+				})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			res, err := queryClient.OracleParticipantLiveness(cmd.Context(), &types.QueryOracleParticipantLivenessRequest{
+				ConsensusPubkey: args[0],
+			})
 			if err != nil {
 				return err
 			}
