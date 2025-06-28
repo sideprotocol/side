@@ -26,6 +26,11 @@ func handleDKGRequests(ctx sdk.Context, k keeper.Keeper) {
 			req.Status = types.DKGStatus_DKG_STATUS_TIMEDOUT
 			k.SetDKGRequest(ctx, req)
 
+			// callback the corresponding module handler
+			if err := k.GetDKGRequestTimeoutHandler(req.Module)(ctx, req.Id, req.Type, req.Intent, k.GetAbsentDKGParticipants(ctx, req)); err != nil {
+				k.Logger(ctx).Info("Failed to call DGKRequestTimeoutHandler", "module", req.Module, "type", req.Type, "intent", req.Intent)
+			}
+
 			continue
 		}
 

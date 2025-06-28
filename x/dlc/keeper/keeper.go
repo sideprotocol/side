@@ -40,8 +40,14 @@ func NewKeeper(
 		authority:     authority,
 	}
 
+	// register DKG completion received handler
+	tssKeeper.RegisterDKGCompletionReceivedHandler(types.ModuleName, k.DKGCompletionReceivedHandler)
+
 	// register DKG request completed handler
 	tssKeeper.RegisterDKGRequestCompletedHandler(types.ModuleName, k.DKGCompletedHandler)
+
+	// register DKG request timeout handler
+	tssKeeper.RegisterDKGRequestTimeoutHandler(types.ModuleName, k.DKGTimeoutHandler)
 
 	// register signing request completed handler
 	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
