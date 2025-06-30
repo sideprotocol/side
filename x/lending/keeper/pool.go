@@ -200,6 +200,17 @@ func (k Keeper) UpdatePoolStatus(ctx sdk.Context, pool *types.LendingPool, newCo
 	}
 }
 
+// OnPoolTranchesConfigChanged is called when the pool tranches config changes
+func (k Keeper) OnPoolTranchesConfigChanged(ctx sdk.Context, pool *types.LendingPool, newTranchesConfig []types.PoolTrancheConfig) {
+	for _, newConfig := range newTranchesConfig {
+		_, found := types.GetTrancheConfig(pool.Config.Tranches, newConfig.Maturity)
+		if !found {
+			// add the new tranche to pool if the tranche does not exist
+			pool.Tranches = append(pool.Tranches, types.NewTranche(newConfig))
+		}
+	}
+}
+
 // NormalizePool normalizes the given pool
 func (k Keeper) NormalizePool(ctx sdk.Context, pool *types.LendingPool) {
 	if pool.TotalBorrowed.IsNegative() {
