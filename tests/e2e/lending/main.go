@@ -3,14 +3,13 @@ package main
 import (
 	"bytes"
 	"context"
-	"crypto/rand"
+	"encoding/base64"
 	"encoding/hex"
 	"flag"
 	"fmt"
 	"os"
 	"os/exec"
 	"path"
-	"strconv"
 	"strings"
 	"time"
 
@@ -30,11 +29,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/bitcoin"
-	"github.com/sideprotocol/side/crypto/adaptor"
-	"github.com/sideprotocol/side/crypto/hash"
+	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	lendingtypes "github.com/sideprotocol/side/x/lending/types"
 
+	"lending-tests/btcutils/client/base"
+	"lending-tests/btcutils/client/btcapi/mempool"
 	psbtbuilder "lending-tests/btcutils/psbt"
 )
 
@@ -52,111 +52,105 @@ func init() {
 }
 
 func main() {
-	mode := flag.Int("mode", 1, "Specify the testing mode, 1 for liquidation, 2 for repayment")
+	mode := flag.Int("mode", 2, "Specify the testing mode, 1 for liquidation(Deprecated), 2 for repayment")
 	flag.Parse()
 
 	if *mode == 1 {
-		fmt.Printf("****testing mode: liquidation****\n\n")
+		fmt.Println("****testing mode: liquidation****\n")
+		fmt.Println("the mode has been deprecated")
+
+		return
 	} else {
-		fmt.Printf("****testing mode: repayment****\n\n")
+		fmt.Println("****testing mode: repayment****\n")
 	}
+
+	poolId := "usdc"
+	collateralAmount := sdk.NewInt64Coin("sat", 100000)
+	borrowAmount := sdk.NewInt64Coin("uusdc", 100000000)
+	maturity := 7 * 24 * 3600 // 7 days
 
 	borrowerPrivKeyHex := "7b769bcd5372539ce9ad7d4d80deb668cd07b9e6d90a6744ea7390b6b18aa55e"
 
-	depositAmount := sdk.NewInt64Coin("sat", 100000)
-	borrowAmount := sdk.NewInt64Coin("uusdc", 8000000)
-	loanPeriod := 1000000 * time.Minute
-
-	loanSecret := generateRandSecret()
-	loanSecretHash := hash.Sha256(loanSecret)
-	maturityTime := time.Now().Add(loanPeriod).Unix()
-	finalTimeout := maturityTime + int64(7*24*time.Hour)
-
-	fmt.Printf("loan secret: %s\n", hex.EncodeToString(loanSecret))
-
-	borrowPrivKeyBytes, err := hex.DecodeString(borrowerPrivKeyHex)
+	borrowerPrivKeyBytes, err := hex.DecodeString(borrowerPrivKeyHex)
 	if err != nil {
 		fmt.Printf("invalid private key\n")
 		return
 	}
 
-	lendingPool, err := GetPool(gRPC)
-	if err != nil {
-		fmt.Printf("failed to get lending pool: %v\n", err)
-		return
-	}
-
-	fmt.Printf("pool id: %s\n", lendingPool.Id)
-
-	agency, err := GetAgency(gRPC)
-	if err != nil {
-		fmt.Printf("failed to get agency: %v\n", err)
-		return
-	}
-
-	fmt.Printf("agency pub key: %s\n", agency.Pubkey)
-
-	liquidationEvent, err := QueryLiquidationEvent(gRPC, depositAmount, borrowAmount)
-	if err != nil {
-		fmt.Printf("failed to query liquidation event: %v\n", err)
-		return
-	}
-
-	fmt.Printf("oracle pub key: %s\n", liquidationEvent.OraclePubkey)
-	fmt.Printf("nonce: %s\n", liquidationEvent.Nonce)
-	fmt.Printf("trigger price: %s\n", liquidationEvent.Price)
-
-	borrowerPrivKey, borrowerPubKey := btcec.PrivKeyFromBytes(borrowPrivKeyBytes)
+	borrowerPrivKey, borrowerPubKey := btcec.PrivKeyFromBytes(borrowerPrivKeyBytes)
 	borrowerPubKeyHex := hex.EncodeToString(schnorr.SerializePubKey(borrowerPubKey))
 
-	agencyPkScript, err := lendingtypes.GetPkScriptFromPubKey(agency.Pubkey)
+	_, err = GetPool(gRPC, poolId)
 	if err != nil {
-		fmt.Printf("failed to get agency pk script: %v\n", err)
+		fmt.Printf("failed to get lending pool %s: %v\n", poolId, err)
 		return
 	}
+
+	liquidationPrice, err := QueryLiquidationPrice(gRPC, poolId, collateralAmount.String(), borrowAmount.String(), int64(maturity))
+	if err != nil {
+		fmt.Printf("failed to query liquidation price: %v\n", err)
+		return
+	}
+
+	fmt.Printf("liquidation price: %s%s\n", liquidationPrice.Price, liquidationPrice.Pair)
+
+	dcm, err := GetDCM(gRPC)
+	if err != nil {
+		fmt.Printf("failed to get dcm: %v\n", err)
+		return
+	}
+
+	fmt.Printf("dcm pub key: %s\n", dcm.Pubkey)
+
+	dlcEventCount, err := QueryAvailableDLCEventCount(gRPC)
+	if err != nil {
+		fmt.Printf("failed to query available dlc event count: %v\n", err)
+		return
+	}
+
+	if dlcEventCount.Count == 0 {
+		fmt.Printf("no available dlc event\n")
+		return
+	}
+
+	fmt.Printf("available dlc event count: %d\n", dlcEventCount.Count)
+
+	applyTxArgs := fmt.Sprintf("tx lending apply %s %s %s %s %d %d %s %s %s", borrowerPubKeyHex, borrowerPubKeyHex, poolId, borrowAmount, maturity, dcm.Id, globalTxArgs)
+	if err := Apply(binary, applyTxArgs); err != nil {
+		fmt.Printf("failed to execute apply tx: %v\n", err)
+		return
+	}
+
+	time.Sleep(10 * time.Second)
+
+	loans, err := QueryLoans(gRPC)
+	if err != nil {
+		fmt.Printf("failed to query loans: %v\n", err)
+		return
+	}
+
+	vault := loans.Loans[0].VaultAddress
+	loanId := vault
+
+	fmt.Printf("vault: %s\n", vault)
+
+	// deposit btc
 
 	taprootOutKey := txscript.ComputeTaprootKeyNoScript(borrowerPubKey)
-	borrowerAddress, err := btcutil.NewAddressTaproot(schnorr.SerializePubKey(taprootOutKey), &chaincfg.SigNetParams)
+	borrowerAddress, err := btcutil.NewAddressTaproot(schnorr.SerializePubKey(taprootOutKey), &chaincfg.TestNet3Params)
 	if err != nil {
-		fmt.Printf("failed to get borrower address: %v\n", err)
+		fmt.Printf("failed to get borrower btc address: %v\n", err)
 		return
 	}
 
-	fmt.Printf("borrower address: %s\n", borrowerAddress.EncodeAddress())
+	fmt.Printf("borrower btc address: %s\n", borrowerAddress.EncodeAddress())
 
-	multisigScript, err := lendingtypes.CreateMultisigScript([]string{hex.EncodeToString(schnorr.SerializePubKey(borrowerPubKey)), agency.Pubkey})
-	if err != nil {
-		fmt.Printf("failed to get multisig script: %v\n", err)
-		return
-	}
-
-	forcedRepaymentScript, err := lendingtypes.CreateHashTimeLockScript(agency.Pubkey, hex.EncodeToString(loanSecretHash), maturityTime)
-	if err != nil {
-		fmt.Printf("failed to get forced repayment script: %v\n", err)
-		return
-	}
-
-	timeoutRefundScript, err := lendingtypes.CreatePubKeyTimeLockScript(hex.EncodeToString(schnorr.SerializePubKey(borrowerPubKey)), int64(finalTimeout))
-	if err != nil {
-		fmt.Printf("failed to get timeout refund script: %v\n", err)
-		return
-	}
-
-	vaultAddress, err := lendingtypes.CreateTaprootAddress(lendingtypes.GetInternalKey(), [][]byte{
-		multisigScript, forcedRepaymentScript, timeoutRefundScript,
-	}, &chaincfg.SigNetParams)
-	if err != nil {
-		fmt.Printf("failed to create vault address: %v\n", err)
-		return
-	}
-
-	fmt.Printf("vault: %s\n", vaultAddress)
-
-	// depositTxPsbt, err := psbtbuilder.BuildPsbt(borrowerAddress.EncodeAddress(), "", vaultAddress, depositAmount, 10)
+	// depositTxPsbt, err := buildMockPsbt(vaultAddress, collateral.Amount.Int64())
 	// if err != nil {
-	// 	panic(err)
+	// 	fmt.Printf("failed to build deposit tx psbt: %v\n", err)
+	// 	return
 	// }
-	depositTxPsbt, err := buildMockPsbt(vaultAddress, depositAmount.Amount.Int64())
+	depositTxPsbt, err := psbtbuilder.BuildPsbt(borrowerAddress.EncodeAddress(), "", vault, collateralAmount.Amount.Int64(), 10)
 	if err != nil {
 		fmt.Printf("failed to build deposit tx psbt: %v\n", err)
 		return
@@ -189,100 +183,108 @@ func main() {
 		return
 	}
 
-	// mempoolClient := mempool.NewClient(&chaincfg.SigNetParams, base.NewClient(5, time.Second))
-	// if _, err := mempoolClient.BroadcastTx(signedDepositTx); err != nil {
-	// 	panic(err)
-	// }
-
-	outIndex := 0
-	out := signedDepositTx.TxOut[outIndex]
-
-	liquidationCet := wire.NewMsgTx(2)
-	liquidationCet.AddTxIn(wire.NewTxIn(wire.NewOutPoint(&depositTxHash, uint32(outIndex)), nil, nil))
-	liquidationCet.AddTxOut(wire.NewTxOut(out.Value-1000, agencyPkScript))
-
-	p, err := psbt.NewFromUnsignedTx(liquidationCet)
-	if err != nil {
-		fmt.Printf("failed to create liquidation cet: %v\n", err)
+	mempoolClient := mempool.NewClient(&chaincfg.TestNet3Params, base.NewClient(5, time.Second))
+	if _, err := mempoolClient.BroadcastTx(signedDepositTx); err != nil {
+		fmt.Printf("failed to broadcast deposit tx: %v\n", err)
 		return
 	}
 
-	p.Inputs[0].WitnessUtxo = signedDepositTx.TxOut[outIndex]
-	p.Inputs[0].SighashType = txscript.SigHashDefault
+	// query cet signing infos
 
-	liquidationCetPsbt, err := p.B64Encode()
+	cetInfos, err := QueryCetInfos(gRPC, loanId)
 	if err != nil {
-		fmt.Printf("failed to serialize liquidation cet psbt: %v\n", err)
+		fmt.Printf("failed to query cet infos: %v\n", err)
 		return
 	}
 
-	fmt.Printf("liquidation cet: %s\n", liquidationCetPsbt)
+	fmt.Printf("cet infos: %+v\n", cetInfos)
 
-	sigHash, err := lendingtypes.CalcTapscriptSigHash(p, 0, txscript.SigHashDefault, multisigScript)
+	// build cets
+
+	dcmPkScript, err := lendingtypes.GetPkScriptFromPubKey(dcm.Pubkey)
 	if err != nil {
-		fmt.Printf("failed to calculate sig hash: %v\n", err)
+		fmt.Printf("failed to get dcm pk script: %v\n", err)
 		return
 	}
 
-	signaturePoint, _ := hex.DecodeString(liquidationEvent.SignaturePoint)
-
-	adaptorSig, err := adaptor.Sign(borrowerPrivKey, sigHash, signaturePoint)
+	borrowerPkScript, err := lendingtypes.GetPkScriptFromPubKey(borrowerPubKeyHex)
 	if err != nil {
-		fmt.Printf("failed to get the adaptor signature: %v\n", err)
+		fmt.Printf("failed to get borrower pk script: %v\n", err)
 		return
 	}
 
-	fmt.Printf("adaptor signature: %s\n", hex.EncodeToString(adaptorSig.Serialize()))
-	fmt.Printf("adaptor signature verified: %t\n", adaptor.Verify(adaptorSig.Serialize(), sigHash, schnorr.SerializePubKey(borrowerPubKey), signaturePoint))
+	liquidationCetPsbt, liquidationAdaptorSignatures, err := buildLiquidationCet(signedDepositTx, dcmPkScript, cetInfos.LiquidationCetInfo, borrowerPrivKey)
+	if err != nil {
+		fmt.Printf("failed to build liquidation cet: %v\n", err)
+		return
+	}
 
-	applyTxArgs := fmt.Sprintf("tx lending apply %s %s %d %d %s %s %s %d %d %s %s %s", borrowerPubKeyHex, hex.EncodeToString(loanSecretHash), maturityTime, finalTimeout, depositTxPsbtB64, lendingPool.Id, borrowAmount.String(), liquidationEvent.EventId, agency.Id, liquidationCetPsbt, hex.EncodeToString(adaptorSig.Serialize()), globalTxArgs)
-	approveTxArgs := fmt.Sprintf("tx lending approve %s %s %s %s", depositTxHash.String(), "4fc4af9a4fac617aa4d7152313c56678469c93ad4f07b4864d77295bee9d79e8", "12559b5ef74508404ba567b4499c58f9e0ab5c7d34257276f37cdc810d441c00", globalTxArgs)
-	redeemTxArgs := fmt.Sprintf("tx lending redeem %s %s %s", vaultAddress, hex.EncodeToString(loanSecret), globalTxArgs)
+	_, defaultLiquidationAdaptorSignatures, err := buildLiquidationCet(signedDepositTx, dcmPkScript, cetInfos.DefaultLiquidationCetInfo, borrowerPrivKey)
+	if err != nil {
+		fmt.Printf("failed to build default liquidation cet: %v\n", err)
+		return
+	}
 
-	if err := Apply(binary, applyTxArgs); err != nil {
-		fmt.Printf("failed to execute apply tx: %v\n", err)
+	repaymentCetPsbt, repaymentSignatures, err := buildRepaymentCet(signedDepositTx, borrowerPkScript, cetInfos.RepaymentCetInfo, borrowerPrivKey)
+	if err != nil {
+		fmt.Printf("failed to build repayment cet: %v\n", err)
+		return
+	}
+
+	// submit cets (authorize)
+
+	submitCetsTxArgs := fmt.Sprintf("tx lending submit-cets %s %s %s %s %s %s %s %s", loanId, depositTxPsbtB64, liquidationCetPsbt, liquidationAdaptorSignatures[0], defaultLiquidationAdaptorSignatures[0], repaymentCetPsbt, repaymentSignatures[0], globalTxArgs)
+	if err := SubmitCets(binary, submitCetsTxArgs); err != nil {
+		fmt.Printf("failed to execute authorization tx: %v\n", err)
 		return
 	}
 
 	time.Sleep(10 * time.Second)
 
-	if err := Approve(binary, approveTxArgs); err != nil {
-		fmt.Printf("failed to execute approve tx: %v\n", err)
+	// submit deposit tx to Side
+
+	// TODO: retrieve tx proof from mempool
+	blockHash := ""
+	txProof := ""
+
+	submitDepositTxArgs := fmt.Sprintf("tx lending submit-deposit-tx %s %s %s %s %s", vault, serializeTxB64(signedDepositTx), blockHash, txProof, globalTxArgs)
+	if err := SubmitCets(binary, submitDepositTxArgs); err != nil {
+		fmt.Printf("failed to execute submit deposit tx: %v\n", err)
 		return
 	}
-
-	time.Sleep(10 * time.Second)
-
-	if err := Redeem(binary, redeemTxArgs); err != nil {
-		fmt.Printf("failed to execute redeem tx: %v\n", err)
-		return
-	}
-
-	time.Sleep(10 * time.Second)
 
 	switch *mode {
 	case 1:
 		// set price to liquidate the loan
+		// deprecated due to that the price testing method has been removed
 
-		triggerPrice, _ := strconv.ParseUint(liquidationEvent.Price, 10, 64)
+		fmt.Printf("Deprecated mode\n")
 
-		setPriceTxArgs := fmt.Sprintf("tx lending submit-price %d %s", triggerPrice-100, globalTxArgs)
+		return
 
-		if err := SetPrice(binary, setPriceTxArgs); err != nil {
-			fmt.Printf("failed to execute set price tx: %v\n", err)
-			return
-		}
 	case 2:
-		// repay the loan
+		// check if the loan is open
 
-		adaptorSecret := generateAdaptorSecret()
-		adaptorPoint := hex.EncodeToString(adaptorSecret.PubKey().SerializeCompressed())
+		fmt.Printf("check if the loan is open...\n")
 
-		fmt.Printf("repayment adaptor secret: %s\n", hex.EncodeToString(adaptorSecret.Serialize()))
-		fmt.Printf("repayment adaptor point: %s\n", adaptorPoint)
+		for {
+			loan, err := QueryLoan(gRPC, loanId)
+			if err != nil {
+				fmt.Printf("failed to query loan %s: %v\n", loanId, err)
 
-		repayTxArgs := fmt.Sprintf("tx lending repay %s %s %s", vaultAddress, adaptorPoint, globalTxArgs)
+				time.Sleep(2 * time.Second)
+				continue
+			}
 
+			if loan.Loan.Status == lendingtypes.LoanStatus_Open {
+				break
+			}
+
+			time.Sleep(2 * time.Second)
+		}
+
+		// repay
+		repayTxArgs := fmt.Sprintf("tx lending repay %s %s", loanId, globalTxArgs)
 		if err := Repay(binary, repayTxArgs); err != nil {
 			fmt.Printf("failed to execute repay tx: %v\n", err)
 			return
@@ -290,79 +292,73 @@ func main() {
 
 		time.Sleep(10 * time.Second)
 
-		var repayment *lendingtypes.Repayment
+		// query the loan status
 
-		// query the repayment
+		fmt.Printf("check if the loan is repaid...\n")
+
 		for {
-			repayment, err = GetRepayment(gRPC, vaultAddress)
+			loan, err := QueryLoan(gRPC, loanId)
 			if err != nil {
-				fmt.Printf("failed to query repayment: %v\n", err)
+				fmt.Printf("failed to query loan: %v\n", err)
 
 				time.Sleep(2 * time.Second)
 				continue
 			}
 
-			if len(repayment.RepayAdaptorPoint) == 0 {
-				fmt.Printf("no repayment adaptor point found yet, waiting or repay manually if failed")
+			if loan.Loan.Status == lendingtypes.LoanStatus_Repaid {
+				break
+			}
 
-				time.Sleep(5 * time.Second)
+			time.Sleep(2 * time.Second)
+		}
+
+		// query the signed repayment tx
+
+		var rawRepaymentTx []byte
+
+		fmt.Printf("query the signed repayment tx...\n")
+
+		for {
+			dlcMeta, err := GetDLCMeta(gRPC, loanId)
+			if err != nil {
+				fmt.Printf("failed to query dlc meta: %v\n", err)
+
+				time.Sleep(2 * time.Second)
 				continue
 			}
 
-			if len(repayment.DcaAdaptorSignatures) == 0 {
-				fmt.Printf("no dca adaptor signature found yet, waiting")
+			if len(dlcMeta.RepaymentCet.SignedTxHex) != 0 {
+				fmt.Printf("signed repayment tx: %s\n", dlcMeta.RepaymentCet.SignedTxHex)
 
-				time.Sleep(5 * time.Second)
-				continue
+				rawRepaymentTx, _ = hex.DecodeString(dlcMeta.RepaymentCet.SignedTxHex)
+				break
 			}
 
-			// dca adaptor signatures submitted
-			break
+			time.Sleep(2 * time.Second)
 		}
 
-		// decrypt adaptor signatures
-		agencySigs, err := decryptAdaptorSignatures(adaptorSecret, repayment.DcaAdaptorSignatures)
-		if err != nil {
-			fmt.Printf("failed to decrypt dca adaptor signatures: %v\n", err)
+		// deserialize raw repayment tx
+		var signedRepaymentTx wire.MsgTx
+		if err := signedRepaymentTx.Deserialize(bytes.NewReader(rawRepaymentTx)); err != nil {
+			fmt.Printf("failed to deserialize repayment tx: %v\n", err)
 			return
 		}
 
-		// build signed repayment tx
-		signedTx, err := buildSignedRepaymentTx(repayment.Tx, multisigScript, agencySigs, borrowerPrivKey)
-		if err != nil {
-			fmt.Printf("failed to build signed repayment tx: %v\n", err)
-			return
-		}
+		fmt.Printf("repayment tx hash: %s\n", signedRepaymentTx.TxHash().String())
 
 		// send the signed tx to the Bitcoin network
-		// if _, err := mempoolClient.BroadcastTx(signedTx); err != nil {
-		// 	fmt.Printf("failed to broadcast tx: %v\n", err)
-		// 	return
-		// }
-
-		signedTxBytes, err := serializeTx(signedTx)
-		if err != nil {
-			fmt.Printf("failed to serialize tx: %v\n", err)
+		if _, err := mempoolClient.BroadcastTx(&signedRepaymentTx); err != nil {
+			fmt.Printf("failed to broadcast repayment tx: %v\n", err)
 			return
 		}
 
-		fmt.Printf("signed repayment tx: %s\n", hex.EncodeToString(signedTxBytes))
-
-		// close loan with the first borrower signature
-		borrowerSig := signedTx.TxIn[0].Witness[1]
-
-		closeTxArgs := fmt.Sprintf("tx lending close %s %s %s", vaultAddress, hex.EncodeToString(borrowerSig), globalTxArgs)
-
-		if err := Close(binary, closeTxArgs); err != nil {
-			fmt.Printf("failed to execute close tx: %v\n", err)
-			return
-		}
+		fmt.Printf("repayment tx broadcasted\n")
 	}
 
 	fmt.Printf("operations finished\n")
 }
 
-func GetPool(gRPC string) (*lendingtypes.LendingPool, error) {
+func GetPool(gRPC string, id string) (*lendingtypes.LendingPool, error) {
 	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
@@ -379,32 +375,16 @@ func GetPool(gRPC string) (*lendingtypes.LendingPool, error) {
 		return nil, fmt.Errorf("no pool created yet")
 	}
 
-	return resp.Pools[0], nil
+	for _, pool := range resp.Pools {
+		if pool.Id == id {
+			return pool, nil
+		}
+	}
+
+	return nil, fmt.Errorf("pool %s not found", id)
 }
 
-func GetAgency(gRPC string) (*dlctypes.Agency, error) {
-	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		return nil, err
-	}
-
-	client := dlctypes.NewQueryClient(conn)
-
-	resp, err := client.Agencies(context.Background(), &dlctypes.QueryAgenciesRequest{
-		Status: dlctypes.AgencyStatus_Agency_status_Enable,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if len(resp.Agencies) == 0 {
-		return nil, fmt.Errorf("no enabled agencies")
-	}
-
-	return resp.Agencies[0], nil
-}
-
-func QueryLiquidationEvent(gRPC string, collateralAmount sdk.Coin, borrowAmount sdk.Coin) (*lendingtypes.QueryLiquidationEventResponse, error) {
+func QueryLiquidationPrice(gRPC string, poolId string, collateralAmount string, borrowAmount string, maturity int64) (*lendingtypes.QueryLiquidationPriceResponse, error) {
 	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
@@ -412,9 +392,11 @@ func QueryLiquidationEvent(gRPC string, collateralAmount sdk.Coin, borrowAmount 
 
 	client := lendingtypes.NewQueryClient(conn)
 
-	resp, err := client.LiquidationEvent(context.Background(), &lendingtypes.QueryLiquidationEventRequest{
-		CollateralAcmount: &collateralAmount,
-		BorrowAmount:      &borrowAmount,
+	resp, err := client.LiquidationPrice(context.Background(), &lendingtypes.QueryLiquidationPriceRequest{
+		PoolId:           poolId,
+		CollateralAmount: collateralAmount,
+		BorrowAmount:     borrowAmount,
+		Maturity:         maturity,
 	})
 	if err != nil {
 		return nil, err
@@ -423,7 +405,29 @@ func QueryLiquidationEvent(gRPC string, collateralAmount sdk.Coin, borrowAmount 
 	return resp, nil
 }
 
-func GetRepayment(gRPC string, loanId string) (*lendingtypes.Repayment, error) {
+func GetDCM(gRPC string) (*dlctypes.DCM, error) {
+	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
+	client := dlctypes.NewQueryClient(conn)
+
+	resp, err := client.DCMs(context.Background(), &dlctypes.QueryDCMsRequest{
+		Status: dlctypes.DCMStatus_DCM_status_Enable,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if len(resp.DCMs) == 0 {
+		return nil, fmt.Errorf("no enabled dcms")
+	}
+
+	return resp.DCMs[0], nil
+}
+
+func QueryAvailableDLCEventCount(gRPC string) (*lendingtypes.QueryDlcEventCountResponse, error) {
 	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
@@ -431,14 +435,84 @@ func GetRepayment(gRPC string, loanId string) (*lendingtypes.Repayment, error) {
 
 	client := lendingtypes.NewQueryClient(conn)
 
-	resp, err := client.Repayment(context.Background(), &lendingtypes.QueryRepaymentRequest{
+	resp, err := client.DlcEventCount(context.Background(), &lendingtypes.QueryDlcEventCountRequest{})
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func QueryLoans(gRPC string) (*lendingtypes.QueryLoansResponse, error) {
+	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
+	client := lendingtypes.NewQueryClient(conn)
+
+	resp, err := client.Loans(context.Background(), &lendingtypes.QueryLoansRequest{
+		Status: lendingtypes.LoanStatus_Requested,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func QueryLoan(gRPC string, id string) (*lendingtypes.QueryLoanResponse, error) {
+	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
+	client := lendingtypes.NewQueryClient(conn)
+
+	resp, err := client.Loan(context.Background(), &lendingtypes.QueryLoanRequest{
+		Id: id,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func QueryCetInfos(gRPC string, loanId string) (*lendingtypes.QueryLoanCetInfosResponse, error) {
+	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
+	client := lendingtypes.NewQueryClient(conn)
+
+	resp, err := client.LoanCetInfos(context.Background(), &lendingtypes.QueryLoanCetInfosRequest{
 		LoanId: loanId,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return resp.Repayment, nil
+	return resp, nil
+}
+
+func GetDLCMeta(gRPC string, loanId string) (*lendingtypes.DLCMeta, error) {
+	conn, err := grpc.NewClient(gRPC, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
+	client := lendingtypes.NewQueryClient(conn)
+
+	resp, err := client.LoanDlcMeta(context.Background(), &lendingtypes.QueryLoanDlcMetaRequest{
+		LoanId: loanId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.DlcMeta, nil
 }
 
 func Apply(binary string, args string) error {
@@ -447,14 +521,14 @@ func Apply(binary string, args string) error {
 	return executeCmd(binary, args)
 }
 
-func Approve(binary string, args string) error {
-	fmt.Printf("execute approve tx: \n\n")
+func SubmitDepositTx(binary string, args string) error {
+	fmt.Printf("execute submit deposit tx: \n\n")
 
 	return executeCmd(binary, args)
 }
 
-func Redeem(binary string, args string) error {
-	fmt.Printf("execute redeem tx: \n\n")
+func SubmitCets(binary string, args string) error {
+	fmt.Printf("execute submit cets tx: \n\n")
 
 	return executeCmd(binary, args)
 }
@@ -467,12 +541,6 @@ func SetPrice(binary string, args string) error {
 
 func Repay(binary string, args string) error {
 	fmt.Printf("execute repay tx: \n\n")
-
-	return executeCmd(binary, args)
-}
-
-func Close(binary string, args string) error {
-	fmt.Printf("execute close tx: \n\n")
 
 	return executeCmd(binary, args)
 }
@@ -538,79 +606,125 @@ func buildMockPsbt(recipient string, amount int64) (*psbt.Packet, error) {
 	return p, nil
 }
 
-func buildSignedRepaymentTx(repaymentTx string, script []byte, agencySigs [][]byte, privKey *secp256k1.PrivateKey) (*wire.MsgTx, error) {
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentTx)), true)
+func buildLiquidationCet(depositTx *wire.MsgTx, dcmPkScript []byte, cetInfo *lendingtypes.CetInfo, privKey *secp256k1.PrivateKey) (string, []string, error) {
+	depositTxHash := depositTx.TxHash()
+
+	vaultOutIndex := 0
+	vaultOut := depositTx.TxOut[vaultOutIndex]
+
+	liquidationCet := wire.NewMsgTx(2)
+	liquidationCet.AddTxIn(wire.NewTxIn(wire.NewOutPoint(&depositTxHash, uint32(vaultOutIndex)), nil, nil))
+	liquidationCet.AddTxOut(wire.NewTxOut(vaultOut.Value-1000, dcmPkScript))
+
+	p, err := psbt.NewFromUnsignedTx(liquidationCet)
 	if err != nil {
-		return nil, err
+		fmt.Printf("failed to create liquidation cet psbt: %v\n", err)
+		return "", nil, err
 	}
 
-	for i, input := range p.Inputs {
-		selfSig, err := lendingtypes.CalcTapscriptSigHash(p, i, input.SighashType, script)
-		if err != nil {
-			return nil, err
-		}
+	p.Inputs[0].WitnessUtxo = depositTx.TxOut[vaultOutIndex]
+	p.Inputs[0].SighashType = txscript.SigHashDefault
 
-		p.Inputs[i].TaprootScriptSpendSig = []*psbt.TaprootScriptSpendSig{
-			{
-				Signature: agencySigs[i],
-			},
-			{
-				Signature: selfSig,
-			},
-		}
-	}
-
-	if err := psbt.MaybeFinalizeAll(p); err != nil {
-		return nil, err
-	}
-
-	signedTx, err := psbt.Extract(p)
+	liquidationCetPsbt, err := p.B64Encode()
 	if err != nil {
-		return nil, err
+		fmt.Printf("failed to serialize liquidation cet psbt: %v\n", err)
+		return "", nil, err
 	}
 
-	return signedTx, nil
+	fmt.Printf("liquidation cet psbt: %s\n", liquidationCetPsbt)
+
+	script, err := hex.DecodeString(cetInfo.Script.Script)
+	if err != nil {
+		fmt.Printf("failed to decode script: %v\n", err)
+		return "", nil, err
+	}
+
+	signaturePoint, err := hex.DecodeString(cetInfo.SignaturePoint)
+	if err != nil {
+		fmt.Printf("failed to decode signature point: %v\n", err)
+		return "", nil, err
+	}
+
+	sigHash, err := lendingtypes.CalcTapscriptSigHash(p, 0, txscript.SigHashDefault, script)
+	if err != nil {
+		fmt.Printf("failed to calculate sig hash: %v\n", err)
+		return "", nil, err
+	}
+
+	adaptorSig, err := adaptor.Sign(privKey, sigHash, signaturePoint)
+	if err != nil {
+		fmt.Printf("failed to get the adaptor signature: %v\n", err)
+		return "", nil, err
+	}
+
+	adaptorSigHex := hex.EncodeToString(adaptorSig.Serialize())
+
+	fmt.Printf("adaptor signature: %s\n", adaptorSigHex)
+	fmt.Printf("adaptor signature verified: %t\n", adaptor.Verify(adaptorSig.Serialize(), sigHash, schnorr.SerializePubKey(privKey.PubKey()), signaturePoint))
+
+	return liquidationCetPsbt, []string{adaptorSigHex}, nil
 }
 
-func generateRandSecret() []byte {
-	secret := make([]byte, 32)
-	rand.Read(secret)
+func buildRepaymentCet(depositTx *wire.MsgTx, borrowerPkScript []byte, cetInfo *lendingtypes.CetInfo, privKey *secp256k1.PrivateKey) (string, []string, error) {
+	depositTxHash := depositTx.TxHash()
 
-	return secret
+	vaultOutIndex := 0
+	vaultOut := depositTx.TxOut[vaultOutIndex]
+
+	repaymentCet := wire.NewMsgTx(2)
+	repaymentCet.AddTxIn(wire.NewTxIn(wire.NewOutPoint(&depositTxHash, uint32(vaultOutIndex)), nil, nil))
+	repaymentCet.AddTxOut(wire.NewTxOut(vaultOut.Value-1000, borrowerPkScript))
+
+	p, err := psbt.NewFromUnsignedTx(repaymentCet)
+	if err != nil {
+		fmt.Printf("failed to create repayment cet psbt: %v\n", err)
+		return "", nil, err
+	}
+
+	p.Inputs[0].WitnessUtxo = depositTx.TxOut[vaultOutIndex]
+	p.Inputs[0].SighashType = txscript.SigHashDefault
+
+	repaymentCetPsbt, err := p.B64Encode()
+	if err != nil {
+		fmt.Printf("failed to serialize repayment cet psbt: %v\n", err)
+		return "", nil, err
+	}
+
+	fmt.Printf("repayment cet psbt: %s\n", repaymentCetPsbt)
+
+	script, err := hex.DecodeString(cetInfo.Script.Script)
+	if err != nil {
+		fmt.Printf("failed to decode script: %v\n", err)
+		return "", nil, err
+	}
+
+	sigHash, err := lendingtypes.CalcTapscriptSigHash(p, 0, txscript.SigHashDefault, script)
+	if err != nil {
+		fmt.Printf("failed to calculate sig hash: %v\n", err)
+		return "", nil, err
+	}
+
+	schnorrSig, err := schnorr.Sign(privKey, sigHash)
+	if err != nil {
+		fmt.Printf("failed to get the schnorr signature: %v\n", err)
+		return "", nil, err
+	}
+
+	schnorrSigHex := hex.EncodeToString(schnorrSig.Serialize())
+
+	fmt.Printf("schnorr signature: %s\n", schnorrSigHex)
+	fmt.Printf("schnorr signature verified: %t\n", schnorrSig.Verify(sigHash, privKey.PubKey()))
+
+	return repaymentCetPsbt, []string{schnorrSigHex}, nil
 }
 
-func generateAdaptorSecret() *secp256k1.PrivateKey {
-	secretKey, err := secp256k1.GeneratePrivateKey()
-	if err != nil {
+func serializeTxB64(tx *wire.MsgTx) string {
+	var buf bytes.Buffer
+	if err := tx.Serialize(&buf); err != nil {
 		panic(err)
 	}
 
-	return secretKey
-}
-
-func decryptAdaptorSignatures(adaptorSecret *secp256k1.PrivateKey, adaptorSigs []string) ([][]byte, error) {
-	adaptedSigs := make([][]byte, 0)
-
-	for _, adaptorSig := range adaptorSigs {
-		sigBytes, err := hex.DecodeString(adaptorSig)
-		if err != nil {
-			return nil, err
-		}
-
-		adaptedSig := adaptor.Adapt(sigBytes, adaptorSecret.Serialize())
-		adaptedSigs = append(adaptedSigs, adaptedSig)
-	}
-
-	return adaptedSigs, nil
-}
-
-func serializeTx(tx *wire.MsgTx) ([]byte, error) {
-	var buf bytes.Buffer
-	if err := tx.Serialize(&buf); err != nil {
-		return nil, err
-	}
-
-	return buf.Bytes(), nil
+	return base64.StdEncoding.EncodeToString(buf.Bytes())
 }
 
 func getHomeDir() string {
