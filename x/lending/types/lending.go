@@ -264,13 +264,20 @@ func GetTranche(tranches []PoolTranche, maturity int64) (*PoolTranche, bool) {
 	return nil, false
 }
 
+// NewTranche creates a new tranche from the given tranche config
+func NewTranche(config PoolTrancheConfig) PoolTranche {
+	return PoolTranche{
+		Maturity:    config.Maturity,
+		BorrowIndex: InitialBorrowIndex,
+	}
+}
+
 // NewTranches initializes the pool tranches from the given tranche configs
 func NewTranches(trancheConfigs []PoolTrancheConfig) []PoolTranche {
 	tranches := make([]PoolTranche, len(trancheConfigs))
 
 	for i, config := range trancheConfigs {
-		tranches[i].Maturity = config.Maturity
-		tranches[i].BorrowIndex = InitialBorrowIndex
+		tranches[i] = NewTranche(config)
 	}
 
 	return tranches
