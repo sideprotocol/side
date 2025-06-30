@@ -8,8 +8,10 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/txscript"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	"github.com/sideprotocol/side/x/lending/types"
 )
 
@@ -132,27 +134,36 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 }
 
 // UpdateDLCEvent updates the dlc event of the given loan
-func (k Keeper) UpdateDLCEvent(ctx sdk.Context, loanId string) {
-	loan := k.GetLoan(ctx, loanId)
-
+func (k Keeper) UpdateDLCEvent(ctx sdk.Context, loan *types.Loan) {
 	dlcEvent := k.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
 
 	// update description
-	dlcEvent.Description = fmt.Sprintf("DLC event for loan %s", loanId)
+	dlcEvent.Description = fmt.Sprintf("DLC event for loan %s", loan.VaultAddress)
+
+	liquidatedOutcome := "" // will be populated once the liquidation price is available
+	defaultLiquidatedOutcome := fmt.Sprintf("%d", loan.MaturityTime)
+	repaidOutcome := "Repaid"
 
 	// update outcomes
 	dlcEvent.Outcomes = []string{
-		"Liquidated",
-		"Default liquidated",
-		"Repaid",
+		liquidatedOutcome,
+		defaultLiquidatedOutcome,
+		repaidOutcome,
 	}
 
 	k.dlcKeeper.SetEvent(ctx, dlcEvent)
 }
 
+// UpdateDLCEventLiquidatedOutcome populates the 'liquidated' outcome for the dlc event with the specified liquidation price
+func (k Keeper) UpdateDLCEventLiquidatedOutcome(ctx sdk.Context, loan *types.Loan, dlcEvent *dlctypes.DLCEvent, liquidationPrice sdkmath.LegacyDec) {
+	pool := k.GetPool(ctx, loan.PoolId)
+
+	dlcEvent.Outcomes[types.LiquidatedOutcomeIndex] = types.FormatPriceWithPair(liquidationPrice, types.GetPricePair(pool.Config))
+}
+
 // GetCetInfos gets the related cet infos of the given loan
 // Assume that the loan exists
-func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string) ([]*types.CetInfo, error) {
+func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk.Coin) ([]*types.CetInfo, error) {
 	loan := k.GetLoan(ctx, loanId)
 	dlcMeta := k.GetDLCMeta(ctx, loanId)
 
@@ -160,6 +171,13 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string) ([]*types.CetInfo, e
 	repaymentScript, repaymentScriptControlBlock, _ := types.UnwrapLeafScript(dlcMeta.RepaymentScript)
 
 	dlcEvent := k.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
+	if len(dlcEvent.Outcomes[types.LiquidatedOutcomeIndex]) == 0 {
+		// calculate the liquidation price
+		liquidationPrice := k.GetLiquidationPrice(ctx, loan, collateralAmount.Amount)
+
+		// update the dlc event outcome
+		k.UpdateDLCEventLiquidatedOutcome(ctx, loan, dlcEvent, liquidationPrice)
+	}
 
 	liquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.LiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock)
 	defaultLiquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.DefaultLiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock)

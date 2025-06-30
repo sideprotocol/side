@@ -222,6 +222,17 @@ func (k Keeper) GetRepayment(ctx sdk.Context, loanId string) *types.Repayment {
 	return &repayment
 }
 
+// GetLiquidationPrice gets the liquidation price of the given loan according to the specified collateral amount
+func (k Keeper) GetLiquidationPrice(ctx sdk.Context, loan *types.Loan, collateralAmount sdkmath.Int) sdkmath.LegacyDec {
+	pool := k.GetPool(ctx, loan.PoolId)
+
+	collateralDecimals := int(pool.Config.CollateralAsset.Decimals)
+	borrowDecimals := int(pool.Config.LendingAsset.Decimals)
+	collateralIsBaseAsset := pool.Config.CollateralAsset.IsBasePriceAsset
+
+	return types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, k.GetBlocksPerYear(ctx), pool.Config.LiquidationThreshold, collateralIsBaseAsset)
+}
+
 // GetCurrentBorrowIndex gets the current borrow index of the given loan
 // Assume that the loan maturity exists in the pool tranches
 func (k Keeper) GetCurrentBorrowIndex(ctx sdk.Context, loan *types.Loan) sdkmath.LegacyDec {

@@ -133,6 +133,7 @@ message QueryDlcEventCountResponse {
 
 message QueryLoanCetInfosRequest {
     string loan_id = 1;
+    string collateral_amount = 2;
 }
 
 message QueryLoanCetInfosResponse {
