@@ -3615,14 +3615,14 @@ func (x *fastReflection_MsgAddLiquidityResponse) ProtoMethods() *protoiface.Meth
 var (
 	md_MsgRemoveLiquidity         protoreflect.MessageDescriptor
 	fd_MsgRemoveLiquidity_lender  protoreflect.FieldDescriptor
-	fd_MsgRemoveLiquidity_stokens protoreflect.FieldDescriptor
+	fd_MsgRemoveLiquidity_ytokens protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_lending_tx_proto_init()
 	md_MsgRemoveLiquidity = File_side_lending_tx_proto.Messages().ByName("MsgRemoveLiquidity")
 	fd_MsgRemoveLiquidity_lender = md_MsgRemoveLiquidity.Fields().ByName("lender")
-	fd_MsgRemoveLiquidity_stokens = md_MsgRemoveLiquidity.Fields().ByName("stokens")
+	fd_MsgRemoveLiquidity_ytokens = md_MsgRemoveLiquidity.Fields().ByName("ytokens")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgRemoveLiquidity)(nil)
@@ -3696,9 +3696,9 @@ func (x *fastReflection_MsgRemoveLiquidity) Range(f func(protoreflect.FieldDescr
 			return
 		}
 	}
-	if x.Stokens != nil {
-		value := protoreflect.ValueOfMessage(x.Stokens.ProtoReflect())
-		if !f(fd_MsgRemoveLiquidity_stokens, value) {
+	if x.Ytokens != nil {
+		value := protoreflect.ValueOfMessage(x.Ytokens.ProtoReflect())
+		if !f(fd_MsgRemoveLiquidity_ytokens, value) {
 			return
 		}
 	}
@@ -3719,8 +3719,8 @@ func (x *fastReflection_MsgRemoveLiquidity) Has(fd protoreflect.FieldDescriptor)
 	switch fd.FullName() {
 	case "side.lending.MsgRemoveLiquidity.lender":
 		return x.Lender != ""
-	case "side.lending.MsgRemoveLiquidity.stokens":
-		return x.Stokens != nil
+	case "side.lending.MsgRemoveLiquidity.ytokens":
+		return x.Ytokens != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRemoveLiquidity"))
@@ -3739,8 +3739,8 @@ func (x *fastReflection_MsgRemoveLiquidity) Clear(fd protoreflect.FieldDescripto
 	switch fd.FullName() {
 	case "side.lending.MsgRemoveLiquidity.lender":
 		x.Lender = ""
-	case "side.lending.MsgRemoveLiquidity.stokens":
-		x.Stokens = nil
+	case "side.lending.MsgRemoveLiquidity.ytokens":
+		x.Ytokens = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRemoveLiquidity"))
@@ -3760,8 +3760,8 @@ func (x *fastReflection_MsgRemoveLiquidity) Get(descriptor protoreflect.FieldDes
 	case "side.lending.MsgRemoveLiquidity.lender":
 		value := x.Lender
 		return protoreflect.ValueOfString(value)
-	case "side.lending.MsgRemoveLiquidity.stokens":
-		value := x.Stokens
+	case "side.lending.MsgRemoveLiquidity.ytokens":
+		value := x.Ytokens
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
@@ -3785,8 +3785,8 @@ func (x *fastReflection_MsgRemoveLiquidity) Set(fd protoreflect.FieldDescriptor,
 	switch fd.FullName() {
 	case "side.lending.MsgRemoveLiquidity.lender":
 		x.Lender = value.Interface().(string)
-	case "side.lending.MsgRemoveLiquidity.stokens":
-		x.Stokens = value.Message().Interface().(*v1beta1.Coin)
+	case "side.lending.MsgRemoveLiquidity.ytokens":
+		x.Ytokens = value.Message().Interface().(*v1beta1.Coin)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRemoveLiquidity"))
@@ -3807,11 +3807,11 @@ func (x *fastReflection_MsgRemoveLiquidity) Set(fd protoreflect.FieldDescriptor,
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgRemoveLiquidity) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.lending.MsgRemoveLiquidity.stokens":
-		if x.Stokens == nil {
-			x.Stokens = new(v1beta1.Coin)
+	case "side.lending.MsgRemoveLiquidity.ytokens":
+		if x.Ytokens == nil {
+			x.Ytokens = new(v1beta1.Coin)
 		}
-		return protoreflect.ValueOfMessage(x.Stokens.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.Ytokens.ProtoReflect())
 	case "side.lending.MsgRemoveLiquidity.lender":
 		panic(fmt.Errorf("field lender of message side.lending.MsgRemoveLiquidity is not mutable"))
 	default:
@@ -3829,7 +3829,7 @@ func (x *fastReflection_MsgRemoveLiquidity) NewField(fd protoreflect.FieldDescri
 	switch fd.FullName() {
 	case "side.lending.MsgRemoveLiquidity.lender":
 		return protoreflect.ValueOfString("")
-	case "side.lending.MsgRemoveLiquidity.stokens":
+	case "side.lending.MsgRemoveLiquidity.ytokens":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
@@ -3905,8 +3905,8 @@ func (x *fastReflection_MsgRemoveLiquidity) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Stokens != nil {
-			l = options.Size(x.Stokens)
+		if x.Ytokens != nil {
+			l = options.Size(x.Ytokens)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -3938,8 +3938,8 @@ func (x *fastReflection_MsgRemoveLiquidity) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Stokens != nil {
-			encoded, err := options.Marshal(x.Stokens)
+		if x.Ytokens != nil {
+			encoded, err := options.Marshal(x.Ytokens)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4042,7 +4042,7 @@ func (x *fastReflection_MsgRemoveLiquidity) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Stokens", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Ytokens", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -4069,10 +4069,10 @@ func (x *fastReflection_MsgRemoveLiquidity) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.Stokens == nil {
-					x.Stokens = &v1beta1.Coin{}
+				if x.Ytokens == nil {
+					x.Ytokens = &v1beta1.Coin{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Stokens); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Ytokens); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -10438,7 +10438,7 @@ type MsgRemoveLiquidity struct {
 	unknownFields protoimpl.UnknownFields
 
 	Lender  string        `protobuf:"bytes,1,opt,name=lender,proto3" json:"lender,omitempty"`
-	Stokens *v1beta1.Coin `protobuf:"bytes,2,opt,name=stokens,proto3" json:"stokens,omitempty"`
+	Ytokens *v1beta1.Coin `protobuf:"bytes,2,opt,name=ytokens,proto3" json:"ytokens,omitempty"`
 }
 
 func (x *MsgRemoveLiquidity) Reset() {
@@ -10468,9 +10468,9 @@ func (x *MsgRemoveLiquidity) GetLender() string {
 	return ""
 }
 
-func (x *MsgRemoveLiquidity) GetStokens() *v1beta1.Coin {
+func (x *MsgRemoveLiquidity) GetYtokens() *v1beta1.Coin {
 	if x != nil {
-		return x.Stokens
+		return x.Ytokens
 	}
 	return nil
 }
@@ -11046,11 +11046,11 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f, 0x0a, 0x12,
 	0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
 	0x74, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x44, 0x0a, 0x07, 0x73, 0x74,
+	0x28, 0x09, 0x52, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x44, 0x0a, 0x07, 0x79, 0x74,
 	0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f,
 	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
 	0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x0f, 0xc8, 0xde, 0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x07,
-	0x53, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x52, 0x07, 0x73, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x73,
+	0x59, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x52, 0x07, 0x79, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x73,
 	0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x1c, 0x0a,
 	0x1a, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
 	0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xc9, 0x02, 0x0a, 0x08,
@@ -11243,7 +11243,7 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	20, // 0: side.lending.MsgCreatePool.config:type_name -> side.lending.PoolConfig
 	20, // 1: side.lending.MsgUpdatePoolConfig.config:type_name -> side.lending.PoolConfig
 	21, // 2: side.lending.MsgAddLiquidity.amount:type_name -> cosmos.base.v1beta1.Coin
-	21, // 3: side.lending.MsgRemoveLiquidity.stokens:type_name -> cosmos.base.v1beta1.Coin
+	21, // 3: side.lending.MsgRemoveLiquidity.ytokens:type_name -> cosmos.base.v1beta1.Coin
 	21, // 4: side.lending.MsgApply.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
 	22, // 5: side.lending.MsgUpdateParams.params:type_name -> side.lending.Params
 	0,  // 6: side.lending.Msg.CreatePool:input_type -> side.lending.MsgCreatePool

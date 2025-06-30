@@ -9,10 +9,10 @@ import (
 
 var _ sdk.Msg = &MsgRemoveLiquidity{}
 
-func NewMsgRemoveLiquidity(lender string, sTokens sdk.Coin) *MsgRemoveLiquidity {
+func NewMsgRemoveLiquidity(lender string, yTokens sdk.Coin) *MsgRemoveLiquidity {
 	return &MsgRemoveLiquidity{
 		Lender:  lender,
-		STokens: sTokens,
+		YTokens: yTokens,
 	}
 }
 
@@ -22,12 +22,12 @@ func (m *MsgRemoveLiquidity) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	if !strings.HasPrefix(m.STokens.Denom, S_TOKEN_DENOM_PREFIX) {
-		return errorsmod.Wrap(ErrInvalidAmount, "invalid sToken denom")
+	if !strings.HasPrefix(m.YTokens.Denom, Y_TOKEN_DENOM_PREFIX) {
+		return errorsmod.Wrap(ErrInvalidAmount, "invalid yToken denom")
 	}
 
-	if !m.STokens.IsValid() || !m.STokens.IsPositive() {
-		return errorsmod.Wrap(ErrInvalidAmount, "sTokens must be positive")
+	if !m.YTokens.IsValid() || !m.YTokens.IsPositive() {
+		return errorsmod.Wrap(ErrInvalidAmount, "yTokens must be positive")
 	}
 
 	return nil

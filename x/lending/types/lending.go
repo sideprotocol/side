@@ -17,8 +17,8 @@ import (
 )
 
 var (
-	// denom prefix for sToken
-	S_TOKEN_DENOM_PREFIX = "s"
+	// denom prefix for yToken
+	Y_TOKEN_DENOM_PREFIX = "y"
 
 	// OneYear represents the seconds in one year
 	OneYear = 365 * 24 * 3600
@@ -30,15 +30,15 @@ var (
 	PricePrecision = "0.001"
 )
 
-// GetExchangeRate calculates the sToken exchange rate according to the given params
+// GetExchangeRate calculates the yToken exchange rate according to the given params
 // Formula:
-// exchange rate = (totalAvailable + total borrowed - total reserve) / totalSTokens
-func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalReserve sdkmath.Int, totalSTokens sdkmath.Int) sdkmath.LegacyDec {
-	if totalSTokens.IsZero() {
+// exchange rate = (totalAvailable + total borrowed - total reserve) / totalYTokens
+func GetExchangeRate(totalAvailable sdkmath.Int, totalBorrowed sdkmath.Int, totalReserve sdkmath.Int, totalYTokens sdkmath.Int) sdkmath.LegacyDec {
+	if totalYTokens.IsZero() {
 		return sdkmath.LegacyOneDec()
 	}
 
-	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed).Sub(totalReserve)).Quo(totalSTokens.ToLegacyDec())
+	return sdkmath.LegacyNewDecFromInt(totalAvailable.Add(totalBorrowed).Sub(totalReserve)).Quo(totalYTokens.ToLegacyDec())
 }
 
 // GetInterest calculates the loan interest based on the given borrow index
@@ -141,14 +141,14 @@ func NormalizePrice(price sdkmath.LegacyDec, collateralIsBaseAsset bool) sdkmath
 	return price.Add(adjust).Quo(adjust).TruncateDec().Mul(adjust)
 }
 
-// STokenDenom returns the sToken denom from the given pool id
-func STokenDenom(poolId string) string {
-	return fmt.Sprintf("%s%s", S_TOKEN_DENOM_PREFIX, poolId)
+// YTokenDenom returns the yToken denom from the given pool id
+func YTokenDenom(poolId string) string {
+	return fmt.Sprintf("%s%s", Y_TOKEN_DENOM_PREFIX, poolId)
 }
 
-// PoolIdFromSTokenDenom returns the pool id from the given sToken denom
-func PoolIdFromSTokenDenom(denom string) string {
-	return strings.TrimPrefix(denom, S_TOKEN_DENOM_PREFIX)
+// PoolIdFromYTokenDenom returns the pool id from the given yToken denom
+func PoolIdFromYTokenDenom(denom string) string {
+	return strings.TrimPrefix(denom, Y_TOKEN_DENOM_PREFIX)
 }
 
 // ToLiquidationAssetMeta converts the given asset metadata to the corresponding liquidation asset metadata
