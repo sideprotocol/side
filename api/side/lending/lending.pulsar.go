@@ -3120,7 +3120,7 @@ var (
 	fd_LendingPool_total_borrowed   protoreflect.FieldDescriptor
 	fd_LendingPool_reserve_amount   protoreflect.FieldDescriptor
 	fd_LendingPool_total_reserve    protoreflect.FieldDescriptor
-	fd_LendingPool_total_stokens    protoreflect.FieldDescriptor
+	fd_LendingPool_total_ytokens    protoreflect.FieldDescriptor
 	fd_LendingPool_tranches         protoreflect.FieldDescriptor
 	fd_LendingPool_config           protoreflect.FieldDescriptor
 	fd_LendingPool_status           protoreflect.FieldDescriptor
@@ -3136,7 +3136,7 @@ func init() {
 	fd_LendingPool_total_borrowed = md_LendingPool.Fields().ByName("total_borrowed")
 	fd_LendingPool_reserve_amount = md_LendingPool.Fields().ByName("reserve_amount")
 	fd_LendingPool_total_reserve = md_LendingPool.Fields().ByName("total_reserve")
-	fd_LendingPool_total_stokens = md_LendingPool.Fields().ByName("total_stokens")
+	fd_LendingPool_total_ytokens = md_LendingPool.Fields().ByName("total_ytokens")
 	fd_LendingPool_tranches = md_LendingPool.Fields().ByName("tranches")
 	fd_LendingPool_config = md_LendingPool.Fields().ByName("config")
 	fd_LendingPool_status = md_LendingPool.Fields().ByName("status")
@@ -3249,9 +3249,9 @@ func (x *fastReflection_LendingPool) Range(f func(protoreflect.FieldDescriptor, 
 			return
 		}
 	}
-	if x.TotalStokens != nil {
-		value := protoreflect.ValueOfMessage(x.TotalStokens.ProtoReflect())
-		if !f(fd_LendingPool_total_stokens, value) {
+	if x.TotalYtokens != nil {
+		value := protoreflect.ValueOfMessage(x.TotalYtokens.ProtoReflect())
+		if !f(fd_LendingPool_total_ytokens, value) {
 			return
 		}
 	}
@@ -3302,8 +3302,8 @@ func (x *fastReflection_LendingPool) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ReserveAmount != ""
 	case "side.lending.LendingPool.total_reserve":
 		return x.TotalReserve != ""
-	case "side.lending.LendingPool.total_stokens":
-		return x.TotalStokens != nil
+	case "side.lending.LendingPool.total_ytokens":
+		return x.TotalYtokens != nil
 	case "side.lending.LendingPool.tranches":
 		return len(x.Tranches) != 0
 	case "side.lending.LendingPool.config":
@@ -3340,8 +3340,8 @@ func (x *fastReflection_LendingPool) Clear(fd protoreflect.FieldDescriptor) {
 		x.ReserveAmount = ""
 	case "side.lending.LendingPool.total_reserve":
 		x.TotalReserve = ""
-	case "side.lending.LendingPool.total_stokens":
-		x.TotalStokens = nil
+	case "side.lending.LendingPool.total_ytokens":
+		x.TotalYtokens = nil
 	case "side.lending.LendingPool.tranches":
 		x.Tranches = nil
 	case "side.lending.LendingPool.config":
@@ -3385,8 +3385,8 @@ func (x *fastReflection_LendingPool) Get(descriptor protoreflect.FieldDescriptor
 	case "side.lending.LendingPool.total_reserve":
 		value := x.TotalReserve
 		return protoreflect.ValueOfString(value)
-	case "side.lending.LendingPool.total_stokens":
-		value := x.TotalStokens
+	case "side.lending.LendingPool.total_ytokens":
+		value := x.TotalYtokens
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "side.lending.LendingPool.tranches":
 		if len(x.Tranches) == 0 {
@@ -3434,8 +3434,8 @@ func (x *fastReflection_LendingPool) Set(fd protoreflect.FieldDescriptor, value 
 		x.ReserveAmount = value.Interface().(string)
 	case "side.lending.LendingPool.total_reserve":
 		x.TotalReserve = value.Interface().(string)
-	case "side.lending.LendingPool.total_stokens":
-		x.TotalStokens = value.Message().Interface().(*v1beta1.Coin)
+	case "side.lending.LendingPool.total_ytokens":
+		x.TotalYtokens = value.Message().Interface().(*v1beta1.Coin)
 	case "side.lending.LendingPool.tranches":
 		lv := value.List()
 		clv := lv.(*_LendingPool_9_list)
@@ -3469,11 +3469,11 @@ func (x *fastReflection_LendingPool) Mutable(fd protoreflect.FieldDescriptor) pr
 			x.Supply = new(v1beta1.Coin)
 		}
 		return protoreflect.ValueOfMessage(x.Supply.ProtoReflect())
-	case "side.lending.LendingPool.total_stokens":
-		if x.TotalStokens == nil {
-			x.TotalStokens = new(v1beta1.Coin)
+	case "side.lending.LendingPool.total_ytokens":
+		if x.TotalYtokens == nil {
+			x.TotalYtokens = new(v1beta1.Coin)
 		}
-		return protoreflect.ValueOfMessage(x.TotalStokens.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.TotalYtokens.ProtoReflect())
 	case "side.lending.LendingPool.tranches":
 		if x.Tranches == nil {
 			x.Tranches = []*PoolTranche{}
@@ -3527,7 +3527,7 @@ func (x *fastReflection_LendingPool) NewField(fd protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfString("")
 	case "side.lending.LendingPool.total_reserve":
 		return protoreflect.ValueOfString("")
-	case "side.lending.LendingPool.total_stokens":
+	case "side.lending.LendingPool.total_ytokens":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.lending.LendingPool.tranches":
@@ -3635,8 +3635,8 @@ func (x *fastReflection_LendingPool) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.TotalStokens != nil {
-			l = options.Size(x.TotalStokens)
+		if x.TotalYtokens != nil {
+			l = options.Size(x.TotalYtokens)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if len(x.Tranches) > 0 {
@@ -3716,8 +3716,8 @@ func (x *fastReflection_LendingPool) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0x4a
 			}
 		}
-		if x.TotalStokens != nil {
-			encoded, err := options.Marshal(x.TotalStokens)
+		if x.TotalYtokens != nil {
+			encoded, err := options.Marshal(x.TotalYtokens)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4065,7 +4065,7 @@ func (x *fastReflection_LendingPool) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 8:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TotalStokens", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TotalYtokens", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -4092,10 +4092,10 @@ func (x *fastReflection_LendingPool) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.TotalStokens == nil {
-					x.TotalStokens = &v1beta1.Coin{}
+				if x.TotalYtokens == nil {
+					x.TotalYtokens = &v1beta1.Coin{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TotalStokens); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TotalYtokens); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -13579,7 +13579,7 @@ type LendingPool struct {
 	TotalBorrowed   string         `protobuf:"bytes,5,opt,name=total_borrowed,json=totalBorrowed,proto3" json:"total_borrowed,omitempty"`
 	ReserveAmount   string         `protobuf:"bytes,6,opt,name=reserve_amount,json=reserveAmount,proto3" json:"reserve_amount,omitempty"`
 	TotalReserve    string         `protobuf:"bytes,7,opt,name=total_reserve,json=totalReserve,proto3" json:"total_reserve,omitempty"`
-	TotalStokens    *v1beta1.Coin  `protobuf:"bytes,8,opt,name=total_stokens,json=totalStokens,proto3" json:"total_stokens,omitempty"`
+	TotalYtokens    *v1beta1.Coin  `protobuf:"bytes,8,opt,name=total_ytokens,json=totalYtokens,proto3" json:"total_ytokens,omitempty"`
 	Tranches        []*PoolTranche `protobuf:"bytes,9,rep,name=tranches,proto3" json:"tranches,omitempty"`
 	Config          *PoolConfig    `protobuf:"bytes,10,opt,name=config,proto3" json:"config,omitempty"`
 	Status          PoolStatus     `protobuf:"varint,11,opt,name=status,proto3,enum=side.lending.PoolStatus" json:"status,omitempty"`
@@ -13654,9 +13654,9 @@ func (x *LendingPool) GetTotalReserve() string {
 	return ""
 }
 
-func (x *LendingPool) GetTotalStokens() *v1beta1.Coin {
+func (x *LendingPool) GetTotalYtokens() *v1beta1.Coin {
 	if x != nil {
-		return x.TotalStokens
+		return x.TotalYtokens
 	}
 	return nil
 }
@@ -14637,12 +14637,12 @@ var file_side_lending_lending_proto_rawDesc = []byte{
 	0x07, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1d, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63,
 	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68,
 	0x2e, 0x49, 0x6e, 0x74, 0x52, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x65, 0x72,
-	0x76, 0x65, 0x12, 0x54, 0x0a, 0x0d, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x5f, 0x73, 0x74, 0x6f, 0x6b,
+	0x76, 0x65, 0x12, 0x54, 0x0a, 0x0d, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x5f, 0x79, 0x74, 0x6f, 0x6b,
 	0x65, 0x6e, 0x73, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
 	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
 	0x43, 0x6f, 0x69, 0x6e, 0x42, 0x14, 0xc8, 0xde, 0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x0c, 0x54, 0x6f,
-	0x74, 0x61, 0x6c, 0x53, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x52, 0x0c, 0x74, 0x6f, 0x74, 0x61,
-	0x6c, 0x53, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x12, 0x3b, 0x0a, 0x08, 0x74, 0x72, 0x61, 0x6e,
+	0x74, 0x61, 0x6c, 0x59, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x52, 0x0c, 0x74, 0x6f, 0x74, 0x61,
+	0x6c, 0x59, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x12, 0x3b, 0x0a, 0x08, 0x74, 0x72, 0x61, 0x6e,
 	0x63, 0x68, 0x65, 0x73, 0x18, 0x09, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x69, 0x64,
 	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x54, 0x72,
 	0x61, 0x6e, 0x63, 0x68, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x08, 0x74, 0x72, 0x61,
@@ -14973,7 +14973,7 @@ var file_side_lending_lending_proto_depIdxs = []int32{
 	7,  // 2: side.lending.PoolConfig.tranches:type_name -> side.lending.PoolTrancheConfig
 	21, // 3: side.lending.PoolConfig.request_fee:type_name -> cosmos.base.v1beta1.Coin
 	21, // 4: side.lending.LendingPool.supply:type_name -> cosmos.base.v1beta1.Coin
-	21, // 5: side.lending.LendingPool.total_stokens:type_name -> cosmos.base.v1beta1.Coin
+	21, // 5: side.lending.LendingPool.total_ytokens:type_name -> cosmos.base.v1beta1.Coin
 	9,  // 6: side.lending.LendingPool.tranches:type_name -> side.lending.PoolTranche
 	8,  // 7: side.lending.LendingPool.config:type_name -> side.lending.PoolConfig
 	0,  // 8: side.lending.LendingPool.status:type_name -> side.lending.PoolStatus

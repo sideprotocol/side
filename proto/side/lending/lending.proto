@@ -131,9 +131,9 @@ message LendingPool {
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    cosmos.base.v1beta1.Coin total_stokens = 8 [
+    cosmos.base.v1beta1.Coin total_ytokens = 8 [
       (gogoproto.nullable) = false,
-      (gogoproto.customname) = "TotalSTokens"
+      (gogoproto.customname) = "TotalYTokens"
     ];
     repeated PoolTranche tranches = 9 [(gogoproto.nullable) = false];
     PoolConfig config = 10 [(gogoproto.nullable) = false];

@@ -58,7 +58,7 @@ func (k Keeper) PoolExchangeRate(goCtx context.Context, req *types.QueryPoolExch
 
 	pool := k.GetPool(ctx, req.PoolId)
 
-	exchangeRate := types.GetExchangeRate(pool.AvailableAmount, pool.TotalBorrowed, pool.TotalReserve, pool.TotalSTokens.Amount)
+	exchangeRate := types.GetExchangeRate(pool.AvailableAmount, pool.TotalBorrowed, pool.TotalReserve, pool.TotalYTokens.Amount)
 
 	return &types.QueryPoolExchangeRateResponse{ExchangeRate: exchangeRate.String()}, nil
 }
