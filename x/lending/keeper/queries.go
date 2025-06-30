@@ -213,7 +213,23 @@ func (k Keeper) LoanCetInfos(goCtx context.Context, req *types.QueryLoanCetInfos
 		return nil, status.Error(codes.InvalidArgument, "loan does not exist")
 	}
 
-	cetInfos, err := k.GetCetInfos(ctx, req.LoanId)
+	loan := k.GetLoan(ctx, req.LoanId)
+
+	var err error
+	var collateralAmount sdk.Coin
+
+	if loan.LiquidationPrice.IsZero() {
+		collateralAmount, err = sdk.ParseCoinNormalized(req.CollateralAmount)
+		if err != nil {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
+
+		if !collateralAmount.IsPositive() {
+			return nil, status.Error(codes.InvalidArgument, "collateral amount must be positive")
+		}
+	}
+
+	cetInfos, err := k.GetCetInfos(ctx, req.LoanId, collateralAmount)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

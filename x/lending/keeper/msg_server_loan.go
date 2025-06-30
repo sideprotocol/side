@@ -122,7 +122,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 
 	// update dlc event
-	m.UpdateDLCEvent(ctx, loan.VaultAddress)
+	m.UpdateDLCEvent(ctx, loan)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventTypeApply,
@@ -160,9 +160,6 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan non requested")
 	}
 
-	pool := m.GetPool(ctx, loan.PoolId)
-	poolConfig := pool.Config
-
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
 	depositTxs := []*psbt.Packet{}
@@ -186,7 +183,12 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount can not be zero")
 	}
 
+	// calculate liquidation price
+	liquidationPrice := m.GetLiquidationPrice(ctx, loan, collateralAmount)
+
+	// update dlc event outcome
 	dlcEvent := m.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
+	m.UpdateDLCEventLiquidatedOutcome(ctx, loan, dlcEvent, liquidationPrice)
 
 	// verify cets
 	if err := types.VerifyCets(depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, dlcEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
@@ -214,19 +216,15 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		}
 	}
 
-	collateralDecimals := int(poolConfig.CollateralAsset.Decimals)
-	borrowDecimals := int(poolConfig.LendingAsset.Decimals)
-	collateralIsBaseAsset := poolConfig.CollateralAsset.IsBasePriceAsset
-
-	// calculate liquidation price
-	liquidationPrice := types.GetLiquidationPrice(collateralAmount, collateralDecimals, loan.BorrowAmount.Amount, borrowDecimals, loan.Maturity, loan.BorrowAPR, m.GetBlocksPerYear(ctx), poolConfig.LiquidationThreshold, collateralIsBaseAsset)
-
 	// update loan
 	loan.Authorizations = append(loan.Authorizations, *authorization)
 	loan.CollateralAmount = collateralAmount
 	loan.LiquidationPrice = liquidationPrice
 	loan.Status = types.LoanStatus_Authorized
 	m.SetLoan(ctx, loan)
+
+	// update dlc event
+	m.dlcKeeper.SetEvent(ctx, dlcEvent)
 
 	return &types.MsgSubmitCetsResponse{}, nil
 }
