@@ -224,12 +224,12 @@ func (k Keeper) NormalizePool(ctx sdk.Context, pool *types.LendingPool) {
 	}
 }
 
-// GetSTokenAmount calculates the sToken amount from the given deposit amount
-func (k Keeper) GetSTokenAmount(ctx sdk.Context, pool *types.LendingPool, depositAmount sdkmath.Int) sdkmath.Int {
-	return depositAmount.Mul(pool.TotalSTokens.Amount).Quo(pool.AvailableAmount.Add(pool.TotalBorrowed).Sub(pool.TotalReserve))
+// GetYTokenAmount calculates the yToken amount from the given deposit amount
+func (k Keeper) GetYTokenAmount(ctx sdk.Context, pool *types.LendingPool, depositAmount sdkmath.Int) sdkmath.Int {
+	return depositAmount.Mul(pool.TotalYTokens.Amount).Quo(pool.AvailableAmount.Add(pool.TotalBorrowed).Sub(pool.TotalReserve))
 }
 
-// GetUnderlyingAssetAmount calculates the underlying asset amount from the given sToken amount
-func (k Keeper) GetUnderlyingAssetAmount(ctx sdk.Context, pool *types.LendingPool, sTokenAmount sdkmath.Int) sdkmath.Int {
-	return sTokenAmount.Mul(pool.AvailableAmount.Add(pool.TotalBorrowed).Sub(pool.TotalReserve)).Quo(pool.TotalSTokens.Amount)
+// GetUnderlyingAssetAmount calculates the underlying asset amount from the given yToken amount
+func (k Keeper) GetUnderlyingAssetAmount(ctx sdk.Context, pool *types.LendingPool, yTokenAmount sdkmath.Int) sdkmath.Int {
+	return yTokenAmount.Mul(pool.AvailableAmount.Add(pool.TotalBorrowed).Sub(pool.TotalReserve)).Quo(pool.TotalYTokens.Amount)
 }
