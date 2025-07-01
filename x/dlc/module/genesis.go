@@ -12,6 +12,14 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 
+	// initialize oracle participant liveness
+	for _, participant := range genState.Params.AllowedOracleParticipants {
+		k.SetOracleParticipantLiveness(ctx, &types.OracleParticipantLiveness{
+			ConsensusPubkey: participant,
+			IsAlive:         true,
+		})
+	}
+
 	// set events
 	for _, event := range genState.Events {
 		k.SetEvent(ctx, event)
