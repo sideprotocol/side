@@ -96,6 +96,14 @@ func (k Keeper) UpdateOracleParticipantsLiveness(ctx sdk.Context, participants [
 				ConsensusPubkey: participant,
 				IsAlive:         true,
 			})
+
+			continue
 		}
+
+		// set to alive status
+		liveness := k.GetOracleParticipantLiveness(ctx, participant)
+		liveness.IsAlive = true
+
+		k.SetOracleParticipantLiveness(ctx, liveness)
 	}
 }
