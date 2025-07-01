@@ -19,6 +19,9 @@ const (
 	// DKG type for nonce generation along with oracle
 	DKG_TYPE_NONCE = "nonce"
 
+	// DKG type for oracle participants liveness check
+	DKG_TYPE_LIVENESS_CHECK = "liveness_check"
+
 	// default outcome index
 	DefaultOutcomeIndex = -1
 )

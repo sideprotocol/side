@@ -10,6 +10,8 @@ import (
 // EndBlocker called at the end of every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	generateLendingEventNonces(ctx, k)
+
+	checkOracleParticipantLiveness(ctx, k)
 }
 
 // generateLendingEventNonces generates nonces events for dlc lending events
@@ -19,24 +21,37 @@ func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
 		return
 	}
 
-	// check if there exist oracle participant base set
-	if len(k.OracleParticipantBaseSet(ctx)) == 0 {
-		return
-	}
-
 	// check if lending event nonces need to be generated
 	pendingLendingEventCount := k.GetPendingLendingEventCount(ctx)
 	if pendingLendingEventCount >= uint64(k.NonceQueueSize(ctx)) {
 		return
 	}
 
-	// get oracle participants
-	participants := k.GetOracleParticipants(ctx)
+	// get alive oracle participants
+	participants := k.GetAliveOracleParticipants(ctx)
 	if len(participants) == 0 {
-		k.Logger(ctx).Info("No sufficient oracle participants", "required oracle participant num", k.OracleParticipantNum(ctx), "alive oracle participant num", len(k.GetAliveOracleParticipants(ctx)))
+		k.Logger(ctx).Info("No sufficient alive oracle participants", "required oracle participant num", k.OracleParticipantNum(ctx), "alive oracle participant num", len(k.GetAllAliveOracleParticipants(ctx)))
 		return
 	}
 
 	// initiate DKG
 	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_LENDING_EVENT_NONCE), participants, k.OracleParticipantThreshold(ctx), k.NonceGenerationBatchSize(ctx))
+}
+
+// checkOracleParticipantLiveness triggers DKG to check oracle participant liveness
+func checkOracleParticipantLiveness(ctx sdk.Context, k keeper.Keeper) {
+	// check block height
+	if ctx.BlockHeight()%k.OracleParticipantLivenessCheckInterval(ctx) != 0 {
+		return
+	}
+
+	// get random oracle participants
+	participants := k.GetOracleParticipants(ctx)
+	if len(participants) == 0 {
+		k.Logger(ctx).Info("No sufficient oracle participants", "required oracle participant num", k.OracleParticipantNum(ctx), "total oracle participant num", len(k.OracleParticipantBaseSet(ctx)))
+		return
+	}
+
+	// initiate DKG
+	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_LIVENESS_CHECK, int32(types.DKGIntent_DKG_INTENT_DEFAULT), participants, k.OracleParticipantThreshold(ctx), 1)
 }

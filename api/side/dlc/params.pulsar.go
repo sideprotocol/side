@@ -62,13 +62,14 @@ func (x *_Params_4_list) IsValid() bool {
 }
 
 var (
-	md_Params                              protoreflect.MessageDescriptor
-	fd_Params_nonce_queue_size             protoreflect.FieldDescriptor
-	fd_Params_nonce_generation_batch_size  protoreflect.FieldDescriptor
-	fd_Params_nonce_generation_interval    protoreflect.FieldDescriptor
-	fd_Params_allowed_oracle_participants  protoreflect.FieldDescriptor
-	fd_Params_oracle_participant_num       protoreflect.FieldDescriptor
-	fd_Params_oracle_participant_threshold protoreflect.FieldDescriptor
+	md_Params                                            protoreflect.MessageDescriptor
+	fd_Params_nonce_queue_size                           protoreflect.FieldDescriptor
+	fd_Params_nonce_generation_batch_size                protoreflect.FieldDescriptor
+	fd_Params_nonce_generation_interval                  protoreflect.FieldDescriptor
+	fd_Params_allowed_oracle_participants                protoreflect.FieldDescriptor
+	fd_Params_oracle_participant_num                     protoreflect.FieldDescriptor
+	fd_Params_oracle_participant_threshold               protoreflect.FieldDescriptor
+	fd_Params_oracle_participant_liveness_check_interval protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -80,6 +81,7 @@ func init() {
 	fd_Params_allowed_oracle_participants = md_Params.Fields().ByName("allowed_oracle_participants")
 	fd_Params_oracle_participant_num = md_Params.Fields().ByName("oracle_participant_num")
 	fd_Params_oracle_participant_threshold = md_Params.Fields().ByName("oracle_participant_threshold")
+	fd_Params_oracle_participant_liveness_check_interval = md_Params.Fields().ByName("oracle_participant_liveness_check_interval")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -183,6 +185,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
+	if x.OracleParticipantLivenessCheckInterval != int64(0) {
+		value := protoreflect.ValueOfInt64(x.OracleParticipantLivenessCheckInterval)
+		if !f(fd_Params_oracle_participant_liveness_check_interval, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -210,6 +218,8 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.OracleParticipantNum != uint32(0)
 	case "side.dlc.Params.oracle_participant_threshold":
 		return x.OracleParticipantThreshold != uint32(0)
+	case "side.dlc.Params.oracle_participant_liveness_check_interval":
+		return x.OracleParticipantLivenessCheckInterval != int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -238,6 +248,8 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.OracleParticipantNum = uint32(0)
 	case "side.dlc.Params.oracle_participant_threshold":
 		x.OracleParticipantThreshold = uint32(0)
+	case "side.dlc.Params.oracle_participant_liveness_check_interval":
+		x.OracleParticipantLivenessCheckInterval = int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -275,6 +287,9 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "side.dlc.Params.oracle_participant_threshold":
 		value := x.OracleParticipantThreshold
 		return protoreflect.ValueOfUint32(value)
+	case "side.dlc.Params.oracle_participant_liveness_check_interval":
+		value := x.OracleParticipantLivenessCheckInterval
+		return protoreflect.ValueOfInt64(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -309,6 +324,8 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.OracleParticipantNum = uint32(value.Uint())
 	case "side.dlc.Params.oracle_participant_threshold":
 		x.OracleParticipantThreshold = uint32(value.Uint())
+	case "side.dlc.Params.oracle_participant_liveness_check_interval":
+		x.OracleParticipantLivenessCheckInterval = value.Int()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -345,6 +362,8 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		panic(fmt.Errorf("field oracle_participant_num of message side.dlc.Params is not mutable"))
 	case "side.dlc.Params.oracle_participant_threshold":
 		panic(fmt.Errorf("field oracle_participant_threshold of message side.dlc.Params is not mutable"))
+	case "side.dlc.Params.oracle_participant_liveness_check_interval":
+		panic(fmt.Errorf("field oracle_participant_liveness_check_interval of message side.dlc.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -371,6 +390,8 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "side.dlc.Params.oracle_participant_threshold":
 		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.dlc.Params.oracle_participant_liveness_check_interval":
+		return protoreflect.ValueOfInt64(int64(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.Params"))
@@ -461,6 +482,9 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.OracleParticipantThreshold != 0 {
 			n += 1 + runtime.Sov(uint64(x.OracleParticipantThreshold))
 		}
+		if x.OracleParticipantLivenessCheckInterval != 0 {
+			n += 1 + runtime.Sov(uint64(x.OracleParticipantLivenessCheckInterval))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -489,6 +513,11 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.OracleParticipantLivenessCheckInterval != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OracleParticipantLivenessCheckInterval))
+			i--
+			dAtA[i] = 0x38
 		}
 		if x.OracleParticipantThreshold != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.OracleParticipantThreshold))
@@ -700,6 +729,25 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
+			case 7:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OracleParticipantLivenessCheckInterval", wireType)
+				}
+				x.OracleParticipantLivenessCheckInterval = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.OracleParticipantLivenessCheckInterval |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -754,12 +802,13 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	NonceQueueSize             uint32   `protobuf:"varint,1,opt,name=nonce_queue_size,json=nonceQueueSize,proto3" json:"nonce_queue_size,omitempty"`
-	NonceGenerationBatchSize   uint32   `protobuf:"varint,2,opt,name=nonce_generation_batch_size,json=nonceGenerationBatchSize,proto3" json:"nonce_generation_batch_size,omitempty"`
-	NonceGenerationInterval    int64    `protobuf:"varint,3,opt,name=nonce_generation_interval,json=nonceGenerationInterval,proto3" json:"nonce_generation_interval,omitempty"`
-	AllowedOracleParticipants  []string `protobuf:"bytes,4,rep,name=allowed_oracle_participants,json=allowedOracleParticipants,proto3" json:"allowed_oracle_participants,omitempty"`
-	OracleParticipantNum       uint32   `protobuf:"varint,5,opt,name=oracle_participant_num,json=oracleParticipantNum,proto3" json:"oracle_participant_num,omitempty"`
-	OracleParticipantThreshold uint32   `protobuf:"varint,6,opt,name=oracle_participant_threshold,json=oracleParticipantThreshold,proto3" json:"oracle_participant_threshold,omitempty"`
+	NonceQueueSize                         uint32   `protobuf:"varint,1,opt,name=nonce_queue_size,json=nonceQueueSize,proto3" json:"nonce_queue_size,omitempty"`
+	NonceGenerationBatchSize               uint32   `protobuf:"varint,2,opt,name=nonce_generation_batch_size,json=nonceGenerationBatchSize,proto3" json:"nonce_generation_batch_size,omitempty"`
+	NonceGenerationInterval                int64    `protobuf:"varint,3,opt,name=nonce_generation_interval,json=nonceGenerationInterval,proto3" json:"nonce_generation_interval,omitempty"`
+	AllowedOracleParticipants              []string `protobuf:"bytes,4,rep,name=allowed_oracle_participants,json=allowedOracleParticipants,proto3" json:"allowed_oracle_participants,omitempty"`
+	OracleParticipantNum                   uint32   `protobuf:"varint,5,opt,name=oracle_participant_num,json=oracleParticipantNum,proto3" json:"oracle_participant_num,omitempty"`
+	OracleParticipantThreshold             uint32   `protobuf:"varint,6,opt,name=oracle_participant_threshold,json=oracleParticipantThreshold,proto3" json:"oracle_participant_threshold,omitempty"`
+	OracleParticipantLivenessCheckInterval int64    `protobuf:"varint,7,opt,name=oracle_participant_liveness_check_interval,json=oracleParticipantLivenessCheckInterval,proto3" json:"oracle_participant_liveness_check_interval,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -824,6 +873,13 @@ func (x *Params) GetOracleParticipantThreshold() uint32 {
 	return 0
 }
 
+func (x *Params) GetOracleParticipantLivenessCheckInterval() int64 {
+	if x != nil {
+		return x.OracleParticipantLivenessCheckInterval
+	}
+	return 0
+}
+
 var File_side_dlc_params_proto protoreflect.FileDescriptor
 
 var file_side_dlc_params_proto_rawDesc = []byte{
@@ -834,7 +890,7 @@ var file_side_dlc_params_proto_rawDesc = []byte{
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
 	0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x22, 0xe5, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x28, 0x0a,
+	0x74, 0x6f, 0x22, 0xc1, 0x03, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x28, 0x0a,
 	0x10, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f, 0x71, 0x75, 0x65, 0x75, 0x65, 0x5f, 0x73, 0x69, 0x7a,
 	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0e, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x51, 0x75,
 	0x65, 0x75, 0x65, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x3d, 0x0a, 0x1b, 0x6e, 0x6f, 0x6e, 0x63, 0x65,
@@ -856,16 +912,22 @@ var file_side_dlc_params_proto_rawDesc = []byte{
 	0x6c, 0x65, 0x5f, 0x70, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x5f, 0x74,
 	0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1a,
 	0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e,
-	0x74, 0x54, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x42, 0x87, 0x01, 0x0a, 0x0c, 0x63,
-	0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x0b, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68,
-	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64,
-	0x65, 0x2f, 0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69,
-	0x64, 0x65, 0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c,
-	0x63, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a,
-	0x3a, 0x44, 0x6c, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x54, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x12, 0x5a, 0x0a, 0x2a, 0x6f, 0x72,
+	0x61, 0x63, 0x6c, 0x65, 0x5f, 0x70, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74,
+	0x5f, 0x6c, 0x69, 0x76, 0x65, 0x6e, 0x65, 0x73, 0x73, 0x5f, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x5f,
+	0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x18, 0x07, 0x20, 0x01, 0x28, 0x03, 0x52, 0x26,
+	0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e,
+	0x74, 0x4c, 0x69, 0x76, 0x65, 0x6e, 0x65, 0x73, 0x73, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x49, 0x6e,
+	0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x42, 0x87, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50,
+	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f,
+	0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x64, 0x6c,
+	0x63, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x44,
+	0x6c, 0x63, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0xe2, 0x02, 0x14,
+	0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
+	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x44, 0x6c, 0x63,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

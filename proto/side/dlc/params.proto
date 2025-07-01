@@ -15,4 +15,5 @@ message Params {
     repeated string allowed_oracle_participants = 4;
     uint32 oracle_participant_num = 5;
     uint32 oracle_participant_threshold = 6;
+    int64 oracle_participant_liveness_check_interval = 7;
 }

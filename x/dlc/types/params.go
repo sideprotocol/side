@@ -25,17 +25,21 @@ var (
 
 	// default oracle participant threshold
 	DefaultOracleParticipantThreshold = uint32(2)
+
+	// default oracle participant liveness check interval
+	DefaultOracleParticipantLivenessCheckInterval = int64(2000) // 2000 blocks
 )
 
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		NonceQueueSize:             DefaultNonceQueueSize,
-		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
-		NonceGenerationInterval:    DefaultNonceGenerationInterval,
-		AllowedOracleParticipants:  []string{},
-		OracleParticipantNum:       DefaultOracleParticipantNum,
-		OracleParticipantThreshold: DefaultOracleParticipantThreshold,
+		NonceQueueSize:                         DefaultNonceQueueSize,
+		NonceGenerationBatchSize:               DefaultNonceGenerationBatchSize,
+		NonceGenerationInterval:                DefaultNonceGenerationInterval,
+		AllowedOracleParticipants:              []string{},
+		OracleParticipantNum:                   DefaultOracleParticipantNum,
+		OracleParticipantThreshold:             DefaultOracleParticipantThreshold,
+		OracleParticipantLivenessCheckInterval: DefaultOracleParticipantLivenessCheckInterval,
 	}
 }
 
@@ -72,6 +76,10 @@ func (p Params) Validate() error {
 
 	if p.OracleParticipantThreshold == 0 || p.OracleParticipantThreshold > p.OracleParticipantNum {
 		return errorsmod.Wrapf(ErrInvalidParams, "invalid oracle participant threshold")
+	}
+
+	if p.OracleParticipantLivenessCheckInterval <= 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "invalid oracle participant liveness check interval")
 	}
 
 	return nil

@@ -37,3 +37,8 @@ func (k Keeper) OracleParticipantNum(ctx sdk.Context) uint32 {
 func (k Keeper) OracleParticipantThreshold(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).OracleParticipantThreshold
 }
+
+// OracleParticipantLivenessCheckInterval gets the oracle participant liveness check interval
+func (k Keeper) OracleParticipantLivenessCheckInterval(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).OracleParticipantLivenessCheckInterval
+}
