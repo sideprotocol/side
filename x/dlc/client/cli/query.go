@@ -376,15 +376,15 @@ func CmdQueryOracleParticipantLiveness() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			_, err = base64.StdEncoding.DecodeString(args[0])
+			alive, err := strconv.ParseBool(args[0])
 			if err != nil {
-				alive, err := strconv.ParseBool(args[0])
+				_, err := base64.StdEncoding.DecodeString(args[0])
 				if err != nil {
 					return fmt.Errorf("neither consensus pub key nor liveness status provided")
 				}
 
 				res, err := queryClient.OracleParticipantLiveness(cmd.Context(), &types.QueryOracleParticipantLivenessRequest{
-					Alive: alive,
+					ConsensusPubkey: args[0],
 				})
 				if err != nil {
 					return err
@@ -394,7 +394,7 @@ func CmdQueryOracleParticipantLiveness() *cobra.Command {
 			}
 
 			res, err := queryClient.OracleParticipantLiveness(cmd.Context(), &types.QueryOracleParticipantLivenessRequest{
-				ConsensusPubkey: args[0],
+				Alive: alive,
 			})
 			if err != nil {
 				return err
