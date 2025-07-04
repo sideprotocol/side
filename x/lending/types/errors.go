@@ -48,11 +48,10 @@ var (
 	ErrRedemptionDoesNotExist    = errorsmod.Register(ModuleName, 5003, "redemption does not exist")
 	ErrDCMSignaturesAlreadyExist = errorsmod.Register(ModuleName, 5004, "dcm signatures already exist")
 
-	ErrMinMaturityNotReached            = errorsmod.Register(ModuleName, 6001, "min maturity not reached")
-	ErrRepaymentAdaptorSigsAlreadyExist = errorsmod.Register(ModuleName, 6002, "repayment adaptor signatures already exist")
-	ErrRepaymentAdaptorSigsDoNotExist   = errorsmod.Register(ModuleName, 6003, "repayment adaptor signatures do not exist")
-	ErrInvalidAdaptorSignatures         = errorsmod.Register(ModuleName, 6004, "invalid adaptor signatures")
-	ErrInvalidAdaptorSignature          = errorsmod.Register(ModuleName, 6005, "invalid adaptor signature")
+	ErrRepaymentAdaptorSigsAlreadyExist = errorsmod.Register(ModuleName, 6001, "repayment adaptor signatures already exist")
+	ErrRepaymentAdaptorSigsDoNotExist   = errorsmod.Register(ModuleName, 6002, "repayment adaptor signatures do not exist")
+	ErrInvalidAdaptorSignatures         = errorsmod.Register(ModuleName, 6003, "invalid adaptor signatures")
+	ErrInvalidAdaptorSignature          = errorsmod.Register(ModuleName, 6004, "invalid adaptor signature")
 
 	ErrLoanNotLiquidated                 = errorsmod.Register(ModuleName, 7001, "loan not liquidated yet")
 	ErrLiquidationSignaturesAlreadyExist = errorsmod.Register(ModuleName, 7002, "dcm liquidation signatures already exist")

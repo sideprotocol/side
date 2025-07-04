@@ -31,8 +31,6 @@ message PoolTrancheConfig {
   int64 maturity = 1;
   // borrow apr permille
   uint32 borrow_apr = 2 [(gogoproto.customname) = "BorrowAPR"];
-  // minimum maturity factor permille
-  uint32 min_maturity_factor = 3;
 }
 
 // Pool config
@@ -204,28 +202,27 @@ message Loan {
     ];
     int64 maturity = 14;
     uint32 borrow_apr = 15 [(gogoproto.customname) = "BorrowAPR"];
-    int64 min_maturity = 16;
-    string start_borrow_index = 17 [
+    string start_borrow_index = 16 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable)   = false
     ];
-    string liquidation_price = 18 [
+    string liquidation_price = 17 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable) = false
     ];
-    uint64 dlc_event_id = 19;
-    repeated Authorization authorizations = 20 [(gogoproto.nullable) = false];
-    string collateral_amount = 21 [
+    uint64 dlc_event_id = 18;
+    repeated Authorization authorizations = 19 [(gogoproto.nullable) = false];
+    string collateral_amount = 20 [
       (gogoproto.customtype) = "cosmossdk.io/math.Int",
       (gogoproto.nullable) = false
     ];
-    uint64 liquidation_id = 22;
-    string referrer = 23;
-    google.protobuf.Timestamp create_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    google.protobuf.Timestamp disburse_at = 25 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    LoanStatus status = 26;
+    uint64 liquidation_id = 21;
+    string referrer = 22;
+    google.protobuf.Timestamp create_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 25;
 }
 
 enum CetType {
