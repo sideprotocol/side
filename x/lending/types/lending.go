@@ -396,10 +396,6 @@ func validatePoolTranches(tranches []PoolTrancheConfig) error {
 		if tranche.BorrowAPR == 0 || tranche.BorrowAPR >= 1000 {
 			return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1000)")
 		}
-
-		if tranche.MinMaturityFactor == 0 || tranche.MinMaturityFactor > 1000 {
-			return errorsmod.Wrap(ErrInvalidPoolConfig, "min maturity factor must be between (0, 1000]")
-		}
 	}
 
 	return nil
