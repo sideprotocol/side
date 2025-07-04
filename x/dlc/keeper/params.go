@@ -1,7 +1,12 @@
 package keeper
 
 import (
+	"slices"
+
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/sideprotocol/side/x/dlc/types"
 )
 
 // EventNonceQueueSize gets the nonce queue size
@@ -19,13 +24,9 @@ func (k Keeper) NonceGenerationInterval(ctx sdk.Context) int64 {
 	return k.GetParams(ctx).NonceGenerationInterval
 }
 
-// OracleParticipantBaseSet gets the oracle participant base set
-func (k Keeper) OracleParticipantBaseSet(ctx sdk.Context) []string {
-	if len(k.GetParams(ctx).AllowedOracleParticipants) != 0 {
-		return k.GetParams(ctx).AllowedOracleParticipants
-	}
-
-	return k.tssKeeper.AllowedDKGParticipants(ctx)
+// AllowedOracleParticipants gets the allowed oracle participants
+func (k Keeper) AllowedOracleParticipants(ctx sdk.Context) []string {
+	return k.GetParams(ctx).AllowedOracleParticipants
 }
 
 // OracleParticipantNum gets the oracle participant number
@@ -36,4 +37,19 @@ func (k Keeper) OracleParticipantNum(ctx sdk.Context) uint32 {
 // OracleParticipantThreshold gets the oracle participant threshold
 func (k Keeper) OracleParticipantThreshold(ctx sdk.Context) uint32 {
 	return k.GetParams(ctx).OracleParticipantThreshold
+}
+
+// ValidateOracleParticipantAllowlist validates the allowed oracle participants
+func (k Keeper) ValidateOracleParticipantAllowlist(ctx sdk.Context, allowedOracleParticipants []string) error {
+	baseParticipants := k.tssKeeper.AllowedDKGParticipants(ctx)
+
+	if len(allowedOracleParticipants) != 0 && len(baseParticipants) != 0 {
+		for _, p := range allowedOracleParticipants {
+			if !slices.Contains(baseParticipants, p) {
+				return errorsmod.Wrap(types.ErrInvalidParams, "oracle participant not authorized")
+			}
+		}
+	}
+
+	return nil
 }

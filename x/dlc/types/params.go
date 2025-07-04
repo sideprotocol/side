@@ -12,7 +12,7 @@ var (
 	DefaultNonceQueueSize = uint32(1000)
 
 	// default nonce generation batch size
-	DefaultNonceGenerationBatchSize = uint32(200)
+	DefaultNonceGenerationBatchSize = uint32(100)
 
 	// default nonce generation interval in blocks
 	DefaultNonceGenerationInterval = int64(50) // 50 blocks
