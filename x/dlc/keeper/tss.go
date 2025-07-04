@@ -13,6 +13,7 @@ import (
 func (k Keeper) DKGCompletionReceivedHandler(ctx sdk.Context, id uint64, ty string, intent int32, participant string) error {
 	switch ty {
 	case types.DKG_TYPE_NONCE:
+		// set to alive with the current dkg
 		k.SetOracleParticipantLiveness(ctx, &types.OracleParticipantLiveness{
 			ConsensusPubkey: participant,
 			IsAlive:         true,
@@ -48,10 +49,15 @@ func (k Keeper) DKGTimeoutHandler(ctx sdk.Context, id uint64, ty string, intent 
 	switch ty {
 	case types.DKG_TYPE_NONCE:
 		for _, participant := range absentParticipants {
-			k.SetOracleParticipantLiveness(ctx, &types.OracleParticipantLiveness{
-				ConsensusPubkey: participant,
-				IsAlive:         false,
-			})
+			liveness := k.GetOracleParticipantLiveness(ctx, participant)
+			if liveness.LastDkgId > id {
+				// skip if the last dkg is later than the current one
+				continue
+			}
+
+			// set to non-alive
+			liveness.IsAlive = false
+			k.SetOracleParticipantLiveness(ctx, liveness)
 		}
 	}
 
@@ -64,38 +70,38 @@ func (k Keeper) SigningCompletedHandler(ctx sdk.Context, sender string, id uint6
 }
 
 // GetOracleParticipants gets oracle participants
+// First select alive participants, then fallback to random participants if not sufficient
 func (k Keeper) GetOracleParticipants(ctx sdk.Context) []string {
-	// get alive participants
 	aliveParticipants := k.GetAliveOracleParticipants(ctx)
-
-	// check the participant num
-	participantNum := int(k.OracleParticipantNum(ctx))
-	if len(aliveParticipants) < participantNum {
-		return nil
-	}
-
-	if len(aliveParticipants) == participantNum {
+	if len(aliveParticipants) != 0 {
 		return aliveParticipants
 	}
 
-	participants := []string{}
-
-	// select oracle participants randomly from the alive list based on the expected participant number
-	rand := rand.New(rand.NewSource(ctx.BlockTime().Unix()))
-	selectedIndices := rand.Perm(len(aliveParticipants))[0:participantNum]
-	for _, index := range selectedIndices {
-		participants = append(participants, aliveParticipants[index])
-	}
-
-	return participants
+	return k.GetRandomOracleParticipants(ctx)
 }
 
-// GetAliveOracleParticipants gets alive oracle participants
+// GetRandomOracleParticipants gets oracle participants randomly
+func (k Keeper) GetRandomOracleParticipants(ctx sdk.Context) []string {
+	baseParticipants := k.OracleParticipantBaseSet(ctx)
+	participantNum := int(k.OracleParticipantNum(ctx))
+
+	return k.SelectOracleParticipants(ctx, baseParticipants, participantNum)
+}
+
+// GetAliveOracleParticipants gets alive oracle participants randomly
 func (k Keeper) GetAliveOracleParticipants(ctx sdk.Context) []string {
+	aliveParticipants := k.GetAllAliveOracleParticipants(ctx)
+	participantNum := int(k.OracleParticipantNum(ctx))
+
+	return k.SelectOracleParticipants(ctx, aliveParticipants, participantNum)
+}
+
+// GetAllAliveOracleParticipants gets all alive oracle participants
+func (k Keeper) GetAllAliveOracleParticipants(ctx sdk.Context) []string {
 	// get base participants
 	baseParticipants := k.OracleParticipantBaseSet(ctx)
 
-	// get alive participants
+	// filter alive participants
 	aliveParticipants := []string{}
 	for _, participant := range baseParticipants {
 		if k.IsOracleParticipantAlive(ctx, participant) {
@@ -104,4 +110,25 @@ func (k Keeper) GetAliveOracleParticipants(ctx sdk.Context) []string {
 	}
 
 	return aliveParticipants
+}
+
+// SelectOracleParticipants selects oracle participants randomly from the base set based on the specified participant num
+func (k Keeper) SelectOracleParticipants(ctx sdk.Context, baseOracleParticipants []string, participantNum int) []string {
+	if len(baseOracleParticipants) < participantNum {
+		return nil
+	}
+
+	if len(baseOracleParticipants) == participantNum {
+		return baseOracleParticipants
+	}
+
+	selectedParticipants := []string{}
+
+	rand := rand.New(rand.NewSource(ctx.BlockTime().Unix()))
+	selectedIndices := rand.Perm(len(baseOracleParticipants))[0:participantNum]
+	for _, index := range selectedIndices {
+		selectedParticipants = append(selectedParticipants, baseOracleParticipants[index])
+	}
+
+	return selectedParticipants
 }
