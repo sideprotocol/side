@@ -239,7 +239,7 @@ func CollateralRedeemable(loan *Loan) bool {
 		return loan.Status == LoanStatus_Rejected
 	}
 
-	return loan.Status == LoanStatus_Requested || loan.Status == LoanStatus_Rejected
+	return loan.Status == LoanStatus_Requested || loan.Status == LoanStatus_Cancelled || loan.Status == LoanStatus_Rejected
 }
 
 // GetTrancheConfig gets the corresponding tranche config according to the given maturity

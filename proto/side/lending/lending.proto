@@ -144,20 +144,22 @@ enum LoanStatus {
     Unspecified = 0;
     // Loan Requested
     Requested = 1;
+    // Loan Cancelled
+    Cancelled = 2;
     // Loan Authorized
-    Authorized = 2;
+    Authorized = 3;
     // Loan Rejected
-    Rejected = 3;
+    Rejected = 4;
     // Loan Open
-    Open = 4;
+    Open = 5;
     // Loan Repaid
-    Repaid = 5;
+    Repaid = 6;
     // Loan Defaulted
-    Defaulted = 6;
+    Defaulted = 7;
     // Loan Liquidated
-    Liquidated = 7;
+    Liquidated = 8;
     // Loan Closed
-    Closed = 8;
+    Closed = 9;
 }
 
 // Authorization Status
