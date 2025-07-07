@@ -241,7 +241,7 @@ func (m msgServer) SubmitDepositTransaction(goCtx context.Context, msg *types.Ms
 	}
 
 	loan := m.GetLoan(ctx, msg.Vault)
-	if loan.Status != types.LoanStatus_Requested && loan.Status != types.LoanStatus_Authorized && loan.Status != types.LoanStatus_Rejected {
+	if loan.Status != types.LoanStatus_Requested && loan.Status != types.LoanStatus_Cancelled && loan.Status != types.LoanStatus_Authorized && loan.Status != types.LoanStatus_Rejected {
 		return nil, types.ErrInvalidLoanStatus
 	}
 
@@ -375,6 +375,12 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 		sigHashes,
 		nil,
 	)
+
+	// update loan status to cancelled if the current status is requested
+	if loan.Status == types.LoanStatus_Requested {
+		loan.Status = types.LoanStatus_Cancelled
+		m.SetLoan(ctx, loan)
+	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
