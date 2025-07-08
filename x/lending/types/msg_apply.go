@@ -11,7 +11,7 @@ import (
 
 var _ sdk.Msg = &MsgApply{}
 
-func NewMsgApply(borrower string, borrowerPubkey string, borrowerAuthPubkey string, poolId string, borrowAmount sdk.Coin, maturity int64, dcmId uint64, referrer string) *MsgApply {
+func NewMsgApply(borrower string, borrowerPubkey string, borrowerAuthPubkey string, poolId string, borrowAmount sdk.Coin, maturity int64, dcmId uint64, referralCode string) *MsgApply {
 	return &MsgApply{
 		Borrower:           borrower,
 		BorrowerPubkey:     borrowerPubkey,
@@ -20,7 +20,7 @@ func NewMsgApply(borrower string, borrowerPubkey string, borrowerAuthPubkey stri
 		BorrowAmount:       borrowAmount,
 		Maturity:           maturity,
 		DCMId:              dcmId,
-		Referrer:           referrer,
+		ReferralCode:       referralCode,
 	}
 }
 
@@ -60,10 +60,8 @@ func (m *MsgApply) ValidateBasic() error {
 		return errorsmod.Wrap(ErrInvalidMaturity, "maturity must be greater than 0")
 	}
 
-	if len(m.Referrer) != 0 {
-		if _, err := sdk.AccAddressFromBech32(m.Referrer); err != nil {
-			return errorsmod.Wrap(err, "invalid referrer address")
-		}
+	if len(m.ReferralCode) != 0 && !ReferralCodeRegex.MatchString(m.ReferralCode) {
+		return errorsmod.Wrap(ErrInvalidReferralCode, "referral code must be 8 alphanumeric characters")
 	}
 
 	return nil

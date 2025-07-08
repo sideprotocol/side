@@ -37,6 +37,8 @@ var (
 	RepaymentKeyPrefix       = []byte{0x15}
 	DLCMetaKeyPrefix         = []byte{0x16}
 	RedemptionKeyPrefix      = []byte{0x17}
+
+	ReferrerKeyPrefix = []byte{0x20}
 )
 
 func PoolKey(id string) []byte {
@@ -69,4 +71,8 @@ func RepaymentKey(loanId string) []byte {
 
 func RedemptionKey(id uint64) []byte {
 	return append(RedemptionKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+}
+
+func ReferrerKey(referralCode string) []byte {
+	return append(ReferrerKeyPrefix, []byte(referralCode)...)
 }

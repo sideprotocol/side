@@ -72,10 +72,15 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 
 	protocolFee := types.GetProtocolFee(interest, pool.Config.ReserveFactor)
 
+	var referrer *types.Referrer
+	if k.HasReferrer(ctx, loan.ReferralCode) {
+		referrer = k.GetReferrer(ctx, loan.ReferralCode)
+	}
+
 	referralFee := sdkmath.ZeroInt()
 	actualProtocolFee := protocolFee
-	if protocolFee.IsPositive() && types.HasReferralFee(loan, pool) {
-		referralFee = protocolFee.Mul(sdkmath.NewInt(int64(pool.Config.ReferralFeeFactor))).Quo(types.Permille)
+	if protocolFee.IsPositive() && referrer != nil {
+		referralFee = protocolFee.ToLegacyDec().Mul(referrer.ReferralFeeFactor).TruncateInt()
 		actualProtocolFee = protocolFee.Sub(referralFee)
 	}
 
@@ -90,7 +95,7 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 	}
 
 	if referralFee.IsPositive() {
-		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(loan.Referrer), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, referralFee))); err != nil {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAccount, sdk.MustAccAddressFromBech32(referrer.Address), sdk.NewCoins(sdk.NewCoin(debtAmount.Denom, referralFee))); err != nil {
 			return err
 		}
 	}
