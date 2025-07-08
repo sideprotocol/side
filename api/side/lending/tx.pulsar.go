@@ -5,6 +5,7 @@ import (
 	v1beta1 "cosmossdk.io/api/cosmos/base/v1beta1"
 	_ "cosmossdk.io/api/cosmos/msg/v1"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -4476,7 +4477,7 @@ var (
 	fd_MsgApply_borrow_amount        protoreflect.FieldDescriptor
 	fd_MsgApply_maturity             protoreflect.FieldDescriptor
 	fd_MsgApply_dcm_id               protoreflect.FieldDescriptor
-	fd_MsgApply_referrer             protoreflect.FieldDescriptor
+	fd_MsgApply_referral_code        protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -4489,7 +4490,7 @@ func init() {
 	fd_MsgApply_borrow_amount = md_MsgApply.Fields().ByName("borrow_amount")
 	fd_MsgApply_maturity = md_MsgApply.Fields().ByName("maturity")
 	fd_MsgApply_dcm_id = md_MsgApply.Fields().ByName("dcm_id")
-	fd_MsgApply_referrer = md_MsgApply.Fields().ByName("referrer")
+	fd_MsgApply_referral_code = md_MsgApply.Fields().ByName("referral_code")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgApply)(nil)
@@ -4599,9 +4600,9 @@ func (x *fastReflection_MsgApply) Range(f func(protoreflect.FieldDescriptor, pro
 			return
 		}
 	}
-	if x.Referrer != "" {
-		value := protoreflect.ValueOfString(x.Referrer)
-		if !f(fd_MsgApply_referrer, value) {
+	if x.ReferralCode != "" {
+		value := protoreflect.ValueOfString(x.ReferralCode)
+		if !f(fd_MsgApply_referral_code, value) {
 			return
 		}
 	}
@@ -4634,8 +4635,8 @@ func (x *fastReflection_MsgApply) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Maturity != int64(0)
 	case "side.lending.MsgApply.dcm_id":
 		return x.DcmId != uint64(0)
-	case "side.lending.MsgApply.referrer":
-		return x.Referrer != ""
+	case "side.lending.MsgApply.referral_code":
+		return x.ReferralCode != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
@@ -4666,8 +4667,8 @@ func (x *fastReflection_MsgApply) Clear(fd protoreflect.FieldDescriptor) {
 		x.Maturity = int64(0)
 	case "side.lending.MsgApply.dcm_id":
 		x.DcmId = uint64(0)
-	case "side.lending.MsgApply.referrer":
-		x.Referrer = ""
+	case "side.lending.MsgApply.referral_code":
+		x.ReferralCode = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
@@ -4705,8 +4706,8 @@ func (x *fastReflection_MsgApply) Get(descriptor protoreflect.FieldDescriptor) p
 	case "side.lending.MsgApply.dcm_id":
 		value := x.DcmId
 		return protoreflect.ValueOfUint64(value)
-	case "side.lending.MsgApply.referrer":
-		value := x.Referrer
+	case "side.lending.MsgApply.referral_code":
+		value := x.ReferralCode
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -4742,8 +4743,8 @@ func (x *fastReflection_MsgApply) Set(fd protoreflect.FieldDescriptor, value pro
 		x.Maturity = value.Int()
 	case "side.lending.MsgApply.dcm_id":
 		x.DcmId = value.Uint()
-	case "side.lending.MsgApply.referrer":
-		x.Referrer = value.Interface().(string)
+	case "side.lending.MsgApply.referral_code":
+		x.ReferralCode = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
@@ -4781,8 +4782,8 @@ func (x *fastReflection_MsgApply) Mutable(fd protoreflect.FieldDescriptor) proto
 		panic(fmt.Errorf("field maturity of message side.lending.MsgApply is not mutable"))
 	case "side.lending.MsgApply.dcm_id":
 		panic(fmt.Errorf("field dcm_id of message side.lending.MsgApply is not mutable"))
-	case "side.lending.MsgApply.referrer":
-		panic(fmt.Errorf("field referrer of message side.lending.MsgApply is not mutable"))
+	case "side.lending.MsgApply.referral_code":
+		panic(fmt.Errorf("field referral_code of message side.lending.MsgApply is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgApply"))
@@ -4811,7 +4812,7 @@ func (x *fastReflection_MsgApply) NewField(fd protoreflect.FieldDescriptor) prot
 		return protoreflect.ValueOfInt64(int64(0))
 	case "side.lending.MsgApply.dcm_id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "side.lending.MsgApply.referrer":
+	case "side.lending.MsgApply.referral_code":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -4908,7 +4909,7 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 		if x.DcmId != 0 {
 			n += 1 + runtime.Sov(uint64(x.DcmId))
 		}
-		l = len(x.Referrer)
+		l = len(x.ReferralCode)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -4941,10 +4942,10 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Referrer) > 0 {
-			i -= len(x.Referrer)
-			copy(dAtA[i:], x.Referrer)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Referrer)))
+		if len(x.ReferralCode) > 0 {
+			i -= len(x.ReferralCode)
+			copy(dAtA[i:], x.ReferralCode)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReferralCode)))
 			i--
 			dAtA[i] = 0x42
 		}
@@ -5253,7 +5254,7 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 				}
 			case 8:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Referrer", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReferralCode", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -5281,7 +5282,7 @@ func (x *fastReflection_MsgApply) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Referrer = string(dAtA[iNdEx:postIndex])
+				x.ReferralCode = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -9259,6 +9260,2070 @@ func (x *fastReflection_MsgRedeemResponse) ProtoMethods() *protoiface.Methods {
 }
 
 var (
+	md_MsgRegisterReferrer                     protoreflect.MessageDescriptor
+	fd_MsgRegisterReferrer_authority           protoreflect.FieldDescriptor
+	fd_MsgRegisterReferrer_name                protoreflect.FieldDescriptor
+	fd_MsgRegisterReferrer_referral_code       protoreflect.FieldDescriptor
+	fd_MsgRegisterReferrer_address             protoreflect.FieldDescriptor
+	fd_MsgRegisterReferrer_referral_fee_factor protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_lending_tx_proto_init()
+	md_MsgRegisterReferrer = File_side_lending_tx_proto.Messages().ByName("MsgRegisterReferrer")
+	fd_MsgRegisterReferrer_authority = md_MsgRegisterReferrer.Fields().ByName("authority")
+	fd_MsgRegisterReferrer_name = md_MsgRegisterReferrer.Fields().ByName("name")
+	fd_MsgRegisterReferrer_referral_code = md_MsgRegisterReferrer.Fields().ByName("referral_code")
+	fd_MsgRegisterReferrer_address = md_MsgRegisterReferrer.Fields().ByName("address")
+	fd_MsgRegisterReferrer_referral_fee_factor = md_MsgRegisterReferrer.Fields().ByName("referral_fee_factor")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgRegisterReferrer)(nil)
+
+type fastReflection_MsgRegisterReferrer MsgRegisterReferrer
+
+func (x *MsgRegisterReferrer) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRegisterReferrer)(x)
+}
+
+func (x *MsgRegisterReferrer) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_lending_tx_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgRegisterReferrer_messageType fastReflection_MsgRegisterReferrer_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRegisterReferrer_messageType{}
+
+type fastReflection_MsgRegisterReferrer_messageType struct{}
+
+func (x fastReflection_MsgRegisterReferrer_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRegisterReferrer)(nil)
+}
+func (x fastReflection_MsgRegisterReferrer_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRegisterReferrer)
+}
+func (x fastReflection_MsgRegisterReferrer_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRegisterReferrer
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgRegisterReferrer) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRegisterReferrer
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgRegisterReferrer) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRegisterReferrer_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgRegisterReferrer) New() protoreflect.Message {
+	return new(fastReflection_MsgRegisterReferrer)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgRegisterReferrer) Interface() protoreflect.ProtoMessage {
+	return (*MsgRegisterReferrer)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgRegisterReferrer) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Authority != "" {
+		value := protoreflect.ValueOfString(x.Authority)
+		if !f(fd_MsgRegisterReferrer_authority, value) {
+			return
+		}
+	}
+	if x.Name != "" {
+		value := protoreflect.ValueOfString(x.Name)
+		if !f(fd_MsgRegisterReferrer_name, value) {
+			return
+		}
+	}
+	if x.ReferralCode != "" {
+		value := protoreflect.ValueOfString(x.ReferralCode)
+		if !f(fd_MsgRegisterReferrer_referral_code, value) {
+			return
+		}
+	}
+	if x.Address != "" {
+		value := protoreflect.ValueOfString(x.Address)
+		if !f(fd_MsgRegisterReferrer_address, value) {
+			return
+		}
+	}
+	if x.ReferralFeeFactor != "" {
+		value := protoreflect.ValueOfString(x.ReferralFeeFactor)
+		if !f(fd_MsgRegisterReferrer_referral_fee_factor, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgRegisterReferrer) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.lending.MsgRegisterReferrer.authority":
+		return x.Authority != ""
+	case "side.lending.MsgRegisterReferrer.name":
+		return x.Name != ""
+	case "side.lending.MsgRegisterReferrer.referral_code":
+		return x.ReferralCode != ""
+	case "side.lending.MsgRegisterReferrer.address":
+		return x.Address != ""
+	case "side.lending.MsgRegisterReferrer.referral_fee_factor":
+		return x.ReferralFeeFactor != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRegisterReferrer) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.lending.MsgRegisterReferrer.authority":
+		x.Authority = ""
+	case "side.lending.MsgRegisterReferrer.name":
+		x.Name = ""
+	case "side.lending.MsgRegisterReferrer.referral_code":
+		x.ReferralCode = ""
+	case "side.lending.MsgRegisterReferrer.address":
+		x.Address = ""
+	case "side.lending.MsgRegisterReferrer.referral_fee_factor":
+		x.ReferralFeeFactor = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgRegisterReferrer) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.lending.MsgRegisterReferrer.authority":
+		value := x.Authority
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgRegisterReferrer.name":
+		value := x.Name
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgRegisterReferrer.referral_code":
+		value := x.ReferralCode
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgRegisterReferrer.address":
+		value := x.Address
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgRegisterReferrer.referral_fee_factor":
+		value := x.ReferralFeeFactor
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrer does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRegisterReferrer) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.lending.MsgRegisterReferrer.authority":
+		x.Authority = value.Interface().(string)
+	case "side.lending.MsgRegisterReferrer.name":
+		x.Name = value.Interface().(string)
+	case "side.lending.MsgRegisterReferrer.referral_code":
+		x.ReferralCode = value.Interface().(string)
+	case "side.lending.MsgRegisterReferrer.address":
+		x.Address = value.Interface().(string)
+	case "side.lending.MsgRegisterReferrer.referral_fee_factor":
+		x.ReferralFeeFactor = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRegisterReferrer) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.lending.MsgRegisterReferrer.authority":
+		panic(fmt.Errorf("field authority of message side.lending.MsgRegisterReferrer is not mutable"))
+	case "side.lending.MsgRegisterReferrer.name":
+		panic(fmt.Errorf("field name of message side.lending.MsgRegisterReferrer is not mutable"))
+	case "side.lending.MsgRegisterReferrer.referral_code":
+		panic(fmt.Errorf("field referral_code of message side.lending.MsgRegisterReferrer is not mutable"))
+	case "side.lending.MsgRegisterReferrer.address":
+		panic(fmt.Errorf("field address of message side.lending.MsgRegisterReferrer is not mutable"))
+	case "side.lending.MsgRegisterReferrer.referral_fee_factor":
+		panic(fmt.Errorf("field referral_fee_factor of message side.lending.MsgRegisterReferrer is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgRegisterReferrer) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.lending.MsgRegisterReferrer.authority":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgRegisterReferrer.name":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgRegisterReferrer.referral_code":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgRegisterReferrer.address":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgRegisterReferrer.referral_fee_factor":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgRegisterReferrer) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgRegisterReferrer", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgRegisterReferrer) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRegisterReferrer) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgRegisterReferrer) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgRegisterReferrer) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgRegisterReferrer)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Authority)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Name)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ReferralCode)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Address)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ReferralFeeFactor)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgRegisterReferrer)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.ReferralFeeFactor) > 0 {
+			i -= len(x.ReferralFeeFactor)
+			copy(dAtA[i:], x.ReferralFeeFactor)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReferralFeeFactor)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.Address) > 0 {
+			i -= len(x.Address)
+			copy(dAtA[i:], x.Address)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.ReferralCode) > 0 {
+			i -= len(x.ReferralCode)
+			copy(dAtA[i:], x.ReferralCode)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReferralCode)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Name) > 0 {
+			i -= len(x.Name)
+			copy(dAtA[i:], x.Name)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Name)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Authority) > 0 {
+			i -= len(x.Authority)
+			copy(dAtA[i:], x.Authority)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Authority)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgRegisterReferrer)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterReferrer: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterReferrer: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Authority = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Name = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReferralCode", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ReferralCode = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Address = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReferralFeeFactor", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ReferralFeeFactor = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgRegisterReferrerResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_side_lending_tx_proto_init()
+	md_MsgRegisterReferrerResponse = File_side_lending_tx_proto.Messages().ByName("MsgRegisterReferrerResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgRegisterReferrerResponse)(nil)
+
+type fastReflection_MsgRegisterReferrerResponse MsgRegisterReferrerResponse
+
+func (x *MsgRegisterReferrerResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRegisterReferrerResponse)(x)
+}
+
+func (x *MsgRegisterReferrerResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_lending_tx_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgRegisterReferrerResponse_messageType fastReflection_MsgRegisterReferrerResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRegisterReferrerResponse_messageType{}
+
+type fastReflection_MsgRegisterReferrerResponse_messageType struct{}
+
+func (x fastReflection_MsgRegisterReferrerResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRegisterReferrerResponse)(nil)
+}
+func (x fastReflection_MsgRegisterReferrerResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRegisterReferrerResponse)
+}
+func (x fastReflection_MsgRegisterReferrerResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRegisterReferrerResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgRegisterReferrerResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRegisterReferrerResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgRegisterReferrerResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRegisterReferrerResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgRegisterReferrerResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgRegisterReferrerResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgRegisterReferrerResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgRegisterReferrerResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgRegisterReferrerResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgRegisterReferrerResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRegisterReferrerResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgRegisterReferrerResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrerResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRegisterReferrerResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRegisterReferrerResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgRegisterReferrerResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgRegisterReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgRegisterReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgRegisterReferrerResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgRegisterReferrerResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgRegisterReferrerResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRegisterReferrerResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgRegisterReferrerResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgRegisterReferrerResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgRegisterReferrerResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgRegisterReferrerResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgRegisterReferrerResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterReferrerResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterReferrerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgUpdateReferrer                     protoreflect.MessageDescriptor
+	fd_MsgUpdateReferrer_authority           protoreflect.FieldDescriptor
+	fd_MsgUpdateReferrer_name                protoreflect.FieldDescriptor
+	fd_MsgUpdateReferrer_referral_code       protoreflect.FieldDescriptor
+	fd_MsgUpdateReferrer_address             protoreflect.FieldDescriptor
+	fd_MsgUpdateReferrer_referral_fee_factor protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_lending_tx_proto_init()
+	md_MsgUpdateReferrer = File_side_lending_tx_proto.Messages().ByName("MsgUpdateReferrer")
+	fd_MsgUpdateReferrer_authority = md_MsgUpdateReferrer.Fields().ByName("authority")
+	fd_MsgUpdateReferrer_name = md_MsgUpdateReferrer.Fields().ByName("name")
+	fd_MsgUpdateReferrer_referral_code = md_MsgUpdateReferrer.Fields().ByName("referral_code")
+	fd_MsgUpdateReferrer_address = md_MsgUpdateReferrer.Fields().ByName("address")
+	fd_MsgUpdateReferrer_referral_fee_factor = md_MsgUpdateReferrer.Fields().ByName("referral_fee_factor")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgUpdateReferrer)(nil)
+
+type fastReflection_MsgUpdateReferrer MsgUpdateReferrer
+
+func (x *MsgUpdateReferrer) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgUpdateReferrer)(x)
+}
+
+func (x *MsgUpdateReferrer) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_lending_tx_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgUpdateReferrer_messageType fastReflection_MsgUpdateReferrer_messageType
+var _ protoreflect.MessageType = fastReflection_MsgUpdateReferrer_messageType{}
+
+type fastReflection_MsgUpdateReferrer_messageType struct{}
+
+func (x fastReflection_MsgUpdateReferrer_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgUpdateReferrer)(nil)
+}
+func (x fastReflection_MsgUpdateReferrer_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgUpdateReferrer)
+}
+func (x fastReflection_MsgUpdateReferrer_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgUpdateReferrer
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgUpdateReferrer) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgUpdateReferrer
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgUpdateReferrer) Type() protoreflect.MessageType {
+	return _fastReflection_MsgUpdateReferrer_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgUpdateReferrer) New() protoreflect.Message {
+	return new(fastReflection_MsgUpdateReferrer)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgUpdateReferrer) Interface() protoreflect.ProtoMessage {
+	return (*MsgUpdateReferrer)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgUpdateReferrer) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Authority != "" {
+		value := protoreflect.ValueOfString(x.Authority)
+		if !f(fd_MsgUpdateReferrer_authority, value) {
+			return
+		}
+	}
+	if x.Name != "" {
+		value := protoreflect.ValueOfString(x.Name)
+		if !f(fd_MsgUpdateReferrer_name, value) {
+			return
+		}
+	}
+	if x.ReferralCode != "" {
+		value := protoreflect.ValueOfString(x.ReferralCode)
+		if !f(fd_MsgUpdateReferrer_referral_code, value) {
+			return
+		}
+	}
+	if x.Address != "" {
+		value := protoreflect.ValueOfString(x.Address)
+		if !f(fd_MsgUpdateReferrer_address, value) {
+			return
+		}
+	}
+	if x.ReferralFeeFactor != "" {
+		value := protoreflect.ValueOfString(x.ReferralFeeFactor)
+		if !f(fd_MsgUpdateReferrer_referral_fee_factor, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgUpdateReferrer) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.lending.MsgUpdateReferrer.authority":
+		return x.Authority != ""
+	case "side.lending.MsgUpdateReferrer.name":
+		return x.Name != ""
+	case "side.lending.MsgUpdateReferrer.referral_code":
+		return x.ReferralCode != ""
+	case "side.lending.MsgUpdateReferrer.address":
+		return x.Address != ""
+	case "side.lending.MsgUpdateReferrer.referral_fee_factor":
+		return x.ReferralFeeFactor != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgUpdateReferrer) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.lending.MsgUpdateReferrer.authority":
+		x.Authority = ""
+	case "side.lending.MsgUpdateReferrer.name":
+		x.Name = ""
+	case "side.lending.MsgUpdateReferrer.referral_code":
+		x.ReferralCode = ""
+	case "side.lending.MsgUpdateReferrer.address":
+		x.Address = ""
+	case "side.lending.MsgUpdateReferrer.referral_fee_factor":
+		x.ReferralFeeFactor = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgUpdateReferrer) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.lending.MsgUpdateReferrer.authority":
+		value := x.Authority
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgUpdateReferrer.name":
+		value := x.Name
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgUpdateReferrer.referral_code":
+		value := x.ReferralCode
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgUpdateReferrer.address":
+		value := x.Address
+		return protoreflect.ValueOfString(value)
+	case "side.lending.MsgUpdateReferrer.referral_fee_factor":
+		value := x.ReferralFeeFactor
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrer does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgUpdateReferrer) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.lending.MsgUpdateReferrer.authority":
+		x.Authority = value.Interface().(string)
+	case "side.lending.MsgUpdateReferrer.name":
+		x.Name = value.Interface().(string)
+	case "side.lending.MsgUpdateReferrer.referral_code":
+		x.ReferralCode = value.Interface().(string)
+	case "side.lending.MsgUpdateReferrer.address":
+		x.Address = value.Interface().(string)
+	case "side.lending.MsgUpdateReferrer.referral_fee_factor":
+		x.ReferralFeeFactor = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgUpdateReferrer) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.lending.MsgUpdateReferrer.authority":
+		panic(fmt.Errorf("field authority of message side.lending.MsgUpdateReferrer is not mutable"))
+	case "side.lending.MsgUpdateReferrer.name":
+		panic(fmt.Errorf("field name of message side.lending.MsgUpdateReferrer is not mutable"))
+	case "side.lending.MsgUpdateReferrer.referral_code":
+		panic(fmt.Errorf("field referral_code of message side.lending.MsgUpdateReferrer is not mutable"))
+	case "side.lending.MsgUpdateReferrer.address":
+		panic(fmt.Errorf("field address of message side.lending.MsgUpdateReferrer is not mutable"))
+	case "side.lending.MsgUpdateReferrer.referral_fee_factor":
+		panic(fmt.Errorf("field referral_fee_factor of message side.lending.MsgUpdateReferrer is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgUpdateReferrer) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.lending.MsgUpdateReferrer.authority":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgUpdateReferrer.name":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgUpdateReferrer.referral_code":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgUpdateReferrer.address":
+		return protoreflect.ValueOfString("")
+	case "side.lending.MsgUpdateReferrer.referral_fee_factor":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrer"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrer does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgUpdateReferrer) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgUpdateReferrer", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgUpdateReferrer) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgUpdateReferrer) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgUpdateReferrer) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgUpdateReferrer) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgUpdateReferrer)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Authority)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Name)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ReferralCode)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Address)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ReferralFeeFactor)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgUpdateReferrer)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.ReferralFeeFactor) > 0 {
+			i -= len(x.ReferralFeeFactor)
+			copy(dAtA[i:], x.ReferralFeeFactor)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReferralFeeFactor)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.Address) > 0 {
+			i -= len(x.Address)
+			copy(dAtA[i:], x.Address)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.ReferralCode) > 0 {
+			i -= len(x.ReferralCode)
+			copy(dAtA[i:], x.ReferralCode)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReferralCode)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Name) > 0 {
+			i -= len(x.Name)
+			copy(dAtA[i:], x.Name)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Name)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Authority) > 0 {
+			i -= len(x.Authority)
+			copy(dAtA[i:], x.Authority)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Authority)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgUpdateReferrer)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdateReferrer: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdateReferrer: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Authority = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Name = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReferralCode", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ReferralCode = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Address = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReferralFeeFactor", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ReferralFeeFactor = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgUpdateReferrerResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_side_lending_tx_proto_init()
+	md_MsgUpdateReferrerResponse = File_side_lending_tx_proto.Messages().ByName("MsgUpdateReferrerResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgUpdateReferrerResponse)(nil)
+
+type fastReflection_MsgUpdateReferrerResponse MsgUpdateReferrerResponse
+
+func (x *MsgUpdateReferrerResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgUpdateReferrerResponse)(x)
+}
+
+func (x *MsgUpdateReferrerResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_lending_tx_proto_msgTypes[21]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgUpdateReferrerResponse_messageType fastReflection_MsgUpdateReferrerResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgUpdateReferrerResponse_messageType{}
+
+type fastReflection_MsgUpdateReferrerResponse_messageType struct{}
+
+func (x fastReflection_MsgUpdateReferrerResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgUpdateReferrerResponse)(nil)
+}
+func (x fastReflection_MsgUpdateReferrerResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgUpdateReferrerResponse)
+}
+func (x fastReflection_MsgUpdateReferrerResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgUpdateReferrerResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgUpdateReferrerResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgUpdateReferrerResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgUpdateReferrerResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgUpdateReferrerResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgUpdateReferrerResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgUpdateReferrerResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgUpdateReferrerResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgUpdateReferrerResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgUpdateReferrerResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgUpdateReferrerResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgUpdateReferrerResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgUpdateReferrerResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrerResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgUpdateReferrerResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgUpdateReferrerResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgUpdateReferrerResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.lending.MsgUpdateReferrerResponse"))
+		}
+		panic(fmt.Errorf("message side.lending.MsgUpdateReferrerResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgUpdateReferrerResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.lending.MsgUpdateReferrerResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgUpdateReferrerResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgUpdateReferrerResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgUpdateReferrerResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgUpdateReferrerResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgUpdateReferrerResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgUpdateReferrerResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgUpdateReferrerResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdateReferrerResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdateReferrerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_MsgUpdateParams           protoreflect.MessageDescriptor
 	fd_MsgUpdateParams_authority protoreflect.FieldDescriptor
 	fd_MsgUpdateParams_params    protoreflect.FieldDescriptor
@@ -9280,7 +11345,7 @@ func (x *MsgUpdateParams) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUpdateParams) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_tx_proto_msgTypes[18]
+	mi := &file_side_lending_tx_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9775,7 +11840,7 @@ func (x *MsgUpdateParamsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUpdateParamsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_lending_tx_proto_msgTypes[19]
+	mi := &file_side_lending_tx_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10513,7 +12578,7 @@ type MsgApply struct {
 	BorrowAmount       *v1beta1.Coin `protobuf:"bytes,5,opt,name=borrow_amount,json=borrowAmount,proto3" json:"borrow_amount,omitempty"`
 	Maturity           int64         `protobuf:"varint,6,opt,name=maturity,proto3" json:"maturity,omitempty"`
 	DcmId              uint64        `protobuf:"varint,7,opt,name=dcm_id,json=dcmId,proto3" json:"dcm_id,omitempty"`
-	Referrer           string        `protobuf:"bytes,8,opt,name=referrer,proto3" json:"referrer,omitempty"`
+	ReferralCode       string        `protobuf:"bytes,8,opt,name=referral_code,json=referralCode,proto3" json:"referral_code,omitempty"`
 }
 
 func (x *MsgApply) Reset() {
@@ -10585,9 +12650,9 @@ func (x *MsgApply) GetDcmId() uint64 {
 	return 0
 }
 
-func (x *MsgApply) GetReferrer() string {
+func (x *MsgApply) GetReferralCode() string {
 	if x != nil {
-		return x.Referrer
+		return x.ReferralCode
 	}
 	return ""
 }
@@ -10913,6 +12978,206 @@ func (*MsgRedeemResponse) Descriptor() ([]byte, []int) {
 	return file_side_lending_tx_proto_rawDescGZIP(), []int{17}
 }
 
+// MsgRegisterReferrer is the Msg/RegisterReferrer request type.
+type MsgRegisterReferrer struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// authority is the address that controls the module (defaults to x/gov unless overwritten).
+	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
+	// Optional referrer name
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Unique referral code with 8 alphanumeric characters
+	ReferralCode string `protobuf:"bytes,3,opt,name=referral_code,json=referralCode,proto3" json:"referral_code,omitempty"`
+	// Referrer address
+	Address string `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
+	// Referral fee factor
+	ReferralFeeFactor string `protobuf:"bytes,5,opt,name=referral_fee_factor,json=referralFeeFactor,proto3" json:"referral_fee_factor,omitempty"`
+}
+
+func (x *MsgRegisterReferrer) Reset() {
+	*x = MsgRegisterReferrer{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_lending_tx_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgRegisterReferrer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgRegisterReferrer) ProtoMessage() {}
+
+// Deprecated: Use MsgRegisterReferrer.ProtoReflect.Descriptor instead.
+func (*MsgRegisterReferrer) Descriptor() ([]byte, []int) {
+	return file_side_lending_tx_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *MsgRegisterReferrer) GetAuthority() string {
+	if x != nil {
+		return x.Authority
+	}
+	return ""
+}
+
+func (x *MsgRegisterReferrer) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *MsgRegisterReferrer) GetReferralCode() string {
+	if x != nil {
+		return x.ReferralCode
+	}
+	return ""
+}
+
+func (x *MsgRegisterReferrer) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *MsgRegisterReferrer) GetReferralFeeFactor() string {
+	if x != nil {
+		return x.ReferralFeeFactor
+	}
+	return ""
+}
+
+// MsgRegisterReferrerResponse defines the Msg/RegisterReferrer response type.
+type MsgRegisterReferrerResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgRegisterReferrerResponse) Reset() {
+	*x = MsgRegisterReferrerResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_lending_tx_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgRegisterReferrerResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgRegisterReferrerResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgRegisterReferrerResponse.ProtoReflect.Descriptor instead.
+func (*MsgRegisterReferrerResponse) Descriptor() ([]byte, []int) {
+	return file_side_lending_tx_proto_rawDescGZIP(), []int{19}
+}
+
+// MsgUpdateReferrer is the Msg/UpdateReferrer request type.
+type MsgUpdateReferrer struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// authority is the address that controls the module (defaults to x/gov unless overwritten).
+	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
+	// new referrer name
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Unique referral code with 8 alphanumeric characters
+	ReferralCode string `protobuf:"bytes,3,opt,name=referral_code,json=referralCode,proto3" json:"referral_code,omitempty"`
+	// new referrer address
+	Address string `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
+	// new referral fee factor
+	ReferralFeeFactor string `protobuf:"bytes,5,opt,name=referral_fee_factor,json=referralFeeFactor,proto3" json:"referral_fee_factor,omitempty"`
+}
+
+func (x *MsgUpdateReferrer) Reset() {
+	*x = MsgUpdateReferrer{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_lending_tx_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgUpdateReferrer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgUpdateReferrer) ProtoMessage() {}
+
+// Deprecated: Use MsgUpdateReferrer.ProtoReflect.Descriptor instead.
+func (*MsgUpdateReferrer) Descriptor() ([]byte, []int) {
+	return file_side_lending_tx_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *MsgUpdateReferrer) GetAuthority() string {
+	if x != nil {
+		return x.Authority
+	}
+	return ""
+}
+
+func (x *MsgUpdateReferrer) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *MsgUpdateReferrer) GetReferralCode() string {
+	if x != nil {
+		return x.ReferralCode
+	}
+	return ""
+}
+
+func (x *MsgUpdateReferrer) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *MsgUpdateReferrer) GetReferralFeeFactor() string {
+	if x != nil {
+		return x.ReferralFeeFactor
+	}
+	return ""
+}
+
+// MsgUpdateReferrerResponse defines the Msg/UpdateReferrer response type.
+type MsgUpdateReferrerResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgUpdateReferrerResponse) Reset() {
+	*x = MsgUpdateReferrerResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_lending_tx_proto_msgTypes[21]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgUpdateReferrerResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgUpdateReferrerResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgUpdateReferrerResponse.ProtoReflect.Descriptor instead.
+func (*MsgUpdateReferrerResponse) Descriptor() ([]byte, []int) {
+	return file_side_lending_tx_proto_rawDescGZIP(), []int{21}
+}
+
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //
 // Since: cosmos-sdk 0.47
@@ -10932,7 +13197,7 @@ type MsgUpdateParams struct {
 func (x *MsgUpdateParams) Reset() {
 	*x = MsgUpdateParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_lending_tx_proto_msgTypes[18]
+		mi := &file_side_lending_tx_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10946,7 +13211,7 @@ func (*MsgUpdateParams) ProtoMessage() {}
 
 // Deprecated: Use MsgUpdateParams.ProtoReflect.Descriptor instead.
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
-	return file_side_lending_tx_proto_rawDescGZIP(), []int{18}
+	return file_side_lending_tx_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *MsgUpdateParams) GetAuthority() string {
@@ -10975,7 +13240,7 @@ type MsgUpdateParamsResponse struct {
 func (x *MsgUpdateParamsResponse) Reset() {
 	*x = MsgUpdateParamsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_lending_tx_proto_msgTypes[19]
+		mi := &file_side_lending_tx_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10989,7 +13254,7 @@ func (*MsgUpdateParamsResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgUpdateParamsResponse.ProtoReflect.Descriptor instead.
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
-	return file_side_lending_tx_proto_rawDescGZIP(), []int{19}
+	return file_side_lending_tx_proto_rawDescGZIP(), []int{23}
 }
 
 var File_side_lending_tx_proto protoreflect.FileDescriptor
@@ -11002,203 +13267,252 @@ var file_side_lending_tx_proto_rawDesc = []byte{
 	0x6d, 0x6f, 0x73, 0x2f, 0x6d, 0x73, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6d, 0x73, 0x67, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73,
 	0x65, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1a, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x1a, 0x19, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x70,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x85, 0x01, 0x0a, 0x0d,
-	0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x1c, 0x0a,
-	0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69,
-	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x36, 0x0a, 0x06, 0x63,
-	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x43,
-	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x63, 0x6f, 0x6e,
-	0x66, 0x69, 0x67, 0x3a, 0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
-	0x69, 0x74, 0x79, 0x22, 0x17, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
-	0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x94, 0x01, 0x0a,
-	0x13, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f,
-	0x6e, 0x66, 0x69, 0x67, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74,
-	0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
-	0x74, 0x79, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x36, 0x0a, 0x06, 0x63,
-	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x43,
-	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x63, 0x6f, 0x6e,
-	0x66, 0x69, 0x67, 0x3a, 0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
-	0x69, 0x74, 0x79, 0x22, 0x1d, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x4e, 0x0a, 0x08, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x12, 0x1a,
-	0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f,
-	0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61,
-	0x6e, 0x49, 0x64, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
-	0x65, 0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x88, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x41, 0x64,
-	0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x6c, 0x65,
-	0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x65, 0x6e, 0x64,
-	0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x37, 0x0a, 0x06, 0x61,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
-	0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d,
-	0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65,
-	0x72, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f, 0x0a, 0x12,
-	0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x44, 0x0a, 0x07, 0x79, 0x74,
-	0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
-	0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x0f, 0xc8, 0xde, 0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x07,
-	0x59, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x52, 0x07, 0x79, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x73,
-	0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x1c, 0x0a,
-	0x1a, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xc9, 0x02, 0x0a, 0x08,
-	0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72,
-	0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72,
-	0x6f, 0x77, 0x65, 0x72, 0x12, 0x27, 0x0a, 0x0f, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72,
-	0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x62,
-	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x30, 0x0a,
-	0x14, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x5f, 0x70,
-	0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x12, 0x62, 0x6f, 0x72,
-	0x72, 0x6f, 0x77, 0x65, 0x72, 0x41, 0x75, 0x74, 0x68, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12,
-	0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x44, 0x0a, 0x0d, 0x62, 0x6f, 0x72, 0x72,
-	0x6f, 0x77, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31,
-	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00,
-	0x52, 0x0c, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1a,
-	0x0a, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03,
-	0x52, 0x08, 0x6d, 0x61, 0x74, 0x75, 0x72, 0x69, 0x74, 0x79, 0x12, 0x20, 0x0a, 0x06, 0x64, 0x63,
-	0x6d, 0x5f, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x04, 0x42, 0x09, 0xe2, 0xde, 0x1f, 0x05,
-	0x44, 0x43, 0x4d, 0x49, 0x64, 0x52, 0x05, 0x64, 0x63, 0x6d, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08,
-	0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
-	0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62,
-	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x41, 0x70,
-	0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x90, 0x03, 0x0a, 0x0d,
-	0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x12, 0x1a, 0x0a,
-	0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61,
-	0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e,
-	0x49, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78,
-	0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x54, 0x78, 0x73, 0x12, 0x27, 0x0a, 0x0f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x44, 0x0a, 0x1e,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x61, 0x64, 0x61, 0x70,
-	0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x05,
-	0x20, 0x03, 0x28, 0x09, 0x52, 0x1c, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72,
-	0x65, 0x73, 0x12, 0x53, 0x0a, 0x26, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x61, 0x64, 0x61, 0x70, 0x74, 0x6f,
-	0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x06, 0x20, 0x03,
-	0x28, 0x09, 0x52, 0x23, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x4c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67,
-	0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x70, 0x61, 0x79,
-	0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
-	0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x65, 0x74, 0x12, 0x31, 0x0a, 0x14,
-	0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52, 0x13, 0x72, 0x65, 0x70, 0x61,
-	0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a,
-	0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x17,
-	0x0a, 0x15, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xaf, 0x01, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x53,
-	0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61, 0x6e,
-	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79,
-	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65,
-	0x72, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x05, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x70, 0x6f, 0x73,
-	0x69, 0x74, 0x5f, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x70,
-	0x6f, 0x73, 0x69, 0x74, 0x54, 0x78, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f,
-	0x68, 0x61, 0x73, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x48, 0x61, 0x73, 0x68, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x18, 0x05,
-	0x20, 0x03, 0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x3a, 0x0c, 0x82, 0xe7, 0xb0,
-	0x2a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x22, 0x25, 0x0a, 0x23, 0x4d, 0x73, 0x67,
+	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
+	0x1a, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x73, 0x69, 0x64,
+	0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x85, 0x01, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68,
+	0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x36, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x3a, 0x0e,
+	0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0x17,
+	0x0a, 0x15, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x94, 0x01, 0x0a, 0x13, 0x4d, 0x73, 0x67, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12,
+	0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x17, 0x0a,
+	0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x36, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x3a, 0x0e,
+	0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0x1d,
+	0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4e, 0x0a,
+	0x08, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72,
+	0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72,
+	0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x3a, 0x0d,
+	0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x12, 0x0a,
+	0x10, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x88, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x17, 0x0a,
+	0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69,
+	0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a,
+	0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x19, 0x0a, 0x17,
+	0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x52, 0x65,
+	0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x16, 0x0a,
+	0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c,
+	0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x44, 0x0a, 0x07, 0x79, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x73,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69,
+	0x6e, 0x42, 0x0f, 0xc8, 0xde, 0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x07, 0x59, 0x54, 0x6f, 0x6b, 0x65,
+	0x6e, 0x73, 0x52, 0x07, 0x79, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
+	0x2a, 0x06, 0x6c, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x1c, 0x0a, 0x1a, 0x4d, 0x73, 0x67, 0x52,
+	0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xd2, 0x02, 0x0a, 0x08, 0x4d, 0x73, 0x67, 0x41, 0x70,
+	0x70, 0x6c, 0x79, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12,
+	0x27, 0x0a, 0x0f, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x70, 0x75, 0x62, 0x6b,
+	0x65, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x65, 0x72, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x30, 0x0a, 0x14, 0x62, 0x6f, 0x72, 0x72,
+	0x6f, 0x77, 0x65, 0x72, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x12, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72,
+	0x41, 0x75, 0x74, 0x68, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f,
+	0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x6f, 0x6f,
+	0x6c, 0x49, 0x64, 0x12, 0x44, 0x0a, 0x0d, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x5f, 0x61, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31,
+	0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0c, 0x62, 0x6f, 0x72,
+	0x72, 0x6f, 0x77, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x74,
+	0x75, 0x72, 0x69, 0x74, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6d, 0x61, 0x74,
+	0x75, 0x72, 0x69, 0x74, 0x79, 0x12, 0x20, 0x0a, 0x06, 0x64, 0x63, 0x6d, 0x5f, 0x69, 0x64, 0x18,
+	0x07, 0x20, 0x01, 0x28, 0x04, 0x42, 0x09, 0xe2, 0xde, 0x1f, 0x05, 0x44, 0x43, 0x4d, 0x49, 0x64,
+	0x52, 0x05, 0x64, 0x63, 0x6d, 0x49, 0x64, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x66, 0x65, 0x72,
+	0x72, 0x61, 0x6c, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
+	0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x43, 0x6f, 0x64, 0x65, 0x3a, 0x0d, 0x82, 0xe7,
+	0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d,
+	0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x90, 0x03, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74,
+	0x73, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a,
+	0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69,
+	0x74, 0x5f, 0x74, 0x78, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x64, 0x65, 0x70,
+	0x6f, 0x73, 0x69, 0x74, 0x54, 0x78, 0x73, 0x12, 0x27, 0x0a, 0x0f, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74,
+	0x12, 0x44, 0x0a, 0x1e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
+	0x61, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72,
+	0x65, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x09, 0x52, 0x1c, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f, 0x72, 0x53, 0x69, 0x67, 0x6e,
+	0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x53, 0x0a, 0x26, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c,
+	0x74, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x61, 0x64,
+	0x61, 0x70, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
+	0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x52, 0x23, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x41, 0x64, 0x61, 0x70, 0x74, 0x6f,
+	0x72, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x72,
+	0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x07, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x65, 0x74,
+	0x12, 0x31, 0x0a, 0x14, 0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x73, 0x69,
+	0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52, 0x13,
+	0x72, 0x65, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
+	0x72, 0x65, 0x73, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x65, 0x72, 0x22, 0x17, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43,
+	0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xaf, 0x01, 0x0a, 0x1b,
+	0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x72,
+	0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x72, 0x65,
+	0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x64,
+	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x09, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x78, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09,
+	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x61, 0x73, 0x68, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x6f,
+	0x6f, 0x66, 0x18, 0x05, 0x20, 0x03, 0x28, 0x09, 0x52, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x3a,
+	0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x72, 0x65, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x22, 0x25, 0x0a,
+	0x23, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69,
+	0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7f, 0x0a, 0x09, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65,
+	0x6d, 0x12, 0x1a, 0x0a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a,
+	0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x02, 0x74, 0x78, 0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74,
+	0x75, 0x72, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e,
+	0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72,
+	0x72, 0x6f, 0x77, 0x65, 0x72, 0x22, 0x13, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65,
+	0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xf9, 0x01, 0x0a, 0x13, 0x4d,
+	0x73, 0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72,
+	0x65, 0x72, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c,
+	0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x66,
+	0x65, 0x72, 0x72, 0x61, 0x6c, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x12, 0x61, 0x0a, 0x13, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x5f,
+	0x66, 0x65, 0x65, 0x5f, 0x66, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x31, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61,
+	0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x44, 0x65, 0x63, 0x52, 0x11, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x46, 0x65, 0x65,
+	0x46, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x3a, 0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0x1d, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x67,
+	0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xf7, 0x01, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x12, 0x1c, 0x0a, 0x09, 0x61,
+	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09,
+	0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x23, 0x0a,
+	0x0d, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x43, 0x6f,
+	0x64, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x61, 0x0a, 0x13,
+	0x72, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x66, 0x61, 0x63,
+	0x74, 0x6f, 0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x31, 0xc8, 0xde, 0x1f, 0x00, 0xda,
+	0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
+	0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4,
+	0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x52, 0x11, 0x72, 0x65,
+	0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x46, 0x65, 0x65, 0x46, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x3a,
+	0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22,
+	0x1b, 0x0a, 0x19, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x66, 0x65,
+	0x72, 0x72, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a, 0x0f,
+	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12,
+	0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x32, 0x0a,
+	0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x3a, 0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74,
+	0x79, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x97, 0x08, 0x0a,
+	0x03, 0x4d, 0x73, 0x67, 0x12, 0x4e, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f,
+	0x6f, 0x6c, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a,
+	0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
+	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x0c, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x52, 0x65,
+	0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x20, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
+	0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a,
+	0x28, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
+	0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x10, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x21, 0x2e,
+	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x1a, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e,
+	0x66, 0x69, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x41,
+	0x70, 0x70, 0x6c, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x1a, 0x1e, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41,
+	0x70, 0x70, 0x6c, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4e, 0x0a, 0x0a,
+	0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64,
+	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62,
+	0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x1a, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
+	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
+	0x43, 0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x18,
 	0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61,
-	0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x7f, 0x0a, 0x09, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12, 0x1a, 0x0a,
-	0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61,
-	0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e,
-	0x49, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x74, 0x78, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
-	0x74, 0x78, 0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
-	0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72,
-	0x65, 0x73, 0x3a, 0x0d, 0x82, 0xe7, 0xb0, 0x2a, 0x08, 0x62, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x65,
-	0x72, 0x22, 0x13, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74,
-	0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x75,
-	0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x32, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8,
-	0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x0e, 0x82, 0xe7, 0xb0,
-	0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0x19, 0x0a, 0x17, 0x4d,
-	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xd9, 0x06, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x4e,
-	0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x1b, 0x2e, 0x73,
-	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54,
-	0x0a, 0x0c, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x1d,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
-	0x67, 0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x25, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
-	0x41, 0x64, 0x64, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x0f, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65,
-	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x28, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f,
-	0x76, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f,
-	0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x21, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x1a, 0x29, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x12, 0x16,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
-	0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4e, 0x0a, 0x0a, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
-	0x43, 0x65, 0x74, 0x73, 0x12, 0x1b, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74,
-	0x73, 0x1a, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x43, 0x65, 0x74, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x18, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74,
-	0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73,
-	0x69, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x31, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
-	0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61,
-	0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x42, 0x0a, 0x06, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x12, 0x17, 0x2e, 0x73, 0x69, 0x64,
-	0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64,
-	0x65, 0x65, 0x6d, 0x1a, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x52, 0x65, 0x70, 0x61, 0x79, 0x12, 0x16, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
-	0x52, 0x65, 0x70, 0x61, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0,
-	0x2a, 0x01, 0x42, 0x9b, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
-	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73,
-	0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x4c,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x65, 0x6e,
-	0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
-	0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69,
+	0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x1a, 0x31, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x44, 0x65, 0x70, 0x6f,
+	0x73, 0x69, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x42, 0x0a, 0x06, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d,
+	0x12, 0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x1a, 0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x64, 0x65,
+	0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x52, 0x65,
+	0x70, 0x61, 0x79, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x1a, 0x1e, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65,
+	0x70, 0x61, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x10, 0x52,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x12,
+	0x21, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
+	0x73, 0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72,
+	0x65, 0x72, 0x1a, 0x29, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x66,
+	0x65, 0x72, 0x72, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5a, 0x0a,
+	0x0e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72, 0x12,
+	0x1f, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
+	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65, 0x72,
+	0x1a, 0x27, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e,
+	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72, 0x65,
+	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x0c, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65,
+	0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e,
+	0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a,
+	0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x9b, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x6c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x07, 0x54, 0x78, 0x50,
+	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f,
+	0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x65,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69,
+	0x64, 0x65, 0x2e, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64,
+	0x65, 0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65,
+	0x5c, 0x4c, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
+	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x65, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -11213,7 +13527,7 @@ func file_side_lending_tx_proto_rawDescGZIP() []byte {
 	return file_side_lending_tx_proto_rawDescData
 }
 
-var file_side_lending_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_side_lending_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_side_lending_tx_proto_goTypes = []interface{}{
 	(*MsgCreatePool)(nil),                       // 0: side.lending.MsgCreatePool
 	(*MsgCreatePoolResponse)(nil),               // 1: side.lending.MsgCreatePoolResponse
@@ -11233,19 +13547,23 @@ var file_side_lending_tx_proto_goTypes = []interface{}{
 	(*MsgSubmitDepositTransactionResponse)(nil), // 15: side.lending.MsgSubmitDepositTransactionResponse
 	(*MsgRedeem)(nil),                           // 16: side.lending.MsgRedeem
 	(*MsgRedeemResponse)(nil),                   // 17: side.lending.MsgRedeemResponse
-	(*MsgUpdateParams)(nil),                     // 18: side.lending.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil),             // 19: side.lending.MsgUpdateParamsResponse
-	(*PoolConfig)(nil),                          // 20: side.lending.PoolConfig
-	(*v1beta1.Coin)(nil),                        // 21: cosmos.base.v1beta1.Coin
-	(*Params)(nil),                              // 22: side.lending.Params
+	(*MsgRegisterReferrer)(nil),                 // 18: side.lending.MsgRegisterReferrer
+	(*MsgRegisterReferrerResponse)(nil),         // 19: side.lending.MsgRegisterReferrerResponse
+	(*MsgUpdateReferrer)(nil),                   // 20: side.lending.MsgUpdateReferrer
+	(*MsgUpdateReferrerResponse)(nil),           // 21: side.lending.MsgUpdateReferrerResponse
+	(*MsgUpdateParams)(nil),                     // 22: side.lending.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil),             // 23: side.lending.MsgUpdateParamsResponse
+	(*PoolConfig)(nil),                          // 24: side.lending.PoolConfig
+	(*v1beta1.Coin)(nil),                        // 25: cosmos.base.v1beta1.Coin
+	(*Params)(nil),                              // 26: side.lending.Params
 }
 var file_side_lending_tx_proto_depIdxs = []int32{
-	20, // 0: side.lending.MsgCreatePool.config:type_name -> side.lending.PoolConfig
-	20, // 1: side.lending.MsgUpdatePoolConfig.config:type_name -> side.lending.PoolConfig
-	21, // 2: side.lending.MsgAddLiquidity.amount:type_name -> cosmos.base.v1beta1.Coin
-	21, // 3: side.lending.MsgRemoveLiquidity.ytokens:type_name -> cosmos.base.v1beta1.Coin
-	21, // 4: side.lending.MsgApply.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
-	22, // 5: side.lending.MsgUpdateParams.params:type_name -> side.lending.Params
+	24, // 0: side.lending.MsgCreatePool.config:type_name -> side.lending.PoolConfig
+	24, // 1: side.lending.MsgUpdatePoolConfig.config:type_name -> side.lending.PoolConfig
+	25, // 2: side.lending.MsgAddLiquidity.amount:type_name -> cosmos.base.v1beta1.Coin
+	25, // 3: side.lending.MsgRemoveLiquidity.ytokens:type_name -> cosmos.base.v1beta1.Coin
+	25, // 4: side.lending.MsgApply.borrow_amount:type_name -> cosmos.base.v1beta1.Coin
+	26, // 5: side.lending.MsgUpdateParams.params:type_name -> side.lending.Params
 	0,  // 6: side.lending.Msg.CreatePool:input_type -> side.lending.MsgCreatePool
 	6,  // 7: side.lending.Msg.AddLiquidity:input_type -> side.lending.MsgAddLiquidity
 	8,  // 8: side.lending.Msg.RemoveLiquidity:input_type -> side.lending.MsgRemoveLiquidity
@@ -11255,19 +13573,23 @@ var file_side_lending_tx_proto_depIdxs = []int32{
 	14, // 12: side.lending.Msg.SubmitDepositTransaction:input_type -> side.lending.MsgSubmitDepositTransaction
 	16, // 13: side.lending.Msg.Redeem:input_type -> side.lending.MsgRedeem
 	4,  // 14: side.lending.Msg.Repay:input_type -> side.lending.MsgRepay
-	18, // 15: side.lending.Msg.UpdateParams:input_type -> side.lending.MsgUpdateParams
-	1,  // 16: side.lending.Msg.CreatePool:output_type -> side.lending.MsgCreatePoolResponse
-	7,  // 17: side.lending.Msg.AddLiquidity:output_type -> side.lending.MsgAddLiquidityResponse
-	9,  // 18: side.lending.Msg.RemoveLiquidity:output_type -> side.lending.MsgRemoveLiquidityResponse
-	3,  // 19: side.lending.Msg.UpdatePoolConfig:output_type -> side.lending.MsgUpdatePoolConfigResponse
-	11, // 20: side.lending.Msg.Apply:output_type -> side.lending.MsgApplyResponse
-	13, // 21: side.lending.Msg.SubmitCets:output_type -> side.lending.MsgSubmitCetsResponse
-	15, // 22: side.lending.Msg.SubmitDepositTransaction:output_type -> side.lending.MsgSubmitDepositTransactionResponse
-	17, // 23: side.lending.Msg.Redeem:output_type -> side.lending.MsgRedeemResponse
-	5,  // 24: side.lending.Msg.Repay:output_type -> side.lending.MsgRepayResponse
-	19, // 25: side.lending.Msg.UpdateParams:output_type -> side.lending.MsgUpdateParamsResponse
-	16, // [16:26] is the sub-list for method output_type
-	6,  // [6:16] is the sub-list for method input_type
+	18, // 15: side.lending.Msg.RegisterReferrer:input_type -> side.lending.MsgRegisterReferrer
+	20, // 16: side.lending.Msg.UpdateReferrer:input_type -> side.lending.MsgUpdateReferrer
+	22, // 17: side.lending.Msg.UpdateParams:input_type -> side.lending.MsgUpdateParams
+	1,  // 18: side.lending.Msg.CreatePool:output_type -> side.lending.MsgCreatePoolResponse
+	7,  // 19: side.lending.Msg.AddLiquidity:output_type -> side.lending.MsgAddLiquidityResponse
+	9,  // 20: side.lending.Msg.RemoveLiquidity:output_type -> side.lending.MsgRemoveLiquidityResponse
+	3,  // 21: side.lending.Msg.UpdatePoolConfig:output_type -> side.lending.MsgUpdatePoolConfigResponse
+	11, // 22: side.lending.Msg.Apply:output_type -> side.lending.MsgApplyResponse
+	13, // 23: side.lending.Msg.SubmitCets:output_type -> side.lending.MsgSubmitCetsResponse
+	15, // 24: side.lending.Msg.SubmitDepositTransaction:output_type -> side.lending.MsgSubmitDepositTransactionResponse
+	17, // 25: side.lending.Msg.Redeem:output_type -> side.lending.MsgRedeemResponse
+	5,  // 26: side.lending.Msg.Repay:output_type -> side.lending.MsgRepayResponse
+	19, // 27: side.lending.Msg.RegisterReferrer:output_type -> side.lending.MsgRegisterReferrerResponse
+	21, // 28: side.lending.Msg.UpdateReferrer:output_type -> side.lending.MsgUpdateReferrerResponse
+	23, // 29: side.lending.Msg.UpdateParams:output_type -> side.lending.MsgUpdateParamsResponse
+	18, // [18:30] is the sub-list for method output_type
+	6,  // [6:18] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
 	6,  // [6:6] is the sub-list for extension extendee
 	0,  // [0:6] is the sub-list for field type_name
@@ -11498,7 +13820,7 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdateParams); i {
+			switch v := v.(*MsgRegisterReferrer); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11510,6 +13832,54 @@ func file_side_lending_tx_proto_init() {
 			}
 		}
 		file_side_lending_tx_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgRegisterReferrerResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_lending_tx_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgUpdateReferrer); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_lending_tx_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgUpdateReferrerResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_lending_tx_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgUpdateParams); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_lending_tx_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgUpdateParamsResponse); i {
 			case 0:
 				return &v.state
@@ -11528,7 +13898,7 @@ func file_side_lending_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_lending_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

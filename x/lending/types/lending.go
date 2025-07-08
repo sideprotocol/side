@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/hex"
 	fmt "fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -28,6 +29,12 @@ var (
 
 	// price precision
 	PricePrecision = "0.001"
+
+	// maximum length of the referrer name
+	MaxReferrerNameLength = 70
+
+	// referral code regex: 8 alphanumeric characters
+	ReferralCodeRegex = regexp.MustCompile("^[a-zA-Z0-9]{8}$")
 )
 
 // GetExchangeRate calculates the yToken exchange rate according to the given params
@@ -197,9 +204,9 @@ func HasOriginationFee(pool *LendingPool) bool {
 	return pool.Config.OriginationFee.IsPositive()
 }
 
-// HasReferralFee returns true if the referrer exists and the referral fee factor is not 0, false otherwise
-func HasReferralFee(loan *Loan, pool *LendingPool) bool {
-	return len(loan.Referrer) != 0 && pool.Config.ReferralFeeFactor > 0
+// HasReferralFee returns true if the referral code exists, false otherwise
+func HasReferralFee(loan *Loan) bool {
+	return len(loan.ReferralCode) != 0
 }
 
 // CheckSupplyCap checks if the supply cap will be exceeded for the given deposit amount
@@ -327,10 +334,6 @@ func ValidatePoolConfig(config PoolConfig) error {
 
 	if config.ReserveFactor >= 1000 {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid reserve factor")
-	}
-
-	if config.ReferralFeeFactor > 1000 {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid referral fee factor")
 	}
 
 	if config.LiquidationThreshold == 0 || config.LiquidationThreshold >= 100 {
