@@ -72,14 +72,12 @@ message PoolConfig {
     ];
     // reserve factor permille
     uint32 reserve_factor = 10;
-    // referral fee factor permille
-    uint32 referral_fee_factor = 11;
     // maximum ltv percent
-    uint32 max_ltv = 12;
+    uint32 max_ltv = 11;
     // liquidation ltv percent
-    uint32 liquidation_threshold = 13;
+    uint32 liquidation_threshold = 12;
     // indicates if the pool is paused
-    bool paused = 14;
+    bool paused = 13;
 }
 
 // Pool tranche
@@ -221,7 +219,7 @@ message Loan {
       (gogoproto.nullable) = false
     ];
     uint64 liquidation_id = 21;
-    string referrer = 22;
+    string referral_code = 22;
     google.protobuf.Timestamp create_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     google.protobuf.Timestamp disburse_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     LoanStatus status = 25;
@@ -274,6 +272,22 @@ message LoanV1 {
     google.protobuf.Timestamp create_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     google.protobuf.Timestamp disburse_at = 25 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     LoanStatus status = 26;
+}
+
+// Referrer defines the referrer
+message Referrer {
+  // Optional name
+  string name = 1;
+  // Unique referral code with 8 alphanumeric characters
+  string referral_code = 2;
+  // Referrer address
+  string address = 3;
+  // Referral fee factor
+  string referral_fee_factor = 4 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
 }
 
 enum CetType {

@@ -14,6 +14,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	"github.com/sideprotocol/side/x/lending/types"
@@ -109,7 +110,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Maturity:           trancheConfig.Maturity,
 		BorrowAPR:          trancheConfig.BorrowAPR,
 		DlcEventId:         dlcEvent.Id,
-		Referrer:           msg.Referrer,
+		ReferralCode:       msg.ReferralCode,
 		CreateAt:           ctx.BlockTime(),
 		Status:             types.LoanStatus_Requested,
 	}
@@ -439,4 +440,61 @@ func (m msgServer) Repay(goCtx context.Context, msg *types.MsgRepay) (*types.Msg
 	)
 
 	return &types.MsgRepayResponse{}, nil
+}
+
+// RegisterReferrer implements types.MsgServer.
+func (m msgServer) RegisterReferrer(goCtx context.Context, msg *types.MsgRegisterReferrer) (*types.MsgRegisterReferrerResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// check if the referrer already exists
+	if m.HasReferrer(ctx, msg.ReferralCode) {
+		return nil, types.ErrReferrerAlreadyExists
+	}
+
+	// create new referrer
+	referrer := &types.Referrer{
+		Name:              msg.Name,
+		ReferralCode:      msg.ReferralCode,
+		Address:           msg.Address,
+		ReferralFeeFactor: msg.ReferralFeeFactor,
+	}
+	m.SetReferrer(ctx, referrer)
+
+	return &types.MsgRegisterReferrerResponse{}, nil
+}
+
+// UpdateReferrer implements types.MsgServer.
+func (m msgServer) UpdateReferrer(goCtx context.Context, msg *types.MsgUpdateReferrer) (*types.MsgUpdateReferrerResponse, error) {
+	if m.authority != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
+	}
+
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// check if the referrer already exists
+	if !m.HasReferrer(ctx, msg.ReferralCode) {
+		return nil, types.ErrReferrerDoesNotExist
+	}
+
+	referrer := m.GetReferrer(ctx, msg.ReferralCode)
+
+	// update referrer
+	referrer.Name = msg.Name
+	referrer.Address = msg.Address
+	referrer.ReferralFeeFactor = msg.ReferralFeeFactor
+	m.SetReferrer(ctx, referrer)
+
+	return &types.MsgUpdateReferrerResponse{}, nil
 }

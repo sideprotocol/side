@@ -63,4 +63,10 @@ var (
 
 	ErrInvalidPricePair = errorsmod.Register(ModuleName, 9000, "invalid price pair")
 	ErrInvalidPrice     = errorsmod.Register(ModuleName, 9001, "invalid price")
+
+	ErrInvalidReferrer          = errorsmod.Register(ModuleName, 10000, "invalid referrer")
+	ErrInvalidReferralCode      = errorsmod.Register(ModuleName, 10001, "invalid referral code")
+	ErrInvalidReferralFeeFactor = errorsmod.Register(ModuleName, 10002, "invalid referral fee factor")
+	ErrReferrerAlreadyExists    = errorsmod.Register(ModuleName, 10003, "referrer already exists")
+	ErrReferrerDoesNotExist     = errorsmod.Register(ModuleName, 10004, "referrer does not exist")
 )

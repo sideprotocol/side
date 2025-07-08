@@ -70,10 +70,15 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 	interest := repayment.Amount.Sub(loan.BorrowAmount)
 	protocolFee := sdk.NewCoin(interest.Denom, interest.Amount.Mul(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).Quo(types.Permille))
 
+	var referrer *types.Referrer
+	if k.HasReferrer(ctx, loan.ReferralCode) {
+		referrer = k.GetReferrer(ctx, loan.ReferralCode)
+	}
+
 	referralFee := sdkmath.ZeroInt()
 	actualProtocolFee := protocolFee
-	if protocolFee.IsPositive() && types.HasReferralFee(loan, pool) {
-		referralFee = protocolFee.Amount.Mul(sdkmath.NewInt(int64(pool.Config.ReferralFeeFactor))).Quo(types.Permille)
+	if protocolFee.IsPositive() && referrer != nil {
+		referralFee = protocolFee.Amount.ToLegacyDec().Mul(referrer.ReferralFeeFactor).TruncateInt()
 		actualProtocolFee = protocolFee.SubAmount(referralFee)
 	}
 
@@ -89,7 +94,7 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 	}
 
 	if referralFee.IsPositive() {
-		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(loan.Referrer), sdk.NewCoins(sdk.NewCoin(protocolFee.Denom, referralFee))); err != nil {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(referrer.Address), sdk.NewCoins(sdk.NewCoin(protocolFee.Denom, referralFee))); err != nil {
 			return err
 		}
 	}
