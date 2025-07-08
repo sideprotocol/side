@@ -348,6 +348,17 @@ func (k Keeper) CurrentInterest(goCtx context.Context, req *types.QueryCurrentIn
 	}, nil
 }
 
+// Referrers implements types.QueryServer.
+func (k Keeper) Referrers(goCtx context.Context, req *types.QueryReferrersRequest) (*types.QueryReferrersResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryReferrersResponse{Referrers: k.GetReferrers(ctx)}, nil
+}
+
 // Params implements types.QueryServer.
 func (k Keeper) Params(goCtx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	if req == nil {
