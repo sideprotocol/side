@@ -80,6 +80,10 @@ service Query {
     rpc CurrentInterest(QueryCurrentInterestRequest) returns (QueryCurrentInterestResponse) {
         option (google.api.http).get = "/side/lending/loan/current_interest";
     }
+
+    rpc Referrers(QueryReferrersRequest) returns (QueryReferrersResponse) {
+        option (google.api.http).get = "/side/lending/referrers";
+    }
 }
 
 // QueryPoolRequest is request type for the Query/Pool RPC method.
@@ -251,4 +255,13 @@ message QueryCurrentInterestRequest {
 
 message QueryCurrentInterestResponse {
     cosmos.base.v1beta1.Coin interest = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryReferrersRequest {
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryReferrersResponse {
+    repeated Referrer referrers = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
