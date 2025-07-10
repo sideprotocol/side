@@ -199,11 +199,6 @@ func HasRequestFee(pool *LendingPool) bool {
 	return pool.Config.RequestFee.IsPositive()
 }
 
-// HasOriginationFee returns true if the origination fee set in the given pool, false otherwise
-func HasOriginationFee(pool *LendingPool) bool {
-	return pool.Config.OriginationFee.IsPositive()
-}
-
 // HasReferralFee returns true if the referral code exists, false otherwise
 func HasReferralFee(loan *Loan) bool {
 	return len(loan.ReferralCode) != 0
@@ -324,12 +319,8 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid request fee")
 	}
 
-	if config.OriginationFee.IsNil() || config.OriginationFee.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee can not be nil or negative")
-	}
-
-	if config.OriginationFee.IsPositive() && (!config.MinBorrowAmount.IsPositive() || config.OriginationFee.GTE(config.MinBorrowAmount)) {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "origination fee must be less than min borrow amount")
+	if config.OriginationFeeFactor >= 1000 {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid origination fee factor")
 	}
 
 	if config.ReserveFactor >= 1000 {

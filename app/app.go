@@ -159,6 +159,7 @@ import (
 
 	upgradev2 "github.com/sideprotocol/side/app/upgrades/v2"
 	upgradev2rc8 "github.com/sideprotocol/side/app/upgrades/v2_rc8"
+	upgradev2rc9 "github.com/sideprotocol/side/app/upgrades/v2_rc9"
 )
 
 const (
@@ -1311,6 +1312,7 @@ func BlockedAddresses() map[string]bool {
 func (app *App) SetUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev2.UpgradeName, upgradev2.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc8.UpgradeName, upgradev2rc8.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+    app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc9.UpgradeName, upgradev2rc9.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
