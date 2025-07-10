@@ -65,11 +65,8 @@ message PoolConfig {
     cosmos.base.v1beta1.Coin request_fee = 8 [
       (gogoproto.nullable) = false
     ];
-    // origination fee
-    string origination_fee = 9 [
-      (gogoproto.customtype) = "cosmossdk.io/math.Int",
-      (gogoproto.nullable) = false
-    ];
+    // origination fee factor permille
+    uint32 origination_fee_factor = 9;
     // reserve factor permille
     uint32 reserve_factor = 10;
     // maximum ltv percent
