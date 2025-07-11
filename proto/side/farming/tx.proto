@@ -1,0 +1,68 @@
+syntax = "proto3";
+package side.farming;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "side/farming/params.proto";
+
+option go_package = "github.com/sideprotocol/side/x/farming/types";
+
+// Msg defines the Msg service.
+service Msg {
+    option (cosmos.msg.v1.service) = true;
+
+    rpc Stake(MsgStake) returns (MsgStakeResponse);
+    rpc Unstake(MsgUnstake) returns (MsgUnstakeResponse);
+
+    // UpdateParams defines a governance operation for updating the x/farming module
+    // parameters. The authority defaults to the x/gov module account.
+    //
+    // Since: cosmos-sdk 0.47
+    rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+message MsgStake {
+    option (cosmos.msg.v1.signer) = "staker";
+
+    // Staker address
+    string staker = 1;
+    // Staked amount
+    cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+    // Lock duration
+    google.protobuf.Duration lock_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+message MsgStakeResponse{}
+
+message MsgUnstake {
+  option (cosmos.msg.v1.signer) = "staker";
+
+  // Staker address
+  string staker = 1;
+  // Staking id
+  uint64 id = 2;
+}
+
+message MsgUnstakeResponse {}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+
+  // params defines the x/dlc parameters to be updated.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsResponse {}
