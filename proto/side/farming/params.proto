@@ -9,19 +9,5 @@ import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/sideprotocol/side/x/farming/types";
 
-// Asset defines the farming asset
-message Asset {
-    // Asset denom
-    string denom = 1;
-    // Reward ratio in total rewards
-    string reward_ratio= 2 [
-      (cosmos_proto.scalar)  = "cosmos.Dec",
-      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-      (gogoproto.nullable)   = false
-    ];
-}
-
 // Params defines the parameters for the module.
-message Params {
-    
-}
+message Params {}

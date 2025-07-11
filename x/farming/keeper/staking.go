@@ -63,51 +63,59 @@ func (k Keeper) SetStakingByAddress(ctx sdk.Context, address string, staking *ty
 	store.Set(types.StakingByAddressKey(address, staking.Id), []byte{})
 }
 
-// HasTotalStakings returns true if total staking stats exists by the given denom, false otherwise
-func (k Keeper) HasTotalStakings(ctx sdk.Context, denom string) bool {
+// HasTotalStaking returns true if total staking exists for the given phase and denom, false otherwise
+func (k Keeper) HasTotalStaking(ctx sdk.Context, phaseId uint64, denom string) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.TotalStakingsKey(denom))
+	return store.Has(types.TotalStakingKey(phaseId, denom))
 }
 
-// GetTotalStakings gets total staking stats by the given denom
-func (k Keeper) GetTotalStakings(ctx sdk.Context, denom string) *types.TotalStakings {
+// GetTotalStaking gets total staking by the given phase and denom
+func (k Keeper) GetTotalStaking(ctx sdk.Context, phaseId uint64, denom string) *types.TotalStaking {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := store.Get(types.TotalStakingsKey(denom))
-	var totalStakings types.TotalStakings
-	k.cdc.MustUnmarshal(bz, &totalStakings)
+	bz := store.Get(types.TotalStakingKey(phaseId, denom))
+	var totalStaking types.TotalStaking
+	k.cdc.MustUnmarshal(bz, &totalStaking)
 
-	return &totalStakings
+	return &totalStaking
 }
 
-// SetTotalStakings sets total staking stats
-func (k Keeper) SetTotalStakings(ctx sdk.Context, totalStakings *types.TotalStakings) {
+// SetTotalStaking sets total staking
+func (k Keeper) SetTotalStaking(ctx sdk.Context, totalStaking *types.TotalStaking) {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := k.cdc.MustMarshal(totalStakings)
+	bz := k.cdc.MustMarshal(totalStaking)
 
-	store.Set(types.TotalStakingsKey(totalStakings.Denom), bz)
+	store.Set(types.TotalStakingKey(totalStaking.PhaseId, totalStaking.Denom), bz)
 }
 
-// IncreaseTotalStakings increases total staking stats according to the given staking
-func (k Keeper) IncreaseTotalStakings(ctx sdk.Context, staking *types.Staking) {
-	totalStakings := k.GetTotalStakings(ctx, staking.Amount.Denom)
+// IncreaseTotalStaking increases total staking according to the given staking
+func (k Keeper) IncreaseTotalStaking(ctx sdk.Context, staking *types.Staking) {
+	totalStaking := &types.TotalStaking{}
+	if !k.HasTotalStaking(ctx, staking.PhaseId, staking.Amount.Denom) {
+		totalStaking.PhaseId = staking.PhaseId
+		totalStaking.Denom = staking.Amount.Denom
+		totalStaking.Amount = sdk.NewInt64Coin(staking.Amount.Denom, 0)
+		totalStaking.EffectiveAmount = sdk.NewInt64Coin(staking.Amount.Denom, 0)
+	} else {
+		totalStaking = k.GetTotalStaking(ctx, staking.PhaseId, staking.Amount.Denom)
+	}
 
-	totalStakings.Amount = staking.Amount.AddAmount(totalStakings.Amount.Amount)
-	totalStakings.EffectiveAmount = staking.EffectiveAmount.AddAmount(totalStakings.EffectiveAmount.Amount)
+	totalStaking.Amount = totalStaking.Amount.Add(staking.Amount)
+	totalStaking.EffectiveAmount = totalStaking.EffectiveAmount.Add(staking.EffectiveAmount)
 
-	k.SetTotalStakings(ctx, totalStakings)
+	k.SetTotalStaking(ctx, totalStaking)
 }
 
-// DecreaseTotalStakings decreases total staking stats according to the given staking
-func (k Keeper) DecreaseTotalStakings(ctx sdk.Context, staking *types.Staking) {
-	totalStakings := k.GetTotalStakings(ctx, staking.Amount.Denom)
+// DecreaseTotalStaking decreases total staking according to the given staking
+func (k Keeper) DecreaseTotalStaking(ctx sdk.Context, staking *types.Staking) {
+	totalStaking := k.GetTotalStaking(ctx, staking.PhaseId, staking.Amount.Denom)
 
-	totalStakings.Amount = totalStakings.Amount.Sub(staking.Amount)
-	totalStakings.EffectiveAmount = totalStakings.EffectiveAmount.Sub(staking.EffectiveAmount)
+	totalStaking.Amount = totalStaking.Amount.Sub(staking.Amount)
+	totalStaking.EffectiveAmount = totalStaking.EffectiveAmount.Sub(staking.EffectiveAmount)
 
-	k.SetTotalStakings(ctx, totalStakings)
+	k.SetTotalStaking(ctx, totalStaking)
 }
 
 // GetAllStakings gets all stakings
