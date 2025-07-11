@@ -1,0 +1,40 @@
+syntax = "proto3";
+package side.farming;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/sideprotocol/side/x/farming/types";
+
+// Staking status
+enum StakingStatus {
+  STAKING_STATUS_UNSPECIFIED = 0;
+  STAKING_STATUS_STAKED = 1;
+  STAKING_STATUS_UNSTAKED = 2;
+}
+
+// Staking defines the staking
+message Staking {
+  uint64 id = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  google.protobuf.Duration lock_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  string lock_multiplier = 4 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+  cosmos.base.v1beta1.Coin effective_amount = 5 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp start_time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  google.protobuf.Timestamp end_time = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  StakingStatus status = 8;
+}
+
+// TotalStakings defines total stakings per denom
+message TotalStakings {
+  string denom = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin effective_amount = 3 [(gogoproto.nullable) = false];
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+package side.farming;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/sideprotocol/side/x/farming/types";
+
+// Asset defines the farming asset
+message Asset {
+    // Asset denom
+    string denom = 1;
+    // Reward ratio in total rewards
+    string reward_ratio= 2 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+}
+
+// Params defines the parameters for the module.
+message Params {
+    
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package side.farming;
+
+import "gogoproto/gogo.proto";
+import "side/farming/params.proto";
+import "side/farming/farming.proto";
+
+option go_package = "github.com/sideprotocol/side/x/farming/types";
+
+// GenesisState defines the farming module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
+
+    repeated Staking stakings = 2;
+}
