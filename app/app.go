@@ -135,6 +135,12 @@ import (
 	dlckeeper "github.com/sideprotocol/side/x/dlc/keeper"
 	dlcmodule "github.com/sideprotocol/side/x/dlc/module"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
+	farmingkeeper "github.com/sideprotocol/side/x/farming/keeper"
+	farmingmodule "github.com/sideprotocol/side/x/farming/module"
+	farmingtypes "github.com/sideprotocol/side/x/farming/types"
+	incentivekeeper "github.com/sideprotocol/side/x/incentive/keeper"
+	incentivemodule "github.com/sideprotocol/side/x/incentive/module"
+	incentivetypes "github.com/sideprotocol/side/x/incentive/types"
 	lendingkeeper "github.com/sideprotocol/side/x/lending/keeper"
 	lendingmodule "github.com/sideprotocol/side/x/lending/module"
 	lendingtypes "github.com/sideprotocol/side/x/lending/types"
@@ -142,17 +148,12 @@ import (
 	liquidationmodule "github.com/sideprotocol/side/x/liquidation/module"
 	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
 	oracleabci "github.com/sideprotocol/side/x/oracle/abci"
-	tsskeeper "github.com/sideprotocol/side/x/tss/keeper"
-	tssmodule "github.com/sideprotocol/side/x/tss/module"
-	tsstypes "github.com/sideprotocol/side/x/tss/types"
-
 	oraclekeeper "github.com/sideprotocol/side/x/oracle/keeper"
 	oraclemodule "github.com/sideprotocol/side/x/oracle/module"
 	oracletypes "github.com/sideprotocol/side/x/oracle/types"
-
-	incentivekeeper "github.com/sideprotocol/side/x/incentive/keeper"
-	incentivemodule "github.com/sideprotocol/side/x/incentive/module"
-	incentivetypes "github.com/sideprotocol/side/x/incentive/types"
+	tsskeeper "github.com/sideprotocol/side/x/tss/keeper"
+	tssmodule "github.com/sideprotocol/side/x/tss/module"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	btccodec "github.com/sideprotocol/side/bitcoin/crypto/codec"
@@ -218,6 +219,7 @@ var (
 		lendingmodule.AppModuleBasic{},
 		oraclemodule.AppModuleBasic{},
 		incentivemodule.AppModuleBasic{},
+		farmingmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -241,6 +243,7 @@ var (
 		lendingtypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
 		lendingtypes.RepaymentEscrowAccount: nil,
 		oracletypes.ModuleName:              nil,
+		farmingtypes.ModuleName:             nil,
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -313,6 +316,7 @@ type App struct {
 	LendingKeeper     lendingkeeper.Keeper
 	OracleKeeper      oraclekeeper.Keeper
 	IncentiveKeeper   incentivekeeper.Keeper
+	FarmingKeeper     farmingkeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -387,7 +391,7 @@ func New(
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey, tsstypes.StoreKey,
 		btcbridgetypes.StoreKey, liquidationtypes.StoreKey,
 		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
-		incentivetypes.StoreKey,
+		incentivetypes.StoreKey, farmingtypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 
@@ -727,6 +731,15 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
+	app.FarmingKeeper = farmingkeeper.NewKeeper(
+		appCodec,
+		keys[farmingtypes.StoreKey],
+		keys[farmingtypes.MemStoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
 	if err != nil {
@@ -851,6 +864,7 @@ func New(
 		dlcmodule.NewAppModule(appCodec, app.DLCKeeper),
 		lendingmodule.NewAppModule(appCodec, app.LendingKeeper),
 		oraclemodule.NewAppModule(appCodec, app.OracleKeeper),
+		farmingmodule.NewAppModule(appCodec, app.FarmingKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -912,6 +926,7 @@ func New(
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
 		incentivetypes.ModuleName,
+		farmingtypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -946,6 +961,7 @@ func New(
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
 		incentivetypes.ModuleName,
+		farmingtypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -985,6 +1001,7 @@ func New(
 		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
 		incentivetypes.ModuleName,
+		farmingtypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
@@ -1282,6 +1299,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(lendingtypes.ModuleName)
 	paramsKeeper.Subspace(oracletypes.ModuleName)
 	paramsKeeper.Subspace(incentivetypes.ModuleName)
+	paramsKeeper.Subspace(farmingtypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
@@ -1302,6 +1320,7 @@ func BlockedAddresses() map[string]bool {
 	// allow the following addresses to receive funds
 	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
 	delete(modAccAddrs, authtypes.NewModuleAddress(incentivetypes.ModuleName).String())
+	delete(modAccAddrs, authtypes.NewModuleAddress(farmingtypes.ModuleName).String())
 
 	return modAccAddrs
 }

@@ -1,0 +1,86 @@
+syntax = "proto3";
+package side.farming;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "side/farming/params.proto";
+import "side/farming/farming.proto";
+
+option go_package = "github.com/sideprotocol/side/x/farming/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Params queries the parameters of the module.
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+      option (google.api.http).get = "/side/farming/params";
+    }
+
+    rpc Staking(QueryStakingRequest) returns (QueryStakingResponse) {
+        option (google.api.http).get = "/side/farming/stakings/{id}";
+    }
+
+    rpc Stakings(QueryStakingsRequest) returns (QueryStakingsResponse) {
+        option (google.api.http).get = "/side/farming/stakings";
+    }
+
+    rpc TotalStakings(QueryTotalStakingsRequest) returns (QueryTotalStakingsResponse) {
+        option (google.api.http).get = "/side/farming/stakings/stats/{denom}";
+    }
+
+    rpc PendingReward(QueryPendingRewardRequest) returns (QueryPendingRewardResponse) {
+        option (google.api.http).get = "/side/farming/stakings/{id}/pending_reward";
+    }
+}
+
+// QueryStakingRequest is request type for the Query/Staking RPC method.
+message QueryStakingRequest {
+    uint64 id = 1;
+}
+
+// QueryStakingResponse is response type for the Query/Staking RPC method.
+message QueryStakingResponse {
+    Staking staking = 1;
+}
+
+// QueryStakingsRequest is request type for the Query/Stakings RPC method.
+message QueryStakingsRequest {
+    string address = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryStakingsResponse is response type for the Query/Stakings RPC method.
+message QueryStakingsResponse {
+    repeated Staking stakings = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryTotalStakingsRequest is request type for the Query/TotalStakings RPC method.
+message QueryTotalStakingsRequest {
+    string denom = 1;
+}
+
+// QueryTotalStakingsResponse is response type for the Query/TotalStakings RPC method.
+message QueryTotalStakingsResponse {
+    TotalStakings total_stakings = 1;
+}
+
+// QueryPendingRewardRequest is request type for the Query/PendingReward RPC method.
+message QueryPendingRewardRequest {
+    uint64 id = 1;
+}
+
+// QueryPendingRewardResponse is response type for the Query/PendingReward RPC method.
+message QueryPendingRewardResponse {
+    string pending_reward = 1;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+    Params params = 1 [(gogoproto.nullable) = false];
+}
