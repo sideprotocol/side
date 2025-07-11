@@ -5,8 +5,8 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "side/farming/params.proto";
 import "side/farming/farming.proto";
+import "side/farming/params.proto";
 
 option go_package = "github.com/sideprotocol/side/x/farming/types";
 
@@ -17,6 +17,18 @@ service Query {
       option (google.api.http).get = "/side/farming/params";
     }
 
+    rpc Phase(QueryPhaseRequest) returns (QueryPhaseResponse) {
+        option (google.api.http).get = "/side/farming/phases/{id}";
+    }
+
+    rpc CurrentPhase(QueryCurrentPhaseRequest) returns (QueryCurrentPhaseResponse) {
+        option (google.api.http).get = "/side/farming/current_phase";
+    }
+
+    rpc Phases(QueryPhasesRequest) returns (QueryPhasesResponse) {
+        option (google.api.http).get = "/side/farming/phases";
+    }
+
     rpc Staking(QueryStakingRequest) returns (QueryStakingResponse) {
         option (google.api.http).get = "/side/farming/stakings/{id}";
     }
@@ -25,13 +37,43 @@ service Query {
         option (google.api.http).get = "/side/farming/stakings";
     }
 
-    rpc TotalStakings(QueryTotalStakingsRequest) returns (QueryTotalStakingsResponse) {
-        option (google.api.http).get = "/side/farming/stakings/stats/{denom}";
+    rpc TotalStaking(QueryTotalStakingRequest) returns (QueryTotalStakingResponse) {
+        option (google.api.http).get = "/side/farming/total_staking";
     }
 
     rpc PendingReward(QueryPendingRewardRequest) returns (QueryPendingRewardResponse) {
         option (google.api.http).get = "/side/farming/stakings/{id}/pending_reward";
     }
+}
+
+// QueryPhaseRequest is request type for the Query/Phase RPC method.
+message QueryPhaseRequest {
+    uint64 id = 1;
+}
+
+// QueryPhaseResponse is response type for the Query/Phase RPC method.
+message QueryPhaseResponse {
+    Phase phase = 1;
+}
+
+// QueryCurrentPhaseRequest is request type for the Query/CurrentPhase RPC method.
+message QueryCurrentPhaseRequest {
+}
+
+// QueryCurrentPhaseResponse is response type for the Query/CurrentPhase RPC method.
+message QueryCurrentPhaseResponse {
+    Phase phase = 1;
+}
+
+// QueryPhasesRequest is request type for the Query/Phases RPC method.
+message QueryPhasesRequest {
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryPhasesResponse is response type for the Query/Phases RPC method.
+message QueryPhasesResponse {
+    repeated Phase phases = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryStakingRequest is request type for the Query/Staking RPC method.
@@ -56,14 +98,15 @@ message QueryStakingsResponse {
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-// QueryTotalStakingsRequest is request type for the Query/TotalStakings RPC method.
-message QueryTotalStakingsRequest {
-    string denom = 1;
+// QueryTotalStakingRequest is request type for the Query/TotalStaking RPC method.
+message QueryTotalStakingRequest {
+    uint64 phase_id = 1;
+    string denom = 2;
 }
 
-// QueryTotalStakingsResponse is response type for the Query/TotalStakings RPC method.
-message QueryTotalStakingsResponse {
-    TotalStakings total_stakings = 1;
+// QueryTotalStakingResponse is response type for the Query/TotalStaking RPC method.
+message QueryTotalStakingResponse {
+    TotalStaking total_staking = 1;
 }
 
 // QueryPendingRewardRequest is request type for the Query/PendingReward RPC method.

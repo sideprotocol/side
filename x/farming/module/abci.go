@@ -22,7 +22,7 @@ func distributeRewards(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		if !ctx.BlockTime().Before(staking.EndTime) {
+		if !ctx.BlockTime().Before(staking.StartTime.Add(staking.LockDuration)) {
 			continue
 		}
 

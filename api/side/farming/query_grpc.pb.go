@@ -20,9 +20,12 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Query_Params_FullMethodName        = "/side.farming.Query/Params"
+	Query_Phase_FullMethodName         = "/side.farming.Query/Phase"
+	Query_CurrentPhase_FullMethodName  = "/side.farming.Query/CurrentPhase"
+	Query_Phases_FullMethodName        = "/side.farming.Query/Phases"
 	Query_Staking_FullMethodName       = "/side.farming.Query/Staking"
 	Query_Stakings_FullMethodName      = "/side.farming.Query/Stakings"
-	Query_TotalStakings_FullMethodName = "/side.farming.Query/TotalStakings"
+	Query_TotalStaking_FullMethodName  = "/side.farming.Query/TotalStaking"
 	Query_PendingReward_FullMethodName = "/side.farming.Query/PendingReward"
 )
 
@@ -32,9 +35,12 @@ const (
 type QueryClient interface {
 	// Params queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	Phase(ctx context.Context, in *QueryPhaseRequest, opts ...grpc.CallOption) (*QueryPhaseResponse, error)
+	CurrentPhase(ctx context.Context, in *QueryCurrentPhaseRequest, opts ...grpc.CallOption) (*QueryCurrentPhaseResponse, error)
+	Phases(ctx context.Context, in *QueryPhasesRequest, opts ...grpc.CallOption) (*QueryPhasesResponse, error)
 	Staking(ctx context.Context, in *QueryStakingRequest, opts ...grpc.CallOption) (*QueryStakingResponse, error)
 	Stakings(ctx context.Context, in *QueryStakingsRequest, opts ...grpc.CallOption) (*QueryStakingsResponse, error)
-	TotalStakings(ctx context.Context, in *QueryTotalStakingsRequest, opts ...grpc.CallOption) (*QueryTotalStakingsResponse, error)
+	TotalStaking(ctx context.Context, in *QueryTotalStakingRequest, opts ...grpc.CallOption) (*QueryTotalStakingResponse, error)
 	PendingReward(ctx context.Context, in *QueryPendingRewardRequest, opts ...grpc.CallOption) (*QueryPendingRewardResponse, error)
 }
 
@@ -49,6 +55,33 @@ func NewQueryClient(cc grpc.ClientConnInterface) QueryClient {
 func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
 	out := new(QueryParamsResponse)
 	err := c.cc.Invoke(ctx, Query_Params_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Phase(ctx context.Context, in *QueryPhaseRequest, opts ...grpc.CallOption) (*QueryPhaseResponse, error) {
+	out := new(QueryPhaseResponse)
+	err := c.cc.Invoke(ctx, Query_Phase_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) CurrentPhase(ctx context.Context, in *QueryCurrentPhaseRequest, opts ...grpc.CallOption) (*QueryCurrentPhaseResponse, error) {
+	out := new(QueryCurrentPhaseResponse)
+	err := c.cc.Invoke(ctx, Query_CurrentPhase_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Phases(ctx context.Context, in *QueryPhasesRequest, opts ...grpc.CallOption) (*QueryPhasesResponse, error) {
+	out := new(QueryPhasesResponse)
+	err := c.cc.Invoke(ctx, Query_Phases_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,9 +106,9 @@ func (c *queryClient) Stakings(ctx context.Context, in *QueryStakingsRequest, op
 	return out, nil
 }
 
-func (c *queryClient) TotalStakings(ctx context.Context, in *QueryTotalStakingsRequest, opts ...grpc.CallOption) (*QueryTotalStakingsResponse, error) {
-	out := new(QueryTotalStakingsResponse)
-	err := c.cc.Invoke(ctx, Query_TotalStakings_FullMethodName, in, out, opts...)
+func (c *queryClient) TotalStaking(ctx context.Context, in *QueryTotalStakingRequest, opts ...grpc.CallOption) (*QueryTotalStakingResponse, error) {
+	out := new(QueryTotalStakingResponse)
+	err := c.cc.Invoke(ctx, Query_TotalStaking_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,9 +130,12 @@ func (c *queryClient) PendingReward(ctx context.Context, in *QueryPendingRewardR
 type QueryServer interface {
 	// Params queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	Phase(context.Context, *QueryPhaseRequest) (*QueryPhaseResponse, error)
+	CurrentPhase(context.Context, *QueryCurrentPhaseRequest) (*QueryCurrentPhaseResponse, error)
+	Phases(context.Context, *QueryPhasesRequest) (*QueryPhasesResponse, error)
 	Staking(context.Context, *QueryStakingRequest) (*QueryStakingResponse, error)
 	Stakings(context.Context, *QueryStakingsRequest) (*QueryStakingsResponse, error)
-	TotalStakings(context.Context, *QueryTotalStakingsRequest) (*QueryTotalStakingsResponse, error)
+	TotalStaking(context.Context, *QueryTotalStakingRequest) (*QueryTotalStakingResponse, error)
 	PendingReward(context.Context, *QueryPendingRewardRequest) (*QueryPendingRewardResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
@@ -111,14 +147,23 @@ type UnimplementedQueryServer struct {
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
+func (UnimplementedQueryServer) Phase(context.Context, *QueryPhaseRequest) (*QueryPhaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Phase not implemented")
+}
+func (UnimplementedQueryServer) CurrentPhase(context.Context, *QueryCurrentPhaseRequest) (*QueryCurrentPhaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CurrentPhase not implemented")
+}
+func (UnimplementedQueryServer) Phases(context.Context, *QueryPhasesRequest) (*QueryPhasesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Phases not implemented")
+}
 func (UnimplementedQueryServer) Staking(context.Context, *QueryStakingRequest) (*QueryStakingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Staking not implemented")
 }
 func (UnimplementedQueryServer) Stakings(context.Context, *QueryStakingsRequest) (*QueryStakingsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Stakings not implemented")
 }
-func (UnimplementedQueryServer) TotalStakings(context.Context, *QueryTotalStakingsRequest) (*QueryTotalStakingsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method TotalStakings not implemented")
+func (UnimplementedQueryServer) TotalStaking(context.Context, *QueryTotalStakingRequest) (*QueryTotalStakingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TotalStaking not implemented")
 }
 func (UnimplementedQueryServer) PendingReward(context.Context, *QueryPendingRewardRequest) (*QueryPendingRewardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PendingReward not implemented")
@@ -150,6 +195,60 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Params(ctx, req.(*QueryParamsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Phase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPhaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Phase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Phase_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Phase(ctx, req.(*QueryPhaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_CurrentPhase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCurrentPhaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CurrentPhase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_CurrentPhase_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CurrentPhase(ctx, req.(*QueryCurrentPhaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Phases_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPhasesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Phases(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Phases_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Phases(ctx, req.(*QueryPhasesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -190,20 +289,20 @@ func _Query_Stakings_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_TotalStakings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryTotalStakingsRequest)
+func _Query_TotalStaking_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTotalStakingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).TotalStakings(ctx, in)
+		return srv.(QueryServer).TotalStaking(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_TotalStakings_FullMethodName,
+		FullMethod: Query_TotalStaking_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).TotalStakings(ctx, req.(*QueryTotalStakingsRequest))
+		return srv.(QueryServer).TotalStaking(ctx, req.(*QueryTotalStakingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -238,6 +337,18 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
+			MethodName: "Phase",
+			Handler:    _Query_Phase_Handler,
+		},
+		{
+			MethodName: "CurrentPhase",
+			Handler:    _Query_CurrentPhase_Handler,
+		},
+		{
+			MethodName: "Phases",
+			Handler:    _Query_Phases_Handler,
+		},
+		{
 			MethodName: "Staking",
 			Handler:    _Query_Staking_Handler,
 		},
@@ -246,8 +357,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Stakings_Handler,
 		},
 		{
-			MethodName: "TotalStakings",
-			Handler:    _Query_TotalStakings_Handler,
+			MethodName: "TotalStaking",
+			Handler:    _Query_TotalStaking_Handler,
 		},
 		{
 			MethodName: "PendingReward",

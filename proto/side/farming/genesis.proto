@@ -2,8 +2,8 @@ syntax = "proto3";
 package side.farming;
 
 import "gogoproto/gogo.proto";
-import "side/farming/params.proto";
 import "side/farming/farming.proto";
+import "side/farming/params.proto";
 
 option go_package = "github.com/sideprotocol/side/x/farming/types";
 
