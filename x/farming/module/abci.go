@@ -9,28 +9,48 @@ import (
 
 // EndBlocker called at the end of every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
-	distributeRewards(ctx, k)
+	handleMatureStakings(ctx, k)
+
+	updateEpoch(ctx, k)
 }
 
-// distributeRewards performs rewards distribution
-func distributeRewards(ctx sdk.Context, k keeper.Keeper) {
+// updateEpoch updates the epoch
+func updateEpoch(ctx sdk.Context, k keeper.Keeper) {
+	if k.FarmingEnabled(ctx) {
+		currentEpoch := k.GetCurrentEpoch(ctx)
+		if !ctx.BlockTime().Before(currentEpoch.EndTime) {
+			// call handler on epoch ended
+			k.OnEpochEnded(ctx)
+
+			// end the current epoch
+			currentEpoch.Status = types.EpochStatus_EPOCH_STATUS_ENDED
+			k.SetEpoch(ctx, currentEpoch)
+
+			// start the new epoch
+			k.NewEpoch(ctx)
+
+			// call handler on epoch started
+			k.OnEpochStarted(ctx)
+		}
+	}
+}
+
+// handleMatureStakings performs handling for the mature stakings
+func handleMatureStakings(ctx sdk.Context, k keeper.Keeper) {
 	// get all stakings
 	stakings := k.GetAllStakings(ctx)
 
 	for _, staking := range stakings {
-		if staking.Status == types.StakingStatus_STAKING_STATUS_UNSTAKED {
+		if staking.Status != types.StakingStatus_STAKING_STATUS_STAKED {
 			continue
 		}
 
-		if !ctx.BlockTime().Before(staking.StartTime.Add(staking.LockDuration)) {
+		if ctx.BlockTime().Before(staking.StartTime.Add(staking.LockDuration)) {
 			continue
 		}
 
-		// get the pending reward of the last distribution interval
-		pendingReward := k.GetPendingReward(ctx, staking.Id)
-
-		// accumulate reward
-		staking.PendingReward = staking.PendingReward.Add(pendingReward)
+		// update status
+		staking.Status = types.StakingStatus_STAKING_STATUS_UNLOCKED
 		k.SetStaking(ctx, staking)
 	}
 }
