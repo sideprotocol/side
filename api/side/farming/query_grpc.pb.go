@@ -20,13 +20,11 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Query_Params_FullMethodName        = "/side.farming.Query/Params"
-	Query_Phase_FullMethodName         = "/side.farming.Query/Phase"
-	Query_CurrentPhase_FullMethodName  = "/side.farming.Query/CurrentPhase"
-	Query_Phases_FullMethodName        = "/side.farming.Query/Phases"
 	Query_Staking_FullMethodName       = "/side.farming.Query/Staking"
 	Query_Stakings_FullMethodName      = "/side.farming.Query/Stakings"
 	Query_TotalStaking_FullMethodName  = "/side.farming.Query/TotalStaking"
 	Query_PendingReward_FullMethodName = "/side.farming.Query/PendingReward"
+	Query_CurrentEpoch_FullMethodName  = "/side.farming.Query/CurrentEpoch"
 )
 
 // QueryClient is the client API for Query service.
@@ -35,13 +33,11 @@ const (
 type QueryClient interface {
 	// Params queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	Phase(ctx context.Context, in *QueryPhaseRequest, opts ...grpc.CallOption) (*QueryPhaseResponse, error)
-	CurrentPhase(ctx context.Context, in *QueryCurrentPhaseRequest, opts ...grpc.CallOption) (*QueryCurrentPhaseResponse, error)
-	Phases(ctx context.Context, in *QueryPhasesRequest, opts ...grpc.CallOption) (*QueryPhasesResponse, error)
 	Staking(ctx context.Context, in *QueryStakingRequest, opts ...grpc.CallOption) (*QueryStakingResponse, error)
 	Stakings(ctx context.Context, in *QueryStakingsRequest, opts ...grpc.CallOption) (*QueryStakingsResponse, error)
 	TotalStaking(ctx context.Context, in *QueryTotalStakingRequest, opts ...grpc.CallOption) (*QueryTotalStakingResponse, error)
 	PendingReward(ctx context.Context, in *QueryPendingRewardRequest, opts ...grpc.CallOption) (*QueryPendingRewardResponse, error)
+	CurrentEpoch(ctx context.Context, in *QueryCurrentEpochRequest, opts ...grpc.CallOption) (*QueryCurrentEpochResponse, error)
 }
 
 type queryClient struct {
@@ -55,33 +51,6 @@ func NewQueryClient(cc grpc.ClientConnInterface) QueryClient {
 func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
 	out := new(QueryParamsResponse)
 	err := c.cc.Invoke(ctx, Query_Params_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) Phase(ctx context.Context, in *QueryPhaseRequest, opts ...grpc.CallOption) (*QueryPhaseResponse, error) {
-	out := new(QueryPhaseResponse)
-	err := c.cc.Invoke(ctx, Query_Phase_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) CurrentPhase(ctx context.Context, in *QueryCurrentPhaseRequest, opts ...grpc.CallOption) (*QueryCurrentPhaseResponse, error) {
-	out := new(QueryCurrentPhaseResponse)
-	err := c.cc.Invoke(ctx, Query_CurrentPhase_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) Phases(ctx context.Context, in *QueryPhasesRequest, opts ...grpc.CallOption) (*QueryPhasesResponse, error) {
-	out := new(QueryPhasesResponse)
-	err := c.cc.Invoke(ctx, Query_Phases_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -124,19 +93,26 @@ func (c *queryClient) PendingReward(ctx context.Context, in *QueryPendingRewardR
 	return out, nil
 }
 
+func (c *queryClient) CurrentEpoch(ctx context.Context, in *QueryCurrentEpochRequest, opts ...grpc.CallOption) (*QueryCurrentEpochResponse, error) {
+	out := new(QueryCurrentEpochResponse)
+	err := c.cc.Invoke(ctx, Query_CurrentEpoch_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
 type QueryServer interface {
 	// Params queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	Phase(context.Context, *QueryPhaseRequest) (*QueryPhaseResponse, error)
-	CurrentPhase(context.Context, *QueryCurrentPhaseRequest) (*QueryCurrentPhaseResponse, error)
-	Phases(context.Context, *QueryPhasesRequest) (*QueryPhasesResponse, error)
 	Staking(context.Context, *QueryStakingRequest) (*QueryStakingResponse, error)
 	Stakings(context.Context, *QueryStakingsRequest) (*QueryStakingsResponse, error)
 	TotalStaking(context.Context, *QueryTotalStakingRequest) (*QueryTotalStakingResponse, error)
 	PendingReward(context.Context, *QueryPendingRewardRequest) (*QueryPendingRewardResponse, error)
+	CurrentEpoch(context.Context, *QueryCurrentEpochRequest) (*QueryCurrentEpochResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -146,15 +122,6 @@ type UnimplementedQueryServer struct {
 
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
-}
-func (UnimplementedQueryServer) Phase(context.Context, *QueryPhaseRequest) (*QueryPhaseResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Phase not implemented")
-}
-func (UnimplementedQueryServer) CurrentPhase(context.Context, *QueryCurrentPhaseRequest) (*QueryCurrentPhaseResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CurrentPhase not implemented")
-}
-func (UnimplementedQueryServer) Phases(context.Context, *QueryPhasesRequest) (*QueryPhasesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Phases not implemented")
 }
 func (UnimplementedQueryServer) Staking(context.Context, *QueryStakingRequest) (*QueryStakingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Staking not implemented")
@@ -167,6 +134,9 @@ func (UnimplementedQueryServer) TotalStaking(context.Context, *QueryTotalStaking
 }
 func (UnimplementedQueryServer) PendingReward(context.Context, *QueryPendingRewardRequest) (*QueryPendingRewardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PendingReward not implemented")
+}
+func (UnimplementedQueryServer) CurrentEpoch(context.Context, *QueryCurrentEpochRequest) (*QueryCurrentEpochResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CurrentEpoch not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -195,60 +165,6 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Params(ctx, req.(*QueryParamsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_Phase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryPhaseRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Phase(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_Phase_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Phase(ctx, req.(*QueryPhaseRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_CurrentPhase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCurrentPhaseRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).CurrentPhase(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_CurrentPhase_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CurrentPhase(ctx, req.(*QueryCurrentPhaseRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_Phases_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryPhasesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Phases(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_Phases_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Phases(ctx, req.(*QueryPhasesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -325,6 +241,24 @@ func _Query_PendingReward_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_CurrentEpoch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCurrentEpochRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CurrentEpoch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_CurrentEpoch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CurrentEpoch(ctx, req.(*QueryCurrentEpochRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -335,18 +269,6 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
-		},
-		{
-			MethodName: "Phase",
-			Handler:    _Query_Phase_Handler,
-		},
-		{
-			MethodName: "CurrentPhase",
-			Handler:    _Query_CurrentPhase_Handler,
-		},
-		{
-			MethodName: "Phases",
-			Handler:    _Query_Phases_Handler,
 		},
 		{
 			MethodName: "Staking",
@@ -363,6 +285,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PendingReward",
 			Handler:    _Query_PendingReward_Handler,
+		},
+		{
+			MethodName: "CurrentEpoch",
+			Handler:    _Query_CurrentEpoch_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

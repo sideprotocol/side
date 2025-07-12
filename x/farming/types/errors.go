@@ -7,13 +7,10 @@ import (
 )
 
 var (
-	ErrInvalidPhaseParams   = errorsmod.Register(ModuleName, 1000, "invalid amount")
 	ErrInvalidAmount        = errorsmod.Register(ModuleName, 1001, "invalid amount")
 	ErrInvalidLockDuration  = errorsmod.Register(ModuleName, 1002, "invalid lock duration")
-	ErrPhaseDoesNotExist    = errorsmod.Register(ModuleName, 1003, "phase does not exist")
-	ErrPhaseNotStarted      = errorsmod.Register(ModuleName, 1004, "phase not started")
-	ErrPhaseEnded           = errorsmod.Register(ModuleName, 1005, "phase ended")
-	ErrAssetNotAllowed      = errorsmod.Register(ModuleName, 1006, "asset not allowed")
+	ErrFarmingNotEnabled    = errorsmod.Register(ModuleName, 1003, "farming not enabled")
+	ErrAssetNotEligible     = errorsmod.Register(ModuleName, 1006, "asset not eligible")
 	ErrUnauthorized         = errorsmod.Register(ModuleName, 1007, "unauthorized")
 	ErrStakingDoesNotExist  = errorsmod.Register(ModuleName, 1008, "staking does not exist")
 	ErrInvalidStakingStatus = errorsmod.Register(ModuleName, 1009, "invalid staking status")

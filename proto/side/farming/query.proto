@@ -4,7 +4,6 @@ package side.farming;
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "cosmos/base/v1beta1/coin.proto";
 import "side/farming/farming.proto";
 import "side/farming/params.proto";
 
@@ -15,18 +14,6 @@ service Query {
     // Params queries the parameters of the module.
     rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
       option (google.api.http).get = "/side/farming/params";
-    }
-
-    rpc Phase(QueryPhaseRequest) returns (QueryPhaseResponse) {
-        option (google.api.http).get = "/side/farming/phases/{id}";
-    }
-
-    rpc CurrentPhase(QueryCurrentPhaseRequest) returns (QueryCurrentPhaseResponse) {
-        option (google.api.http).get = "/side/farming/current_phase";
-    }
-
-    rpc Phases(QueryPhasesRequest) returns (QueryPhasesResponse) {
-        option (google.api.http).get = "/side/farming/phases";
     }
 
     rpc Staking(QueryStakingRequest) returns (QueryStakingResponse) {
@@ -44,36 +31,10 @@ service Query {
     rpc PendingReward(QueryPendingRewardRequest) returns (QueryPendingRewardResponse) {
         option (google.api.http).get = "/side/farming/stakings/{id}/pending_reward";
     }
-}
 
-// QueryPhaseRequest is request type for the Query/Phase RPC method.
-message QueryPhaseRequest {
-    uint64 id = 1;
-}
-
-// QueryPhaseResponse is response type for the Query/Phase RPC method.
-message QueryPhaseResponse {
-    Phase phase = 1;
-}
-
-// QueryCurrentPhaseRequest is request type for the Query/CurrentPhase RPC method.
-message QueryCurrentPhaseRequest {
-}
-
-// QueryCurrentPhaseResponse is response type for the Query/CurrentPhase RPC method.
-message QueryCurrentPhaseResponse {
-    Phase phase = 1;
-}
-
-// QueryPhasesRequest is request type for the Query/Phases RPC method.
-message QueryPhasesRequest {
-    cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-// QueryPhasesResponse is response type for the Query/Phases RPC method.
-message QueryPhasesResponse {
-    repeated Phase phases = 1;
-    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+    rpc CurrentEpoch(QueryCurrentEpochRequest) returns (QueryCurrentEpochResponse) {
+        option (google.api.http).get = "/side/farming/current_epoch";
+    }
 }
 
 // QueryStakingRequest is request type for the Query/Staking RPC method.
@@ -100,8 +61,7 @@ message QueryStakingsResponse {
 
 // QueryTotalStakingRequest is request type for the Query/TotalStaking RPC method.
 message QueryTotalStakingRequest {
-    uint64 phase_id = 1;
-    string denom = 2;
+    string denom = 1;
 }
 
 // QueryTotalStakingResponse is response type for the Query/TotalStaking RPC method.
@@ -117,6 +77,15 @@ message QueryPendingRewardRequest {
 // QueryPendingRewardResponse is response type for the Query/PendingReward RPC method.
 message QueryPendingRewardResponse {
     string pending_reward = 1;
+}
+
+// QueryCurrentEpochRequest is request type for the Query/CurrentEpoch RPC method.
+message QueryCurrentEpochRequest {
+}
+
+// QueryCurrentEpochResponse is response type for the Query/CurrentEpoch RPC method.
+message QueryCurrentEpochResponse {
+    Epoch current_epoch = 1;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.

@@ -11,1384 +11,15 @@ import (
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	reflect "reflect"
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_MsgCreatePhase_6_list)(nil)
-
-type _MsgCreatePhase_6_list struct {
-	list *[]*durationpb.Duration
-}
-
-func (x *_MsgCreatePhase_6_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_MsgCreatePhase_6_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_MsgCreatePhase_6_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*durationpb.Duration)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_MsgCreatePhase_6_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*durationpb.Duration)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_MsgCreatePhase_6_list) AppendMutable() protoreflect.Value {
-	v := new(durationpb.Duration)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_MsgCreatePhase_6_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_MsgCreatePhase_6_list) NewElement() protoreflect.Value {
-	v := new(durationpb.Duration)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_MsgCreatePhase_6_list) IsValid() bool {
-	return x.list != nil
-}
-
-var _ protoreflect.List = (*_MsgCreatePhase_7_list)(nil)
-
-type _MsgCreatePhase_7_list struct {
-	list *[]*Asset
-}
-
-func (x *_MsgCreatePhase_7_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_MsgCreatePhase_7_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_MsgCreatePhase_7_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Asset)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_MsgCreatePhase_7_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Asset)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_MsgCreatePhase_7_list) AppendMutable() protoreflect.Value {
-	v := new(Asset)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_MsgCreatePhase_7_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_MsgCreatePhase_7_list) NewElement() protoreflect.Value {
-	v := new(Asset)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_MsgCreatePhase_7_list) IsValid() bool {
-	return x.list != nil
-}
-
-var (
-	md_MsgCreatePhase                       protoreflect.MessageDescriptor
-	fd_MsgCreatePhase_authority             protoreflect.FieldDescriptor
-	fd_MsgCreatePhase_start_time            protoreflect.FieldDescriptor
-	fd_MsgCreatePhase_duration              protoreflect.FieldDescriptor
-	fd_MsgCreatePhase_distribution_interval protoreflect.FieldDescriptor
-	fd_MsgCreatePhase_rewards_per_interval  protoreflect.FieldDescriptor
-	fd_MsgCreatePhase_lock_durations        protoreflect.FieldDescriptor
-	fd_MsgCreatePhase_allowed_assets        protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_side_farming_tx_proto_init()
-	md_MsgCreatePhase = File_side_farming_tx_proto.Messages().ByName("MsgCreatePhase")
-	fd_MsgCreatePhase_authority = md_MsgCreatePhase.Fields().ByName("authority")
-	fd_MsgCreatePhase_start_time = md_MsgCreatePhase.Fields().ByName("start_time")
-	fd_MsgCreatePhase_duration = md_MsgCreatePhase.Fields().ByName("duration")
-	fd_MsgCreatePhase_distribution_interval = md_MsgCreatePhase.Fields().ByName("distribution_interval")
-	fd_MsgCreatePhase_rewards_per_interval = md_MsgCreatePhase.Fields().ByName("rewards_per_interval")
-	fd_MsgCreatePhase_lock_durations = md_MsgCreatePhase.Fields().ByName("lock_durations")
-	fd_MsgCreatePhase_allowed_assets = md_MsgCreatePhase.Fields().ByName("allowed_assets")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgCreatePhase)(nil)
-
-type fastReflection_MsgCreatePhase MsgCreatePhase
-
-func (x *MsgCreatePhase) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCreatePhase)(x)
-}
-
-func (x *MsgCreatePhase) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgCreatePhase_messageType fastReflection_MsgCreatePhase_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCreatePhase_messageType{}
-
-type fastReflection_MsgCreatePhase_messageType struct{}
-
-func (x fastReflection_MsgCreatePhase_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCreatePhase)(nil)
-}
-func (x fastReflection_MsgCreatePhase_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCreatePhase)
-}
-func (x fastReflection_MsgCreatePhase_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCreatePhase
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgCreatePhase) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCreatePhase
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCreatePhase) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCreatePhase_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCreatePhase) New() protoreflect.Message {
-	return new(fastReflection_MsgCreatePhase)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCreatePhase) Interface() protoreflect.ProtoMessage {
-	return (*MsgCreatePhase)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgCreatePhase) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Authority != "" {
-		value := protoreflect.ValueOfString(x.Authority)
-		if !f(fd_MsgCreatePhase_authority, value) {
-			return
-		}
-	}
-	if x.StartTime != nil {
-		value := protoreflect.ValueOfMessage(x.StartTime.ProtoReflect())
-		if !f(fd_MsgCreatePhase_start_time, value) {
-			return
-		}
-	}
-	if x.Duration != nil {
-		value := protoreflect.ValueOfMessage(x.Duration.ProtoReflect())
-		if !f(fd_MsgCreatePhase_duration, value) {
-			return
-		}
-	}
-	if x.DistributionInterval != nil {
-		value := protoreflect.ValueOfMessage(x.DistributionInterval.ProtoReflect())
-		if !f(fd_MsgCreatePhase_distribution_interval, value) {
-			return
-		}
-	}
-	if x.RewardsPerInterval != nil {
-		value := protoreflect.ValueOfMessage(x.RewardsPerInterval.ProtoReflect())
-		if !f(fd_MsgCreatePhase_rewards_per_interval, value) {
-			return
-		}
-	}
-	if len(x.LockDurations) != 0 {
-		value := protoreflect.ValueOfList(&_MsgCreatePhase_6_list{list: &x.LockDurations})
-		if !f(fd_MsgCreatePhase_lock_durations, value) {
-			return
-		}
-	}
-	if len(x.AllowedAssets) != 0 {
-		value := protoreflect.ValueOfList(&_MsgCreatePhase_7_list{list: &x.AllowedAssets})
-		if !f(fd_MsgCreatePhase_allowed_assets, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCreatePhase) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "side.farming.MsgCreatePhase.authority":
-		return x.Authority != ""
-	case "side.farming.MsgCreatePhase.start_time":
-		return x.StartTime != nil
-	case "side.farming.MsgCreatePhase.duration":
-		return x.Duration != nil
-	case "side.farming.MsgCreatePhase.distribution_interval":
-		return x.DistributionInterval != nil
-	case "side.farming.MsgCreatePhase.rewards_per_interval":
-		return x.RewardsPerInterval != nil
-	case "side.farming.MsgCreatePhase.lock_durations":
-		return len(x.LockDurations) != 0
-	case "side.farming.MsgCreatePhase.allowed_assets":
-		return len(x.AllowedAssets) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhase"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhase does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreatePhase) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "side.farming.MsgCreatePhase.authority":
-		x.Authority = ""
-	case "side.farming.MsgCreatePhase.start_time":
-		x.StartTime = nil
-	case "side.farming.MsgCreatePhase.duration":
-		x.Duration = nil
-	case "side.farming.MsgCreatePhase.distribution_interval":
-		x.DistributionInterval = nil
-	case "side.farming.MsgCreatePhase.rewards_per_interval":
-		x.RewardsPerInterval = nil
-	case "side.farming.MsgCreatePhase.lock_durations":
-		x.LockDurations = nil
-	case "side.farming.MsgCreatePhase.allowed_assets":
-		x.AllowedAssets = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhase"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhase does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCreatePhase) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "side.farming.MsgCreatePhase.authority":
-		value := x.Authority
-		return protoreflect.ValueOfString(value)
-	case "side.farming.MsgCreatePhase.start_time":
-		value := x.StartTime
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.farming.MsgCreatePhase.duration":
-		value := x.Duration
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.farming.MsgCreatePhase.distribution_interval":
-		value := x.DistributionInterval
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.farming.MsgCreatePhase.rewards_per_interval":
-		value := x.RewardsPerInterval
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.farming.MsgCreatePhase.lock_durations":
-		if len(x.LockDurations) == 0 {
-			return protoreflect.ValueOfList(&_MsgCreatePhase_6_list{})
-		}
-		listValue := &_MsgCreatePhase_6_list{list: &x.LockDurations}
-		return protoreflect.ValueOfList(listValue)
-	case "side.farming.MsgCreatePhase.allowed_assets":
-		if len(x.AllowedAssets) == 0 {
-			return protoreflect.ValueOfList(&_MsgCreatePhase_7_list{})
-		}
-		listValue := &_MsgCreatePhase_7_list{list: &x.AllowedAssets}
-		return protoreflect.ValueOfList(listValue)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhase"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhase does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreatePhase) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "side.farming.MsgCreatePhase.authority":
-		x.Authority = value.Interface().(string)
-	case "side.farming.MsgCreatePhase.start_time":
-		x.StartTime = value.Message().Interface().(*timestamppb.Timestamp)
-	case "side.farming.MsgCreatePhase.duration":
-		x.Duration = value.Message().Interface().(*durationpb.Duration)
-	case "side.farming.MsgCreatePhase.distribution_interval":
-		x.DistributionInterval = value.Message().Interface().(*durationpb.Duration)
-	case "side.farming.MsgCreatePhase.rewards_per_interval":
-		x.RewardsPerInterval = value.Message().Interface().(*v1beta1.Coin)
-	case "side.farming.MsgCreatePhase.lock_durations":
-		lv := value.List()
-		clv := lv.(*_MsgCreatePhase_6_list)
-		x.LockDurations = *clv.list
-	case "side.farming.MsgCreatePhase.allowed_assets":
-		lv := value.List()
-		clv := lv.(*_MsgCreatePhase_7_list)
-		x.AllowedAssets = *clv.list
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhase"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhase does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreatePhase) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.farming.MsgCreatePhase.start_time":
-		if x.StartTime == nil {
-			x.StartTime = new(timestamppb.Timestamp)
-		}
-		return protoreflect.ValueOfMessage(x.StartTime.ProtoReflect())
-	case "side.farming.MsgCreatePhase.duration":
-		if x.Duration == nil {
-			x.Duration = new(durationpb.Duration)
-		}
-		return protoreflect.ValueOfMessage(x.Duration.ProtoReflect())
-	case "side.farming.MsgCreatePhase.distribution_interval":
-		if x.DistributionInterval == nil {
-			x.DistributionInterval = new(durationpb.Duration)
-		}
-		return protoreflect.ValueOfMessage(x.DistributionInterval.ProtoReflect())
-	case "side.farming.MsgCreatePhase.rewards_per_interval":
-		if x.RewardsPerInterval == nil {
-			x.RewardsPerInterval = new(v1beta1.Coin)
-		}
-		return protoreflect.ValueOfMessage(x.RewardsPerInterval.ProtoReflect())
-	case "side.farming.MsgCreatePhase.lock_durations":
-		if x.LockDurations == nil {
-			x.LockDurations = []*durationpb.Duration{}
-		}
-		value := &_MsgCreatePhase_6_list{list: &x.LockDurations}
-		return protoreflect.ValueOfList(value)
-	case "side.farming.MsgCreatePhase.allowed_assets":
-		if x.AllowedAssets == nil {
-			x.AllowedAssets = []*Asset{}
-		}
-		value := &_MsgCreatePhase_7_list{list: &x.AllowedAssets}
-		return protoreflect.ValueOfList(value)
-	case "side.farming.MsgCreatePhase.authority":
-		panic(fmt.Errorf("field authority of message side.farming.MsgCreatePhase is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhase"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhase does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCreatePhase) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "side.farming.MsgCreatePhase.authority":
-		return protoreflect.ValueOfString("")
-	case "side.farming.MsgCreatePhase.start_time":
-		m := new(timestamppb.Timestamp)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.farming.MsgCreatePhase.duration":
-		m := new(durationpb.Duration)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.farming.MsgCreatePhase.distribution_interval":
-		m := new(durationpb.Duration)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.farming.MsgCreatePhase.rewards_per_interval":
-		m := new(v1beta1.Coin)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.farming.MsgCreatePhase.lock_durations":
-		list := []*durationpb.Duration{}
-		return protoreflect.ValueOfList(&_MsgCreatePhase_6_list{list: &list})
-	case "side.farming.MsgCreatePhase.allowed_assets":
-		list := []*Asset{}
-		return protoreflect.ValueOfList(&_MsgCreatePhase_7_list{list: &list})
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhase"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhase does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCreatePhase) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.farming.MsgCreatePhase", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCreatePhase) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreatePhase) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCreatePhase) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCreatePhase) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCreatePhase)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Authority)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.StartTime != nil {
-			l = options.Size(x.StartTime)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Duration != nil {
-			l = options.Size(x.Duration)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.DistributionInterval != nil {
-			l = options.Size(x.DistributionInterval)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.RewardsPerInterval != nil {
-			l = options.Size(x.RewardsPerInterval)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if len(x.LockDurations) > 0 {
-			for _, e := range x.LockDurations {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if len(x.AllowedAssets) > 0 {
-			for _, e := range x.AllowedAssets {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCreatePhase)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.AllowedAssets) > 0 {
-			for iNdEx := len(x.AllowedAssets) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.AllowedAssets[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x3a
-			}
-		}
-		if len(x.LockDurations) > 0 {
-			for iNdEx := len(x.LockDurations) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.LockDurations[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x32
-			}
-		}
-		if x.RewardsPerInterval != nil {
-			encoded, err := options.Marshal(x.RewardsPerInterval)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x2a
-		}
-		if x.DistributionInterval != nil {
-			encoded, err := options.Marshal(x.DistributionInterval)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x22
-		}
-		if x.Duration != nil {
-			encoded, err := options.Marshal(x.Duration)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if x.StartTime != nil {
-			encoded, err := options.Marshal(x.StartTime)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x12
-		}
-		if len(x.Authority) > 0 {
-			i -= len(x.Authority)
-			copy(dAtA[i:], x.Authority)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Authority)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCreatePhase)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreatePhase: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreatePhase: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Authority = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.StartTime == nil {
-					x.StartTime = &timestamppb.Timestamp{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.StartTime); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.Duration == nil {
-					x.Duration = &durationpb.Duration{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Duration); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 4:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DistributionInterval", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.DistributionInterval == nil {
-					x.DistributionInterval = &durationpb.Duration{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DistributionInterval); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 5:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RewardsPerInterval", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.RewardsPerInterval == nil {
-					x.RewardsPerInterval = &v1beta1.Coin{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.RewardsPerInterval); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 6:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LockDurations", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.LockDurations = append(x.LockDurations, &durationpb.Duration{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.LockDurations[len(x.LockDurations)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 7:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AllowedAssets", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AllowedAssets = append(x.AllowedAssets, &Asset{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.AllowedAssets[len(x.AllowedAssets)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_MsgCreatePhaseResponse protoreflect.MessageDescriptor
-)
-
-func init() {
-	file_side_farming_tx_proto_init()
-	md_MsgCreatePhaseResponse = File_side_farming_tx_proto.Messages().ByName("MsgCreatePhaseResponse")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgCreatePhaseResponse)(nil)
-
-type fastReflection_MsgCreatePhaseResponse MsgCreatePhaseResponse
-
-func (x *MsgCreatePhaseResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCreatePhaseResponse)(x)
-}
-
-func (x *MsgCreatePhaseResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgCreatePhaseResponse_messageType fastReflection_MsgCreatePhaseResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCreatePhaseResponse_messageType{}
-
-type fastReflection_MsgCreatePhaseResponse_messageType struct{}
-
-func (x fastReflection_MsgCreatePhaseResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCreatePhaseResponse)(nil)
-}
-func (x fastReflection_MsgCreatePhaseResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCreatePhaseResponse)
-}
-func (x fastReflection_MsgCreatePhaseResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCreatePhaseResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgCreatePhaseResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCreatePhaseResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCreatePhaseResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCreatePhaseResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCreatePhaseResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgCreatePhaseResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCreatePhaseResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgCreatePhaseResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgCreatePhaseResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCreatePhaseResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhaseResponse"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhaseResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreatePhaseResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhaseResponse"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhaseResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCreatePhaseResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhaseResponse"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhaseResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreatePhaseResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhaseResponse"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhaseResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreatePhaseResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhaseResponse"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhaseResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCreatePhaseResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgCreatePhaseResponse"))
-		}
-		panic(fmt.Errorf("message side.farming.MsgCreatePhaseResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCreatePhaseResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in side.farming.MsgCreatePhaseResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCreatePhaseResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCreatePhaseResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCreatePhaseResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCreatePhaseResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCreatePhaseResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCreatePhaseResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCreatePhaseResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreatePhaseResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreatePhaseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
 var (
 	md_MsgStake               protoreflect.MessageDescriptor
 	fd_MsgStake_staker        protoreflect.FieldDescriptor
-	fd_MsgStake_phase_id      protoreflect.FieldDescriptor
 	fd_MsgStake_amount        protoreflect.FieldDescriptor
 	fd_MsgStake_lock_duration protoreflect.FieldDescriptor
 )
@@ -1397,7 +28,6 @@ func init() {
 	file_side_farming_tx_proto_init()
 	md_MsgStake = File_side_farming_tx_proto.Messages().ByName("MsgStake")
 	fd_MsgStake_staker = md_MsgStake.Fields().ByName("staker")
-	fd_MsgStake_phase_id = md_MsgStake.Fields().ByName("phase_id")
 	fd_MsgStake_amount = md_MsgStake.Fields().ByName("amount")
 	fd_MsgStake_lock_duration = md_MsgStake.Fields().ByName("lock_duration")
 }
@@ -1411,7 +41,7 @@ func (x *MsgStake) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgStake) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[2]
+	mi := &file_side_farming_tx_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1473,12 +103,6 @@ func (x *fastReflection_MsgStake) Range(f func(protoreflect.FieldDescriptor, pro
 			return
 		}
 	}
-	if x.PhaseId != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.PhaseId)
-		if !f(fd_MsgStake_phase_id, value) {
-			return
-		}
-	}
 	if x.Amount != nil {
 		value := protoreflect.ValueOfMessage(x.Amount.ProtoReflect())
 		if !f(fd_MsgStake_amount, value) {
@@ -1508,8 +132,6 @@ func (x *fastReflection_MsgStake) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "side.farming.MsgStake.staker":
 		return x.Staker != ""
-	case "side.farming.MsgStake.phase_id":
-		return x.PhaseId != uint64(0)
 	case "side.farming.MsgStake.amount":
 		return x.Amount != nil
 	case "side.farming.MsgStake.lock_duration":
@@ -1532,8 +154,6 @@ func (x *fastReflection_MsgStake) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "side.farming.MsgStake.staker":
 		x.Staker = ""
-	case "side.farming.MsgStake.phase_id":
-		x.PhaseId = uint64(0)
 	case "side.farming.MsgStake.amount":
 		x.Amount = nil
 	case "side.farming.MsgStake.lock_duration":
@@ -1557,9 +177,6 @@ func (x *fastReflection_MsgStake) Get(descriptor protoreflect.FieldDescriptor) p
 	case "side.farming.MsgStake.staker":
 		value := x.Staker
 		return protoreflect.ValueOfString(value)
-	case "side.farming.MsgStake.phase_id":
-		value := x.PhaseId
-		return protoreflect.ValueOfUint64(value)
 	case "side.farming.MsgStake.amount":
 		value := x.Amount
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -1588,8 +205,6 @@ func (x *fastReflection_MsgStake) Set(fd protoreflect.FieldDescriptor, value pro
 	switch fd.FullName() {
 	case "side.farming.MsgStake.staker":
 		x.Staker = value.Interface().(string)
-	case "side.farming.MsgStake.phase_id":
-		x.PhaseId = value.Uint()
 	case "side.farming.MsgStake.amount":
 		x.Amount = value.Message().Interface().(*v1beta1.Coin)
 	case "side.farming.MsgStake.lock_duration":
@@ -1626,8 +241,6 @@ func (x *fastReflection_MsgStake) Mutable(fd protoreflect.FieldDescriptor) proto
 		return protoreflect.ValueOfMessage(x.LockDuration.ProtoReflect())
 	case "side.farming.MsgStake.staker":
 		panic(fmt.Errorf("field staker of message side.farming.MsgStake is not mutable"))
-	case "side.farming.MsgStake.phase_id":
-		panic(fmt.Errorf("field phase_id of message side.farming.MsgStake is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.MsgStake"))
@@ -1643,8 +256,6 @@ func (x *fastReflection_MsgStake) NewField(fd protoreflect.FieldDescriptor) prot
 	switch fd.FullName() {
 	case "side.farming.MsgStake.staker":
 		return protoreflect.ValueOfString("")
-	case "side.farming.MsgStake.phase_id":
-		return protoreflect.ValueOfUint64(uint64(0))
 	case "side.farming.MsgStake.amount":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -1724,9 +335,6 @@ func (x *fastReflection_MsgStake) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.PhaseId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PhaseId))
-		}
 		if x.Amount != nil {
 			l = options.Size(x.Amount)
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -1776,7 +384,7 @@ func (x *fastReflection_MsgStake) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x1a
 		}
 		if x.Amount != nil {
 			encoded, err := options.Marshal(x.Amount)
@@ -1790,12 +398,7 @@ func (x *fastReflection_MsgStake) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x1a
-		}
-		if x.PhaseId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PhaseId))
-			i--
-			dAtA[i] = 0x10
+			dAtA[i] = 0x12
 		}
 		if len(x.Staker) > 0 {
 			i -= len(x.Staker)
@@ -1886,25 +489,6 @@ func (x *fastReflection_MsgStake) ProtoMethods() *protoiface.Methods {
 				x.Staker = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PhaseId", wireType)
-				}
-				x.PhaseId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.PhaseId |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 				}
@@ -1940,7 +524,7 @@ func (x *fastReflection_MsgStake) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 4:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LockDuration", wireType)
 				}
@@ -2029,7 +613,7 @@ func (x *MsgStakeResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgStakeResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[3]
+	mi := &file_side_farming_tx_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2389,7 +973,7 @@ func (x *MsgUnstake) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUnstake) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[4]
+	mi := &file_side_farming_tx_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2853,7 +1437,7 @@ func (x *MsgUnstakeResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUnstakeResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[5]
+	mi := &file_side_farming_tx_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3213,7 +1797,7 @@ func (x *MsgClaim) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgClaim) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[6]
+	mi := &file_side_farming_tx_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3677,7 +2261,7 @@ func (x *MsgClaimResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgClaimResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[7]
+	mi := &file_side_farming_tx_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4037,7 +2621,7 @@ func (x *MsgUpdateParams) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUpdateParams) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[8]
+	mi := &file_side_farming_tx_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4532,7 +3116,7 @@ func (x *MsgUpdateParamsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUpdateParamsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_farming_tx_proto_msgTypes[9]
+	mi := &file_side_farming_tx_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4883,122 +3467,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type MsgCreatePhase struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// authority is the address that controls the module (defaults to x/gov unless overwritten).
-	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// Phase start time
-	StartTime *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
-	// Phase duration
-	Duration *durationpb.Duration `protobuf:"bytes,3,opt,name=duration,proto3" json:"duration,omitempty"`
-	// Rewards distribution interval
-	DistributionInterval *durationpb.Duration `protobuf:"bytes,4,opt,name=distribution_interval,json=distributionInterval,proto3" json:"distribution_interval,omitempty"`
-	// Rewards amount per interval
-	RewardsPerInterval *v1beta1.Coin `protobuf:"bytes,5,opt,name=rewards_per_interval,json=rewardsPerInterval,proto3" json:"rewards_per_interval,omitempty"`
-	// Accepted lock durations
-	LockDurations []*durationpb.Duration `protobuf:"bytes,6,rep,name=lock_durations,json=lockDurations,proto3" json:"lock_durations,omitempty"`
-	// Allowed assets
-	AllowedAssets []*Asset `protobuf:"bytes,7,rep,name=allowed_assets,json=allowedAssets,proto3" json:"allowed_assets,omitempty"`
-}
-
-func (x *MsgCreatePhase) Reset() {
-	*x = MsgCreatePhase{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgCreatePhase) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgCreatePhase) ProtoMessage() {}
-
-// Deprecated: Use MsgCreatePhase.ProtoReflect.Descriptor instead.
-func (*MsgCreatePhase) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *MsgCreatePhase) GetAuthority() string {
-	if x != nil {
-		return x.Authority
-	}
-	return ""
-}
-
-func (x *MsgCreatePhase) GetStartTime() *timestamppb.Timestamp {
-	if x != nil {
-		return x.StartTime
-	}
-	return nil
-}
-
-func (x *MsgCreatePhase) GetDuration() *durationpb.Duration {
-	if x != nil {
-		return x.Duration
-	}
-	return nil
-}
-
-func (x *MsgCreatePhase) GetDistributionInterval() *durationpb.Duration {
-	if x != nil {
-		return x.DistributionInterval
-	}
-	return nil
-}
-
-func (x *MsgCreatePhase) GetRewardsPerInterval() *v1beta1.Coin {
-	if x != nil {
-		return x.RewardsPerInterval
-	}
-	return nil
-}
-
-func (x *MsgCreatePhase) GetLockDurations() []*durationpb.Duration {
-	if x != nil {
-		return x.LockDurations
-	}
-	return nil
-}
-
-func (x *MsgCreatePhase) GetAllowedAssets() []*Asset {
-	if x != nil {
-		return x.AllowedAssets
-	}
-	return nil
-}
-
-type MsgCreatePhaseResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *MsgCreatePhaseResponse) Reset() {
-	*x = MsgCreatePhaseResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgCreatePhaseResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgCreatePhaseResponse) ProtoMessage() {}
-
-// Deprecated: Use MsgCreatePhaseResponse.ProtoReflect.Descriptor instead.
-func (*MsgCreatePhaseResponse) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{1}
-}
-
 type MsgStake struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -5006,18 +3474,16 @@ type MsgStake struct {
 
 	// Staker address
 	Staker string `protobuf:"bytes,1,opt,name=staker,proto3" json:"staker,omitempty"`
-	// Phase id
-	PhaseId uint64 `protobuf:"varint,2,opt,name=phase_id,json=phaseId,proto3" json:"phase_id,omitempty"`
 	// Staked amount
-	Amount *v1beta1.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount *v1beta1.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
 	// Lock duration
-	LockDuration *durationpb.Duration `protobuf:"bytes,4,opt,name=lock_duration,json=lockDuration,proto3" json:"lock_duration,omitempty"`
+	LockDuration *durationpb.Duration `protobuf:"bytes,3,opt,name=lock_duration,json=lockDuration,proto3" json:"lock_duration,omitempty"`
 }
 
 func (x *MsgStake) Reset() {
 	*x = MsgStake{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[2]
+		mi := &file_side_farming_tx_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5031,7 +3497,7 @@ func (*MsgStake) ProtoMessage() {}
 
 // Deprecated: Use MsgStake.ProtoReflect.Descriptor instead.
 func (*MsgStake) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{2}
+	return file_side_farming_tx_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *MsgStake) GetStaker() string {
@@ -5039,13 +3505,6 @@ func (x *MsgStake) GetStaker() string {
 		return x.Staker
 	}
 	return ""
-}
-
-func (x *MsgStake) GetPhaseId() uint64 {
-	if x != nil {
-		return x.PhaseId
-	}
-	return 0
 }
 
 func (x *MsgStake) GetAmount() *v1beta1.Coin {
@@ -5071,7 +3530,7 @@ type MsgStakeResponse struct {
 func (x *MsgStakeResponse) Reset() {
 	*x = MsgStakeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[3]
+		mi := &file_side_farming_tx_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5085,7 +3544,7 @@ func (*MsgStakeResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgStakeResponse.ProtoReflect.Descriptor instead.
 func (*MsgStakeResponse) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{3}
+	return file_side_farming_tx_proto_rawDescGZIP(), []int{1}
 }
 
 type MsgUnstake struct {
@@ -5102,7 +3561,7 @@ type MsgUnstake struct {
 func (x *MsgUnstake) Reset() {
 	*x = MsgUnstake{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[4]
+		mi := &file_side_farming_tx_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5116,7 +3575,7 @@ func (*MsgUnstake) ProtoMessage() {}
 
 // Deprecated: Use MsgUnstake.ProtoReflect.Descriptor instead.
 func (*MsgUnstake) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{4}
+	return file_side_farming_tx_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *MsgUnstake) GetStaker() string {
@@ -5142,7 +3601,7 @@ type MsgUnstakeResponse struct {
 func (x *MsgUnstakeResponse) Reset() {
 	*x = MsgUnstakeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[5]
+		mi := &file_side_farming_tx_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5156,7 +3615,7 @@ func (*MsgUnstakeResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgUnstakeResponse.ProtoReflect.Descriptor instead.
 func (*MsgUnstakeResponse) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{5}
+	return file_side_farming_tx_proto_rawDescGZIP(), []int{3}
 }
 
 type MsgClaim struct {
@@ -5173,7 +3632,7 @@ type MsgClaim struct {
 func (x *MsgClaim) Reset() {
 	*x = MsgClaim{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[6]
+		mi := &file_side_farming_tx_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5187,7 +3646,7 @@ func (*MsgClaim) ProtoMessage() {}
 
 // Deprecated: Use MsgClaim.ProtoReflect.Descriptor instead.
 func (*MsgClaim) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{6}
+	return file_side_farming_tx_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *MsgClaim) GetStaker() string {
@@ -5213,7 +3672,7 @@ type MsgClaimResponse struct {
 func (x *MsgClaimResponse) Reset() {
 	*x = MsgClaimResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[7]
+		mi := &file_side_farming_tx_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5227,7 +3686,7 @@ func (*MsgClaimResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgClaimResponse.ProtoReflect.Descriptor instead.
 func (*MsgClaimResponse) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{7}
+	return file_side_farming_tx_proto_rawDescGZIP(), []int{5}
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -5249,7 +3708,7 @@ type MsgUpdateParams struct {
 func (x *MsgUpdateParams) Reset() {
 	*x = MsgUpdateParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[8]
+		mi := &file_side_farming_tx_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5263,7 +3722,7 @@ func (*MsgUpdateParams) ProtoMessage() {}
 
 // Deprecated: Use MsgUpdateParams.ProtoReflect.Descriptor instead.
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{8}
+	return file_side_farming_tx_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *MsgUpdateParams) GetAuthority() string {
@@ -5292,7 +3751,7 @@ type MsgUpdateParamsResponse struct {
 func (x *MsgUpdateParamsResponse) Reset() {
 	*x = MsgUpdateParamsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_farming_tx_proto_msgTypes[9]
+		mi := &file_side_farming_tx_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5306,7 +3765,7 @@ func (*MsgUpdateParamsResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgUpdateParamsResponse.ProtoReflect.Descriptor instead.
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
-	return file_side_farming_tx_proto_rawDescGZIP(), []int{9}
+	return file_side_farming_tx_proto_rawDescGZIP(), []int{7}
 }
 
 var File_side_farming_tx_proto protoreflect.FileDescriptor
@@ -5326,110 +3785,69 @@ var file_side_farming_tx_proto_rawDesc = []byte{
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1a, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x66, 0x61, 0x72, 0x6d,
 	0x69, 0x6e, 0x67, 0x2f, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x1a, 0x19, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2f,
-	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xff, 0x03, 0x0a,
-	0x0e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x68, 0x61, 0x73, 0x65, 0x12,
-	0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x43, 0x0a,
-	0x0a, 0x73, 0x74, 0x61, 0x72, 0x74, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8,
-	0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x09, 0x73, 0x74, 0x61, 0x72, 0x74, 0x54, 0x69,
-	0x6d, 0x65, 0x12, 0x3f, 0x0a, 0x08, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42,
-	0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x08, 0x64, 0x75, 0x72, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x12, 0x58, 0x0a, 0x15, 0x64, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74,
-	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x18, 0x04, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8,
-	0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x14, 0x64, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62,
-	0x75, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x12, 0x51, 0x0a,
-	0x14, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5f, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x6e, 0x74,
-	0x65, 0x72, 0x76, 0x61, 0x6c, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
-	0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x12, 0x72, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x65, 0x72, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c,
-	0x12, 0x4a, 0x0a, 0x0e, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
-	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x0d, 0x6c,
-	0x6f, 0x63, 0x6b, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x40, 0x0a, 0x0e,
-	0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x5f, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x18, 0x07,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d,
-	0x69, 0x6e, 0x67, 0x2e, 0x41, 0x73, 0x73, 0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
-	0x0d, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x41, 0x73, 0x73, 0x65, 0x74, 0x73, 0x3a, 0x0e,
-	0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0x18,
-	0x0a, 0x16, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x68, 0x61, 0x73, 0x65,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xcd, 0x01, 0x0a, 0x08, 0x4d, 0x73, 0x67,
-	0x53, 0x74, 0x61, 0x6b, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x12, 0x19, 0x0a,
-	0x08, 0x70, 0x68, 0x61, 0x73, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52,
-	0x07, 0x70, 0x68, 0x61, 0x73, 0x65, 0x49, 0x64, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43,
-	0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
-	0x74, 0x12, 0x48, 0x0a, 0x0d, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
-	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x0c, 0x6c,
-	0x6f, 0x63, 0x6b, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
-	0x2a, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x53,
-	0x74, 0x61, 0x6b, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x41, 0x0a, 0x0a,
-	0x4d, 0x73, 0x67, 0x55, 0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74,
+	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb2, 0x01, 0x0a,
+	0x08, 0x4d, 0x73, 0x67, 0x53, 0x74, 0x61, 0x6b, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61,
+	0x6b, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65,
+	0x72, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde,
+	0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x48, 0x0a, 0x0d, 0x6c, 0x6f,
+	0x63, 0x6b, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde,
+	0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x0c, 0x6c, 0x6f, 0x63, 0x6b, 0x44, 0x75, 0x72, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65,
+	0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x53, 0x74, 0x61, 0x6b, 0x65, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x41, 0x0a, 0x0a, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x73, 0x74,
+	0x61, 0x6b, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
+	0x2a, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x22, 0x14, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x55,
+	0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3f,
+	0x0a, 0x08, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74,
 	0x61, 0x6b, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x6b,
 	0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02,
 	0x69, 0x64, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x22,
-	0x14, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3f, 0x0a, 0x08, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x61, 0x69,
-	0x6d, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06,
-	0x73, 0x74, 0x61, 0x6b, 0x65, 0x72, 0x22, 0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x61,
-	0x69, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a, 0x0f, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1c, 0x0a,
-	0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x32, 0x0a, 0x06, 0x70,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a,
-	0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22,
-	0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xfe, 0x02, 0x0a, 0x03, 0x4d,
-	0x73, 0x67, 0x12, 0x51, 0x0a, 0x0b, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x68, 0x61, 0x73,
-	0x65, 0x12, 0x1c, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67,
-	0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x68, 0x61, 0x73, 0x65, 0x1a,
-	0x24, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d,
-	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x68, 0x61, 0x73, 0x65, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x53, 0x74, 0x61, 0x6b, 0x65, 0x12, 0x16,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
-	0x67, 0x53, 0x74, 0x61, 0x6b, 0x65, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61,
-	0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x74, 0x61, 0x6b, 0x65, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a, 0x07, 0x55, 0x6e, 0x73, 0x74, 0x61, 0x6b,
-	0x65, 0x12, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67,
-	0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x1a, 0x20, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e,
-	0x73, 0x74, 0x61, 0x6b, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a,
-	0x05, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61,
-	0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x1a, 0x1e,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
-	0x67, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54,
-	0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1d,
-	0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x25, 0x2e,
-	0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x9b, 0x01, 0x0a, 0x10,
-	0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67,
-	0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74,
-	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x2f, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x46, 0x58,
-	0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0xca,
-	0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0xe2, 0x02,
-	0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50,
-	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65,
-	0x3a, 0x3a, 0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x12, 0x0a, 0x10, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
+	0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f,
+	0x72, 0x69, 0x74, 0x79, 0x12, 0x32, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d,
+	0x69, 0x6e, 0x67, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00,
+	0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61,
+	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x32, 0xab, 0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x3f, 0x0a, 0x05, 0x53,
+	0x74, 0x61, 0x6b, 0x65, 0x12, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d,
+	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x74, 0x61, 0x6b, 0x65, 0x1a, 0x1e, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x53,
+	0x74, 0x61, 0x6b, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a, 0x07,
+	0x55, 0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x12, 0x18, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66,
+	0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x73, 0x74, 0x61, 0x6b,
+	0x65, 0x1a, 0x20, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67,
+	0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x05, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x12, 0x16, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43,
+	0x6c, 0x61, 0x69, 0x6d, 0x1a, 0x1e, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d,
+	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x12, 0x1d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d,
+	0x69, 0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x1a, 0x25, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69,
+	0x6e, 0x67, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a,
+	0x01, 0x42, 0x9b, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66,
+	0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
+	0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69,
+	0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
+	0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67,
+	0xa2, 0x02, 0x03, 0x53, 0x46, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x46, 0x61,
+	0x72, 0x6d, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x46, 0x61, 0x72,
+	0x6d, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x46, 0x61, 0x72, 0x6d,
+	0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
+	0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -5444,49 +3862,37 @@ func file_side_farming_tx_proto_rawDescGZIP() []byte {
 	return file_side_farming_tx_proto_rawDescData
 }
 
-var file_side_farming_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_side_farming_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_side_farming_tx_proto_goTypes = []interface{}{
-	(*MsgCreatePhase)(nil),          // 0: side.farming.MsgCreatePhase
-	(*MsgCreatePhaseResponse)(nil),  // 1: side.farming.MsgCreatePhaseResponse
-	(*MsgStake)(nil),                // 2: side.farming.MsgStake
-	(*MsgStakeResponse)(nil),        // 3: side.farming.MsgStakeResponse
-	(*MsgUnstake)(nil),              // 4: side.farming.MsgUnstake
-	(*MsgUnstakeResponse)(nil),      // 5: side.farming.MsgUnstakeResponse
-	(*MsgClaim)(nil),                // 6: side.farming.MsgClaim
-	(*MsgClaimResponse)(nil),        // 7: side.farming.MsgClaimResponse
-	(*MsgUpdateParams)(nil),         // 8: side.farming.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil), // 9: side.farming.MsgUpdateParamsResponse
-	(*timestamppb.Timestamp)(nil),   // 10: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),     // 11: google.protobuf.Duration
-	(*v1beta1.Coin)(nil),            // 12: cosmos.base.v1beta1.Coin
-	(*Asset)(nil),                   // 13: side.farming.Asset
-	(*Params)(nil),                  // 14: side.farming.Params
+	(*MsgStake)(nil),                // 0: side.farming.MsgStake
+	(*MsgStakeResponse)(nil),        // 1: side.farming.MsgStakeResponse
+	(*MsgUnstake)(nil),              // 2: side.farming.MsgUnstake
+	(*MsgUnstakeResponse)(nil),      // 3: side.farming.MsgUnstakeResponse
+	(*MsgClaim)(nil),                // 4: side.farming.MsgClaim
+	(*MsgClaimResponse)(nil),        // 5: side.farming.MsgClaimResponse
+	(*MsgUpdateParams)(nil),         // 6: side.farming.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil), // 7: side.farming.MsgUpdateParamsResponse
+	(*v1beta1.Coin)(nil),            // 8: cosmos.base.v1beta1.Coin
+	(*durationpb.Duration)(nil),     // 9: google.protobuf.Duration
+	(*Params)(nil),                  // 10: side.farming.Params
 }
 var file_side_farming_tx_proto_depIdxs = []int32{
-	10, // 0: side.farming.MsgCreatePhase.start_time:type_name -> google.protobuf.Timestamp
-	11, // 1: side.farming.MsgCreatePhase.duration:type_name -> google.protobuf.Duration
-	11, // 2: side.farming.MsgCreatePhase.distribution_interval:type_name -> google.protobuf.Duration
-	12, // 3: side.farming.MsgCreatePhase.rewards_per_interval:type_name -> cosmos.base.v1beta1.Coin
-	11, // 4: side.farming.MsgCreatePhase.lock_durations:type_name -> google.protobuf.Duration
-	13, // 5: side.farming.MsgCreatePhase.allowed_assets:type_name -> side.farming.Asset
-	12, // 6: side.farming.MsgStake.amount:type_name -> cosmos.base.v1beta1.Coin
-	11, // 7: side.farming.MsgStake.lock_duration:type_name -> google.protobuf.Duration
-	14, // 8: side.farming.MsgUpdateParams.params:type_name -> side.farming.Params
-	0,  // 9: side.farming.Msg.CreatePhase:input_type -> side.farming.MsgCreatePhase
-	2,  // 10: side.farming.Msg.Stake:input_type -> side.farming.MsgStake
-	4,  // 11: side.farming.Msg.Unstake:input_type -> side.farming.MsgUnstake
-	6,  // 12: side.farming.Msg.Claim:input_type -> side.farming.MsgClaim
-	8,  // 13: side.farming.Msg.UpdateParams:input_type -> side.farming.MsgUpdateParams
-	1,  // 14: side.farming.Msg.CreatePhase:output_type -> side.farming.MsgCreatePhaseResponse
-	3,  // 15: side.farming.Msg.Stake:output_type -> side.farming.MsgStakeResponse
-	5,  // 16: side.farming.Msg.Unstake:output_type -> side.farming.MsgUnstakeResponse
-	7,  // 17: side.farming.Msg.Claim:output_type -> side.farming.MsgClaimResponse
-	9,  // 18: side.farming.Msg.UpdateParams:output_type -> side.farming.MsgUpdateParamsResponse
-	14, // [14:19] is the sub-list for method output_type
-	9,  // [9:14] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	8,  // 0: side.farming.MsgStake.amount:type_name -> cosmos.base.v1beta1.Coin
+	9,  // 1: side.farming.MsgStake.lock_duration:type_name -> google.protobuf.Duration
+	10, // 2: side.farming.MsgUpdateParams.params:type_name -> side.farming.Params
+	0,  // 3: side.farming.Msg.Stake:input_type -> side.farming.MsgStake
+	2,  // 4: side.farming.Msg.Unstake:input_type -> side.farming.MsgUnstake
+	4,  // 5: side.farming.Msg.Claim:input_type -> side.farming.MsgClaim
+	6,  // 6: side.farming.Msg.UpdateParams:input_type -> side.farming.MsgUpdateParams
+	1,  // 7: side.farming.Msg.Stake:output_type -> side.farming.MsgStakeResponse
+	3,  // 8: side.farming.Msg.Unstake:output_type -> side.farming.MsgUnstakeResponse
+	5,  // 9: side.farming.Msg.Claim:output_type -> side.farming.MsgClaimResponse
+	7,  // 10: side.farming.Msg.UpdateParams:output_type -> side.farming.MsgUpdateParamsResponse
+	7,  // [7:11] is the sub-list for method output_type
+	3,  // [3:7] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_side_farming_tx_proto_init() }
@@ -5498,30 +3904,6 @@ func file_side_farming_tx_proto_init() {
 	file_side_farming_params_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_side_farming_tx_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCreatePhase); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_side_farming_tx_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCreatePhaseResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_side_farming_tx_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgStake); i {
 			case 0:
 				return &v.state
@@ -5533,7 +3915,7 @@ func file_side_farming_tx_proto_init() {
 				return nil
 			}
 		}
-		file_side_farming_tx_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_side_farming_tx_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgStakeResponse); i {
 			case 0:
 				return &v.state
@@ -5545,7 +3927,7 @@ func file_side_farming_tx_proto_init() {
 				return nil
 			}
 		}
-		file_side_farming_tx_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_side_farming_tx_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgUnstake); i {
 			case 0:
 				return &v.state
@@ -5557,7 +3939,7 @@ func file_side_farming_tx_proto_init() {
 				return nil
 			}
 		}
-		file_side_farming_tx_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_side_farming_tx_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgUnstakeResponse); i {
 			case 0:
 				return &v.state
@@ -5569,7 +3951,7 @@ func file_side_farming_tx_proto_init() {
 				return nil
 			}
 		}
-		file_side_farming_tx_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_side_farming_tx_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgClaim); i {
 			case 0:
 				return &v.state
@@ -5581,7 +3963,7 @@ func file_side_farming_tx_proto_init() {
 				return nil
 			}
 		}
-		file_side_farming_tx_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_side_farming_tx_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgClaimResponse); i {
 			case 0:
 				return &v.state
@@ -5593,7 +3975,7 @@ func file_side_farming_tx_proto_init() {
 				return nil
 			}
 		}
-		file_side_farming_tx_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_side_farming_tx_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgUpdateParams); i {
 			case 0:
 				return &v.state
@@ -5605,7 +3987,7 @@ func file_side_farming_tx_proto_init() {
 				return nil
 			}
 		}
-		file_side_farming_tx_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_side_farming_tx_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgUpdateParamsResponse); i {
 			case 0:
 				return &v.state
@@ -5624,7 +4006,7 @@ func file_side_farming_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_farming_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

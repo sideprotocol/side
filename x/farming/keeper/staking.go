@@ -63,18 +63,18 @@ func (k Keeper) SetStakingByAddress(ctx sdk.Context, address string, staking *ty
 	store.Set(types.StakingByAddressKey(address, staking.Id), []byte{})
 }
 
-// HasTotalStaking returns true if total staking exists for the given phase and denom, false otherwise
-func (k Keeper) HasTotalStaking(ctx sdk.Context, phaseId uint64, denom string) bool {
+// HasTotalStaking returns true if total staking exists for the given denom, false otherwise
+func (k Keeper) HasTotalStaking(ctx sdk.Context, denom string) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.TotalStakingKey(phaseId, denom))
+	return store.Has(types.TotalStakingKey(denom))
 }
 
 // GetTotalStaking gets total staking by the given phase and denom
-func (k Keeper) GetTotalStaking(ctx sdk.Context, phaseId uint64, denom string) *types.TotalStaking {
+func (k Keeper) GetTotalStaking(ctx sdk.Context, denom string) *types.TotalStaking {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := store.Get(types.TotalStakingKey(phaseId, denom))
+	bz := store.Get(types.TotalStakingKey(denom))
 	var totalStaking types.TotalStaking
 	k.cdc.MustUnmarshal(bz, &totalStaking)
 
@@ -87,19 +87,18 @@ func (k Keeper) SetTotalStaking(ctx sdk.Context, totalStaking *types.TotalStakin
 
 	bz := k.cdc.MustMarshal(totalStaking)
 
-	store.Set(types.TotalStakingKey(totalStaking.PhaseId, totalStaking.Denom), bz)
+	store.Set(types.TotalStakingKey(totalStaking.Denom), bz)
 }
 
 // IncreaseTotalStaking increases total staking according to the given staking
 func (k Keeper) IncreaseTotalStaking(ctx sdk.Context, staking *types.Staking) {
 	totalStaking := &types.TotalStaking{}
-	if !k.HasTotalStaking(ctx, staking.PhaseId, staking.Amount.Denom) {
-		totalStaking.PhaseId = staking.PhaseId
+	if !k.HasTotalStaking(ctx, staking.Amount.Denom) {
 		totalStaking.Denom = staking.Amount.Denom
 		totalStaking.Amount = sdk.NewInt64Coin(staking.Amount.Denom, 0)
 		totalStaking.EffectiveAmount = sdk.NewInt64Coin(staking.Amount.Denom, 0)
 	} else {
-		totalStaking = k.GetTotalStaking(ctx, staking.PhaseId, staking.Amount.Denom)
+		totalStaking = k.GetTotalStaking(ctx, staking.Amount.Denom)
 	}
 
 	totalStaking.Amount = totalStaking.Amount.Add(staking.Amount)
@@ -110,7 +109,7 @@ func (k Keeper) IncreaseTotalStaking(ctx sdk.Context, staking *types.Staking) {
 
 // DecreaseTotalStaking decreases total staking according to the given staking
 func (k Keeper) DecreaseTotalStaking(ctx sdk.Context, staking *types.Staking) {
-	totalStaking := k.GetTotalStaking(ctx, staking.PhaseId, staking.Amount.Denom)
+	totalStaking := k.GetTotalStaking(ctx, staking.Amount.Denom)
 
 	totalStaking.Amount = totalStaking.Amount.Sub(staking.Amount)
 	totalStaking.EffectiveAmount = totalStaking.EffectiveAmount.Sub(staking.EffectiveAmount)

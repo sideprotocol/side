@@ -9,36 +9,19 @@ import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/sideprotocol/side/x/farming/types";
 
-// Phase status
-enum PhaseStatus {
-  PHASE_STATUS_UNSPECIFIED = 0;
-  PHASE_STATUS_PENDING = 1;
-  PHASE_STATUS_STARTED = 2;
-  PAHSE_STATUS_ENDED = 3;
+// Epoch status
+enum EpochStatus {
+  EPOCH_STATUS_PENDING = 0;
+  EPOCH_STATUS_STARTED = 1;
+  EPOCH_STATUS_ENDED = 2;
 }
 
-// Asset defines the farming asset
-message Asset {
-    // Asset denom
-    string denom = 1;
-    // Ratio of the reward relative to the total rewards
-    string reward_ratio = 2 [
-      (cosmos_proto.scalar)  = "cosmos.Dec",
-      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-      (gogoproto.nullable)   = false
-    ];
-}
-
-// Phase defines the phase
-message Phase {
+// Epoch defines the epoch
+message Epoch {
   uint64 id = 1;
   google.protobuf.Timestamp start_time = 2 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-  google.protobuf.Duration duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-  google.protobuf.Duration distribution_interval = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-  cosmos.base.v1beta1.Coin rewards_per_interval = 5 [(gogoproto.nullable) = false];
-  repeated google.protobuf.Duration lock_durations = 6 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-  repeated Asset allowed_assets = 7 [(gogoproto.nullable) = false];
-  PhaseStatus status = 8;
+  google.protobuf.Timestamp end_time = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  EpochStatus status = 4;
 }
 
 // Staking status
@@ -52,25 +35,23 @@ enum StakingStatus {
 // Staking defines the staking
 message Staking {
   uint64 id = 1;
-  uint64 phase_id = 2;
-  string address = 3;
-  cosmos.base.v1beta1.Coin amount = 4 [(gogoproto.nullable) = false];
-  google.protobuf.Duration lock_duration = 5 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-  string lock_multiplier = 6 [
+  string address = 2;
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  google.protobuf.Duration lock_duration = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  string lock_multiplier = 5 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable)   = false
     ];
-  cosmos.base.v1beta1.Coin effective_amount = 7 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin pending_reward = 8 [(gogoproto.nullable) = false];
-  google.protobuf.Timestamp start_time = 9 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-  StakingStatus status = 10;
+  cosmos.base.v1beta1.Coin effective_amount = 6 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin pending_reward = 7 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp start_time = 8 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  StakingStatus status = 9;
 }
 
-// TotalStaking defines total staking per phase and denom
+// TotalStaking defines total staking per epoch and denom
 message TotalStaking {
-  uint64 phase_id = 1;
-  string denom = 2;
-  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin effective_amount = 4 [(gogoproto.nullable) = false];
+  string denom = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin effective_amount = 3 [(gogoproto.nullable) = false];
 }
