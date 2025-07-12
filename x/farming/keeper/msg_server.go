@@ -4,6 +4,7 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
@@ -98,6 +99,7 @@ func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.Msg
 		LockDuration:    lockDuration,
 		LockMultiplier:  lockMultiplier,
 		EffectiveAmount: types.GetEffectiveAmount(msg.Amount, lockMultiplier),
+		PendingReward:   sdk.NewCoin(phase.RewardsPerInterval.Denom, sdkmath.ZeroInt()),
 		StartTime:       ctx.BlockTime(),
 		Status:          types.StakingStatus_STAKING_STATUS_STAKED,
 	}
@@ -141,6 +143,13 @@ func (m msgServer) Unstake(goCtx context.Context, msg *types.MsgUnstake) (*types
 		return nil, err
 	}
 
+	// claim pending reward if any
+	if staking.PendingReward.IsPositive() {
+		if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingReward)); err != nil {
+			return nil, err
+		}
+	}
+
 	// update status
 	staking.Status = types.StakingStatus_STAKING_STATUS_UNSTAKED
 	m.SetStaking(ctx, staking)
@@ -149,6 +158,38 @@ func (m msgServer) Unstake(goCtx context.Context, msg *types.MsgUnstake) (*types
 	m.DecreaseTotalStaking(ctx, staking)
 
 	return &types.MsgUnstakeResponse{}, nil
+}
+
+// Claim implements types.MsgServer.
+func (m msgServer) Claim(goCtx context.Context, msg *types.MsgClaim) (*types.MsgClaimResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !m.HasStaking(ctx, msg.Id) {
+		return nil, errorsmod.Wrapf(types.ErrStakingDoesNotExist, "id: %d", msg.Id)
+	}
+
+	staking := m.GetStaking(ctx, msg.Id)
+	if staking.Address != msg.Staker {
+		return nil, errorsmod.Wrap(types.ErrUnauthorized, "mismatched staker address")
+	}
+
+	if staking.Status == types.StakingStatus_STAKING_STATUS_UNSTAKED {
+		return nil, errorsmod.Wrapf(types.ErrInvalidStakingStatus, "already unstaked: %d", msg.Id)
+	}
+
+	if staking.PendingReward.IsZero() {
+		return nil, types.ErrNoPendingReward
+	}
+
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingReward)); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgClaimResponse{}, nil
 }
 
 // UpdateParams updates the module params.
