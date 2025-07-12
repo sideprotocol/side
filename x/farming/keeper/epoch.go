@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/farming/types"
@@ -65,6 +66,37 @@ func (k Keeper) GetCurrentEpoch(ctx sdk.Context) *types.Epoch {
 	return k.GetEpoch(ctx, id)
 }
 
+// AddToCurrentEpochStakingQueue adds the given staking to the staking queue for the current epoch
+func (k Keeper) AddToCurrentEpochStakingQueue(ctx sdk.Context, stakingId uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.CurrentEpochStakingQueueKey(stakingId), []byte{})
+}
+
+// RemoveFromCurrentEpochStakingQueue removes the given staking from the staking queue for the current epoch
+func (k Keeper) RemoveFromCurrentEpochStakingQueue(ctx sdk.Context, stakingId uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Delete(types.CurrentEpochStakingQueueKey(stakingId))
+}
+
+// IterateCurrentEpochStakingQueue iterates through the staking queue for the current epoch
+func (k Keeper) IterateCurrentEpochStakingQueue(ctx sdk.Context, cb func(staking *types.Staking) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.CurrentEpochStakingQueueKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		stakingId := sdk.BigEndianToUint64(iterator.Key()[1:])
+		staking := k.GetStaking(ctx, stakingId)
+
+		if cb(staking) {
+			break
+		}
+	}
+}
+
 // NewEpoch creates a new epoch
 func (k Keeper) NewEpoch(ctx sdk.Context) {
 	epoch := &types.Epoch{
@@ -75,4 +107,43 @@ func (k Keeper) NewEpoch(ctx sdk.Context) {
 	}
 
 	k.SetEpoch(ctx, epoch)
+}
+
+// OnEpochStarted is called when the current epoch is started
+func (k Keeper) OnEpochStarted(ctx sdk.Context) {
+	// get the current epoch
+	currentEpoch := k.GetCurrentEpoch(ctx)
+
+	// get all stakings
+	stakings := k.GetAllStakings(ctx)
+
+	for _, staking := range stakings {
+		if staking.Status != types.StakingStatus_STAKING_STATUS_STAKED {
+			continue
+		}
+
+		if staking.StartTime.Add(staking.LockDuration).Before(currentEpoch.EndTime) {
+			continue
+		}
+
+		// add to staking queue for the current epoch
+		k.AddToCurrentEpochStakingQueue(ctx, staking.Id)
+	}
+}
+
+// OnEpochEnded is called when the current epoch ends
+func (k Keeper) OnEpochEnded(ctx sdk.Context) {
+	k.IterateCurrentEpochStakingQueue(ctx, func(staking *types.Staking) (stop bool) {
+		// calculate the pending reward
+		pendingReward := k.GetPendingReward(ctx, staking.Id)
+
+		// distribute reward
+		staking.PendingReward = staking.PendingReward.Add(pendingReward)
+		k.SetStaking(ctx, staking)
+
+		// remove from the staking queue for the current epoch
+		k.RemoveFromCurrentEpochStakingQueue(ctx, staking.Id)
+
+		return false
+	})
 }

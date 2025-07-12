@@ -20,13 +20,15 @@ const (
 
 var (
 	ParamsKey    = []byte{0x01} // key for params
-	StakingIdKey = []byte{0x02} // key for staking id
-	EpochIdKey   = []byte{0x03} // key for epoch id
+	EpochIdKey   = []byte{0x02} // key for epoch id
+	StakingIdKey = []byte{0x03} // key for staking id
 
 	EpochKeyPrefix            = []byte{0x10} // key prefix for epoch
 	StakingKeyPrefix          = []byte{0x11} // key prefix for staking
 	StakingByAddressKeyPrefix = []byte{0x12} // key prefix for staking by address
 	TotalStakingKeyPrefix     = []byte{0x13} // key prefix for total staking
+
+	CurrentEpochStakingQueueKeyPrefix = []byte{0x20} // key prefix for staking queue for the current epoch
 )
 
 func EpochKey(id uint64) []byte {
@@ -43,4 +45,8 @@ func StakingByAddressKey(address string, id uint64) []byte {
 
 func TotalStakingKey(denom string) []byte {
 	return append(TotalStakingKeyPrefix, []byte(denom)...)
+}
+
+func CurrentEpochStakingQueueKey(stakingId uint64) []byte {
+	return append(CurrentEpochStakingQueueKeyPrefix, sdk.Uint64ToBigEndian(stakingId)...)
 }
