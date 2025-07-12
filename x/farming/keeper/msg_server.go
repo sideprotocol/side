@@ -15,43 +15,6 @@ type msgServer struct {
 	Keeper
 }
 
-// CreatePhase implements types.MsgServer.
-func (m msgServer) CreatePhase(goCtx context.Context, msg *types.MsgCreatePhase) (*types.MsgCreatePhaseResponse, error) {
-	if m.authority != msg.Authority {
-		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", m.authority, msg.Authority)
-	}
-
-	if err := msg.ValidateBasic(); err != nil {
-		return nil, err
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !ctx.BlockTime().Before(msg.StartTime.Add(msg.Duration)) {
-		return nil, errorsmod.Wrap(types.ErrInvalidPhaseParams, "phase end time has reached")
-	}
-
-	phase := &types.Phase{
-		Id:                   m.IncrementPhaseId(ctx),
-		StartTime:            msg.StartTime,
-		Duration:             msg.Duration,
-		DistributionInterval: msg.DistributionInterval,
-		RewardsPerInterval:   msg.RewardsPerInterval,
-		LockDurations:        msg.LockDurations,
-		AllowedAssets:        msg.AllowedAssets,
-		Status:               types.PhaseStatus_PHASE_STATUS_PENDING,
-	}
-
-	if !ctx.BlockTime().Before(phase.StartTime) {
-		phase.Status = types.PhaseStatus_PHASE_STATUS_STARTED
-	}
-
-	// set phase
-	m.SetPhase(ctx, phase)
-
-	return &types.MsgCreatePhaseResponse{}, nil
-}
-
 // Stake implements types.MsgServer.
 func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.MsgStakeResponse, error) {
 	if err := msg.ValidateBasic(); err != nil {
@@ -60,25 +23,15 @@ func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.Msg
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.HasPhase(ctx, msg.PhaseId) {
-		return nil, errorsmod.Wrapf(types.ErrPhaseDoesNotExist, "id: %d", msg.PhaseId)
+	if !m.FarmingEnabled(ctx) {
+		return nil, types.ErrFarmingNotEnabled
 	}
 
-	phase := m.GetPhase(ctx, msg.PhaseId)
-
-	if ctx.BlockTime().Before(phase.StartTime) {
-		return nil, errorsmod.Wrapf(types.ErrPhaseNotStarted, "start time: %s", phase.StartTime)
+	if !m.IsEligibleAsset(ctx, msg.Amount.Denom) {
+		return nil, errorsmod.Wrapf(types.ErrAssetNotEligible, "asset %s not eligible", msg.Amount.Denom)
 	}
 
-	if !ctx.BlockTime().Before(phase.StartTime.Add(phase.Duration)) {
-		return nil, errorsmod.Wrapf(types.ErrPhaseEnded, "end time: %s", phase.StartTime.Add(phase.Duration))
-	}
-
-	if !types.IsAllowedAsset(phase, msg.Amount.Denom) {
-		return nil, errorsmod.Wrapf(types.ErrAssetNotAllowed, "asset %s not allowed", msg.Amount.Denom)
-	}
-
-	if !types.LockDurationExists(phase, msg.LockDuration) {
+	if !m.LockDurationExists(ctx, msg.LockDuration) {
 		return nil, types.ErrInvalidLockDuration
 	}
 
@@ -86,20 +39,16 @@ func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.Msg
 		return nil, err
 	}
 
-	phaseRemainingDuration := phase.StartTime.Add(phase.Duration).Sub(ctx.BlockTime())
-	lockDuration := min(msg.LockDuration, phaseRemainingDuration)
-
-	lockMultiplier := types.GetLockMultiplier(lockDuration)
+	lockMultiplier := types.GetLockMultiplier(msg.LockDuration)
 
 	staking := &types.Staking{
 		Id:              m.IncrementStakingId(ctx),
-		PhaseId:         msg.PhaseId,
 		Address:         msg.Staker,
 		Amount:          msg.Amount,
-		LockDuration:    lockDuration,
+		LockDuration:    msg.LockDuration,
 		LockMultiplier:  lockMultiplier,
 		EffectiveAmount: types.GetEffectiveAmount(msg.Amount, lockMultiplier),
-		PendingReward:   sdk.NewCoin(phase.RewardsPerInterval.Denom, sdkmath.ZeroInt()),
+		PendingReward:   sdk.NewCoin(m.RewardsPerEpoch(ctx).Denom, sdkmath.ZeroInt()),
 		StartTime:       ctx.BlockTime(),
 		Status:          types.StakingStatus_STAKING_STATUS_STAKED,
 	}
@@ -204,7 +153,14 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// get the current params
+	params := m.GetParams(ctx)
+
+	// update params
 	m.SetParams(ctx, msg.Params)
+
+	// handle params change
+	m.OnParamsChanged(ctx, params, msg.Params)
 
 	return &types.MsgUpdateParamsResponse{}, nil
 }

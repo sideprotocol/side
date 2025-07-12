@@ -31,35 +31,32 @@ var _ = time.Kitchen
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Phase status
-type PhaseStatus int32
+// Epoch status
+type EpochStatus int32
 
 const (
-	PhaseStatus_PHASE_STATUS_UNSPECIFIED PhaseStatus = 0
-	PhaseStatus_PHASE_STATUS_PENDING     PhaseStatus = 1
-	PhaseStatus_PHASE_STATUS_STARTED     PhaseStatus = 2
-	PhaseStatus_PAHSE_STATUS_ENDED       PhaseStatus = 3
+	EpochStatus_EPOCH_STATUS_PENDING EpochStatus = 0
+	EpochStatus_EPOCH_STATUS_STARTED EpochStatus = 1
+	EpochStatus_EPOCH_STATUS_ENDED   EpochStatus = 2
 )
 
-var PhaseStatus_name = map[int32]string{
-	0: "PHASE_STATUS_UNSPECIFIED",
-	1: "PHASE_STATUS_PENDING",
-	2: "PHASE_STATUS_STARTED",
-	3: "PAHSE_STATUS_ENDED",
+var EpochStatus_name = map[int32]string{
+	0: "EPOCH_STATUS_PENDING",
+	1: "EPOCH_STATUS_STARTED",
+	2: "EPOCH_STATUS_ENDED",
 }
 
-var PhaseStatus_value = map[string]int32{
-	"PHASE_STATUS_UNSPECIFIED": 0,
-	"PHASE_STATUS_PENDING":     1,
-	"PHASE_STATUS_STARTED":     2,
-	"PAHSE_STATUS_ENDED":       3,
+var EpochStatus_value = map[string]int32{
+	"EPOCH_STATUS_PENDING": 0,
+	"EPOCH_STATUS_STARTED": 1,
+	"EPOCH_STATUS_ENDED":   2,
 }
 
-func (x PhaseStatus) String() string {
-	return proto.EnumName(PhaseStatus_name, int32(x))
+func (x EpochStatus) String() string {
+	return proto.EnumName(EpochStatus_name, int32(x))
 }
 
-func (PhaseStatus) EnumDescriptor() ([]byte, []int) {
+func (EpochStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_117d7eb64797c9dd, []int{0}
 }
 
@@ -95,26 +92,26 @@ func (StakingStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_117d7eb64797c9dd, []int{1}
 }
 
-// Asset defines the farming asset
-type Asset struct {
-	// Asset denom
-	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
-	// Ratio of the reward relative to the total rewards
-	RewardRatio cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,opt,name=reward_ratio,json=rewardRatio,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"reward_ratio"`
+// Epoch defines the epoch
+type Epoch struct {
+	Id        uint64      `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	StartTime time.Time   `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
+	EndTime   time.Time   `protobuf:"bytes,3,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
+	Status    EpochStatus `protobuf:"varint,4,opt,name=status,proto3,enum=side.farming.EpochStatus" json:"status,omitempty"`
 }
 
-func (m *Asset) Reset()         { *m = Asset{} }
-func (m *Asset) String() string { return proto.CompactTextString(m) }
-func (*Asset) ProtoMessage()    {}
-func (*Asset) Descriptor() ([]byte, []int) {
+func (m *Epoch) Reset()         { *m = Epoch{} }
+func (m *Epoch) String() string { return proto.CompactTextString(m) }
+func (*Epoch) ProtoMessage()    {}
+func (*Epoch) Descriptor() ([]byte, []int) {
 	return fileDescriptor_117d7eb64797c9dd, []int{0}
 }
-func (m *Asset) XXX_Unmarshal(b []byte) error {
+func (m *Epoch) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *Asset) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *Epoch) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_Asset.Marshal(b, m, deterministic)
+		return xxx_messageInfo_Epoch.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -124,145 +121,64 @@ func (m *Asset) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *Asset) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Asset.Merge(m, src)
+func (m *Epoch) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Epoch.Merge(m, src)
 }
-func (m *Asset) XXX_Size() int {
+func (m *Epoch) XXX_Size() int {
 	return m.Size()
 }
-func (m *Asset) XXX_DiscardUnknown() {
-	xxx_messageInfo_Asset.DiscardUnknown(m)
+func (m *Epoch) XXX_DiscardUnknown() {
+	xxx_messageInfo_Epoch.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Asset proto.InternalMessageInfo
+var xxx_messageInfo_Epoch proto.InternalMessageInfo
 
-func (m *Asset) GetDenom() string {
-	if m != nil {
-		return m.Denom
-	}
-	return ""
-}
-
-// Phase defines the phase
-type Phase struct {
-	Id                   uint64          `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	StartTime            time.Time       `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
-	Duration             time.Duration   `protobuf:"bytes,3,opt,name=duration,proto3,stdduration" json:"duration"`
-	DistributionInterval time.Duration   `protobuf:"bytes,4,opt,name=distribution_interval,json=distributionInterval,proto3,stdduration" json:"distribution_interval"`
-	RewardsPerInterval   types.Coin      `protobuf:"bytes,5,opt,name=rewards_per_interval,json=rewardsPerInterval,proto3" json:"rewards_per_interval"`
-	LockDurations        []time.Duration `protobuf:"bytes,6,rep,name=lock_durations,json=lockDurations,proto3,stdduration" json:"lock_durations"`
-	AllowedAssets        []Asset         `protobuf:"bytes,7,rep,name=allowed_assets,json=allowedAssets,proto3" json:"allowed_assets"`
-	Status               PhaseStatus     `protobuf:"varint,8,opt,name=status,proto3,enum=side.farming.PhaseStatus" json:"status,omitempty"`
-}
-
-func (m *Phase) Reset()         { *m = Phase{} }
-func (m *Phase) String() string { return proto.CompactTextString(m) }
-func (*Phase) ProtoMessage()    {}
-func (*Phase) Descriptor() ([]byte, []int) {
-	return fileDescriptor_117d7eb64797c9dd, []int{1}
-}
-func (m *Phase) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *Phase) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Phase.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *Phase) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Phase.Merge(m, src)
-}
-func (m *Phase) XXX_Size() int {
-	return m.Size()
-}
-func (m *Phase) XXX_DiscardUnknown() {
-	xxx_messageInfo_Phase.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Phase proto.InternalMessageInfo
-
-func (m *Phase) GetId() uint64 {
+func (m *Epoch) GetId() uint64 {
 	if m != nil {
 		return m.Id
 	}
 	return 0
 }
 
-func (m *Phase) GetStartTime() time.Time {
+func (m *Epoch) GetStartTime() time.Time {
 	if m != nil {
 		return m.StartTime
 	}
 	return time.Time{}
 }
 
-func (m *Phase) GetDuration() time.Duration {
+func (m *Epoch) GetEndTime() time.Time {
 	if m != nil {
-		return m.Duration
+		return m.EndTime
 	}
-	return 0
+	return time.Time{}
 }
 
-func (m *Phase) GetDistributionInterval() time.Duration {
-	if m != nil {
-		return m.DistributionInterval
-	}
-	return 0
-}
-
-func (m *Phase) GetRewardsPerInterval() types.Coin {
-	if m != nil {
-		return m.RewardsPerInterval
-	}
-	return types.Coin{}
-}
-
-func (m *Phase) GetLockDurations() []time.Duration {
-	if m != nil {
-		return m.LockDurations
-	}
-	return nil
-}
-
-func (m *Phase) GetAllowedAssets() []Asset {
-	if m != nil {
-		return m.AllowedAssets
-	}
-	return nil
-}
-
-func (m *Phase) GetStatus() PhaseStatus {
+func (m *Epoch) GetStatus() EpochStatus {
 	if m != nil {
 		return m.Status
 	}
-	return PhaseStatus_PHASE_STATUS_UNSPECIFIED
+	return EpochStatus_EPOCH_STATUS_PENDING
 }
 
 // Staking defines the staking
 type Staking struct {
 	Id              uint64                      `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	PhaseId         uint64                      `protobuf:"varint,2,opt,name=phase_id,json=phaseId,proto3" json:"phase_id,omitempty"`
-	Address         string                      `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
-	Amount          types.Coin                  `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount"`
-	LockDuration    time.Duration               `protobuf:"bytes,5,opt,name=lock_duration,json=lockDuration,proto3,stdduration" json:"lock_duration"`
-	LockMultiplier  cosmossdk_io_math.LegacyDec `protobuf:"bytes,6,opt,name=lock_multiplier,json=lockMultiplier,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"lock_multiplier"`
-	EffectiveAmount types.Coin                  `protobuf:"bytes,7,opt,name=effective_amount,json=effectiveAmount,proto3" json:"effective_amount"`
-	PendingReward   types.Coin                  `protobuf:"bytes,8,opt,name=pending_reward,json=pendingReward,proto3" json:"pending_reward"`
-	StartTime       time.Time                   `protobuf:"bytes,9,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
-	Status          StakingStatus               `protobuf:"varint,10,opt,name=status,proto3,enum=side.farming.StakingStatus" json:"status,omitempty"`
+	Address         string                      `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	Amount          types.Coin                  `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
+	LockDuration    time.Duration               `protobuf:"bytes,4,opt,name=lock_duration,json=lockDuration,proto3,stdduration" json:"lock_duration"`
+	LockMultiplier  cosmossdk_io_math.LegacyDec `protobuf:"bytes,5,opt,name=lock_multiplier,json=lockMultiplier,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"lock_multiplier"`
+	EffectiveAmount types.Coin                  `protobuf:"bytes,6,opt,name=effective_amount,json=effectiveAmount,proto3" json:"effective_amount"`
+	PendingReward   types.Coin                  `protobuf:"bytes,7,opt,name=pending_reward,json=pendingReward,proto3" json:"pending_reward"`
+	StartTime       time.Time                   `protobuf:"bytes,8,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
+	Status          StakingStatus               `protobuf:"varint,9,opt,name=status,proto3,enum=side.farming.StakingStatus" json:"status,omitempty"`
 }
 
 func (m *Staking) Reset()         { *m = Staking{} }
 func (m *Staking) String() string { return proto.CompactTextString(m) }
 func (*Staking) ProtoMessage()    {}
 func (*Staking) Descriptor() ([]byte, []int) {
-	return fileDescriptor_117d7eb64797c9dd, []int{2}
+	return fileDescriptor_117d7eb64797c9dd, []int{1}
 }
 func (m *Staking) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -294,13 +210,6 @@ var xxx_messageInfo_Staking proto.InternalMessageInfo
 func (m *Staking) GetId() uint64 {
 	if m != nil {
 		return m.Id
-	}
-	return 0
-}
-
-func (m *Staking) GetPhaseId() uint64 {
-	if m != nil {
-		return m.PhaseId
 	}
 	return 0
 }
@@ -354,19 +263,18 @@ func (m *Staking) GetStatus() StakingStatus {
 	return StakingStatus_STAKING_STATUS_UNSPECIFIED
 }
 
-// TotalStaking defines total staking per phase and denom
+// TotalStaking defines total staking per epoch and denom
 type TotalStaking struct {
-	PhaseId         uint64     `protobuf:"varint,1,opt,name=phase_id,json=phaseId,proto3" json:"phase_id,omitempty"`
-	Denom           string     `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
-	Amount          types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
-	EffectiveAmount types.Coin `protobuf:"bytes,4,opt,name=effective_amount,json=effectiveAmount,proto3" json:"effective_amount"`
+	Denom           string     `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
+	Amount          types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
+	EffectiveAmount types.Coin `protobuf:"bytes,3,opt,name=effective_amount,json=effectiveAmount,proto3" json:"effective_amount"`
 }
 
 func (m *TotalStaking) Reset()         { *m = TotalStaking{} }
 func (m *TotalStaking) String() string { return proto.CompactTextString(m) }
 func (*TotalStaking) ProtoMessage()    {}
 func (*TotalStaking) Descriptor() ([]byte, []int) {
-	return fileDescriptor_117d7eb64797c9dd, []int{3}
+	return fileDescriptor_117d7eb64797c9dd, []int{2}
 }
 func (m *TotalStaking) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -395,13 +303,6 @@ func (m *TotalStaking) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TotalStaking proto.InternalMessageInfo
 
-func (m *TotalStaking) GetPhaseId() uint64 {
-	if m != nil {
-		return m.PhaseId
-	}
-	return 0
-}
-
 func (m *TotalStaking) GetDenom() string {
 	if m != nil {
 		return m.Denom
@@ -424,10 +325,9 @@ func (m *TotalStaking) GetEffectiveAmount() types.Coin {
 }
 
 func init() {
-	proto.RegisterEnum("side.farming.PhaseStatus", PhaseStatus_name, PhaseStatus_value)
+	proto.RegisterEnum("side.farming.EpochStatus", EpochStatus_name, EpochStatus_value)
 	proto.RegisterEnum("side.farming.StakingStatus", StakingStatus_name, StakingStatus_value)
-	proto.RegisterType((*Asset)(nil), "side.farming.Asset")
-	proto.RegisterType((*Phase)(nil), "side.farming.Phase")
+	proto.RegisterType((*Epoch)(nil), "side.farming.Epoch")
 	proto.RegisterType((*Staking)(nil), "side.farming.Staking")
 	proto.RegisterType((*TotalStaking)(nil), "side.farming.TotalStaking")
 }
@@ -435,63 +335,53 @@ func init() {
 func init() { proto.RegisterFile("side/farming/farming.proto", fileDescriptor_117d7eb64797c9dd) }
 
 var fileDescriptor_117d7eb64797c9dd = []byte{
-	// 833 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xbf, 0x6f, 0xdb, 0x46,
-	0x18, 0x15, 0x25, 0x59, 0xb2, 0x3f, 0x5b, 0x8a, 0x70, 0x55, 0x5a, 0x4a, 0x2e, 0x64, 0xc3, 0x53,
-	0x10, 0xb4, 0x24, 0x9c, 0x0c, 0x1d, 0x5b, 0xd9, 0x94, 0x63, 0x25, 0xa9, 0xaa, 0x52, 0x0c, 0x50,
-	0x64, 0x21, 0x4e, 0xe4, 0x99, 0x3e, 0x98, 0xe4, 0x09, 0xbc, 0x93, 0xdd, 0xec, 0xdd, 0xba, 0x64,
-	0xec, 0x1f, 0xd2, 0xad, 0x6b, 0x87, 0x8c, 0x41, 0xa7, 0xa2, 0x83, 0x5b, 0xd8, 0xff, 0x48, 0xc1,
-	0xe3, 0x91, 0x96, 0x6c, 0x03, 0x55, 0x3d, 0xd9, 0xdf, 0xbd, 0x7b, 0xef, 0xfb, 0xf5, 0x8e, 0x82,
-	0x2e, 0xa7, 0x3e, 0x31, 0x4f, 0x70, 0x12, 0xd1, 0x38, 0xc8, 0xff, 0x1a, 0xb3, 0x84, 0x09, 0x86,
-	0xb6, 0x52, 0xcc, 0x50, 0x67, 0xdd, 0x76, 0xc0, 0x02, 0x26, 0x01, 0x33, 0xfd, 0x2f, 0xbb, 0xd3,
-	0xed, 0x05, 0x8c, 0x05, 0x21, 0x31, 0x65, 0x34, 0x9d, 0x9f, 0x98, 0xfe, 0x3c, 0xc1, 0x82, 0xb2,
-	0x58, 0xe1, 0x3b, 0xb7, 0x71, 0x41, 0x23, 0xc2, 0x05, 0x8e, 0x66, 0xb9, 0x80, 0xc7, 0x78, 0xc4,
-	0xb8, 0x39, 0xc5, 0x9c, 0x98, 0xe7, 0xfb, 0x53, 0x22, 0xf0, 0xbe, 0xe9, 0x31, 0x9a, 0x0b, 0x74,
-	0x32, 0xdc, 0xcd, 0x32, 0x67, 0x41, 0x06, 0xed, 0x71, 0x58, 0xeb, 0x73, 0x4e, 0x04, 0x6a, 0xc3,
-	0x9a, 0x4f, 0x62, 0x16, 0xe9, 0xda, 0xae, 0xf6, 0x64, 0xc3, 0xce, 0x02, 0xe4, 0xc0, 0x56, 0x42,
-	0x2e, 0x70, 0xe2, 0xbb, 0xb2, 0x22, 0xbd, 0x9c, 0x82, 0x07, 0xfb, 0x1f, 0x2e, 0x77, 0x4a, 0x7f,
-	0x5d, 0xee, 0x6c, 0x67, 0x52, 0xdc, 0x3f, 0x33, 0x28, 0x33, 0x23, 0x2c, 0x4e, 0x8d, 0xd7, 0x24,
-	0xc0, 0xde, 0x3b, 0x8b, 0x78, 0x7f, 0xfc, 0xfa, 0x25, 0xa8, 0x4c, 0x16, 0xf1, 0xec, 0xcd, 0x4c,
-	0xc6, 0x4e, 0x55, 0xf6, 0x7e, 0xae, 0xc2, 0xda, 0xf8, 0x14, 0x73, 0x82, 0x9a, 0x50, 0xa6, 0xbe,
-	0x4c, 0x59, 0xb5, 0xcb, 0xd4, 0x47, 0x87, 0x00, 0x5c, 0xe0, 0x44, 0xb8, 0x69, 0x8b, 0x32, 0xdb,
-	0xe6, 0xb3, 0xae, 0x91, 0xf5, 0x6f, 0xe4, 0xfd, 0x1b, 0x4e, 0xde, 0xff, 0xc1, 0x7a, 0x5a, 0xc9,
-	0xfb, 0xbf, 0x77, 0x34, 0x7b, 0x43, 0xf2, 0x52, 0x04, 0x7d, 0x0d, 0xeb, 0xf9, 0x04, 0xf5, 0x8a,
-	0x94, 0xe8, 0xdc, 0x91, 0xb0, 0xd4, 0x85, 0x4c, 0xe1, 0x97, 0x54, 0xa1, 0x20, 0xa1, 0x1f, 0xe0,
-	0xb1, 0x4f, 0xb9, 0x48, 0xe8, 0x74, 0x9e, 0xc6, 0x2e, 0x8d, 0x05, 0x49, 0xce, 0x71, 0xa8, 0x57,
-	0x57, 0x57, 0x6b, 0x2f, 0x2a, 0x0c, 0x95, 0x00, 0xfa, 0x1e, 0xda, 0xd9, 0x20, 0xb8, 0x3b, 0x23,
-	0xc9, 0x8d, 0xf0, 0x9a, 0x12, 0x56, 0x13, 0x4b, 0x17, 0x69, 0xa8, 0x45, 0x1a, 0x87, 0x8c, 0xc6,
-	0x07, 0xd5, 0x54, 0xd8, 0x46, 0x8a, 0x3c, 0x26, 0x49, 0x21, 0xf9, 0x12, 0x9a, 0x21, 0xf3, 0xce,
-	0xdc, 0xbc, 0x7a, 0xae, 0xd7, 0x76, 0x2b, 0xab, 0x56, 0xd9, 0x48, 0xa9, 0xf9, 0x39, 0x47, 0xdf,
-	0x40, 0x13, 0x87, 0x21, 0xbb, 0x20, 0xbe, 0x8b, 0x53, 0x57, 0x70, 0xbd, 0x2e, 0xb5, 0x3e, 0x31,
-	0x16, 0x6d, 0x6c, 0x48, 0xc7, 0xa8, 0x92, 0x1a, 0x8a, 0x20, 0xcf, 0x38, 0xda, 0x87, 0x1a, 0x17,
-	0x58, 0xcc, 0xb9, 0xbe, 0xbe, 0xab, 0x3d, 0x69, 0x3e, 0xeb, 0x2c, 0x33, 0xe5, 0xd6, 0x27, 0xf2,
-	0x82, 0xad, 0x2e, 0xee, 0xfd, 0x56, 0x85, 0xfa, 0x44, 0xe0, 0x33, 0x1a, 0x07, 0x77, 0xfc, 0xd0,
-	0x81, 0xf5, 0x59, 0x4a, 0x71, 0xa9, 0x2f, 0xdd, 0x50, 0xb5, 0xeb, 0x32, 0x1e, 0xfa, 0x48, 0x87,
-	0x3a, 0xf6, 0xfd, 0x84, 0x70, 0x2e, 0x97, 0xbc, 0x61, 0xe7, 0x21, 0xfa, 0x0a, 0x6a, 0x38, 0x62,
-	0xf3, 0x58, 0x14, 0xfb, 0xfa, 0x8f, 0xb1, 0xaa, 0xeb, 0xe8, 0x18, 0x1a, 0x4b, 0xa3, 0x2c, 0xd6,
-	0xb2, 0xc2, 0x24, 0xb7, 0x16, 0x27, 0x89, 0xde, 0xc2, 0x23, 0xa9, 0x14, 0xcd, 0x43, 0x41, 0x67,
-	0x21, 0x25, 0x89, 0x5e, 0x7b, 0xe8, 0xd3, 0x91, 0xeb, 0xfd, 0xb6, 0x10, 0x42, 0x2f, 0xa1, 0x45,
-	0x4e, 0x4e, 0x88, 0x27, 0xe8, 0x39, 0x71, 0x55, 0xa3, 0xf5, 0xd5, 0x1a, 0x7d, 0x54, 0x10, 0xfb,
-	0x59, 0xc7, 0x47, 0xd0, 0x9c, 0x91, 0xd8, 0xa7, 0x71, 0xe0, 0x66, 0xd6, 0x92, 0x6b, 0x5b, 0x41,
-	0xa9, 0xa1, 0x68, 0xb6, 0x64, 0xdd, 0x7a, 0xb7, 0x1b, 0x0f, 0x7b, 0xb7, 0xcf, 0x0b, 0xef, 0x80,
-	0xf4, 0xce, 0xf6, 0xb2, 0x77, 0x94, 0x47, 0x6e, 0xb9, 0xe7, 0x77, 0x0d, 0xb6, 0x1c, 0x26, 0x70,
-	0x98, 0x5b, 0x68, 0xd1, 0x32, 0xda, 0xb2, 0x65, 0x8a, 0x6f, 0x5c, 0x79, 0xf1, 0x1b, 0x77, 0x63,
-	0x97, 0xca, 0xff, 0xb3, 0xcb, 0x7d, 0x8b, 0xa8, 0x3e, 0x6c, 0x11, 0x4f, 0x2f, 0x60, 0x73, 0xe1,
-	0x6d, 0xa0, 0xcf, 0x41, 0x1f, 0x1f, 0xf7, 0x27, 0x03, 0x77, 0xe2, 0xf4, 0x9d, 0x37, 0x13, 0xf7,
-	0xcd, 0x68, 0x32, 0x1e, 0x1c, 0x0e, 0x8f, 0x86, 0x03, 0xab, 0x55, 0x42, 0x3a, 0xb4, 0x97, 0xd0,
-	0xf1, 0x60, 0x64, 0x0d, 0x47, 0x2f, 0x5a, 0xda, 0x1d, 0x64, 0xe2, 0xf4, 0x6d, 0x67, 0x60, 0xb5,
-	0xca, 0xe8, 0x53, 0x40, 0xe3, 0xfe, 0xf1, 0x0d, 0x32, 0x18, 0x59, 0x03, 0xab, 0x55, 0x79, 0xfa,
-	0x93, 0x06, 0x8d, 0xa5, 0xc9, 0xa2, 0x1e, 0x74, 0x27, 0x4e, 0xff, 0xd5, 0x70, 0xf4, 0xe2, 0xfe,
-	0xec, 0x1d, 0x78, 0x7c, 0x0b, 0x4f, 0xc3, 0x81, 0xd5, 0xd2, 0xd0, 0x36, 0x7c, 0x76, 0x87, 0xfa,
-	0xfa, 0xbb, 0xc3, 0x57, 0xb2, 0x82, 0xfb, 0x40, 0xc5, 0xac, 0x1c, 0x1c, 0x7d, 0xb8, 0xea, 0x69,
-	0x1f, 0xaf, 0x7a, 0xda, 0x3f, 0x57, 0x3d, 0xed, 0xfd, 0x75, 0xaf, 0xf4, 0xf1, 0xba, 0x57, 0xfa,
-	0xf3, 0xba, 0x57, 0x7a, 0xfb, 0x45, 0x40, 0xc5, 0xe9, 0x7c, 0x6a, 0x78, 0x2c, 0x32, 0x53, 0x3f,
-	0x48, 0x37, 0x79, 0x2c, 0x94, 0x81, 0xf9, 0x63, 0xf1, 0xbb, 0x2b, 0xde, 0xcd, 0x08, 0x9f, 0xd6,
-	0x24, 0xfc, 0xfc, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x75, 0x26, 0xed, 0xa6, 0x94, 0x07, 0x00,
-	0x00,
+	// 675 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x31, 0x4f, 0xdb, 0x40,
+	0x18, 0x8d, 0x43, 0x48, 0xc8, 0x01, 0x21, 0xb2, 0x68, 0xeb, 0x04, 0xc9, 0x41, 0x4c, 0x08, 0xb5,
+	0xb6, 0x02, 0x43, 0xc7, 0x2a, 0x89, 0x0d, 0xa4, 0xa5, 0x01, 0xd9, 0x66, 0x28, 0x8b, 0x75, 0xb1,
+	0x2f, 0xe6, 0x44, 0xec, 0x8b, 0xec, 0x0b, 0x2d, 0x7b, 0x7f, 0x00, 0x63, 0xc7, 0xae, 0xdd, 0xfb,
+	0x23, 0x18, 0x51, 0xa7, 0xaa, 0x03, 0xad, 0xe0, 0x8f, 0x54, 0x77, 0x3e, 0x47, 0x10, 0x18, 0x80,
+	0x29, 0xf9, 0xee, 0x7d, 0xef, 0xdd, 0xfb, 0xbe, 0x7b, 0x32, 0xa8, 0x27, 0xd8, 0x47, 0xfa, 0x00,
+	0xc6, 0x21, 0x8e, 0x82, 0xec, 0x57, 0x1b, 0xc5, 0x84, 0x12, 0x79, 0x81, 0x61, 0x9a, 0x38, 0xab,
+	0x2f, 0x07, 0x24, 0x20, 0x1c, 0xd0, 0xd9, 0xbf, 0xb4, 0xa7, 0xae, 0x06, 0x84, 0x04, 0x43, 0xa4,
+	0xf3, 0xaa, 0x3f, 0x1e, 0xe8, 0xfe, 0x38, 0x86, 0x14, 0x93, 0x48, 0xe0, 0x8d, 0x69, 0x9c, 0xe2,
+	0x10, 0x25, 0x14, 0x86, 0xa3, 0x4c, 0xc0, 0x23, 0x49, 0x48, 0x12, 0xbd, 0x0f, 0x13, 0xa4, 0x9f,
+	0x36, 0xfb, 0x88, 0xc2, 0xa6, 0xee, 0x11, 0x9c, 0x09, 0xd4, 0x52, 0xdc, 0x4d, 0x6f, 0x4e, 0x8b,
+	0x14, 0x5a, 0xbb, 0x94, 0xc0, 0xac, 0x39, 0x22, 0xde, 0xb1, 0x5c, 0x01, 0x79, 0xec, 0x2b, 0xd2,
+	0xaa, 0xb4, 0x5e, 0xb0, 0xf2, 0xd8, 0x97, 0x3b, 0x00, 0x24, 0x14, 0xc6, 0xd4, 0x65, 0xb7, 0x29,
+	0xf9, 0x55, 0x69, 0x7d, 0x7e, 0xb3, 0xae, 0xa5, 0x56, 0xb4, 0xcc, 0x8a, 0xe6, 0x64, 0x56, 0xda,
+	0x73, 0x17, 0x57, 0x8d, 0xdc, 0xf9, 0xdf, 0x86, 0x64, 0x95, 0x39, 0x8f, 0x21, 0xf2, 0x3b, 0x30,
+	0x87, 0x22, 0x3f, 0x95, 0x98, 0x79, 0x82, 0x44, 0x09, 0x45, 0x3e, 0x17, 0x68, 0x82, 0x62, 0x42,
+	0x21, 0x1d, 0x27, 0x4a, 0x61, 0x55, 0x5a, 0xaf, 0x6c, 0xd6, 0xb4, 0xdb, 0x0b, 0xd5, 0xb8, 0x75,
+	0x9b, 0x37, 0x58, 0xa2, 0x71, 0xed, 0x7b, 0x01, 0x94, 0x6c, 0x0a, 0x4f, 0x70, 0x14, 0xdc, 0x1b,
+	0x4a, 0x01, 0x25, 0xe8, 0xfb, 0x31, 0x4a, 0x12, 0x3e, 0x51, 0xd9, 0xca, 0x4a, 0xf9, 0x2d, 0x28,
+	0xc2, 0x90, 0x8c, 0x23, 0x2a, 0x7c, 0xd6, 0x34, 0xb1, 0x27, 0xb6, 0x54, 0x4d, 0x2c, 0x55, 0xeb,
+	0x10, 0x1c, 0xb5, 0x0b, 0xcc, 0xa6, 0x25, 0xda, 0xe5, 0x5d, 0xb0, 0x38, 0x24, 0xde, 0x89, 0x9b,
+	0x3d, 0x1a, 0x37, 0xca, 0xf8, 0xd3, 0x73, 0x1a, 0xa2, 0x21, 0x1d, 0xf3, 0x1b, 0x1b, 0x73, 0x81,
+	0x31, 0xb3, 0x73, 0xf9, 0x08, 0x2c, 0x71, 0xa5, 0x70, 0x3c, 0xa4, 0x78, 0x34, 0xc4, 0x28, 0x56,
+	0x66, 0x99, 0xc9, 0x76, 0x93, 0x11, 0xfe, 0x5c, 0x35, 0x56, 0x52, 0x4b, 0x89, 0x7f, 0xa2, 0x61,
+	0xa2, 0x87, 0x90, 0x1e, 0x6b, 0x7b, 0x28, 0x80, 0xde, 0x99, 0x81, 0xbc, 0x5f, 0x3f, 0xdf, 0x00,
+	0xe1, 0xd8, 0x40, 0x9e, 0x55, 0x61, 0x4a, 0x1f, 0x27, 0x42, 0xf2, 0x7b, 0x50, 0x45, 0x83, 0x01,
+	0xf2, 0x28, 0x3e, 0x45, 0xae, 0x18, 0xb4, 0xf8, 0xb8, 0x41, 0x97, 0x26, 0xc4, 0x56, 0x3a, 0xf1,
+	0x36, 0xa8, 0x8c, 0x50, 0xe4, 0xe3, 0x28, 0x70, 0x63, 0xf4, 0x19, 0xc6, 0xbe, 0x52, 0x7a, 0x9c,
+	0xd2, 0xa2, 0xa0, 0x59, 0x9c, 0x35, 0x95, 0xb0, 0xb9, 0xe7, 0x25, 0x6c, 0x6b, 0x12, 0x90, 0x32,
+	0x0f, 0xc8, 0xca, 0xdd, 0x80, 0x88, 0x20, 0x4c, 0x45, 0xe4, 0x87, 0x04, 0x16, 0x1c, 0x42, 0xe1,
+	0x30, 0xcb, 0xc9, 0x32, 0x98, 0xf5, 0x51, 0x44, 0x42, 0x1e, 0x95, 0xb2, 0x95, 0x16, 0xb7, 0x32,
+	0x91, 0x7f, 0x5a, 0x26, 0x1e, 0xda, 0xf6, 0xcc, 0xf3, 0xb6, 0xbd, 0xf1, 0x09, 0xcc, 0xdf, 0x4a,
+	0xb9, 0xac, 0x80, 0x65, 0xf3, 0x60, 0xbf, 0xb3, 0xeb, 0xda, 0x4e, 0xcb, 0x39, 0xb4, 0xdd, 0x03,
+	0xb3, 0x67, 0x74, 0x7b, 0x3b, 0xd5, 0xdc, 0x3d, 0xc4, 0x76, 0x5a, 0x96, 0x63, 0x1a, 0x55, 0x49,
+	0x7e, 0x09, 0xe4, 0x3b, 0x88, 0xd9, 0x33, 0x4c, 0xa3, 0x9a, 0xdf, 0xf8, 0x2a, 0x81, 0xc5, 0x3b,
+	0x0b, 0x92, 0x55, 0x50, 0xb7, 0x9d, 0xd6, 0x87, 0x6e, 0x6f, 0x27, 0xeb, 0x3d, 0xec, 0xd9, 0x07,
+	0x66, 0xa7, 0xbb, 0xdd, 0x35, 0x8d, 0x6a, 0x4e, 0xae, 0x81, 0x17, 0x53, 0x38, 0x2b, 0xf9, 0x25,
+	0x2b, 0xe0, 0xd5, 0x3d, 0xea, 0xde, 0x7e, 0x87, 0x81, 0xf9, 0x07, 0x41, 0xc1, 0x9c, 0x69, 0x6f,
+	0x5f, 0x5c, 0xab, 0xd2, 0xe5, 0xb5, 0x2a, 0xfd, 0xbb, 0x56, 0xa5, 0xf3, 0x1b, 0x35, 0x77, 0x79,
+	0xa3, 0xe6, 0x7e, 0xdf, 0xa8, 0xb9, 0xa3, 0xd7, 0x01, 0xa6, 0xc7, 0xe3, 0xbe, 0xe6, 0x91, 0x50,
+	0x67, 0xcf, 0xca, 0x43, 0xe1, 0x91, 0x21, 0x2f, 0xf4, 0x2f, 0x93, 0x6f, 0x2e, 0x3d, 0x1b, 0xa1,
+	0xa4, 0x5f, 0xe4, 0xf0, 0xd6, 0xff, 0x00, 0x00, 0x00, 0xff, 0xff, 0xfd, 0x06, 0xac, 0x42, 0x90,
+	0x05, 0x00, 0x00,
 }
 
-func (m *Asset) Marshal() (dAtA []byte, err error) {
+func (m *Epoch) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -501,52 +391,12 @@ func (m *Asset) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *Asset) MarshalTo(dAtA []byte) (int, error) {
+func (m *Epoch) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Asset) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size := m.RewardRatio.Size()
-		i -= size
-		if _, err := m.RewardRatio.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintFarming(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintFarming(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Phase) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Phase) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Phase) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *Epoch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -554,66 +404,22 @@ func (m *Phase) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.Status != 0 {
 		i = encodeVarintFarming(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x40
+		dAtA[i] = 0x20
 	}
-	if len(m.AllowedAssets) > 0 {
-		for iNdEx := len(m.AllowedAssets) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.AllowedAssets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintFarming(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x3a
-		}
+	n1, err1 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.EndTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.EndTime):])
+	if err1 != nil {
+		return 0, err1
 	}
-	if len(m.LockDurations) > 0 {
-		for iNdEx := len(m.LockDurations) - 1; iNdEx >= 0; iNdEx-- {
-			n, err := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.LockDurations[iNdEx], dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.LockDurations[iNdEx]):])
-			if err != nil {
-				return 0, err
-			}
-			i -= n
-			i = encodeVarintFarming(dAtA, i, uint64(n))
-			i--
-			dAtA[i] = 0x32
-		}
-	}
-	{
-		size, err := m.RewardsPerInterval.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintFarming(dAtA, i, uint64(size))
-	}
+	i -= n1
+	i = encodeVarintFarming(dAtA, i, uint64(n1))
 	i--
-	dAtA[i] = 0x2a
-	n2, err2 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.DistributionInterval, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.DistributionInterval):])
+	dAtA[i] = 0x1a
+	n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.StartTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime):])
 	if err2 != nil {
 		return 0, err2
 	}
 	i -= n2
 	i = encodeVarintFarming(dAtA, i, uint64(n2))
-	i--
-	dAtA[i] = 0x22
-	n3, err3 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.Duration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.Duration):])
-	if err3 != nil {
-		return 0, err3
-	}
-	i -= n3
-	i = encodeVarintFarming(dAtA, i, uint64(n3))
-	i--
-	dAtA[i] = 0x1a
-	n4, err4 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.StartTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime):])
-	if err4 != nil {
-		return 0, err4
-	}
-	i -= n4
-	i = encodeVarintFarming(dAtA, i, uint64(n4))
 	i--
 	dAtA[i] = 0x12
 	if m.Id != 0 {
@@ -647,16 +453,16 @@ func (m *Staking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.Status != 0 {
 		i = encodeVarintFarming(dAtA, i, uint64(m.Status))
 		i--
-		dAtA[i] = 0x50
+		dAtA[i] = 0x48
 	}
-	n5, err5 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.StartTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime):])
-	if err5 != nil {
-		return 0, err5
+	n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.StartTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime):])
+	if err3 != nil {
+		return 0, err3
 	}
-	i -= n5
-	i = encodeVarintFarming(dAtA, i, uint64(n5))
+	i -= n3
+	i = encodeVarintFarming(dAtA, i, uint64(n3))
 	i--
-	dAtA[i] = 0x4a
+	dAtA[i] = 0x42
 	{
 		size, err := m.PendingReward.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -666,7 +472,7 @@ func (m *Staking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintFarming(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x42
+	dAtA[i] = 0x3a
 	{
 		size, err := m.EffectiveAmount.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -676,7 +482,7 @@ func (m *Staking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintFarming(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x3a
+	dAtA[i] = 0x32
 	{
 		size := m.LockMultiplier.Size()
 		i -= size
@@ -686,15 +492,15 @@ func (m *Staking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintFarming(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x32
-	n8, err8 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.LockDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.LockDuration):])
-	if err8 != nil {
-		return 0, err8
-	}
-	i -= n8
-	i = encodeVarintFarming(dAtA, i, uint64(n8))
-	i--
 	dAtA[i] = 0x2a
+	n6, err6 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.LockDuration, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.LockDuration):])
+	if err6 != nil {
+		return 0, err6
+	}
+	i -= n6
+	i = encodeVarintFarming(dAtA, i, uint64(n6))
+	i--
+	dAtA[i] = 0x22
 	{
 		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -704,18 +510,13 @@ func (m *Staking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintFarming(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x22
+	dAtA[i] = 0x1a
 	if len(m.Address) > 0 {
 		i -= len(m.Address)
 		copy(dAtA[i:], m.Address)
 		i = encodeVarintFarming(dAtA, i, uint64(len(m.Address)))
 		i--
-		dAtA[i] = 0x1a
-	}
-	if m.PhaseId != 0 {
-		i = encodeVarintFarming(dAtA, i, uint64(m.PhaseId))
-		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x12
 	}
 	if m.Id != 0 {
 		i = encodeVarintFarming(dAtA, i, uint64(m.Id))
@@ -754,7 +555,7 @@ func (m *TotalStaking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintFarming(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x22
+	dAtA[i] = 0x1a
 	{
 		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -764,18 +565,13 @@ func (m *TotalStaking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintFarming(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x1a
+	dAtA[i] = 0x12
 	if len(m.Denom) > 0 {
 		i -= len(m.Denom)
 		copy(dAtA[i:], m.Denom)
 		i = encodeVarintFarming(dAtA, i, uint64(len(m.Denom)))
 		i--
-		dAtA[i] = 0x12
-	}
-	if m.PhaseId != 0 {
-		i = encodeVarintFarming(dAtA, i, uint64(m.PhaseId))
-		i--
-		dAtA[i] = 0x8
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -791,22 +587,7 @@ func encodeVarintFarming(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *Asset) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovFarming(uint64(l))
-	}
-	l = m.RewardRatio.Size()
-	n += 1 + l + sovFarming(uint64(l))
-	return n
-}
-
-func (m *Phase) Size() (n int) {
+func (m *Epoch) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -817,24 +598,8 @@ func (m *Phase) Size() (n int) {
 	}
 	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime)
 	n += 1 + l + sovFarming(uint64(l))
-	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.Duration)
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.EndTime)
 	n += 1 + l + sovFarming(uint64(l))
-	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.DistributionInterval)
-	n += 1 + l + sovFarming(uint64(l))
-	l = m.RewardsPerInterval.Size()
-	n += 1 + l + sovFarming(uint64(l))
-	if len(m.LockDurations) > 0 {
-		for _, e := range m.LockDurations {
-			l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(e)
-			n += 1 + l + sovFarming(uint64(l))
-		}
-	}
-	if len(m.AllowedAssets) > 0 {
-		for _, e := range m.AllowedAssets {
-			l = e.Size()
-			n += 1 + l + sovFarming(uint64(l))
-		}
-	}
 	if m.Status != 0 {
 		n += 1 + sovFarming(uint64(m.Status))
 	}
@@ -849,9 +614,6 @@ func (m *Staking) Size() (n int) {
 	_ = l
 	if m.Id != 0 {
 		n += 1 + sovFarming(uint64(m.Id))
-	}
-	if m.PhaseId != 0 {
-		n += 1 + sovFarming(uint64(m.PhaseId))
 	}
 	l = len(m.Address)
 	if l > 0 {
@@ -881,9 +643,6 @@ func (m *TotalStaking) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.PhaseId != 0 {
-		n += 1 + sovFarming(uint64(m.PhaseId))
-	}
 	l = len(m.Denom)
 	if l > 0 {
 		n += 1 + l + sovFarming(uint64(l))
@@ -901,7 +660,7 @@ func sovFarming(x uint64) (n int) {
 func sozFarming(x uint64) (n int) {
 	return sovFarming(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *Asset) Unmarshal(dAtA []byte) error {
+func (m *Epoch) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -924,126 +683,10 @@ func (m *Asset) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: Asset: wiretype end group for non-group")
+			return fmt.Errorf("proto: Epoch: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Asset: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowFarming
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthFarming
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthFarming
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RewardRatio", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowFarming
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthFarming
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthFarming
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.RewardRatio.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipFarming(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthFarming
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Phase) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowFarming
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Phase: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Phase: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Epoch: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1100,7 +743,7 @@ func (m *Phase) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1127,145 +770,11 @@ func (m *Phase) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.Duration, dAtA[iNdEx:postIndex]); err != nil {
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.EndTime, dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DistributionInterval", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowFarming
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthFarming
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthFarming
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.DistributionInterval, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RewardsPerInterval", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowFarming
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthFarming
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthFarming
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.RewardsPerInterval.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LockDurations", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowFarming
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthFarming
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthFarming
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LockDurations = append(m.LockDurations, time.Duration(0))
-			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&(m.LockDurations[len(m.LockDurations)-1]), dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowedAssets", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowFarming
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthFarming
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthFarming
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AllowedAssets = append(m.AllowedAssets, Asset{})
-			if err := m.AllowedAssets[len(m.AllowedAssets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 8:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
@@ -1279,7 +788,7 @@ func (m *Phase) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= PhaseStatus(b&0x7F) << shift
+				m.Status |= EpochStatus(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1354,25 +863,6 @@ func (m *Staking) Unmarshal(dAtA []byte) error {
 				}
 			}
 		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PhaseId", wireType)
-			}
-			m.PhaseId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowFarming
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PhaseId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
 			}
@@ -1404,7 +894,7 @@ func (m *Staking) Unmarshal(dAtA []byte) error {
 			}
 			m.Address = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -1437,7 +927,7 @@ func (m *Staking) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LockDuration", wireType)
 			}
@@ -1470,7 +960,7 @@ func (m *Staking) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 6:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LockMultiplier", wireType)
 			}
@@ -1504,7 +994,7 @@ func (m *Staking) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 7:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EffectiveAmount", wireType)
 			}
@@ -1537,7 +1027,7 @@ func (m *Staking) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 8:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PendingReward", wireType)
 			}
@@ -1570,7 +1060,7 @@ func (m *Staking) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 9:
+		case 8:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
 			}
@@ -1603,7 +1093,7 @@ func (m *Staking) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 10:
+		case 9:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
@@ -1673,25 +1163,6 @@ func (m *TotalStaking) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PhaseId", wireType)
-			}
-			m.PhaseId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowFarming
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PhaseId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
 			}
@@ -1723,7 +1194,7 @@ func (m *TotalStaking) Unmarshal(dAtA []byte) error {
 			}
 			m.Denom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -1756,7 +1227,7 @@ func (m *TotalStaking) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EffectiveAmount", wireType)
 			}

@@ -15,7 +15,6 @@ option go_package = "github.com/sideprotocol/side/x/farming/types";
 service Msg {
     option (cosmos.msg.v1.service) = true;
 
-    rpc CreatePhase(MsgCreatePhase) returns (MsgCreatePhaseResponse);
     rpc Stake(MsgStake) returns (MsgStakeResponse);
     rpc Unstake(MsgUnstake) returns (MsgUnstakeResponse);
     rpc Claim(MsgClaim) returns (MsgClaimResponse);
@@ -27,38 +26,15 @@ service Msg {
     rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
-message MsgCreatePhase {
-  option (cosmos.msg.v1.signer) = "authority";
-
-  // authority is the address that controls the module (defaults to x/gov unless overwritten).
-  string authority = 1;
-  // Phase start time
-  google.protobuf.Timestamp start_time = 2 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-  // Phase duration
-  google.protobuf.Duration duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-  // Rewards distribution interval
-  google.protobuf.Duration distribution_interval = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-  // Rewards amount per interval
-  cosmos.base.v1beta1.Coin rewards_per_interval = 5 [(gogoproto.nullable) = false];
-  // Accepted lock durations
-  repeated google.protobuf.Duration lock_durations = 6 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-  // Allowed assets
-  repeated Asset allowed_assets = 7 [(gogoproto.nullable) = false];
-}
-
-message MsgCreatePhaseResponse{}
-
 message MsgStake {
     option (cosmos.msg.v1.signer) = "staker";
 
     // Staker address
     string staker = 1;
-    // Phase id
-    uint64 phase_id = 2;
     // Staked amount
-    cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
     // Lock duration
-    google.protobuf.Duration lock_duration = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    google.protobuf.Duration lock_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }
 
 message MsgStakeResponse{}
