@@ -26,10 +26,11 @@ func distributeRewards(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
+		// get the pending reward of the last distribution interval
 		pendingReward := k.GetPendingReward(ctx, staking.Id)
 
-		if err := k.BankKeeper().SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(""), sdk.NewCoins(pendingReward)); err != nil {
-			k.Logger(ctx).Error("Failed to distribute reward", "staker", "", "reward", pendingReward, "err", err)
-		}
+		// accumulate reward
+		staking.PendingReward = staking.PendingReward.Add(pendingReward)
+		k.SetStaking(ctx, staking)
 	}
 }

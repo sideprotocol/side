@@ -22,6 +22,7 @@ const (
 	Msg_CreatePhase_FullMethodName  = "/side.farming.Msg/CreatePhase"
 	Msg_Stake_FullMethodName        = "/side.farming.Msg/Stake"
 	Msg_Unstake_FullMethodName      = "/side.farming.Msg/Unstake"
+	Msg_Claim_FullMethodName        = "/side.farming.Msg/Claim"
 	Msg_UpdateParams_FullMethodName = "/side.farming.Msg/UpdateParams"
 )
 
@@ -32,6 +33,7 @@ type MsgClient interface {
 	CreatePhase(ctx context.Context, in *MsgCreatePhase, opts ...grpc.CallOption) (*MsgCreatePhaseResponse, error)
 	Stake(ctx context.Context, in *MsgStake, opts ...grpc.CallOption) (*MsgStakeResponse, error)
 	Unstake(ctx context.Context, in *MsgUnstake, opts ...grpc.CallOption) (*MsgUnstakeResponse, error)
+	Claim(ctx context.Context, in *MsgClaim, opts ...grpc.CallOption) (*MsgClaimResponse, error)
 	// UpdateParams defines a governance operation for updating the x/farming module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -74,6 +76,15 @@ func (c *msgClient) Unstake(ctx context.Context, in *MsgUnstake, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *msgClient) Claim(ctx context.Context, in *MsgClaim, opts ...grpc.CallOption) (*MsgClaimResponse, error) {
+	out := new(MsgClaimResponse)
+	err := c.cc.Invoke(ctx, Msg_Claim_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	out := new(MsgUpdateParamsResponse)
 	err := c.cc.Invoke(ctx, Msg_UpdateParams_FullMethodName, in, out, opts...)
@@ -90,6 +101,7 @@ type MsgServer interface {
 	CreatePhase(context.Context, *MsgCreatePhase) (*MsgCreatePhaseResponse, error)
 	Stake(context.Context, *MsgStake) (*MsgStakeResponse, error)
 	Unstake(context.Context, *MsgUnstake) (*MsgUnstakeResponse, error)
+	Claim(context.Context, *MsgClaim) (*MsgClaimResponse, error)
 	// UpdateParams defines a governance operation for updating the x/farming module
 	// parameters. The authority defaults to the x/gov module account.
 	//
@@ -110,6 +122,9 @@ func (UnimplementedMsgServer) Stake(context.Context, *MsgStake) (*MsgStakeRespon
 }
 func (UnimplementedMsgServer) Unstake(context.Context, *MsgUnstake) (*MsgUnstakeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Unstake not implemented")
+}
+func (UnimplementedMsgServer) Claim(context.Context, *MsgClaim) (*MsgClaimResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Claim not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -181,6 +196,24 @@ func _Msg_Unstake_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_Claim_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgClaim)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).Claim(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_Claim_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).Claim(ctx, req.(*MsgClaim))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -217,6 +250,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Unstake",
 			Handler:    _Msg_Unstake_Handler,
+		},
+		{
+			MethodName: "Claim",
+			Handler:    _Msg_Claim_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

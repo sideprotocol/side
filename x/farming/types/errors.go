@@ -18,6 +18,7 @@ var (
 	ErrStakingDoesNotExist  = errorsmod.Register(ModuleName, 1008, "staking does not exist")
 	ErrInvalidStakingStatus = errorsmod.Register(ModuleName, 1009, "invalid staking status")
 	ErrLockDurationNotEnded = errorsmod.Register(ModuleName, 1010, "lock duration not ended")
+	ErrNoPendingReward      = errorsmod.Register(ModuleName, 1011, "no pending reward")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 2000, "invalid params")
 )
