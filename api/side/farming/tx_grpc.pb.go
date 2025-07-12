@@ -19,7 +19,6 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_CreatePhase_FullMethodName  = "/side.farming.Msg/CreatePhase"
 	Msg_Stake_FullMethodName        = "/side.farming.Msg/Stake"
 	Msg_Unstake_FullMethodName      = "/side.farming.Msg/Unstake"
 	Msg_Claim_FullMethodName        = "/side.farming.Msg/Claim"
@@ -30,7 +29,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MsgClient interface {
-	CreatePhase(ctx context.Context, in *MsgCreatePhase, opts ...grpc.CallOption) (*MsgCreatePhaseResponse, error)
 	Stake(ctx context.Context, in *MsgStake, opts ...grpc.CallOption) (*MsgStakeResponse, error)
 	Unstake(ctx context.Context, in *MsgUnstake, opts ...grpc.CallOption) (*MsgUnstakeResponse, error)
 	Claim(ctx context.Context, in *MsgClaim, opts ...grpc.CallOption) (*MsgClaimResponse, error)
@@ -47,15 +45,6 @@ type msgClient struct {
 
 func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
-}
-
-func (c *msgClient) CreatePhase(ctx context.Context, in *MsgCreatePhase, opts ...grpc.CallOption) (*MsgCreatePhaseResponse, error) {
-	out := new(MsgCreatePhaseResponse)
-	err := c.cc.Invoke(ctx, Msg_CreatePhase_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *msgClient) Stake(ctx context.Context, in *MsgStake, opts ...grpc.CallOption) (*MsgStakeResponse, error) {
@@ -98,7 +87,6 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
 type MsgServer interface {
-	CreatePhase(context.Context, *MsgCreatePhase) (*MsgCreatePhaseResponse, error)
 	Stake(context.Context, *MsgStake) (*MsgStakeResponse, error)
 	Unstake(context.Context, *MsgUnstake) (*MsgUnstakeResponse, error)
 	Claim(context.Context, *MsgClaim) (*MsgClaimResponse, error)
@@ -114,9 +102,6 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
-func (UnimplementedMsgServer) CreatePhase(context.Context, *MsgCreatePhase) (*MsgCreatePhaseResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreatePhase not implemented")
-}
 func (UnimplementedMsgServer) Stake(context.Context, *MsgStake) (*MsgStakeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Stake not implemented")
 }
@@ -140,24 +125,6 @@ type UnsafeMsgServer interface {
 
 func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 	s.RegisterService(&Msg_ServiceDesc, srv)
-}
-
-func _Msg_CreatePhase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCreatePhase)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).CreatePhase(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_CreatePhase_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).CreatePhase(ctx, req.(*MsgCreatePhase))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Msg_Stake_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -239,10 +206,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "side.farming.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "CreatePhase",
-			Handler:    _Msg_CreatePhase_Handler,
-		},
 		{
 			MethodName: "Stake",
 			Handler:    _Msg_Stake_Handler,
