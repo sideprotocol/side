@@ -97,6 +97,9 @@ func (m msgServer) Unstake(goCtx context.Context, msg *types.MsgUnstake) (*types
 		if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingRewards)); err != nil {
 			return nil, err
 		}
+
+		// reset pending rewards
+		staking.PendingRewards = sdk.NewCoin(staking.PendingRewards.Denom, sdkmath.ZeroInt())
 	}
 
 	// update status
@@ -137,6 +140,10 @@ func (m msgServer) Claim(goCtx context.Context, msg *types.MsgClaim) (*types.Msg
 	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingRewards)); err != nil {
 		return nil, err
 	}
+
+	// reset pending rewards
+	staking.PendingRewards = sdk.NewCoin(staking.PendingRewards.Denom, sdkmath.ZeroInt())
+	m.SetStaking(ctx, staking)
 
 	return &types.MsgClaimResponse{}, nil
 }
