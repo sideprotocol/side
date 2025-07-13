@@ -62,6 +62,16 @@ func (k Keeper) TotalStaking(goCtx context.Context, req *types.QueryTotalStaking
 	return &types.QueryTotalStakingResponse{TotalStaking: k.GetTotalStaking(ctx, req.Denom)}, nil
 }
 
+func (k Keeper) CurrentEpoch(goCtx context.Context, req *types.QueryCurrentEpochRequest) (*types.QueryCurrentEpochResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryCurrentEpochResponse{CurrentEpoch: k.GetCurrentEpoch(ctx)}, nil
+}
+
 func (k Keeper) PendingReward(goCtx context.Context, req *types.QueryPendingRewardRequest) (*types.QueryPendingRewardResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
@@ -73,22 +83,11 @@ func (k Keeper) PendingReward(goCtx context.Context, req *types.QueryPendingRewa
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("staking %d does not exist", req.Id))
 	}
 
+	if !k.HasStakingForCurrentEpoch(ctx, req.Id) {
+		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("staking %d does not exist for the current epoch", req.Id))
+	}
+
 	staking := k.GetStaking(ctx, req.Id)
 
-	pendingReward := sdk.Coin{}
-	if staking.Status == types.StakingStatus_STAKING_STATUS_STAKED {
-		pendingReward = k.GetPendingReward(ctx, staking.Id)
-	}
-
-	return &types.QueryPendingRewardResponse{PendingReward: pendingReward.String()}, nil
-}
-
-func (k Keeper) CurrentEpoch(goCtx context.Context, req *types.QueryCurrentEpochRequest) (*types.QueryCurrentEpochResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	return &types.QueryCurrentEpochResponse{CurrentEpoch: k.GetCurrentEpoch(ctx)}, nil
+	return &types.QueryPendingRewardResponse{PendingReward: k.GetPendingReward(ctx, staking).String()}, nil
 }

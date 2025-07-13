@@ -21,7 +21,8 @@ message Epoch {
   uint64 id = 1;
   google.protobuf.Timestamp start_time = 2 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
   google.protobuf.Timestamp end_time = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-  EpochStatus status = 4;
+  repeated TotalStaking total_stakings = 4 [(gogoproto.nullable) = false];
+  EpochStatus status = 5;
 }
 
 // Staking status
@@ -44,12 +45,12 @@ message Staking {
       (gogoproto.nullable)   = false
     ];
   cosmos.base.v1beta1.Coin effective_amount = 6 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin pending_reward = 7 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin pending_rewards = 7 [(gogoproto.nullable) = false];
   google.protobuf.Timestamp start_time = 8 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
   StakingStatus status = 9;
 }
 
-// TotalStaking defines total staking per epoch and denom
+// TotalStaking defines total staking per denom
 message TotalStaking {
   string denom = 1;
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
