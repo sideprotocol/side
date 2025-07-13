@@ -12,14 +12,14 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 
-	// create a new epoch if farming enabled
-	if genState.Params.Enabled {
-		k.NewEpoch(ctx)
-	}
-
 	// set stakings
 	for _, staking := range genState.Stakings {
 		k.SetStaking(ctx, staking)
+	}
+
+	// start the new epoch if farming enabled
+	if genState.Params.Enabled {
+		k.NewEpoch(ctx)
 	}
 }
 
