@@ -80,6 +80,13 @@ func (k Keeper) RemoveFromCurrentEpochStakingQueue(ctx sdk.Context, stakingId ui
 	store.Delete(types.CurrentEpochStakingQueueKey(stakingId))
 }
 
+// HasStakingForCurrentEpoch returns true if the given staking exists for the current epoch, false otherwise
+func (k Keeper) HasStakingForCurrentEpoch(ctx sdk.Context, stakingId uint64) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.CurrentEpochStakingQueueKey(stakingId))
+}
+
 // IterateCurrentEpochStakingQueue iterates through the staking queue for the current epoch
 func (k Keeper) IterateCurrentEpochStakingQueue(ctx sdk.Context, cb func(staking *types.Staking) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
@@ -128,17 +135,23 @@ func (k Keeper) OnEpochStarted(ctx sdk.Context) {
 
 		// add to staking queue for the current epoch
 		k.AddToCurrentEpochStakingQueue(ctx, staking.Id)
+
+		// update total staking for the current epoch
+		types.UpdateEpochTotalStaking(currentEpoch, staking)
 	}
+
+	// update the current epoch
+	k.SetEpoch(ctx, currentEpoch)
 }
 
 // OnEpochEnded is called when the current epoch ends
 func (k Keeper) OnEpochEnded(ctx sdk.Context) {
 	k.IterateCurrentEpochStakingQueue(ctx, func(staking *types.Staking) (stop bool) {
 		// calculate the pending reward
-		pendingReward := k.GetPendingReward(ctx, staking.Id)
+		pendingReward := k.GetPendingReward(ctx, staking)
 
 		// distribute reward
-		staking.PendingReward = staking.PendingReward.Add(pendingReward)
+		staking.PendingRewards = staking.PendingRewards.Add(pendingReward)
 		k.SetStaking(ctx, staking)
 
 		// remove from the staking queue for the current epoch
