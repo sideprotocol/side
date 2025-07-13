@@ -28,12 +28,12 @@ service Query {
         option (google.api.http).get = "/side/farming/total_staking";
     }
 
-    rpc PendingReward(QueryPendingRewardRequest) returns (QueryPendingRewardResponse) {
-        option (google.api.http).get = "/side/farming/stakings/{id}/pending_reward";
-    }
-
     rpc CurrentEpoch(QueryCurrentEpochRequest) returns (QueryCurrentEpochResponse) {
         option (google.api.http).get = "/side/farming/current_epoch";
+    }
+
+    rpc PendingReward(QueryPendingRewardRequest) returns (QueryPendingRewardResponse) {
+        option (google.api.http).get = "/side/farming/current_epoch/pending_reward";
     }
 }
 

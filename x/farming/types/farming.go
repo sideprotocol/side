@@ -32,3 +32,35 @@ func GetEffectiveAmount(amount sdk.Coin, lockMultiplier sdkmath.LegacyDec) sdk.C
 func GetLockDurationInDays(lockDuration time.Duration) time.Duration {
 	return lockDuration / (24 * time.Hour)
 }
+
+// GetEpochTotalStaking gets the total staking for the specified epoch by the given denom
+func GetEpochTotalStaking(epoch *Epoch, denom string) *TotalStaking {
+	for _, totalStaking := range epoch.TotalStakings {
+		if totalStaking.Denom == denom {
+			return &totalStaking
+		}
+	}
+
+	return nil
+}
+
+// UpdateEpochTotalStaking updates the total staking for the specified epoch by the given staking
+func UpdateEpochTotalStaking(epoch *Epoch, staking *Staking) {
+	for i, totalStaking := range epoch.TotalStakings {
+		if totalStaking.Denom == staking.Amount.Denom {
+			// update total staking if existing
+			totalStaking.Amount = totalStaking.Amount.Add(staking.Amount)
+			totalStaking.EffectiveAmount = totalStaking.EffectiveAmount.Add(staking.EffectiveAmount)
+
+			epoch.TotalStakings[i] = totalStaking
+			return
+		}
+	}
+
+	// add new total staking if not found
+	epoch.TotalStakings = append(epoch.TotalStakings, TotalStaking{
+		Denom:           staking.Amount.Denom,
+		Amount:          staking.Amount,
+		EffectiveAmount: staking.EffectiveAmount,
+	})
+}

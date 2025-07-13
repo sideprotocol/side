@@ -48,7 +48,7 @@ func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.Msg
 		LockDuration:    msg.LockDuration,
 		LockMultiplier:  lockMultiplier,
 		EffectiveAmount: types.GetEffectiveAmount(msg.Amount, lockMultiplier),
-		PendingReward:   sdk.NewCoin(m.RewardsPerEpoch(ctx).Denom, sdkmath.ZeroInt()),
+		PendingRewards:  sdk.NewCoin(m.RewardsPerEpoch(ctx).Denom, sdkmath.ZeroInt()),
 		StartTime:       ctx.BlockTime(),
 		Status:          types.StakingStatus_STAKING_STATUS_STAKED,
 	}
@@ -92,9 +92,9 @@ func (m msgServer) Unstake(goCtx context.Context, msg *types.MsgUnstake) (*types
 		return nil, err
 	}
 
-	// claim pending reward if any
-	if staking.PendingReward.IsPositive() {
-		if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingReward)); err != nil {
+	// claim pending rewards if any
+	if staking.PendingRewards.IsPositive() {
+		if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingRewards)); err != nil {
 			return nil, err
 		}
 	}
@@ -130,11 +130,11 @@ func (m msgServer) Claim(goCtx context.Context, msg *types.MsgClaim) (*types.Msg
 		return nil, errorsmod.Wrapf(types.ErrInvalidStakingStatus, "already unstaked: %d", msg.Id)
 	}
 
-	if staking.PendingReward.IsZero() {
-		return nil, types.ErrNoPendingReward
+	if staking.PendingRewards.IsZero() {
+		return nil, types.ErrNoPendingRewards
 	}
 
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingReward)); err != nil {
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingRewards)); err != nil {
 		return nil, err
 	}
 
