@@ -113,7 +113,11 @@ func (k Keeper) NewEpoch(ctx sdk.Context) {
 		Status:    types.EpochStatus_EPOCH_STATUS_STARTED,
 	}
 
+	// set the new epoch
 	k.SetEpoch(ctx, epoch)
+
+	// call handler on the new epoch started
+	k.OnEpochStarted(ctx)
 }
 
 // OnEpochStarted is called when the current epoch is started

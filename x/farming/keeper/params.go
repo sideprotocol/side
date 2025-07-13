@@ -55,7 +55,6 @@ func (k Keeper) OnParamsChanged(ctx sdk.Context, params types.Params, newParams 
 	if !params.Enabled && newParams.Enabled {
 		// start the new epoch when farming enabled or re-enabled
 		k.NewEpoch(ctx)
-		k.OnEpochStarted(ctx)
 	} else if params.Enabled && !newParams.Enabled {
 		// terminate the current epoch if disabled
 		currentEpoch := k.GetCurrentEpoch(ctx)

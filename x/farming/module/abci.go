@@ -11,11 +11,11 @@ import (
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handleMatureStakings(ctx, k)
 
-	updateEpoch(ctx, k)
+	handleEpoch(ctx, k)
 }
 
-// updateEpoch updates the epoch
-func updateEpoch(ctx sdk.Context, k keeper.Keeper) {
+// handleEpoch handles the epoch
+func handleEpoch(ctx sdk.Context, k keeper.Keeper) {
 	if k.FarmingEnabled(ctx) {
 		currentEpoch := k.GetCurrentEpoch(ctx)
 		if !ctx.BlockTime().Before(currentEpoch.EndTime) {
@@ -28,9 +28,6 @@ func updateEpoch(ctx sdk.Context, k keeper.Keeper) {
 
 			// start the new epoch
 			k.NewEpoch(ctx)
-
-			// call handler on epoch started
-			k.OnEpochStarted(ctx)
 		}
 	}
 }
