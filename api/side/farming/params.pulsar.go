@@ -503,7 +503,7 @@ func (x *fastReflection_Asset) ProtoMethods() *protoiface.Methods {
 var _ protoreflect.List = (*_Params_4_list)(nil)
 
 type _Params_4_list struct {
-	list *[]*durationpb.Duration
+	list *[]*Asset
 }
 
 func (x *_Params_4_list) Len() int {
@@ -519,18 +519,18 @@ func (x *_Params_4_list) Get(i int) protoreflect.Value {
 
 func (x *_Params_4_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*durationpb.Duration)
+	concreteValue := valueUnwrapped.Interface().(*Asset)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_Params_4_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*durationpb.Duration)
+	concreteValue := valueUnwrapped.Interface().(*Asset)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_Params_4_list) AppendMutable() protoreflect.Value {
-	v := new(durationpb.Duration)
+	v := new(Asset)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -543,62 +543,11 @@ func (x *_Params_4_list) Truncate(n int) {
 }
 
 func (x *_Params_4_list) NewElement() protoreflect.Value {
-	v := new(durationpb.Duration)
+	v := new(Asset)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
 func (x *_Params_4_list) IsValid() bool {
-	return x.list != nil
-}
-
-var _ protoreflect.List = (*_Params_5_list)(nil)
-
-type _Params_5_list struct {
-	list *[]*Asset
-}
-
-func (x *_Params_5_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_Params_5_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_Params_5_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Asset)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_Params_5_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Asset)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_Params_5_list) AppendMutable() protoreflect.Value {
-	v := new(Asset)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_Params_5_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_Params_5_list) NewElement() protoreflect.Value {
-	v := new(Asset)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_Params_5_list) IsValid() bool {
 	return x.list != nil
 }
 
@@ -607,7 +556,6 @@ var (
 	fd_Params_enabled           protoreflect.FieldDescriptor
 	fd_Params_epoch_duration    protoreflect.FieldDescriptor
 	fd_Params_rewards_per_epoch protoreflect.FieldDescriptor
-	fd_Params_lock_durations    protoreflect.FieldDescriptor
 	fd_Params_eligible_assets   protoreflect.FieldDescriptor
 )
 
@@ -617,7 +565,6 @@ func init() {
 	fd_Params_enabled = md_Params.Fields().ByName("enabled")
 	fd_Params_epoch_duration = md_Params.Fields().ByName("epoch_duration")
 	fd_Params_rewards_per_epoch = md_Params.Fields().ByName("rewards_per_epoch")
-	fd_Params_lock_durations = md_Params.Fields().ByName("lock_durations")
 	fd_Params_eligible_assets = md_Params.Fields().ByName("eligible_assets")
 }
 
@@ -704,14 +651,8 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if len(x.LockDurations) != 0 {
-		value := protoreflect.ValueOfList(&_Params_4_list{list: &x.LockDurations})
-		if !f(fd_Params_lock_durations, value) {
-			return
-		}
-	}
 	if len(x.EligibleAssets) != 0 {
-		value := protoreflect.ValueOfList(&_Params_5_list{list: &x.EligibleAssets})
+		value := protoreflect.ValueOfList(&_Params_4_list{list: &x.EligibleAssets})
 		if !f(fd_Params_eligible_assets, value) {
 			return
 		}
@@ -737,8 +678,6 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.EpochDuration != nil
 	case "side.farming.Params.rewards_per_epoch":
 		return x.RewardsPerEpoch != nil
-	case "side.farming.Params.lock_durations":
-		return len(x.LockDurations) != 0
 	case "side.farming.Params.eligible_assets":
 		return len(x.EligibleAssets) != 0
 	default:
@@ -763,8 +702,6 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.EpochDuration = nil
 	case "side.farming.Params.rewards_per_epoch":
 		x.RewardsPerEpoch = nil
-	case "side.farming.Params.lock_durations":
-		x.LockDurations = nil
 	case "side.farming.Params.eligible_assets":
 		x.EligibleAssets = nil
 	default:
@@ -792,17 +729,11 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "side.farming.Params.rewards_per_epoch":
 		value := x.RewardsPerEpoch
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "side.farming.Params.lock_durations":
-		if len(x.LockDurations) == 0 {
-			return protoreflect.ValueOfList(&_Params_4_list{})
-		}
-		listValue := &_Params_4_list{list: &x.LockDurations}
-		return protoreflect.ValueOfList(listValue)
 	case "side.farming.Params.eligible_assets":
 		if len(x.EligibleAssets) == 0 {
-			return protoreflect.ValueOfList(&_Params_5_list{})
+			return protoreflect.ValueOfList(&_Params_4_list{})
 		}
-		listValue := &_Params_5_list{list: &x.EligibleAssets}
+		listValue := &_Params_4_list{list: &x.EligibleAssets}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -830,13 +761,9 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.EpochDuration = value.Message().Interface().(*durationpb.Duration)
 	case "side.farming.Params.rewards_per_epoch":
 		x.RewardsPerEpoch = value.Message().Interface().(*v1beta1.Coin)
-	case "side.farming.Params.lock_durations":
-		lv := value.List()
-		clv := lv.(*_Params_4_list)
-		x.LockDurations = *clv.list
 	case "side.farming.Params.eligible_assets":
 		lv := value.List()
-		clv := lv.(*_Params_5_list)
+		clv := lv.(*_Params_4_list)
 		x.EligibleAssets = *clv.list
 	default:
 		if fd.IsExtension() {
@@ -868,17 +795,11 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 			x.RewardsPerEpoch = new(v1beta1.Coin)
 		}
 		return protoreflect.ValueOfMessage(x.RewardsPerEpoch.ProtoReflect())
-	case "side.farming.Params.lock_durations":
-		if x.LockDurations == nil {
-			x.LockDurations = []*durationpb.Duration{}
-		}
-		value := &_Params_4_list{list: &x.LockDurations}
-		return protoreflect.ValueOfList(value)
 	case "side.farming.Params.eligible_assets":
 		if x.EligibleAssets == nil {
 			x.EligibleAssets = []*Asset{}
 		}
-		value := &_Params_5_list{list: &x.EligibleAssets}
+		value := &_Params_4_list{list: &x.EligibleAssets}
 		return protoreflect.ValueOfList(value)
 	case "side.farming.Params.enabled":
 		panic(fmt.Errorf("field enabled of message side.farming.Params is not mutable"))
@@ -903,12 +824,9 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 	case "side.farming.Params.rewards_per_epoch":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "side.farming.Params.lock_durations":
-		list := []*durationpb.Duration{}
-		return protoreflect.ValueOfList(&_Params_4_list{list: &list})
 	case "side.farming.Params.eligible_assets":
 		list := []*Asset{}
-		return protoreflect.ValueOfList(&_Params_5_list{list: &list})
+		return protoreflect.ValueOfList(&_Params_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.farming.Params"))
@@ -989,12 +907,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.RewardsPerEpoch)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.LockDurations) > 0 {
-			for _, e := range x.LockDurations {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
 		if len(x.EligibleAssets) > 0 {
 			for _, e := range x.EligibleAssets {
 				l = options.Size(e)
@@ -1033,22 +945,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if len(x.EligibleAssets) > 0 {
 			for iNdEx := len(x.EligibleAssets) - 1; iNdEx >= 0; iNdEx-- {
 				encoded, err := options.Marshal(x.EligibleAssets[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x2a
-			}
-		}
-		if len(x.LockDurations) > 0 {
-			for iNdEx := len(x.LockDurations) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.LockDurations[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1243,40 +1139,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LockDurations", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.LockDurations = append(x.LockDurations, &durationpb.Duration{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.LockDurations[len(x.LockDurations)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 5:
-				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EligibleAssets", wireType)
 				}
 				var msglen int
@@ -1409,11 +1271,10 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Enabled         bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	EpochDuration   *durationpb.Duration   `protobuf:"bytes,2,opt,name=epoch_duration,json=epochDuration,proto3" json:"epoch_duration,omitempty"`
-	RewardsPerEpoch *v1beta1.Coin          `protobuf:"bytes,3,opt,name=rewards_per_epoch,json=rewardsPerEpoch,proto3" json:"rewards_per_epoch,omitempty"`
-	LockDurations   []*durationpb.Duration `protobuf:"bytes,4,rep,name=lock_durations,json=lockDurations,proto3" json:"lock_durations,omitempty"`
-	EligibleAssets  []*Asset               `protobuf:"bytes,5,rep,name=eligible_assets,json=eligibleAssets,proto3" json:"eligible_assets,omitempty"`
+	Enabled         bool                 `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	EpochDuration   *durationpb.Duration `protobuf:"bytes,2,opt,name=epoch_duration,json=epochDuration,proto3" json:"epoch_duration,omitempty"`
+	RewardsPerEpoch *v1beta1.Coin        `protobuf:"bytes,3,opt,name=rewards_per_epoch,json=rewardsPerEpoch,proto3" json:"rewards_per_epoch,omitempty"`
+	EligibleAssets  []*Asset             `protobuf:"bytes,4,rep,name=eligible_assets,json=eligibleAssets,proto3" json:"eligible_assets,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -1457,13 +1318,6 @@ func (x *Params) GetRewardsPerEpoch() *v1beta1.Coin {
 	return nil
 }
 
-func (x *Params) GetLockDurations() []*durationpb.Duration {
-	if x != nil {
-		return x.LockDurations
-	}
-	return nil
-}
-
 func (x *Params) GetEligibleAssets() []*Asset {
 	if x != nil {
 		return x.EligibleAssets
@@ -1491,7 +1345,7 @@ var file_side_farming_params_proto_rawDesc = []byte{
 	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63,
 	0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44,
 	0x65, 0x63, 0x52, 0x0b, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x61, 0x74, 0x69, 0x6f, 0x22,
-	0xcb, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e,
+	0xff, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e,
 	0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61,
 	0x62, 0x6c, 0x65, 0x64, 0x12, 0x4a, 0x0a, 0x0e, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x5f, 0x64, 0x75,
 	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67,
@@ -1502,27 +1356,22 @@ var file_side_farming_params_proto_rawDesc = []byte{
 	0x65, 0x70, 0x6f, 0x63, 0x68, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f,
 	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
 	0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0f, 0x72, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x65, 0x72, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x12, 0x4a, 0x0a,
-	0x0e, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18,
-	0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x0d, 0x6c, 0x6f, 0x63, 0x6b,
-	0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x42, 0x0a, 0x0f, 0x65, 0x6c, 0x69,
-	0x67, 0x69, 0x62, 0x6c, 0x65, 0x5f, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x18, 0x05, 0x20, 0x03,
-	0x28, 0x0b, 0x32, 0x13, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e,
-	0x67, 0x2e, 0x41, 0x73, 0x73, 0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x65,
-	0x6c, 0x69, 0x67, 0x69, 0x62, 0x6c, 0x65, 0x41, 0x73, 0x73, 0x65, 0x74, 0x73, 0x42, 0x9f, 0x01,
-	0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61, 0x72, 0x6d, 0x69,
-	0x6e, 0x67, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69,
-	0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x66, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67,
-	0xa2, 0x02, 0x03, 0x53, 0x46, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x46, 0x61,
-	0x72, 0x6d, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x46, 0x61, 0x72,
-	0x6d, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x46, 0x61, 0x72, 0x6d,
-	0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x65, 0x72, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x12, 0x42, 0x0a,
+	0x0f, 0x65, 0x6c, 0x69, 0x67, 0x69, 0x62, 0x6c, 0x65, 0x5f, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73,
+	0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66, 0x61,
+	0x72, 0x6d, 0x69, 0x6e, 0x67, 0x2e, 0x41, 0x73, 0x73, 0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f,
+	0x00, 0x52, 0x0e, 0x65, 0x6c, 0x69, 0x67, 0x69, 0x62, 0x6c, 0x65, 0x41, 0x73, 0x73, 0x65, 0x74,
+	0x73, 0x42, 0x9f, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x66,
+	0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72,
+	0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
+	0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73,
+	0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x66, 0x61, 0x72,
+	0x6d, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x46, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x69, 0x64,
+	0x65, 0x2e, 0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x0c, 0x53, 0x69, 0x64, 0x65,
+	0x5c, 0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x18, 0x53, 0x69, 0x64, 0x65, 0x5c,
+	0x46, 0x61, 0x72, 0x6d, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64,
+	0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x46, 0x61, 0x72, 0x6d,
+	0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1547,13 +1396,12 @@ var file_side_farming_params_proto_goTypes = []interface{}{
 var file_side_farming_params_proto_depIdxs = []int32{
 	2, // 0: side.farming.Params.epoch_duration:type_name -> google.protobuf.Duration
 	3, // 1: side.farming.Params.rewards_per_epoch:type_name -> cosmos.base.v1beta1.Coin
-	2, // 2: side.farming.Params.lock_durations:type_name -> google.protobuf.Duration
-	0, // 3: side.farming.Params.eligible_assets:type_name -> side.farming.Asset
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0, // 2: side.farming.Params.eligible_assets:type_name -> side.farming.Asset
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_side_farming_params_proto_init() }

@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"slices"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,16 +21,6 @@ func (k Keeper) EpochDuration(ctx sdk.Context) time.Duration {
 // RewardsPerEpoch gets the rewards per epoch
 func (k Keeper) RewardsPerEpoch(ctx sdk.Context) sdk.Coin {
 	return k.GetParams(ctx).RewardsPerEpoch
-}
-
-// LockDurations gets the lock durations
-func (k Keeper) LockDurations(ctx sdk.Context) []time.Duration {
-	return k.GetParams(ctx).LockDurations
-}
-
-// LockDurationExists returns true if the given lock duration exists, false otherwise
-func (k Keeper) LockDurationExists(ctx sdk.Context, lockDuration time.Duration) bool {
-	return slices.Contains(k.LockDurations(ctx), lockDuration)
 }
 
 // EligibleAssets gets all eligible assets

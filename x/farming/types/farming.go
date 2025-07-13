@@ -15,7 +15,7 @@ var (
 // GetLockMultiplier gets the lock multiplier according to the given lock duration
 // Formula: 1 + (lockDurationInDays / 365) * 2.5
 func GetLockMultiplier(lockDuration time.Duration) sdkmath.LegacyDec {
-	lockDurationInDays := lockDuration / (24 * time.Hour)
+	lockDurationInDays := GetLockDurationInDays(lockDuration)
 
 	return sdkmath.LegacyNewDec(int64(lockDurationInDays)).QuoInt64(365).Mul(LockMultiplierFactor).Add(sdkmath.LegacyOneDec())
 }
@@ -26,4 +26,9 @@ func GetEffectiveAmount(amount sdk.Coin, lockMultiplier sdkmath.LegacyDec) sdk.C
 	effectiveAmount := amount.Amount.ToLegacyDec().Mul(lockMultiplier).TruncateInt()
 
 	return sdk.NewCoin(amount.Denom, effectiveAmount)
+}
+
+// GetLockDurationInDays gets days for the given lock duration
+func GetLockDurationInDays(lockDuration time.Duration) time.Duration {
+	return lockDuration / (24 * time.Hour)
 }
