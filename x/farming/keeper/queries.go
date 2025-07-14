@@ -45,7 +45,27 @@ func (k Keeper) Stakings(goCtx context.Context, req *types.QueryStakingsRequest)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryStakingsResponse{Stakings: k.GetStakingsByAddress(ctx, req.Address)}, nil
+	stakings, pagination, err := k.GetStakingsByStatusWithPagination(ctx, req.Status, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryStakingsResponse{Stakings: stakings, Pagination: pagination}, nil
+}
+
+func (k Keeper) StakingsByAddress(goCtx context.Context, req *types.QueryStakingsByAddressRequest) (*types.QueryStakingsByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	stakings, pagination, err := k.GetStakingsByAddressWithPagination(ctx, req.Address, req.Status, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryStakingsByAddressResponse{Stakings: stakings, Pagination: pagination}, nil
 }
 
 func (k Keeper) TotalStaking(goCtx context.Context, req *types.QueryTotalStakingRequest) (*types.QueryTotalStakingResponse, error) {
