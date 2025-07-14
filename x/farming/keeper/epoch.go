@@ -125,14 +125,11 @@ func (k Keeper) OnEpochStarted(ctx sdk.Context) {
 	// get the current epoch
 	currentEpoch := k.GetCurrentEpoch(ctx)
 
-	// get all stakings
-	stakings := k.GetAllStakings(ctx)
+	// get staked stakings
+	stakings := k.GetStakingsByStatus(ctx, types.StakingStatus_STAKING_STATUS_STAKED)
 
 	for _, staking := range stakings {
-		if staking.Status != types.StakingStatus_STAKING_STATUS_STAKED {
-			continue
-		}
-
+		// ensure the staking end time satisfies the current epoch
 		if staking.StartTime.Add(staking.LockDuration).Before(currentEpoch.EndTime) {
 			continue
 		}

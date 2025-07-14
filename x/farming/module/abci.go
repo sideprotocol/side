@@ -34,14 +34,11 @@ func handleEpoch(ctx sdk.Context, k keeper.Keeper) {
 
 // handleMatureStakings performs handling for the mature stakings
 func handleMatureStakings(ctx sdk.Context, k keeper.Keeper) {
-	// get all stakings
-	stakings := k.GetAllStakings(ctx)
+	// get staked stakings
+	stakings := k.GetStakingsByStatus(ctx, types.StakingStatus_STAKING_STATUS_STAKED)
 
 	for _, staking := range stakings {
-		if staking.Status != types.StakingStatus_STAKING_STATUS_STAKED {
-			continue
-		}
-
+		// check if the lock duration has ended
 		if ctx.BlockTime().Before(staking.StartTime.Add(staking.LockDuration)) {
 			continue
 		}
