@@ -19,12 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName        = "/side.farming.Query/Params"
-	Query_Staking_FullMethodName       = "/side.farming.Query/Staking"
-	Query_Stakings_FullMethodName      = "/side.farming.Query/Stakings"
-	Query_TotalStaking_FullMethodName  = "/side.farming.Query/TotalStaking"
-	Query_CurrentEpoch_FullMethodName  = "/side.farming.Query/CurrentEpoch"
-	Query_PendingReward_FullMethodName = "/side.farming.Query/PendingReward"
+	Query_Params_FullMethodName            = "/side.farming.Query/Params"
+	Query_Staking_FullMethodName           = "/side.farming.Query/Staking"
+	Query_Stakings_FullMethodName          = "/side.farming.Query/Stakings"
+	Query_StakingsByAddress_FullMethodName = "/side.farming.Query/StakingsByAddress"
+	Query_TotalStaking_FullMethodName      = "/side.farming.Query/TotalStaking"
+	Query_CurrentEpoch_FullMethodName      = "/side.farming.Query/CurrentEpoch"
+	Query_PendingReward_FullMethodName     = "/side.farming.Query/PendingReward"
 )
 
 // QueryClient is the client API for Query service.
@@ -35,6 +36,7 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	Staking(ctx context.Context, in *QueryStakingRequest, opts ...grpc.CallOption) (*QueryStakingResponse, error)
 	Stakings(ctx context.Context, in *QueryStakingsRequest, opts ...grpc.CallOption) (*QueryStakingsResponse, error)
+	StakingsByAddress(ctx context.Context, in *QueryStakingsByAddressRequest, opts ...grpc.CallOption) (*QueryStakingsByAddressResponse, error)
 	TotalStaking(ctx context.Context, in *QueryTotalStakingRequest, opts ...grpc.CallOption) (*QueryTotalStakingResponse, error)
 	CurrentEpoch(ctx context.Context, in *QueryCurrentEpochRequest, opts ...grpc.CallOption) (*QueryCurrentEpochResponse, error)
 	PendingReward(ctx context.Context, in *QueryPendingRewardRequest, opts ...grpc.CallOption) (*QueryPendingRewardResponse, error)
@@ -69,6 +71,15 @@ func (c *queryClient) Staking(ctx context.Context, in *QueryStakingRequest, opts
 func (c *queryClient) Stakings(ctx context.Context, in *QueryStakingsRequest, opts ...grpc.CallOption) (*QueryStakingsResponse, error) {
 	out := new(QueryStakingsResponse)
 	err := c.cc.Invoke(ctx, Query_Stakings_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) StakingsByAddress(ctx context.Context, in *QueryStakingsByAddressRequest, opts ...grpc.CallOption) (*QueryStakingsByAddressResponse, error) {
+	out := new(QueryStakingsByAddressResponse)
+	err := c.cc.Invoke(ctx, Query_StakingsByAddress_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -110,6 +121,7 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	Staking(context.Context, *QueryStakingRequest) (*QueryStakingResponse, error)
 	Stakings(context.Context, *QueryStakingsRequest) (*QueryStakingsResponse, error)
+	StakingsByAddress(context.Context, *QueryStakingsByAddressRequest) (*QueryStakingsByAddressResponse, error)
 	TotalStaking(context.Context, *QueryTotalStakingRequest) (*QueryTotalStakingResponse, error)
 	CurrentEpoch(context.Context, *QueryCurrentEpochRequest) (*QueryCurrentEpochResponse, error)
 	PendingReward(context.Context, *QueryPendingRewardRequest) (*QueryPendingRewardResponse, error)
@@ -128,6 +140,9 @@ func (UnimplementedQueryServer) Staking(context.Context, *QueryStakingRequest) (
 }
 func (UnimplementedQueryServer) Stakings(context.Context, *QueryStakingsRequest) (*QueryStakingsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Stakings not implemented")
+}
+func (UnimplementedQueryServer) StakingsByAddress(context.Context, *QueryStakingsByAddressRequest) (*QueryStakingsByAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StakingsByAddress not implemented")
 }
 func (UnimplementedQueryServer) TotalStaking(context.Context, *QueryTotalStakingRequest) (*QueryTotalStakingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TotalStaking not implemented")
@@ -205,6 +220,24 @@ func _Query_Stakings_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_StakingsByAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryStakingsByAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).StakingsByAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_StakingsByAddress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).StakingsByAddress(ctx, req.(*QueryStakingsByAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_TotalStaking_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryTotalStakingRequest)
 	if err := dec(in); err != nil {
@@ -277,6 +310,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Stakings",
 			Handler:    _Query_Stakings_Handler,
+		},
+		{
+			MethodName: "StakingsByAddress",
+			Handler:    _Query_StakingsByAddress_Handler,
 		},
 		{
 			MethodName: "TotalStaking",

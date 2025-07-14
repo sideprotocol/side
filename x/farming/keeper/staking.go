@@ -133,7 +133,7 @@ func (k Keeper) GetStakingsByStatusWithPagination(ctx sdk.Context, status types.
 	return stakings, pageRes, nil
 }
 
-// GetStakingsByAddress gets stakings according to the specified address
+// GetStakingsByAddress gets stakings by the given address
 func (k Keeper) GetStakingsByAddress(ctx sdk.Context, address string) []*types.Staking {
 	stakings := make([]*types.Staking, 0)
 
@@ -143,6 +143,30 @@ func (k Keeper) GetStakingsByAddress(ctx sdk.Context, address string) []*types.S
 	})
 
 	return stakings
+}
+
+// GetStakingsByAddressWithPagination gets stakings by the given address and status with pagination
+func (k Keeper) GetStakingsByAddressWithPagination(ctx sdk.Context, address string, status types.StakingStatus, pagination *query.PageRequest) ([]*types.Staking, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	stakingByAddressStore := prefix.NewStore(store, append(types.StakingByAddressKeyPrefix, []byte(address)...))
+
+	var stakings []*types.Staking
+
+	pageRes, err := query.Paginate(stakingByAddressStore, pagination, func(key []byte, value []byte) error {
+		id := sdk.BigEndianToUint64(key)
+		staking := k.GetStaking(ctx, id)
+
+		if status == types.StakingStatus_STAKING_STATUS_UNSPECIFIED || staking.Status == status {
+			stakings = append(stakings, staking)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return stakings, pageRes, nil
 }
 
 // IterateStakings iterates through all stakings
