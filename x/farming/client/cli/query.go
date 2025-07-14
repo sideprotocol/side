@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"strconv"
 
 	// "strings"
 
@@ -24,6 +25,13 @@ func GetQueryCmd(_ string) *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
+	cmd.AddCommand(CmdQueryParams())
+	cmd.AddCommand(CmdQueryStaking())
+	cmd.AddCommand(CmdQueryStakings())
+	cmd.AddCommand(CmdQueryTotalStaking())
+	cmd.AddCommand(CmdQueryCurrentEpoch())
+	cmd.AddCommand(CmdQueryPendingReward())
+
 	return cmd
 }
 
@@ -41,6 +49,151 @@ func CmdQueryParams() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.Params(cmd.Context(), &types.QueryParamsRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryStaking() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "staking [id]",
+		Short: "Query staking by the given id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.Staking(cmd.Context(), &types.QueryStakingRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryStakings() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "stakings [address]",
+		Short: "Query all stakings of the given address",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Stakings(cmd.Context(), &types.QueryStakingsRequest{Address: args[0]})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryTotalStaking() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "total-staking [denom]",
+		Short: "Query total staking by the given denom",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.TotalStaking(cmd.Context(), &types.QueryTotalStakingRequest{Denom: args[0]})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryCurrentEpoch() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "current-epoch",
+		Short: "Query the current epoch",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.CurrentEpoch(cmd.Context(), &types.QueryCurrentEpochRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryPendingReward() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "pending-reward [staking id]",
+		Short: "Query the pending reward of the given staking for the current epoch",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.PendingReward(cmd.Context(), &types.QueryPendingRewardRequest{Id: id})
 			if err != nil {
 				return err
 			}

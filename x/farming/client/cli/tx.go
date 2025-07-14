@@ -1,11 +1,15 @@
 package cli
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/sideprotocol/side/x/farming/types"
@@ -27,6 +31,118 @@ func GetTxCmd() *cobra.Command {
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
 	}
+
+	cmd.AddCommand(CmdStake())
+	cmd.AddCommand(CmdUnstake())
+	cmd.AddCommand(CmdClaim())
+
+	return cmd
+}
+
+func CmdStake() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "stake [amount] [lock duration in days]",
+		Short: "Stake the given amount for the specified lock duration",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			amount, err := sdk.ParseCoinNormalized(args[0])
+			if err != nil {
+				return err
+			}
+
+			lockDurationInDays, err := strconv.ParseUint(args[1], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgStake(
+				clientCtx.GetFromAddress().String(),
+				amount,
+				time.Duration(lockDurationInDays)*24*time.Hour,
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdUnstake() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "unstake [staking id]",
+		Short: "Unstake the given staking",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgUnstake(
+				clientCtx.GetFromAddress().String(),
+				id,
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdClaim() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "claim [staking id]",
+		Short: "Claim the pending rewards of the given staking",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgClaim(
+				clientCtx.GetFromAddress().String(),
+				id,
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
