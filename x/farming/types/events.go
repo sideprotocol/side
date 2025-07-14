@@ -4,9 +4,11 @@ package types
 const (
 	EventTypeStake   = "stake"
 	EventTypeUnstake = "unstake"
+	EventTypeClaim   = "claim"
 
-	AttributeKeySender       = "sender"
+	AttributeKeyStaker       = "staker"
 	AttributeKeyId           = "id"
 	AttributeKeyAmount       = "amount"
 	AttributeKeyLockDuration = "lock_duration"
+	AttributeKeyRewards      = "rewards"
 )
