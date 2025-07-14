@@ -25,5 +25,6 @@ message Params {
   bool enabled = 1;
   google.protobuf.Duration epoch_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
   cosmos.base.v1beta1.Coin rewards_per_epoch = 3 [(gogoproto.nullable) = false];
-  repeated Asset eligible_assets = 4 [(gogoproto.nullable) = false];
+  repeated google.protobuf.Duration lock_durations = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  repeated Asset eligible_assets = 5 [(gogoproto.nullable) = false];
 }

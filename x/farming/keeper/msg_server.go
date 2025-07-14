@@ -31,8 +31,8 @@ func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.Msg
 		return nil, errorsmod.Wrapf(types.ErrAssetNotEligible, "asset %s not eligible", msg.Amount.Denom)
 	}
 
-	if msg.LockDuration < m.EpochDuration(ctx) {
-		return nil, errorsmod.Wrapf(types.ErrInvalidLockDuration, "lock duration cannot be less than %s day(s)", types.GetLockDurationInDays(m.EpochDuration(ctx)))
+	if !m.LockDurationExists(ctx, msg.LockDuration) {
+		return nil, types.ErrInvalidLockDuration
 	}
 
 	if err := m.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Staker), types.ModuleName, sdk.NewCoins(msg.Amount)); err != nil {
