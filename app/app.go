@@ -161,6 +161,7 @@ import (
 	upgradev2 "github.com/sideprotocol/side/app/upgrades/v2"
 	upgradev2rc8 "github.com/sideprotocol/side/app/upgrades/v2_rc8"
 	upgradev2rc9 "github.com/sideprotocol/side/app/upgrades/v2_rc9"
+	upgradev2rc10 "github.com/sideprotocol/side/app/upgrades/v2_rc10"
 )
 
 const (
@@ -1332,6 +1333,7 @@ func (app *App) SetUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev2.UpgradeName, upgradev2.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc8.UpgradeName, upgradev2rc8.CreateUpgradeHandler(app.ModuleManager, app.configurator))
     app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc9.UpgradeName, upgradev2rc9.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc10.UpgradeName, upgradev2rc10.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
@@ -1345,6 +1347,10 @@ func (app *App) SetUpgradeHandlers() {
 	// register store loader for current upgrade
 	if upgradeInfo.Name == upgradev2.UpgradeName {
 		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgradev2.StoreUpgrades))
+	}
+
+	if upgradeInfo.Name == upgradev2rc10.UpgradeName {
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgradev2rc10.StoreUpgrades))
 	}
 }
 
