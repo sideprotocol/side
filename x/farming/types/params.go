@@ -14,6 +14,9 @@ var (
 
 	// default rewards per epoch
 	DefaultRewardsPerEpoch = sdk.NewCoin("uside", sdkmath.NewIntWithDecimal(1000000, 6)) // 100000 SIDE
+
+	// default lock durations
+	DefaultLockDurations = []time.Duration{30 * 24 * time.Hour} // 30 days
 )
 
 // DefaultParams returns a default set of parameters
@@ -22,6 +25,7 @@ func DefaultParams() Params {
 		Enabled:         false,
 		EpochDuration:   DefaultEpochDuration,
 		RewardsPerEpoch: DefaultRewardsPerEpoch,
+		LockDurations:   DefaultLockDurations,
 		EligibleAssets:  nil,
 	}
 }
@@ -34,6 +38,19 @@ func (p Params) Validate() error {
 
 	if !p.RewardsPerEpoch.IsValid() || !p.RewardsPerEpoch.IsPositive() {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid rewards per epoch")
+	}
+
+	lockDurations := make(map[time.Duration]bool)
+	for _, lockDuration := range p.LockDurations {
+		if lockDurations[lockDuration] {
+			return errorsmod.Wrap(ErrInvalidParams, "duplicate lock duration")
+		}
+
+		if lockDuration <= 0 {
+			return errorsmod.Wrap(ErrInvalidParams, "invalid lock duration")
+		}
+
+		lockDurations[lockDuration] = true
 	}
 
 	eligibleAssets := make(map[string]bool)
