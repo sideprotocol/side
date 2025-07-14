@@ -25,8 +25,9 @@ var (
 
 	EpochKeyPrefix            = []byte{0x10} // key prefix for epoch
 	StakingKeyPrefix          = []byte{0x11} // key prefix for staking
-	StakingByAddressKeyPrefix = []byte{0x12} // key prefix for staking by address
-	TotalStakingKeyPrefix     = []byte{0x13} // key prefix for total staking
+	StakingByStatusKeyPrefix  = []byte{0x12} // key prefix for staking by status
+	StakingByAddressKeyPrefix = []byte{0x13} // key prefix for staking by address
+	TotalStakingKeyPrefix     = []byte{0x14} // key prefix for total staking
 
 	CurrentEpochStakingQueueKeyPrefix = []byte{0x20} // key prefix for staking queue for the current epoch
 )
@@ -37,6 +38,12 @@ func EpochKey(id uint64) []byte {
 
 func StakingKey(id uint64) []byte {
 	return append(StakingKeyPrefix, sdk.Uint64ToBigEndian(id)...)
+}
+
+func StakingByStatusKey(status StakingStatus, id uint64) []byte {
+	key := append(StakingByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...)
+
+	return append(key, sdk.Uint64ToBigEndian(id)...)
 }
 
 func StakingByAddressKey(address string, id uint64) []byte {
