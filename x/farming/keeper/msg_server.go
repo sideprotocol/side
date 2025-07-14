@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
@@ -60,6 +61,17 @@ func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.Msg
 	// update total staking
 	m.IncreaseTotalStaking(ctx, staking)
 
+	// emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeStake,
+			sdk.NewAttribute(types.AttributeKeyStaker, msg.Staker),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", staking.Id)),
+			sdk.NewAttribute(types.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyLockDuration, msg.LockDuration.String()),
+		),
+	)
+
 	return &types.MsgStakeResponse{}, nil
 }
 
@@ -109,6 +121,15 @@ func (m msgServer) Unstake(goCtx context.Context, msg *types.MsgUnstake) (*types
 	// update total staking
 	m.DecreaseTotalStaking(ctx, staking)
 
+	// emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeUnstake,
+			sdk.NewAttribute(types.AttributeKeyStaker, msg.Staker),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", msg.Id)),
+		),
+	)
+
 	return &types.MsgUnstakeResponse{}, nil
 }
 
@@ -137,13 +158,24 @@ func (m msgServer) Claim(goCtx context.Context, msg *types.MsgClaim) (*types.Msg
 		return nil, types.ErrNoPendingRewards
 	}
 
-	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(staking.PendingRewards)); err != nil {
+	amount := staking.PendingRewards
+	if err := m.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Staker), sdk.NewCoins(amount)); err != nil {
 		return nil, err
 	}
 
 	// reset pending rewards
 	staking.PendingRewards = sdk.NewCoin(staking.PendingRewards.Denom, sdkmath.ZeroInt())
 	m.SetStaking(ctx, staking)
+
+	// emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeClaim,
+			sdk.NewAttribute(types.AttributeKeyStaker, msg.Staker),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", msg.Id)),
+			sdk.NewAttribute(types.AttributeKeyRewards, amount.String()),
+		),
+	)
 
 	return &types.MsgClaimResponse{}, nil
 }
