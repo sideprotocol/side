@@ -9,14 +9,20 @@ import (
 )
 
 var (
+	// duration for 1 day
+	Day = 24 * time.Hour
+
 	// default epoch duration
-	DefaultEpochDuration = 7 * 24 * time.Hour // 1W
+	DefaultEpochDuration = 7 * Day
 
 	// default rewards per epoch
-	DefaultRewardsPerEpoch = sdk.NewCoin("uside", sdkmath.NewIntWithDecimal(1000000, 6)) // 100000 SIDE
+	DefaultRewardsPerEpoch = sdk.NewCoin("uside", sdkmath.NewIntWithDecimal(0, 6)) // 0 SIDE
 
 	// default lock durations
-	DefaultLockDurations = []time.Duration{30 * 24 * time.Hour} // 30 days
+	DefaultLockDurations = []time.Duration{
+		7 * Day, 30 * Day, 60 * Day, 90 * Day,
+		120 * Day, 180 * Day, 365 * Day,
+	}
 )
 
 // DefaultParams returns a default set of parameters
@@ -60,6 +66,8 @@ func validateEpochDuration(p Params) error {
 	if p.Enabled && p.EpochDuration == 0 {
 		return errorsmod.Wrap(ErrInvalidParams, "epoch duration must be greater than 0 when farming enabled")
 	}
+
+	return nil
 }
 
 // validateRewardsPerEpoch validates the given rewards per epoch

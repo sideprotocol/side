@@ -40,14 +40,14 @@ func (k Keeper) EligibleAssets(ctx sdk.Context) []types.Asset {
 }
 
 // GetAsset gets the eligible asset by the given denom
-func (k Keeper) GetAsset(ctx sdk.Context, denom string) *types.Asset {
+func (k Keeper) GetAsset(ctx sdk.Context, denom string) types.Asset {
 	for _, asset := range k.EligibleAssets(ctx) {
 		if asset.Denom == denom {
-			return &asset
+			return asset
 		}
 	}
 
-	return nil
+	return types.Asset{}
 }
 
 // IsEligibleAsset returns true if the given asset is eligible, false otherwise
