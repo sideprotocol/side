@@ -96,9 +96,9 @@ func CmdQueryStaking() *cobra.Command {
 
 func CmdQueryStakings() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "stakings [address]",
-		Short: "Query all stakings of the given address",
-		Args:  cobra.ExactArgs(1),
+		Use:   "stakings [status] [address]",
+		Short: "Query stakings by the given status with the optional address",
+		Args:  cobra.RangeArgs(1, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -107,7 +107,26 @@ func CmdQueryStakings() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.Stakings(cmd.Context(), &types.QueryStakingsRequest{Address: args[0]})
+			status, err := strconv.ParseInt(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			if len(args) == 2 {
+				res, err := queryClient.StakingsByAddress(cmd.Context(), &types.QueryStakingsByAddressRequest{
+					Address: args[1],
+					Status:  types.StakingStatus(status),
+				})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			res, err := queryClient.Stakings(cmd.Context(), &types.QueryStakingsRequest{
+				Status: types.StakingStatus(status),
+			})
 			if err != nil {
 				return err
 			}

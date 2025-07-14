@@ -24,6 +24,10 @@ service Query {
         option (google.api.http).get = "/side/farming/stakings";
     }
 
+    rpc StakingsByAddress(QueryStakingsByAddressRequest) returns (QueryStakingsByAddressResponse) {
+        option (google.api.http).get = "/side/farming/stakings/address/{address}";
+    }
+
     rpc TotalStaking(QueryTotalStakingRequest) returns (QueryTotalStakingResponse) {
         option (google.api.http).get = "/side/farming/total_staking";
     }
@@ -49,12 +53,25 @@ message QueryStakingResponse {
 
 // QueryStakingsRequest is request type for the Query/Stakings RPC method.
 message QueryStakingsRequest {
-    string address = 1;
+    StakingStatus status = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 // QueryStakingsResponse is response type for the Query/Stakings RPC method.
 message QueryStakingsResponse {
+    repeated Staking stakings = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryStakingsByAddressRequest is request type for the Query/StakingsByAddress RPC method.
+message QueryStakingsByAddressRequest {
+    string address = 1;
+    StakingStatus status = 2;
+    cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+// QueryStakingsByAddressResponse is response type for the Query/StakingsByAddress RPC method.
+message QueryStakingsByAddressResponse {
     repeated Staking stakings = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
