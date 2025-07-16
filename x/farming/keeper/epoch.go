@@ -151,8 +151,9 @@ func (k Keeper) OnEpochEnded(ctx sdk.Context) {
 		// calculate the pending reward
 		pendingReward := k.GetPendingReward(ctx, staking)
 
-		// distribute reward
+		// accumulate rewards
 		staking.PendingRewards = staking.PendingRewards.Add(pendingReward)
+		staking.TotalRewards = staking.TotalRewards.Add(pendingReward)
 		k.SetStaking(ctx, staking)
 
 		// remove from the staking queue for the current epoch
