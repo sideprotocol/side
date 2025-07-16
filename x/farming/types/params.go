@@ -15,8 +15,8 @@ var (
 	// default epoch duration
 	DefaultEpochDuration = 7 * Day
 
-	// default rewards per epoch
-	DefaultRewardsPerEpoch = sdk.NewCoin("uside", sdkmath.NewIntWithDecimal(0, 6)) // 0 SIDE
+	// default reward per epoch
+	DefaultRewardPerEpoch = sdk.NewCoin("uside", sdkmath.NewIntWithDecimal(0, 6)) // 0 SIDE
 
 	// default lock durations
 	DefaultLockDurations = []time.Duration{
@@ -28,11 +28,11 @@ var (
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
 	return Params{
-		Enabled:         false,
-		EpochDuration:   DefaultEpochDuration,
-		RewardsPerEpoch: DefaultRewardsPerEpoch,
-		LockDurations:   DefaultLockDurations,
-		EligibleAssets:  nil,
+		Enabled:        false,
+		EpochDuration:  DefaultEpochDuration,
+		RewardPerEpoch: DefaultRewardPerEpoch,
+		LockDurations:  DefaultLockDurations,
+		EligibleAssets: nil,
 	}
 }
 
@@ -42,7 +42,7 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if err := validateRewardsPerEpoch(p); err != nil {
+	if err := validateRewardPerEpoch(p); err != nil {
 		return err
 	}
 
@@ -70,14 +70,14 @@ func validateEpochDuration(p Params) error {
 	return nil
 }
 
-// validateRewardsPerEpoch validates the given rewards per epoch
-func validateRewardsPerEpoch(p Params) error {
-	if !p.RewardsPerEpoch.IsValid() {
-		return errorsmod.Wrap(ErrInvalidParams, "invalid rewards per epoch")
+// validateRewardPerEpoch validates the given reward per epoch
+func validateRewardPerEpoch(p Params) error {
+	if !p.RewardPerEpoch.IsValid() {
+		return errorsmod.Wrap(ErrInvalidParams, "invalid reward per epoch")
 	}
 
-	if p.Enabled && !p.RewardsPerEpoch.IsPositive() {
-		return errorsmod.Wrap(ErrInvalidParams, "rewards per epoch must be positive when farming enabled")
+	if p.Enabled && !p.RewardPerEpoch.IsPositive() {
+		return errorsmod.Wrap(ErrInvalidParams, "reward per epoch must be positive when farming enabled")
 	}
 
 	return nil
