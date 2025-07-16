@@ -46,8 +46,9 @@ message Staking {
     ];
   cosmos.base.v1beta1.Coin effective_amount = 6 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin pending_rewards = 7 [(gogoproto.nullable) = false];
-  google.protobuf.Timestamp start_time = 8 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-  StakingStatus status = 9;
+  cosmos.base.v1beta1.Coin total_rewards = 8 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp start_time = 9 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  StakingStatus status = 10;
 }
 
 // TotalStaking defines total staking per denom
