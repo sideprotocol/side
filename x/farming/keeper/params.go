@@ -19,9 +19,9 @@ func (k Keeper) EpochDuration(ctx sdk.Context) time.Duration {
 	return k.GetParams(ctx).EpochDuration
 }
 
-// RewardsPerEpoch gets the rewards per epoch
-func (k Keeper) RewardsPerEpoch(ctx sdk.Context) sdk.Coin {
-	return k.GetParams(ctx).RewardsPerEpoch
+// RewardsPerEpoch gets the reward per epoch
+func (k Keeper) RewardPerEpoch(ctx sdk.Context) sdk.Coin {
+	return k.GetParams(ctx).RewardPerEpoch
 }
 
 // LockDurations gets the lock durations
