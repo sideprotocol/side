@@ -67,17 +67,19 @@ func (k Keeper) GetCurrentEpoch(ctx sdk.Context) *types.Epoch {
 }
 
 // AddToCurrentEpochStakingQueue adds the given staking to the staking queue for the current epoch
-func (k Keeper) AddToCurrentEpochStakingQueue(ctx sdk.Context, stakingId uint64) {
+func (k Keeper) AddToCurrentEpochStakingQueue(ctx sdk.Context, staking *types.Staking) {
 	store := ctx.KVStore(k.storeKey)
 
-	store.Set(types.CurrentEpochStakingQueueKey(stakingId), []byte{})
+	store.Set(types.CurrentEpochStakingQueueKey(staking.Id), []byte{})
+	store.Set(types.CurrentEpochStakingQueueByAddressKey(staking.Address, staking.Id), []byte{})
 }
 
 // RemoveFromCurrentEpochStakingQueue removes the given staking from the staking queue for the current epoch
-func (k Keeper) RemoveFromCurrentEpochStakingQueue(ctx sdk.Context, stakingId uint64) {
+func (k Keeper) RemoveFromCurrentEpochStakingQueue(ctx sdk.Context, staking *types.Staking) {
 	store := ctx.KVStore(k.storeKey)
 
-	store.Delete(types.CurrentEpochStakingQueueKey(stakingId))
+	store.Delete(types.CurrentEpochStakingQueueKey(staking.Id))
+	store.Delete(types.CurrentEpochStakingQueueByAddressKey(staking.Address, staking.Id))
 }
 
 // HasStakingForCurrentEpoch returns true if the given staking exists for the current epoch, false otherwise
@@ -96,6 +98,25 @@ func (k Keeper) IterateCurrentEpochStakingQueue(ctx sdk.Context, cb func(staking
 
 	for ; iterator.Valid(); iterator.Next() {
 		stakingId := sdk.BigEndianToUint64(iterator.Key()[1:])
+		staking := k.GetStaking(ctx, stakingId)
+
+		if cb(staking) {
+			break
+		}
+	}
+}
+
+// IterateCurrentEpochStakingQueueByAddress iterates through the staking queue by the given address for the current epoch
+func (k Keeper) IterateCurrentEpochStakingQueueByAddress(ctx sdk.Context, address string, cb func(staking *types.Staking) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	keyPrefix := append(types.CurrentEpochStakingQueueByAddressKeyPrefix, []byte(address)...)
+
+	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		stakingId := sdk.BigEndianToUint64(iterator.Key()[len(keyPrefix):])
 		staking := k.GetStaking(ctx, stakingId)
 
 		if cb(staking) {
@@ -135,10 +156,10 @@ func (k Keeper) OnEpochStarted(ctx sdk.Context) {
 		}
 
 		// add to staking queue for the current epoch
-		k.AddToCurrentEpochStakingQueue(ctx, staking.Id)
+		k.AddToCurrentEpochStakingQueue(ctx, staking)
 
-		// update total staking for the current epoch
-		types.UpdateEpochTotalStaking(currentEpoch, staking)
+		// update total stakings for the current epoch
+		types.UpdateEpochTotalStakings(currentEpoch, staking)
 	}
 
 	// update the current epoch
@@ -157,7 +178,7 @@ func (k Keeper) OnEpochEnded(ctx sdk.Context) {
 		k.SetStaking(ctx, staking)
 
 		// remove from the staking queue for the current epoch
-		k.RemoveFromCurrentEpochStakingQueue(ctx, staking.Id)
+		k.RemoveFromCurrentEpochStakingQueue(ctx, staking)
 
 		return false
 	})
