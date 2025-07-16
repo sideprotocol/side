@@ -49,7 +49,7 @@ func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.Msg
 		LockDuration:    msg.LockDuration,
 		LockMultiplier:  lockMultiplier,
 		EffectiveAmount: types.GetEffectiveAmount(msg.Amount, lockMultiplier),
-		PendingRewards:  sdk.NewCoin(m.RewardsPerEpoch(ctx).Denom, sdkmath.ZeroInt()),
+		PendingRewards:  sdk.NewCoin(m.RewardPerEpoch(ctx).Denom, sdkmath.ZeroInt()),
 		StartTime:       ctx.BlockTime(),
 		Status:          types.StakingStatus_STAKING_STATUS_STAKED,
 	}
