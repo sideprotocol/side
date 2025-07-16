@@ -33,6 +33,17 @@ func GetLockDurationInDays(lockDuration time.Duration) time.Duration {
 	return lockDuration / (24 * time.Hour)
 }
 
+// GetAsset gets the asset by the given denom
+func GetAsset(assets []Asset, denom string) Asset {
+	for _, asset := range assets {
+		if asset.Denom == denom {
+			return asset
+		}
+	}
+
+	return Asset{}
+}
+
 // GetEpochTotalStaking gets the total staking for the specified epoch by the given denom
 func GetEpochTotalStaking(epoch *Epoch, denom string) *TotalStaking {
 	for _, totalStaking := range epoch.TotalStakings {
@@ -44,15 +55,14 @@ func GetEpochTotalStaking(epoch *Epoch, denom string) *TotalStaking {
 	return nil
 }
 
-// UpdateEpochTotalStaking updates the total staking for the specified epoch by the given staking
-func UpdateEpochTotalStaking(epoch *Epoch, staking *Staking) {
+// UpdateEpochTotalStakings updates the total stakings for the specified epoch by the given staking
+func UpdateEpochTotalStakings(epoch *Epoch, staking *Staking) {
 	for i, totalStaking := range epoch.TotalStakings {
 		if totalStaking.Denom == staking.Amount.Denom {
 			// update total staking if existing
-			totalStaking.Amount = totalStaking.Amount.Add(staking.Amount)
-			totalStaking.EffectiveAmount = totalStaking.EffectiveAmount.Add(staking.EffectiveAmount)
+			epoch.TotalStakings[i].Amount = totalStaking.Amount.Add(staking.Amount)
+			epoch.TotalStakings[i].EffectiveAmount = totalStaking.EffectiveAmount.Add(staking.EffectiveAmount)
 
-			epoch.TotalStakings[i] = totalStaking
 			return
 		}
 	}
@@ -63,4 +73,47 @@ func UpdateEpochTotalStaking(epoch *Epoch, staking *Staking) {
 		Amount:          staking.Amount,
 		EffectiveAmount: staking.EffectiveAmount,
 	})
+}
+
+// UpdateAccountTotalStakings updates the account total stakings by the given staking
+func UpdateAccountTotalStakings(totalStakings []TotalStaking, staking *Staking) []TotalStaking {
+	for i, totalStaking := range totalStakings {
+		if totalStaking.Denom == staking.Amount.Denom {
+			// update total staking if existing
+			totalStakings[i].Amount = totalStaking.Amount.Add(staking.Amount)
+			totalStakings[i].EffectiveAmount = totalStaking.EffectiveAmount.Add(staking.EffectiveAmount)
+
+			return totalStakings
+		}
+	}
+
+	// add new total staking if not found
+	return append(totalStakings, TotalStaking{
+		Denom:           staking.Amount.Denom,
+		Amount:          staking.Amount,
+		EffectiveAmount: staking.EffectiveAmount,
+	})
+}
+
+// GetAccountRewardPerEpoch gets the account reward for the given epoch
+func GetAccountRewardPerEpoch(address string, accountTotalStakings []TotalStaking, epoch *Epoch, rewardPerEpoch sdk.Coin, assets []Asset) *AccountRewardPerEpoch {
+	accountRewardPerEpoch := &AccountRewardPerEpoch{
+		Address:  address,
+		Stakings: accountTotalStakings,
+		Shares:   []sdkmath.LegacyDec{},
+		Reward:   sdk.NewCoin(rewardPerEpoch.Denom, sdkmath.ZeroInt()),
+	}
+
+	for _, totalStaking := range accountTotalStakings {
+		epochTotalStaking := GetEpochTotalStaking(epoch, totalStaking.Denom)
+		asset := GetAsset(assets, totalStaking.Denom)
+
+		share := totalStaking.EffectiveAmount.Amount.ToLegacyDec().QuoInt(epochTotalStaking.EffectiveAmount.Amount)
+		rewardAmount := rewardPerEpoch.Amount.ToLegacyDec().Mul(asset.RewardRatio).Mul(share).TruncateInt()
+
+		accountRewardPerEpoch.Shares = append(accountRewardPerEpoch.Shares, share)
+		accountRewardPerEpoch.Reward = accountRewardPerEpoch.Reward.AddAmount(rewardAmount)
+	}
+
+	return accountRewardPerEpoch
 }

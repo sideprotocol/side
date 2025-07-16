@@ -57,3 +57,15 @@ message TotalStaking {
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin effective_amount = 3 [(gogoproto.nullable) = false];
 }
+
+// AccountRewardPerEpoch defines the account reward per epoch
+message AccountRewardPerEpoch {
+  string address = 1;
+  repeated TotalStaking stakings = 2 [(gogoproto.nullable) = false];
+  repeated string shares = 3 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+  cosmos.base.v1beta1.Coin reward = 4 [(gogoproto.nullable) = false];
+}

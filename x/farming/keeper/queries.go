@@ -111,3 +111,13 @@ func (k Keeper) PendingReward(goCtx context.Context, req *types.QueryPendingRewa
 
 	return &types.QueryPendingRewardResponse{PendingReward: k.GetPendingReward(ctx, staking).String()}, nil
 }
+
+func (k Keeper) PendingRewardByAddress(goCtx context.Context, req *types.QueryPendingRewardByAddressRequest) (*types.QueryPendingRewardByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryPendingRewardByAddressResponse{PendingReward: k.GetPendingRewardByAddress(ctx, req.Address)}, nil
+}
