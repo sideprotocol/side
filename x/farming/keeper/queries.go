@@ -92,6 +92,21 @@ func (k Keeper) CurrentEpoch(goCtx context.Context, req *types.QueryCurrentEpoch
 	return &types.QueryCurrentEpochResponse{CurrentEpoch: k.GetCurrentEpoch(ctx)}, nil
 }
 
+func (k Keeper) Rewards(goCtx context.Context, req *types.QueryRewardsRequest) (*types.QueryRewardsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	pendingRewards, totalRewards := k.GetRewards(ctx, req.Address)
+
+	return &types.QueryRewardsResponse{
+		PendingRewards: pendingRewards.String(),
+		TotalRewards:   totalRewards.String(),
+	}, nil
+}
+
 func (k Keeper) PendingReward(goCtx context.Context, req *types.QueryPendingRewardRequest) (*types.QueryPendingRewardResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")

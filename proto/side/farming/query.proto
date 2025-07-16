@@ -36,6 +36,10 @@ service Query {
         option (google.api.http).get = "/side/farming/current_epoch";
     }
 
+    rpc Rewards(QueryRewardsRequest) returns (QueryRewardsResponse) {
+        option (google.api.http).get = "/side/farming/rewards";
+    }
+
     rpc PendingReward(QueryPendingRewardRequest) returns (QueryPendingRewardResponse) {
         option (google.api.http).get = "/side/farming/current_epoch/pending_reward";
     }
@@ -97,6 +101,17 @@ message QueryCurrentEpochRequest {
 // QueryCurrentEpochResponse is response type for the Query/CurrentEpoch RPC method.
 message QueryCurrentEpochResponse {
     Epoch current_epoch = 1;
+}
+
+// QueryRewardsRequest is request type for the Query/Rewards RPC method.
+message QueryRewardsRequest {
+    string address = 1;
+}
+
+// QueryRewardsResponse is response type for the Query/Rewards RPC method.
+message QueryRewardsResponse {
+    string pending_rewards = 1;
+    string total_rewards = 2;
 }
 
 // QueryPendingRewardRequest is request type for the Query/PendingReward RPC method.
