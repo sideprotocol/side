@@ -10,6 +10,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/farming/types"
 )
@@ -29,9 +30,9 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryStaking())
 	cmd.AddCommand(CmdQueryStakings())
 	cmd.AddCommand(CmdQueryTotalStaking())
+	cmd.AddCommand(CmdQueryRewards())
 	cmd.AddCommand(CmdQueryCurrentEpoch())
 	cmd.AddCommand(CmdQueryPendingReward())
-
 	return cmd
 }
 
@@ -194,10 +195,37 @@ func CmdQueryCurrentEpoch() *cobra.Command {
 	return cmd
 }
 
+func CmdQueryRewards() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "rewards [address]",
+		Short: "Query the reward stats of the given address",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Rewards(cmd.Context(), &types.QueryRewardsRequest{Address: args[0]})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
 func CmdQueryPendingReward() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "pending-reward [staking id]",
-		Short: "Query the pending reward of the given staking for the current epoch",
+		Use:   "pending-reward [staking id | address]",
+		Short: "Query the pending reward of the given staking or address for the current epoch",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -209,7 +237,17 @@ func CmdQueryPendingReward() *cobra.Command {
 
 			id, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
-				return err
+				_, err := sdk.ParseCoinNormalized(args[0])
+				if err != nil {
+					return fmt.Errorf("neigher id nor address is provided")
+				}
+
+				res, err := queryClient.PendingRewardByAddress(cmd.Context(), &types.QueryPendingRewardByAddressRequest{Address: args[0]})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
 			}
 
 			res, err := queryClient.PendingReward(cmd.Context(), &types.QueryPendingRewardRequest{Id: id})
