@@ -39,6 +39,10 @@ service Query {
     rpc PendingReward(QueryPendingRewardRequest) returns (QueryPendingRewardResponse) {
         option (google.api.http).get = "/side/farming/current_epoch/pending_reward";
     }
+
+    rpc PendingRewardByAddress(QueryPendingRewardByAddressRequest) returns (QueryPendingRewardByAddressResponse) {
+        option (google.api.http).get = "/side/farming/current_epoch/pending_reward/{address}";
+    }
 }
 
 // QueryStakingRequest is request type for the Query/Staking RPC method.
@@ -86,6 +90,15 @@ message QueryTotalStakingResponse {
     TotalStaking total_staking = 1;
 }
 
+// QueryCurrentEpochRequest is request type for the Query/CurrentEpoch RPC method.
+message QueryCurrentEpochRequest {
+}
+
+// QueryCurrentEpochResponse is response type for the Query/CurrentEpoch RPC method.
+message QueryCurrentEpochResponse {
+    Epoch current_epoch = 1;
+}
+
 // QueryPendingRewardRequest is request type for the Query/PendingReward RPC method.
 message QueryPendingRewardRequest {
     uint64 id = 1;
@@ -96,13 +109,14 @@ message QueryPendingRewardResponse {
     string pending_reward = 1;
 }
 
-// QueryCurrentEpochRequest is request type for the Query/CurrentEpoch RPC method.
-message QueryCurrentEpochRequest {
+// QueryPendingRewardByAddressRequest is request type for the Query/PendingRewardByAddress RPC method.
+message QueryPendingRewardByAddressRequest {
+    string address = 1;
 }
 
-// QueryCurrentEpochResponse is response type for the Query/CurrentEpoch RPC method.
-message QueryCurrentEpochResponse {
-    Epoch current_epoch = 1;
+// QueryPendingRewardByAddressResponse is response type for the Query/PendingRewardByAddress RPC method.
+message QueryPendingRewardByAddressResponse {
+    AccountRewardPerEpoch pending_reward = 1;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
