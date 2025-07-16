@@ -25,6 +25,7 @@ const (
 	Query_StakingsByAddress_FullMethodName      = "/side.farming.Query/StakingsByAddress"
 	Query_TotalStaking_FullMethodName           = "/side.farming.Query/TotalStaking"
 	Query_CurrentEpoch_FullMethodName           = "/side.farming.Query/CurrentEpoch"
+	Query_Rewards_FullMethodName                = "/side.farming.Query/Rewards"
 	Query_PendingReward_FullMethodName          = "/side.farming.Query/PendingReward"
 	Query_PendingRewardByAddress_FullMethodName = "/side.farming.Query/PendingRewardByAddress"
 )
@@ -40,6 +41,7 @@ type QueryClient interface {
 	StakingsByAddress(ctx context.Context, in *QueryStakingsByAddressRequest, opts ...grpc.CallOption) (*QueryStakingsByAddressResponse, error)
 	TotalStaking(ctx context.Context, in *QueryTotalStakingRequest, opts ...grpc.CallOption) (*QueryTotalStakingResponse, error)
 	CurrentEpoch(ctx context.Context, in *QueryCurrentEpochRequest, opts ...grpc.CallOption) (*QueryCurrentEpochResponse, error)
+	Rewards(ctx context.Context, in *QueryRewardsRequest, opts ...grpc.CallOption) (*QueryRewardsResponse, error)
 	PendingReward(ctx context.Context, in *QueryPendingRewardRequest, opts ...grpc.CallOption) (*QueryPendingRewardResponse, error)
 	PendingRewardByAddress(ctx context.Context, in *QueryPendingRewardByAddressRequest, opts ...grpc.CallOption) (*QueryPendingRewardByAddressResponse, error)
 }
@@ -106,6 +108,15 @@ func (c *queryClient) CurrentEpoch(ctx context.Context, in *QueryCurrentEpochReq
 	return out, nil
 }
 
+func (c *queryClient) Rewards(ctx context.Context, in *QueryRewardsRequest, opts ...grpc.CallOption) (*QueryRewardsResponse, error) {
+	out := new(QueryRewardsResponse)
+	err := c.cc.Invoke(ctx, Query_Rewards_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) PendingReward(ctx context.Context, in *QueryPendingRewardRequest, opts ...grpc.CallOption) (*QueryPendingRewardResponse, error) {
 	out := new(QueryPendingRewardResponse)
 	err := c.cc.Invoke(ctx, Query_PendingReward_FullMethodName, in, out, opts...)
@@ -135,6 +146,7 @@ type QueryServer interface {
 	StakingsByAddress(context.Context, *QueryStakingsByAddressRequest) (*QueryStakingsByAddressResponse, error)
 	TotalStaking(context.Context, *QueryTotalStakingRequest) (*QueryTotalStakingResponse, error)
 	CurrentEpoch(context.Context, *QueryCurrentEpochRequest) (*QueryCurrentEpochResponse, error)
+	Rewards(context.Context, *QueryRewardsRequest) (*QueryRewardsResponse, error)
 	PendingReward(context.Context, *QueryPendingRewardRequest) (*QueryPendingRewardResponse, error)
 	PendingRewardByAddress(context.Context, *QueryPendingRewardByAddressRequest) (*QueryPendingRewardByAddressResponse, error)
 	mustEmbedUnimplementedQueryServer()
@@ -161,6 +173,9 @@ func (UnimplementedQueryServer) TotalStaking(context.Context, *QueryTotalStaking
 }
 func (UnimplementedQueryServer) CurrentEpoch(context.Context, *QueryCurrentEpochRequest) (*QueryCurrentEpochResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CurrentEpoch not implemented")
+}
+func (UnimplementedQueryServer) Rewards(context.Context, *QueryRewardsRequest) (*QueryRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Rewards not implemented")
 }
 func (UnimplementedQueryServer) PendingReward(context.Context, *QueryPendingRewardRequest) (*QueryPendingRewardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PendingReward not implemented")
@@ -289,6 +304,24 @@ func _Query_CurrentEpoch_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Rewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Rewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Rewards_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Rewards(ctx, req.(*QueryRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_PendingReward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryPendingRewardRequest)
 	if err := dec(in); err != nil {
@@ -355,6 +388,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CurrentEpoch",
 			Handler:    _Query_CurrentEpoch_Handler,
+		},
+		{
+			MethodName: "Rewards",
+			Handler:    _Query_Rewards_Handler,
 		},
 		{
 			MethodName: "PendingReward",

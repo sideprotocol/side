@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/farming/types"
@@ -37,4 +38,19 @@ func (k Keeper) GetPendingRewardByAddress(ctx sdk.Context, address string) *type
 	}
 
 	return types.GetAccountRewardPerEpoch(address, totalStakings, currentEpoch, k.RewardPerEpoch(ctx), k.EligibleAssets(ctx))
+}
+
+// GetRewards gets the reward stats of the given address
+func (k Keeper) GetRewards(ctx sdk.Context, address string) (sdk.Coin, sdk.Coin) {
+	stakings := k.GetStakingsByAddress(ctx, address)
+
+	pendingRewards := sdk.NewCoin(k.RewardPerEpoch(ctx).Denom, sdkmath.ZeroInt())
+	totalRewards := pendingRewards
+
+	for _, staking := range stakings {
+		pendingRewards = pendingRewards.Add(staking.PendingRewards)
+		totalRewards = totalRewards.Add(staking.TotalRewards)
+	}
+
+	return pendingRewards, totalRewards
 }
