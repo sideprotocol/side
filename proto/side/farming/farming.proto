@@ -51,6 +51,23 @@ message Staking {
   StakingStatus status = 10;
 }
 
+// StakingV1 defines the v1 staking
+message StakingV1 {
+  uint64 id = 1;
+  string address = 2;
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  google.protobuf.Duration lock_duration = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  string lock_multiplier = 5 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+  cosmos.base.v1beta1.Coin effective_amount = 6 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin pending_rewards = 7 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp start_time = 8 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  StakingStatus status = 9;
+}
+
 // TotalStaking defines total staking per denom
 message TotalStaking {
   string denom = 1;
