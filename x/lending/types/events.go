@@ -11,6 +11,9 @@ const (
 	EventTypeLiquidate                           = "liquidate"
 	EventTypeGenerateSignedCet                   = "generate_signed_cet"
 	EventTypeGenerateSignedRedemptionTransaction = "generate_signed_redemption_transaction"
+	EventTypeRegisterReferrer                    = "register_referrer"
+	EventTypeUpdateReferrer                      = "update_referrer"
+	EventTypeReferral                            = "referral"
 
 	AttributeKeyVault            = "vault"
 	AttributeKeyBorrower         = "borrower"
@@ -33,6 +36,12 @@ const (
 	AttributeKeyTxHash = "tx_hash"
 
 	AttributeKeyCetType = "cet_type"
+
+	AttributeKeyReferrerName      = "referrer_name"
+	AttributeKeyReferralCode      = "referral_code"
+	AttributeKeyReferrerAddress   = "referrer_address"
+	AttributeKeyReferralFeeFactor = "referral_fee_factor"
+	AttributeKeyReferralFee       = "referral_fee"
 )
 
 const (

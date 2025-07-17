@@ -26,8 +26,8 @@ func (m *MsgUpdateReferrer) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid referrer address")
 	}
 
-	if !m.ReferralFeeFactor.IsPositive() || m.ReferralFeeFactor.GTE(sdkmath.LegacyOneDec()) {
-		return errorsmod.Wrap(ErrInvalidReferralFeeFactor, "referral fee factor must be between (0, 1)")
+	if m.ReferralFeeFactor.IsNegative() || m.ReferralFeeFactor.GT(sdkmath.LegacyOneDec()) {
+		return errorsmod.Wrap(ErrInvalidReferralFeeFactor, "referral fee factor must be between [0, 1]")
 	}
 
 	return nil

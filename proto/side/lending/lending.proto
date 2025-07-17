@@ -299,7 +299,7 @@ message Loan {
       (gogoproto.nullable) = false
     ];
     uint64 liquidation_id = 21;
-    string referral_code = 22;
+    Referrer referrer = 22;
     google.protobuf.Timestamp create_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     google.protobuf.Timestamp disburse_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     LoanStatus status = 25;
