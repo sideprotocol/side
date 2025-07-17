@@ -199,9 +199,9 @@ func HasRequestFee(pool *LendingPool) bool {
 	return pool.Config.RequestFee.IsPositive()
 }
 
-// HasReferralFee returns true if the referral code exists, false otherwise
+// HasReferralFee returns true if the referral fee exists, false otherwise
 func HasReferralFee(loan *Loan) bool {
-	return len(loan.ReferralCode) != 0
+	return loan.Referrer != nil && loan.Referrer.ReferralFeeFactor.IsPositive()
 }
 
 // CheckSupplyCap checks if the supply cap will be exceeded for the given deposit amount

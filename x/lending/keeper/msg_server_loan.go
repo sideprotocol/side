@@ -110,7 +110,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		Maturity:           trancheConfig.Maturity,
 		BorrowAPR:          trancheConfig.BorrowAPR,
 		DlcEventId:         dlcEvent.Id,
-		ReferralCode:       msg.ReferralCode,
+		Referrer:           m.GetReferrer(ctx, msg.ReferralCode),
 		CreateAt:           ctx.BlockTime(),
 		Status:             types.LoanStatus_Requested,
 	}
@@ -133,6 +133,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
 			sdk.NewAttribute(types.AttributeKeyPoolId, loan.PoolId),
 			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyReferralCode, msg.ReferralCode),
 		))
 
 	return &types.MsgApplyResponse{}, nil
@@ -468,6 +469,17 @@ func (m msgServer) RegisterReferrer(goCtx context.Context, msg *types.MsgRegiste
 	}
 	m.SetReferrer(ctx, referrer)
 
+	// emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeRegisterReferrer,
+			sdk.NewAttribute(types.AttributeKeyReferrerName, referrer.Name),
+			sdk.NewAttribute(types.AttributeKeyReferralCode, referrer.ReferralCode),
+			sdk.NewAttribute(types.AttributeKeyReferrerAddress, referrer.Address),
+			sdk.NewAttribute(types.AttributeKeyReferralFeeFactor, referrer.ReferralFeeFactor.String()),
+		),
+	)
+
 	return &types.MsgRegisterReferrerResponse{}, nil
 }
 
@@ -495,6 +507,17 @@ func (m msgServer) UpdateReferrer(goCtx context.Context, msg *types.MsgUpdateRef
 	referrer.Address = msg.Address
 	referrer.ReferralFeeFactor = msg.ReferralFeeFactor
 	m.SetReferrer(ctx, referrer)
+
+	// emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeUpdateReferrer,
+			sdk.NewAttribute(types.AttributeKeyReferralCode, referrer.ReferralCode),
+			sdk.NewAttribute(types.AttributeKeyReferrerName, referrer.Name),
+			sdk.NewAttribute(types.AttributeKeyReferrerAddress, referrer.Address),
+			sdk.NewAttribute(types.AttributeKeyReferralFeeFactor, referrer.ReferralFeeFactor.String()),
+		),
+	)
 
 	return &types.MsgUpdateReferrerResponse{}, nil
 }
