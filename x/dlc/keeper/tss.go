@@ -46,6 +46,11 @@ func (k Keeper) DKGCompletedHandler(ctx sdk.Context, id uint64, ty string, inten
 func (k Keeper) DKGTimeoutHandler(ctx sdk.Context, id uint64, ty string, intent int32, absentParticipants []string) error {
 	switch ty {
 	case types.DKG_TYPE_NONCE:
+		if len(absentParticipants) == len(k.tssKeeper.GetDKGRequest(ctx, id).Participants) {
+			// remain current liveness if all participants are absent
+			return nil
+		}
+
 		for _, participant := range absentParticipants {
 			liveness := k.GetOracleParticipantLiveness(ctx, participant)
 			if liveness.LastDkgId > id {
