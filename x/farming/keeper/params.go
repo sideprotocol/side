@@ -56,7 +56,10 @@ func (k Keeper) OnParamsChanged(ctx sdk.Context, params types.Params, newParams 
 		// start the new epoch when farming enabled or re-enabled
 		k.NewEpoch(ctx)
 	} else if params.Enabled && !newParams.Enabled {
-		// terminate the current epoch if disabled
+		// remove the staking queue for the current epoch
+		k.RemoveCurrentEpochStakingQueue(ctx)
+
+		// end the current epoch
 		currentEpoch := k.GetCurrentEpoch(ctx)
 		currentEpoch.Status = types.EpochStatus_EPOCH_STATUS_ENDED
 		k.SetEpoch(ctx, currentEpoch)
