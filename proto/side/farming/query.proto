@@ -3,6 +3,7 @@ package side.farming;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "side/farming/farming.proto";
 import "side/farming/params.proto";
@@ -46,6 +47,10 @@ service Query {
 
     rpc PendingRewardByAddress(QueryPendingRewardByAddressRequest) returns (QueryPendingRewardByAddressResponse) {
         option (google.api.http).get = "/side/farming/current_epoch/pending_reward/{address}";
+    }
+
+    rpc EstimateReward(QueryEstimateRewardRequest) returns (QueryEstimateRewardResponse) {
+        option (google.api.http).get = "/side/farming/estimate_reward";
     }
 }
 
@@ -132,6 +137,17 @@ message QueryPendingRewardByAddressRequest {
 // QueryPendingRewardByAddressResponse is response type for the Query/PendingRewardByAddress RPC method.
 message QueryPendingRewardByAddressResponse {
     AccountRewardPerEpoch pending_reward = 1;
+}
+
+// QueryEstimateRewardRequest is request type for the Query/EstimateReward RPC method.
+message QueryEstimateRewardRequest {
+    string amount = 1;
+    google.protobuf.Duration lock_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// QueryEstimateRewardResponse is response type for the Query/EstimateReward RPC method.
+message QueryEstimateRewardResponse {
+    string reward = 1;
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.

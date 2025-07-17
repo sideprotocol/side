@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -12,14 +14,9 @@ import (
 func (k Keeper) GetPendingReward(ctx sdk.Context, staking *types.Staking) sdk.Coin {
 	currentEpoch := k.GetCurrentEpoch(ctx)
 
-	totalStaking := types.GetEpochTotalStaking(currentEpoch, staking.Amount.Denom)
 	asset := types.GetAsset(k.EligibleAssets(ctx), staking.Amount.Denom)
 
-	totalRewards := k.RewardPerEpoch(ctx).Amount.ToLegacyDec().Mul(asset.RewardRatio).TruncateInt()
-
-	rewardAmount := totalRewards.Mul(staking.EffectiveAmount.Amount).Quo(totalStaking.EffectiveAmount.Amount)
-
-	return sdk.NewCoin(k.RewardPerEpoch(ctx).Denom, rewardAmount)
+	return types.GetEpochReward(ctx, staking, currentEpoch, k.RewardPerEpoch(ctx), asset.RewardRatio)
 }
 
 // GetPendingRewardByAddress gets the pending reward of the given address for the current epoch
@@ -53,6 +50,23 @@ func (k Keeper) GetRewards(ctx sdk.Context, address string) (sdk.Coin, sdk.Coin)
 	}
 
 	return pendingRewards, totalRewards
+}
+
+// GetEstimatedReward gets the estimated epoch reward for the given params
+// Assume that the given params are valid
+func (k Keeper) GetEstimatedReward(ctx sdk.Context, amount sdk.Coin, lockDuration time.Duration) sdk.Coin {
+	nextEpoch := k.GetNextEpochSnapshot(ctx)
+
+	staking := &types.Staking{
+		Amount:          amount,
+		EffectiveAmount: types.GetEffectiveAmount(amount, types.GetLockMultiplier(lockDuration)),
+	}
+
+	types.UpdateEpochTotalStakings(nextEpoch, staking)
+
+	asset := types.GetAsset(k.EligibleAssets(ctx), staking.Amount.Denom)
+
+	return types.GetEpochReward(ctx, staking, nextEpoch, k.RewardPerEpoch(ctx), asset.RewardRatio)
 }
 
 // ClaimAllRewards claims all pending rewards of the given address
