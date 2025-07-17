@@ -84,5 +84,10 @@ message AccountRewardPerEpoch {
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable)   = false
     ];
-  cosmos.base.v1beta1.Coin reward = 4 [(gogoproto.nullable) = false];
+  string total_share = 4 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+  cosmos.base.v1beta1.Coin reward = 5 [(gogoproto.nullable) = false];
 }
