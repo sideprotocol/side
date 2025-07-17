@@ -28,6 +28,7 @@ const (
 	Query_Rewards_FullMethodName                = "/side.farming.Query/Rewards"
 	Query_PendingReward_FullMethodName          = "/side.farming.Query/PendingReward"
 	Query_PendingRewardByAddress_FullMethodName = "/side.farming.Query/PendingRewardByAddress"
+	Query_EstimateReward_FullMethodName         = "/side.farming.Query/EstimateReward"
 )
 
 // QueryClient is the client API for Query service.
@@ -44,6 +45,7 @@ type QueryClient interface {
 	Rewards(ctx context.Context, in *QueryRewardsRequest, opts ...grpc.CallOption) (*QueryRewardsResponse, error)
 	PendingReward(ctx context.Context, in *QueryPendingRewardRequest, opts ...grpc.CallOption) (*QueryPendingRewardResponse, error)
 	PendingRewardByAddress(ctx context.Context, in *QueryPendingRewardByAddressRequest, opts ...grpc.CallOption) (*QueryPendingRewardByAddressResponse, error)
+	EstimateReward(ctx context.Context, in *QueryEstimateRewardRequest, opts ...grpc.CallOption) (*QueryEstimateRewardResponse, error)
 }
 
 type queryClient struct {
@@ -135,6 +137,15 @@ func (c *queryClient) PendingRewardByAddress(ctx context.Context, in *QueryPendi
 	return out, nil
 }
 
+func (c *queryClient) EstimateReward(ctx context.Context, in *QueryEstimateRewardRequest, opts ...grpc.CallOption) (*QueryEstimateRewardResponse, error) {
+	out := new(QueryEstimateRewardResponse)
+	err := c.cc.Invoke(ctx, Query_EstimateReward_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -149,6 +160,7 @@ type QueryServer interface {
 	Rewards(context.Context, *QueryRewardsRequest) (*QueryRewardsResponse, error)
 	PendingReward(context.Context, *QueryPendingRewardRequest) (*QueryPendingRewardResponse, error)
 	PendingRewardByAddress(context.Context, *QueryPendingRewardByAddressRequest) (*QueryPendingRewardByAddressResponse, error)
+	EstimateReward(context.Context, *QueryEstimateRewardRequest) (*QueryEstimateRewardResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -182,6 +194,9 @@ func (UnimplementedQueryServer) PendingReward(context.Context, *QueryPendingRewa
 }
 func (UnimplementedQueryServer) PendingRewardByAddress(context.Context, *QueryPendingRewardByAddressRequest) (*QueryPendingRewardByAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PendingRewardByAddress not implemented")
+}
+func (UnimplementedQueryServer) EstimateReward(context.Context, *QueryEstimateRewardRequest) (*QueryEstimateRewardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EstimateReward not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -358,6 +373,24 @@ func _Query_PendingRewardByAddress_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_EstimateReward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryEstimateRewardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).EstimateReward(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_EstimateReward_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).EstimateReward(ctx, req.(*QueryEstimateRewardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -400,6 +433,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PendingRewardByAddress",
 			Handler:    _Query_PendingRewardByAddress_Handler,
+		},
+		{
+			MethodName: "EstimateReward",
+			Handler:    _Query_EstimateReward_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

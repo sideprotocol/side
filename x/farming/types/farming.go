@@ -33,6 +33,19 @@ func GetLockDurationInDays(lockDuration time.Duration) time.Duration {
 	return lockDuration / (24 * time.Hour)
 }
 
+// GetEpochReward calculates the reward of the given staking for the specified epoch
+// Assume that the given params are valid
+// Formula: rewardPerEpoch * assetRewardRatio * effectiveAmount / totalEffectiveAmount
+func GetEpochReward(ctx sdk.Context, staking *Staking, epoch *Epoch, rewardPerEpoch sdk.Coin, assetRewardRatio sdkmath.LegacyDec) sdk.Coin {
+	totalStaking := GetEpochTotalStaking(epoch, staking.Amount.Denom)
+
+	totalRewards := rewardPerEpoch.Amount.ToLegacyDec().Mul(assetRewardRatio).TruncateInt()
+
+	rewardAmount := totalRewards.Mul(staking.EffectiveAmount.Amount).Quo(totalStaking.EffectiveAmount.Amount)
+
+	return sdk.NewCoin(rewardPerEpoch.Denom, rewardAmount)
+}
+
 // GetAsset gets the asset by the given denom
 func GetAsset(assets []Asset, denom string) Asset {
 	for _, asset := range assets {
