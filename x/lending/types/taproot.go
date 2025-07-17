@@ -57,8 +57,8 @@ func CreatePubKeyTimeLockScript(pubKey []byte, lockTime int64) ([]byte, error) {
 
 // CreateTaprootAddress creates the taproot address with the given internal key and scripts
 func CreateTaprootAddress(internalKey *secp256k1.PublicKey, scripts [][]byte, params *chaincfg.Params) (string, error) {
-	tapScriptTree := GetTapScriptTree(scripts)
-	scriptRoot := tapScriptTree.RootNode.TapHash()
+	tapscriptTree := GetTapscriptTree(scripts)
+	scriptRoot := tapscriptTree.RootNode.TapHash()
 
 	taprootOutKey := txscript.ComputeTaprootOutputKey(internalKey, scriptRoot[:])
 
@@ -145,7 +145,7 @@ func GetInternalKey(borrowerPubKey []byte, dcmPubKey []byte) *btcec.PublicKey {
 	return btcec.NewPublicKey(&P.X, &P.Y)
 }
 
-func GetTapScriptTree(scripts [][]byte) *txscript.IndexedTapScriptTree {
+func GetTapscriptTree(scripts [][]byte) *txscript.IndexedTapScriptTree {
 	leaves := []txscript.TapLeaf{}
 
 	for _, script := range scripts {
