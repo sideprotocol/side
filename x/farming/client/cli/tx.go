@@ -116,12 +116,24 @@ func CmdUnstake() *cobra.Command {
 func CmdClaim() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "claim [staking id]",
-		Short: "Claim the pending rewards of the given staking",
-		Args:  cobra.ExactArgs(1),
+		Short: "Claim the pending rewards by the given staking or all stakings",
+		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
+			}
+
+			if len(args) == 0 {
+				msg := types.NewMsgClaimAll(
+					clientCtx.GetFromAddress().String(),
+				)
+
+				if err := msg.ValidateBasic(); err != nil {
+					return err
+				}
+
+				return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 			}
 
 			id, err := strconv.ParseUint(args[0], 10, 64)
