@@ -18,6 +18,7 @@ service Msg {
     rpc Stake(MsgStake) returns (MsgStakeResponse);
     rpc Unstake(MsgUnstake) returns (MsgUnstakeResponse);
     rpc Claim(MsgClaim) returns (MsgClaimResponse);
+    rpc ClaimAll(MsgClaimAll) returns (MsgClaimAllResponse);
 
     // UpdateParams defines a governance operation for updating the x/farming module
     // parameters. The authority defaults to the x/gov module account.
@@ -60,6 +61,15 @@ message MsgClaim {
 }
 
 message MsgClaimResponse {}
+
+message MsgClaimAll {
+  option (cosmos.msg.v1.signer) = "staker";
+
+  // Staker address
+  string staker = 1;
+}
+
+message MsgClaimAllResponse {}
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //

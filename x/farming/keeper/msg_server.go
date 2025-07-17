@@ -181,6 +181,31 @@ func (m msgServer) Claim(goCtx context.Context, msg *types.MsgClaim) (*types.Msg
 	return &types.MsgClaimResponse{}, nil
 }
 
+// ClaimAll implements types.MsgServer.
+func (m msgServer) ClaimAll(goCtx context.Context, msg *types.MsgClaimAll) (*types.MsgClaimAllResponse, error) {
+	if err := msg.ValidateBasic(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	pendingRewards, err := m.ClaimAllRewards(ctx, msg.Staker)
+	if err != nil {
+		return nil, err
+	}
+
+	// emit events
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeClaim,
+			sdk.NewAttribute(types.AttributeKeyStaker, msg.Staker),
+			sdk.NewAttribute(types.AttributeKeyRewards, pendingRewards.String()),
+		),
+	)
+
+	return &types.MsgClaimAllResponse{}, nil
+}
+
 // UpdateParams updates the module params.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	if m.authority != msg.Authority {
