@@ -183,3 +183,30 @@ func (k Keeper) OnEpochEnded(ctx sdk.Context) {
 		return false
 	})
 }
+
+// GetNextEpochSnapshot gets the current snapshot for the next epoch
+func (k Keeper) GetNextEpochSnapshot(ctx sdk.Context) *types.Epoch {
+	// get the current epoch
+	currentEpoch := k.GetCurrentEpoch(ctx)
+
+	// next epoch
+	nextEpoch := &types.Epoch{
+		StartTime: currentEpoch.EndTime,
+		EndTime:   currentEpoch.EndTime.Add(k.EpochDuration(ctx)),
+	}
+
+	// get staked stakings
+	stakings := k.GetStakingsByStatus(ctx, types.StakingStatus_STAKING_STATUS_STAKED)
+
+	for _, staking := range stakings {
+		// ensure the staking end time satisfies the next epoch
+		if staking.StartTime.Add(staking.LockDuration).Before(nextEpoch.EndTime) {
+			continue
+		}
+
+		// update total stakings for the next epoch
+		types.UpdateEpochTotalStakings(nextEpoch, staking)
+	}
+
+	return nextEpoch
+}
