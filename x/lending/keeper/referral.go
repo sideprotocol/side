@@ -27,8 +27,12 @@ func (k Keeper) HasReferrer(ctx sdk.Context, referralCode string) bool {
 func (k Keeper) GetReferrer(ctx sdk.Context, referralCode string) *types.Referrer {
 	store := ctx.KVStore(k.storeKey)
 
-	var referrer types.Referrer
 	bz := store.Get(types.ReferrerKey(referralCode))
+	if bz == nil {
+		return nil
+	}
+
+	var referrer types.Referrer
 	k.cdc.MustUnmarshal(bz, &referrer)
 
 	return &referrer

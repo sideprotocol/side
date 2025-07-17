@@ -70,15 +70,10 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 	interest := repayment.Amount.Sub(loan.BorrowAmount)
 	protocolFee := sdk.NewCoin(interest.Denom, interest.Amount.Mul(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).Quo(types.Permille))
 
-	var referrer *types.Referrer
-	if k.HasReferrer(ctx, loan.ReferralCode) {
-		referrer = k.GetReferrer(ctx, loan.ReferralCode)
-	}
-
 	referralFee := sdkmath.ZeroInt()
 	actualProtocolFee := protocolFee
-	if protocolFee.IsPositive() && referrer != nil {
-		referralFee = protocolFee.Amount.ToLegacyDec().Mul(referrer.ReferralFeeFactor).TruncateInt()
+	if protocolFee.IsPositive() && loan.Referrer != nil {
+		referralFee = protocolFee.Amount.ToLegacyDec().Mul(loan.Referrer.ReferralFeeFactor).TruncateInt()
 		actualProtocolFee = protocolFee.SubAmount(referralFee)
 	}
 
@@ -94,7 +89,7 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 	}
 
 	if referralFee.IsPositive() {
-		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(referrer.Address), sdk.NewCoins(sdk.NewCoin(protocolFee.Denom, referralFee))); err != nil {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RepaymentEscrowAccount, sdk.MustAccAddressFromBech32(loan.Referrer.Address), sdk.NewCoins(sdk.NewCoin(protocolFee.Denom, referralFee))); err != nil {
 			return err
 		}
 	}
@@ -104,6 +99,20 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 
 	loan.Status = types.LoanStatus_Closed
 	k.SetLoan(ctx, loan)
+
+	// emit referral event
+	if referralFee.IsPositive() {
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeReferral,
+				sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+				sdk.NewAttribute(types.AttributeKeyReferralCode, loan.Referrer.ReferralCode),
+				sdk.NewAttribute(types.AttributeKeyReferrerAddress, loan.Referrer.Address),
+				sdk.NewAttribute(types.AttributeKeyReferralFeeFactor, loan.Referrer.ReferralFeeFactor.String()),
+				sdk.NewAttribute(types.AttributeKeyReferralFee, referralFee.String()),
+			),
+		)
+	}
 
 	return nil
 }
