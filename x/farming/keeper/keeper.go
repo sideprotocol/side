@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -28,6 +30,11 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	authority string,
 ) Keeper {
+	// ensure the module account is set
+	if addr := authKeeper.GetModuleAddress(types.ModuleName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
+	}
+
 	return Keeper{
 		cdc:        cdc,
 		storeKey:   storeKey,
@@ -59,6 +66,14 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	k.cdc.MustUnmarshal(bz, &params)
 
 	return params
+}
+
+func (k Keeper) GetModuleAccount(ctx sdk.Context) sdk.ModuleAccountI {
+	return k.authKeeper.GetModuleAccount(ctx, types.ModuleName)
+}
+
+func (k Keeper) AuthKeeper() types.AccountKeeper {
+	return k.authKeeper
 }
 
 func (k Keeper) BankKeeper() types.BankKeeper {

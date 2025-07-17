@@ -13,6 +13,8 @@ type AccountKeeper interface {
 
 	GetModuleAddress(name string) sdk.AccAddress
 	GetModuleAccount(ctx context.Context, moduleName string) sdk.ModuleAccountI
+
+	SetModuleAccount(ctx context.Context, macc sdk.ModuleAccountI)
 }
 
 // BankKeeper defines the expected bank keeper interface
@@ -31,4 +33,5 @@ type BankKeeper interface {
 
 	HasSupply(ctx context.Context, denom string) bool
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
+	GetAllBalances(ctx context.Context, addr sdk.AccAddress) sdk.Coins
 }
