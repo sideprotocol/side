@@ -54,3 +54,29 @@ func (k Keeper) GetRewards(ctx sdk.Context, address string) (sdk.Coin, sdk.Coin)
 
 	return pendingRewards, totalRewards
 }
+
+// ClaimAllRewards claims all pending rewards of the given address
+func (k Keeper) ClaimAllRewards(ctx sdk.Context, address string) (sdk.Coin, error) {
+	pendingRewards := sdk.NewCoin(k.RewardPerEpoch(ctx).Denom, sdkmath.ZeroInt())
+
+	k.IterateStakingsByAddress(ctx, address, func(staking *types.Staking) (stop bool) {
+		// accumulate pending rewards
+		pendingRewards = pendingRewards.Add(staking.PendingRewards)
+
+		// reset pending rewards
+		staking.PendingRewards = sdk.NewCoin(k.RewardPerEpoch(ctx).Denom, sdkmath.ZeroInt())
+		k.SetStaking(ctx, staking)
+
+		return false
+	})
+
+	if pendingRewards.IsZero() {
+		return pendingRewards, types.ErrNoPendingRewards
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(address), sdk.NewCoins(pendingRewards)); err != nil {
+		return pendingRewards, err
+	}
+
+	return pendingRewards, nil
+}
