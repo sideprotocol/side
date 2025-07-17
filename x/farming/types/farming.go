@@ -98,10 +98,11 @@ func UpdateAccountTotalStakings(totalStakings []TotalStaking, staking *Staking) 
 // GetAccountRewardPerEpoch gets the account reward for the given epoch
 func GetAccountRewardPerEpoch(address string, accountTotalStakings []TotalStaking, epoch *Epoch, rewardPerEpoch sdk.Coin, assets []Asset) *AccountRewardPerEpoch {
 	accountRewardPerEpoch := &AccountRewardPerEpoch{
-		Address:  address,
-		Stakings: accountTotalStakings,
-		Shares:   []sdkmath.LegacyDec{},
-		Reward:   sdk.NewCoin(rewardPerEpoch.Denom, sdkmath.ZeroInt()),
+		Address:    address,
+		Stakings:   accountTotalStakings,
+		Shares:     []sdkmath.LegacyDec{},
+		TotalShare: sdkmath.LegacyZeroDec(),
+		Reward:     sdk.NewCoin(rewardPerEpoch.Denom, sdkmath.ZeroInt()),
 	}
 
 	for _, totalStaking := range accountTotalStakings {
@@ -112,6 +113,8 @@ func GetAccountRewardPerEpoch(address string, accountTotalStakings []TotalStakin
 		rewardAmount := rewardPerEpoch.Amount.ToLegacyDec().Mul(asset.RewardRatio).Mul(share).TruncateInt()
 
 		accountRewardPerEpoch.Shares = append(accountRewardPerEpoch.Shares, share)
+		accountRewardPerEpoch.TotalShare = accountRewardPerEpoch.TotalShare.Add(share.Mul(asset.RewardRatio))
+
 		accountRewardPerEpoch.Reward = accountRewardPerEpoch.Reward.AddAmount(rewardAmount)
 	}
 
