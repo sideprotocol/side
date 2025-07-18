@@ -402,6 +402,54 @@ message LoanV2 {
     LoanStatus status = 25;
 }
 
+message LoanV3 {
+    string vault_address = 1; // id
+    string borrower = 2;
+    string borrowerPubKey = 3;
+    string borrowerAuthPubKey = 4;
+    string dcm = 5 [(gogoproto.customname) = "DCM"];
+    int64 maturity_time = 6;
+    int64 final_timeout = 7;
+    string pool_id = 8;
+    cosmos.base.v1beta1.Coin borrow_amount = 9 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin request_fee = 10 [(gogoproto.nullable) = false];
+    string origination_fee = 11 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string interest = 12 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string protocol_fee = 13 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    int64 maturity = 14;
+    uint32 borrow_apr = 15 [(gogoproto.customname) = "BorrowAPR"];
+    string start_borrow_index = 16 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    string liquidation_price = 17 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable) = false
+    ];
+    uint64 dlc_event_id = 18;
+    repeated Authorization authorizations = 19 [(gogoproto.nullable) = false];
+    string collateral_amount = 20 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    uint64 liquidation_id = 21;
+    string referral_code = 22;
+    google.protobuf.Timestamp create_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 25;
+}
+
 // Referrer defines the referrer
 message Referrer {
   // Optional name
