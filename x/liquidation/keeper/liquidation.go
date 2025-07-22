@@ -3,8 +3,10 @@ package keeper
 import (
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
+	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/x/liquidation/types"
 )
@@ -155,7 +157,30 @@ func (k Keeper) SetLiquidation(ctx sdk.Context, liquidation *types.Liquidation) 
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(liquidation)
+
+	k.SetLiquidationStatus(ctx, liquidation.Id, liquidation.Status)
+
 	store.Set(types.LiquidationKey(liquidation.Id), bz)
+}
+
+// SetLiquidationStatus sets the status store of the given liquidation
+func (k Keeper) SetLiquidationStatus(ctx sdk.Context, id uint64, status types.LiquidationStatus) {
+	store := ctx.KVStore(k.storeKey)
+
+	if k.HasLiquidation(ctx, id) {
+		k.RemoveLiquidationStatus(ctx, id)
+	}
+
+	store.Set(types.LiquidationByStatusKey(status, id), []byte{})
+}
+
+// RemoveLiquidationStatus removes the status store of the given liquidation
+func (k Keeper) RemoveLiquidationStatus(ctx sdk.Context, id uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	liquidation := k.GetLiquidation(ctx, id)
+
+	store.Delete(types.LiquidationByStatusKey(liquidation.Status, id))
 }
 
 // CreateLiquidation creates and returns the newly created liquidation
@@ -186,19 +211,60 @@ func (k Keeper) GetAllLiquidations(ctx sdk.Context) []*types.Liquidation {
 	return liquidations
 }
 
-// GetLiquidations gets liquidations by the given status
-func (k Keeper) GetLiquidations(ctx sdk.Context, status types.LiquidationStatus) []*types.Liquidation {
+// GetLiquidationsByStatus gets liquidations by the given status
+func (k Keeper) GetLiquidationsByStatus(ctx sdk.Context, status types.LiquidationStatus) []*types.Liquidation {
 	liquidations := make([]*types.Liquidation, 0)
 
-	k.IterateLiquidations(ctx, func(liquidation *types.Liquidation) (stop bool) {
-		if liquidation.Status == status {
-			liquidations = append(liquidations, liquidation)
-		}
-
+	k.IterateLiquidationsByStatus(ctx, status, func(liquidation *types.Liquidation) (stop bool) {
+		liquidations = append(liquidations, liquidation)
 		return false
 	})
 
 	return liquidations
+}
+
+// GetLiquidationsByStatusWithPagination gets the liquidations by the given status with pagination
+func (k Keeper) GetLiquidationsByStatusWithPagination(ctx sdk.Context, status types.LiquidationStatus, pagination *query.PageRequest) ([]*types.Liquidation, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	liquidationStatusStore := prefix.NewStore(store, append(types.LiquidationByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...))
+
+	var liquidations []*types.Liquidation
+
+	pageRes, err := query.Paginate(liquidationStatusStore, pagination, func(key []byte, value []byte) error {
+		id := sdk.BigEndianToUint64(key)
+		liquidation := k.GetLiquidation(ctx, id)
+
+		liquidations = append(liquidations, liquidation)
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return liquidations, pageRes, nil
+}
+
+// GetLiquidationsWithPagination gets the liquidations with pagination
+func (k Keeper) GetLiquidationsWithPagination(ctx sdk.Context, pagination *query.PageRequest) ([]*types.Liquidation, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	liquidationStore := prefix.NewStore(store, types.LiquidationKeyPrefix)
+
+	var liquidations []*types.Liquidation
+
+	pageRes, err := query.Paginate(liquidationStore, pagination, func(key []byte, value []byte) error {
+		var liquidation types.Liquidation
+		k.cdc.MustUnmarshal(value, &liquidation)
+
+		liquidations = append(liquidations, &liquidation)
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return liquidations, pageRes, nil
 }
 
 // IterateLiquidations iterates through all liquidations
@@ -213,6 +279,25 @@ func (k Keeper) IterateLiquidations(ctx sdk.Context, cb func(liquidation *types.
 		k.cdc.MustUnmarshal(iterator.Value(), &liquidation)
 
 		if cb(&liquidation) {
+			break
+		}
+	}
+}
+
+// IterateLiquidationsByStatus iterates through liquidations by the given status
+func (k Keeper) IterateLiquidationsByStatus(ctx sdk.Context, status types.LiquidationStatus, cb func(liquidation *types.Liquidation) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	keyPrefix := append(types.LiquidationByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...)
+
+	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		id := sdk.BigEndianToUint64(iterator.Key()[len(keyPrefix):])
+		liquidation := k.GetLiquidation(ctx, id)
+
+		if cb(liquidation) {
 			break
 		}
 	}

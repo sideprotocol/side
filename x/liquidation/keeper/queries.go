@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/x/liquidation/types"
 )
@@ -44,15 +45,21 @@ func (k Keeper) Liquidations(goCtx context.Context, req *types.QueryLiquidations
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	var err error
 	var liquidations []*types.Liquidation
+	var pagination *query.PageResponse
 
 	if req.Status == types.LiquidationStatus_LIQUIDATION_STATUS_UNSPECIFIED {
-		liquidations = k.GetAllLiquidations(ctx)
+		liquidations, pagination, err = k.GetLiquidationsWithPagination(ctx, req.Pagination)
 	} else {
-		liquidations = k.GetLiquidations(ctx, req.Status)
+		liquidations, pagination, err = k.GetLiquidationsByStatusWithPagination(ctx, req.Status, req.Pagination)
 	}
 
-	return &types.QueryLiquidationsResponse{Liquidations: liquidations}, nil
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryLiquidationsResponse{Liquidations: liquidations, Pagination: pagination}, nil
 }
 
 func (k Keeper) LiquidationRecord(goCtx context.Context, req *types.QueryLiquidationRecordRequest) (*types.QueryLiquidationRecordResponse, error) {

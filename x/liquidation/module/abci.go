@@ -18,7 +18,7 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 // handlePendingLiquidations handles the pending liquidations
 func handlePendingLiquidations(ctx sdk.Context, k keeper.Keeper) {
 	// get pending liquidations
-	liquidations := k.GetLiquidations(ctx, types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATING)
+	liquidations := k.GetLiquidationsByStatus(ctx, types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATING)
 	if len(liquidations) == 0 {
 		return
 	}
@@ -75,7 +75,7 @@ func handlePendingLiquidations(ctx sdk.Context, k keeper.Keeper) {
 // handleCompletedLiquidations handles the completed liquidations
 func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 	// get completed liquidations
-	liquidations := k.GetLiquidations(ctx, types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED)
+	liquidations := k.GetLiquidationsByStatus(ctx, types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED)
 	if len(liquidations) == 0 {
 		return
 	}
