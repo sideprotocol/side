@@ -27,12 +27,12 @@ func (k Keeper) DKGCompletionReceivedHandler(ctx sdk.Context, id uint64, ty stri
 func (k Keeper) DKGCompletedHandler(ctx sdk.Context, id uint64, ty string, intent int32, pubKeys []string) error {
 	switch ty {
 	case types.DKG_TYPE_DCM:
-		return k.CreateDCM(ctx, pubKeys[0])
+		return k.CreateDCM(ctx, id, pubKeys[0])
 
 	case types.DKG_TYPE_NONCE:
 		// the first pub key is oracle and the remaining are nonces
 
-		if err := k.CreateOracle(ctx, pubKeys[0]); err != nil {
+		if err := k.CreateOracle(ctx, id, pubKeys[0]); err != nil {
 			return err
 		}
 

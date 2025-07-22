@@ -6,9 +6,9 @@ const (
 	EventTypeCreateDCM       = "create_dcm"
 	EventTypeTriggerDLCEvent = "trigger_dlc_event"
 
-	AttributeKeyPubKey = "pub_key"
-
 	AttributeKeyId           = "id"
+	AttributeKeyDKGId        = "dkg_id"
+	AttributeKeyPubKey       = "pub_key"
 	AttributeKeyDLCEventType = "dlc_event_type"
 	AttributeKeyOutcome      = "outcome"
 )

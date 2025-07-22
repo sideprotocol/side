@@ -2,6 +2,8 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
+	"fmt"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -23,14 +25,44 @@ func (k Keeper) Params(goCtx context.Context, req *types.QueryParamsRequest) (*t
 	return &types.QueryParamsResponse{Params: k.GetParams(ctx)}, nil
 }
 
-func (k Keeper) Oracles(goCtx context.Context, req *types.QueryOraclesRequest) (*types.QueryOraclesResponse, error) {
+func (k Keeper) DCM(goCtx context.Context, req *types.QueryDCMRequest) (*types.QueryDCMResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryOraclesResponse{Oracles: k.GetOracles(ctx, req.Status)}, nil
+	if req.Id == 0 && len(req.PubKey) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "neigher id or pub key is provided")
+	}
+
+	var dcm *types.DCM
+	var participants []string
+
+	if req.Id != 0 {
+		if !k.HasDCM(ctx, req.Id) {
+			return nil, status.Error(codes.NotFound, fmt.Sprintf("dcm %d does not exist", req.Id))
+		}
+
+		dcm = k.GetDCM(ctx, req.Id)
+	} else {
+		pubKey, err := hex.DecodeString(req.PubKey)
+		if err != nil {
+			return nil, status.Error(codes.InvalidArgument, "invalid pub key")
+		}
+
+		if !k.HasDCMByPubKey(ctx, pubKey) {
+			return nil, status.Error(codes.NotFound, fmt.Sprintf("dcm %s does not exist", req.PubKey))
+		}
+
+		dcm = k.GetDCMByPubKey(ctx, pubKey)
+	}
+
+	if k.tssKeeper.HasDKGRequest(ctx, dcm.DkgId) {
+		participants = k.tssKeeper.GetDKGRequest(ctx, dcm.DkgId).Participants
+	}
+
+	return &types.QueryDCMResponse{DCM: dcm, Participants: participants}, nil
 }
 
 func (k Keeper) DCMs(goCtx context.Context, req *types.QueryDCMsRequest) (*types.QueryDCMsResponse, error) {
@@ -41,6 +73,56 @@ func (k Keeper) DCMs(goCtx context.Context, req *types.QueryDCMsRequest) (*types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	return &types.QueryDCMsResponse{DCMs: k.GetDCMs(ctx, req.Status)}, nil
+}
+
+func (k Keeper) Oracle(goCtx context.Context, req *types.QueryOracleRequest) (*types.QueryOracleResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if req.Id == 0 && len(req.PubKey) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "neigher id or pub key is provided")
+	}
+
+	var oracle *types.DLCOracle
+	var participants []string
+
+	if req.Id != 0 {
+		if !k.HasOracle(ctx, req.Id) {
+			return nil, status.Error(codes.NotFound, fmt.Sprintf("oracle %d does not exist", req.Id))
+		}
+
+		oracle = k.GetOracle(ctx, req.Id)
+	} else {
+		pubKey, err := hex.DecodeString(req.PubKey)
+		if err != nil {
+			return nil, status.Error(codes.InvalidArgument, "invalid pub key")
+		}
+
+		if !k.HasOracleByPubKey(ctx, pubKey) {
+			return nil, status.Error(codes.NotFound, fmt.Sprintf("oracle %s does not exist", req.PubKey))
+		}
+
+		oracle = k.GetOracleByPubKey(ctx, pubKey)
+	}
+
+	if k.tssKeeper.HasDKGRequest(ctx, oracle.DkgId) {
+		participants = k.tssKeeper.GetDKGRequest(ctx, oracle.DkgId).Participants
+	}
+
+	return &types.QueryOracleResponse{Oracle: oracle, Participants: participants}, nil
+}
+
+func (k Keeper) Oracles(goCtx context.Context, req *types.QueryOraclesRequest) (*types.QueryOraclesResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryOraclesResponse{Oracles: k.GetOracles(ctx, req.Status)}, nil
 }
 
 func (k Keeper) Nonce(goCtx context.Context, req *types.QueryNonceRequest) (*types.QueryNonceResponse, error) {

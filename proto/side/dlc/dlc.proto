@@ -13,11 +13,12 @@ enum DLCOracleStatus {
 
 message DLCOracle {
     uint64 id = 1;
-    string desc = 2;
-    string pubkey = 3;
-    uint64 nonce_index = 4;
-    google.protobuf.Timestamp time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    DLCOracleStatus status = 6;
+    uint64 dkg_id = 2;
+    string desc = 3;
+    string pubkey = 4;
+    uint64 nonce_index = 5;
+    google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    DLCOracleStatus status = 7;
 }
 
 enum DCMStatus {
@@ -27,10 +28,11 @@ enum DCMStatus {
 
 message DCM {
     uint64 id = 1;
-    string desc = 2;
-    string pubkey = 3;
-    google.protobuf.Timestamp time = 4 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-    DCMStatus status = 5;
+    uint64 dkg_id = 2;
+    string desc = 3;
+    string pubkey = 4;
+    google.protobuf.Timestamp time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    DCMStatus status = 6;
 }
 
 message DLCNonce {
