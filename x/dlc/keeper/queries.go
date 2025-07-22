@@ -94,7 +94,12 @@ func (k Keeper) Events(goCtx context.Context, req *types.QueryEventsRequest) (*t
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryEventsResponse{Events: k.GetEvents(ctx, req.Triggered)}, nil
+	events, pagination, err := k.GetEventsByStatusWithPagination(ctx, req.Triggered, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryEventsResponse{Events: events, Pagination: pagination}, nil
 }
 
 func (k Keeper) Attestation(goCtx context.Context, req *types.QueryAttestationRequest) (*types.QueryAttestationResponse, error) {

@@ -4,8 +4,10 @@ import (
 	"encoding/base64"
 	"fmt"
 
+	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/x/dlc/types"
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
@@ -57,7 +59,29 @@ func (k Keeper) SetEvent(ctx sdk.Context, event *types.DLCEvent) {
 
 	bz := k.cdc.MustMarshal(event)
 
+	k.SetEventStatus(ctx, event.Id, event.HasTriggered)
+
 	store.Set(types.EventKey(event.Id), bz)
+}
+
+// SetEventStatus sets the status store of the given event
+func (k Keeper) SetEventStatus(ctx sdk.Context, id uint64, triggered bool) {
+	store := ctx.KVStore(k.storeKey)
+
+	if k.HasEvent(ctx, id) {
+		k.RemoveEventStatus(ctx, id)
+	}
+
+	store.Set(types.EventByStatusKey(triggered, id), []byte{})
+}
+
+// RemoveEventStatus removes the status store of the given event
+func (k Keeper) RemoveEventStatus(ctx sdk.Context, id uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	event := k.GetEvent(ctx, id)
+
+	store.Delete(types.EventByStatusKey(event.HasTriggered, id))
 }
 
 // GetPendingLendingEventCount gets the pending lending event count
@@ -167,8 +191,8 @@ func (k Keeper) GetAllEvents(ctx sdk.Context) []*types.DLCEvent {
 	return events
 }
 
-// GetEvents gets events according to the specified status
-func (k Keeper) GetEvents(ctx sdk.Context, triggered bool) []*types.DLCEvent {
+// GetEventsByStatus gets events according to the specified status
+func (k Keeper) GetEventsByStatus(ctx sdk.Context, triggered bool) []*types.DLCEvent {
 	events := make([]*types.DLCEvent, 0)
 
 	k.IterateEventsByStatus(ctx, triggered, func(event *types.DLCEvent) (stop bool) {
@@ -179,21 +203,26 @@ func (k Keeper) GetEvents(ctx sdk.Context, triggered bool) []*types.DLCEvent {
 	return events
 }
 
-// IterateEventsByStatus iterates through events by the given status
-func (k Keeper) IterateEventsByStatus(ctx sdk.Context, triggered bool, cb func(event *types.DLCEvent) (stop bool)) {
+// GetEventsByStatusWithPagination gets events by the given status with pagination
+func (k Keeper) GetEventsByStatusWithPagination(ctx sdk.Context, triggered bool, pagination *query.PageRequest) ([]*types.DLCEvent, *query.PageResponse, error) {
 	store := ctx.KVStore(k.storeKey)
+	eventStatusStore := prefix.NewStore(store, append(types.EventByStatusKeyPrefix, types.EventStatusToByte(triggered)))
 
-	iterator := storetypes.KVStorePrefixIterator(store, types.EventKeyPrefix)
-	defer iterator.Close()
+	var events []*types.DLCEvent
 
-	for ; iterator.Valid(); iterator.Next() {
-		var event types.DLCEvent
-		k.cdc.MustUnmarshal(iterator.Value(), &event)
+	pageRes, err := query.Paginate(eventStatusStore, pagination, func(key []byte, value []byte) error {
+		id := sdk.BigEndianToUint64(key)
+		event := k.GetEvent(ctx, id)
 
-		if event.HasTriggered == triggered && cb(&event) {
-			break
-		}
+		events = append(events, event)
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
 	}
+
+	return events, pageRes, nil
 }
 
 // IterateEvents iterates through all events
@@ -208,6 +237,27 @@ func (k Keeper) IterateEvents(ctx sdk.Context, cb func(event *types.DLCEvent) (s
 		k.cdc.MustUnmarshal(iterator.Value(), &event)
 
 		if cb(&event) {
+			break
+		}
+	}
+}
+
+// IterateEventsByStatus iterates through events by the given status
+func (k Keeper) IterateEventsByStatus(ctx sdk.Context, triggered bool, cb func(event *types.DLCEvent) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	keyPrefix := append(types.EventByStatusKeyPrefix, types.EventStatusToByte(triggered))
+
+	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		key := iterator.Key()
+
+		id := sdk.BigEndianToUint64(key[len(keyPrefix):])
+		event := k.GetEvent(ctx, id)
+
+		if cb(event) {
 			break
 		}
 	}
