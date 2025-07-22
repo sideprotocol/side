@@ -28,8 +28,10 @@ const (
 	Query_Nonce_FullMethodName                     = "/side.dlc.Query/Nonce"
 	Query_Nonces_FullMethodName                    = "/side.dlc.Query/Nonces"
 	Query_CountNonces_FullMethodName               = "/side.dlc.Query/CountNonces"
-	Query_Oracles_FullMethodName                   = "/side.dlc.Query/Oracles"
+	Query_DCM_FullMethodName                       = "/side.dlc.Query/DCM"
 	Query_DCMs_FullMethodName                      = "/side.dlc.Query/DCMs"
+	Query_Oracle_FullMethodName                    = "/side.dlc.Query/Oracle"
+	Query_Oracles_FullMethodName                   = "/side.dlc.Query/Oracles"
 	Query_OracleParticipantLiveness_FullMethodName = "/side.dlc.Query/OracleParticipantLiveness"
 )
 
@@ -55,10 +57,14 @@ type QueryClient interface {
 	Nonces(ctx context.Context, in *QueryNoncesRequest, opts ...grpc.CallOption) (*QueryNoncesResponse, error)
 	// CountNonces queries the total count of nonces.
 	CountNonces(ctx context.Context, in *QueryCountNoncesRequest, opts ...grpc.CallOption) (*QueryCountNoncesResponse, error)
-	// Oracles query oracles by the given status.
-	Oracles(ctx context.Context, in *QueryOraclesRequest, opts ...grpc.CallOption) (*QueryOraclesResponse, error)
-	// DCMs query DCMs by the given status.
+	// DCM queries the DCM by the given id or public key.
+	DCM(ctx context.Context, in *QueryDCMRequest, opts ...grpc.CallOption) (*QueryDCMResponse, error)
+	// DCMs queries DCMs by the given status.
 	DCMs(ctx context.Context, in *QueryDCMsRequest, opts ...grpc.CallOption) (*QueryDCMsResponse, error)
+	// Oracle queries the oracle by the given id or public key.
+	Oracle(ctx context.Context, in *QueryOracleRequest, opts ...grpc.CallOption) (*QueryOracleResponse, error)
+	// Oracles queries oracles by the given status.
+	Oracles(ctx context.Context, in *QueryOraclesRequest, opts ...grpc.CallOption) (*QueryOraclesResponse, error)
 	// OracleParticipantLiveness queries the oracle participant liveness
 	OracleParticipantLiveness(ctx context.Context, in *QueryOracleParticipantLivenessRequest, opts ...grpc.CallOption) (*QueryOracleParticipantLivenessResponse, error)
 }
@@ -152,9 +158,9 @@ func (c *queryClient) CountNonces(ctx context.Context, in *QueryCountNoncesReque
 	return out, nil
 }
 
-func (c *queryClient) Oracles(ctx context.Context, in *QueryOraclesRequest, opts ...grpc.CallOption) (*QueryOraclesResponse, error) {
-	out := new(QueryOraclesResponse)
-	err := c.cc.Invoke(ctx, Query_Oracles_FullMethodName, in, out, opts...)
+func (c *queryClient) DCM(ctx context.Context, in *QueryDCMRequest, opts ...grpc.CallOption) (*QueryDCMResponse, error) {
+	out := new(QueryDCMResponse)
+	err := c.cc.Invoke(ctx, Query_DCM_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -164,6 +170,24 @@ func (c *queryClient) Oracles(ctx context.Context, in *QueryOraclesRequest, opts
 func (c *queryClient) DCMs(ctx context.Context, in *QueryDCMsRequest, opts ...grpc.CallOption) (*QueryDCMsResponse, error) {
 	out := new(QueryDCMsResponse)
 	err := c.cc.Invoke(ctx, Query_DCMs_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Oracle(ctx context.Context, in *QueryOracleRequest, opts ...grpc.CallOption) (*QueryOracleResponse, error) {
+	out := new(QueryOracleResponse)
+	err := c.cc.Invoke(ctx, Query_Oracle_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Oracles(ctx context.Context, in *QueryOraclesRequest, opts ...grpc.CallOption) (*QueryOraclesResponse, error) {
+	out := new(QueryOraclesResponse)
+	err := c.cc.Invoke(ctx, Query_Oracles_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -201,10 +225,14 @@ type QueryServer interface {
 	Nonces(context.Context, *QueryNoncesRequest) (*QueryNoncesResponse, error)
 	// CountNonces queries the total count of nonces.
 	CountNonces(context.Context, *QueryCountNoncesRequest) (*QueryCountNoncesResponse, error)
-	// Oracles query oracles by the given status.
-	Oracles(context.Context, *QueryOraclesRequest) (*QueryOraclesResponse, error)
-	// DCMs query DCMs by the given status.
+	// DCM queries the DCM by the given id or public key.
+	DCM(context.Context, *QueryDCMRequest) (*QueryDCMResponse, error)
+	// DCMs queries DCMs by the given status.
 	DCMs(context.Context, *QueryDCMsRequest) (*QueryDCMsResponse, error)
+	// Oracle queries the oracle by the given id or public key.
+	Oracle(context.Context, *QueryOracleRequest) (*QueryOracleResponse, error)
+	// Oracles queries oracles by the given status.
+	Oracles(context.Context, *QueryOraclesRequest) (*QueryOraclesResponse, error)
 	// OracleParticipantLiveness queries the oracle participant liveness
 	OracleParticipantLiveness(context.Context, *QueryOracleParticipantLivenessRequest) (*QueryOracleParticipantLivenessResponse, error)
 	mustEmbedUnimplementedQueryServer()
@@ -241,11 +269,17 @@ func (UnimplementedQueryServer) Nonces(context.Context, *QueryNoncesRequest) (*Q
 func (UnimplementedQueryServer) CountNonces(context.Context, *QueryCountNoncesRequest) (*QueryCountNoncesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CountNonces not implemented")
 }
-func (UnimplementedQueryServer) Oracles(context.Context, *QueryOraclesRequest) (*QueryOraclesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Oracles not implemented")
+func (UnimplementedQueryServer) DCM(context.Context, *QueryDCMRequest) (*QueryDCMResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DCM not implemented")
 }
 func (UnimplementedQueryServer) DCMs(context.Context, *QueryDCMsRequest) (*QueryDCMsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DCMs not implemented")
+}
+func (UnimplementedQueryServer) Oracle(context.Context, *QueryOracleRequest) (*QueryOracleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Oracle not implemented")
+}
+func (UnimplementedQueryServer) Oracles(context.Context, *QueryOraclesRequest) (*QueryOraclesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Oracles not implemented")
 }
 func (UnimplementedQueryServer) OracleParticipantLiveness(context.Context, *QueryOracleParticipantLivenessRequest) (*QueryOracleParticipantLivenessResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OracleParticipantLiveness not implemented")
@@ -425,20 +459,20 @@ func _Query_CountNonces_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Oracles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryOraclesRequest)
+func _Query_DCM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDCMRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Oracles(ctx, in)
+		return srv.(QueryServer).DCM(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_Oracles_FullMethodName,
+		FullMethod: Query_DCM_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Oracles(ctx, req.(*QueryOraclesRequest))
+		return srv.(QueryServer).DCM(ctx, req.(*QueryDCMRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -457,6 +491,42 @@ func _Query_DCMs_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).DCMs(ctx, req.(*QueryDCMsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Oracle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOracleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Oracle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Oracle_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Oracle(ctx, req.(*QueryOracleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Oracles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOraclesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Oracles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Oracles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Oracles(ctx, req.(*QueryOraclesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -523,12 +593,20 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_CountNonces_Handler,
 		},
 		{
-			MethodName: "Oracles",
-			Handler:    _Query_Oracles_Handler,
+			MethodName: "DCM",
+			Handler:    _Query_DCM_Handler,
 		},
 		{
 			MethodName: "DCMs",
 			Handler:    _Query_DCMs_Handler,
+		},
+		{
+			MethodName: "Oracle",
+			Handler:    _Query_Oracle_Handler,
+		},
+		{
+			MethodName: "Oracles",
+			Handler:    _Query_Oracles_Handler,
 		},
 		{
 			MethodName: "OracleParticipantLiveness",

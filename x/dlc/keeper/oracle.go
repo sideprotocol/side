@@ -12,9 +12,9 @@ import (
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
-// CreateOracle creates a new oracle with the given pub key
+// CreateOracle creates a new oracle with the given DKG Id and pub key
 // Assume that the pub key is valid
-func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) error {
+func (k Keeper) CreateOracle(ctx sdk.Context, dkgId uint64, pubKey string) error {
 	pubKeyBz, _ := hex.DecodeString(pubKey)
 	if k.HasOracleByPubKey(ctx, pubKeyBz) {
 		return types.ErrOracleAlreadyExists
@@ -22,6 +22,7 @@ func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) error {
 
 	oracle := &types.DLCOracle{
 		Id:     k.IncrementOracleId(ctx),
+		DkgId:  dkgId,
 		Pubkey: pubKey,
 		Time:   ctx.BlockTime(),
 		Status: types.DLCOracleStatus_Oracle_status_Enable,
@@ -34,6 +35,7 @@ func (k Keeper) CreateOracle(ctx sdk.Context, pubKey string) error {
 		sdk.NewEvent(
 			types.EventTypeCreateOracle,
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", oracle.Id)),
+			sdk.NewAttribute(types.AttributeKeyDKGId, fmt.Sprintf("%d", dkgId)),
 			sdk.NewAttribute(types.AttributeKeyPubKey, oracle.Pubkey),
 		),
 	)
@@ -63,11 +65,11 @@ func (k Keeper) IncrementOracleId(ctx sdk.Context) uint64 {
 	return id
 }
 
-// HasOracleByPubKey returns true if the given oracle exists, false otherwise
-func (k Keeper) HasOracleByPubKey(ctx sdk.Context, pubKey []byte) bool {
+// HasOracle returns true if the given oracle exists, false otherwise
+func (k Keeper) HasOracle(ctx sdk.Context, id uint64) bool {
 	store := ctx.KVStore(k.storeKey)
 
-	return store.Has(types.OracleByPubKeyKey(pubKey))
+	return store.Has(types.OracleKey(id))
 }
 
 // GetOracle gets the oracle by the given id
@@ -81,6 +83,21 @@ func (k Keeper) GetOracle(ctx sdk.Context, id uint64) *types.DLCOracle {
 	return &oracle
 }
 
+// SetOracle sets the given oracle
+func (k Keeper) SetOracle(ctx sdk.Context, oracle *types.DLCOracle) {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := k.cdc.MustMarshal(oracle)
+	store.Set(types.OracleKey(oracle.Id), bz)
+}
+
+// HasOracleByPubKey returns true if the given oracle exists, false otherwise
+func (k Keeper) HasOracleByPubKey(ctx sdk.Context, pubKey []byte) bool {
+	store := ctx.KVStore(k.storeKey)
+
+	return store.Has(types.OracleByPubKeyKey(pubKey))
+}
+
 // GetOracleByPubKey gets the oracle by the given public key
 func (k Keeper) GetOracleByPubKey(ctx sdk.Context, pubKey []byte) *types.DLCOracle {
 	store := ctx.KVStore(k.storeKey)
@@ -91,14 +108,6 @@ func (k Keeper) GetOracleByPubKey(ctx sdk.Context, pubKey []byte) *types.DLCOrac
 	}
 
 	return k.GetOracle(ctx, sdk.BigEndianToUint64(bz))
-}
-
-// SetOracle sets the given oracle
-func (k Keeper) SetOracle(ctx sdk.Context, oracle *types.DLCOracle) {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := k.cdc.MustMarshal(oracle)
-	store.Set(types.OracleKey(oracle.Id), bz)
 }
 
 // SetOracleByPubKey sets the given oracle by pub key

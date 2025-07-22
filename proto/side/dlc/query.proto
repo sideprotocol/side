@@ -4,8 +4,8 @@ package side.dlc;
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "side/dlc/params.proto";
 import "side/dlc/dlc.proto";
+import "side/dlc/params.proto";
 
 option go_package = "github.com/sideprotocol/side/x/dlc/types";
 
@@ -56,14 +56,24 @@ service Query {
         option (google.api.http).get = "/side/dlc/nonces/count";
     }
 
-    // Oracles query oracles by the given status.
-    rpc Oracles(QueryOraclesRequest) returns (QueryOraclesResponse) {
-        option (google.api.http).get = "/side/dlc/oracles";
+    // DCM queries the DCM by the given id or public key.
+    rpc DCM(QueryDCMRequest) returns (QueryDCMResponse) {
+        option (google.api.http).get = "/side/dlc/dcm";
     }
 
-    // DCMs query DCMs by the given status.
+    // DCMs queries DCMs by the given status.
     rpc DCMs(QueryDCMsRequest) returns (QueryDCMsResponse) {
         option (google.api.http).get = "/side/dlc/dcms";
+    }
+
+    // Oracle queries the oracle by the given id or public key.
+    rpc Oracle(QueryOracleRequest) returns (QueryOracleResponse) {
+        option (google.api.http).get = "/side/dlc/oracle";
+    }
+
+    // Oracles queries oracles by the given status.
+    rpc Oracles(QueryOraclesRequest) returns (QueryOraclesResponse) {
+        option (google.api.http).get = "/side/dlc/oracles";
     }
 
     // OracleParticipantLiveness queries the oracle participant liveness
@@ -97,6 +107,16 @@ message QueryAttestationsResponse {
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+message QueryDCMRequest {
+    uint64 id = 1;
+    string pub_key = 2;
+}
+
+message QueryDCMResponse {
+    DCM dcm = 1 [(gogoproto.customname) = "DCM"];
+    repeated string participants = 2;
+}
+
 message QueryDCMsRequest {
     DCMStatus status = 1;
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -105,6 +125,16 @@ message QueryDCMsRequest {
 message QueryDCMsResponse {
     repeated DCM dcms = 1 [(gogoproto.customname) = "DCMs"];
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryOracleRequest{
+    uint64 id = 1;
+    string pub_key = 2;
+}
+
+message QueryOracleResponse{
+    DLCOracle oracle = 1;
+    repeated string participants = 2;
 }
 
 message QueryOraclesRequest{

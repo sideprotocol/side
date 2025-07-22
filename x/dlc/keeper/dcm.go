@@ -10,9 +10,9 @@ import (
 	"github.com/sideprotocol/side/x/dlc/types"
 )
 
-// CreateDCM creates a new DCM with the given pub key
+// CreateDCM creates a new DCM with the given DKG id and pub key
 // Assume that the pub key is valid
-func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) error {
+func (k Keeper) CreateDCM(ctx sdk.Context, dkgId uint64, pubKey string) error {
 	pubKeyBz, _ := hex.DecodeString(pubKey)
 	if k.HasDCMByPubKey(ctx, pubKeyBz) {
 		return types.ErrDCMAlreadyExists
@@ -20,6 +20,7 @@ func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) error {
 
 	dcm := &types.DCM{
 		Id:     k.IncrementDCMId(ctx),
+		DkgId:  dkgId,
 		Pubkey: pubKey,
 		Time:   ctx.BlockTime(),
 		Status: types.DCMStatus_DCM_status_Enable,
@@ -32,6 +33,7 @@ func (k Keeper) CreateDCM(ctx sdk.Context, pubKey string) error {
 		sdk.NewEvent(
 			types.EventTypeCreateDCM,
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", dcm.Id)),
+			sdk.NewAttribute(types.AttributeKeyDKGId, fmt.Sprintf("%d", dkgId)),
 			sdk.NewAttribute(types.AttributeKeyPubKey, dcm.Pubkey),
 		),
 	)
@@ -92,6 +94,18 @@ func (k Keeper) HasDCMByPubKey(ctx sdk.Context, pubKey []byte) bool {
 	store := ctx.KVStore(k.storeKey)
 
 	return store.Has(types.DCMByPubKeyKey(pubKey))
+}
+
+// GetDCMByPubKey gets the DCM by the given public key
+func (k Keeper) GetDCMByPubKey(ctx sdk.Context, pubKey []byte) *types.DCM {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.DCMByPubKeyKey(pubKey))
+	if bz == nil {
+		return nil
+	}
+
+	return k.GetDCM(ctx, sdk.BigEndianToUint64(bz))
 }
 
 // SetDCMByPubKey sets the given DCM by pub key
