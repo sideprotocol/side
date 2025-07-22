@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/x/tss/types"
 )
@@ -44,7 +45,21 @@ func (k Keeper) DKGRequests(goCtx context.Context, req *types.QueryDKGRequestsRe
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryDKGRequestsResponse{Requests: k.GetDKGRequests(ctx, req.Status)}, nil
+	var err error
+	var dkgRequests []*types.DKGRequest
+	var pagination *query.PageResponse
+
+	if req.Status == types.DKGStatus_DKG_STATUS_UNSPECIFIED {
+		dkgRequests, pagination, err = k.GetDKGRequestsWithPagination(ctx, req.Module, req.Pagination)
+	} else {
+		dkgRequests, pagination, err = k.GetDKGRequestsByStatusWithPagination(ctx, req.Status, req.Module, req.Pagination)
+	}
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryDKGRequestsResponse{Requests: dkgRequests, Pagination: pagination}, nil
 }
 
 func (k Keeper) DKGCompletions(goCtx context.Context, req *types.QueryDKGCompletionsRequest) (*types.QueryDKGCompletionsResponse, error) {
@@ -78,7 +93,21 @@ func (k Keeper) SigningRequests(goCtx context.Context, req *types.QuerySigningRe
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QuerySigningRequestsResponse{Requests: k.GetSigningRequests(ctx, req.Status)}, nil
+	var err error
+	var signingRequests []*types.SigningRequest
+	var pagination *query.PageResponse
+
+	if req.Status == types.SigningStatus_SIGNING_STATUS_UNSPECIFIED {
+		signingRequests, pagination, err = k.GetSigningRequestsWithPagination(ctx, req.Module, req.Pagination)
+	} else {
+		signingRequests, pagination, err = k.GetSigningRequestsByStatusWithPagination(ctx, req.Status, req.Module, req.Pagination)
+	}
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QuerySigningRequestsResponse{Requests: signingRequests, Pagination: pagination}, nil
 }
 
 func (k Keeper) RefreshingRequest(goCtx context.Context, req *types.QueryRefreshingRequestRequest) (*types.QueryRefreshingRequestResponse, error) {

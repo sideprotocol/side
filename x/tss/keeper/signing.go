@@ -8,8 +8,10 @@ import (
 	"strings"
 
 	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
@@ -44,7 +46,29 @@ func (k Keeper) SetSigningRequest(ctx sdk.Context, signingRequest *types.Signing
 
 	bz := k.cdc.MustMarshal(signingRequest)
 
+	k.SetSigningRequestStatus(ctx, signingRequest.Id, signingRequest.Status)
+
 	store.Set(types.SigningRequestKey(signingRequest.Id), bz)
+}
+
+// SetSigningRequestStatus sets the status store of the given signing request
+func (k Keeper) SetSigningRequestStatus(ctx sdk.Context, id uint64, status types.SigningStatus) {
+	store := ctx.KVStore(k.storeKey)
+
+	if k.HasSigningRequest(ctx, id) {
+		k.RemoveSigningRequestStatus(ctx, id)
+	}
+
+	store.Set(types.SigningRequestByStatusKey(status, id), []byte{})
+}
+
+// RemoveSigningRequestStatus removes the status store of the given signing request
+func (k Keeper) RemoveSigningRequestStatus(ctx sdk.Context, id uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	signingRequest := k.GetSigningRequest(ctx, id)
+
+	store.Delete(types.SigningRequestByStatusKey(signingRequest.Status, id))
 }
 
 // HasSigningRequest returns true if the given signing request exists, false otherwise
@@ -65,15 +89,72 @@ func (k Keeper) GetSigningRequest(ctx sdk.Context, id uint64) *types.SigningRequ
 	return &signingRequest
 }
 
-// GetSigningRequests gets the signing requests by the given status
-func (k Keeper) GetSigningRequests(ctx sdk.Context, status types.SigningStatus) []*types.SigningRequest {
+// GetSigningRequestsByStatus gets the signing requests by the given status
+func (k Keeper) GetSigningRequestsByStatus(ctx sdk.Context, status types.SigningStatus) []*types.SigningRequest {
+	requests := make([]*types.SigningRequest, 0)
+
+	k.IterateSigningRequestsByStatus(ctx, status, func(req *types.SigningRequest) (stop bool) {
+		requests = append(requests, req)
+		return false
+	})
+
+	return requests
+}
+
+// GetSigningRequestsByStatusWithPagination gets the signing requests by the given status and module with pagination
+func (k Keeper) GetSigningRequestsByStatusWithPagination(ctx sdk.Context, status types.SigningStatus, module string, pagination *query.PageRequest) ([]*types.SigningRequest, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	signingRequestStatusStore := prefix.NewStore(store, append(types.SigningRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...))
+
+	var signingRequests []*types.SigningRequest
+
+	pageRes, err := query.Paginate(signingRequestStatusStore, pagination, func(key []byte, value []byte) error {
+		id := sdk.BigEndianToUint64(key)
+		signingRequest := k.GetSigningRequest(ctx, id)
+
+		if signingRequest.Module == module {
+			signingRequests = append(signingRequests, signingRequest)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return signingRequests, pageRes, nil
+}
+
+// GetSigningRequestsWithPagination gets the signing requests by the given module with pagination
+func (k Keeper) GetSigningRequestsWithPagination(ctx sdk.Context, module string, pagination *query.PageRequest) ([]*types.SigningRequest, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	signingRequestStore := prefix.NewStore(store, types.SigningRequestKeyPrefix)
+
+	var signingRequests []*types.SigningRequest
+
+	pageRes, err := query.Paginate(signingRequestStore, pagination, func(key []byte, value []byte) error {
+		var signingRequest types.SigningRequest
+		k.cdc.MustUnmarshal(value, &signingRequest)
+
+		if len(module) == 0 || signingRequest.Module == module {
+			signingRequests = append(signingRequests, &signingRequest)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return signingRequests, pageRes, nil
+}
+
+// GetAllSigningRequests gets all signing requests
+func (k Keeper) GetAllSigningRequests(ctx sdk.Context) []*types.SigningRequest {
 	requests := make([]*types.SigningRequest, 0)
 
 	k.IterateSigningRequests(ctx, func(req *types.SigningRequest) (stop bool) {
-		if req.Status == status {
-			requests = append(requests, req)
-		}
-
+		requests = append(requests, req)
 		return false
 	})
 
@@ -92,6 +173,27 @@ func (k Keeper) IterateSigningRequests(ctx sdk.Context, cb func(signingRequest *
 		k.cdc.MustUnmarshal(iterator.Value(), &signingRequest)
 
 		if cb(&signingRequest) {
+			break
+		}
+	}
+}
+
+// IterateSigningRequestsByStatus iterates through signing requests by the given status
+func (k Keeper) IterateSigningRequestsByStatus(ctx sdk.Context, status types.SigningStatus, cb func(req *types.SigningRequest) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	keyPrefix := append(types.SigningRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...)
+
+	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		key := iterator.Key()
+
+		id := sdk.BigEndianToUint64(key[len(keyPrefix):])
+		signingRequest := k.GetSigningRequest(ctx, id)
+
+		if cb(signingRequest) {
 			break
 		}
 	}

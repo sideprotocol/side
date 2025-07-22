@@ -6,8 +6,10 @@ import (
 	"strings"
 
 	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/x/tss/types"
 )
@@ -36,7 +38,30 @@ func (k Keeper) SetDKGRequest(ctx sdk.Context, req *types.DKGRequest) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(req)
+
+	k.SetDKGRequestStatus(ctx, req.Id, req.Status)
+
 	store.Set(types.DKGRequestKey(req.Id), bz)
+}
+
+// SetDKGRequestStatus sets the status store of the given DKG request
+func (k Keeper) SetDKGRequestStatus(ctx sdk.Context, id uint64, status types.DKGStatus) {
+	store := ctx.KVStore(k.storeKey)
+
+	if k.HasDKGRequest(ctx, id) {
+		k.RemoveDKGRequestStatus(ctx, id)
+	}
+
+	store.Set(types.DKGRequestByStatusKey(status, id), []byte{})
+}
+
+// RemoveDKGRequestStatus removes the status store of the given DKG request
+func (k Keeper) RemoveDKGRequestStatus(ctx sdk.Context, id uint64) {
+	store := ctx.KVStore(k.storeKey)
+
+	dkgRequest := k.GetDKGRequest(ctx, id)
+
+	store.Delete(types.DKGRequestByStatusKey(dkgRequest.Status, id))
 }
 
 // HasDKGRequest returns true if the given DKG exists, false otherwise
@@ -57,34 +82,69 @@ func (k Keeper) GetDKGRequest(ctx sdk.Context, id uint64) *types.DKGRequest {
 	return &req
 }
 
-// GetDKGRequests gets the DKG requests by the given status
-func (k Keeper) GetDKGRequests(ctx sdk.Context, status types.DKGStatus) []*types.DKGRequest {
+// GetDKGRequestsByStatus gets the DKG requests by the given status
+func (k Keeper) GetDKGRequestsByStatus(ctx sdk.Context, status types.DKGStatus) []*types.DKGRequest {
 	requests := make([]*types.DKGRequest, 0)
 
-	k.IterateDKGRequests(ctx, func(req *types.DKGRequest) (stop bool) {
-		if req.Status == status {
-			requests = append(requests, req)
-		}
-
+	k.IterateDKGRequestsByStatus(ctx, status, func(req *types.DKGRequest) (stop bool) {
+		requests = append(requests, req)
 		return false
 	})
 
 	return requests
 }
 
-// GetPendingDKGRequests gets the pending DKG requests
-func (k Keeper) GetPendingDKGRequests(ctx sdk.Context) []*types.DKGRequest {
-	requests := make([]*types.DKGRequest, 0)
+// GetDKGRequestsByStatusWithPagination gets the DKG requests by the given status and module with pagination
+func (k Keeper) GetDKGRequestsByStatusWithPagination(ctx sdk.Context, status types.DKGStatus, module string, pagination *query.PageRequest) ([]*types.DKGRequest, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	dkgRequestStatusStore := prefix.NewStore(store, append(types.DKGRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...))
 
-	k.IterateDKGRequests(ctx, func(req *types.DKGRequest) (stop bool) {
-		if req.Status == types.DKGStatus_DKG_STATUS_PENDING {
-			requests = append(requests, req)
+	var dkgRequests []*types.DKGRequest
+
+	pageRes, err := query.Paginate(dkgRequestStatusStore, pagination, func(key []byte, value []byte) error {
+		id := sdk.BigEndianToUint64(key)
+		dkgRequest := k.GetDKGRequest(ctx, id)
+
+		if len(module) == 0 || dkgRequest.Module == module {
+			dkgRequests = append(dkgRequests, dkgRequest)
 		}
 
-		return false
+		return nil
 	})
+	if err != nil {
+		return nil, nil, err
+	}
 
-	return requests
+	return dkgRequests, pageRes, nil
+}
+
+// GetDKGRequestsWithPagination gets the DKG requests by the given module with pagination
+func (k Keeper) GetDKGRequestsWithPagination(ctx sdk.Context, module string, pagination *query.PageRequest) ([]*types.DKGRequest, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	dkgRequestStore := prefix.NewStore(store, types.DKGRequestKeyPrefix)
+
+	var dkgRequests []*types.DKGRequest
+
+	pageRes, err := query.Paginate(dkgRequestStore, pagination, func(key []byte, value []byte) error {
+		var dkgRequest types.DKGRequest
+		k.cdc.MustUnmarshal(value, &dkgRequest)
+
+		if len(module) == 0 || dkgRequest.Module == module {
+			dkgRequests = append(dkgRequests, &dkgRequest)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return dkgRequests, pageRes, nil
+}
+
+// GetPendingDKGRequests gets the pending DKG requests
+func (k Keeper) GetPendingDKGRequests(ctx sdk.Context) []*types.DKGRequest {
+	return k.GetDKGRequestsByStatus(ctx, types.DKGStatus_DKG_STATUS_PENDING)
 }
 
 // GetAllDKGRequests gets all DKG requests
@@ -111,6 +171,27 @@ func (k Keeper) IterateDKGRequests(ctx sdk.Context, cb func(req *types.DKGReques
 		k.cdc.MustUnmarshal(iterator.Value(), &req)
 
 		if cb(&req) {
+			break
+		}
+	}
+}
+
+// IterateDKGRequestsByStatus iterates through DKG requests by the given status
+func (k Keeper) IterateDKGRequestsByStatus(ctx sdk.Context, status types.DKGStatus, cb func(req *types.DKGRequest) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	keyPrefix := append(types.DKGRequestByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...)
+
+	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		key := iterator.Key()
+
+		id := sdk.BigEndianToUint64(key[len(keyPrefix):])
+		dkgRequest := k.GetDKGRequest(ctx, id)
+
+		if cb(dkgRequest) {
 			break
 		}
 	}
