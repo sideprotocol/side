@@ -41,7 +41,6 @@ func BuildDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey st
 	liquidationScript, repaymentScript, timeoutRefundScript, _ := GetVaultScripts(borrowerPubKey, borrowerAuthPubKey, dcmPubKey, finalTimeout)
 
 	tapscriptTree := GetTapscriptTree([][]byte{liquidationScript, repaymentScript, timeoutRefundScript})
-	sanitizeTapscriptTreeProofs(tapscriptTree)
 
 	liquidationScriptProof := tapscriptTree.LeafMerkleProofs[0]
 	repaymentScriptProof := tapscriptTree.LeafMerkleProofs[1]
@@ -628,23 +627,4 @@ func getVaultUtxosFromDepositTx(depositTx *psbt.Packet, vaultPkScript []byte) ([
 	}
 
 	return utxos, nil
-}
-
-// sanitizeTapscriptTreeProofs adjusts the merkle proofs of given tapscript tree
-// NOTE: This is a workaround because btcsuite.AssembleTaprootScriptTree overrides the proof if there exist same scripts
-// This method only works for three-leaf script tree
-func sanitizeTapscriptTreeProofs(tree *txscript.IndexedTapScriptTree) {
-	proofTwo := tree.LeafMerkleProofs[1].InclusionProof
-
-	// abnormal proof
-	if len(proofTwo) > 64 {
-		// trim the second proof
-		tree.LeafMerkleProofs[1].InclusionProof = proofTwo[0:64]
-
-		// get the last element
-		lastProofElement := proofTwo[len(proofTwo)-32:]
-
-		// append to the first proof
-		tree.LeafMerkleProofs[0].InclusionProof = append(tree.LeafMerkleProofs[0].InclusionProof, lastProofElement...)
-	}
 }

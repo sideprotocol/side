@@ -1,6 +1,7 @@
 package types
 
 import (
+	"bytes"
 	"encoding/hex"
 
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
@@ -154,6 +155,11 @@ func GetTapscriptTree(scripts [][]byte) *txscript.IndexedTapScriptTree {
 
 	tree := txscript.AssembleTaprootScriptTree(leaves...)
 
+	// adjust merkle proofs if required
+	if len(scripts) == 3 && bytes.Equal(scripts[0], scripts[1]) {
+		sanitizeTapscriptTreeProofs(tree)
+	}
+
 	return tree
 }
 
@@ -224,4 +230,23 @@ func GetNUMSPoint() *btcec.PublicKey {
 	}
 
 	return point
+}
+
+// sanitizeTapscriptTreeProofs adjusts the merkle proofs of given tapscript tree
+// NOTE: This is a workaround because btcsuite.AssembleTaprootScriptTree overrides the proof if there exist same scripts
+// This method is only used for the three-leaf script tree where the first two leaves are the same
+func sanitizeTapscriptTreeProofs(tree *txscript.IndexedTapScriptTree) {
+	proofTwo := tree.LeafMerkleProofs[1].InclusionProof
+
+	// abnormal proof
+	if len(proofTwo) > 64 {
+		// trim the second proof
+		tree.LeafMerkleProofs[1].InclusionProof = proofTwo[0:64]
+
+		// get the last element
+		lastProofElement := proofTwo[len(proofTwo)-32:]
+
+		// append to the first proof
+		tree.LeafMerkleProofs[0].InclusionProof = append(tree.LeafMerkleProofs[0].InclusionProof, lastProofElement...)
+	}
 }
