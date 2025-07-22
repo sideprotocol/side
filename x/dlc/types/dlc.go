@@ -89,6 +89,20 @@ func GetEventTypeFromIntent(intent int32) DlcEventType {
 	}
 }
 
+// EventStatusToByte converts the given status to a byte
+func EventStatusToByte(triggered bool) byte {
+	if triggered {
+		return 1
+	}
+
+	return 0
+}
+
+// ByteToEventStatus converts the given byte to the status
+func ByteToEventStatus(b byte) bool {
+	return b != 0
+}
+
 // ToScopedId converts the given local id to the scoped id
 func ToScopedId(id uint64) string {
 	return fmt.Sprintf("%d", id)
