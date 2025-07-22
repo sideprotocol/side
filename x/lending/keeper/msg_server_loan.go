@@ -133,6 +133,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
 			sdk.NewAttribute(types.AttributeKeyPoolId, loan.PoolId),
 			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyOraclePubKey, dlcEvent.Pubkey),
 			sdk.NewAttribute(types.AttributeKeyReferralCode, msg.ReferralCode),
 		))
 

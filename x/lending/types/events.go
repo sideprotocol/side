@@ -23,6 +23,7 @@ const (
 	AttributeKeyPoolId           = "pool_id"
 	AttributeKeyCollateralAmount = "collateral_amount"
 	AttributeKeyBorrowAmount     = "borrow_amount"
+	AttributeKeyOraclePubKey     = "oracle_pub_key"
 
 	AttributeKeyLoanId = "loan_id"
 	AttributeKeyId     = "id"
