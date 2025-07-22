@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -179,15 +180,21 @@ func (k Keeper) Loans(goCtx context.Context, req *types.QueryLoansRequest) (*typ
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	var err error
 	var loans []*types.Loan
+	var pagination *query.PageResponse
 
 	if req.Status == types.LoanStatus_Unspecified {
-		loans = k.GetAllLoans(ctx)
+		loans, pagination, err = k.GetLoansWithPagination(ctx, req.Pagination)
 	} else {
-		loans = k.GetLoans(ctx, req.Status)
+		loans, pagination, err = k.GetLoansByStatusWithPagination(ctx, req.Status, req.Pagination)
 	}
 
-	return &types.QueryLoansResponse{Loans: loans}, nil
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryLoansResponse{Loans: loans, Pagination: pagination}, nil
 }
 
 // LoansByAddress implements types.QueryServer.

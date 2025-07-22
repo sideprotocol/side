@@ -31,12 +31,13 @@ var (
 
 	PoolKeyPrefix            = []byte{0x10}
 	LoanKeyPrefix            = []byte{0x11}
-	LoanByAddressKeyPrefix   = []byte{0x12}
-	AuthorizationIdKeyPrefix = []byte{0x13}
-	DepositLogKeyPrefix      = []byte{0x14}
-	RepaymentKeyPrefix       = []byte{0x15}
-	DLCMetaKeyPrefix         = []byte{0x16}
-	RedemptionKeyPrefix      = []byte{0x17}
+	LoanByStatusKeyPrefix    = []byte{0x12}
+	LoanByAddressKeyPrefix   = []byte{0x13}
+	AuthorizationIdKeyPrefix = []byte{0x14}
+	DepositLogKeyPrefix      = []byte{0x15}
+	RepaymentKeyPrefix       = []byte{0x16}
+	DLCMetaKeyPrefix         = []byte{0x17}
+	RedemptionKeyPrefix      = []byte{0x18}
 
 	ReferrerKeyPrefix = []byte{0x20}
 )
@@ -47,6 +48,12 @@ func PoolKey(id string) []byte {
 
 func LoanKey(id string) []byte {
 	return append(LoanKeyPrefix, []byte(id)...)
+}
+
+func LoanByStatusKey(status LoanStatus, id string) []byte {
+	key := append(LoanByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...)
+
+	return append(key, []byte(id)...)
 }
 
 func LoanByAddressKey(id string, address string) []byte {
