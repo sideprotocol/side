@@ -28,8 +28,8 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 
 	genesis.Params = k.GetParams(ctx)
-	genesis.DkgRequests = k.GetDKGRequests(ctx, types.DKGStatus_DKG_STATUS_PENDING)
-	genesis.SigningRequests = k.GetSigningRequests(ctx, types.SigningStatus_SIGNING_STATUS_PENDING)
+	genesis.DkgRequests = k.GetAllDKGRequests(ctx)
+	genesis.SigningRequests = k.GetAllSigningRequests(ctx)
 
 	// this line is used by starport scaffolding # genesis/module/export
 
