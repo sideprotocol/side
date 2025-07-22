@@ -205,7 +205,12 @@ func (k Keeper) LoansByAddress(goCtx context.Context, req *types.QueryLoansByAdd
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryLoansByAddressResponse{Loans: k.GetLoansByAddress(ctx, req.Address, req.Status)}, nil
+	loans, pagination, err := k.GetLoansByAddress(ctx, req.Address, req.Status, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryLoansByAddressResponse{Loans: loans, Pagination: pagination}, nil
 }
 
 // LoanCetInfos implements types.QueryServer.
