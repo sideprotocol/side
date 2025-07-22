@@ -2,8 +2,10 @@ package keeper
 
 import (
 	sdkmath "cosmossdk.io/math"
+	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -14,6 +16,8 @@ func (k Keeper) SetLoan(ctx sdk.Context, loan *types.Loan) {
 
 	bz := k.cdc.MustMarshal(loan)
 
+	k.SetLoanStatus(ctx, loan.VaultAddress, loan.Status)
+
 	store.Set(types.LoanKey(loan.VaultAddress), bz)
 }
 
@@ -22,6 +26,26 @@ func (k Keeper) SetLoanByAddress(ctx sdk.Context, loan *types.Loan) {
 	store := ctx.KVStore(k.storeKey)
 
 	store.Set(types.LoanByAddressKey(loan.VaultAddress, loan.Borrower), []byte{})
+}
+
+// SetLoanStatus sets the status store of the given loan
+func (k Keeper) SetLoanStatus(ctx sdk.Context, id string, status types.LoanStatus) {
+	store := ctx.KVStore(k.storeKey)
+
+	if k.HasLoan(ctx, id) {
+		k.RemoveLoanStatus(ctx, id)
+	}
+
+	store.Set(types.LoanByStatusKey(status, id), []byte{})
+}
+
+// RemoveLoanStatus removes the status store of the given loan
+func (k Keeper) RemoveLoanStatus(ctx sdk.Context, id string) {
+	store := ctx.KVStore(k.storeKey)
+
+	loan := k.GetLoan(ctx, id)
+
+	store.Delete(types.LoanByStatusKey(loan.Status, id))
 }
 
 // HasLoan returns true if the given loan exists, false otherwise
@@ -46,15 +70,56 @@ func (k Keeper) GetLoan(ctx sdk.Context, id string) *types.Loan {
 func (k Keeper) GetLoans(ctx sdk.Context, status types.LoanStatus) []*types.Loan {
 	var loans []*types.Loan
 
-	k.IterateLoans(ctx, func(loan *types.Loan) (stop bool) {
-		if loan.Status == status {
-			loans = append(loans, loan)
-		}
-
+	k.IterateLoansByStatus(ctx, status, func(loan *types.Loan) (stop bool) {
+		loans = append(loans, loan)
 		return false
 	})
 
 	return loans
+}
+
+// GetLoansByStatusWithPagination gets loans by the given status with pagination
+func (k Keeper) GetLoansByStatusWithPagination(ctx sdk.Context, status types.LoanStatus, pagination *query.PageRequest) ([]*types.Loan, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	loanStatusStore := prefix.NewStore(store, append(types.LoanByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...))
+
+	var loans []*types.Loan
+
+	pageRes, err := query.Paginate(loanStatusStore, pagination, func(key []byte, value []byte) error {
+		id := string(key)
+		loan := k.GetLoan(ctx, id)
+
+		loans = append(loans, loan)
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return loans, pageRes, nil
+}
+
+// GetLoansWithPagination gets loans with pagination
+func (k Keeper) GetLoansWithPagination(ctx sdk.Context, pagination *query.PageRequest) ([]*types.Loan, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	loanStore := prefix.NewStore(store, types.LoanKeyPrefix)
+
+	var loans []*types.Loan
+
+	pageRes, err := query.Paginate(loanStore, pagination, func(key []byte, value []byte) error {
+		var loan types.Loan
+		k.cdc.MustUnmarshal(value, &loan)
+
+		loans = append(loans, &loan)
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return loans, pageRes, nil
 }
 
 // GetPendingLoans gets the requested or authorized loans
@@ -113,6 +178,27 @@ func (k Keeper) IterateLoans(ctx sdk.Context, cb func(loan *types.Loan) (stop bo
 		k.cdc.MustUnmarshal(iterator.Value(), &loan)
 
 		if cb(&loan) {
+			break
+		}
+	}
+}
+
+// IterateLoansByStatus iterates through loans by the given status
+func (k Keeper) IterateLoansByStatus(ctx sdk.Context, status types.LoanStatus, cb func(loan *types.Loan) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	keyPrefix := append(types.LoanByStatusKeyPrefix, sdk.Uint64ToBigEndian(uint64(status))...)
+
+	iterator := storetypes.KVStorePrefixIterator(store, keyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		key := iterator.Key()
+
+		id := string(key[len(keyPrefix):])
+		loan := k.GetLoan(ctx, id)
+
+		if cb(loan) {
 			break
 		}
 	}
