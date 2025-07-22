@@ -122,6 +122,30 @@ func (k Keeper) GetLoansWithPagination(ctx sdk.Context, pagination *query.PageRe
 	return loans, pageRes, nil
 }
 
+// GetLoansByAddress gets loans by the given address and status with pagination
+func (k Keeper) GetLoansByAddress(ctx sdk.Context, address string, status types.LoanStatus, pagination *query.PageRequest) ([]*types.Loan, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	loanByAddressStore := prefix.NewStore(store, append(types.LoanByAddressKeyPrefix, []byte(address)...))
+
+	var loans []*types.Loan
+
+	pageRes, err := query.Paginate(loanByAddressStore, pagination, func(key []byte, value []byte) error {
+		id := string(key)
+		loan := k.GetLoan(ctx, id)
+
+		if status == types.LoanStatus_Unspecified || loan.Status == status {
+			loans = append(loans, loan)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return loans, pageRes, nil
+}
+
 // GetPendingLoans gets the requested or authorized loans
 func (k Keeper) GetPendingLoans(ctx sdk.Context) []*types.Loan {
 	var loans []*types.Loan
@@ -145,21 +169,6 @@ func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 
 	k.IterateLoans(ctx, func(loan *types.Loan) (stop bool) {
 		loans = append(loans, loan)
-		return false
-	})
-
-	return loans
-}
-
-// GetLoansByAddress gets loans by the given address and status
-func (k Keeper) GetLoansByAddress(ctx sdk.Context, address string, status types.LoanStatus) []*types.Loan {
-	var loans []*types.Loan
-
-	k.IterateLoansByAddress(ctx, address, func(loan *types.Loan) (stop bool) {
-		if status == types.LoanStatus_Unspecified || loan.Status == status {
-			loans = append(loans, loan)
-		}
-
 		return false
 	})
 
@@ -197,24 +206,6 @@ func (k Keeper) IterateLoansByStatus(ctx sdk.Context, status types.LoanStatus, c
 
 		id := string(key[len(keyPrefix):])
 		loan := k.GetLoan(ctx, id)
-
-		if cb(loan) {
-			break
-		}
-	}
-}
-
-// IterateLoansByAddress iterates through loans by the given address
-func (k Keeper) IterateLoansByAddress(ctx sdk.Context, address string, cb func(loan *types.Loan) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-
-	iterator := storetypes.KVStorePrefixIterator(store, append(types.LoanByAddressKeyPrefix, []byte(address)...))
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		key := iterator.Key()
-
-		loan := k.GetLoan(ctx, string(key[1+len(address):]))
 
 		if cb(loan) {
 			break
