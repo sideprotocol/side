@@ -126,17 +126,22 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 	m.UpdateDLCEvent(ctx, loan)
 
 	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(types.EventTypeApply,
+		sdk.NewEvent(
+			types.EventTypeApply,
 			sdk.NewAttribute(types.AttributeKeyVault, loan.VaultAddress),
 			sdk.NewAttribute(types.AttributeKeyBorrower, loan.Borrower),
+			sdk.NewAttribute(types.AttributeKeyBorrowerPubKey, loan.BorrowerPubKey),
+			sdk.NewAttribute(types.AttributeKeyBorrowerAuthPubKey, loan.BorrowerAuthPubKey),
 			sdk.NewAttribute(types.AttributeKeyDCMPubKey, loan.DCM),
 			sdk.NewAttribute(types.AttributeKeyMuturityTime, fmt.Sprint(loan.MaturityTime)),
 			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
 			sdk.NewAttribute(types.AttributeKeyPoolId, loan.PoolId),
 			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyDLCEventId, fmt.Sprintf("%d", loan.DlcEventId)),
 			sdk.NewAttribute(types.AttributeKeyOraclePubKey, dlcEvent.Pubkey),
 			sdk.NewAttribute(types.AttributeKeyReferralCode, msg.ReferralCode),
-		))
+		),
+	)
 
 	return &types.MsgApplyResponse{}, nil
 }
@@ -228,6 +233,15 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	// update dlc event
 	m.dlcKeeper.SetEvent(ctx, dlcEvent)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeAuthorize,
+			sdk.NewAttribute(types.AttributeKeyLoanId, msg.LoanId),
+			sdk.NewAttribute(types.AttributeKeyCollateralAmount, loan.CollateralAmount.String()),
+			sdk.NewAttribute(types.AttributeKeyLiquidationPrice, types.FormatPrice(loan.LiquidationPrice)),
+		),
+	)
 
 	return &types.MsgSubmitCetsResponse{}, nil
 }
