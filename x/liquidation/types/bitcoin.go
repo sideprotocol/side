@@ -84,7 +84,7 @@ func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*Liquidation
 			return nil, 0, err
 		}
 
-		txOuts = append(txOuts, wire.NewTxOut(record.CollateralAmount.Amount.Int64(), pkScript))
+		txOuts = append(txOuts, wire.NewTxOut(record.CollateralAmount.Add(record.BonusAmount).Amount.Int64(), pkScript))
 	}
 
 	protocolFeeCollectorAddr, err := btcutil.DecodeAddress(protocolFeeCollector, chainCfg)
