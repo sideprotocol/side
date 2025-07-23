@@ -117,6 +117,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 
 	m.SetLoan(ctx, loan)
 	m.SetLoanByAddress(ctx, loan)
+	m.SetLoanByOracle(ctx, loan.VaultAddress, dlcEvent.Pubkey)
 
 	// set dlc meta
 	m.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
