@@ -29,6 +29,7 @@ const (
 	Query_Loan_FullMethodName              = "/side.lending.Query/Loan"
 	Query_Loans_FullMethodName             = "/side.lending.Query/Loans"
 	Query_LoansByAddress_FullMethodName    = "/side.lending.Query/LoansByAddress"
+	Query_LoansByOracle_FullMethodName     = "/side.lending.Query/LoansByOracle"
 	Query_LoanCetInfos_FullMethodName      = "/side.lending.Query/LoanCetInfos"
 	Query_LoanDlcMeta_FullMethodName       = "/side.lending.Query/LoanDlcMeta"
 	Query_LoanAuthorization_FullMethodName = "/side.lending.Query/LoanAuthorization"
@@ -54,6 +55,7 @@ type QueryClient interface {
 	Loan(ctx context.Context, in *QueryLoanRequest, opts ...grpc.CallOption) (*QueryLoanResponse, error)
 	Loans(ctx context.Context, in *QueryLoansRequest, opts ...grpc.CallOption) (*QueryLoansResponse, error)
 	LoansByAddress(ctx context.Context, in *QueryLoansByAddressRequest, opts ...grpc.CallOption) (*QueryLoansByAddressResponse, error)
+	LoansByOracle(ctx context.Context, in *QueryLoansByOracleRequest, opts ...grpc.CallOption) (*QueryLoansByOracleResponse, error)
 	LoanCetInfos(ctx context.Context, in *QueryLoanCetInfosRequest, opts ...grpc.CallOption) (*QueryLoanCetInfosResponse, error)
 	LoanDlcMeta(ctx context.Context, in *QueryLoanDlcMetaRequest, opts ...grpc.CallOption) (*QueryLoanDlcMetaResponse, error)
 	LoanAuthorization(ctx context.Context, in *QueryLoanAuthorizationRequest, opts ...grpc.CallOption) (*QueryLoanAuthorizationResponse, error)
@@ -162,6 +164,15 @@ func (c *queryClient) LoansByAddress(ctx context.Context, in *QueryLoansByAddres
 	return out, nil
 }
 
+func (c *queryClient) LoansByOracle(ctx context.Context, in *QueryLoansByOracleRequest, opts ...grpc.CallOption) (*QueryLoansByOracleResponse, error) {
+	out := new(QueryLoansByOracleResponse)
+	err := c.cc.Invoke(ctx, Query_LoansByOracle_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) LoanCetInfos(ctx context.Context, in *QueryLoanCetInfosRequest, opts ...grpc.CallOption) (*QueryLoanCetInfosResponse, error) {
 	out := new(QueryLoanCetInfosResponse)
 	err := c.cc.Invoke(ctx, Query_LoanCetInfos_FullMethodName, in, out, opts...)
@@ -249,6 +260,7 @@ type QueryServer interface {
 	Loan(context.Context, *QueryLoanRequest) (*QueryLoanResponse, error)
 	Loans(context.Context, *QueryLoansRequest) (*QueryLoansResponse, error)
 	LoansByAddress(context.Context, *QueryLoansByAddressRequest) (*QueryLoansByAddressResponse, error)
+	LoansByOracle(context.Context, *QueryLoansByOracleRequest) (*QueryLoansByOracleResponse, error)
 	LoanCetInfos(context.Context, *QueryLoanCetInfosRequest) (*QueryLoanCetInfosResponse, error)
 	LoanDlcMeta(context.Context, *QueryLoanDlcMetaRequest) (*QueryLoanDlcMetaResponse, error)
 	LoanAuthorization(context.Context, *QueryLoanAuthorizationRequest) (*QueryLoanAuthorizationResponse, error)
@@ -293,6 +305,9 @@ func (UnimplementedQueryServer) Loans(context.Context, *QueryLoansRequest) (*Que
 }
 func (UnimplementedQueryServer) LoansByAddress(context.Context, *QueryLoansByAddressRequest) (*QueryLoansByAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoansByAddress not implemented")
+}
+func (UnimplementedQueryServer) LoansByOracle(context.Context, *QueryLoansByOracleRequest) (*QueryLoansByOracleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoansByOracle not implemented")
 }
 func (UnimplementedQueryServer) LoanCetInfos(context.Context, *QueryLoanCetInfosRequest) (*QueryLoanCetInfosResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoanCetInfos not implemented")
@@ -511,6 +526,24 @@ func _Query_LoansByAddress_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_LoansByOracle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLoansByOracleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).LoansByOracle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_LoansByOracle_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).LoansByOracle(ctx, req.(*QueryLoansByOracleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_LoanCetInfos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryLoanCetInfosRequest)
 	if err := dec(in); err != nil {
@@ -701,6 +734,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoansByAddress",
 			Handler:    _Query_LoansByAddress_Handler,
+		},
+		{
+			MethodName: "LoansByOracle",
+			Handler:    _Query_LoansByOracle_Handler,
 		},
 		{
 			MethodName: "LoanCetInfos",

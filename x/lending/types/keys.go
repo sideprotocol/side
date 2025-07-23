@@ -1,6 +1,8 @@
 package types
 
 import (
+	"encoding/hex"
+
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -33,11 +35,12 @@ var (
 	LoanKeyPrefix            = []byte{0x11}
 	LoanByStatusKeyPrefix    = []byte{0x12}
 	LoanByAddressKeyPrefix   = []byte{0x13}
-	AuthorizationIdKeyPrefix = []byte{0x14}
-	DepositLogKeyPrefix      = []byte{0x15}
-	RepaymentKeyPrefix       = []byte{0x16}
-	DLCMetaKeyPrefix         = []byte{0x17}
-	RedemptionKeyPrefix      = []byte{0x18}
+	LoanByOracleKeyPrefix    = []byte{0x14}
+	AuthorizationIdKeyPrefix = []byte{0x15}
+	DepositLogKeyPrefix      = []byte{0x16}
+	RepaymentKeyPrefix       = []byte{0x17}
+	DLCMetaKeyPrefix         = []byte{0x18}
+	RedemptionKeyPrefix      = []byte{0x19}
 
 	ReferrerKeyPrefix = []byte{0x20}
 )
@@ -58,6 +61,14 @@ func LoanByStatusKey(status LoanStatus, id string) []byte {
 
 func LoanByAddressKey(id string, address string) []byte {
 	return append(append(LoanByAddressKeyPrefix, []byte(address)...), []byte(id)...)
+}
+
+func LoanByOracleKey(oraclePubKey string, id string) []byte {
+	pubKey, _ := hex.DecodeString(oraclePubKey)
+
+	key := append(LoanByOracleKeyPrefix, pubKey...)
+
+	return append(key, []byte(id)...)
 }
 
 func AuthorizationIdKey(loanId string) []byte {

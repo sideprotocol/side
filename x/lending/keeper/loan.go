@@ -28,6 +28,13 @@ func (k Keeper) SetLoanByAddress(ctx sdk.Context, loan *types.Loan) {
 	store.Set(types.LoanByAddressKey(loan.VaultAddress, loan.Borrower), []byte{})
 }
 
+// SetLoanByOracle sets the given loan by oracle
+func (k Keeper) SetLoanByOracle(ctx sdk.Context, id string, oraclePubKey string) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.LoanByOracleKey(oraclePubKey, id), []byte{})
+}
+
 // SetLoanStatus sets the status store of the given loan
 func (k Keeper) SetLoanStatus(ctx sdk.Context, id string, status types.LoanStatus) {
 	store := ctx.KVStore(k.storeKey)
@@ -136,6 +143,28 @@ func (k Keeper) GetLoansByAddress(ctx sdk.Context, address string, status types.
 		if status == types.LoanStatus_Unspecified || loan.Status == status {
 			loans = append(loans, loan)
 		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return loans, pageRes, nil
+}
+
+// GetLoansByOracle gets loans by the given oracle with pagination
+func (k Keeper) GetLoansByOracle(ctx sdk.Context, oraclePubKey []byte, pagination *query.PageRequest) ([]*types.Loan, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	loanByOracleStore := prefix.NewStore(store, append(types.LoanByOracleKeyPrefix, oraclePubKey...))
+
+	var loans []*types.Loan
+
+	pageRes, err := query.Paginate(loanByOracleStore, pagination, func(key []byte, value []byte) error {
+		id := string(key)
+		loan := k.GetLoan(ctx, id)
+
+		loans = append(loans, loan)
 
 		return nil
 	})

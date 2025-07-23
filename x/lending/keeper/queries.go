@@ -213,6 +213,27 @@ func (k Keeper) LoansByAddress(goCtx context.Context, req *types.QueryLoansByAdd
 	return &types.QueryLoansByAddressResponse{Loans: loans, Pagination: pagination}, nil
 }
 
+// LoansByOracle implements types.QueryServer.
+func (k Keeper) LoansByOracle(goCtx context.Context, req *types.QueryLoansByOracleRequest) (*types.QueryLoansByOracleResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	oraclePubKey, err := hex.DecodeString(req.OraclePubkey)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid oracle pub key")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	loans, pagination, err := k.GetLoansByOracle(ctx, oraclePubKey, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryLoansByOracleResponse{Loans: loans, Pagination: pagination}, nil
+}
+
 // LoanCetInfos implements types.QueryServer.
 func (k Keeper) LoanCetInfos(goCtx context.Context, req *types.QueryLoanCetInfosRequest) (*types.QueryLoanCetInfosResponse, error) {
 	if req == nil {
