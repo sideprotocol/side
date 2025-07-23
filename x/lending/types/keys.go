@@ -33,16 +33,16 @@ var (
 
 	PoolKeyPrefix            = []byte{0x10}
 	LoanKeyPrefix            = []byte{0x11}
-	LoanByStatusKeyPrefix    = []byte{0x12}
-	LoanByAddressKeyPrefix   = []byte{0x13}
-	LoanByOracleKeyPrefix    = []byte{0x14}
-	AuthorizationIdKeyPrefix = []byte{0x15}
-	DepositLogKeyPrefix      = []byte{0x16}
-	RepaymentKeyPrefix       = []byte{0x17}
-	DLCMetaKeyPrefix         = []byte{0x18}
-	RedemptionKeyPrefix      = []byte{0x19}
+	LoanByAddressKeyPrefix   = []byte{0x12}
+	AuthorizationIdKeyPrefix = []byte{0x13}
+	DepositLogKeyPrefix      = []byte{0x14}
+	RepaymentKeyPrefix       = []byte{0x15}
+	DLCMetaKeyPrefix         = []byte{0x16}
+	RedemptionKeyPrefix      = []byte{0x17}
 
-	ReferrerKeyPrefix = []byte{0x20}
+	ReferrerKeyPrefix     = []byte{0x20}
+	LoanByStatusKeyPrefix = []byte{0x21}
+	LoanByOracleKeyPrefix = []byte{0x22}
 )
 
 func PoolKey(id string) []byte {

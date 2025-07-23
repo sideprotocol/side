@@ -24,9 +24,10 @@ var (
 	LiquidationRecordIdKey = []byte{0x03} // key for liquidation record id
 
 	LiquidationKeyPrefix                    = []byte{0x10} // prefix for each key to a liquidation
-	LiquidationByStatusKeyPrefix            = []byte{0x11} // prefix for each key to a liquidation by status
-	LiquidationRecordKeyPrefix              = []byte{0x12} // prefix for each key to a liquidation record
-	LiquidationRecordByLiquidationKeyPrefix = []byte{0x13} // prefix for each key to a liquidation record by liquidation
+	LiquidationRecordKeyPrefix              = []byte{0x11} // prefix for each key to a liquidation record
+	LiquidationRecordByLiquidationKeyPrefix = []byte{0x12} // prefix for each key to a liquidation record by liquidation
+
+	LiquidationByStatusKeyPrefix = []byte{0x20} // prefix for each key to a liquidation by status
 )
 
 func LiquidationKey(id uint64) []byte {
