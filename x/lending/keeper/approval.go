@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/lending/types"
@@ -19,8 +20,7 @@ func (k Keeper) HandleApproval(ctx sdk.Context, loan *types.Loan) error {
 	}
 
 	if loan.OriginationFee.IsPositive() {
-		originationFee := sdk.NewCoin(loan.BorrowAmount.Denom, loan.OriginationFee)
-		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(k.OriginationFeeCollector(ctx)), sdk.NewCoins(originationFee)); err != nil {
+		if err := k.handleOriginationFee(ctx, loan); err != nil {
 			return err
 		}
 	}
@@ -52,6 +52,31 @@ func (k Keeper) HandleApproval(ctx sdk.Context, loan *types.Loan) error {
 			sdk.NewAttribute(types.AttributeKeyAmount, amount.String()),
 		),
 	)
+
+	return nil
+}
+
+// handleOriginationFee handles the origination fee for the given loan
+func (k Keeper) handleOriginationFee(ctx sdk.Context, loan *types.Loan) error {
+	originationFee := sdk.NewCoin(loan.BorrowAmount.Denom, loan.OriginationFee)
+	referralFee := sdk.NewCoin(loan.BorrowAmount.Denom, sdkmath.ZeroInt())
+
+	if loan.Referrer != nil {
+		referralFee.Amount = originationFee.Amount.ToLegacyDec().Mul(loan.Referrer.ReferralFeeFactor).TruncateInt()
+		originationFee = originationFee.Sub(referralFee)
+	}
+
+	if originationFee.IsPositive() {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(k.OriginationFeeCollector(ctx)), sdk.NewCoins(originationFee)); err != nil {
+			return err
+		}
+	}
+
+	if referralFee.IsPositive() {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(loan.Referrer.Address), sdk.NewCoins(referralFee)); err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
