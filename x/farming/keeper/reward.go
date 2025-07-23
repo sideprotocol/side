@@ -54,19 +54,25 @@ func (k Keeper) GetRewards(ctx sdk.Context, address string) (sdk.Coin, sdk.Coin)
 
 // GetEstimatedReward gets the estimated epoch reward for the given params
 // Assume that the given params are valid
-func (k Keeper) GetEstimatedReward(ctx sdk.Context, amount sdk.Coin, lockDuration time.Duration) sdk.Coin {
+func (k Keeper) GetEstimatedReward(ctx sdk.Context, address string, amount sdk.Coin, lockDuration time.Duration) *types.AccountRewardPerEpoch {
 	nextEpoch := k.GetNextEpochSnapshot(ctx)
 
 	staking := &types.Staking{
+		Address:         address,
 		Amount:          amount,
 		EffectiveAmount: types.GetEffectiveAmount(amount, types.GetLockMultiplier(lockDuration)),
 	}
 
 	types.UpdateEpochTotalStakings(nextEpoch, staking)
 
-	asset := types.GetAsset(k.EligibleAssets(ctx), staking.Amount.Denom)
+	totalStakings := []types.TotalStaking{}
+	for _, staking := range k.GetStakingsByAddress(ctx, address) {
+		if !staking.StartTime.Add(staking.LockDuration).Before(nextEpoch.StartTime) {
+			totalStakings = types.UpdateAccountTotalStakings(totalStakings, staking)
+		}
+	}
 
-	return types.GetEpochReward(ctx, staking, nextEpoch, k.RewardPerEpoch(ctx), asset.RewardRatio)
+	return types.GetAccountRewardPerEpoch(address, totalStakings, nextEpoch, k.RewardPerEpoch(ctx), k.EligibleAssets(ctx))
 }
 
 // ClaimAllRewards claims all pending rewards of the given address

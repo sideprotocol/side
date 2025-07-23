@@ -137,12 +137,17 @@ func (k Keeper) PendingRewardByAddress(goCtx context.Context, req *types.QueryPe
 	return &types.QueryPendingRewardByAddressResponse{PendingReward: k.GetPendingRewardByAddress(ctx, req.Address)}, nil
 }
 
-func (k Keeper) EstimateReward(goCtx context.Context, req *types.QueryEstimateRewardRequest) (*types.QueryEstimateRewardResponse, error) {
+func (k Keeper) EstimatedReward(goCtx context.Context, req *types.QueryEstimatedRewardRequest) (*types.QueryEstimatedRewardResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	_, err := sdk.AccAddressFromBech32(req.Address)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid address")
+	}
 
 	amount, err := sdk.ParseCoinNormalized(req.Amount)
 	if err != nil || !amount.IsPositive() {
@@ -157,7 +162,7 @@ func (k Keeper) EstimateReward(goCtx context.Context, req *types.QueryEstimateRe
 		return nil, status.Error(codes.InvalidArgument, "invalid lock duration")
 	}
 
-	estimatedReward := k.GetEstimatedReward(ctx, amount, req.LockDuration)
+	estimatedReward := k.GetEstimatedReward(ctx, req.Address, amount, req.LockDuration)
 
-	return &types.QueryEstimateRewardResponse{Reward: estimatedReward.String()}, nil
+	return &types.QueryEstimatedRewardResponse{Reward: estimatedReward}, nil
 }
