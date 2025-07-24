@@ -21,6 +21,15 @@ message DLCOracle {
     DLCOracleStatus status = 7;
 }
 
+message DLCOracleV1 {
+    uint64 id = 1;
+    string desc = 2;
+    string pubkey = 3;
+    uint64 nonce_index = 4;
+    google.protobuf.Timestamp time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    DLCOracleStatus status = 6;
+}
+
 enum DCMStatus {
     DCM_status_Enable = 0;
     DCM_status_Disable = 1;
@@ -33,6 +42,14 @@ message DCM {
     string pubkey = 4;
     google.protobuf.Timestamp time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
     DCMStatus status = 6;
+}
+
+message DCMV1 {
+    uint64 id = 1;
+    string desc = 2;
+    string pubkey = 3;
+    google.protobuf.Timestamp time = 4 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    DCMStatus status = 5;
 }
 
 message DLCNonce {

@@ -770,6 +770,713 @@ func (x *fastReflection_DLCOracle) ProtoMethods() *protoiface.Methods {
 }
 
 var (
+	md_DLCOracleV1             protoreflect.MessageDescriptor
+	fd_DLCOracleV1_id          protoreflect.FieldDescriptor
+	fd_DLCOracleV1_desc        protoreflect.FieldDescriptor
+	fd_DLCOracleV1_pubkey      protoreflect.FieldDescriptor
+	fd_DLCOracleV1_nonce_index protoreflect.FieldDescriptor
+	fd_DLCOracleV1_time        protoreflect.FieldDescriptor
+	fd_DLCOracleV1_status      protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_dlc_dlc_proto_init()
+	md_DLCOracleV1 = File_side_dlc_dlc_proto.Messages().ByName("DLCOracleV1")
+	fd_DLCOracleV1_id = md_DLCOracleV1.Fields().ByName("id")
+	fd_DLCOracleV1_desc = md_DLCOracleV1.Fields().ByName("desc")
+	fd_DLCOracleV1_pubkey = md_DLCOracleV1.Fields().ByName("pubkey")
+	fd_DLCOracleV1_nonce_index = md_DLCOracleV1.Fields().ByName("nonce_index")
+	fd_DLCOracleV1_time = md_DLCOracleV1.Fields().ByName("time")
+	fd_DLCOracleV1_status = md_DLCOracleV1.Fields().ByName("status")
+}
+
+var _ protoreflect.Message = (*fastReflection_DLCOracleV1)(nil)
+
+type fastReflection_DLCOracleV1 DLCOracleV1
+
+func (x *DLCOracleV1) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DLCOracleV1)(x)
+}
+
+func (x *DLCOracleV1) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_dlc_dlc_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_DLCOracleV1_messageType fastReflection_DLCOracleV1_messageType
+var _ protoreflect.MessageType = fastReflection_DLCOracleV1_messageType{}
+
+type fastReflection_DLCOracleV1_messageType struct{}
+
+func (x fastReflection_DLCOracleV1_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DLCOracleV1)(nil)
+}
+func (x fastReflection_DLCOracleV1_messageType) New() protoreflect.Message {
+	return new(fastReflection_DLCOracleV1)
+}
+func (x fastReflection_DLCOracleV1_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DLCOracleV1
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_DLCOracleV1) Descriptor() protoreflect.MessageDescriptor {
+	return md_DLCOracleV1
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_DLCOracleV1) Type() protoreflect.MessageType {
+	return _fastReflection_DLCOracleV1_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_DLCOracleV1) New() protoreflect.Message {
+	return new(fastReflection_DLCOracleV1)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_DLCOracleV1) Interface() protoreflect.ProtoMessage {
+	return (*DLCOracleV1)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_DLCOracleV1) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_DLCOracleV1_id, value) {
+			return
+		}
+	}
+	if x.Desc != "" {
+		value := protoreflect.ValueOfString(x.Desc)
+		if !f(fd_DLCOracleV1_desc, value) {
+			return
+		}
+	}
+	if x.Pubkey != "" {
+		value := protoreflect.ValueOfString(x.Pubkey)
+		if !f(fd_DLCOracleV1_pubkey, value) {
+			return
+		}
+	}
+	if x.NonceIndex != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.NonceIndex)
+		if !f(fd_DLCOracleV1_nonce_index, value) {
+			return
+		}
+	}
+	if x.Time != nil {
+		value := protoreflect.ValueOfMessage(x.Time.ProtoReflect())
+		if !f(fd_DLCOracleV1_time, value) {
+			return
+		}
+	}
+	if x.Status != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
+		if !f(fd_DLCOracleV1_status, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_DLCOracleV1) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.dlc.DLCOracleV1.id":
+		return x.Id != uint64(0)
+	case "side.dlc.DLCOracleV1.desc":
+		return x.Desc != ""
+	case "side.dlc.DLCOracleV1.pubkey":
+		return x.Pubkey != ""
+	case "side.dlc.DLCOracleV1.nonce_index":
+		return x.NonceIndex != uint64(0)
+	case "side.dlc.DLCOracleV1.time":
+		return x.Time != nil
+	case "side.dlc.DLCOracleV1.status":
+		return x.Status != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DLCOracleV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DLCOracleV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DLCOracleV1) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.dlc.DLCOracleV1.id":
+		x.Id = uint64(0)
+	case "side.dlc.DLCOracleV1.desc":
+		x.Desc = ""
+	case "side.dlc.DLCOracleV1.pubkey":
+		x.Pubkey = ""
+	case "side.dlc.DLCOracleV1.nonce_index":
+		x.NonceIndex = uint64(0)
+	case "side.dlc.DLCOracleV1.time":
+		x.Time = nil
+	case "side.dlc.DLCOracleV1.status":
+		x.Status = 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DLCOracleV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DLCOracleV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_DLCOracleV1) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.dlc.DLCOracleV1.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	case "side.dlc.DLCOracleV1.desc":
+		value := x.Desc
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.DLCOracleV1.pubkey":
+		value := x.Pubkey
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.DLCOracleV1.nonce_index":
+		value := x.NonceIndex
+		return protoreflect.ValueOfUint64(value)
+	case "side.dlc.DLCOracleV1.time":
+		value := x.Time
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.dlc.DLCOracleV1.status":
+		value := x.Status
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DLCOracleV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DLCOracleV1 does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DLCOracleV1) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.dlc.DLCOracleV1.id":
+		x.Id = value.Uint()
+	case "side.dlc.DLCOracleV1.desc":
+		x.Desc = value.Interface().(string)
+	case "side.dlc.DLCOracleV1.pubkey":
+		x.Pubkey = value.Interface().(string)
+	case "side.dlc.DLCOracleV1.nonce_index":
+		x.NonceIndex = value.Uint()
+	case "side.dlc.DLCOracleV1.time":
+		x.Time = value.Message().Interface().(*timestamppb.Timestamp)
+	case "side.dlc.DLCOracleV1.status":
+		x.Status = (DLCOracleStatus)(value.Enum())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DLCOracleV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DLCOracleV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DLCOracleV1) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.DLCOracleV1.time":
+		if x.Time == nil {
+			x.Time = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.Time.ProtoReflect())
+	case "side.dlc.DLCOracleV1.id":
+		panic(fmt.Errorf("field id of message side.dlc.DLCOracleV1 is not mutable"))
+	case "side.dlc.DLCOracleV1.desc":
+		panic(fmt.Errorf("field desc of message side.dlc.DLCOracleV1 is not mutable"))
+	case "side.dlc.DLCOracleV1.pubkey":
+		panic(fmt.Errorf("field pubkey of message side.dlc.DLCOracleV1 is not mutable"))
+	case "side.dlc.DLCOracleV1.nonce_index":
+		panic(fmt.Errorf("field nonce_index of message side.dlc.DLCOracleV1 is not mutable"))
+	case "side.dlc.DLCOracleV1.status":
+		panic(fmt.Errorf("field status of message side.dlc.DLCOracleV1 is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DLCOracleV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DLCOracleV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_DLCOracleV1) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.DLCOracleV1.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.dlc.DLCOracleV1.desc":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.DLCOracleV1.pubkey":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.DLCOracleV1.nonce_index":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.dlc.DLCOracleV1.time":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.dlc.DLCOracleV1.status":
+		return protoreflect.ValueOfEnum(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DLCOracleV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DLCOracleV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_DLCOracleV1) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.DLCOracleV1", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_DLCOracleV1) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DLCOracleV1) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_DLCOracleV1) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_DLCOracleV1) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*DLCOracleV1)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
+		l = len(x.Desc)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Pubkey)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.NonceIndex != 0 {
+			n += 1 + runtime.Sov(uint64(x.NonceIndex))
+		}
+		if x.Time != nil {
+			l = options.Size(x.Time)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*DLCOracleV1)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x30
+		}
+		if x.Time != nil {
+			encoded, err := options.Marshal(x.Time)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if x.NonceIndex != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.NonceIndex))
+			i--
+			dAtA[i] = 0x20
+		}
+		if len(x.Pubkey) > 0 {
+			i -= len(x.Pubkey)
+			copy(dAtA[i:], x.Pubkey)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Pubkey)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Desc) > 0 {
+			i -= len(x.Desc)
+			copy(dAtA[i:], x.Desc)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Desc)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*DLCOracleV1)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DLCOracleV1: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DLCOracleV1: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Desc", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Desc = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pubkey", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Pubkey = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NonceIndex", wireType)
+				}
+				x.NonceIndex = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.NonceIndex |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Time", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Time == nil {
+					x.Time = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Time); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 6:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= DLCOracleStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_DCM        protoreflect.MessageDescriptor
 	fd_DCM_id     protoreflect.FieldDescriptor
 	fd_DCM_dkg_id protoreflect.FieldDescriptor
@@ -799,7 +1506,7 @@ func (x *DCM) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DCM) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_dlc_dlc_proto_msgTypes[1]
+	mi := &file_side_dlc_dlc_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1477,6 +2184,665 @@ func (x *fastReflection_DCM) ProtoMethods() *protoiface.Methods {
 }
 
 var (
+	md_DCMV1        protoreflect.MessageDescriptor
+	fd_DCMV1_id     protoreflect.FieldDescriptor
+	fd_DCMV1_desc   protoreflect.FieldDescriptor
+	fd_DCMV1_pubkey protoreflect.FieldDescriptor
+	fd_DCMV1_time   protoreflect.FieldDescriptor
+	fd_DCMV1_status protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_dlc_dlc_proto_init()
+	md_DCMV1 = File_side_dlc_dlc_proto.Messages().ByName("DCMV1")
+	fd_DCMV1_id = md_DCMV1.Fields().ByName("id")
+	fd_DCMV1_desc = md_DCMV1.Fields().ByName("desc")
+	fd_DCMV1_pubkey = md_DCMV1.Fields().ByName("pubkey")
+	fd_DCMV1_time = md_DCMV1.Fields().ByName("time")
+	fd_DCMV1_status = md_DCMV1.Fields().ByName("status")
+}
+
+var _ protoreflect.Message = (*fastReflection_DCMV1)(nil)
+
+type fastReflection_DCMV1 DCMV1
+
+func (x *DCMV1) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DCMV1)(x)
+}
+
+func (x *DCMV1) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_dlc_dlc_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_DCMV1_messageType fastReflection_DCMV1_messageType
+var _ protoreflect.MessageType = fastReflection_DCMV1_messageType{}
+
+type fastReflection_DCMV1_messageType struct{}
+
+func (x fastReflection_DCMV1_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DCMV1)(nil)
+}
+func (x fastReflection_DCMV1_messageType) New() protoreflect.Message {
+	return new(fastReflection_DCMV1)
+}
+func (x fastReflection_DCMV1_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DCMV1
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_DCMV1) Descriptor() protoreflect.MessageDescriptor {
+	return md_DCMV1
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_DCMV1) Type() protoreflect.MessageType {
+	return _fastReflection_DCMV1_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_DCMV1) New() protoreflect.Message {
+	return new(fastReflection_DCMV1)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_DCMV1) Interface() protoreflect.ProtoMessage {
+	return (*DCMV1)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_DCMV1) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_DCMV1_id, value) {
+			return
+		}
+	}
+	if x.Desc != "" {
+		value := protoreflect.ValueOfString(x.Desc)
+		if !f(fd_DCMV1_desc, value) {
+			return
+		}
+	}
+	if x.Pubkey != "" {
+		value := protoreflect.ValueOfString(x.Pubkey)
+		if !f(fd_DCMV1_pubkey, value) {
+			return
+		}
+	}
+	if x.Time != nil {
+		value := protoreflect.ValueOfMessage(x.Time.ProtoReflect())
+		if !f(fd_DCMV1_time, value) {
+			return
+		}
+	}
+	if x.Status != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
+		if !f(fd_DCMV1_status, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_DCMV1) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.dlc.DCMV1.id":
+		return x.Id != uint64(0)
+	case "side.dlc.DCMV1.desc":
+		return x.Desc != ""
+	case "side.dlc.DCMV1.pubkey":
+		return x.Pubkey != ""
+	case "side.dlc.DCMV1.time":
+		return x.Time != nil
+	case "side.dlc.DCMV1.status":
+		return x.Status != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DCMV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DCMV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DCMV1) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.dlc.DCMV1.id":
+		x.Id = uint64(0)
+	case "side.dlc.DCMV1.desc":
+		x.Desc = ""
+	case "side.dlc.DCMV1.pubkey":
+		x.Pubkey = ""
+	case "side.dlc.DCMV1.time":
+		x.Time = nil
+	case "side.dlc.DCMV1.status":
+		x.Status = 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DCMV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DCMV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_DCMV1) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.dlc.DCMV1.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	case "side.dlc.DCMV1.desc":
+		value := x.Desc
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.DCMV1.pubkey":
+		value := x.Pubkey
+		return protoreflect.ValueOfString(value)
+	case "side.dlc.DCMV1.time":
+		value := x.Time
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.dlc.DCMV1.status":
+		value := x.Status
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DCMV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DCMV1 does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DCMV1) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.dlc.DCMV1.id":
+		x.Id = value.Uint()
+	case "side.dlc.DCMV1.desc":
+		x.Desc = value.Interface().(string)
+	case "side.dlc.DCMV1.pubkey":
+		x.Pubkey = value.Interface().(string)
+	case "side.dlc.DCMV1.time":
+		x.Time = value.Message().Interface().(*timestamppb.Timestamp)
+	case "side.dlc.DCMV1.status":
+		x.Status = (DCMStatus)(value.Enum())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DCMV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DCMV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DCMV1) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.DCMV1.time":
+		if x.Time == nil {
+			x.Time = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.Time.ProtoReflect())
+	case "side.dlc.DCMV1.id":
+		panic(fmt.Errorf("field id of message side.dlc.DCMV1 is not mutable"))
+	case "side.dlc.DCMV1.desc":
+		panic(fmt.Errorf("field desc of message side.dlc.DCMV1 is not mutable"))
+	case "side.dlc.DCMV1.pubkey":
+		panic(fmt.Errorf("field pubkey of message side.dlc.DCMV1 is not mutable"))
+	case "side.dlc.DCMV1.status":
+		panic(fmt.Errorf("field status of message side.dlc.DCMV1 is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DCMV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DCMV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_DCMV1) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.dlc.DCMV1.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "side.dlc.DCMV1.desc":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.DCMV1.pubkey":
+		return protoreflect.ValueOfString("")
+	case "side.dlc.DCMV1.time":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.dlc.DCMV1.status":
+		return protoreflect.ValueOfEnum(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.dlc.DCMV1"))
+		}
+		panic(fmt.Errorf("message side.dlc.DCMV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_DCMV1) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.dlc.DCMV1", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_DCMV1) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DCMV1) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_DCMV1) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_DCMV1) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*DCMV1)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
+		l = len(x.Desc)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Pubkey)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Time != nil {
+			l = options.Size(x.Time)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*DCMV1)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x28
+		}
+		if x.Time != nil {
+			encoded, err := options.Marshal(x.Time)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.Pubkey) > 0 {
+			i -= len(x.Pubkey)
+			copy(dAtA[i:], x.Pubkey)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Pubkey)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Desc) > 0 {
+			i -= len(x.Desc)
+			copy(dAtA[i:], x.Desc)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Desc)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*DCMV1)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DCMV1: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DCMV1: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Desc", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Desc = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pubkey", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Pubkey = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Time", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Time == nil {
+					x.Time = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Time); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= DCMStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_DLCNonce               protoreflect.MessageDescriptor
 	fd_DLCNonce_index         protoreflect.FieldDescriptor
 	fd_DLCNonce_nonce         protoreflect.FieldDescriptor
@@ -1502,7 +2868,7 @@ func (x *DLCNonce) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DLCNonce) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_dlc_dlc_proto_msgTypes[2]
+	mi := &file_side_dlc_dlc_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2171,7 +3537,7 @@ func (x *DLCEvent) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DLCEvent) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_dlc_dlc_proto_msgTypes[3]
+	mi := &file_side_dlc_dlc_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3145,7 +4511,7 @@ func (x *DLCAttestation) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DLCAttestation) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_dlc_dlc_proto_msgTypes[4]
+	mi := &file_side_dlc_dlc_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3864,7 +5230,7 @@ func (x *OracleParticipantLiveness) ProtoReflect() protoreflect.Message {
 }
 
 func (x *OracleParticipantLiveness) slowProtoReflect() protoreflect.Message {
-	mi := &file_side_dlc_dlc_proto_msgTypes[5]
+	mi := &file_side_dlc_dlc_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4745,6 +6111,81 @@ func (x *DLCOracle) GetStatus() DLCOracleStatus {
 	return DLCOracleStatus_Oracle_status_Enable
 }
 
+type DLCOracleV1 struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id         uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Desc       string                 `protobuf:"bytes,2,opt,name=desc,proto3" json:"desc,omitempty"`
+	Pubkey     string                 `protobuf:"bytes,3,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	NonceIndex uint64                 `protobuf:"varint,4,opt,name=nonce_index,json=nonceIndex,proto3" json:"nonce_index,omitempty"`
+	Time       *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=time,proto3" json:"time,omitempty"`
+	Status     DLCOracleStatus        `protobuf:"varint,6,opt,name=status,proto3,enum=side.dlc.DLCOracleStatus" json:"status,omitempty"`
+}
+
+func (x *DLCOracleV1) Reset() {
+	*x = DLCOracleV1{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_dlc_dlc_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DLCOracleV1) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DLCOracleV1) ProtoMessage() {}
+
+// Deprecated: Use DLCOracleV1.ProtoReflect.Descriptor instead.
+func (*DLCOracleV1) Descriptor() ([]byte, []int) {
+	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *DLCOracleV1) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DLCOracleV1) GetDesc() string {
+	if x != nil {
+		return x.Desc
+	}
+	return ""
+}
+
+func (x *DLCOracleV1) GetPubkey() string {
+	if x != nil {
+		return x.Pubkey
+	}
+	return ""
+}
+
+func (x *DLCOracleV1) GetNonceIndex() uint64 {
+	if x != nil {
+		return x.NonceIndex
+	}
+	return 0
+}
+
+func (x *DLCOracleV1) GetTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Time
+	}
+	return nil
+}
+
+func (x *DLCOracleV1) GetStatus() DLCOracleStatus {
+	if x != nil {
+		return x.Status
+	}
+	return DLCOracleStatus_Oracle_status_Enable
+}
+
 type DCM struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -4761,7 +6202,7 @@ type DCM struct {
 func (x *DCM) Reset() {
 	*x = DCM{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_dlc_dlc_proto_msgTypes[1]
+		mi := &file_side_dlc_dlc_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4775,7 +6216,7 @@ func (*DCM) ProtoMessage() {}
 
 // Deprecated: Use DCM.ProtoReflect.Descriptor instead.
 func (*DCM) Descriptor() ([]byte, []int) {
-	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{1}
+	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *DCM) GetId() uint64 {
@@ -4820,6 +6261,73 @@ func (x *DCM) GetStatus() DCMStatus {
 	return DCMStatus_DCM_status_Enable
 }
 
+type DCMV1 struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id     uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Desc   string                 `protobuf:"bytes,2,opt,name=desc,proto3" json:"desc,omitempty"`
+	Pubkey string                 `protobuf:"bytes,3,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	Time   *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=time,proto3" json:"time,omitempty"`
+	Status DCMStatus              `protobuf:"varint,5,opt,name=status,proto3,enum=side.dlc.DCMStatus" json:"status,omitempty"`
+}
+
+func (x *DCMV1) Reset() {
+	*x = DCMV1{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_dlc_dlc_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DCMV1) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DCMV1) ProtoMessage() {}
+
+// Deprecated: Use DCMV1.ProtoReflect.Descriptor instead.
+func (*DCMV1) Descriptor() ([]byte, []int) {
+	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *DCMV1) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DCMV1) GetDesc() string {
+	if x != nil {
+		return x.Desc
+	}
+	return ""
+}
+
+func (x *DCMV1) GetPubkey() string {
+	if x != nil {
+		return x.Pubkey
+	}
+	return ""
+}
+
+func (x *DCMV1) GetTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Time
+	}
+	return nil
+}
+
+func (x *DCMV1) GetStatus() DCMStatus {
+	if x != nil {
+		return x.Status
+	}
+	return DCMStatus_DCM_status_Enable
+}
+
 type DLCNonce struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -4834,7 +6342,7 @@ type DLCNonce struct {
 func (x *DLCNonce) Reset() {
 	*x = DLCNonce{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_dlc_dlc_proto_msgTypes[2]
+		mi := &file_side_dlc_dlc_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4848,7 +6356,7 @@ func (*DLCNonce) ProtoMessage() {}
 
 // Deprecated: Use DLCNonce.ProtoReflect.Descriptor instead.
 func (*DLCNonce) Descriptor() ([]byte, []int) {
-	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{2}
+	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DLCNonce) GetIndex() uint64 {
@@ -4899,7 +6407,7 @@ type DLCEvent struct {
 func (x *DLCEvent) Reset() {
 	*x = DLCEvent{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_dlc_dlc_proto_msgTypes[3]
+		mi := &file_side_dlc_dlc_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4913,7 +6421,7 @@ func (*DLCEvent) ProtoMessage() {}
 
 // Deprecated: Use DLCEvent.ProtoReflect.Descriptor instead.
 func (*DLCEvent) Descriptor() ([]byte, []int) {
-	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{3}
+	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DLCEvent) GetId() uint64 {
@@ -5002,7 +6510,7 @@ type DLCAttestation struct {
 func (x *DLCAttestation) Reset() {
 	*x = DLCAttestation{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_dlc_dlc_proto_msgTypes[4]
+		mi := &file_side_dlc_dlc_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5016,7 +6524,7 @@ func (*DLCAttestation) ProtoMessage() {}
 
 // Deprecated: Use DLCAttestation.ProtoReflect.Descriptor instead.
 func (*DLCAttestation) Descriptor() ([]byte, []int) {
-	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{4}
+	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *DLCAttestation) GetId() uint64 {
@@ -5080,7 +6588,7 @@ type OracleParticipantLiveness struct {
 func (x *OracleParticipantLiveness) Reset() {
 	*x = OracleParticipantLiveness{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_side_dlc_dlc_proto_msgTypes[5]
+		mi := &file_side_dlc_dlc_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5094,7 +6602,7 @@ func (*OracleParticipantLiveness) ProtoMessage() {}
 
 // Deprecated: Use OracleParticipantLiveness.ProtoReflect.Descriptor instead.
 func (*OracleParticipantLiveness) Descriptor() ([]byte, []int) {
-	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{5}
+	return file_side_dlc_dlc_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *OracleParticipantLiveness) GetConsensusPubkey() string {
@@ -5148,110 +6656,134 @@ var file_side_dlc_dlc_proto_rawDesc = []byte{
 	0x65, 0x12, 0x31, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x07, 0x20, 0x01, 0x28,
 	0x0e, 0x32, 0x19, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x44, 0x4c, 0x43,
 	0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x22, 0xbf, 0x01, 0x0a, 0x03, 0x44, 0x43, 0x4d, 0x12, 0x0e, 0x0a, 0x02,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x15, 0x0a, 0x06,
-	0x64, 0x6b, 0x67, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x64, 0x6b,
-	0x67, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x65, 0x73, 0x63, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x64, 0x65, 0x73, 0x63, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65,
-	0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12,
-	0x38, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
+	0x61, 0x74, 0x75, 0x73, 0x22, 0xd7, 0x01, 0x0a, 0x0b, 0x44, 0x4c, 0x43, 0x4f, 0x72, 0x61, 0x63,
+	0x6c, 0x65, 0x56, 0x31, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x65, 0x73, 0x63, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x04, 0x64, 0x65, 0x73, 0x63, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b,
+	0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79,
+	0x12, 0x1f, 0x0a, 0x0b, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x49, 0x6e, 0x64, 0x65,
+	0x78, 0x12, 0x38, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f,
+	0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x31, 0x0a, 0x06, 0x73,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x19, 0x2e, 0x73, 0x69,
+	0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x44, 0x4c, 0x43, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0xbf,
+	0x01, 0x0a, 0x03, 0x44, 0x43, 0x4d, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x15, 0x0a, 0x06, 0x64, 0x6b, 0x67, 0x5f, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x64, 0x6b, 0x67, 0x49, 0x64, 0x12, 0x12, 0x0a,
+	0x04, 0x64, 0x65, 0x73, 0x63, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x64, 0x65, 0x73,
+	0x63, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x38, 0x0a, 0x04, 0x74, 0x69, 0x6d,
+	0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74,
+	0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x04, 0x74,
+	0x69, 0x6d, 0x65, 0x12, 0x2b, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x0e, 0x32, 0x13, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x44,
+	0x43, 0x4d, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x22, 0xaa, 0x01, 0x0a, 0x05, 0x44, 0x43, 0x4d, 0x56, 0x31, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x65,
+	0x73, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x64, 0x65, 0x73, 0x63, 0x12, 0x16,
+	0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x38, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70,
+	0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65,
+	0x12, 0x2b, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x13, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x44, 0x43, 0x4d, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x95, 0x01,
+	0x0a, 0x08, 0x44, 0x4c, 0x43, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6e,
+	0x64, 0x65, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x69, 0x6e, 0x64, 0x65, 0x78,
+	0x12, 0x14, 0x0a, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65,
+	0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x6f,
+	0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x38, 0x0a, 0x04, 0x74,
+	0x69, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65,
+	0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52,
+	0x04, 0x74, 0x69, 0x6d, 0x65, 0x22, 0x86, 0x03, 0x0a, 0x08, 0x44, 0x4c, 0x43, 0x45, 0x76, 0x65,
+	0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02,
+	0x69, 0x64, 0x12, 0x2a, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x44, 0x6c, 0x63, 0x45,
+	0x76, 0x65, 0x6e, 0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x14,
+	0x0a, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6e,
+	0x6f, 0x6e, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x20, 0x0a, 0x0b,
+	0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1a,
+	0x0a, 0x08, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09,
+	0x52, 0x08, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x68, 0x61,
+	0x73, 0x5f, 0x74, 0x72, 0x69, 0x67, 0x67, 0x65, 0x72, 0x65, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28,
+	0x08, 0x52, 0x0c, 0x68, 0x61, 0x73, 0x54, 0x72, 0x69, 0x67, 0x67, 0x65, 0x72, 0x65, 0x64, 0x12,
+	0x23, 0x0a, 0x0d, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78,
+	0x18, 0x08, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0c, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x49,
+	0x6e, 0x64, 0x65, 0x78, 0x12, 0x43, 0x0a, 0x0a, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x5f,
+	0x61, 0x74, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73,
+	0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x09,
+	0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x41, 0x74, 0x12, 0x43, 0x0a, 0x0a, 0x74, 0x72, 0x69,
+	0x67, 0x67, 0x65, 0x72, 0x5f, 0x61, 0x74, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
 	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
 	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90,
-	0xdf, 0x1f, 0x01, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x2b, 0x0a, 0x06, 0x73, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x13, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x44, 0x43, 0x4d, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06,
-	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x95, 0x01, 0x0a, 0x08, 0x44, 0x4c, 0x43, 0x4e, 0x6f,
-	0x6e, 0x63, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x05, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x14, 0x0a, 0x05, 0x6e, 0x6f, 0x6e,
-	0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x12,
-	0x23, 0x0a, 0x0d, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x75,
-	0x62, 0x6b, 0x65, 0x79, 0x12, 0x38, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08,
-	0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x22, 0x86,
-	0x03, 0x0a, 0x08, 0x44, 0x4c, 0x43, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69,
-	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x2a, 0x0a, 0x04, 0x74,
-	0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x16, 0x2e, 0x73, 0x69, 0x64, 0x65,
-	0x2e, 0x64, 0x6c, 0x63, 0x2e, 0x44, 0x6c, 0x63, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x54, 0x79, 0x70,
-	0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x12, 0x16, 0x0a,
-	0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70,
-	0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70,
-	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63,
-	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x6f, 0x75, 0x74, 0x63, 0x6f,
-	0x6d, 0x65, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x52, 0x08, 0x6f, 0x75, 0x74, 0x63, 0x6f,
-	0x6d, 0x65, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x68, 0x61, 0x73, 0x5f, 0x74, 0x72, 0x69, 0x67, 0x67,
-	0x65, 0x72, 0x65, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0c, 0x68, 0x61, 0x73, 0x54,
-	0x72, 0x69, 0x67, 0x67, 0x65, 0x72, 0x65, 0x64, 0x12, 0x23, 0x0a, 0x0d, 0x6f, 0x75, 0x74, 0x63,
-	0x6f, 0x6d, 0x65, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x08, 0x20, 0x01, 0x28, 0x05, 0x52,
-	0x0c, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x43, 0x0a,
-	0x0a, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x5f, 0x61, 0x74, 0x18, 0x09, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8,
-	0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x09, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68,
-	0x41, 0x74, 0x12, 0x43, 0x0a, 0x0a, 0x74, 0x72, 0x69, 0x67, 0x67, 0x65, 0x72, 0x5f, 0x61, 0x74,
-	0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
-	0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x09, 0x74, 0x72,
-	0x69, 0x67, 0x67, 0x65, 0x72, 0x41, 0x74, 0x22, 0xc5, 0x01, 0x0a, 0x0e, 0x44, 0x4c, 0x43, 0x41,
-	0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76,
-	0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x65, 0x76,
-	0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x12,
-	0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61,
-	0x74, 0x75, 0x72, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e,
-	0x61, 0x74, 0x75, 0x72, 0x65, 0x12, 0x38, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x06, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42,
-	0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x22,
-	0xad, 0x01, 0x0a, 0x19, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x61, 0x72, 0x74, 0x69, 0x63,
-	0x69, 0x70, 0x61, 0x6e, 0x74, 0x4c, 0x69, 0x76, 0x65, 0x6e, 0x65, 0x73, 0x73, 0x12, 0x29, 0x0a,
-	0x10, 0x63, 0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65,
-	0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73,
-	0x75, 0x73, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x19, 0x0a, 0x08, 0x69, 0x73, 0x5f, 0x61,
-	0x6c, 0x69, 0x76, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x69, 0x73, 0x41, 0x6c,
-	0x69, 0x76, 0x65, 0x12, 0x1e, 0x0a, 0x0b, 0x6c, 0x61, 0x73, 0x74, 0x5f, 0x64, 0x6b, 0x67, 0x5f,
-	0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x6c, 0x61, 0x73, 0x74, 0x44, 0x6b,
-	0x67, 0x49, 0x64, 0x12, 0x2a, 0x0a, 0x11, 0x6c, 0x61, 0x73, 0x74, 0x5f, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x5f, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0f,
-	0x6c, 0x61, 0x73, 0x74, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65, 0x69, 0x67, 0x68, 0x74, 0x2a,
-	0x46, 0x0a, 0x0f, 0x44, 0x4c, 0x43, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x53, 0x74, 0x61, 0x74,
-	0x75, 0x73, 0x12, 0x18, 0x0a, 0x14, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x5f, 0x73, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x5f, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x00, 0x12, 0x19, 0x0a, 0x15,
-	0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x5f, 0x44, 0x69,
-	0x73, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x01, 0x2a, 0x3a, 0x0a, 0x09, 0x44, 0x43, 0x4d, 0x53, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x12, 0x15, 0x0a, 0x11, 0x44, 0x43, 0x4d, 0x5f, 0x73, 0x74, 0x61, 0x74,
-	0x75, 0x73, 0x5f, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x00, 0x12, 0x16, 0x0a, 0x12, 0x44,
-	0x43, 0x4d, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x5f, 0x44, 0x69, 0x73, 0x61, 0x62, 0x6c,
-	0x65, 0x10, 0x01, 0x2a, 0x41, 0x0a, 0x0c, 0x44, 0x6c, 0x63, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x54,
-	0x79, 0x70, 0x65, 0x12, 0x0f, 0x0a, 0x0b, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49,
-	0x45, 0x44, 0x10, 0x00, 0x12, 0x09, 0x0a, 0x05, 0x50, 0x52, 0x49, 0x43, 0x45, 0x10, 0x01, 0x12,
-	0x08, 0x0a, 0x04, 0x44, 0x41, 0x54, 0x45, 0x10, 0x02, 0x12, 0x0b, 0x0a, 0x07, 0x4c, 0x45, 0x4e,
-	0x44, 0x49, 0x4e, 0x47, 0x10, 0x03, 0x2a, 0x2b, 0x0a, 0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e,
-	0x67, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x1a, 0x0a, 0x16, 0x53, 0x49, 0x47, 0x4e, 0x49,
-	0x4e, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x44, 0x45, 0x46, 0x41, 0x55, 0x4c,
-	0x54, 0x10, 0x00, 0x2a, 0x8f, 0x01, 0x0a, 0x09, 0x44, 0x4b, 0x47, 0x49, 0x6e, 0x74, 0x65, 0x6e,
-	0x74, 0x12, 0x16, 0x0a, 0x12, 0x44, 0x4b, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f,
-	0x44, 0x45, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x10, 0x00, 0x12, 0x21, 0x0a, 0x1c, 0x44, 0x4b, 0x47,
-	0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x50, 0x52, 0x49, 0x43, 0x45, 0x5f, 0x45, 0x56,
-	0x45, 0x4e, 0x54, 0x5f, 0x4e, 0x4f, 0x4e, 0x43, 0x45, 0x10, 0x90, 0x4e, 0x12, 0x21, 0x0a, 0x1b,
-	0x44, 0x4b, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x44, 0x41, 0x54, 0x45, 0x5f,
-	0x45, 0x56, 0x45, 0x4e, 0x54, 0x5f, 0x4e, 0x4f, 0x4e, 0x43, 0x45, 0x10, 0xa0, 0x9c, 0x01, 0x12,
-	0x24, 0x0a, 0x1e, 0x44, 0x4b, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x4c, 0x45,
-	0x4e, 0x44, 0x49, 0x4e, 0x47, 0x5f, 0x45, 0x56, 0x45, 0x4e, 0x54, 0x5f, 0x4e, 0x4f, 0x4e, 0x43,
-	0x45, 0x10, 0xb0, 0xea, 0x01, 0x42, 0x84, 0x01, 0x0a, 0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69,
-	0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x08, 0x44, 0x6c, 0x63, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73,
-	0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03,
-	0x53, 0x44, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02,
-	0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65,
-	0x5c, 0x44, 0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
-	0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x44, 0x6c, 0x63, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0xdf, 0x1f, 0x01, 0x52, 0x09, 0x74, 0x72, 0x69, 0x67, 0x67, 0x65, 0x72, 0x41, 0x74, 0x22, 0xc5,
+	0x01, 0x0a, 0x0e, 0x44, 0x4c, 0x43, 0x41, 0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69,
+	0x64, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x07, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x18, 0x0a, 0x07,
+	0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6f,
+	0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12, 0x1c,
+	0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x12, 0x38, 0x0a, 0x04,
+	0x74, 0x69, 0x6d, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d,
+	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01,
+	0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x22, 0xad, 0x01, 0x0a, 0x19, 0x4f, 0x72, 0x61, 0x63, 0x6c,
+	0x65, 0x50, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x4c, 0x69, 0x76, 0x65,
+	0x6e, 0x65, 0x73, 0x73, 0x12, 0x29, 0x0a, 0x10, 0x63, 0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75,
+	0x73, 0x5f, 0x70, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f,
+	0x63, 0x6f, 0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x50, 0x75, 0x62, 0x6b, 0x65, 0x79, 0x12,
+	0x19, 0x0a, 0x08, 0x69, 0x73, 0x5f, 0x61, 0x6c, 0x69, 0x76, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x08, 0x52, 0x07, 0x69, 0x73, 0x41, 0x6c, 0x69, 0x76, 0x65, 0x12, 0x1e, 0x0a, 0x0b, 0x6c, 0x61,
+	0x73, 0x74, 0x5f, 0x64, 0x6b, 0x67, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x09, 0x6c, 0x61, 0x73, 0x74, 0x44, 0x6b, 0x67, 0x49, 0x64, 0x12, 0x2a, 0x0a, 0x11, 0x6c, 0x61,
+	0x73, 0x74, 0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0f, 0x6c, 0x61, 0x73, 0x74, 0x42, 0x6c, 0x6f, 0x63, 0x6b,
+	0x48, 0x65, 0x69, 0x67, 0x68, 0x74, 0x2a, 0x46, 0x0a, 0x0f, 0x44, 0x4c, 0x43, 0x4f, 0x72, 0x61,
+	0x63, 0x6c, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x18, 0x0a, 0x14, 0x4f, 0x72, 0x61,
+	0x63, 0x6c, 0x65, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x5f, 0x45, 0x6e, 0x61, 0x62, 0x6c,
+	0x65, 0x10, 0x00, 0x12, 0x19, 0x0a, 0x15, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x5f, 0x73, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x5f, 0x44, 0x69, 0x73, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x01, 0x2a, 0x3a,
+	0x0a, 0x09, 0x44, 0x43, 0x4d, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x15, 0x0a, 0x11, 0x44,
+	0x43, 0x4d, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x5f, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65,
+	0x10, 0x00, 0x12, 0x16, 0x0a, 0x12, 0x44, 0x43, 0x4d, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x5f, 0x44, 0x69, 0x73, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x01, 0x2a, 0x41, 0x0a, 0x0c, 0x44, 0x6c,
+	0x63, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0f, 0x0a, 0x0b, 0x55, 0x4e,
+	0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x09, 0x0a, 0x05, 0x50,
+	0x52, 0x49, 0x43, 0x45, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x44, 0x41, 0x54, 0x45, 0x10, 0x02,
+	0x12, 0x0b, 0x0a, 0x07, 0x4c, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x03, 0x2a, 0x2b, 0x0a,
+	0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x1a,
+	0x0a, 0x16, 0x53, 0x49, 0x47, 0x4e, 0x49, 0x4e, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54,
+	0x5f, 0x44, 0x45, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x10, 0x00, 0x2a, 0x8f, 0x01, 0x0a, 0x09, 0x44,
+	0x4b, 0x47, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x16, 0x0a, 0x12, 0x44, 0x4b, 0x47, 0x5f,
+	0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x44, 0x45, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x10, 0x00,
+	0x12, 0x21, 0x0a, 0x1c, 0x44, 0x4b, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e, 0x54, 0x5f, 0x50,
+	0x52, 0x49, 0x43, 0x45, 0x5f, 0x45, 0x56, 0x45, 0x4e, 0x54, 0x5f, 0x4e, 0x4f, 0x4e, 0x43, 0x45,
+	0x10, 0x90, 0x4e, 0x12, 0x21, 0x0a, 0x1b, 0x44, 0x4b, 0x47, 0x5f, 0x49, 0x4e, 0x54, 0x45, 0x4e,
+	0x54, 0x5f, 0x44, 0x41, 0x54, 0x45, 0x5f, 0x45, 0x56, 0x45, 0x4e, 0x54, 0x5f, 0x4e, 0x4f, 0x4e,
+	0x43, 0x45, 0x10, 0xa0, 0x9c, 0x01, 0x12, 0x24, 0x0a, 0x1e, 0x44, 0x4b, 0x47, 0x5f, 0x49, 0x4e,
+	0x54, 0x45, 0x4e, 0x54, 0x5f, 0x4c, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x5f, 0x45, 0x56, 0x45,
+	0x4e, 0x54, 0x5f, 0x4e, 0x4f, 0x4e, 0x43, 0x45, 0x10, 0xb0, 0xea, 0x01, 0x42, 0x84, 0x01, 0x0a,
+	0x0c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x64, 0x6c, 0x63, 0x42, 0x08, 0x44,
+	0x6c, 0x63, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63,
+	0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65,
+	0x2f, 0x64, 0x6c, 0x63, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x08, 0x53, 0x69, 0x64,
+	0x65, 0x2e, 0x44, 0x6c, 0x63, 0xca, 0x02, 0x08, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63,
+	0xe2, 0x02, 0x14, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x44, 0x6c, 0x63, 0x5c, 0x47, 0x50, 0x42, 0x4d,
+	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x09, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a,
+	0x44, 0x6c, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -5267,7 +6799,7 @@ func file_side_dlc_dlc_proto_rawDescGZIP() []byte {
 }
 
 var file_side_dlc_dlc_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_side_dlc_dlc_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_side_dlc_dlc_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_side_dlc_dlc_proto_goTypes = []interface{}{
 	(DLCOracleStatus)(0),              // 0: side.dlc.DLCOracleStatus
 	(DCMStatus)(0),                    // 1: side.dlc.DCMStatus
@@ -5275,28 +6807,34 @@ var file_side_dlc_dlc_proto_goTypes = []interface{}{
 	(SigningIntent)(0),                // 3: side.dlc.SigningIntent
 	(DKGIntent)(0),                    // 4: side.dlc.DKGIntent
 	(*DLCOracle)(nil),                 // 5: side.dlc.DLCOracle
-	(*DCM)(nil),                       // 6: side.dlc.DCM
-	(*DLCNonce)(nil),                  // 7: side.dlc.DLCNonce
-	(*DLCEvent)(nil),                  // 8: side.dlc.DLCEvent
-	(*DLCAttestation)(nil),            // 9: side.dlc.DLCAttestation
-	(*OracleParticipantLiveness)(nil), // 10: side.dlc.OracleParticipantLiveness
-	(*timestamppb.Timestamp)(nil),     // 11: google.protobuf.Timestamp
+	(*DLCOracleV1)(nil),               // 6: side.dlc.DLCOracleV1
+	(*DCM)(nil),                       // 7: side.dlc.DCM
+	(*DCMV1)(nil),                     // 8: side.dlc.DCMV1
+	(*DLCNonce)(nil),                  // 9: side.dlc.DLCNonce
+	(*DLCEvent)(nil),                  // 10: side.dlc.DLCEvent
+	(*DLCAttestation)(nil),            // 11: side.dlc.DLCAttestation
+	(*OracleParticipantLiveness)(nil), // 12: side.dlc.OracleParticipantLiveness
+	(*timestamppb.Timestamp)(nil),     // 13: google.protobuf.Timestamp
 }
 var file_side_dlc_dlc_proto_depIdxs = []int32{
-	11, // 0: side.dlc.DLCOracle.time:type_name -> google.protobuf.Timestamp
+	13, // 0: side.dlc.DLCOracle.time:type_name -> google.protobuf.Timestamp
 	0,  // 1: side.dlc.DLCOracle.status:type_name -> side.dlc.DLCOracleStatus
-	11, // 2: side.dlc.DCM.time:type_name -> google.protobuf.Timestamp
-	1,  // 3: side.dlc.DCM.status:type_name -> side.dlc.DCMStatus
-	11, // 4: side.dlc.DLCNonce.time:type_name -> google.protobuf.Timestamp
-	2,  // 5: side.dlc.DLCEvent.type:type_name -> side.dlc.DlcEventType
-	11, // 6: side.dlc.DLCEvent.publish_at:type_name -> google.protobuf.Timestamp
-	11, // 7: side.dlc.DLCEvent.trigger_at:type_name -> google.protobuf.Timestamp
-	11, // 8: side.dlc.DLCAttestation.time:type_name -> google.protobuf.Timestamp
-	9,  // [9:9] is the sub-list for method output_type
-	9,  // [9:9] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	13, // 2: side.dlc.DLCOracleV1.time:type_name -> google.protobuf.Timestamp
+	0,  // 3: side.dlc.DLCOracleV1.status:type_name -> side.dlc.DLCOracleStatus
+	13, // 4: side.dlc.DCM.time:type_name -> google.protobuf.Timestamp
+	1,  // 5: side.dlc.DCM.status:type_name -> side.dlc.DCMStatus
+	13, // 6: side.dlc.DCMV1.time:type_name -> google.protobuf.Timestamp
+	1,  // 7: side.dlc.DCMV1.status:type_name -> side.dlc.DCMStatus
+	13, // 8: side.dlc.DLCNonce.time:type_name -> google.protobuf.Timestamp
+	2,  // 9: side.dlc.DLCEvent.type:type_name -> side.dlc.DlcEventType
+	13, // 10: side.dlc.DLCEvent.publish_at:type_name -> google.protobuf.Timestamp
+	13, // 11: side.dlc.DLCEvent.trigger_at:type_name -> google.protobuf.Timestamp
+	13, // 12: side.dlc.DLCAttestation.time:type_name -> google.protobuf.Timestamp
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_side_dlc_dlc_proto_init() }
@@ -5318,7 +6856,7 @@ func file_side_dlc_dlc_proto_init() {
 			}
 		}
 		file_side_dlc_dlc_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DCM); i {
+			switch v := v.(*DLCOracleV1); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5330,7 +6868,7 @@ func file_side_dlc_dlc_proto_init() {
 			}
 		}
 		file_side_dlc_dlc_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DLCNonce); i {
+			switch v := v.(*DCM); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5342,7 +6880,7 @@ func file_side_dlc_dlc_proto_init() {
 			}
 		}
 		file_side_dlc_dlc_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DLCEvent); i {
+			switch v := v.(*DCMV1); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5354,7 +6892,7 @@ func file_side_dlc_dlc_proto_init() {
 			}
 		}
 		file_side_dlc_dlc_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DLCAttestation); i {
+			switch v := v.(*DLCNonce); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5366,6 +6904,30 @@ func file_side_dlc_dlc_proto_init() {
 			}
 		}
 		file_side_dlc_dlc_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DLCEvent); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_dlc_dlc_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DLCAttestation); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_side_dlc_dlc_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*OracleParticipantLiveness); i {
 			case 0:
 				return &v.state
@@ -5384,7 +6946,7 @@ func file_side_dlc_dlc_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_dlc_dlc_proto_rawDesc,
 			NumEnums:      5,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
