@@ -65,9 +65,16 @@ func (k Keeper) GetEstimatedReward(ctx sdk.Context, address string, amount sdk.C
 
 	types.UpdateEpochTotalStakings(nextEpoch, staking)
 
-	totalStakings := []types.TotalStaking{}
+	totalStakings := []types.TotalStaking{
+		types.TotalStaking{
+			Denom:           staking.Amount.Denom,
+			Amount:          staking.Amount,
+			EffectiveAmount: staking.EffectiveAmount,
+		},
+	}
+
 	for _, staking := range k.GetStakingsByAddress(ctx, address) {
-		if !staking.StartTime.Add(staking.LockDuration).Before(nextEpoch.StartTime) {
+		if staking.Status == types.StakingStatus_STAKING_STATUS_STAKED && !staking.StartTime.Add(staking.LockDuration).Before(nextEpoch.EndTime) {
 			totalStakings = types.UpdateAccountTotalStakings(totalStakings, staking)
 		}
 	}
