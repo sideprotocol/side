@@ -1,10 +1,8 @@
 package keeper
 
 import (
-	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	dlctypes "github.com/sideprotocol/side/x/dlc/types"
 	v2 "github.com/sideprotocol/side/x/lending/migrations/v2"
 	v3 "github.com/sideprotocol/side/x/lending/migrations/v3"
 	v4 "github.com/sideprotocol/side/x/lending/migrations/v4"
@@ -38,5 +36,5 @@ func (m Migrator) Migrate3to4(ctx sdk.Context) error {
 
 // Migrate4to5 migrates from version 4 to 5
 func (m Migrator) Migrate4to5(ctx sdk.Context) error {
-	return v5.MigrateStore(ctx, m.keeper.storeKey, storetypes.NewKVStoreKey(dlctypes.StoreKey), m.keeper.cdc)
+	return v5.MigrateStore(ctx, m.keeper.storeKey, m.keeper.dlcKeeper, m.keeper.cdc)
 }

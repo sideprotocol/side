@@ -13,9 +13,9 @@ import (
 
 // MigrateStore migrates the x/dlc module state from the consensus version 1 to
 // version 2
-func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, tssStoreKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
+func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, tssKeeper types.TSSKeeper, cdc codec.BinaryCodec) error {
 	migrateDLCEvents(ctx, storeKey, cdc)
-	migrateDCMsAndOracles(ctx, storeKey, tssStoreKey, cdc)
+	migrateDCMsAndOracles(ctx, storeKey, tssKeeper, cdc)
 
 	return nil
 }
@@ -31,40 +31,28 @@ func migrateDLCEvents(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.B
 		var dlcEvent types.DLCEvent
 		cdc.MustUnmarshal(iterator.Value(), &dlcEvent)
 
-		// set the DKG request by status
+		// set event by status
 		store.Set(types.EventByStatusKey(dlcEvent.HasTriggered, dlcEvent.Id), []byte{})
 	}
 }
 
 // migrateDCMsAndOracles performs the DCMs and oracles migration
-func migrateDCMsAndOracles(ctx sdk.Context, storeKey storetypes.StoreKey, tssStoreKey storetypes.StoreKey, cdc codec.BinaryCodec) {
-	tssStore := ctx.KVStore(tssStoreKey)
+func migrateDCMsAndOracles(ctx sdk.Context, storeKey storetypes.StoreKey, tssKeeper types.TSSKeeper, cdc codec.BinaryCodec) {
+	tssKeeper.IterateDKGRequests(ctx, func(req *tsstypes.DKGRequest) (stop bool) {
+		if req.Status == tsstypes.DKGStatus_DKG_STATUS_COMPLETED {
+			// dcm or oracle pub key
+			pubKey := tssKeeper.GetDKGPubKeys(ctx, req.Id)[0]
+			pubKeyBz, _ := hex.DecodeString(pubKey)
 
-	iterator := storetypes.KVStorePrefixIterator(tssStore, tsstypes.DKGRequestKeyPrefix)
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var dkgRequest tsstypes.DKGRequest
-		cdc.MustUnmarshal(iterator.Value(), &dkgRequest)
-
-		if dkgRequest.Status != tsstypes.DKGStatus_DKG_STATUS_COMPLETED {
-			continue
+			if req.Type == types.DKG_TYPE_DCM {
+				updateDCM(ctx, storeKey, req.Id, pubKeyBz, cdc)
+			} else if req.Type == types.DKG_TYPE_NONCE {
+				updateOracle(ctx, storeKey, req.Id, pubKeyBz, cdc)
+			}
 		}
 
-		bz := tssStore.Get(tsstypes.DKGCompletionKey(dkgRequest.Id, dkgRequest.Participants[0]))
-		var dkgCompletion tsstypes.DKGCompletion
-		cdc.MustUnmarshal(bz, &dkgCompletion)
-
-		// DCM or oracle pub key
-		pubKey := dkgCompletion.PubKeys[0]
-		pubKeyBz, _ := hex.DecodeString(pubKey)
-
-		if dkgRequest.Type == types.DKG_TYPE_DCM {
-			updateDCM(ctx, storeKey, dkgRequest.Id, pubKeyBz, cdc)
-		} else if dkgRequest.Type == types.DKG_TYPE_NONCE {
-			updateOracle(ctx, storeKey, dkgRequest.Id, pubKeyBz, cdc)
-		}
-	}
+		return false
+	})
 }
 
 // updateDCM updates the given dcm
