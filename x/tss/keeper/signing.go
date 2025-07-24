@@ -112,7 +112,7 @@ func (k Keeper) GetSigningRequestsByStatusWithPagination(ctx sdk.Context, status
 		id := sdk.BigEndianToUint64(key)
 		signingRequest := k.GetSigningRequest(ctx, id)
 
-		if signingRequest.Module == module {
+		if len(module) == 0 || signingRequest.Module == module {
 			signingRequests = append(signingRequests, signingRequest)
 		}
 
