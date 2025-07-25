@@ -88,5 +88,10 @@ type IBCChannelKeeper interface {
 
 // IBCTransferKeeper defines the expected IBC transfer interfaces
 type IBCTransferKeeper interface {
+	GetPort(ctx sdk.Context) string
+
+	GetTotalEscrowForDenom(ctx sdk.Context, denom string) sdk.Coin
+	SetTotalEscrowForDenom(ctx sdk.Context, coin sdk.Coin)
+
 	Transfer(goCtx context.Context, msg *ibctransfertypes.MsgTransfer) (*ibctransfertypes.MsgTransferResponse, error)
 }

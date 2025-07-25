@@ -104,11 +104,6 @@ func (k Keeper) AddressRateLimitQuota(ctx sdk.Context) int64 {
 	return k.GetParams(ctx).RateLimitParams.AddressRateLimitParams.Quota
 }
 
-// IBCPortId gets the IBC port id
-func (k Keeper) IBCPortId(ctx sdk.Context) string {
-	return k.GetParams(ctx).IbcParams.PortId
-}
-
 // IBCTimeoutHeightOffset gets the IBC timeout height offset
 func (k Keeper) IBCTimeoutHeightOffset(ctx sdk.Context) uint64 {
 	return k.GetParams(ctx).IbcParams.TimeoutHeightOffset

@@ -166,10 +166,8 @@ message TSSParams {
 
 // IBCParams defines the params related to IBC
 message IBCParams {
-  // Id of the IBC port used to transfer sBTC
-  string port_id = 1;
   // Timeout height offset relative to the current client height
-  uint64 timeout_height_offset = 2;
+  uint64 timeout_height_offset = 1;
   // Timeout duration relative to the current time
-  google.protobuf.Duration timeout_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  google.protobuf.Duration timeout_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }

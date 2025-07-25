@@ -14,7 +14,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	ibchost "github.com/cosmos/ibc-go/v8/modules/core/24-host"
 
 	"github.com/sideprotocol/side/bitcoin"
 )
@@ -55,9 +54,6 @@ var (
 
 	// default TSS participant update transition period; not used for now
 	DefaultTSSParticipantUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
-
-	// default port id used to transfer sBTC via IBC
-	DefaultIBCPortId = "transfer"
 
 	// default IBC timeout height offset
 	DefaultIBCTimeoutHeightOffset = uint64(0)
@@ -109,7 +105,6 @@ func NewParams() Params {
 			ParticipantUpdateTransitionPeriod: DefaultTSSParticipantUpdateTransitionPeriod,
 		},
 		IbcParams: IBCParams{
-			PortId:              DefaultIBCPortId,
 			TimeoutHeightOffset: DefaultIBCTimeoutHeightOffset,
 			TimeoutDuration:     DefaultIBCTimeoutDuration,
 		},
@@ -365,10 +360,6 @@ func validateTSSParams(params *TSSParams) error {
 
 // validateIBCParams validates the given IBC params
 func validateIBCParams(params *IBCParams) error {
-	if err := ibchost.PortIdentifierValidator(params.PortId); err != nil {
-		return errorsmod.Wrapf(ErrInvalidParams, "invalid IBC port id: %v", err)
-	}
-
 	if params.TimeoutDuration < 0 {
 		return errorsmod.Wrapf(ErrInvalidParams, "invalid timeout duration")
 	}
