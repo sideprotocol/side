@@ -19,13 +19,15 @@ import (
 
 // IBCTransfer performs the IBC transfer by the given params
 func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, token sdk.Coin, channelId string) (uint64, error) {
-	clientHeight, err := k.GetClientHeight(ctx, k.IBCPortId(ctx), channelId)
+	portId := k.ibctransferKeeper.GetPort(ctx)
+
+	clientHeight, err := k.GetClientHeight(ctx, portId, channelId)
 	if err != nil {
 		return 0, err
 	}
 
 	msg := &transfertypes.MsgTransfer{
-		SourcePort:       k.IBCPortId(ctx),
+		SourcePort:       portId,
 		SourceChannel:    channelId,
 		Token:            token,
 		Sender:           sender,
@@ -35,8 +37,20 @@ func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, to
 		Memo:             types.DefaultMemo,
 	}
 
+	// total escrow before transfer
+	totalEscrowBefore := k.ibctransferKeeper.GetTotalEscrowForDenom(ctx, token.Denom)
+
 	resp, err := k.ibctransferKeeper.Transfer(ctx, msg)
 	if err != nil {
+		// total escrow after transfer
+		totalEscrowAfter := k.ibctransferKeeper.GetTotalEscrowForDenom(ctx, token.Denom)
+		if totalEscrowBefore.IsLT(totalEscrowAfter) {
+			// unescrow token
+			if err := k.UnescrowToken(ctx, portId, channelId, sender, token); err != nil {
+				panic(err)
+			}
+		}
+
 		return 0, err
 	}
 
@@ -139,6 +153,21 @@ func (k Keeper) GetClientHeight(ctx sdk.Context, sourcePort string, sourceChanne
 	}
 
 	return clientState.GetLatestHeight(), nil
+}
+
+// UnescrowToken unescrows the given token from the IBC transfer module
+// NOTE: This method is called only if the IBC transfer failed while the token is escrowed
+func (k Keeper) UnescrowToken(ctx sdk.Context, portId string, channelId string, recipient string, token sdk.Coin) error {
+	escrowAddress := transfertypes.GetEscrowAddress(portId, channelId)
+	if err := k.bankKeeper.SendCoins(ctx, escrowAddress, sdk.MustAccAddressFromBech32(recipient), sdk.NewCoins(token)); err != nil {
+		return errorsmod.Wrap(err, "failed to unescrow token")
+	}
+
+	currentTotalEscrow := k.ibctransferKeeper.GetTotalEscrowForDenom(ctx, token.Denom)
+	newTotalEscrow := currentTotalEscrow.Sub(token)
+	k.ibctransferKeeper.SetTotalEscrowForDenom(ctx, newTotalEscrow)
+
+	return nil
 }
 
 // IBCSendPacketCallback implements IBC callbacks
