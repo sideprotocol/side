@@ -34,29 +34,26 @@ const (
 // Assume that the given params are valid
 func BuildDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, finalTimeout int64) (*DLCMeta, error) {
 	borrowerPubKeyBytes, _ := hex.DecodeString(borrowerPubKey)
+	borrowerAuthPubKeyBytes, _ := hex.DecodeString(borrowerAuthPubKey)
 	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
 
 	internalKey := GetInternalKey(borrowerPubKeyBytes, dcmPubKeyBytes)
 
-	liquidationScript, repaymentScript, timeoutRefundScript, _ := GetVaultScripts(borrowerPubKey, borrowerAuthPubKey, dcmPubKey, finalTimeout)
+	liquidationScript, repaymentScript, timeoutRefundScript, _ := GetVaultScripts(borrowerPubKeyBytes, borrowerAuthPubKeyBytes, dcmPubKeyBytes, finalTimeout)
 
 	tapscriptTree := GetTapscriptTree([][]byte{liquidationScript, repaymentScript, timeoutRefundScript})
 
-	liquidationScriptProof := tapscriptTree.LeafMerkleProofs[0]
-	repaymentScriptProof := tapscriptTree.LeafMerkleProofs[1]
-	timeoutRefundScriptProof := tapscriptTree.LeafMerkleProofs[2]
-
-	liquidationScriptControlBlock, err := GetControlBlock(internalKey, liquidationScriptProof)
+	liquidationScriptControlBlock, err := GetControlBlock(tapscriptTree, liquidationScript, internalKey)
 	if err != nil {
 		return nil, err
 	}
 
-	repaymentScriptControlBlock, err := GetControlBlock(internalKey, repaymentScriptProof)
+	repaymentScriptControlBlock, err := GetControlBlock(tapscriptTree, repaymentScript, internalKey)
 	if err != nil {
 		return nil, err
 	}
 
-	timeoutRefundScriptControlBlock, err := GetControlBlock(internalKey, timeoutRefundScriptProof)
+	timeoutRefundScriptControlBlock, err := GetControlBlock(tapscriptTree, timeoutRefundScript, internalKey)
 	if err != nil {
 		return nil, err
 	}
