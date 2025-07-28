@@ -55,6 +55,20 @@ func (k Keeper) RemoveLoanStatus(ctx sdk.Context, id string) {
 	store.Delete(types.LoanByStatusKey(loan.Status, id))
 }
 
+// AddToLiquidationQueue adds the given loan to the liquidation queue
+func (k Keeper) AddToLiquidationQueue(ctx sdk.Context, loanId string) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Set(types.LiquidationQueueKey(loanId), []byte{})
+}
+
+// RemoveFromLiquidationQueue removes the given loan from the liquidation queue
+func (k Keeper) RemoveFromLiquidationQueue(ctx sdk.Context, loanId string) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Delete(types.LiquidationQueueKey(loanId))
+}
+
 // HasLoan returns true if the given loan exists, false otherwise
 func (k Keeper) HasLoan(ctx sdk.Context, id string) bool {
 	store := ctx.KVStore(k.storeKey)
@@ -192,6 +206,18 @@ func (k Keeper) GetPendingLoans(ctx sdk.Context) []*types.Loan {
 	return loans
 }
 
+// GetLiquidatedLoans gets the liquidated loans from the liquidation queue
+func (k Keeper) GetLiquidatedLoans(ctx sdk.Context) []*types.Loan {
+	var loans []*types.Loan
+
+	k.IterateLiquidationQueue(ctx, func(loan *types.Loan) (stop bool) {
+		loans = append(loans, loan)
+		return false
+	})
+
+	return loans
+}
+
 // GetAllLoans returns all loans
 func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 	var loans []*types.Loan
@@ -234,6 +260,23 @@ func (k Keeper) IterateLoansByStatus(ctx sdk.Context, status types.LoanStatus, c
 		key := iterator.Key()
 
 		id := string(key[len(keyPrefix):])
+		loan := k.GetLoan(ctx, id)
+
+		if cb(loan) {
+			break
+		}
+	}
+}
+
+// IterateLiquidationQueue iterates through the liquidation queue
+func (k Keeper) IterateLiquidationQueue(ctx sdk.Context, cb func(loan *types.Loan) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.LiquidationQueueKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		id := string(iterator.Key()[1:])
 		loan := k.GetLoan(ctx, id)
 
 		if cb(loan) {

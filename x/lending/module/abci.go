@@ -25,8 +25,6 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	handleActiveLoans(ctx, k)
 
 	handleLiquidatedLoans(ctx, k)
-	handleDefaultedLoans(ctx, k)
-
 	handleRepayments(ctx, k)
 }
 
@@ -199,6 +197,9 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			loan.LiquidationId = liquidation.Id
 			k.SetLoan(ctx, loan)
 
+			// add to liquidation queue
+			k.AddToLiquidationQueue(ctx, loan.VaultAddress)
+
 			// trigger dlc event if not triggered yet
 			if !k.DLCKeeper().GetEvent(ctx, loan.DlcEventId).HasTriggered {
 				k.DLCKeeper().TriggerDLCEvent(ctx, loan.DlcEventId, outcomeIndex)
@@ -221,18 +222,18 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 // handleLiquidatedLoans handles liquidated loans
 func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
-	// get all liquidated loans
-	loans := k.GetLoans(ctx, types.LoanStatus_Liquidated)
+	// get liquidated loans
+	loans := k.GetLiquidatedLoans(ctx)
 
 	for _, loan := range loans {
-		// check if the liquidation cet has been signed
+		// get dlc meta
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
-		if len(dlcMeta.LiquidationCet.SignedTxHex) != 0 {
-			continue
-		}
+
+		// get liquidation cet and type
+		cet, cetType := types.GetLiquidationCetAndType(dlcMeta, loan.Status)
 
 		// check if the borrower adapted signatures already exist
-		if len(dlcMeta.LiquidationCet.BorrowerAdaptedSignatures) == 0 {
+		if len(cet.BorrowerAdaptedSignatures) == 0 {
 			// check if the event attestation has been submitted
 			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.DlcEventId)
 			if attestation == nil {
@@ -243,94 +244,43 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 			adaptorSecret := eventSignature[32:]
 
 			// decrypt the adaptor signatures
-			for _, adaptorSignature := range dlcMeta.LiquidationCet.BorrowerAdaptorSignatures {
+			for _, adaptorSignature := range cet.BorrowerAdaptorSignatures {
 				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
 				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
 
 				// update the adapted signatures
-				dlcMeta.LiquidationCet.BorrowerAdaptedSignatures = append(
-					dlcMeta.LiquidationCet.BorrowerAdaptedSignatures,
+				cet.BorrowerAdaptedSignatures = append(
+					cet.BorrowerAdaptedSignatures,
 					hex.EncodeToString(adaptedSignature))
 			}
 		}
 
 		// build signed liquidation cet if both borrower adapted signatures(obviously exist) and DCM signatures already exist
-		if len(dlcMeta.LiquidationCet.DCMSignatures) != 0 {
-			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.LiquidationCet.Tx, loan.BorrowerAuthPubKey, dlcMeta.LiquidationCet.BorrowerAdaptedSignatures, loan.DCM, dlcMeta.LiquidationCet.DCMSignatures)
+		if len(cet.DCMSignatures) != 0 {
+			signedTx, txHash, err := types.BuildSignedCet(cet.Tx, loan.BorrowerAuthPubKey, cet.BorrowerAdaptedSignatures, loan.DCM, cet.DCMSignatures)
 			if err != nil {
 				k.Logger(ctx).Info("failed to build signed liquidation cet", "loan id", loan.VaultAddress, "err", err)
 			} else {
-				dlcMeta.LiquidationCet.SignedTxHex = hex.EncodeToString(signedTx)
+				cet.SignedTxHex = hex.EncodeToString(signedTx)
+
+				// remove from the liquidation queue
+				k.RemoveFromLiquidationQueue(ctx, loan.VaultAddress)
 
 				// emit event
 				ctx.EventManager().EmitEvent(
 					sdk.NewEvent(types.EventTypeGenerateSignedCet,
 						sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-						sdk.NewAttribute(types.AttributeKeyCetType, fmt.Sprintf("%d", types.CetType_LIQUIDATION)),
+						sdk.NewAttribute(types.AttributeKeyCetType, fmt.Sprintf("%d", cetType)),
 						sdk.NewAttribute(types.AttributeKeyTxHash, txHash.String()),
 					),
 				)
 			}
 		}
 
-		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
-	}
-}
+		// update liquidation cet
+		types.UpdateLiquidationCet(dlcMeta, cetType, cet)
 
-// handleDefaultedLoans handles defaulted loans
-func handleDefaultedLoans(ctx sdk.Context, k keeper.Keeper) {
-	// get all defaulted loans
-	loans := k.GetLoans(ctx, types.LoanStatus_Defaulted)
-
-	for _, loan := range loans {
-		// check if the default liquidation cet has been signed
-		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
-		if len(dlcMeta.DefaultLiquidationCet.SignedTxHex) != 0 {
-			continue
-		}
-
-		// check if the borrower adapted signatures already exist
-		if len(dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures) == 0 {
-			// check if the event attestation has been submitted
-			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.DlcEventId)
-			if attestation == nil {
-				continue
-			}
-
-			eventSignature, _ := hex.DecodeString(attestation.Signature)
-			adaptorSecret := eventSignature[32:]
-
-			// decrypt the adaptor signatures
-			for _, adaptorSignature := range dlcMeta.DefaultLiquidationCet.BorrowerAdaptorSignatures {
-				adaptorSignature, _ := hex.DecodeString(adaptorSignature)
-				adaptedSignature := adaptor.Adapt(adaptorSignature, adaptorSecret)
-
-				// update the adapted signatures
-				dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures = append(
-					dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures,
-					hex.EncodeToString(adaptedSignature))
-			}
-		}
-
-		// build signed default liquidation cet if both borrower adapted signatures(obviously exist) and DCM signatures already exist
-		if len(dlcMeta.DefaultLiquidationCet.DCMSignatures) != 0 {
-			signedTx, txHash, err := types.BuildSignedCet(dlcMeta.DefaultLiquidationCet.Tx, loan.BorrowerAuthPubKey, dlcMeta.DefaultLiquidationCet.BorrowerAdaptedSignatures, loan.DCM, dlcMeta.DefaultLiquidationCet.DCMSignatures)
-			if err != nil {
-				k.Logger(ctx).Info("failed to build signed default liquidation cet", "loan id", loan.VaultAddress, "err", err)
-			} else {
-				dlcMeta.DefaultLiquidationCet.SignedTxHex = hex.EncodeToString(signedTx)
-
-				// emit event
-				ctx.EventManager().EmitEvent(
-					sdk.NewEvent(types.EventTypeGenerateSignedCet,
-						sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
-						sdk.NewAttribute(types.AttributeKeyCetType, fmt.Sprintf("%d", types.CetType_DEFAULT_LIQUIDATION)),
-						sdk.NewAttribute(types.AttributeKeyTxHash, txHash.String()),
-					),
-				)
-			}
-		}
-
+		// update dlc meta
 		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 	}
 }
