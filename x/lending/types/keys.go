@@ -40,9 +40,10 @@ var (
 	DLCMetaKeyPrefix         = []byte{0x16}
 	RedemptionKeyPrefix      = []byte{0x17}
 
-	ReferrerKeyPrefix     = []byte{0x20}
-	LoanByStatusKeyPrefix = []byte{0x21}
-	LoanByOracleKeyPrefix = []byte{0x22}
+	ReferrerKeyPrefix         = []byte{0x20}
+	LoanByStatusKeyPrefix     = []byte{0x21}
+	LoanByOracleKeyPrefix     = []byte{0x22}
+	LiquidationQueueKeyPrefix = []byte{0x23}
 )
 
 func PoolKey(id string) []byte {
@@ -69,6 +70,10 @@ func LoanByOracleKey(oraclePubKey string, id string) []byte {
 	key := append(LoanByOracleKeyPrefix, pubKey...)
 
 	return append(key, []byte(id)...)
+}
+
+func LiquidationQueueKey(loanId string) []byte {
+	return append(LiquidationQueueKeyPrefix, []byte(loanId)...)
 }
 
 func AuthorizationIdKey(loanId string) []byte {

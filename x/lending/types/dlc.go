@@ -455,6 +455,28 @@ func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []stri
 	return buf.Bytes(), &txHash, nil
 }
 
+// GetCet gets the liquidation cet and corresponding type according to the given loan status
+func GetLiquidationCetAndType(dlcMeta *DLCMeta, loanStatus LoanStatus) (LiquidationCet, CetType) {
+	switch loanStatus {
+	case LoanStatus_Liquidated:
+		return dlcMeta.LiquidationCet, CetType_LIQUIDATION
+
+	default:
+		return dlcMeta.DefaultLiquidationCet, CetType_DEFAULT_LIQUIDATION
+	}
+}
+
+// UpdateLiquidationCet updates the liquidation cet by the given type
+func UpdateLiquidationCet(dlcMeta *DLCMeta, cetType CetType, cet LiquidationCet) {
+	switch cetType {
+	case CetType_LIQUIDATION:
+		dlcMeta.LiquidationCet = cet
+
+	default:
+		dlcMeta.DefaultLiquidationCet = cet
+	}
+}
+
 // GetCetInfo gets the cet info from the given event and script
 func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte, controlBlock []byte) (*CetInfo, error) {
 	if event == nil {
