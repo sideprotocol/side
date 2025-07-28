@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
 
 	"github.com/sideprotocol/side/bitcoin"
@@ -75,11 +76,12 @@ func CreateTaprootAddress(internalKey *secp256k1.PublicKey, scripts [][]byte, pa
 // Assume that the given pub keys are valid
 func CreateVaultAddress(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, finalTimeout int64) (string, error) {
 	borrowerPubKeyBytes, _ := hex.DecodeString(borrowerPubKey)
+	borrowerAuthPubKeyBytes, _ := hex.DecodeString(borrowerAuthPubKey)
 	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
 
 	internalKey := GetInternalKey(borrowerPubKeyBytes, dcmPubKeyBytes)
 
-	liquidationScript, repaymentScript, timeoutRefundScript, err := GetVaultScripts(borrowerPubKey, borrowerAuthPubKey, dcmPubKey, finalTimeout)
+	liquidationScript, repaymentScript, timeoutRefundScript, err := GetVaultScripts(borrowerPubKeyBytes, borrowerAuthPubKeyBytes, dcmPubKeyBytes, finalTimeout)
 	if err != nil {
 		return "", err
 	}
@@ -95,26 +97,21 @@ func CreateVaultAddress(borrowerPubKey string, borrowerAuthPubKey string, dcmPub
 }
 
 // GetVaultScripts gets the scripts associated the underlying vault address from the given params
-// Assume that the given pub keys are valid
-func GetVaultScripts(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, finalTimeout int64) ([]byte, []byte, []byte, error) {
-	borrowerPubKeyBytes, _ := hex.DecodeString(borrowerPubKey)
-	borrowerAuthPubKeyBytes, _ := hex.DecodeString(borrowerAuthPubKey)
-	dcmPubKeyBytes, _ := hex.DecodeString(dcmPubKey)
-
+func GetVaultScripts(borrowerPubKey []byte, borrowerAuthPubKey []byte, dcmPubKey []byte, finalTimeout int64) ([]byte, []byte, []byte, error) {
 	// liquidation script
-	liquidationScript, err := CreateMultisigScript([][]byte{borrowerAuthPubKeyBytes, dcmPubKeyBytes})
+	liquidationScript, err := CreateMultisigScript([][]byte{borrowerAuthPubKey, dcmPubKey})
 	if err != nil {
 		return nil, nil, nil, err
 	}
 
 	// repayment script
-	repaymentScript, err := CreateMultisigScript([][]byte{borrowerPubKeyBytes, dcmPubKeyBytes})
+	repaymentScript, err := CreateMultisigScript([][]byte{borrowerPubKey, dcmPubKey})
 	if err != nil {
 		return nil, nil, nil, err
 	}
 
 	// refund script
-	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubKeyBytes, finalTimeout)
+	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubKey, finalTimeout)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -145,11 +142,20 @@ func GetInternalKey(borrowerPubKey []byte, dcmPubKey []byte) *btcec.PublicKey {
 	return btcec.NewPublicKey(&P.X, &P.Y)
 }
 
+// GetTapscriptTree gets the tapscript tree built from the given tapscripts
+// NOTE: Duplicate scripts are filtered out
 func GetTapscriptTree(scripts [][]byte) *txscript.IndexedTapScriptTree {
 	leaves := []txscript.TapLeaf{}
+	leafMap := make(map[chainhash.Hash]bool)
 
 	for _, script := range scripts {
-		leaves = append(leaves, txscript.NewBaseTapLeaf(script))
+		leaf := txscript.NewBaseTapLeaf(script)
+		hash := leaf.TapHash()
+
+		if !leafMap[hash] {
+			leaves = append(leaves, leaf)
+			leafMap[hash] = true
+		}
 	}
 
 	tree := txscript.AssembleTaprootScriptTree(leaves...)
@@ -157,8 +163,23 @@ func GetTapscriptTree(scripts [][]byte) *txscript.IndexedTapScriptTree {
 	return tree
 }
 
-func GetControlBlock(pubKey *secp256k1.PublicKey, proof txscript.TapscriptProof) ([]byte, error) {
-	controlBlock := proof.ToControlBlock(pubKey)
+// GetTapscriptMerkleProof gets the merkle proof of the specified script from the given tapscript tree
+func GetTapscriptMerkleProof(tree *txscript.IndexedTapScriptTree, script []byte) txscript.TapscriptProof {
+	leaf := txscript.NewBaseTapLeaf(script)
+
+	index, ok := tree.LeafProofIndex[leaf.TapHash()]
+	if !ok {
+		return txscript.TapscriptProof{}
+	}
+
+	return tree.LeafMerkleProofs[index]
+}
+
+// GetControlBlock gets the control block for the given tapscript
+// Assume that the given script exists in the tapscript tree
+func GetControlBlock(tree *txscript.IndexedTapScriptTree, script []byte, internalKey *secp256k1.PublicKey) ([]byte, error) {
+	proof := GetTapscriptMerkleProof(tree, script)
+	controlBlock := proof.ToControlBlock(internalKey)
 
 	controlBlockBz, err := controlBlock.ToBytes()
 	if err != nil {
