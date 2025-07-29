@@ -29,8 +29,13 @@ message AssetMetadata {
 message PoolTrancheConfig {
   // maturity duration in seconds
   int64 maturity = 1;
-  // borrow apr permille
-  uint32 borrow_apr = 2 [(gogoproto.customname) = "BorrowAPR"];
+  // borrow apr
+  string borrow_apr = 2 [
+    (gogoproto.customname) = "BorrowAPR",
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false
+  ];
 }
 
 // Pool config
@@ -65,14 +70,30 @@ message PoolConfig {
     cosmos.base.v1beta1.Coin request_fee = 8 [
       (gogoproto.nullable) = false
     ];
-    // origination fee factor permille
-    uint32 origination_fee_factor = 9;
-    // reserve factor permille
-    uint32 reserve_factor = 10;
-    // maximum ltv percent
-    uint32 max_ltv = 11;
-    // liquidation ltv percent
-    uint32 liquidation_threshold = 12;
+    // origination fee factor
+    string origination_fee_factor = 9 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    // reserve factor
+    string reserve_factor = 10 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    // maximum ltv
+    string max_ltv = 11 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    // liquidation ltv
+    string liquidation_threshold = 12 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
     // indicates if the pool is paused
     bool paused = 13;
 }
@@ -198,7 +219,12 @@ message Loan {
       (gogoproto.nullable) = false
     ];
     int64 maturity = 14;
-    uint32 borrow_apr = 15 [(gogoproto.customname) = "BorrowAPR"];
+    string borrow_apr = 15 [
+      (gogoproto.customname) = "BorrowAPR",
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
     string start_borrow_index = 16 [
       (cosmos_proto.scalar)  = "cosmos.Dec",
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
