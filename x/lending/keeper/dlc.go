@@ -41,6 +41,7 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 	dlcMeta := k.GetDLCMeta(ctx, loanId)
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loanId)
+	dcmPkScript, _ := types.GetPkScriptFromPubKey(loan.DCM)
 
 	vaultUtxos, err := types.GetVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
@@ -63,7 +64,6 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 	repaymentScript, repaymentScriptControlBlock, _ := types.UnwrapLeafScript(dlcMeta.RepaymentScript)
 
 	for i := range liquidationCetPsbt.Inputs {
-		liquidationCetPsbt.Inputs[i].SighashType = txscript.SigHashDefault
 		liquidationCetPsbt.Inputs[i].TaprootInternalKey = internalKey
 		liquidationCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
@@ -74,8 +74,18 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 		}
 	}
 
+	// get fee rate
+	feeRate := k.btcbridgeKeeper.GetFeeRate(ctx)
+	if err := k.btcbridgeKeeper.CheckFeeRate(ctx, feeRate); err != nil {
+		return err
+	}
+
+	// add DCM output to liquidation cet
+	if err := types.AddDCMOutputToLiquidationCet(liquidationCetPsbt, liquidationScript, liquidationScriptControlBlock, dcmPkScript, feeRate.Value); err != nil {
+		return err
+	}
+
 	for i := range repaymentCetPsbt.Inputs {
-		repaymentCetPsbt.Inputs[i].SighashType = txscript.SigHashDefault
 		repaymentCetPsbt.Inputs[i].TaprootInternalKey = internalKey
 		repaymentCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
@@ -101,12 +111,7 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 		return err
 	}
 
-	// get fee rate
-	feeRate := k.BtcBridgeKeeper().GetFeeRate(ctx)
-	if feeRate.Value == 0 {
-		feeRate.Value = types.DefaultFeeRate
-	}
-
+	// timeout refund transaction can be generated offchain as needed
 	timeoutRefundTx, err := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey, dlcMeta.TimeoutRefundScript, feeRate.Value)
 	if err != nil {
 		return err
@@ -179,9 +184,9 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 		k.UpdateDLCEventLiquidatedOutcome(ctx, loan, dlcEvent, liquidationPrice)
 	}
 
-	liquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.LiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock)
-	defaultLiquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.DefaultLiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock)
-	repaymentCetInfo, _ := types.GetCetInfo(dlcEvent, types.RepaidOutcomeIndex, repaymentScript, repaymentScriptControlBlock)
+	liquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.LiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock, types.BorrowerLiquidationCetSigHashType)
+	defaultLiquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.DefaultLiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock, types.BorrowerLiquidationCetSigHashType)
+	repaymentCetInfo, _ := types.GetCetInfo(dlcEvent, types.RepaidOutcomeIndex, repaymentScript, repaymentScriptControlBlock, types.DefaultSigHashType)
 
 	return []*types.CetInfo{
 		liquidationCetInfo,

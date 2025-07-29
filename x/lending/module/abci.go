@@ -257,7 +257,7 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		// build signed liquidation cet if both borrower adapted signatures(obviously exist) and DCM signatures already exist
 		if len(cet.DCMSignatures) != 0 {
-			signedTx, txHash, err := types.BuildSignedCet(cet.Tx, loan.BorrowerAuthPubKey, cet.BorrowerAdaptedSignatures, loan.DCM, cet.DCMSignatures)
+			signedTx, txHash, err := types.BuildSignedCet(cet.Tx, loan.BorrowerAuthPubKey, cet.BorrowerAdaptedSignatures, loan.DCM, cet.DCMSignatures, cetType)
 			if err != nil {
 				k.Logger(ctx).Info("failed to build signed liquidation cet", "loan id", loan.VaultAddress, "err", err)
 			} else {
@@ -331,7 +331,7 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 		}
 
 		// build signed repayment cet
-		signedTx, txHash, err := types.BuildSignedCet(dlcMeta.RepaymentCet.Tx, loan.BorrowerPubKey, dlcMeta.RepaymentCet.BorrowerSignatures, loan.DCM, dlcMeta.RepaymentCet.DCMAdaptedSignatures)
+		signedTx, txHash, err := types.BuildSignedCet(dlcMeta.RepaymentCet.Tx, loan.BorrowerPubKey, dlcMeta.RepaymentCet.BorrowerSignatures, loan.DCM, dlcMeta.RepaymentCet.DCMAdaptedSignatures, types.CetType_REPAYMENT)
 		if err != nil {
 			k.Logger(ctx).Info("failed to build signed repayment cet", "loan id", loan.VaultAddress, "err", err)
 		} else {
