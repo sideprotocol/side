@@ -44,7 +44,6 @@ func migrateParams(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Bina
 		ProtocolFees:              paramsV1.ProtocolFees,
 		TssParams:                 paramsV1.TssParams,
 		IbcParams: types.IBCParams{
-			PortId:              types.DefaultIBCPortId,
 			TimeoutHeightOffset: types.DefaultIBCTimeoutHeightOffset,
 			TimeoutDuration:     types.DefaultIBCTimeoutDuration,
 		},

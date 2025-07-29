@@ -79,6 +79,42 @@ message Params {
   RateLimitParams rate_limit_params = 16 [(gogoproto.nullable) = false];
 }
 
+// ParamsV2 defines the V2 parameters for the module.
+message ParamsV2 {
+  // The minimum number of confirmations required for the deposit transactions
+  int32 deposit_confirmation_depth = 1;
+  // The minimum number of confirmations required for the withdrawal transactions
+  int32 withdraw_confirmation_depth = 2;
+  // Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
+  uint64 max_acceptable_block_depth = 3;
+  // The denomination of the voucher
+  string btc_voucher_denom = 4;
+  // Indicates if deposit is enabled
+  bool deposit_enabled = 5;
+  // Indicates if withdrawal is enabled
+  bool withdraw_enabled = 6;
+  // Trusted relayers for non-btc asset deposit
+  repeated string trusted_non_btc_relayers = 7;
+  // Trusted fee providers to submit bitcoin fee rate
+  repeated string trusted_fee_providers = 8;
+  // Period of validity for the fee rate
+  int64 fee_rate_validity_period = 9;
+  // Asset vaults
+  repeated Vault vaults = 10;
+  // Withdrawal params
+  WithdrawParams withdraw_params = 11 [(gogoproto.nullable) = false];
+  // Protocol limitations
+  ProtocolLimits protocol_limits = 12 [(gogoproto.nullable) = false];
+  // Protocol fees
+  ProtocolFees protocol_fees = 13 [(gogoproto.nullable) = false];
+  // TSS params
+  TSSParams tss_params = 14 [(gogoproto.nullable) = false];
+  // IBC params
+  IBCParamsV1 ibc_params = 15 [(gogoproto.nullable) = false];
+  // Rate limit params
+  RateLimitParams rate_limit_params = 16 [(gogoproto.nullable) = false];
+}
+
 // AssetType defines the type of asset
 enum AssetType {
   // Unspecified asset type
@@ -170,4 +206,13 @@ message IBCParams {
   uint64 timeout_height_offset = 1;
   // Timeout duration relative to the current time
   google.protobuf.Duration timeout_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// IBCParamsV1 defines the V1 params related to IBC
+message IBCParamsV1 {
+  string port_id = 1;
+  // Timeout height offset relative to the current client height
+  uint64 timeout_height_offset = 2;
+  // Timeout duration relative to the current time
+  google.protobuf.Duration timeout_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }
