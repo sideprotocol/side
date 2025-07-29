@@ -35,7 +35,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 	}
 
 	// minimum liquidation debt amount if the remaining debt amount is sufficient
-	minLiquidationDebtAmount := liquidation.DebtAmount.Amount.Mul(sdkmath.NewInt(int64(k.MinLiquidationFactor(ctx)))).Quo(sdkmath.NewInt(1000))
+	minLiquidationDebtAmount := liquidation.DebtAmount.Amount.ToLegacyDec().Mul(k.MinLiquidationFactor(ctx)).TruncateInt()
 
 	// check remaining debt amount
 	if remainingDebtAmount.Amount.GTE(minLiquidationDebtAmount) && debtAmount.Amount.LT(minLiquidationDebtAmount) {
@@ -75,7 +75,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 	remainingCollateralAmount = remainingCollateralAmount.SubAmount(collateralAmount)
 
 	// calculate bonus
-	bonusAmountInDebt := debtAmount.Amount.Mul(sdkmath.NewInt(int64(k.LiquidationBonusFactor(ctx)))).Quo(sdkmath.NewInt(1000))
+	bonusAmountInDebt := debtAmount.Amount.ToLegacyDec().Mul(k.LiquidationBonusFactor(ctx)).TruncateInt()
 	bonusAmount := types.GetCollateralAmount(bonusAmountInDebt, debtDecimals, collateralDecimals, currentPrice, collateralIsBaseAsset)
 
 	// check if there is left collateral for bonus
@@ -88,7 +88,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, liquidator string, liquidatio
 		return nil, errorsmod.Wrapf(types.ErrInvalidAmount, "dust collateral amount %s", collateralAmount)
 	}
 
-	protocolLiquidationFee := bonusAmount.Mul(sdkmath.NewInt(int64(k.ProtocolLiquidationFeeFactor(ctx)))).Quo(sdkmath.NewInt(1000))
+	protocolLiquidationFee := bonusAmount.ToLegacyDec().Mul(k.ProtocolLiquidationFeeFactor(ctx)).TruncateInt()
 
 	liquidation.LiquidatedCollateralAmount = liquidation.LiquidatedCollateralAmount.AddAmount(collateralAmount).AddAmount(bonusAmount)
 	liquidation.LiquidatedDebtAmount = liquidation.LiquidatedDebtAmount.Add(debtAmount)

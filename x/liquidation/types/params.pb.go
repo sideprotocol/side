@@ -4,7 +4,9 @@
 package types
 
 import (
+	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	io "io"
@@ -25,12 +27,12 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	// minimum liquidation factor permille
-	MinLiquidationFactor uint32 `protobuf:"varint,1,opt,name=min_liquidation_factor,json=minLiquidationFactor,proto3" json:"min_liquidation_factor,omitempty"`
-	// liquidation bonus factor permille
-	LiquidationBonusFactor uint32 `protobuf:"varint,2,opt,name=liquidation_bonus_factor,json=liquidationBonusFactor,proto3" json:"liquidation_bonus_factor,omitempty"`
-	// protocol liquidation fee factor permille
-	ProtocolLiquidationFeeFactor uint32 `protobuf:"varint,3,opt,name=protocol_liquidation_fee_factor,json=protocolLiquidationFeeFactor,proto3" json:"protocol_liquidation_fee_factor,omitempty"`
+	// minimum liquidation factor
+	MinLiquidationFactor cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=min_liquidation_factor,json=minLiquidationFactor,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"min_liquidation_factor"`
+	// liquidation bonus factor
+	LiquidationBonusFactor cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,opt,name=liquidation_bonus_factor,json=liquidationBonusFactor,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"liquidation_bonus_factor"`
+	// protocol liquidation fee factor
+	ProtocolLiquidationFeeFactor cosmossdk_io_math.LegacyDec `protobuf:"bytes,3,opt,name=protocol_liquidation_fee_factor,json=protocolLiquidationFeeFactor,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"protocol_liquidation_fee_factor"`
 	// protocol liquidation fee collector
 	ProtocolLiquidationFeeCollector string `protobuf:"bytes,4,opt,name=protocol_liquidation_fee_collector,json=protocolLiquidationFeeCollector,proto3" json:"protocol_liquidation_fee_collector,omitempty"`
 }
@@ -68,27 +70,6 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetMinLiquidationFactor() uint32 {
-	if m != nil {
-		return m.MinLiquidationFactor
-	}
-	return 0
-}
-
-func (m *Params) GetLiquidationBonusFactor() uint32 {
-	if m != nil {
-		return m.LiquidationBonusFactor
-	}
-	return 0
-}
-
-func (m *Params) GetProtocolLiquidationFeeFactor() uint32 {
-	if m != nil {
-		return m.ProtocolLiquidationFeeFactor
-	}
-	return 0
-}
-
 func (m *Params) GetProtocolLiquidationFeeCollector() string {
 	if m != nil {
 		return m.ProtocolLiquidationFeeCollector
@@ -103,23 +84,27 @@ func init() {
 func init() { proto.RegisterFile("side/liquidation/params.proto", fileDescriptor_0a9a4d8d5a54e05b) }
 
 var fileDescriptor_0a9a4d8d5a54e05b = []byte{
-	// 254 bytes of a gzipped FileDescriptorProto
+	// 313 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2d, 0xce, 0x4c, 0x49,
 	0xd5, 0xcf, 0xc9, 0x2c, 0x2c, 0xcd, 0x4c, 0x49, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2f, 0x48, 0x2c,
 	0x4a, 0xcc, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x00, 0x49, 0xeb, 0x21, 0x49,
-	0x4b, 0x89, 0xa4, 0xe7, 0xa7, 0xe7, 0x83, 0x25, 0xf5, 0x41, 0x2c, 0x88, 0x3a, 0xa5, 0x1e, 0x26,
-	0x2e, 0xb6, 0x00, 0xb0, 0x46, 0x21, 0x13, 0x2e, 0xb1, 0xdc, 0xcc, 0xbc, 0x78, 0x24, 0x3d, 0xf1,
-	0x69, 0x89, 0xc9, 0x25, 0xf9, 0x45, 0x12, 0x8c, 0x0a, 0x8c, 0x1a, 0xbc, 0x41, 0x22, 0xb9, 0x99,
-	0x79, 0x3e, 0x08, 0x49, 0x37, 0xb0, 0x9c, 0x90, 0x05, 0x97, 0x04, 0xb2, 0x8e, 0xa4, 0xfc, 0xbc,
-	0xd2, 0x62, 0x98, 0x3e, 0x26, 0xb0, 0x3e, 0x31, 0x24, 0x79, 0x27, 0x90, 0x34, 0x54, 0xa7, 0x2b,
-	0x97, 0x3c, 0xd8, 0x0d, 0xc9, 0xf9, 0x39, 0xa8, 0x96, 0xa6, 0xa6, 0xc2, 0x0c, 0x60, 0x06, 0x1b,
-	0x20, 0x03, 0x53, 0x86, 0x6c, 0x7b, 0x6a, 0x2a, 0xd4, 0x18, 0x6f, 0x2e, 0x25, 0x9c, 0xc6, 0x24,
-	0xe7, 0xe7, 0xe4, 0xa4, 0x82, 0x4d, 0x62, 0x51, 0x60, 0xd4, 0xe0, 0x0c, 0x92, 0xc7, 0x6e, 0x92,
-	0x33, 0x4c, 0x99, 0x93, 0xd7, 0x89, 0x47, 0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31, 0x3e, 0x78, 0x24,
-	0xc7, 0x38, 0xe1, 0xb1, 0x1c, 0xc3, 0x85, 0xc7, 0x72, 0x0c, 0x37, 0x1e, 0xcb, 0x31, 0x44, 0x19,
-	0xa4, 0x67, 0x96, 0x64, 0x94, 0x26, 0xe9, 0x25, 0xe7, 0xe7, 0xea, 0x83, 0xc2, 0x16, 0x66, 0x12,
-	0x98, 0xa3, 0x5f, 0x81, 0x12, 0x13, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49, 0x6c, 0x60, 0x25, 0xc6,
-	0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x2e, 0xee, 0x62, 0x26, 0xaa, 0x01, 0x00, 0x00,
+	0x4b, 0x89, 0xa4, 0xe7, 0xa7, 0xe7, 0x83, 0x25, 0xf5, 0x41, 0x2c, 0x88, 0x3a, 0x29, 0xc9, 0xe4,
+	0xfc, 0xe2, 0xdc, 0xfc, 0xe2, 0x78, 0x88, 0x04, 0x84, 0x03, 0x91, 0x52, 0x5a, 0xca, 0xcc, 0xc5,
+	0x16, 0x00, 0x36, 0x53, 0x28, 0x9d, 0x4b, 0x2c, 0x37, 0x33, 0x2f, 0x1e, 0xc9, 0xb8, 0xf8, 0xb4,
+	0xc4, 0xe4, 0x92, 0xfc, 0x22, 0x09, 0x46, 0x05, 0x46, 0x0d, 0x4e, 0x27, 0xc3, 0x13, 0xf7, 0xe4,
+	0x19, 0x6e, 0xdd, 0x93, 0x97, 0x86, 0x18, 0x50, 0x9c, 0x92, 0xad, 0x97, 0x99, 0xaf, 0x9f, 0x9b,
+	0x58, 0x92, 0xa1, 0xe7, 0x93, 0x9a, 0x9e, 0x98, 0x5c, 0xe9, 0x92, 0x9a, 0x7c, 0x69, 0x8b, 0x2e,
+	0x17, 0xd4, 0x7c, 0x97, 0xd4, 0xe4, 0x20, 0x91, 0xdc, 0xcc, 0x3c, 0x1f, 0x84, 0x79, 0x6e, 0x60,
+	0xe3, 0x84, 0xb2, 0xb9, 0x24, 0x90, 0x2d, 0x49, 0xca, 0xcf, 0x2b, 0x2d, 0x86, 0x59, 0xc5, 0x44,
+	0xae, 0x55, 0x62, 0x48, 0x46, 0x3a, 0x81, 0x4c, 0x84, 0x5a, 0x56, 0xc1, 0x25, 0x0f, 0xf6, 0x69,
+	0x72, 0x7e, 0x0e, 0xaa, 0xd7, 0x52, 0x53, 0x61, 0x76, 0x32, 0x93, 0x6b, 0xa7, 0x0c, 0xcc, 0x64,
+	0x64, 0x3f, 0xa6, 0xa6, 0x42, 0x6d, 0xf6, 0xe6, 0x52, 0xc2, 0x69, 0x73, 0x72, 0x7e, 0x4e, 0x4e,
+	0x2a, 0xd8, 0x72, 0x16, 0x90, 0xe5, 0x41, 0xf2, 0xd8, 0x4d, 0x72, 0x86, 0x29, 0x73, 0xf2, 0x3a,
+	0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63,
+	0xb8, 0xf0, 0x58, 0x8e, 0xe1, 0xc6, 0x63, 0x39, 0x86, 0x28, 0x83, 0xf4, 0xcc, 0x92, 0x8c, 0xd2,
+	0x24, 0xbd, 0xe4, 0xfc, 0x5c, 0x7d, 0x50, 0x7a, 0x80, 0x99, 0x04, 0xe6, 0xe8, 0x57, 0xa0, 0xa4,
+	0x9e, 0x92, 0xca, 0x82, 0xd4, 0xe2, 0x24, 0x36, 0xb0, 0x12, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff,
+	0xff, 0x55, 0xd2, 0x3c, 0xcf, 0x5e, 0x02, 0x00, 0x00,
 }
 
 func (m *Params) Marshal() (dAtA []byte, err error) {
@@ -149,21 +134,36 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.ProtocolLiquidationFeeFactor != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.ProtocolLiquidationFeeFactor))
-		i--
-		dAtA[i] = 0x18
+	{
+		size := m.ProtocolLiquidationFeeFactor.Size()
+		i -= size
+		if _, err := m.ProtocolLiquidationFeeFactor.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
-	if m.LiquidationBonusFactor != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.LiquidationBonusFactor))
-		i--
-		dAtA[i] = 0x10
+	i--
+	dAtA[i] = 0x1a
+	{
+		size := m.LiquidationBonusFactor.Size()
+		i -= size
+		if _, err := m.LiquidationBonusFactor.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
-	if m.MinLiquidationFactor != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MinLiquidationFactor))
-		i--
-		dAtA[i] = 0x8
+	i--
+	dAtA[i] = 0x12
+	{
+		size := m.MinLiquidationFactor.Size()
+		i -= size
+		if _, err := m.MinLiquidationFactor.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -184,15 +184,12 @@ func (m *Params) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.MinLiquidationFactor != 0 {
-		n += 1 + sovParams(uint64(m.MinLiquidationFactor))
-	}
-	if m.LiquidationBonusFactor != 0 {
-		n += 1 + sovParams(uint64(m.LiquidationBonusFactor))
-	}
-	if m.ProtocolLiquidationFeeFactor != 0 {
-		n += 1 + sovParams(uint64(m.ProtocolLiquidationFeeFactor))
-	}
+	l = m.MinLiquidationFactor.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.LiquidationBonusFactor.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.ProtocolLiquidationFeeFactor.Size()
+	n += 1 + l + sovParams(uint64(l))
 	l = len(m.ProtocolLiquidationFeeCollector)
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
@@ -236,10 +233,10 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field MinLiquidationFactor", wireType)
 			}
-			m.MinLiquidationFactor = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -249,16 +246,31 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MinLiquidationFactor |= uint32(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.MinLiquidationFactor.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LiquidationBonusFactor", wireType)
 			}
-			m.LiquidationBonusFactor = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -268,16 +280,31 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LiquidationBonusFactor |= uint32(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.LiquidationBonusFactor.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 3:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeFactor", wireType)
 			}
-			m.ProtocolLiquidationFeeFactor = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -287,11 +314,26 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ProtocolLiquidationFeeFactor |= uint32(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ProtocolLiquidationFeeFactor.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeCollector", wireType)
