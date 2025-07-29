@@ -483,6 +483,7 @@ message CetInfo {
   uint32 outcome_index = 2;
   string signature_point = 3;
   LeafScript script = 4 [(gogoproto.nullable) = false];
+  uint32 sighash_type = 5;
 }
 
 message LiquidationCet {

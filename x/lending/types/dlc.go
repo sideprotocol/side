@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
+	"github.com/btcsuite/btcd/wire"
 
 	errorsmod "cosmossdk.io/errors"
 
@@ -17,6 +18,17 @@ import (
 	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	btcbridgetypes "github.com/sideprotocol/side/x/btcbridge/types"
 	dlctypes "github.com/sideprotocol/side/x/dlc/types"
+)
+
+const (
+	// liquidation cet sig hash type for borrower
+	BorrowerLiquidationCetSigHashType = txscript.SigHashNone | txscript.SigHashAnyOneCanPay
+
+	// liquidation cet sig hash type for DCM
+	DCMLiquidationCetSigHashType = txscript.SigHashDefault
+
+	// default sig hash type used for repayment or redemption
+	DefaultSigHashType = txscript.SigHashDefault | txscript.SigHashAnyOneCanPay
 )
 
 const (
@@ -42,7 +54,6 @@ func BuildDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey st
 	liquidationScript, repaymentScript, timeoutRefundScript, _ := GetVaultScripts(borrowerPubKeyBytes, borrowerAuthPubKeyBytes, dcmPubKeyBytes, finalTimeout)
 
 	tapscriptTree := GetTapscriptTree([][]byte{liquidationScript, repaymentScript, timeoutRefundScript})
-	sanitizeTapscriptTreeProofs(tapscriptTree)
 
 	liquidationScriptControlBlock, err := GetControlBlock(tapscriptTree, liquidationScript, internalKey)
 	if err != nil {
@@ -68,7 +79,7 @@ func BuildDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey st
 }
 
 // VerifyCets verifies the given cets
-func VerifyCets(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, dlcEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
+func VerifyCets(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, dlcEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
 	liquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(dlcEvent, LiquidatedOutcomeIndex)
 	if err != nil {
 		return err
@@ -79,15 +90,15 @@ func VerifyCets(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey 
 		return err
 	}
 
-	if err := VerifyLiquidationCet(depositTxs, vaultPkScript, borrowerAuthPubKey, dcmPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint); err != nil {
+	if err := VerifyLiquidationCet(dlcMeta, depositTxs, vaultPkScript, borrowerAuthPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint); err != nil {
 		return errorsmod.Wrapf(ErrInvalidCET, "invalid liquidation cet: %v", err)
 	}
 
-	if err := VerifyLiquidationCet(depositTxs, vaultPkScript, borrowerAuthPubKey, dcmPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint); err != nil {
+	if err := VerifyLiquidationCet(dlcMeta, depositTxs, vaultPkScript, borrowerAuthPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint); err != nil {
 		return errorsmod.Wrapf(ErrInvalidCET, "invalid default liquidation cet: %v", err)
 	}
 
-	if err := VerifyRepaymentCet(depositTxs, vaultPkScript, borrowerPubKey, dcmPubKey, repaymentCet, repaymentSignatures); err != nil {
+	if err := VerifyRepaymentCet(dlcMeta, depositTxs, vaultPkScript, borrowerPubKey, repaymentCet, repaymentSignatures); err != nil {
 		return errorsmod.Wrapf(ErrInvalidCET, "invalid repayment cet: %v", err)
 	}
 
@@ -95,32 +106,15 @@ func VerifyCets(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey 
 }
 
 // VerifyLiquidationCet verifies the given liquidation cet and corresponding adaptor signatures
-func VerifyLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerAuthPubKey string, dcmPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte) error {
+func VerifyLiquidationCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerAuthPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte) error {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCET)), true)
 	if err != nil {
 		return errorsmod.Wrap(ErrInvalidCET, "failed to deserialize cet")
 	}
 
-	dcmPkScript, err := GetPkScriptFromPubKey(dcmPubKey)
-	if err != nil {
-		return err
-	}
-
-	if len(p.UnsignedTx.TxOut) != 1 || !bytes.Equal(p.UnsignedTx.TxOut[0].PkScript, dcmPkScript) {
+	// no output is allowed; output will be populated later
+	if len(p.UnsignedTx.TxOut) != 0 {
 		return errorsmod.Wrap(ErrInvalidCET, "incorrect tx out")
-	}
-
-	if btcbridgetypes.IsDustOut(p.UnsignedTx.TxOut[0]) {
-		return errorsmod.Wrap(ErrInvalidCET, "dust tx out")
-	}
-
-	fee, err := p.GetTxFee()
-	if err != nil || int64(fee) < btcbridgetypes.GetTxVirtualSize(p.UnsignedTx, nil) {
-		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
-	}
-
-	if err := btcbridgetypes.CheckTransactionWeight(p.UnsignedTx, nil); err != nil {
-		return err
 	}
 
 	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
@@ -163,18 +157,13 @@ func VerifyLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borro
 		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower auth public key")
 	}
 
-	dcmPubKeyBytes, err := hex.DecodeString(dcmPubKey)
-	if err != nil {
-		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode dcm public key")
-	}
-
-	script, err := CreateMultisigScript([][]byte{borrowerAuthPubKeyBytes, dcmPubKeyBytes})
+	script, _, err := UnwrapLeafScript(dlcMeta.LiquidationScript)
 	if err != nil {
 		return err
 	}
 
 	for i, signature := range adaptorSignatures {
-		sigHash, err := CalcTapscriptSigHash(p, i, DefaultSigHashType, script)
+		sigHash, err := CalcTapscriptSigHash(p, i, BorrowerLiquidationCetSigHashType, script)
 		if err != nil {
 			return errorsmod.Wrapf(err, "failed to calculate sig hash")
 		}
@@ -193,22 +182,37 @@ func VerifyLiquidationCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borro
 }
 
 // VerifyRepaymentCet verifies the given repayment cet and corresponding signatures
-func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, dcmPubKey string, repaymentCet string, signatures []string) error {
+func VerifyRepaymentCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, repaymentCet string, signatures []string) error {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(repaymentCet)), true)
 	if err != nil {
 		return errorsmod.Wrap(ErrInvalidCET, "failed to deserialize cet")
+	}
+
+	if len(p.UnsignedTx.TxOut) == 0 {
+		return errorsmod.Wrap(ErrInvalidCET, "missing tx out")
 	}
 
 	if slices.ContainsFunc(p.UnsignedTx.TxOut, btcbridgetypes.IsDustOut) {
 		return errorsmod.Wrap(ErrInvalidCET, "dust tx out")
 	}
 
+	script, controlBlock, err := UnwrapLeafScript(dlcMeta.RepaymentScript)
+	if err != nil {
+		return err
+	}
+
+	witnessSize := getCetWitnessSize(CetType_REPAYMENT, script, controlBlock)
+
 	fee, err := p.GetTxFee()
-	if err != nil || int64(fee) < btcbridgetypes.GetTxVirtualSize(p.UnsignedTx, nil) {
+	if err != nil {
+		return errorsmod.Wrapf(ErrInvalidCET, "failed to get tx fee: %v", err)
+	}
+
+	if int64(fee) < GetTxVirtualSize(p.UnsignedTx, witnessSize) {
 		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
 	}
 
-	if err := btcbridgetypes.CheckTransactionWeight(p.UnsignedTx, nil); err != nil {
+	if err := CheckTransactionWeight(p.UnsignedTx, witnessSize); err != nil {
 		return err
 	}
 
@@ -252,16 +256,6 @@ func VerifyRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode borrower public key")
 	}
 
-	dcmPubKeyBytes, err := hex.DecodeString(dcmPubKey)
-	if err != nil {
-		return errorsmod.Wrap(ErrInvalidPubKey, "failed to decode dcm public key")
-	}
-
-	script, err := CreateMultisigScript([][]byte{borrowerPubKeyBytes, dcmPubKeyBytes})
-	if err != nil {
-		return err
-	}
-
 	for i, signature := range signatures {
 		sigHash, err := CalcTapscriptSigHash(p, i, DefaultSigHashType, script)
 		if err != nil {
@@ -293,7 +287,7 @@ func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPk
 		return "", err
 	}
 
-	p, err := BuildPsbt(vaultUtxos, dcmPkScript, feeRate)
+	p, err := BuildPsbt(vaultUtxos, dcmPkScript, feeRate, getCetWitnessSize(CetType_LIQUIDATION, script, controlBlock))
 	if err != nil {
 		return "", err
 	}
@@ -329,7 +323,7 @@ func CreateRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowe
 		return "", err
 	}
 
-	p, err := BuildPsbt(vaultUtxos, borrowerPkScript, feeRate)
+	p, err := BuildPsbt(vaultUtxos, borrowerPkScript, feeRate, getCetWitnessSize(CetType_REPAYMENT, script, controlBlock))
 	if err != nil {
 		return "", err
 	}
@@ -365,12 +359,13 @@ func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []b
 		return "", err
 	}
 
-	p, err := BuildPsbt(vaultUtxos, borrowerPkScript, feeRate)
+	p, err := BuildPsbt(vaultUtxos, borrowerPkScript, feeRate, 64+len(script)+len(controlBlock))
 	if err != nil {
 		return "", err
 	}
 
 	for i := range p.Inputs {
+		p.Inputs[i].SighashType = txscript.SigHashDefault
 		p.Inputs[i].TaprootInternalKey = internalKeyBytes
 		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
 			{
@@ -391,7 +386,7 @@ func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []b
 
 // BuildSignedCet builds the signed cet from the given signatures
 // Assume that the cet is valid and signatures match
-func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []string, dcmPubKey string, dcmSignatures []string) ([]byte, *chainhash.Hash, error) {
+func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []string, dcmPubKey string, dcmSignatures []string, cetType CetType) ([]byte, *chainhash.Hash, error) {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(cet)), true)
 	if err != nil {
 		return nil, nil, err
@@ -406,6 +401,8 @@ func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []stri
 	if err != nil {
 		return nil, nil, err
 	}
+
+	borrowerSigHashType, dcmSigHashType := GetCetSigHashTypes(cetType)
 
 	for i, input := range p.Inputs {
 		borrowerSig, err := hex.DecodeString(borrowerSignatures[i])
@@ -425,13 +422,13 @@ func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []stri
 				XOnlyPubKey: dcmPubKeyBytes,
 				LeafHash:    leafHash[:],
 				Signature:   dcmSig,
-				SigHash:     txscript.SigHashDefault,
+				SigHash:     dcmSigHashType,
 			},
 			{
 				XOnlyPubKey: borrowerPubKeyBytes,
 				LeafHash:    leafHash[:],
 				Signature:   borrowerSig,
-				SigHash:     txscript.SigHashDefault,
+				SigHash:     borrowerSigHashType,
 			},
 		}
 	}
@@ -453,6 +450,17 @@ func BuildSignedCet(cet string, borrowerPubKey string, borrowerSignatures []stri
 	txHash := signedTx.TxHash()
 
 	return buf.Bytes(), &txHash, nil
+}
+
+// GetCetSigHashTypes gets the cet sig hash types for borrower and DCM by the given cet type
+func GetCetSigHashTypes(cetType CetType) (txscript.SigHashType, txscript.SigHashType) {
+	switch cetType {
+	case CetType_LIQUIDATION, CetType_DEFAULT_LIQUIDATION:
+		return BorrowerLiquidationCetSigHashType, DCMLiquidationCetSigHashType
+
+	default:
+		return DefaultSigHashType, DefaultSigHashType
+	}
 }
 
 // GetCet gets the liquidation cet and corresponding type according to the given loan status
@@ -477,8 +485,33 @@ func UpdateLiquidationCet(dlcMeta *DLCMeta, cetType CetType, cet LiquidationCet)
 	}
 }
 
+// UpdateLiquidationCetOutput adds the DCM output to the given cet
+func AddDCMOutputToLiquidationCet(cet *psbt.Packet, script []byte, controlBlock []byte, dcmPkScript []byte, feeRate int64) error {
+	// get total input amount
+	inputAmount := int64(0)
+	for _, input := range cet.Inputs {
+		inputAmount += input.WitnessUtxo.Value
+	}
+
+	// add dcm output
+	cet.UnsignedTx.TxOut[0] = wire.NewTxOut(0, dcmPkScript)
+
+	// calculate tx fee
+	witnessSize := getCetWitnessSize(CetType_LIQUIDATION, script, controlBlock)
+	fee := GetTxVirtualSize(cet.UnsignedTx, witnessSize) * feeRate
+
+	// update output value
+	cet.UnsignedTx.TxOut[0].Value = inputAmount - fee
+
+	if btcbridgetypes.IsDustOut(cet.UnsignedTx.TxOut[0]) {
+		return ErrDustOutput
+	}
+
+	return CheckTransactionWeight(cet.UnsignedTx, witnessSize)
+}
+
 // GetCetInfo gets the cet info from the given event and script
-func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte, controlBlock []byte) (*CetInfo, error) {
+func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte, controlBlock []byte, sigHashType txscript.SigHashType) (*CetInfo, error) {
 	if event == nil {
 		return nil, nil
 	}
@@ -493,6 +526,7 @@ func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte, contr
 		OutcomeIndex:   uint32(outcomeIndex),
 		SignaturePoint: hex.EncodeToString(signaturePoint),
 		Script:         GetLeafScript(script, controlBlock),
+		SighashType:    uint32(sigHashType),
 	}, nil
 }
 
@@ -510,8 +544,8 @@ func GetLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 
 	sigHashes := []string{}
 
-	for i, input := range p.Inputs {
-		sigHash, err := CalcTapscriptSigHash(p, i, input.SighashType, script)
+	for i := range p.Inputs {
+		sigHash, err := CalcTapscriptSigHash(p, i, DCMLiquidationCetSigHashType, script)
 		if err != nil {
 			return nil, err
 		}
@@ -536,8 +570,8 @@ func GetDefaultLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 
 	sigHashes := []string{}
 
-	for i, input := range p.Inputs {
-		sigHash, err := CalcTapscriptSigHash(p, i, input.SighashType, script)
+	for i := range p.Inputs {
+		sigHash, err := CalcTapscriptSigHash(p, i, DCMLiquidationCetSigHashType, script)
 		if err != nil {
 			return nil, err
 		}
@@ -562,8 +596,8 @@ func GetRepaymentCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
 
 	sigHashes := []string{}
 
-	for i, input := range p.Inputs {
-		sigHash, err := CalcTapscriptSigHash(p, i, input.SighashType, script)
+	for i := range p.Inputs {
+		sigHash, err := CalcTapscriptSigHash(p, i, DefaultSigHashType, script)
 		if err != nil {
 			return nil, err
 		}
@@ -649,21 +683,15 @@ func getVaultUtxosFromDepositTx(depositTx *psbt.Packet, vaultPkScript []byte) ([
 	return utxos, nil
 }
 
-// sanitizeTapscriptTreeProofs adjusts the merkle proofs of given tapscript tree
-// NOTE: This is a workaround because btcsuite.AssembleTaprootScriptTree overrides the proof if there exist same scripts
-// This method only works for three-leaf script tree
-func sanitizeTapscriptTreeProofs(tree *txscript.IndexedTapScriptTree) {
-	proofTwo := tree.LeafMerkleProofs[1].InclusionProof
+// getCetWitnessSize gets the cet witness size according to the given params
+func getCetWitnessSize(cetType CetType, script []byte, controlBlock []byte) int {
+	switch cetType {
+	case CetType_LIQUIDATION, CetType_DEFAULT_LIQUIDATION:
+		// dcm signature(64) + borrower signature(65) + len(script) + len(control block)
+		return 64 + 65 + len(script) + len(controlBlock)
 
-	// abnormal proof
-	if len(proofTwo) > 64 {
-		// trim the second proof
-		tree.LeafMerkleProofs[1].InclusionProof = proofTwo[0:64]
-
-		// get the last element
-		lastProofElement := proofTwo[len(proofTwo)-32:]
-
-		// append to the first proof
-		tree.LeafMerkleProofs[0].InclusionProof = append(tree.LeafMerkleProofs[0].InclusionProof, lastProofElement...)
+	default:
+		// dcm signature(65) + borrower signature(65) + len(script) + len(control block)
+		return 65 + 65 + len(script) + len(controlBlock)
 	}
 }
