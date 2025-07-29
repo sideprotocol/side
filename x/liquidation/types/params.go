@@ -2,6 +2,7 @@ package types
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
@@ -9,13 +10,13 @@ import (
 
 var (
 	// default minimum liquidation factor
-	DefaultMinLiquidationFactor = uint32(20) // 2%
+	DefaultMinLiquidationFactor = sdkmath.LegacyMustNewDecFromStr("0.02") // 2%
 
 	// default liquidation bonus factor
-	DefaultLiquidationBonusFactor = uint32(50) // 5%
+	DefaultLiquidationBonusFactor = sdkmath.LegacyMustNewDecFromStr("0.05") // 5%
 
 	// default protocol liquidation fee factor
-	DefaultProtocolLiquidationFeeFactor = uint32(100) // 10%
+	DefaultProtocolLiquidationFeeFactor = sdkmath.LegacyMustNewDecFromStr("0.1") // 10%
 )
 
 // NewParams creates a new Params instance
@@ -35,15 +36,15 @@ func DefaultParams() Params {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if p.MinLiquidationFactor == 0 || p.MinLiquidationFactor >= 1000 {
+	if !p.MinLiquidationFactor.IsPositive() || p.MinLiquidationFactor.GT(sdkmath.LegacyOneDec()) {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid minimum liquidation factor")
 	}
 
-	if p.LiquidationBonusFactor == 0 || p.LiquidationBonusFactor >= 1000 {
+	if !p.LiquidationBonusFactor.IsPositive() || p.LiquidationBonusFactor.GTE(sdkmath.LegacyOneDec()) {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid liquidation bonus factor")
 	}
 
-	if p.ProtocolLiquidationFeeFactor >= 1000 {
+	if p.ProtocolLiquidationFeeFactor.GTE(sdkmath.LegacyOneDec()) {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid protocol liquidation fee factor")
 	}
 

@@ -1,21 +1,22 @@
 package keeper
 
 import (
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // MinLiquidationFactor returns the minimum liquidation factor
-func (k Keeper) MinLiquidationFactor(ctx sdk.Context) uint32 {
+func (k Keeper) MinLiquidationFactor(ctx sdk.Context) sdkmath.LegacyDec {
 	return k.GetParams(ctx).MinLiquidationFactor
 }
 
 // LiquidationBonusFactor returns the liquidation bonus factor
-func (k Keeper) LiquidationBonusFactor(ctx sdk.Context) uint32 {
+func (k Keeper) LiquidationBonusFactor(ctx sdk.Context) sdkmath.LegacyDec {
 	return k.GetParams(ctx).LiquidationBonusFactor
 }
 
 // ProtocolLiquidationFeeFactor returns the protocol liquidation fee factor
-func (k Keeper) ProtocolLiquidationFeeFactor(ctx sdk.Context) uint32 {
+func (k Keeper) ProtocolLiquidationFeeFactor(ctx sdk.Context) sdkmath.LegacyDec {
 	return k.GetParams(ctx).ProtocolLiquidationFeeFactor
 }
 

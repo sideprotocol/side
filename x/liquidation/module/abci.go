@@ -1,7 +1,6 @@
 package liquidation
 
 import (
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/liquidation/keeper"
@@ -47,7 +46,7 @@ func handlePendingLiquidations(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		minLiquidationDebtAmount := liquidation.DebtAmount.Amount.Mul(sdkmath.NewInt(int64(k.MinLiquidationFactor(ctx)))).Quo(sdkmath.NewInt(1000))
+		minLiquidationDebtAmount := liquidation.DebtAmount.Amount.ToLegacyDec().Mul(k.MinLiquidationFactor(ctx)).TruncateInt()
 		if remainingDebtAmount.Amount.GTE(minLiquidationDebtAmount) {
 			continue
 		}
