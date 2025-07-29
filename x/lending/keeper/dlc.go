@@ -41,7 +41,6 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 	dlcMeta := k.GetDLCMeta(ctx, loanId)
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loanId)
-	dcmPkScript, _ := types.GetPkScriptFromPubKey(loan.DCM)
 
 	vaultUtxos, err := types.GetVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
@@ -74,17 +73,6 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 		}
 	}
 
-	// get fee rate
-	feeRate := k.btcbridgeKeeper.GetFeeRate(ctx)
-	if err := k.btcbridgeKeeper.CheckFeeRate(ctx, feeRate); err != nil {
-		return err
-	}
-
-	// add DCM output to liquidation cet
-	if err := types.AddDCMOutputToLiquidationCet(liquidationCetPsbt, liquidationScript, liquidationScriptControlBlock, dcmPkScript, feeRate.Value); err != nil {
-		return err
-	}
-
 	for i := range repaymentCetPsbt.Inputs {
 		repaymentCetPsbt.Inputs[i].TaprootInternalKey = internalKey
 		repaymentCetPsbt.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
@@ -109,6 +97,12 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 	borrowerPkScript, err := types.GetPkScriptFromPubKey(loan.BorrowerPubKey)
 	if err != nil {
 		return err
+	}
+
+	// get fee rate
+	feeRate := k.btcbridgeKeeper.GetFeeRate(ctx)
+	if err := k.btcbridgeKeeper.CheckFeeRate(ctx, feeRate); err != nil {
+		feeRate.Value = types.DefaultFeeRate
 	}
 
 	// timeout refund transaction can be generated offchain as needed
@@ -184,8 +178,8 @@ func (k Keeper) GetCetInfos(ctx sdk.Context, loanId string, collateralAmount sdk
 		k.UpdateDLCEventLiquidatedOutcome(ctx, loan, dlcEvent, liquidationPrice)
 	}
 
-	liquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.LiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock, types.BorrowerLiquidationCetSigHashType)
-	defaultLiquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.DefaultLiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock, types.BorrowerLiquidationCetSigHashType)
+	liquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.LiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock, types.DefaultSigHashType)
+	defaultLiquidationCetInfo, _ := types.GetCetInfo(dlcEvent, types.DefaultLiquidatedOutcomeIndex, liquidationScript, liquidationScriptControlBlock, types.DefaultSigHashType)
 	repaymentCetInfo, _ := types.GetCetInfo(dlcEvent, types.RepaidOutcomeIndex, repaymentScript, repaymentScriptControlBlock, types.DefaultSigHashType)
 
 	return []*types.CetInfo{
