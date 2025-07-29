@@ -37,7 +37,7 @@ func migrateLoans(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 		}
 
 		// build new loan
-		loan := &types.Loan{
+		loan := &types.LoanV4{
 			VaultAddress:       loanV3.VaultAddress,
 			Borrower:           loanV3.Borrower,
 			BorrowerPubKey:     loanV3.BorrowerPubKey,

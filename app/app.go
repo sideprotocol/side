@@ -164,6 +164,7 @@ import (
 	upgradev2rc12 "github.com/sideprotocol/side/app/upgrades/v2_rc12"
 	upgradev2rc13 "github.com/sideprotocol/side/app/upgrades/v2_rc13"
 	upgradev2rc14 "github.com/sideprotocol/side/app/upgrades/v2_rc14"
+	upgradev2rc15 "github.com/sideprotocol/side/app/upgrades/v2_rc15"
 	upgradev2rc8 "github.com/sideprotocol/side/app/upgrades/v2_rc8"
 	upgradev2rc9 "github.com/sideprotocol/side/app/upgrades/v2_rc9"
 )
@@ -1342,6 +1343,7 @@ func (app *App) SetUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc12.UpgradeName, upgradev2rc12.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc13.UpgradeName, upgradev2rc13.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 	app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc14.UpgradeName, upgradev2rc14.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev2rc15.UpgradeName, upgradev2rc15.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {

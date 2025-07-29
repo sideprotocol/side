@@ -29,3 +29,16 @@ message Params {
     // protocol liquidation fee collector
     string protocol_liquidation_fee_collector = 4;
 }
+
+
+// ParamsV1 defines the V1 parameters for the module.
+message ParamsV1 {
+    // minimum liquidation factor permille
+    uint32 min_liquidation_factor = 1;
+    // liquidation bonus factor permille
+    uint32 liquidation_bonus_factor = 2;
+    // protocol liquidation fee factor permille
+    uint32 protocol_liquidation_fee_factor = 3;
+    // protocol liquidation fee collector
+    string protocol_liquidation_fee_collector = 4;
+}

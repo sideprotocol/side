@@ -76,7 +76,7 @@ func migratePools(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 		cdc.MustUnmarshal(iterator.Value(), &poolV1)
 
 		// build new pool
-		pool := &types.LendingPool{
+		pool := &types.LendingPoolV2{
 			Id:              poolV1.Id,
 			Supply:          poolV1.Supply,
 			AvailableAmount: poolV1.AvailableAmount,
@@ -86,7 +86,7 @@ func migratePools(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 			TotalReserve:    poolV1.TotalReserve,
 			TotalYTokens:    poolV1.TotalYTokens,
 			Tranches:        poolV1.Tranches,
-			Config: types.PoolConfig{
+			Config: types.PoolConfigV2{
 				CollateralAsset:      poolV1.Config.CollateralAsset,
 				LendingAsset:         poolV1.Config.LendingAsset,
 				SupplyCap:            poolV1.Config.SupplyCap,

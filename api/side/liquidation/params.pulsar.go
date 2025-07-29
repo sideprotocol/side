@@ -626,6 +626,570 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var (
+	md_ParamsV1                                    protoreflect.MessageDescriptor
+	fd_ParamsV1_min_liquidation_factor             protoreflect.FieldDescriptor
+	fd_ParamsV1_liquidation_bonus_factor           protoreflect.FieldDescriptor
+	fd_ParamsV1_protocol_liquidation_fee_factor    protoreflect.FieldDescriptor
+	fd_ParamsV1_protocol_liquidation_fee_collector protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_side_liquidation_params_proto_init()
+	md_ParamsV1 = File_side_liquidation_params_proto.Messages().ByName("ParamsV1")
+	fd_ParamsV1_min_liquidation_factor = md_ParamsV1.Fields().ByName("min_liquidation_factor")
+	fd_ParamsV1_liquidation_bonus_factor = md_ParamsV1.Fields().ByName("liquidation_bonus_factor")
+	fd_ParamsV1_protocol_liquidation_fee_factor = md_ParamsV1.Fields().ByName("protocol_liquidation_fee_factor")
+	fd_ParamsV1_protocol_liquidation_fee_collector = md_ParamsV1.Fields().ByName("protocol_liquidation_fee_collector")
+}
+
+var _ protoreflect.Message = (*fastReflection_ParamsV1)(nil)
+
+type fastReflection_ParamsV1 ParamsV1
+
+func (x *ParamsV1) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ParamsV1)(x)
+}
+
+func (x *ParamsV1) slowProtoReflect() protoreflect.Message {
+	mi := &file_side_liquidation_params_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_ParamsV1_messageType fastReflection_ParamsV1_messageType
+var _ protoreflect.MessageType = fastReflection_ParamsV1_messageType{}
+
+type fastReflection_ParamsV1_messageType struct{}
+
+func (x fastReflection_ParamsV1_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ParamsV1)(nil)
+}
+func (x fastReflection_ParamsV1_messageType) New() protoreflect.Message {
+	return new(fastReflection_ParamsV1)
+}
+func (x fastReflection_ParamsV1_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ParamsV1
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_ParamsV1) Descriptor() protoreflect.MessageDescriptor {
+	return md_ParamsV1
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_ParamsV1) Type() protoreflect.MessageType {
+	return _fastReflection_ParamsV1_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_ParamsV1) New() protoreflect.Message {
+	return new(fastReflection_ParamsV1)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_ParamsV1) Interface() protoreflect.ProtoMessage {
+	return (*ParamsV1)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_ParamsV1) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.MinLiquidationFactor != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.MinLiquidationFactor)
+		if !f(fd_ParamsV1_min_liquidation_factor, value) {
+			return
+		}
+	}
+	if x.LiquidationBonusFactor != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.LiquidationBonusFactor)
+		if !f(fd_ParamsV1_liquidation_bonus_factor, value) {
+			return
+		}
+	}
+	if x.ProtocolLiquidationFeeFactor != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ProtocolLiquidationFeeFactor)
+		if !f(fd_ParamsV1_protocol_liquidation_fee_factor, value) {
+			return
+		}
+	}
+	if x.ProtocolLiquidationFeeCollector != "" {
+		value := protoreflect.ValueOfString(x.ProtocolLiquidationFeeCollector)
+		if !f(fd_ParamsV1_protocol_liquidation_fee_collector, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_ParamsV1) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "side.liquidation.ParamsV1.min_liquidation_factor":
+		return x.MinLiquidationFactor != uint32(0)
+	case "side.liquidation.ParamsV1.liquidation_bonus_factor":
+		return x.LiquidationBonusFactor != uint32(0)
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_factor":
+		return x.ProtocolLiquidationFeeFactor != uint32(0)
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_collector":
+		return x.ProtocolLiquidationFeeCollector != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.liquidation.ParamsV1"))
+		}
+		panic(fmt.Errorf("message side.liquidation.ParamsV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ParamsV1) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "side.liquidation.ParamsV1.min_liquidation_factor":
+		x.MinLiquidationFactor = uint32(0)
+	case "side.liquidation.ParamsV1.liquidation_bonus_factor":
+		x.LiquidationBonusFactor = uint32(0)
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_factor":
+		x.ProtocolLiquidationFeeFactor = uint32(0)
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_collector":
+		x.ProtocolLiquidationFeeCollector = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.liquidation.ParamsV1"))
+		}
+		panic(fmt.Errorf("message side.liquidation.ParamsV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_ParamsV1) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "side.liquidation.ParamsV1.min_liquidation_factor":
+		value := x.MinLiquidationFactor
+		return protoreflect.ValueOfUint32(value)
+	case "side.liquidation.ParamsV1.liquidation_bonus_factor":
+		value := x.LiquidationBonusFactor
+		return protoreflect.ValueOfUint32(value)
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_factor":
+		value := x.ProtocolLiquidationFeeFactor
+		return protoreflect.ValueOfUint32(value)
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_collector":
+		value := x.ProtocolLiquidationFeeCollector
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.liquidation.ParamsV1"))
+		}
+		panic(fmt.Errorf("message side.liquidation.ParamsV1 does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ParamsV1) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "side.liquidation.ParamsV1.min_liquidation_factor":
+		x.MinLiquidationFactor = uint32(value.Uint())
+	case "side.liquidation.ParamsV1.liquidation_bonus_factor":
+		x.LiquidationBonusFactor = uint32(value.Uint())
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_factor":
+		x.ProtocolLiquidationFeeFactor = uint32(value.Uint())
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_collector":
+		x.ProtocolLiquidationFeeCollector = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.liquidation.ParamsV1"))
+		}
+		panic(fmt.Errorf("message side.liquidation.ParamsV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ParamsV1) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.liquidation.ParamsV1.min_liquidation_factor":
+		panic(fmt.Errorf("field min_liquidation_factor of message side.liquidation.ParamsV1 is not mutable"))
+	case "side.liquidation.ParamsV1.liquidation_bonus_factor":
+		panic(fmt.Errorf("field liquidation_bonus_factor of message side.liquidation.ParamsV1 is not mutable"))
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_factor":
+		panic(fmt.Errorf("field protocol_liquidation_fee_factor of message side.liquidation.ParamsV1 is not mutable"))
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_collector":
+		panic(fmt.Errorf("field protocol_liquidation_fee_collector of message side.liquidation.ParamsV1 is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.liquidation.ParamsV1"))
+		}
+		panic(fmt.Errorf("message side.liquidation.ParamsV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_ParamsV1) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "side.liquidation.ParamsV1.min_liquidation_factor":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.liquidation.ParamsV1.liquidation_bonus_factor":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_factor":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "side.liquidation.ParamsV1.protocol_liquidation_fee_collector":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.liquidation.ParamsV1"))
+		}
+		panic(fmt.Errorf("message side.liquidation.ParamsV1 does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_ParamsV1) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in side.liquidation.ParamsV1", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_ParamsV1) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ParamsV1) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_ParamsV1) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_ParamsV1) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*ParamsV1)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.MinLiquidationFactor != 0 {
+			n += 1 + runtime.Sov(uint64(x.MinLiquidationFactor))
+		}
+		if x.LiquidationBonusFactor != 0 {
+			n += 1 + runtime.Sov(uint64(x.LiquidationBonusFactor))
+		}
+		if x.ProtocolLiquidationFeeFactor != 0 {
+			n += 1 + runtime.Sov(uint64(x.ProtocolLiquidationFeeFactor))
+		}
+		l = len(x.ProtocolLiquidationFeeCollector)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*ParamsV1)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.ProtocolLiquidationFeeCollector) > 0 {
+			i -= len(x.ProtocolLiquidationFeeCollector)
+			copy(dAtA[i:], x.ProtocolLiquidationFeeCollector)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ProtocolLiquidationFeeCollector)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if x.ProtocolLiquidationFeeFactor != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ProtocolLiquidationFeeFactor))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.LiquidationBonusFactor != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.LiquidationBonusFactor))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.MinLiquidationFactor != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.MinLiquidationFactor))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*ParamsV1)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ParamsV1: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ParamsV1: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MinLiquidationFactor", wireType)
+				}
+				x.MinLiquidationFactor = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.MinLiquidationFactor |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationBonusFactor", wireType)
+				}
+				x.LiquidationBonusFactor = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.LiquidationBonusFactor |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeFactor", wireType)
+				}
+				x.ProtocolLiquidationFeeFactor = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ProtocolLiquidationFeeFactor |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeCollector", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ProtocolLiquidationFeeCollector = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -703,6 +1267,70 @@ func (x *Params) GetProtocolLiquidationFeeCollector() string {
 	return ""
 }
 
+// ParamsV1 defines the V1 parameters for the module.
+type ParamsV1 struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// minimum liquidation factor permille
+	MinLiquidationFactor uint32 `protobuf:"varint,1,opt,name=min_liquidation_factor,json=minLiquidationFactor,proto3" json:"min_liquidation_factor,omitempty"`
+	// liquidation bonus factor permille
+	LiquidationBonusFactor uint32 `protobuf:"varint,2,opt,name=liquidation_bonus_factor,json=liquidationBonusFactor,proto3" json:"liquidation_bonus_factor,omitempty"`
+	// protocol liquidation fee factor permille
+	ProtocolLiquidationFeeFactor uint32 `protobuf:"varint,3,opt,name=protocol_liquidation_fee_factor,json=protocolLiquidationFeeFactor,proto3" json:"protocol_liquidation_fee_factor,omitempty"`
+	// protocol liquidation fee collector
+	ProtocolLiquidationFeeCollector string `protobuf:"bytes,4,opt,name=protocol_liquidation_fee_collector,json=protocolLiquidationFeeCollector,proto3" json:"protocol_liquidation_fee_collector,omitempty"`
+}
+
+func (x *ParamsV1) Reset() {
+	*x = ParamsV1{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_side_liquidation_params_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ParamsV1) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ParamsV1) ProtoMessage() {}
+
+// Deprecated: Use ParamsV1.ProtoReflect.Descriptor instead.
+func (*ParamsV1) Descriptor() ([]byte, []int) {
+	return file_side_liquidation_params_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ParamsV1) GetMinLiquidationFactor() uint32 {
+	if x != nil {
+		return x.MinLiquidationFactor
+	}
+	return 0
+}
+
+func (x *ParamsV1) GetLiquidationBonusFactor() uint32 {
+	if x != nil {
+		return x.LiquidationBonusFactor
+	}
+	return 0
+}
+
+func (x *ParamsV1) GetProtocolLiquidationFeeFactor() uint32 {
+	if x != nil {
+		return x.ProtocolLiquidationFeeFactor
+	}
+	return 0
+}
+
+func (x *ParamsV1) GetProtocolLiquidationFeeCollector() string {
+	if x != nil {
+		return x.ProtocolLiquidationFeeCollector
+	}
+	return ""
+}
+
 var File_side_liquidation_params_proto protoreflect.FileDescriptor
 
 var file_side_liquidation_params_proto_rawDesc = []byte{
@@ -738,19 +1366,36 @@ var file_side_liquidation_params_proto_rawDesc = []byte{
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63,
 	0x74, 0x6f, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x1f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x63, 0x6f, 0x6c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65,
-	0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x42, 0xb7, 0x01, 0x0a, 0x14, 0x63,
-	0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73,
-	0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64, 0x65,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x10, 0x53, 0x69,
-	0x64, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0xca, 0x02,
-	0x10, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0xe2, 0x02, 0x1c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
-	0xea, 0x02, 0x11, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x22, 0x8e, 0x02, 0x0a, 0x08, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x56, 0x31, 0x12, 0x34, 0x0a, 0x16, 0x6d, 0x69, 0x6e, 0x5f, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x61, 0x63, 0x74, 0x6f,
+	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x14, 0x6d, 0x69, 0x6e, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x12, 0x38, 0x0a,
+	0x18, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x62, 0x6f, 0x6e,
+	0x75, 0x73, 0x5f, 0x66, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52,
+	0x16, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x6f, 0x6e, 0x75,
+	0x73, 0x46, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x12, 0x45, 0x0a, 0x1f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x63, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
+	0x66, 0x65, 0x65, 0x5f, 0x66, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x1c, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x46, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x12, 0x4b,
+	0x0a, 0x22, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65,
+	0x63, 0x74, 0x6f, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x1f, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x63, 0x6f, 0x6c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46,
+	0x65, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x42, 0xb7, 0x01, 0x0a, 0x14,
+	0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74,
+	0x6f, 0x50, 0x01, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x73, 0x69, 0x64, 0x65, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x73, 0x69, 0x64,
+	0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x69, 0x64, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x10, 0x53,
+	0x69, 0x64, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0xca,
+	0x02, 0x10, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0xe2, 0x02, 0x1c, 0x53, 0x69, 0x64, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0xea, 0x02, 0x11, 0x53, 0x69, 0x64, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -765,9 +1410,10 @@ func file_side_liquidation_params_proto_rawDescGZIP() []byte {
 	return file_side_liquidation_params_proto_rawDescData
 }
 
-var file_side_liquidation_params_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_side_liquidation_params_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_side_liquidation_params_proto_goTypes = []interface{}{
-	(*Params)(nil), // 0: side.liquidation.Params
+	(*Params)(nil),   // 0: side.liquidation.Params
+	(*ParamsV1)(nil), // 1: side.liquidation.ParamsV1
 }
 var file_side_liquidation_params_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -795,6 +1441,18 @@ func file_side_liquidation_params_proto_init() {
 				return nil
 			}
 		}
+		file_side_liquidation_params_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ParamsV1); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -802,7 +1460,7 @@ func file_side_liquidation_params_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_side_liquidation_params_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

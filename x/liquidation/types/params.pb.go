@@ -77,14 +77,88 @@ func (m *Params) GetProtocolLiquidationFeeCollector() string {
 	return ""
 }
 
+// ParamsV1 defines the V1 parameters for the module.
+type ParamsV1 struct {
+	// minimum liquidation factor permille
+	MinLiquidationFactor uint32 `protobuf:"varint,1,opt,name=min_liquidation_factor,json=minLiquidationFactor,proto3" json:"min_liquidation_factor,omitempty"`
+	// liquidation bonus factor permille
+	LiquidationBonusFactor uint32 `protobuf:"varint,2,opt,name=liquidation_bonus_factor,json=liquidationBonusFactor,proto3" json:"liquidation_bonus_factor,omitempty"`
+	// protocol liquidation fee factor permille
+	ProtocolLiquidationFeeFactor uint32 `protobuf:"varint,3,opt,name=protocol_liquidation_fee_factor,json=protocolLiquidationFeeFactor,proto3" json:"protocol_liquidation_fee_factor,omitempty"`
+	// protocol liquidation fee collector
+	ProtocolLiquidationFeeCollector string `protobuf:"bytes,4,opt,name=protocol_liquidation_fee_collector,json=protocolLiquidationFeeCollector,proto3" json:"protocol_liquidation_fee_collector,omitempty"`
+}
+
+func (m *ParamsV1) Reset()         { *m = ParamsV1{} }
+func (m *ParamsV1) String() string { return proto.CompactTextString(m) }
+func (*ParamsV1) ProtoMessage()    {}
+func (*ParamsV1) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a9a4d8d5a54e05b, []int{1}
+}
+func (m *ParamsV1) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ParamsV1) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ParamsV1.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ParamsV1) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ParamsV1.Merge(m, src)
+}
+func (m *ParamsV1) XXX_Size() int {
+	return m.Size()
+}
+func (m *ParamsV1) XXX_DiscardUnknown() {
+	xxx_messageInfo_ParamsV1.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ParamsV1 proto.InternalMessageInfo
+
+func (m *ParamsV1) GetMinLiquidationFactor() uint32 {
+	if m != nil {
+		return m.MinLiquidationFactor
+	}
+	return 0
+}
+
+func (m *ParamsV1) GetLiquidationBonusFactor() uint32 {
+	if m != nil {
+		return m.LiquidationBonusFactor
+	}
+	return 0
+}
+
+func (m *ParamsV1) GetProtocolLiquidationFeeFactor() uint32 {
+	if m != nil {
+		return m.ProtocolLiquidationFeeFactor
+	}
+	return 0
+}
+
+func (m *ParamsV1) GetProtocolLiquidationFeeCollector() string {
+	if m != nil {
+		return m.ProtocolLiquidationFeeCollector
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*Params)(nil), "side.liquidation.Params")
+	proto.RegisterType((*ParamsV1)(nil), "side.liquidation.ParamsV1")
 }
 
 func init() { proto.RegisterFile("side/liquidation/params.proto", fileDescriptor_0a9a4d8d5a54e05b) }
 
 var fileDescriptor_0a9a4d8d5a54e05b = []byte{
-	// 313 bytes of a gzipped FileDescriptorProto
+	// 345 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2d, 0xce, 0x4c, 0x49,
 	0xd5, 0xcf, 0xc9, 0x2c, 0x2c, 0xcd, 0x4c, 0x49, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2f, 0x48, 0x2c,
 	0x4a, 0xcc, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x00, 0x49, 0xeb, 0x21, 0x49,
@@ -99,12 +173,14 @@ var fileDescriptor_0a9a4d8d5a54e05b = []byte{
 	0xae, 0x55, 0x62, 0x48, 0x46, 0x3a, 0x81, 0x4c, 0x84, 0x5a, 0x56, 0xc1, 0x25, 0x0f, 0xf6, 0x69,
 	0x72, 0x7e, 0x0e, 0xaa, 0xd7, 0x52, 0x53, 0x61, 0x76, 0x32, 0x93, 0x6b, 0xa7, 0x0c, 0xcc, 0x64,
 	0x64, 0x3f, 0xa6, 0xa6, 0x42, 0x6d, 0xf6, 0xe6, 0x52, 0xc2, 0x69, 0x73, 0x72, 0x7e, 0x4e, 0x4e,
-	0x2a, 0xd8, 0x72, 0x16, 0x90, 0xe5, 0x41, 0xf2, 0xd8, 0x4d, 0x72, 0x86, 0x29, 0x73, 0xf2, 0x3a,
-	0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63,
-	0xb8, 0xf0, 0x58, 0x8e, 0xe1, 0xc6, 0x63, 0x39, 0x86, 0x28, 0x83, 0xf4, 0xcc, 0x92, 0x8c, 0xd2,
-	0x24, 0xbd, 0xe4, 0xfc, 0x5c, 0x7d, 0x50, 0x7a, 0x80, 0x99, 0x04, 0xe6, 0xe8, 0x57, 0xa0, 0xa4,
-	0x9e, 0x92, 0xca, 0x82, 0xd4, 0xe2, 0x24, 0x36, 0xb0, 0x12, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0x55, 0xd2, 0x3c, 0xcf, 0x5e, 0x02, 0x00, 0x00,
+	0x2a, 0xd8, 0x72, 0x16, 0x90, 0xe5, 0x41, 0xf2, 0xd8, 0x4d, 0x72, 0x86, 0x29, 0x53, 0xea, 0x63,
+	0xe2, 0xe2, 0x80, 0xc4, 0x53, 0x98, 0xa1, 0x90, 0x09, 0xde, 0x98, 0xe2, 0xc5, 0x11, 0xec, 0x16,
+	0x04, 0x82, 0x9d, 0x17, 0x67, 0x18, 0xba, 0x12, 0x17, 0x86, 0xbc, 0x74, 0x0c, 0x10, 0x27, 0xaf,
+	0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0, 0x48, 0x8e, 0x71, 0xc2, 0x63, 0x39,
+	0x86, 0x0b, 0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0x32, 0x48, 0xcf, 0x2c, 0xc9, 0x28,
+	0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5, 0x07, 0x65, 0x10, 0x98, 0x49, 0x60, 0x8e, 0x7e, 0x05, 0x4a,
+	0x76, 0x2a, 0xa9, 0x2c, 0x48, 0x2d, 0x4e, 0x62, 0x03, 0x2b, 0x31, 0x06, 0x04, 0x00, 0x00, 0xff,
+	0xff, 0xa5, 0xa9, 0xb5, 0x67, 0x6f, 0x03, 0x00, 0x00,
 }
 
 func (m *Params) Marshal() (dAtA []byte, err error) {
@@ -167,6 +243,51 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ParamsV1) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ParamsV1) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ParamsV1) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ProtocolLiquidationFeeCollector) > 0 {
+		i -= len(m.ProtocolLiquidationFeeCollector)
+		copy(dAtA[i:], m.ProtocolLiquidationFeeCollector)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.ProtocolLiquidationFeeCollector)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ProtocolLiquidationFeeFactor != 0 {
+		i = encodeVarintParams(dAtA, i, uint64(m.ProtocolLiquidationFeeFactor))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.LiquidationBonusFactor != 0 {
+		i = encodeVarintParams(dAtA, i, uint64(m.LiquidationBonusFactor))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.MinLiquidationFactor != 0 {
+		i = encodeVarintParams(dAtA, i, uint64(m.MinLiquidationFactor))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintParams(dAtA []byte, offset int, v uint64) int {
 	offset -= sovParams(v)
 	base := offset
@@ -190,6 +311,28 @@ func (m *Params) Size() (n int) {
 	n += 1 + l + sovParams(uint64(l))
 	l = m.ProtocolLiquidationFeeFactor.Size()
 	n += 1 + l + sovParams(uint64(l))
+	l = len(m.ProtocolLiquidationFeeCollector)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	return n
+}
+
+func (m *ParamsV1) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MinLiquidationFactor != 0 {
+		n += 1 + sovParams(uint64(m.MinLiquidationFactor))
+	}
+	if m.LiquidationBonusFactor != 0 {
+		n += 1 + sovParams(uint64(m.LiquidationBonusFactor))
+	}
+	if m.ProtocolLiquidationFeeFactor != 0 {
+		n += 1 + sovParams(uint64(m.ProtocolLiquidationFeeFactor))
+	}
 	l = len(m.ProtocolLiquidationFeeCollector)
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
@@ -334,6 +477,145 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeCollector", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProtocolLiquidationFeeCollector = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipParams(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthParams
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ParamsV1) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowParams
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ParamsV1: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ParamsV1: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MinLiquidationFactor", wireType)
+			}
+			m.MinLiquidationFactor = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MinLiquidationFactor |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LiquidationBonusFactor", wireType)
+			}
+			m.LiquidationBonusFactor = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LiquidationBonusFactor |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeFactor", wireType)
+			}
+			m.ProtocolLiquidationFeeFactor = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ProtocolLiquidationFeeFactor |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ProtocolLiquidationFeeCollector", wireType)
