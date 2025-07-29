@@ -106,7 +106,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 		PoolId:             msg.PoolId,
 		BorrowAmount:       msg.BorrowAmount,
 		RequestFee:         poolConfig.RequestFee,
-		OriginationFee:     msg.BorrowAmount.Amount.Mul(sdkmath.NewInt(int64(poolConfig.OriginationFeeFactor))).Quo(types.Permille),
+		OriginationFee:     msg.BorrowAmount.Amount.ToLegacyDec().Mul(poolConfig.OriginationFeeFactor).TruncateInt(),
 		Maturity:           trancheConfig.Maturity,
 		BorrowAPR:          trancheConfig.BorrowAPR,
 		DlcEventId:         dlcEvent.Id,

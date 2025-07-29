@@ -44,7 +44,7 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid liquidation bonus factor")
 	}
 
-	if p.ProtocolLiquidationFeeFactor.GTE(sdkmath.LegacyOneDec()) {
+	if p.ProtocolLiquidationFeeFactor.IsNegative() || p.ProtocolLiquidationFeeFactor.GTE(sdkmath.LegacyOneDec()) {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid protocol liquidation fee factor")
 	}
 

@@ -54,18 +54,18 @@ func GetInterest(borrowAmount sdkmath.Int, startBorrowIndex sdkmath.LegacyDec, b
 }
 
 // GetTotalInterest calculates the total loan interest based on the given params
-func GetTotalInterest(borrowAmount sdkmath.Int, maturity int64, borrowAPR uint32, blocksPerYear uint64) sdkmath.Int {
+func GetTotalInterest(borrowAmount sdkmath.Int, maturity int64, borrowAPR sdkmath.LegacyDec, blocksPerYear uint64) sdkmath.Int {
 	totalBlocks := uint64(maturity) * blocksPerYear / uint64(OneYear)
 
-	borrowRatePerBlock := sdkmath.LegacyNewDec(int64(borrowAPR)).Quo(sdkmath.LegacyNewDec(1000)).Quo(sdkmath.LegacyNewDec(int64(blocksPerYear)))
+	borrowRatePerBlock := borrowAPR.Quo(sdkmath.LegacyNewDec(int64(blocksPerYear)))
 	borrowIndexRatio := sdkmath.LegacyOneDec().Add(borrowRatePerBlock)
 
 	return borrowAmount.ToLegacyDec().Mul(borrowIndexRatio.Power(totalBlocks)).TruncateInt().Sub(borrowAmount)
 }
 
 // GetProtocolFee calculates the protocol fee based on the given interest and reserve factor
-func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
-	return interest.Mul(sdkmath.NewInt(int64(reserveFactor))).Quo(Permille)
+func GetProtocolFee(interest sdkmath.Int, reserveFactor sdkmath.LegacyDec) sdkmath.Int {
+	return interest.ToLegacyDec().Mul(reserveFactor).TruncateInt()
 }
 
 // GetLiquidationPrice calculates the liquidation price according to the liquidation LTV
@@ -74,14 +74,14 @@ func GetProtocolFee(interest sdkmath.Int, reserveFactor uint32) sdkmath.Int {
 // liquidation price = (borrow amount + interest) / lltv / collateral amount
 // 2. collateral is NOT the base price asset:
 // liquidation price = collateral amount * lltv / (borrow amount + interest)
-func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR uint32, blocksPerYear uint64, lltv uint32, collateralIsBaseAsset bool) sdkmath.LegacyDec {
+func GetLiquidationPrice(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maturity int64, borrowAPR sdkmath.LegacyDec, blocksPerYear uint64, lltv sdkmath.LegacyDec, collateralIsBaseAsset bool) sdkmath.LegacyDec {
 	interest := GetTotalInterest(borrowAmount, maturity, borrowAPR, blocksPerYear)
 
 	var liquidationPrice sdkmath.LegacyDec
 	if collateralIsBaseAsset {
-		liquidationPrice = borrowAmount.Add(interest).Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).Mul(Percent).ToLegacyDec().QuoInt(sdkmath.NewInt(int64(lltv))).QuoInt(collateralAmount).QuoInt(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals))
+		liquidationPrice = borrowAmount.Add(interest).Mul(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).ToLegacyDec().Quo(lltv).QuoInt(collateralAmount).QuoInt(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals))
 	} else {
-		liquidationPrice = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(lltv))).ToLegacyDec().QuoInt(Percent).QuoInt(borrowAmount.Add(interest)).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals))
+		liquidationPrice = collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).ToLegacyDec().Mul(lltv).QuoInt(borrowAmount.Add(interest)).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals))
 	}
 
 	return NormalizePrice(liquidationPrice, collateralIsBaseAsset)
@@ -97,12 +97,12 @@ func ToBeLiquidated(price sdkmath.LegacyDec, liquidationPrice sdkmath.LegacyDec,
 }
 
 // CheckLTV returns true if the collateral amount and borrow amount satisfy the max LTV limitation by the given price, false otherwise
-func CheckLTV(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maxLTV uint32, price sdkmath.LegacyDec, collateralIsBaseAsset bool) bool {
+func CheckLTV(collateralAmount sdkmath.Int, collateralAssetDecimals int, borrowAmount sdkmath.Int, borrowAssetDecimals int, maxLTV sdkmath.LegacyDec, price sdkmath.LegacyDec, collateralIsBaseAsset bool) bool {
 	if collateralIsBaseAsset {
-		return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(maxLTV))).ToLegacyDec().Mul(price).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).QuoInt(Percent).TruncateInt().GTE(borrowAmount)
+		return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).ToLegacyDec().Mul(maxLTV).Mul(price).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).TruncateInt().GTE(borrowAmount)
 	}
 
-	return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).Mul(sdkmath.NewInt(int64(maxLTV))).ToLegacyDec().Quo(price).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).QuoInt(Percent).TruncateInt().GTE(borrowAmount)
+	return collateralAmount.Mul(sdkmath.NewIntWithDecimal(1, borrowAssetDecimals)).ToLegacyDec().Mul(maxLTV).Quo(price).QuoInt(sdkmath.NewIntWithDecimal(1, collateralAssetDecimals)).TruncateInt().GTE(borrowAmount)
 }
 
 // GetPricePair gets the price pair from the given pool config
@@ -292,23 +292,23 @@ func ValidatePoolConfig(config PoolConfig) error {
 	}
 
 	if config.SupplyCap.IsNil() || config.SupplyCap.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "supply cap can not be nil or negative")
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "supply cap cannot be nil or negative")
 	}
 
 	if config.BorrowCap.IsNil() || config.BorrowCap.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow cap can not be nil or negative")
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow cap cannot be nil or negative")
 	}
 
 	if config.MinBorrowAmount.IsNil() || config.MinBorrowAmount.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount can not be nil or negative")
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "min borrow amount cannot be nil or negative")
 	}
 
 	if config.MaxBorrowAmount.IsNil() || config.MaxBorrowAmount.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount can not be nil or negative")
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount cannot be nil or negative")
 	}
 
 	if config.MinBorrowAmount.IsPositive() && config.MaxBorrowAmount.IsPositive() && config.MaxBorrowAmount.LT(config.MinBorrowAmount) {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount can not be less than min borrow amount")
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "max borrow amount cannot be less than min borrow amount")
 	}
 
 	if err := validatePoolTranches(config.Tranches); err != nil {
@@ -319,19 +319,19 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid request fee")
 	}
 
-	if config.OriginationFeeFactor >= 1000 {
+	if config.OriginationFeeFactor.IsNegative() || config.OriginationFeeFactor.GTE(sdkmath.LegacyOneDec()) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid origination fee factor")
 	}
 
-	if config.ReserveFactor >= 1000 {
+	if config.ReserveFactor.IsNegative() || config.ReserveFactor.GTE(sdkmath.LegacyOneDec()) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid reserve factor")
 	}
 
-	if config.LiquidationThreshold == 0 || config.LiquidationThreshold >= 100 {
+	if !config.LiquidationThreshold.IsPositive() || config.LiquidationThreshold.GTE(sdkmath.LegacyOneDec()) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid liquidation threshold")
 	}
 
-	if config.MaxLtv == 0 || config.MaxLtv >= 100 || config.MaxLtv >= config.LiquidationThreshold {
+	if !config.MaxLtv.IsPositive() || config.MaxLtv.GTE(sdkmath.LegacyOneDec()) || config.MaxLtv.GTE(config.LiquidationThreshold) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid max ltv")
 	}
 
@@ -379,7 +379,7 @@ func validateAssetMetadata(metadata AssetMetadata) error {
 // validatePoolTrancheConfig validates the given tranche config
 func validatePoolTranches(tranches []PoolTrancheConfig) error {
 	if len(tranches) == 0 {
-		return errorsmod.Wrap(ErrInvalidPoolConfig, "tranches can not be empty")
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "tranches cannot be empty")
 	}
 
 	for _, tranche := range tranches {
@@ -387,8 +387,8 @@ func validatePoolTranches(tranches []PoolTrancheConfig) error {
 			return errorsmod.Wrap(ErrInvalidPoolConfig, "maturity must be greater than 0")
 		}
 
-		if tranche.BorrowAPR == 0 || tranche.BorrowAPR >= 1000 {
-			return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1000)")
+		if !tranche.BorrowAPR.IsPositive() || tranche.BorrowAPR.GTE(sdkmath.LegacyOneDec()) {
+			return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1)")
 		}
 	}
 

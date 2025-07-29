@@ -68,7 +68,7 @@ func (k Keeper) CompleteRepayment(ctx sdk.Context, loan *types.Loan) error {
 	repayment := k.GetRepayment(ctx, loan.VaultAddress)
 
 	interest := repayment.Amount.Sub(loan.BorrowAmount)
-	protocolFee := sdk.NewCoin(interest.Denom, interest.Amount.Mul(sdkmath.NewInt(int64(pool.Config.ReserveFactor))).Quo(types.Permille))
+	protocolFee := sdk.NewCoin(interest.Denom, interest.Amount.ToLegacyDec().Mul(pool.Config.ReserveFactor).TruncateInt())
 
 	referralFee := sdkmath.ZeroInt()
 	actualProtocolFee := protocolFee
