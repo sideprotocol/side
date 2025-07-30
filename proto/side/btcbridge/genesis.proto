@@ -14,5 +14,10 @@ message GenesisState {
   BlockHeader best_block_header = 2;
   repeated BlockHeader block_headers = 3;
   repeated UTXO utxos = 4;
-  DKGRequest dkg_request= 5;
+  repeated DKGRequest dkg_requests= 5;
+  repeated DKGCompletionRequest dkg_completions = 6;
+  repeated SigningRequest signing_requests = 7;
+  repeated WithdrawRequest withdraw_requests = 8;
+  repeated WithdrawRequest pending_btc_withdraw_requests = 9;
+  repeated string minted_tx_hashes = 10;
 }

@@ -27,10 +27,15 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type GenesisState struct {
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
 	// the chain tip of the bitcoin chain
-	BestBlockHeader *BlockHeader   `protobuf:"bytes,2,opt,name=best_block_header,json=bestBlockHeader,proto3" json:"best_block_header,omitempty"`
-	BlockHeaders    []*BlockHeader `protobuf:"bytes,3,rep,name=block_headers,json=blockHeaders,proto3" json:"block_headers,omitempty"`
-	Utxos           []*UTXO        `protobuf:"bytes,4,rep,name=utxos,proto3" json:"utxos,omitempty"`
-	DkgRequest      *DKGRequest    `protobuf:"bytes,5,opt,name=dkg_request,json=dkgRequest,proto3" json:"dkg_request,omitempty"`
+	BestBlockHeader            *BlockHeader            `protobuf:"bytes,2,opt,name=best_block_header,json=bestBlockHeader,proto3" json:"best_block_header,omitempty"`
+	BlockHeaders               []*BlockHeader          `protobuf:"bytes,3,rep,name=block_headers,json=blockHeaders,proto3" json:"block_headers,omitempty"`
+	Utxos                      []*UTXO                 `protobuf:"bytes,4,rep,name=utxos,proto3" json:"utxos,omitempty"`
+	DkgRequests                []*DKGRequest           `protobuf:"bytes,5,rep,name=dkg_requests,json=dkgRequests,proto3" json:"dkg_requests,omitempty"`
+	DkgCompletions             []*DKGCompletionRequest `protobuf:"bytes,6,rep,name=dkg_completions,json=dkgCompletions,proto3" json:"dkg_completions,omitempty"`
+	SigningRequests            []*SigningRequest       `protobuf:"bytes,7,rep,name=signing_requests,json=signingRequests,proto3" json:"signing_requests,omitempty"`
+	WithdrawRequests           []*WithdrawRequest      `protobuf:"bytes,8,rep,name=withdraw_requests,json=withdrawRequests,proto3" json:"withdraw_requests,omitempty"`
+	PendingBtcWithdrawRequests []*WithdrawRequest      `protobuf:"bytes,9,rep,name=pending_btc_withdraw_requests,json=pendingBtcWithdrawRequests,proto3" json:"pending_btc_withdraw_requests,omitempty"`
+	MintedTxHashes             []string                `protobuf:"bytes,10,rep,name=minted_tx_hashes,json=mintedTxHashes,proto3" json:"minted_tx_hashes,omitempty"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
@@ -94,9 +99,44 @@ func (m *GenesisState) GetUtxos() []*UTXO {
 	return nil
 }
 
-func (m *GenesisState) GetDkgRequest() *DKGRequest {
+func (m *GenesisState) GetDkgRequests() []*DKGRequest {
 	if m != nil {
-		return m.DkgRequest
+		return m.DkgRequests
+	}
+	return nil
+}
+
+func (m *GenesisState) GetDkgCompletions() []*DKGCompletionRequest {
+	if m != nil {
+		return m.DkgCompletions
+	}
+	return nil
+}
+
+func (m *GenesisState) GetSigningRequests() []*SigningRequest {
+	if m != nil {
+		return m.SigningRequests
+	}
+	return nil
+}
+
+func (m *GenesisState) GetWithdrawRequests() []*WithdrawRequest {
+	if m != nil {
+		return m.WithdrawRequests
+	}
+	return nil
+}
+
+func (m *GenesisState) GetPendingBtcWithdrawRequests() []*WithdrawRequest {
+	if m != nil {
+		return m.PendingBtcWithdrawRequests
+	}
+	return nil
+}
+
+func (m *GenesisState) GetMintedTxHashes() []string {
+	if m != nil {
+		return m.MintedTxHashes
 	}
 	return nil
 }
@@ -108,27 +148,36 @@ func init() {
 func init() { proto.RegisterFile("side/btcbridge/genesis.proto", fileDescriptor_37c22954cf4a954b) }
 
 var fileDescriptor_37c22954cf4a954b = []byte{
-	// 318 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x29, 0xce, 0x4c, 0x49,
-	0xd5, 0x4f, 0x2a, 0x49, 0x4e, 0x2a, 0xca, 0x4c, 0x49, 0x4f, 0xd5, 0x4f, 0x4f, 0xcd, 0x4b, 0x2d,
-	0xce, 0x2c, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x03, 0xc9, 0xea, 0xc1, 0x65, 0xa5,
-	0x44, 0xd2, 0xf3, 0xd3, 0xf3, 0xc1, 0x52, 0xfa, 0x20, 0x16, 0x44, 0x95, 0x94, 0x34, 0x9a, 0x19,
-	0x05, 0x89, 0x45, 0x89, 0xb9, 0x50, 0x23, 0xa4, 0xe4, 0xd0, 0x24, 0xe1, 0x2c, 0x88, 0xbc, 0xd2,
-	0x0e, 0x26, 0x2e, 0x1e, 0x77, 0x88, 0xa5, 0xc1, 0x25, 0x89, 0x25, 0xa9, 0x42, 0x26, 0x5c, 0x6c,
-	0x10, 0x03, 0x24, 0x18, 0x15, 0x18, 0x35, 0xb8, 0x8d, 0xc4, 0xf4, 0x50, 0x1d, 0xa1, 0x17, 0x00,
-	0x96, 0x75, 0x62, 0x39, 0x71, 0x4f, 0x9e, 0x21, 0x08, 0xaa, 0x56, 0xc8, 0x9d, 0x4b, 0x30, 0x29,
-	0xb5, 0xb8, 0x24, 0x3e, 0x29, 0x27, 0x3f, 0x39, 0x3b, 0x3e, 0x23, 0x35, 0x31, 0x25, 0xb5, 0x48,
-	0x82, 0x09, 0x6c, 0x80, 0x34, 0xba, 0x01, 0x4e, 0x20, 0x35, 0x1e, 0x60, 0x25, 0x41, 0xfc, 0x20,
-	0x5d, 0x48, 0x02, 0x42, 0x0e, 0x5c, 0xbc, 0xc8, 0x66, 0x14, 0x4b, 0x30, 0x2b, 0x30, 0x13, 0x32,
-	0x84, 0x27, 0x09, 0xc1, 0x29, 0x16, 0xd2, 0xe2, 0x62, 0x2d, 0x2d, 0xa9, 0xc8, 0x2f, 0x96, 0x60,
-	0x01, 0xeb, 0x14, 0x41, 0xd7, 0x19, 0x1a, 0x12, 0xe1, 0x1f, 0x04, 0x51, 0x22, 0x64, 0xcd, 0xc5,
-	0x9d, 0x92, 0x9d, 0x1e, 0x5f, 0x94, 0x5a, 0x58, 0x9a, 0x5a, 0x5c, 0x22, 0xc1, 0x0a, 0x76, 0xb0,
-	0x14, 0xba, 0x0e, 0x17, 0x6f, 0xf7, 0x20, 0x88, 0x8a, 0x20, 0xae, 0x94, 0xec, 0x74, 0x28, 0xdb,
-	0xc9, 0xe3, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0,
-	0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86, 0x1b, 0x8f, 0xe5, 0x18, 0xa2, 0xf4, 0xd2, 0x33, 0x4b,
-	0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0x41, 0x66, 0x81, 0x83, 0x3a, 0x39, 0x3f, 0x07,
-	0xcc, 0xd1, 0xaf, 0x40, 0x8a, 0x8e, 0x92, 0xca, 0x82, 0xd4, 0xe2, 0x24, 0x36, 0xb0, 0x02, 0x63,
-	0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0xb4, 0x80, 0xfe, 0x23, 0x0e, 0x02, 0x00, 0x00,
+	// 456 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0x4d, 0x8b, 0xd3, 0x40,
+	0x18, 0xc7, 0x1b, 0xbb, 0xad, 0xee, 0x6c, 0x6d, 0xbb, 0xc3, 0x22, 0x21, 0xab, 0xd9, 0x22, 0x1e,
+	0x8a, 0x87, 0x04, 0xd4, 0xab, 0x20, 0x55, 0x68, 0x45, 0x45, 0xc9, 0xae, 0xac, 0x78, 0x09, 0x99,
+	0xcc, 0x30, 0x19, 0xda, 0x66, 0x62, 0x9e, 0x29, 0xad, 0xdf, 0xc2, 0x8f, 0xe2, 0xc7, 0xd8, 0x63,
+	0x8f, 0x9e, 0x44, 0xda, 0x2f, 0x22, 0x99, 0xa4, 0x6f, 0xa3, 0xa0, 0xb7, 0xe7, 0xf9, 0xbf, 0xfc,
+	0xe6, 0x39, 0x24, 0xe8, 0x3e, 0x08, 0xca, 0x7c, 0xa2, 0x62, 0x92, 0x0b, 0xca, 0x99, 0xcf, 0x59,
+	0xca, 0x40, 0x80, 0x97, 0xe5, 0x52, 0x49, 0xdc, 0x2e, 0x5c, 0x6f, 0xeb, 0x3a, 0x67, 0x5c, 0x72,
+	0xa9, 0x2d, 0xbf, 0x98, 0xca, 0x94, 0x73, 0x6e, 0x30, 0xb2, 0x28, 0x8f, 0xa6, 0x15, 0xc2, 0x71,
+	0x0d, 0x73, 0x3b, 0x95, 0xfe, 0xc3, 0xef, 0x0d, 0xd4, 0x1a, 0x96, 0x8f, 0x5e, 0xaa, 0x48, 0x31,
+	0xfc, 0x0c, 0x35, 0x4b, 0x80, 0x6d, 0xf5, 0xac, 0xfe, 0xc9, 0x93, 0x7b, 0xde, 0xe1, 0x11, 0xde,
+	0x07, 0xed, 0x0e, 0x8e, 0x6e, 0x7e, 0x5e, 0xd4, 0x82, 0x2a, 0x8b, 0x87, 0xe8, 0x94, 0x30, 0x50,
+	0x21, 0x99, 0xc8, 0x78, 0x1c, 0x26, 0x2c, 0xa2, 0x2c, 0xb7, 0x6f, 0x69, 0xc0, 0xb9, 0x09, 0x18,
+	0x14, 0x99, 0x91, 0x8e, 0x04, 0x9d, 0xa2, 0xb5, 0x27, 0xe0, 0x17, 0xe8, 0xee, 0x3e, 0x03, 0xec,
+	0x7a, 0xaf, 0xfe, 0x2f, 0x48, 0x8b, 0xec, 0x16, 0xc0, 0x8f, 0x51, 0x63, 0xa6, 0x16, 0x12, 0xec,
+	0x23, 0xdd, 0x3c, 0x33, 0x9b, 0x1f, 0xaf, 0x3e, 0xbd, 0x0f, 0xca, 0x08, 0x7e, 0x8e, 0x5a, 0x74,
+	0xcc, 0xc3, 0x9c, 0x7d, 0x99, 0x31, 0x50, 0x60, 0x37, 0x74, 0xc5, 0x31, 0x2b, 0xaf, 0xde, 0x0c,
+	0x83, 0x32, 0x12, 0x9c, 0xd0, 0x31, 0xaf, 0x66, 0xc0, 0xef, 0x50, 0xa7, 0xa8, 0xc7, 0x72, 0x9a,
+	0x4d, 0x98, 0x12, 0x32, 0x05, 0xbb, 0xa9, 0x09, 0x8f, 0xfe, 0x42, 0x78, 0xb9, 0x4d, 0x6d, 0x58,
+	0x6d, 0x3a, 0xe6, 0x3b, 0x15, 0xf0, 0x6b, 0xd4, 0x05, 0xc1, 0x53, 0x91, 0xee, 0x5d, 0x74, 0x5b,
+	0xf3, 0x5c, 0x93, 0x77, 0x59, 0xe6, 0x36, 0xa4, 0x0e, 0x1c, 0xec, 0x80, 0xdf, 0xa2, 0xd3, 0xb9,
+	0x50, 0x09, 0xcd, 0xa3, 0xf9, 0x8e, 0x75, 0x47, 0xb3, 0x2e, 0x4c, 0xd6, 0x75, 0x15, 0xdc, 0xc0,
+	0xba, 0xf3, 0x43, 0x01, 0x30, 0x41, 0x0f, 0x32, 0x96, 0xd2, 0xe2, 0x30, 0xa2, 0xe2, 0xf0, 0x4f,
+	0xf2, 0xf1, 0xff, 0x91, 0x9d, 0x8a, 0x32, 0x50, 0xf1, 0xb5, 0xf9, 0x46, 0x1f, 0x75, 0xa7, 0x22,
+	0x55, 0x8c, 0x86, 0x6a, 0x11, 0x26, 0x11, 0x24, 0x0c, 0x6c, 0xd4, 0xab, 0xf7, 0x8f, 0x83, 0x76,
+	0xa9, 0x5f, 0x2d, 0x46, 0x5a, 0x1d, 0x8c, 0x6e, 0x56, 0xae, 0xb5, 0x5c, 0xb9, 0xd6, 0xaf, 0x95,
+	0x6b, 0x7d, 0x5b, 0xbb, 0xb5, 0xe5, 0xda, 0xad, 0xfd, 0x58, 0xbb, 0xb5, 0xcf, 0x1e, 0x17, 0x2a,
+	0x99, 0x11, 0x2f, 0x96, 0x53, 0xbf, 0x38, 0x45, 0x7f, 0xe2, 0xb1, 0x9c, 0xe8, 0xc5, 0x5f, 0xec,
+	0xfd, 0x06, 0xea, 0x6b, 0xc6, 0x80, 0x34, 0x75, 0xe0, 0xe9, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0xb7, 0xc9, 0x75, 0x9a, 0x86, 0x03, 0x00, 0x00,
 }
 
 func (m *GenesisState) Marshal() (dAtA []byte, err error) {
@@ -151,17 +200,84 @@ func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.DkgRequest != nil {
-		{
-			size, err := m.DkgRequest.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintGenesis(dAtA, i, uint64(size))
+	if len(m.MintedTxHashes) > 0 {
+		for iNdEx := len(m.MintedTxHashes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.MintedTxHashes[iNdEx])
+			copy(dAtA[i:], m.MintedTxHashes[iNdEx])
+			i = encodeVarintGenesis(dAtA, i, uint64(len(m.MintedTxHashes[iNdEx])))
+			i--
+			dAtA[i] = 0x52
 		}
-		i--
-		dAtA[i] = 0x2a
+	}
+	if len(m.PendingBtcWithdrawRequests) > 0 {
+		for iNdEx := len(m.PendingBtcWithdrawRequests) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.PendingBtcWithdrawRequests[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenesis(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.WithdrawRequests) > 0 {
+		for iNdEx := len(m.WithdrawRequests) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.WithdrawRequests[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenesis(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.SigningRequests) > 0 {
+		for iNdEx := len(m.SigningRequests) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.SigningRequests[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenesis(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.DkgCompletions) > 0 {
+		for iNdEx := len(m.DkgCompletions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DkgCompletions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenesis(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.DkgRequests) > 0 {
+		for iNdEx := len(m.DkgRequests) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DkgRequests[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenesis(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
 	}
 	if len(m.Utxos) > 0 {
 		for iNdEx := len(m.Utxos) - 1; iNdEx >= 0; iNdEx-- {
@@ -251,9 +367,41 @@ func (m *GenesisState) Size() (n int) {
 			n += 1 + l + sovGenesis(uint64(l))
 		}
 	}
-	if m.DkgRequest != nil {
-		l = m.DkgRequest.Size()
-		n += 1 + l + sovGenesis(uint64(l))
+	if len(m.DkgRequests) > 0 {
+		for _, e := range m.DkgRequests {
+			l = e.Size()
+			n += 1 + l + sovGenesis(uint64(l))
+		}
+	}
+	if len(m.DkgCompletions) > 0 {
+		for _, e := range m.DkgCompletions {
+			l = e.Size()
+			n += 1 + l + sovGenesis(uint64(l))
+		}
+	}
+	if len(m.SigningRequests) > 0 {
+		for _, e := range m.SigningRequests {
+			l = e.Size()
+			n += 1 + l + sovGenesis(uint64(l))
+		}
+	}
+	if len(m.WithdrawRequests) > 0 {
+		for _, e := range m.WithdrawRequests {
+			l = e.Size()
+			n += 1 + l + sovGenesis(uint64(l))
+		}
+	}
+	if len(m.PendingBtcWithdrawRequests) > 0 {
+		for _, e := range m.PendingBtcWithdrawRequests {
+			l = e.Size()
+			n += 1 + l + sovGenesis(uint64(l))
+		}
+	}
+	if len(m.MintedTxHashes) > 0 {
+		for _, s := range m.MintedTxHashes {
+			l = len(s)
+			n += 1 + l + sovGenesis(uint64(l))
+		}
 	}
 	return n
 }
@@ -432,7 +580,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DkgRequest", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DkgRequests", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -459,12 +607,178 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.DkgRequest == nil {
-				m.DkgRequest = &DKGRequest{}
-			}
-			if err := m.DkgRequest.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.DkgRequests = append(m.DkgRequests, &DKGRequest{})
+			if err := m.DkgRequests[len(m.DkgRequests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DkgCompletions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenesis
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DkgCompletions = append(m.DkgCompletions, &DKGCompletionRequest{})
+			if err := m.DkgCompletions[len(m.DkgCompletions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SigningRequests", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenesis
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SigningRequests = append(m.SigningRequests, &SigningRequest{})
+			if err := m.SigningRequests[len(m.SigningRequests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WithdrawRequests", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenesis
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WithdrawRequests = append(m.WithdrawRequests, &WithdrawRequest{})
+			if err := m.WithdrawRequests[len(m.WithdrawRequests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PendingBtcWithdrawRequests", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenesis
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PendingBtcWithdrawRequests = append(m.PendingBtcWithdrawRequests, &WithdrawRequest{})
+			if err := m.PendingBtcWithdrawRequests[len(m.PendingBtcWithdrawRequests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MintedTxHashes", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenesis
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MintedTxHashes = append(m.MintedTxHashes, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

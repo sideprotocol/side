@@ -28,10 +28,37 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		k.SaveUTXO(ctx, utxo)
 	}
 
-	// set dkg request
-	if genState.DkgRequest != nil {
-		k.SetDKGRequest(ctx, genState.DkgRequest)
-		k.SetDKGRequestID(ctx, genState.DkgRequest.Id)
+	// set dkg requests
+	for _, req := range genState.DkgRequests {
+		k.SetDKGRequest(ctx, req)
+		k.SetDKGRequestID(ctx, req.Id)
+	}
+
+	// set dkg completions
+	for _, completion := range genState.DkgCompletions {
+		k.SetDKGCompletionRequest(ctx, completion)
+	}
+
+	// set signing requests
+	for _, req := range genState.SigningRequests {
+		k.SetSigningRequest(ctx, req)
+		k.IncrementSigningRequestSequence(ctx)
+	}
+
+	// set withdrawal requests
+	for _, req := range genState.WithdrawRequests {
+		k.SetWithdrawRequest(ctx, req)
+		k.IncreaseWithdrawRequestSequence(ctx)
+	}
+
+	// set pending btc withdrawal requests
+	for _, req := range genState.PendingBtcWithdrawRequests {
+		k.AddToBtcWithdrawRequestQueue(ctx, req)
+	}
+
+	// set minted tx hashes
+	for _, txHash := range genState.MintedTxHashes {
+		k.AddToMintHistory(ctx, txHash)
 	}
 
 	// sort vaults and set the latest vault version
@@ -47,9 +74,21 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 	genesis.Params = k.GetParams(ctx)
+
 	genesis.BestBlockHeader = k.GetBestBlockHeader(ctx)
 	genesis.BlockHeaders = k.GetAllBlockHeaders(ctx)
 	genesis.Utxos = k.GetAllUTXOs(ctx)
+
+	genesis.DkgRequests = k.GetAllDKGRequests(ctx)
+	for _, dkgRequest := range genesis.DkgRequests {
+		genesis.DkgCompletions = append(genesis.DkgCompletions, k.GetDKGCompletionRequests(ctx, dkgRequest.Id)...)
+	}
+
+	genesis.SigningRequests = k.GetAllSigningRequests(ctx)
+	genesis.WithdrawRequests = k.GetAllWithdrawRequests(ctx)
+	genesis.PendingBtcWithdrawRequests = k.GetPendingBtcWithdrawRequests(ctx, 0)
+
+	genesis.MintedTxHashes = k.GetAllMintHistories(ctx)
 
 	// this line is used by starport scaffolding # genesis/module/export
 

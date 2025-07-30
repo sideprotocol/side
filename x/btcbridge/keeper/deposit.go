@@ -8,6 +8,7 @@ import (
 	"github.com/btcsuite/btcd/wire"
 
 	sdkmath "cosmossdk.io/math"
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/btcbridge/types"
@@ -331,4 +332,34 @@ func (k Keeper) addToMintHistory(ctx sdk.Context, txHash string) {
 	store.Set(types.BtcMintedTxHashKey(txHash), []byte{1})
 }
 
-// need a query all history for exporting
+func (k Keeper) AddToMintHistory(ctx sdk.Context, txHash string) {
+	k.addToMintHistory(ctx, txHash)
+}
+
+// GetAllMintHistories gets all mint histories
+func (k Keeper) GetAllMintHistories(ctx sdk.Context) []string {
+	txHashes := []string{}
+
+	k.IterateMintHistories(ctx, func(txhash string) (stop bool) {
+		txHashes = append(txHashes, txhash)
+		return false
+	})
+
+	return txHashes
+}
+
+// IterateMintHistories iterates through all mint histories
+func (k Keeper) IterateMintHistories(ctx sdk.Context, cb func(txHash string) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := storetypes.KVStorePrefixIterator(store, types.BtcMintedTxHashKeyPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		hash := string(iterator.Key()[1:])
+
+		if cb(hash) {
+			break
+		}
+	}
+}

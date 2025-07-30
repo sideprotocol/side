@@ -73,7 +73,7 @@ func DefaultGenesis() *GenesisState {
 		BestBlockHeader: DefaultBestBlockHeader(),
 		BlockHeaders:    []*BlockHeader{},
 		Utxos:           []*UTXO{},
-		DkgRequest:      nil,
+		DkgRequests:     []*DKGRequest{},
 	}
 }
 
