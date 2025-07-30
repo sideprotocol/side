@@ -125,16 +125,6 @@ func (k Keeper) Oracles(goCtx context.Context, req *types.QueryOraclesRequest) (
 	return &types.QueryOraclesResponse{Oracles: k.GetOracles(ctx, req.Status)}, nil
 }
 
-func (k Keeper) Nonce(goCtx context.Context, req *types.QueryNonceRequest) (*types.QueryNonceResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	return &types.QueryNonceResponse{Nonce: k.GetNonce(ctx, req.OracleId, req.Index)}, nil
-}
-
 func (k Keeper) Nonces(goCtx context.Context, req *types.QueryNoncesRequest) (*types.QueryNoncesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
@@ -143,16 +133,6 @@ func (k Keeper) Nonces(goCtx context.Context, req *types.QueryNoncesRequest) (*t
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	return &types.QueryNoncesResponse{Nonces: k.GetNonces(ctx, req.OracleId)}, nil
-}
-
-func (k Keeper) CountNonces(goCtx context.Context, req *types.QueryCountNoncesRequest) (*types.QueryCountNoncesResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	return &types.QueryCountNoncesResponse{Counts: k.GetNonceCounts(ctx)}, nil
 }
 
 func (k Keeper) Event(goCtx context.Context, req *types.QueryEventRequest) (*types.QueryEventResponse, error) {

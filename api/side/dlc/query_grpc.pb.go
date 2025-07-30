@@ -25,9 +25,7 @@ const (
 	Query_Attestation_FullMethodName               = "/side.dlc.Query/Attestation"
 	Query_AttestationByEvent_FullMethodName        = "/side.dlc.Query/AttestationByEvent"
 	Query_Attestations_FullMethodName              = "/side.dlc.Query/Attestations"
-	Query_Nonce_FullMethodName                     = "/side.dlc.Query/Nonce"
 	Query_Nonces_FullMethodName                    = "/side.dlc.Query/Nonces"
-	Query_CountNonces_FullMethodName               = "/side.dlc.Query/CountNonces"
 	Query_DCM_FullMethodName                       = "/side.dlc.Query/DCM"
 	Query_DCMs_FullMethodName                      = "/side.dlc.Query/DCMs"
 	Query_Oracle_FullMethodName                    = "/side.dlc.Query/Oracle"
@@ -51,12 +49,8 @@ type QueryClient interface {
 	AttestationByEvent(ctx context.Context, in *QueryAttestationByEventRequest, opts ...grpc.CallOption) (*QueryAttestationByEventResponse, error)
 	// Attestations queries all attestations.
 	Attestations(ctx context.Context, in *QueryAttestationsRequest, opts ...grpc.CallOption) (*QueryAttestationsResponse, error)
-	// Nonce queries the nonce by the given oracle id and index
-	Nonce(ctx context.Context, in *QueryNonceRequest, opts ...grpc.CallOption) (*QueryNonceResponse, error)
 	// Nonces queries all nonces of the given oracle
 	Nonces(ctx context.Context, in *QueryNoncesRequest, opts ...grpc.CallOption) (*QueryNoncesResponse, error)
-	// CountNonces queries the total count of nonces.
-	CountNonces(ctx context.Context, in *QueryCountNoncesRequest, opts ...grpc.CallOption) (*QueryCountNoncesResponse, error)
 	// DCM queries the DCM by the given id or public key.
 	DCM(ctx context.Context, in *QueryDCMRequest, opts ...grpc.CallOption) (*QueryDCMResponse, error)
 	// DCMs queries DCMs by the given status.
@@ -131,27 +125,9 @@ func (c *queryClient) Attestations(ctx context.Context, in *QueryAttestationsReq
 	return out, nil
 }
 
-func (c *queryClient) Nonce(ctx context.Context, in *QueryNonceRequest, opts ...grpc.CallOption) (*QueryNonceResponse, error) {
-	out := new(QueryNonceResponse)
-	err := c.cc.Invoke(ctx, Query_Nonce_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *queryClient) Nonces(ctx context.Context, in *QueryNoncesRequest, opts ...grpc.CallOption) (*QueryNoncesResponse, error) {
 	out := new(QueryNoncesResponse)
 	err := c.cc.Invoke(ctx, Query_Nonces_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) CountNonces(ctx context.Context, in *QueryCountNoncesRequest, opts ...grpc.CallOption) (*QueryCountNoncesResponse, error) {
-	out := new(QueryCountNoncesResponse)
-	err := c.cc.Invoke(ctx, Query_CountNonces_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -219,12 +195,8 @@ type QueryServer interface {
 	AttestationByEvent(context.Context, *QueryAttestationByEventRequest) (*QueryAttestationByEventResponse, error)
 	// Attestations queries all attestations.
 	Attestations(context.Context, *QueryAttestationsRequest) (*QueryAttestationsResponse, error)
-	// Nonce queries the nonce by the given oracle id and index
-	Nonce(context.Context, *QueryNonceRequest) (*QueryNonceResponse, error)
 	// Nonces queries all nonces of the given oracle
 	Nonces(context.Context, *QueryNoncesRequest) (*QueryNoncesResponse, error)
-	// CountNonces queries the total count of nonces.
-	CountNonces(context.Context, *QueryCountNoncesRequest) (*QueryCountNoncesResponse, error)
 	// DCM queries the DCM by the given id or public key.
 	DCM(context.Context, *QueryDCMRequest) (*QueryDCMResponse, error)
 	// DCMs queries DCMs by the given status.
@@ -260,14 +232,8 @@ func (UnimplementedQueryServer) AttestationByEvent(context.Context, *QueryAttest
 func (UnimplementedQueryServer) Attestations(context.Context, *QueryAttestationsRequest) (*QueryAttestationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Attestations not implemented")
 }
-func (UnimplementedQueryServer) Nonce(context.Context, *QueryNonceRequest) (*QueryNonceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Nonce not implemented")
-}
 func (UnimplementedQueryServer) Nonces(context.Context, *QueryNoncesRequest) (*QueryNoncesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Nonces not implemented")
-}
-func (UnimplementedQueryServer) CountNonces(context.Context, *QueryCountNoncesRequest) (*QueryCountNoncesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CountNonces not implemented")
 }
 func (UnimplementedQueryServer) DCM(context.Context, *QueryDCMRequest) (*QueryDCMResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DCM not implemented")
@@ -405,24 +371,6 @@ func _Query_Attestations_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Nonce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryNonceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Nonce(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_Nonce_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Nonce(ctx, req.(*QueryNonceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Query_Nonces_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryNoncesRequest)
 	if err := dec(in); err != nil {
@@ -437,24 +385,6 @@ func _Query_Nonces_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Nonces(ctx, req.(*QueryNoncesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_CountNonces_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCountNoncesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).CountNonces(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_CountNonces_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CountNonces(ctx, req.(*QueryCountNoncesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -581,16 +511,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Attestations_Handler,
 		},
 		{
-			MethodName: "Nonce",
-			Handler:    _Query_Nonce_Handler,
-		},
-		{
 			MethodName: "Nonces",
 			Handler:    _Query_Nonces_Handler,
-		},
-		{
-			MethodName: "CountNonces",
-			Handler:    _Query_CountNonces_Handler,
 		},
 		{
 			MethodName: "DCM",

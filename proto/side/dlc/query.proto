@@ -41,19 +41,9 @@ service Query {
         option (google.api.http).get = "/side/dlc/attestations";
     }
 
-    // Nonce queries the nonce by the given oracle id and index
-    rpc Nonce(QueryNonceRequest) returns (QueryNonceResponse) {
-        option (google.api.http).get = "/side/dlc/nonces/{oracle_id}/{index}";
-    }
-
     // Nonces queries all nonces of the given oracle
     rpc Nonces(QueryNoncesRequest) returns (QueryNoncesResponse) {
         option (google.api.http).get = "/side/dlc/nonces/{oracle_id}";
-    }
-
-    // CountNonces queries the total count of nonces.
-    rpc CountNonces(QueryCountNoncesRequest) returns (QueryCountNoncesResponse) {
-        option (google.api.http).get = "/side/dlc/nonces/count";
     }
 
     // DCM queries the DCM by the given id or public key.
@@ -145,23 +135,6 @@ message QueryOraclesRequest{
 message QueryOraclesResponse{
     repeated DLCOracle oracles = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QueryCountNoncesRequest {}
-
-// QueryCountNoncesResponse is response type for the Query/CountNonces RPC method.
-// counts should use the same order as recommended oracles in Params
-message QueryCountNoncesResponse{
-    repeated uint32 counts = 1; // qty of nonce in the cache queue
-}
-
-message QueryNonceRequest {
-    uint64 oracle_id = 1;
-    uint64 index = 2;
-}
-
-message QueryNonceResponse{
-    DLCNonce nonce = 1;
 }
 
 message QueryNoncesRequest {

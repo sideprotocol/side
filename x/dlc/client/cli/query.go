@@ -2,6 +2,7 @@ package cli
 
 import (
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"strconv"
 
@@ -31,9 +32,10 @@ func GetQueryCmd(_ string) *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdQueryParams())
-	cmd.AddCommand(CmdQueryOracles())
+	cmd.AddCommand(CmdQueryDCM())
 	cmd.AddCommand(CmdQueryDCMs())
-	cmd.AddCommand(CmdQueryNonce())
+	cmd.AddCommand(CmdQueryOracle())
+	cmd.AddCommand(CmdQueryOracles())
 	cmd.AddCommand(CmdQueryNonces())
 	cmd.AddCommand(CmdQueryEvent())
 	cmd.AddCommand(CmdQueryEvents())
@@ -73,10 +75,10 @@ func CmdQueryParams() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryOracles() *cobra.Command {
+func CmdQueryDCM() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "oracles [status]",
-		Short: "Query oracles by the given status",
+		Use:   "dcm [id | pub key]",
+		Short: "Query DCM by the given id or public key",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -86,12 +88,22 @@ func CmdQueryOracles() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			status, err := strconv.ParseUint(args[0], 10, 32)
+			id, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
-				return err
+				_, err := hex.DecodeString(args[0])
+				if err != nil {
+					return fmt.Errorf("neither id nor pub key is provided")
+				}
+
+				res, err := queryClient.DCM(cmd.Context(), &types.QueryDCMRequest{PubKey: args[0]})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
 			}
 
-			res, err := queryClient.Oracles(cmd.Context(), &types.QueryOraclesRequest{Status: types.DLCOracleStatus(status)})
+			res, err := queryClient.DCM(cmd.Context(), &types.QueryDCMRequest{Id: id})
 			if err != nil {
 				return err
 			}
@@ -137,11 +149,11 @@ func CmdQueryDCMs() *cobra.Command {
 	return cmd
 }
 
-func CmdQueryNonce() *cobra.Command {
+func CmdQueryOracle() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "nonce [oracle id] [index]",
-		Short: "Query the nonce by the oracle id and index",
-		Args:  cobra.ExactArgs(2),
+		Use:   "oracle [id | pub key]",
+		Short: "Query oracle by the given id or public key",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -150,17 +162,54 @@ func CmdQueryNonce() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			oracleId, err := strconv.ParseUint(args[0], 10, 64)
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				_, err := hex.DecodeString(args[0])
+				if err != nil {
+					return fmt.Errorf("neither id nor pub key is provided")
+				}
+
+				res, err := queryClient.Oracle(cmd.Context(), &types.QueryOracleRequest{PubKey: args[0]})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			res, err := queryClient.Oracle(cmd.Context(), &types.QueryOracleRequest{Id: id})
 			if err != nil {
 				return err
 			}
 
-			index, err := strconv.ParseUint(args[1], 10, 64)
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryOracles() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "oracles [status]",
+		Short: "Query oracles by the given status",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			res, err := queryClient.Nonce(cmd.Context(), &types.QueryNonceRequest{OracleId: oracleId, Index: index})
+			queryClient := types.NewQueryClient(clientCtx)
+
+			status, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.Oracles(cmd.Context(), &types.QueryOraclesRequest{Status: types.DLCOracleStatus(status)})
 			if err != nil {
 				return err
 			}
