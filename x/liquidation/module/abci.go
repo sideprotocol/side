@@ -9,9 +9,12 @@ import (
 )
 
 // EndBlocker called at the end of every block
-func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
+	// handle pending liquidations
 	handlePendingLiquidations(ctx, k)
-	handleCompletedLiquidations(ctx, k)
+
+	// handle completed liquidations
+	return handleCompletedLiquidations(ctx, k)
 }
 
 // handlePendingLiquidations handles the pending liquidations
@@ -72,35 +75,33 @@ func handlePendingLiquidations(ctx sdk.Context, k keeper.Keeper) {
 }
 
 // handleCompletedLiquidations handles the completed liquidations
-func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
+func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) error {
 	// get completed liquidations
 	liquidations := k.GetLiquidationsByStatus(ctx, types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED)
 	if len(liquidations) == 0 {
-		return
+		return nil
 	}
 
 	// get fee rate
 	feeRate := k.BtcBridgeKeeper().GetFeeRate(ctx)
 	if err := k.BtcBridgeKeeper().CheckFeeRate(ctx, feeRate); err != nil {
-		k.Logger(ctx).Info("Failed to get fee rate to handle liquidation", "err", err)
-
-		return
+		k.Logger(ctx).Warn("Failed to get fee rate to handle liquidation", "err", err)
+		return nil
 	}
 
 	for _, liquidation := range liquidations {
-		// handle liquidated debt(repay the lending pool)
-		if err := k.LiquidatedDebtHandler()(ctx, liquidation.Id, liquidation.LoanId, types.ModuleName, liquidation.LiquidatedDebtAmount); err != nil {
-			k.Logger(ctx).Info("Failed to call LiquidatedDebtHandler", "liquidation id", liquidation.Id, "debt amount", liquidation.LiquidatedDebtAmount, "err", err)
-
-			continue
-		}
-
 		// build settlement tx
 		settlementTx, txHash, sigHashes, changeAmount, err := types.BuildSettlementTransaction(liquidation, k.GetLiquidationRecords(ctx, liquidation.Id), k.ProtocolLiquidationFeeCollector(ctx), feeRate.Value)
 		if err != nil {
-			k.Logger(ctx).Info("Failed to build settlement transaction", "liquidation id", liquidation.Id, "fee rate", feeRate.Value, "err", err)
-
+			k.Logger(ctx).Error("Failed to build settlement transaction", "liquidation id", liquidation.Id, "fee rate", feeRate.Value, "err", err)
 			continue
+		}
+
+		// handle liquidated debt (repay the lending pool)
+		if err := k.LiquidatedDebtHandler()(ctx, liquidation.Id, liquidation.LoanId, types.ModuleName, liquidation.LiquidatedDebtAmount); err != nil {
+			// unexpected error
+			k.Logger(ctx).Error("Failed to call LiquidatedDebtHandler", "liquidation id", liquidation.Id, "debt amount", liquidation.LiquidatedDebtAmount, "err", err)
+			return err
 		}
 
 		liquidation.UnliquidatedCollateralAmount = sdk.NewInt64Coin(liquidation.CollateralAsset.Denom, changeAmount)
@@ -114,4 +115,6 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 		// initiate signing request via TSS
 		k.TSSKeeper().InitiateSigningRequest(ctx, types.ModuleName, types.ToScopedId(liquidation.Id), tsstypes.SigningType_SIGNING_TYPE_SCHNORR_WITH_TWEAK, int32(types.SigningIntent_SIGNING_INTENT_DEFAULT), liquidation.DCM, sigHashes, &tsstypes.SigningOptions{Tweak: ""})
 	}
+
+	return nil
 }

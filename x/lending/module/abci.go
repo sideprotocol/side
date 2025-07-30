@@ -15,17 +15,25 @@ import (
 )
 
 // BeginBlocker called at the beginning of each block
-func BeginBlocker(ctx sdk.Context, k keeper.Keeper) {
+func BeginBlocker(ctx sdk.Context, k keeper.Keeper) error {
 	updatePools(ctx, k)
+
+	return nil
 }
 
 // EndBlocker called at the end of each block
-func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
+	// handle pending loans
 	handlePendingLoans(ctx, k)
+
+	// handle active loans
 	handleActiveLoans(ctx, k)
 
+	// handle liquidated loans
 	handleLiquidatedLoans(ctx, k)
-	handleRepayments(ctx, k)
+
+	// handle repayments
+	return handleRepayments(ctx, k)
 }
 
 // handleActiveLoans handles pending loans
@@ -123,7 +131,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 
 		currentPrice, err := k.GetPrice(ctx, pricePair)
 		if err != nil {
-			k.Logger(ctx).Info("failed to get price", "pair", pricePair, "err", err)
+			k.Logger(ctx).Warn("failed to get price", "pair", pricePair, "err", err)
 		}
 
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
@@ -259,7 +267,7 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 		if len(cet.DCMSignatures) != 0 {
 			signedTx, txHash, err := types.BuildSignedCet(cet.Tx, loan.BorrowerAuthPubKey, cet.BorrowerAdaptedSignatures, loan.DCM, cet.DCMSignatures, cetType)
 			if err != nil {
-				k.Logger(ctx).Info("failed to build signed liquidation cet", "loan id", loan.VaultAddress, "err", err)
+				k.Logger(ctx).Error("failed to build signed liquidation cet", "loan id", loan.VaultAddress, "err", err)
 			} else {
 				cet.SignedTxHex = hex.EncodeToString(signedTx)
 
@@ -286,7 +294,7 @@ func handleLiquidatedLoans(ctx sdk.Context, k keeper.Keeper) {
 }
 
 // handleRepayments handles repayments
-func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
+func handleRepayments(ctx sdk.Context, k keeper.Keeper) error {
 	// get all repaid loans
 	loans := k.GetLoans(ctx, types.LoanStatus_Repaid)
 
@@ -297,11 +305,7 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		// check if the repayment cet has been signed
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
-		if len(dlcMeta.RepaymentCet.SignedTxHex) != 0 {
-			continue
-		}
 
 		// check if the DCM adaptor signatures have been submitted
 		if len(dlcMeta.RepaymentCet.DCMAdaptorSignatures) == 0 {
@@ -333,12 +337,15 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 		// build signed repayment cet
 		signedTx, txHash, err := types.BuildSignedCet(dlcMeta.RepaymentCet.Tx, loan.BorrowerPubKey, dlcMeta.RepaymentCet.BorrowerSignatures, loan.DCM, dlcMeta.RepaymentCet.DCMAdaptedSignatures, types.CetType_REPAYMENT)
 		if err != nil {
-			k.Logger(ctx).Info("failed to build signed repayment cet", "loan id", loan.VaultAddress, "err", err)
+			k.Logger(ctx).Error("failed to build signed repayment cet", "loan id", loan.VaultAddress, "err", err)
 		} else {
 			dlcMeta.RepaymentCet.SignedTxHex = hex.EncodeToString(signedTx)
 
+			// complete repayment
 			if err := k.CompleteRepayment(ctx, loan); err != nil {
-				k.Logger(ctx).Info("failed to complete repayment", "loan id", loan.VaultAddress, "err", err)
+				// unexpected error
+				k.Logger(ctx).Error("failed to complete repayment", "loan id", loan.VaultAddress, "err", err)
+				return err
 			}
 
 			// emit event
@@ -353,6 +360,8 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) {
 
 		k.SetDLCMeta(ctx, loan.VaultAddress, dlcMeta)
 	}
+
+	return nil
 }
 
 // updatePools updates all active pools at the beginning of each block

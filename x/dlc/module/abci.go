@@ -8,8 +8,10 @@ import (
 )
 
 // EndBlocker called at the end of every block
-func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
 	generateLendingEventNonces(ctx, k)
+
+	return nil
 }
 
 // generateLendingEventNonces generates nonces events for dlc lending events
@@ -26,7 +28,9 @@ func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
 	}
 
 	// check if there are sufficient oracle participants
-	if len(k.GetOracleParticipantBaseSet(ctx)) < int(k.OracleParticipantNum(ctx)) {
+	oracleParticipantBaseSet := k.GetOracleParticipantBaseSet(ctx)
+	if len(oracleParticipantBaseSet) < int(k.OracleParticipantNum(ctx)) {
+		k.Logger(ctx).Warn("insufficient oracle participants", "num", len(oracleParticipantBaseSet), "required num", k.OracleParticipantNum(ctx))
 		return
 	}
 

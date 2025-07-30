@@ -10,9 +10,14 @@ import (
 )
 
 // EndBlocker called at the end of every block
-func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
+	// handle dkg
 	handleDKGRequests(ctx, k)
+
+	// handle refreshing
 	handleRefreshingRequests(ctx, k)
+
+	return nil
 }
 
 // handleDKGRequests performs the DKG request handling
@@ -28,7 +33,7 @@ func handleDKGRequests(ctx sdk.Context, k keeper.Keeper) {
 
 			// callback the corresponding module handler
 			if err := k.GetDKGRequestTimeoutHandler(req.Module)(ctx, req.Id, req.Type, req.Intent, k.GetAbsentDKGParticipants(ctx, req)); err != nil {
-				k.Logger(ctx).Info("Failed to call DGKRequestTimeoutHandler", "module", req.Module, "type", req.Type, "intent", req.Intent)
+				k.Logger(ctx).Warn("Failed to call DGKRequestTimeoutHandler", "module", req.Module, "type", req.Type, "intent", req.Intent)
 			}
 
 			continue

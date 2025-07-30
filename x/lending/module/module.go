@@ -146,15 +146,11 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block
 func (am AppModule) BeginBlock(ctx context.Context) error {
 	c := sdk.UnwrapSDKContext(ctx)
-	BeginBlocker(c, am.keeper)
-
-	return nil
+	return BeginBlocker(c, am.keeper)
 }
 
 // EndBlock contains the logic that is automatically triggered at the end of each block
 func (am AppModule) EndBlock(ctx context.Context) error {
 	c := sdk.UnwrapSDKContext(ctx)
-	EndBlocker(c, am.keeper)
-
-	return nil
+	return EndBlocker(c, am.keeper)
 }

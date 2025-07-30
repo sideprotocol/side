@@ -8,10 +8,14 @@ import (
 )
 
 // EndBlocker called at the end of every block
-func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
+	// handle mature stakings
 	handleMatureStakings(ctx, k)
 
+	// handle epoch
 	handleEpoch(ctx, k)
+
+	return nil
 }
 
 // handleEpoch handles the epoch
