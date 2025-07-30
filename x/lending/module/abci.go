@@ -138,7 +138,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 			outcomeIndex = types.DefaultLiquidatedOutcomeIndex
 
 			// get default liquidation cet sig hashes; no error
-			sigHashes, _ = types.GetDefaultLiquidationCetSigHashes(dlcMeta)
+			sigHashes, _ = types.GetCetSigHashes(dlcMeta, types.CetType_DEFAULT_LIQUIDATION)
 
 			// emit default event
 			ctx.EventManager().EmitEvent(
@@ -158,7 +158,7 @@ func handleActiveLoans(ctx sdk.Context, k keeper.Keeper) {
 				outcomeIndex = types.LiquidatedOutcomeIndex
 
 				// get liquidation cet sig hashes; no error
-				sigHashes, _ = types.GetLiquidationCetSigHashes(dlcMeta)
+				sigHashes, _ = types.GetCetSigHashes(dlcMeta, types.CetType_LIQUIDATION)
 
 				// emit liquidation event
 				ctx.EventManager().EmitEvent(

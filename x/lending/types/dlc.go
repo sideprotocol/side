@@ -294,78 +294,6 @@ func VerifyRepaymentCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScri
 	return nil
 }
 
-// CreateLiquidationCET creates the liquidation cet
-func CreateLiquidationCET(depositTxs []*psbt.Packet, vaultPkScript []byte, dcmPkScript []byte, internalKeyBytes []byte, leafScript LeafScript, feeRate int64) (string, error) {
-	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
-	if err != nil {
-		return "", err
-	}
-
-	script, controlBlock, err := UnwrapLeafScript(leafScript)
-	if err != nil {
-		return "", err
-	}
-
-	p, err := BuildPsbt(vaultUtxos, dcmPkScript, feeRate, getCetWitnessSize(CetType_LIQUIDATION, script, controlBlock))
-	if err != nil {
-		return "", err
-	}
-
-	for i := range p.Inputs {
-		p.Inputs[i].TaprootInternalKey = internalKeyBytes
-		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
-			{
-				ControlBlock: controlBlock,
-				Script:       script,
-				LeafVersion:  txscript.BaseLeafVersion,
-			},
-		}
-	}
-
-	psbtB64, err := p.B64Encode()
-	if err != nil {
-		return "", err
-	}
-
-	return psbtB64, nil
-}
-
-// CreateRepaymentCet creates the repayment cet
-func CreateRepaymentCet(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, leafScript LeafScript, feeRate int64) (string, error) {
-	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
-	if err != nil {
-		return "", err
-	}
-
-	script, controlBlock, err := UnwrapLeafScript(leafScript)
-	if err != nil {
-		return "", err
-	}
-
-	p, err := BuildPsbt(vaultUtxos, borrowerPkScript, feeRate, getCetWitnessSize(CetType_REPAYMENT, script, controlBlock))
-	if err != nil {
-		return "", err
-	}
-
-	for i := range p.Inputs {
-		p.Inputs[i].TaprootInternalKey = internalKeyBytes
-		p.Inputs[i].TaprootLeafScript = []*psbt.TaprootTapLeafScript{
-			{
-				ControlBlock: controlBlock,
-				Script:       script,
-				LeafVersion:  txscript.BaseLeafVersion,
-			},
-		}
-	}
-
-	psbtB64, err := p.B64Encode()
-	if err != nil {
-		return "", err
-	}
-
-	return psbtB64, nil
-}
-
 // CreateTimeoutRefundTransaction creates the timeout refund tx
 func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, leafScript LeafScript, feeRate int64) (string, error) {
 	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
@@ -522,74 +450,41 @@ func GetCetInfo(event *dlctypes.DLCEvent, outcomeIndex int, script []byte, contr
 	}, nil
 }
 
-// GetLiquidationCetSigHashes gets the sig hashes of the liquidation cet
-func GetLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.LiquidationCet.Tx)), true)
+// GetCetSigHashes gets the sig hashes by the given cet type
+func GetCetSigHashes(dlcMeta *DLCMeta, cetType CetType) ([]string, error) {
+	var cet string
+	var script string
+
+	switch cetType {
+	case CetType_LIQUIDATION:
+		cet = dlcMeta.LiquidationCet.Tx
+		script = dlcMeta.LiquidationScript.Script
+
+	case CetType_DEFAULT_LIQUIDATION:
+		cet = dlcMeta.DefaultLiquidationCet.Tx
+		script = dlcMeta.LiquidationScript.Script
+
+	case CetType_REPAYMENT:
+		cet = dlcMeta.RepaymentCet.Tx
+		script = dlcMeta.RepaymentScript.Script
+	}
+
+	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(cet)), true)
 	if err != nil {
 		return nil, err
 	}
 
-	script, err := hex.DecodeString(dlcMeta.LiquidationScript.Script)
+	scriptBytes, err := hex.DecodeString(script)
 	if err != nil {
 		return nil, err
 	}
+
+	_, sigHashType := GetCetSigHashTypes(cetType)
 
 	sigHashes := []string{}
 
 	for i := range p.Inputs {
-		sigHash, err := CalcTapscriptSigHash(p, i, DefaultSigHashType, script)
-		if err != nil {
-			return nil, err
-		}
-
-		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
-	}
-
-	return sigHashes, nil
-}
-
-// GetDefaultLiquidationCetSigHashes gets the sig hashes of the default liquidation cet
-func GetDefaultLiquidationCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.DefaultLiquidationCet.Tx)), true)
-	if err != nil {
-		return nil, err
-	}
-
-	script, err := hex.DecodeString(dlcMeta.LiquidationScript.Script)
-	if err != nil {
-		return nil, err
-	}
-
-	sigHashes := []string{}
-
-	for i := range p.Inputs {
-		sigHash, err := CalcTapscriptSigHash(p, i, DefaultSigHashType, script)
-		if err != nil {
-			return nil, err
-		}
-
-		sigHashes = append(sigHashes, base64.StdEncoding.EncodeToString(sigHash))
-	}
-
-	return sigHashes, nil
-}
-
-// GetRepaymentCetSigHashes gets the sig hashes of the repayment cet
-func GetRepaymentCetSigHashes(dlcMeta *DLCMeta) ([]string, error) {
-	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(dlcMeta.RepaymentCet.Tx)), true)
-	if err != nil {
-		return nil, err
-	}
-
-	script, err := hex.DecodeString(dlcMeta.RepaymentScript.Script)
-	if err != nil {
-		return nil, err
-	}
-
-	sigHashes := []string{}
-
-	for i := range p.Inputs {
-		sigHash, err := CalcTapscriptSigHash(p, i, DefaultSigHashType, script)
+		sigHash, err := CalcTapscriptSigHash(p, i, sigHashType, scriptBytes)
 		if err != nil {
 			return nil, err
 		}

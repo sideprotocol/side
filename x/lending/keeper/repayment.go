@@ -20,7 +20,7 @@ func (k Keeper) InitiateRepaymentCetSigningRequest(ctx sdk.Context, loanId strin
 		return err
 	}
 
-	sigHashes, err := types.GetRepaymentCetSigHashes(k.GetDLCMeta(ctx, loanId))
+	sigHashes, err := types.GetCetSigHashes(k.GetDLCMeta(ctx, loanId), types.CetType_REPAYMENT)
 	if err != nil {
 		return err
 	}
