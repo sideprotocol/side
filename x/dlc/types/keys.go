@@ -35,9 +35,9 @@ var (
 	NonceByValueKeyPrefix        = []byte{0x16} // key prefix for the nonce value
 	EventKeyPrefix               = []byte{0x17} // prefix for each key to an event
 	EventByStatusKeyPrefix       = []byte{0x18} // prefix for each key to an event by status
-	PendingLendingEventKeyPrefix = []byte{0x23} // key prefix for the pending lending event
-	AttestationKeyPrefix         = []byte{0x24} // prefix for each key to an attestation
-	AttestationByEventKeyPrefix  = []byte{0x25} // prefix for each key to an attestation by event
+	PendingLendingEventKeyPrefix = []byte{0x19} // key prefix for the pending lending event
+	AttestationKeyPrefix         = []byte{0x20} // prefix for each key to an attestation
+	AttestationByEventKeyPrefix  = []byte{0x21} // prefix for each key to an attestation by event
 
 	OracleParticipantLivenessKeyPrefix = []byte{0x30} // key prefix for oracle participant liveness
 )
