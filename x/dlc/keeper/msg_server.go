@@ -36,7 +36,7 @@ func (m msgServer) CreateDCM(goCtx context.Context, msg *types.MsgCreateDCM) (*t
 		}
 	}
 
-	m.tssKeeper.InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_DCM, int32(types.DKGIntent_DKG_INTENT_DEFAULT), msg.Participants, msg.Threshold, 1)
+	m.tssKeeper.InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_DCM, int32(types.DKGIntent_DKG_INTENT_DEFAULT), msg.Participants, msg.Threshold, 1, msg.TimeoutDuration)
 
 	return &types.MsgCreateDCMResponse{}, nil
 }

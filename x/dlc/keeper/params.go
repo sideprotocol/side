@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"slices"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,6 +23,11 @@ func (k Keeper) NonceGenerationBatchSize(ctx sdk.Context) uint32 {
 // NonceGenerationInterval gets the nonce generation interval
 func (k Keeper) NonceGenerationInterval(ctx sdk.Context) int64 {
 	return k.GetParams(ctx).NonceGenerationInterval
+}
+
+// NonceGenerationTimeoutDuration gets the nonce generation timeout duration
+func (k Keeper) NonceGenerationTimeoutDuration(ctx sdk.Context) time.Duration {
+	return k.GetParams(ctx).NonceGenerationTimeoutDuration
 }
 
 // AllowedOracleParticipants gets the allowed oracle participants

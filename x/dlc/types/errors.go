@@ -19,6 +19,7 @@ var (
 	ErrInvalidParticipants      = errorsmod.Register(ModuleName, 1109, "invalid participants")
 	ErrInvalidThreshold         = errorsmod.Register(ModuleName, 1110, "invalid threshold")
 	ErrInvalidDKGIntent         = errorsmod.Register(ModuleName, 1111, "invalid dkg intent")
+	ErrInvalidTimeoutDuration   = errorsmod.Register(ModuleName, 1112, "invalid timeout duration")
 
 	ErrInsufficientOracleParticipants = errorsmod.Register(ModuleName, 2100, "insufficient oracle participants")
 

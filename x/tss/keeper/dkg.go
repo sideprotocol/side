@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/store/prefix"
@@ -277,7 +278,11 @@ func (k Keeper) GetDKGPubKeys(ctx sdk.Context, id uint64) []string {
 }
 
 // InitiateDKG initiates the DKG request by the specified params
-func (k Keeper) InitiateDKG(ctx sdk.Context, module string, ty string, intent int32, participants []string, threshold uint32, batchSize uint32) *types.DKGRequest {
+func (k Keeper) InitiateDKG(ctx sdk.Context, module string, ty string, intent int32, participants []string, threshold uint32, batchSize uint32, timeoutDuration time.Duration) *types.DKGRequest {
+	if timeoutDuration == 0 {
+		timeoutDuration = k.DKGTimeoutDuration(ctx)
+	}
+
 	req := &types.DKGRequest{
 		Id:             k.GetNextDKGRequestId(ctx),
 		Module:         module,
@@ -286,7 +291,7 @@ func (k Keeper) InitiateDKG(ctx sdk.Context, module string, ty string, intent in
 		Participants:   participants,
 		Threshold:      threshold,
 		BatchSize:      batchSize,
-		ExpirationTime: types.GetExpirationTime(ctx.BlockTime(), k.DKGTimeoutDuration(ctx)),
+		ExpirationTime: types.GetExpirationTime(ctx.BlockTime(), timeoutDuration),
 		Status:         types.DKGStatus_DKG_STATUS_PENDING,
 	}
 

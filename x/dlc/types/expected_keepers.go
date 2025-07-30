@@ -2,6 +2,7 @@ package types
 
 import (
 	context "context"
+	"time"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -30,7 +31,7 @@ type TSSKeeper interface {
 	HasDKGRequest(ctx sdk.Context, id uint64) bool
 	GetDKGRequest(ctx sdk.Context, id uint64) *tsstypes.DKGRequest
 
-	InitiateDKG(ctx sdk.Context, module string, ty string, intent int32, participants []string, threshold uint32, batchSize uint32) *tsstypes.DKGRequest
+	InitiateDKG(ctx sdk.Context, module string, ty string, intent int32, participants []string, threshold uint32, batchSize uint32, timeoutDuration time.Duration) *tsstypes.DKGRequest
 	InitiateSigningRequest(ctx sdk.Context, module string, scopedId string, ty tsstypes.SigningType, intent int32, pubKey string, sigHashes []string, options *tsstypes.SigningOptions) *tsstypes.SigningRequest
 
 	RegisterDKGCompletionReceivedHandler(module string, handler tsstypes.DKGCompletionReceivedHandler)

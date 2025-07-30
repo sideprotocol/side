@@ -34,5 +34,5 @@ func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
 	participants := k.GetOracleParticipants(ctx)
 
 	// initiate DKG
-	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_LENDING_EVENT_NONCE), participants, k.OracleParticipantThreshold(ctx), k.NonceGenerationBatchSize(ctx))
+	k.TSSKeeper().InitiateDKG(ctx, types.ModuleName, types.DKG_TYPE_NONCE, int32(types.DKGIntent_DKG_INTENT_LENDING_EVENT_NONCE), participants, k.OracleParticipantThreshold(ctx), k.NonceGenerationBatchSize(ctx), k.NonceGenerationTimeoutDuration(ctx))
 }

@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/base64"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -17,6 +18,9 @@ var (
 	// default nonce generation interval in blocks
 	DefaultNonceGenerationInterval = int64(50) // 50 blocks
 
+	// default nonce generation timeout duration
+	DefaultNonceGenerationTimeoutDuration = 24 * time.Hour // 24 hours
+
 	// minimum oracle participant number
 	MinOracleParticipantNum = uint32(3)
 
@@ -30,12 +34,13 @@ var (
 // NewParams creates a new Params instance
 func NewParams() Params {
 	return Params{
-		NonceQueueSize:             DefaultNonceQueueSize,
-		NonceGenerationBatchSize:   DefaultNonceGenerationBatchSize,
-		NonceGenerationInterval:    DefaultNonceGenerationInterval,
-		AllowedOracleParticipants:  []string{},
-		OracleParticipantNum:       DefaultOracleParticipantNum,
-		OracleParticipantThreshold: DefaultOracleParticipantThreshold,
+		NonceQueueSize:                 DefaultNonceQueueSize,
+		NonceGenerationBatchSize:       DefaultNonceGenerationBatchSize,
+		NonceGenerationInterval:        DefaultNonceGenerationInterval,
+		NonceGenerationTimeoutDuration: DefaultNonceGenerationTimeoutDuration,
+		AllowedOracleParticipants:      []string{},
+		OracleParticipantNum:           DefaultOracleParticipantNum,
+		OracleParticipantThreshold:     DefaultOracleParticipantThreshold,
 	}
 }
 
@@ -56,6 +61,10 @@ func (p Params) Validate() error {
 
 	if p.NonceGenerationInterval <= 0 {
 		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation interval must be greater than 0")
+	}
+
+	if p.NonceGenerationTimeoutDuration < 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation timeout duration cannot be negative")
 	}
 
 	if err := validateOracleParticipants(p.AllowedOracleParticipants); err != nil {

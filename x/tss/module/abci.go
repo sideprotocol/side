@@ -22,7 +22,7 @@ func handleDKGRequests(ctx sdk.Context, k keeper.Keeper) {
 
 	for _, req := range pendingDKGRequests {
 		// check if the DKG request expired
-		if !ctx.BlockTime().Before(req.ExpirationTime) {
+		if !req.ExpirationTime.IsZero() && !ctx.BlockTime().Before(req.ExpirationTime) {
 			req.Status = types.DKGStatus_DKG_STATUS_TIMEDOUT
 			k.SetDKGRequest(ctx, req)
 

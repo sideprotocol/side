@@ -2,6 +2,7 @@ syntax = "proto3";
 package side.dlc;
 
 import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
 import "cosmos/msg/v1/msg.proto";
 import "side/dlc/params.proto";
 import "side/dlc/dlc.proto";
@@ -28,6 +29,7 @@ message MsgCreateDCM {
     string authority = 1;
     repeated string participants = 2;
     uint32 threshold = 3;
+    google.protobuf.Duration timeout_duration = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }
 
 message MsgCreateDCMResponse {}

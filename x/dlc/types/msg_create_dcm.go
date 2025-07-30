@@ -38,5 +38,9 @@ func (m *MsgCreateDCM) ValidateBasic() error {
 		participants[p] = true
 	}
 
+	if m.TimeoutDuration < 0 {
+		return ErrInvalidTimeoutDuration
+	}
+
 	return nil
 }

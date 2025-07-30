@@ -12,7 +12,8 @@ message Params {
     uint32 nonce_queue_size = 1;
     uint32 nonce_generation_batch_size = 2;
     int64 nonce_generation_interval = 3;
-    repeated string allowed_oracle_participants = 4;
-    uint32 oracle_participant_num = 5;
-    uint32 oracle_participant_threshold = 6;
+    google.protobuf.Duration nonce_generation_timeout_duration = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    repeated string allowed_oracle_participants = 5;
+    uint32 oracle_participant_num = 6;
+    uint32 oracle_participant_threshold = 7;
 }
