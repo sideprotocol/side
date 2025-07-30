@@ -15,7 +15,5 @@ var (
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 2100, "invalid params")
 
-	ErrFailedToBuildTx   = errorsmod.Register(ModuleName, 3100, "failed to build transaction")
-	ErrInvalidSignatures = errorsmod.Register(ModuleName, 3101, "invalid signatures")
-	ErrInvalidSignature  = errorsmod.Register(ModuleName, 3102, "invalid signature")
+	ErrFailedToBuildTx = errorsmod.Register(ModuleName, 3100, "failed to build transaction")
 )
