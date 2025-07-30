@@ -66,8 +66,8 @@ message QueryDKGRequestResponse {
 }
 
 message QueryDKGRequestsRequest {
-    string module = 1;
-    DKGStatus status = 2;
+    DKGStatus status = 1;
+    string module = 2;
     cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
@@ -95,8 +95,8 @@ message QuerySigningRequestResponse {
 }
 
 message QuerySigningRequestsRequest {
-    string module = 1;
-    SigningStatus status = 2;
+    SigningStatus status = 1;
+    string module = 2;
     cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 

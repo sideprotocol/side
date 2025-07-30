@@ -856,16 +856,16 @@ func (x *fastReflection_QueryDKGRequestResponse) ProtoMethods() *protoiface.Meth
 
 var (
 	md_QueryDKGRequestsRequest            protoreflect.MessageDescriptor
-	fd_QueryDKGRequestsRequest_module     protoreflect.FieldDescriptor
 	fd_QueryDKGRequestsRequest_status     protoreflect.FieldDescriptor
+	fd_QueryDKGRequestsRequest_module     protoreflect.FieldDescriptor
 	fd_QueryDKGRequestsRequest_pagination protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_query_proto_init()
 	md_QueryDKGRequestsRequest = File_side_tss_query_proto.Messages().ByName("QueryDKGRequestsRequest")
-	fd_QueryDKGRequestsRequest_module = md_QueryDKGRequestsRequest.Fields().ByName("module")
 	fd_QueryDKGRequestsRequest_status = md_QueryDKGRequestsRequest.Fields().ByName("status")
+	fd_QueryDKGRequestsRequest_module = md_QueryDKGRequestsRequest.Fields().ByName("module")
 	fd_QueryDKGRequestsRequest_pagination = md_QueryDKGRequestsRequest.Fields().ByName("pagination")
 }
 
@@ -934,15 +934,15 @@ func (x *fastReflection_QueryDKGRequestsRequest) Interface() protoreflect.ProtoM
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_QueryDKGRequestsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Module != "" {
-		value := protoreflect.ValueOfString(x.Module)
-		if !f(fd_QueryDKGRequestsRequest_module, value) {
-			return
-		}
-	}
 	if x.Status != 0 {
 		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
 		if !f(fd_QueryDKGRequestsRequest_status, value) {
+			return
+		}
+	}
+	if x.Module != "" {
+		value := protoreflect.ValueOfString(x.Module)
+		if !f(fd_QueryDKGRequestsRequest_module, value) {
 			return
 		}
 	}
@@ -967,10 +967,10 @@ func (x *fastReflection_QueryDKGRequestsRequest) Range(f func(protoreflect.Field
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_QueryDKGRequestsRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.tss.QueryDKGRequestsRequest.module":
-		return x.Module != ""
 	case "side.tss.QueryDKGRequestsRequest.status":
 		return x.Status != 0
+	case "side.tss.QueryDKGRequestsRequest.module":
+		return x.Module != ""
 	case "side.tss.QueryDKGRequestsRequest.pagination":
 		return x.Pagination != nil
 	default:
@@ -989,10 +989,10 @@ func (x *fastReflection_QueryDKGRequestsRequest) Has(fd protoreflect.FieldDescri
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_QueryDKGRequestsRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.tss.QueryDKGRequestsRequest.module":
-		x.Module = ""
 	case "side.tss.QueryDKGRequestsRequest.status":
 		x.Status = 0
+	case "side.tss.QueryDKGRequestsRequest.module":
+		x.Module = ""
 	case "side.tss.QueryDKGRequestsRequest.pagination":
 		x.Pagination = nil
 	default:
@@ -1011,12 +1011,12 @@ func (x *fastReflection_QueryDKGRequestsRequest) Clear(fd protoreflect.FieldDesc
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_QueryDKGRequestsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.tss.QueryDKGRequestsRequest.module":
-		value := x.Module
-		return protoreflect.ValueOfString(value)
 	case "side.tss.QueryDKGRequestsRequest.status":
 		value := x.Status
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	case "side.tss.QueryDKGRequestsRequest.module":
+		value := x.Module
+		return protoreflect.ValueOfString(value)
 	case "side.tss.QueryDKGRequestsRequest.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -1040,10 +1040,10 @@ func (x *fastReflection_QueryDKGRequestsRequest) Get(descriptor protoreflect.Fie
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_QueryDKGRequestsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.tss.QueryDKGRequestsRequest.module":
-		x.Module = value.Interface().(string)
 	case "side.tss.QueryDKGRequestsRequest.status":
 		x.Status = (DKGStatus)(value.Enum())
+	case "side.tss.QueryDKGRequestsRequest.module":
+		x.Module = value.Interface().(string)
 	case "side.tss.QueryDKGRequestsRequest.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
 	default:
@@ -1071,10 +1071,10 @@ func (x *fastReflection_QueryDKGRequestsRequest) Mutable(fd protoreflect.FieldDe
 			x.Pagination = new(v1beta1.PageRequest)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-	case "side.tss.QueryDKGRequestsRequest.module":
-		panic(fmt.Errorf("field module of message side.tss.QueryDKGRequestsRequest is not mutable"))
 	case "side.tss.QueryDKGRequestsRequest.status":
 		panic(fmt.Errorf("field status of message side.tss.QueryDKGRequestsRequest is not mutable"))
+	case "side.tss.QueryDKGRequestsRequest.module":
+		panic(fmt.Errorf("field module of message side.tss.QueryDKGRequestsRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QueryDKGRequestsRequest"))
@@ -1088,10 +1088,10 @@ func (x *fastReflection_QueryDKGRequestsRequest) Mutable(fd protoreflect.FieldDe
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_QueryDKGRequestsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QueryDKGRequestsRequest.module":
-		return protoreflect.ValueOfString("")
 	case "side.tss.QueryDKGRequestsRequest.status":
 		return protoreflect.ValueOfEnum(0)
+	case "side.tss.QueryDKGRequestsRequest.module":
+		return protoreflect.ValueOfString("")
 	case "side.tss.QueryDKGRequestsRequest.pagination":
 		m := new(v1beta1.PageRequest)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -1164,12 +1164,12 @@ func (x *fastReflection_QueryDKGRequestsRequest) ProtoMethods() *protoiface.Meth
 		var n int
 		var l int
 		_ = l
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
+		}
 		l = len(x.Module)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Status != 0 {
-			n += 1 + runtime.Sov(uint64(x.Status))
 		}
 		if x.Pagination != nil {
 			l = options.Size(x.Pagination)
@@ -1218,17 +1218,17 @@ func (x *fastReflection_QueryDKGRequestsRequest) ProtoMethods() *protoiface.Meth
 			i--
 			dAtA[i] = 0x1a
 		}
-		if x.Status != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
-			i--
-			dAtA[i] = 0x10
-		}
 		if len(x.Module) > 0 {
 			i -= len(x.Module)
 			copy(dAtA[i:], x.Module)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Module)))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -1280,6 +1280,25 @@ func (x *fastReflection_QueryDKGRequestsRequest) ProtoMethods() *protoiface.Meth
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= DKGStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Module", wireType)
 				}
@@ -1311,25 +1330,6 @@ func (x *fastReflection_QueryDKGRequestsRequest) ProtoMethods() *protoiface.Meth
 				}
 				x.Module = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
-				}
-				x.Status = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Status |= DKGStatus(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
 			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
@@ -3871,16 +3871,16 @@ func (x *fastReflection_QuerySigningRequestResponse) ProtoMethods() *protoiface.
 
 var (
 	md_QuerySigningRequestsRequest            protoreflect.MessageDescriptor
-	fd_QuerySigningRequestsRequest_module     protoreflect.FieldDescriptor
 	fd_QuerySigningRequestsRequest_status     protoreflect.FieldDescriptor
+	fd_QuerySigningRequestsRequest_module     protoreflect.FieldDescriptor
 	fd_QuerySigningRequestsRequest_pagination protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_side_tss_query_proto_init()
 	md_QuerySigningRequestsRequest = File_side_tss_query_proto.Messages().ByName("QuerySigningRequestsRequest")
-	fd_QuerySigningRequestsRequest_module = md_QuerySigningRequestsRequest.Fields().ByName("module")
 	fd_QuerySigningRequestsRequest_status = md_QuerySigningRequestsRequest.Fields().ByName("status")
+	fd_QuerySigningRequestsRequest_module = md_QuerySigningRequestsRequest.Fields().ByName("module")
 	fd_QuerySigningRequestsRequest_pagination = md_QuerySigningRequestsRequest.Fields().ByName("pagination")
 }
 
@@ -3949,15 +3949,15 @@ func (x *fastReflection_QuerySigningRequestsRequest) Interface() protoreflect.Pr
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_QuerySigningRequestsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Module != "" {
-		value := protoreflect.ValueOfString(x.Module)
-		if !f(fd_QuerySigningRequestsRequest_module, value) {
-			return
-		}
-	}
 	if x.Status != 0 {
 		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
 		if !f(fd_QuerySigningRequestsRequest_status, value) {
+			return
+		}
+	}
+	if x.Module != "" {
+		value := protoreflect.ValueOfString(x.Module)
+		if !f(fd_QuerySigningRequestsRequest_module, value) {
 			return
 		}
 	}
@@ -3982,10 +3982,10 @@ func (x *fastReflection_QuerySigningRequestsRequest) Range(f func(protoreflect.F
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_QuerySigningRequestsRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "side.tss.QuerySigningRequestsRequest.module":
-		return x.Module != ""
 	case "side.tss.QuerySigningRequestsRequest.status":
 		return x.Status != 0
+	case "side.tss.QuerySigningRequestsRequest.module":
+		return x.Module != ""
 	case "side.tss.QuerySigningRequestsRequest.pagination":
 		return x.Pagination != nil
 	default:
@@ -4004,10 +4004,10 @@ func (x *fastReflection_QuerySigningRequestsRequest) Has(fd protoreflect.FieldDe
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_QuerySigningRequestsRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "side.tss.QuerySigningRequestsRequest.module":
-		x.Module = ""
 	case "side.tss.QuerySigningRequestsRequest.status":
 		x.Status = 0
+	case "side.tss.QuerySigningRequestsRequest.module":
+		x.Module = ""
 	case "side.tss.QuerySigningRequestsRequest.pagination":
 		x.Pagination = nil
 	default:
@@ -4026,12 +4026,12 @@ func (x *fastReflection_QuerySigningRequestsRequest) Clear(fd protoreflect.Field
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_QuerySigningRequestsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "side.tss.QuerySigningRequestsRequest.module":
-		value := x.Module
-		return protoreflect.ValueOfString(value)
 	case "side.tss.QuerySigningRequestsRequest.status":
 		value := x.Status
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	case "side.tss.QuerySigningRequestsRequest.module":
+		value := x.Module
+		return protoreflect.ValueOfString(value)
 	case "side.tss.QuerySigningRequestsRequest.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -4055,10 +4055,10 @@ func (x *fastReflection_QuerySigningRequestsRequest) Get(descriptor protoreflect
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_QuerySigningRequestsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "side.tss.QuerySigningRequestsRequest.module":
-		x.Module = value.Interface().(string)
 	case "side.tss.QuerySigningRequestsRequest.status":
 		x.Status = (SigningStatus)(value.Enum())
+	case "side.tss.QuerySigningRequestsRequest.module":
+		x.Module = value.Interface().(string)
 	case "side.tss.QuerySigningRequestsRequest.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
 	default:
@@ -4086,10 +4086,10 @@ func (x *fastReflection_QuerySigningRequestsRequest) Mutable(fd protoreflect.Fie
 			x.Pagination = new(v1beta1.PageRequest)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-	case "side.tss.QuerySigningRequestsRequest.module":
-		panic(fmt.Errorf("field module of message side.tss.QuerySigningRequestsRequest is not mutable"))
 	case "side.tss.QuerySigningRequestsRequest.status":
 		panic(fmt.Errorf("field status of message side.tss.QuerySigningRequestsRequest is not mutable"))
+	case "side.tss.QuerySigningRequestsRequest.module":
+		panic(fmt.Errorf("field module of message side.tss.QuerySigningRequestsRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: side.tss.QuerySigningRequestsRequest"))
@@ -4103,10 +4103,10 @@ func (x *fastReflection_QuerySigningRequestsRequest) Mutable(fd protoreflect.Fie
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_QuerySigningRequestsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "side.tss.QuerySigningRequestsRequest.module":
-		return protoreflect.ValueOfString("")
 	case "side.tss.QuerySigningRequestsRequest.status":
 		return protoreflect.ValueOfEnum(0)
+	case "side.tss.QuerySigningRequestsRequest.module":
+		return protoreflect.ValueOfString("")
 	case "side.tss.QuerySigningRequestsRequest.pagination":
 		m := new(v1beta1.PageRequest)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -4179,12 +4179,12 @@ func (x *fastReflection_QuerySigningRequestsRequest) ProtoMethods() *protoiface.
 		var n int
 		var l int
 		_ = l
+		if x.Status != 0 {
+			n += 1 + runtime.Sov(uint64(x.Status))
+		}
 		l = len(x.Module)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Status != 0 {
-			n += 1 + runtime.Sov(uint64(x.Status))
 		}
 		if x.Pagination != nil {
 			l = options.Size(x.Pagination)
@@ -4233,17 +4233,17 @@ func (x *fastReflection_QuerySigningRequestsRequest) ProtoMethods() *protoiface.
 			i--
 			dAtA[i] = 0x1a
 		}
-		if x.Status != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
-			i--
-			dAtA[i] = 0x10
-		}
 		if len(x.Module) > 0 {
 			i -= len(x.Module)
 			copy(dAtA[i:], x.Module)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Module)))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -4295,6 +4295,25 @@ func (x *fastReflection_QuerySigningRequestsRequest) ProtoMethods() *protoiface.
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= SigningStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Module", wireType)
 				}
@@ -4326,25 +4345,6 @@ func (x *fastReflection_QuerySigningRequestsRequest) ProtoMethods() *protoiface.
 				}
 				x.Module = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
-				}
-				x.Status = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Status |= SigningStatus(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
 			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
@@ -8819,8 +8819,8 @@ type QueryDKGRequestsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Module     string               `protobuf:"bytes,1,opt,name=module,proto3" json:"module,omitempty"`
-	Status     DKGStatus            `protobuf:"varint,2,opt,name=status,proto3,enum=side.tss.DKGStatus" json:"status,omitempty"`
+	Status     DKGStatus            `protobuf:"varint,1,opt,name=status,proto3,enum=side.tss.DKGStatus" json:"status,omitempty"`
+	Module     string               `protobuf:"bytes,2,opt,name=module,proto3" json:"module,omitempty"`
 	Pagination *v1beta1.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -8844,18 +8844,18 @@ func (*QueryDKGRequestsRequest) Descriptor() ([]byte, []int) {
 	return file_side_tss_query_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *QueryDKGRequestsRequest) GetModule() string {
-	if x != nil {
-		return x.Module
-	}
-	return ""
-}
-
 func (x *QueryDKGRequestsRequest) GetStatus() DKGStatus {
 	if x != nil {
 		return x.Status
 	}
 	return DKGStatus_DKG_STATUS_UNSPECIFIED
+}
+
+func (x *QueryDKGRequestsRequest) GetModule() string {
+	if x != nil {
+		return x.Module
+	}
+	return ""
 }
 
 func (x *QueryDKGRequestsRequest) GetPagination() *v1beta1.PageRequest {
@@ -9069,8 +9069,8 @@ type QuerySigningRequestsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Module     string               `protobuf:"bytes,1,opt,name=module,proto3" json:"module,omitempty"`
-	Status     SigningStatus        `protobuf:"varint,2,opt,name=status,proto3,enum=side.tss.SigningStatus" json:"status,omitempty"`
+	Status     SigningStatus        `protobuf:"varint,1,opt,name=status,proto3,enum=side.tss.SigningStatus" json:"status,omitempty"`
+	Module     string               `protobuf:"bytes,2,opt,name=module,proto3" json:"module,omitempty"`
 	Pagination *v1beta1.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -9094,18 +9094,18 @@ func (*QuerySigningRequestsRequest) Descriptor() ([]byte, []int) {
 	return file_side_tss_query_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *QuerySigningRequestsRequest) GetModule() string {
-	if x != nil {
-		return x.Module
-	}
-	return ""
-}
-
 func (x *QuerySigningRequestsRequest) GetStatus() SigningStatus {
 	if x != nil {
 		return x.Status
 	}
 	return SigningStatus_SIGNING_STATUS_UNSPECIFIED
+}
+
+func (x *QuerySigningRequestsRequest) GetModule() string {
+	if x != nil {
+		return x.Module
+	}
+	return ""
 }
 
 func (x *QuerySigningRequestsRequest) GetPagination() *v1beta1.PageRequest {
@@ -9485,12 +9485,12 @@ var file_side_tss_query_proto_rawDesc = []byte{
 	0x0b, 0x32, 0x14, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x44, 0x4b, 0x47,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
 	0x22, 0xa6, 0x01, 0x0a, 0x17, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06,
-	0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6d, 0x6f,
-	0x64, 0x75, 0x6c, 0x65, 0x12, 0x2b, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0e, 0x32, 0x13, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e,
-	0x44, 0x4b, 0x47, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75,
-	0x73, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2b, 0x0a, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x13, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x44, 0x4b, 0x47, 0x53, 0x74, 0x61, 0x74, 0x75,
+	0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x6f, 0x64,
+	0x75, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6d, 0x6f, 0x64, 0x75, 0x6c,
+	0x65, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
 	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
 	0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
 	0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70,
@@ -9531,12 +9531,12 @@ var file_side_tss_query_proto_rawDesc = []byte{
 	0x2e, 0x74, 0x73, 0x73, 0x2e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x52, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0xae, 0x01, 0x0a,
 	0x1b, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06,
-	0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6d, 0x6f,
-	0x64, 0x75, 0x6c, 0x65, 0x12, 0x2f, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0e, 0x32, 0x17, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e,
-	0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73,
-	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74,
+	0x75, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2f, 0x0a, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x17, 0x2e, 0x73,
+	0x69, 0x64, 0x65, 0x2e, 0x74, 0x73, 0x73, 0x2e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x16, 0x0a,
+	0x06, 0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6d,
+	0x6f, 0x64, 0x75, 0x6c, 0x65, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74,
 	0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
 	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31,
 	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,

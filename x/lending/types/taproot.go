@@ -21,9 +21,10 @@ const (
 	NUMS_POINT = "50929b74c1a04954b78b4b6035e97a5e078a5a0f28ec96d547bfee9ace803ac0"
 )
 
-// Branch 1 & 2: multisig script for borrower and dcm
-// 1: liquidation script with borrower auth key
-// 2: repayment script with borrower key
+// CreateMultisigScript creates the multisig script with the given public keys
+// Note: The multisig script is used for liquidation and repayment CETs
+// 1: liquidation script with the borrower auth key and DCM public key
+// 2: repayment script with the borrower key and DCM public key
 func CreateMultisigScript(pubKeys [][]byte) ([]byte, error) {
 	builder := txscript.NewScriptBuilder()
 
@@ -43,8 +44,9 @@ func CreateMultisigScript(pubKeys [][]byte) ([]byte, error) {
 	return builder.Script()
 }
 
-// Branch 3: PubKey with time lock script for borrower refund
-func CreatePubKeyTimeLockScript(pubKey []byte, lockTime int64) ([]byte, error) {
+// CreateTimeLockScript creates the time lock script with the given public key and time lock
+// Note: The time lock script is used for borrower refund when the final timeout reached
+func CreateTimeLockScript(pubKey []byte, lockTime int64) ([]byte, error) {
 	builder := txscript.NewScriptBuilder()
 
 	builder.AddInt64(lockTime)
@@ -111,7 +113,7 @@ func GetVaultScripts(borrowerPubKey []byte, borrowerAuthPubKey []byte, dcmPubKey
 	}
 
 	// refund script
-	timeoutRefundScript, err := CreatePubKeyTimeLockScript(borrowerPubKey, finalTimeout)
+	timeoutRefundScript, err := CreateTimeLockScript(borrowerPubKey, finalTimeout)
 	if err != nil {
 		return nil, nil, nil, err
 	}

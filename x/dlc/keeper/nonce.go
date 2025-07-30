@@ -139,20 +139,6 @@ func (k Keeper) GetNonces(ctx sdk.Context, oracleId uint64) []*types.DLCNonce {
 	return nonces
 }
 
-// GetNonceCounts gets counts of all nonces
-func (k Keeper) GetNonceCounts(ctx sdk.Context) []uint32 {
-	counts := make([]uint32, 0)
-
-	oracles := k.GetOracles(ctx, types.DLCOracleStatus_Oracle_status_Enable)
-
-	for _, oracle := range oracles {
-		nonceCount := k.GetNonceIndex(ctx, oracle.Id)
-		counts = append(counts, uint32(nonceCount))
-	}
-
-	return counts
-}
-
 // IterateNonces iterates through all nonces of the given oracle
 func (k Keeper) IterateNonces(ctx sdk.Context, oracleId uint64, cb func(nonce *types.DLCNonce) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
