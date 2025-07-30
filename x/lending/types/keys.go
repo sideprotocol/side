@@ -3,7 +3,6 @@ package types
 import (
 	"encoding/hex"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -25,9 +24,6 @@ const (
 )
 
 var (
-	Percent  = math.NewInt(100)
-	Permille = math.NewInt(1000)
-
 	ParamsKey       = []byte{0x01}
 	RedemptionIdKey = []byte{0x02}
 

@@ -3,8 +3,6 @@ package types
 import (
 	"sync"
 
-	"cosmossdk.io/math"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -34,9 +32,6 @@ const (
 
 var (
 	SupportedPairs = []string{BTCUSD}
-
-	Percent  = math.NewInt(100)
-	Permille = math.NewInt(1000)
 
 	ParamsStoreKey = []byte{0x01}
 

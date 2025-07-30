@@ -26,24 +26,18 @@ var (
 	PendingLendingEventCountKey = []byte{0x05} // key for pending lending event count
 	AttestationIdKey            = []byte{0x06} // key for attestation id
 
-	OracleKeyPrefix                        = []byte{0x10} // prefix for each key to an oracle
-	OracleByPubKeyKeyPrefix                = []byte{0x11} // prefix for each key to an oracle by public key
-	DCMKeyPrefix                           = []byte{0x12} // prefix for each key to a DCM
-	DCMByPubKeyKeyPrefix                   = []byte{0x13} // prefix for each key to a DCM by public key
-	NonceIndexKeyPrefix                    = []byte{0x14} // key prefix for the nonce index
-	NonceKeyPrefix                         = []byte{0x15} // prefix for each key to a nonce
-	NonceByValueKeyPrefix                  = []byte{0x16} // key prefix for the nonce value
-	EventKeyPrefix                         = []byte{0x17} // prefix for each key to an event
-	EventByStatusKeyPrefix                 = []byte{0x18} // prefix for each key to an event by status
-	EventByPriceKeyPrefix                  = []byte{0x19} // prefix for each key to an event by triggering price
-	CurrentEventPriceKeyPrefix             = []byte{0x20} // key prefix for the current event price
-	EventByDateKeyPrefix                   = []byte{0x21} // prefix for each key to an event by date
-	CurrentEventDateKey                    = []byte{0x22} // key for the current event date
-	PendingLendingEventKeyPrefix           = []byte{0x23} // key prefix for the pending lending event
-	AttestationKeyPrefix                   = []byte{0x24} // prefix for each key to an attestation
-	AttestationByEventKeyPrefix            = []byte{0x25} // prefix for each key to an attestation by event
-	TriggeredPriceEventQueueKeyPrefix      = []byte{0x26} // key prefix for triggered price event queue
-	TriggeredPriceEventQueueCountKeyPrefix = []byte{0x27} // key prefix for triggered price event queue count
+	OracleKeyPrefix              = []byte{0x10} // prefix for each key to an oracle
+	OracleByPubKeyKeyPrefix      = []byte{0x11} // prefix for each key to an oracle by public key
+	DCMKeyPrefix                 = []byte{0x12} // prefix for each key to a DCM
+	DCMByPubKeyKeyPrefix         = []byte{0x13} // prefix for each key to a DCM by public key
+	NonceIndexKeyPrefix          = []byte{0x14} // key prefix for the nonce index
+	NonceKeyPrefix               = []byte{0x15} // prefix for each key to a nonce
+	NonceByValueKeyPrefix        = []byte{0x16} // key prefix for the nonce value
+	EventKeyPrefix               = []byte{0x17} // prefix for each key to an event
+	EventByStatusKeyPrefix       = []byte{0x18} // prefix for each key to an event by status
+	PendingLendingEventKeyPrefix = []byte{0x23} // key prefix for the pending lending event
+	AttestationKeyPrefix         = []byte{0x24} // prefix for each key to an attestation
+	AttestationByEventKeyPrefix  = []byte{0x25} // prefix for each key to an attestation by event
 
 	OracleParticipantLivenessKeyPrefix = []byte{0x30} // key prefix for oracle participant liveness
 )
