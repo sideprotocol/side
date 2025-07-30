@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"context"
+	"encoding/hex"
 	"fmt"
 	"strconv"
 
@@ -10,6 +12,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -34,7 +37,6 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryDlcEventCount())
 	cmd.AddCommand(CmdQueryLoan())
 	cmd.AddCommand(CmdQueryLoans())
-	cmd.AddCommand(CmdQueryLoansByAddress())
 	cmd.AddCommand(CmdQueryLoanCetInfos())
 	cmd.AddCommand(CmdQueryDlcMeta())
 	cmd.AddCommand(CmdQueryDeposits())
@@ -289,65 +291,45 @@ func CmdQueryLoan() *cobra.Command {
 
 func CmdQueryLoans() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "loans [status]",
-		Short: "Query loans by the given status",
-		Args:  cobra.ExactArgs(1),
+		Use:   "loans [status | address | oracle pub key]",
+		Short: "Query loans by the given status, address, or oracle public key",
+		Args:  cobra.RangeArgs(1, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			queryClient := types.NewQueryClient(clientCtx)
-
-			status, err := strconv.ParseUint(args[0], 10, 32)
-			if err != nil {
-				return err
-			}
-
-			res, err := queryClient.Loans(cmd.Context(), &types.QueryLoansRequest{Status: types.LoanStatus(status)})
-			if err != nil {
-				return err
-			}
-
-			return clientCtx.PrintProto(res)
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func CmdQueryLoansByAddress() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "loans-by-address [address] [status]",
-		Short: "Query loans by the given address with the optional status",
-		Args:  cobra.MaximumNArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-
-			status := uint64(0)
 			if len(args) == 2 {
-				status, err = strconv.ParseUint(args[1], 10, 32)
+				_, err := sdk.AccAddressFromBech32(args[0])
 				if err != nil {
 					return err
 				}
+
+				status, err := strconv.ParseUint(args[1], 10, 32)
+				if err != nil {
+					return err
+				}
+
+				return queryLoansByAddress(clientCtx, cmd.Context(), args[0], types.LoanStatus(status))
 			}
 
-			res, err := queryClient.LoansByAddress(cmd.Context(), &types.QueryLoansByAddressRequest{
-				Address: args[0],
-				Status:  types.LoanStatus(status)})
+			status, err := strconv.ParseUint(args[0], 10, 32)
 			if err != nil {
-				return err
+				_, err := sdk.AccAddressFromBech32(args[0])
+				if err != nil {
+					_, err := hex.DecodeString(args[0])
+					if err != nil {
+						return fmt.Errorf("no status, address, or oracle public key is provided")
+					}
+
+					return queryLoansByOracle(clientCtx, cmd.Context(), args[0])
+				}
+
+				return queryLoansByAddress(clientCtx, cmd.Context(), args[0], types.LoanStatus_Unspecified)
 			}
 
-			return clientCtx.PrintProto(res)
+			return queryLoansByStatus(clientCtx, cmd.Context(), types.LoanStatus(status))
 		},
 	}
 
@@ -577,4 +559,47 @@ func CmdQueryReferrers() *cobra.Command {
 	flags.AddQueryFlagsToCmd(cmd)
 
 	return cmd
+}
+
+// queryLoansByStatus queries loans by the given status
+func queryLoansByStatus(clientCtx client.Context, cmdCtx context.Context, status types.LoanStatus) error {
+	queryClient := types.NewQueryClient(clientCtx)
+
+	res, err := queryClient.Loans(cmdCtx, &types.QueryLoansRequest{
+		Status: status,
+	})
+	if err != nil {
+		return err
+	}
+
+	return clientCtx.PrintProto(res)
+}
+
+// queryLoansByAddress queries loans by the given address and status
+func queryLoansByAddress(clientCtx client.Context, cmdCtx context.Context, address string, status types.LoanStatus) error {
+	queryClient := types.NewQueryClient(clientCtx)
+
+	res, err := queryClient.LoansByAddress(cmdCtx, &types.QueryLoansByAddressRequest{
+		Address: address,
+		Status:  status,
+	})
+	if err != nil {
+		return err
+	}
+
+	return clientCtx.PrintProto(res)
+}
+
+// queryLoansByOracle queries loans by the given oracle
+func queryLoansByOracle(clientCtx client.Context, cmdCtx context.Context, oraclePubKey string) error {
+	queryClient := types.NewQueryClient(clientCtx)
+
+	res, err := queryClient.LoansByOracle(cmdCtx, &types.QueryLoansByOracleRequest{
+		OraclePubkey: oraclePubKey,
+	})
+	if err != nil {
+		return err
+	}
+
+	return clientCtx.PrintProto(res)
 }
