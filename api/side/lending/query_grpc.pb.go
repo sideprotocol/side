@@ -37,6 +37,7 @@ const (
 	Query_Redemption_FullMethodName        = "/side.lending.Query/Redemption"
 	Query_Repayment_FullMethodName         = "/side.lending.Query/Repayment"
 	Query_CurrentInterest_FullMethodName   = "/side.lending.Query/CurrentInterest"
+	Query_Referrer_FullMethodName          = "/side.lending.Query/Referrer"
 	Query_Referrers_FullMethodName         = "/side.lending.Query/Referrers"
 )
 
@@ -63,6 +64,7 @@ type QueryClient interface {
 	Redemption(ctx context.Context, in *QueryRedemptionRequest, opts ...grpc.CallOption) (*QueryRedemptionResponse, error)
 	Repayment(ctx context.Context, in *QueryRepaymentRequest, opts ...grpc.CallOption) (*QueryRepaymentResponse, error)
 	CurrentInterest(ctx context.Context, in *QueryCurrentInterestRequest, opts ...grpc.CallOption) (*QueryCurrentInterestResponse, error)
+	Referrer(ctx context.Context, in *QueryReferrerRequest, opts ...grpc.CallOption) (*QueryReferrerResponse, error)
 	Referrers(ctx context.Context, in *QueryReferrersRequest, opts ...grpc.CallOption) (*QueryReferrersResponse, error)
 }
 
@@ -236,6 +238,15 @@ func (c *queryClient) CurrentInterest(ctx context.Context, in *QueryCurrentInter
 	return out, nil
 }
 
+func (c *queryClient) Referrer(ctx context.Context, in *QueryReferrerRequest, opts ...grpc.CallOption) (*QueryReferrerResponse, error) {
+	out := new(QueryReferrerResponse)
+	err := c.cc.Invoke(ctx, Query_Referrer_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) Referrers(ctx context.Context, in *QueryReferrersRequest, opts ...grpc.CallOption) (*QueryReferrersResponse, error) {
 	out := new(QueryReferrersResponse)
 	err := c.cc.Invoke(ctx, Query_Referrers_FullMethodName, in, out, opts...)
@@ -268,6 +279,7 @@ type QueryServer interface {
 	Redemption(context.Context, *QueryRedemptionRequest) (*QueryRedemptionResponse, error)
 	Repayment(context.Context, *QueryRepaymentRequest) (*QueryRepaymentResponse, error)
 	CurrentInterest(context.Context, *QueryCurrentInterestRequest) (*QueryCurrentInterestResponse, error)
+	Referrer(context.Context, *QueryReferrerRequest) (*QueryReferrerResponse, error)
 	Referrers(context.Context, *QueryReferrersRequest) (*QueryReferrersResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
@@ -329,6 +341,9 @@ func (UnimplementedQueryServer) Repayment(context.Context, *QueryRepaymentReques
 }
 func (UnimplementedQueryServer) CurrentInterest(context.Context, *QueryCurrentInterestRequest) (*QueryCurrentInterestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CurrentInterest not implemented")
+}
+func (UnimplementedQueryServer) Referrer(context.Context, *QueryReferrerRequest) (*QueryReferrerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Referrer not implemented")
 }
 func (UnimplementedQueryServer) Referrers(context.Context, *QueryReferrersRequest) (*QueryReferrersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Referrers not implemented")
@@ -670,6 +685,24 @@ func _Query_CurrentInterest_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Referrer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryReferrerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Referrer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Referrer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Referrer(ctx, req.(*QueryReferrerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_Referrers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryReferrersRequest)
 	if err := dec(in); err != nil {
@@ -766,6 +799,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CurrentInterest",
 			Handler:    _Query_CurrentInterest_Handler,
+		},
+		{
+			MethodName: "Referrer",
+			Handler:    _Query_Referrer_Handler,
 		},
 		{
 			MethodName: "Referrers",

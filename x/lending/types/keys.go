@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/hex"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -93,5 +94,5 @@ func RedemptionKey(id uint64) []byte {
 }
 
 func ReferrerKey(referralCode string) []byte {
-	return append(ReferrerKeyPrefix, []byte(referralCode)...)
+	return append(ReferrerKeyPrefix, []byte(strings.ToLower(referralCode))...)
 }

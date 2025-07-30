@@ -85,6 +85,10 @@ service Query {
         option (google.api.http).get = "/side/lending/loan/current_interest";
     }
 
+    rpc Referrer(QueryReferrerRequest) returns (QueryReferrerResponse) {
+        option (google.api.http).get = "/bitway/lending/referrer/{referral_code}";
+    }
+
     rpc Referrers(QueryReferrersRequest) returns (QueryReferrersResponse) {
         option (google.api.http).get = "/side/lending/referrers";
     }
@@ -271,6 +275,14 @@ message QueryCurrentInterestRequest {
 
 message QueryCurrentInterestResponse {
     cosmos.base.v1beta1.Coin interest = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryReferrerRequest {
+    string referral_code = 1;
+}
+
+message QueryReferrerResponse {
+    Referrer referrer = 1;
 }
 
 message QueryReferrersRequest {

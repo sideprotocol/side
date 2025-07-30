@@ -41,6 +41,7 @@ func GetQueryCmd(_ string) *cobra.Command {
 	cmd.AddCommand(CmdQueryRedemption())
 	cmd.AddCommand(CmdQueryRepayment())
 	cmd.AddCommand(CmdQueryCurrentInterest())
+	cmd.AddCommand(CmdQueryReferrer())
 	cmd.AddCommand(CmdQueryReferrers())
 	// this line is used by starport scaffolding # 1
 
@@ -511,6 +512,33 @@ func CmdQueryCurrentInterest() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.CurrentInterest(cmd.Context(), &types.QueryCurrentInterestRequest{LoanId: args[0]})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryReferrer() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "referrer [referral code]",
+		Short: "Query the referrer by the given referral code",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Referrer(cmd.Context(), &types.QueryReferrerRequest{ReferralCode: args[0]})
 			if err != nil {
 				return err
 			}

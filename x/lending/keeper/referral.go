@@ -1,8 +1,10 @@
 package keeper
 
 import (
+	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sideprotocol/side/x/lending/types"
 )
@@ -38,8 +40,30 @@ func (k Keeper) GetReferrer(ctx sdk.Context, referralCode string) *types.Referre
 	return &referrer
 }
 
+// GetReferrersWithPagination gets referrers with pagination
+func (k Keeper) GetReferrersWithPagination(ctx sdk.Context, pagination *query.PageRequest) ([]*types.Referrer, *query.PageResponse, error) {
+	store := ctx.KVStore(k.storeKey)
+	referrerStore := prefix.NewStore(store, types.ReferrerKeyPrefix)
+
+	var referrers []*types.Referrer
+
+	pageRes, err := query.Paginate(referrerStore, pagination, func(key []byte, value []byte) error {
+		var referrer types.Referrer
+		k.cdc.MustUnmarshal(value, &referrer)
+
+		referrers = append(referrers, &referrer)
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return referrers, pageRes, nil
+}
+
 // GetReferrers gets all referrers
-func (k Keeper) GetReferrers(ctx sdk.Context) []*types.Referrer {
+func (k Keeper) GetAllReferrers(ctx sdk.Context) []*types.Referrer {
 	var referrers []*types.Referrer
 
 	k.IterateReferrers(ctx, func(referrer *types.Referrer) (stop bool) {

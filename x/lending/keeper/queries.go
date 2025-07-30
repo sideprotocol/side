@@ -381,6 +381,21 @@ func (k Keeper) CurrentInterest(goCtx context.Context, req *types.QueryCurrentIn
 	}, nil
 }
 
+// Referrer implements types.QueryServer.
+func (k Keeper) Referrer(goCtx context.Context, req *types.QueryReferrerRequest) (*types.QueryReferrerResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !k.HasReferrer(ctx, req.ReferralCode) {
+		return nil, status.Error(codes.NotFound, "referrer does not exist")
+	}
+
+	return &types.QueryReferrerResponse{Referrer: k.GetReferrer(ctx, req.ReferralCode)}, nil
+}
+
 // Referrers implements types.QueryServer.
 func (k Keeper) Referrers(goCtx context.Context, req *types.QueryReferrersRequest) (*types.QueryReferrersResponse, error) {
 	if req == nil {
@@ -389,7 +404,12 @@ func (k Keeper) Referrers(goCtx context.Context, req *types.QueryReferrersReques
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryReferrersResponse{Referrers: k.GetReferrers(ctx)}, nil
+	referrers, pagination, err := k.GetReferrersWithPagination(ctx, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryReferrersResponse{Referrers: referrers, Pagination: pagination}, nil
 }
 
 // Params implements types.QueryServer.
