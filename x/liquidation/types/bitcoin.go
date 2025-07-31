@@ -3,6 +3,7 @@ package types
 import (
 	"bytes"
 	"encoding/base64"
+	"errors"
 
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
@@ -29,7 +30,8 @@ const (
 )
 
 // BuildSettlementTransaction builds the settlement tx for the given liquidation and records
-func BuildSettlementTransaction(liquidation *Liquidation, records []*LiquidationRecord, protocolFeeCollector string, feeRate int64) (string, *chainhash.Hash, []string, int64, error) {
+// If the fee rate is 0 or too high, the reserved network fee will be used instead
+func BuildSettlementTransaction(liquidation *Liquidation, records []*LiquidationRecord, protocolFeeCollector string, feeRate int64, reservedNetworkFee int64) (string, *chainhash.Hash, []string, int64, error) {
 	liquidationCet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidation.LiquidationCet)), true)
 	if err != nil {
 		return "", nil, nil, 0, err
@@ -44,7 +46,7 @@ func BuildSettlementTransaction(liquidation *Liquidation, records []*Liquidation
 		PubKeyScript: txOut.PkScript,
 	}
 
-	settlementTxPsbt, changeAmount, err := BuildBatchTransferPsbt([]*btcbridgetypes.UTXO{utxo}, records, protocolFeeCollector, liquidation.ProtocolLiquidationFee.Amount.Int64(), feeRate, liquidation.Debtor)
+	settlementTxPsbt, changeAmount, err := BuildBatchTransferPsbt([]*btcbridgetypes.UTXO{utxo}, records, protocolFeeCollector, liquidation.ProtocolLiquidationFee.Amount.Int64(), feeRate, reservedNetworkFee, liquidation.Debtor)
 	if err != nil {
 		return "", nil, nil, 0, err
 	}
@@ -71,7 +73,7 @@ func BuildSettlementTransaction(liquidation *Liquidation, records []*Liquidation
 }
 
 // BuildBatchTransferPsbt builds the psbt to perform batch transfer to liquidators, protocol fee collector and debtor(if remaining)
-func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*LiquidationRecord, protocolFeeCollector string, protocolFee int64, feeRate int64, change string) (*psbt.Packet, int64, error) {
+func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*LiquidationRecord, protocolFeeCollector string, protocolFee int64, feeRate int64, reservedNetworkFee int64, change string) (*psbt.Packet, int64, error) {
 	chainCfg := bitcoin.Network
 
 	txOuts := make([]*wire.TxOut, 0)
@@ -115,9 +117,23 @@ func BuildBatchTransferPsbt(utxos []*btcbridgetypes.UTXO, records []*Liquidation
 		return nil, 0, err
 	}
 
-	unsignedTx, changeAmount, err := BuildUnsignedTransaction(utxos, txOuts, feeRate, changePkScript)
-	if err != nil {
-		return nil, 0, err
+	var unsignedTx *wire.MsgTx
+	var changeAmount int64
+
+	// try fee rate mode first
+	if feeRate != 0 {
+		unsignedTx, changeAmount, err = BuildUnsignedTransaction(utxos, txOuts, feeRate, changePkScript)
+		if err != nil && !errors.Is(err, ErrInsufficientUTXOs) {
+			return nil, 0, err
+		}
+	}
+
+	// try fee mode then
+	if unsignedTx == nil {
+		unsignedTx, changeAmount, err = BuildUnsignedTransactionWithFee(utxos, txOuts, reservedNetworkFee, changePkScript)
+		if err != nil {
+			return nil, 0, err
+		}
 	}
 
 	p, err := psbt.NewFromUnsignedTx(unsignedTx)
@@ -167,11 +183,58 @@ func BuildUnsignedTransaction(utxos []*btcbridgetypes.UTXO, txOuts []*wire.TxOut
 		if changeAmount < 0 {
 			feeWithoutChange := btcbridgetypes.GetTxVirtualSize(tx, utxos) * feeRate
 			if inAmount-outAmount-feeWithoutChange < 0 {
-				return nil, 0, errorsmod.Wrap(ErrFailedToBuildTx, "insufficient utxos")
+				return nil, 0, ErrInsufficientUTXOs
 			}
 		}
 
 		changeAmount = 0
+	}
+
+	if err := btcbridgetypes.CheckTransactionWeight(tx, utxos); err != nil {
+		return nil, 0, err
+	}
+
+	return tx, changeAmount, nil
+}
+
+// BuildUnsignedTransactionWithFee is similar to BuildUnsignedTransaction, except that it uses the specified fee instead of the fee rate
+func BuildUnsignedTransactionWithFee(utxos []*btcbridgetypes.UTXO, txOuts []*wire.TxOut, fee int64, changePkScript []byte) (*wire.MsgTx, int64, error) {
+	tx := wire.NewMsgTx(TxVersion)
+
+	inAmount := int64(0)
+	outAmount := int64(0)
+
+	for _, utxo := range utxos {
+		AddUTXOToTx(tx, utxo)
+		inAmount += int64(utxo.Amount)
+	}
+
+	for _, out := range txOuts {
+		tx.AddTxOut(out)
+		outAmount += out.Value
+	}
+
+	tx.AddTxOut(wire.NewTxOut(0, changePkScript))
+
+	changeAmount := inAmount - outAmount - fee
+	if changeAmount > 0 {
+		tx.TxOut[len(tx.TxOut)-1].Value = changeAmount
+		if btcbridgetypes.IsDustOut(tx.TxOut[len(tx.TxOut)-1]) {
+			tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
+			changeAmount = 0
+		}
+	} else {
+		tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
+
+		if changeAmount < 0 {
+			return nil, 0, ErrInsufficientUTXOs
+		}
+
+		changeAmount = 0
+	}
+
+	if fee < btcbridgetypes.GetTxVirtualSize(tx, utxos) {
+		return nil, 0, errorsmod.Wrap(ErrFailedToBuildTx, "too low fee rate")
 	}
 
 	if err := btcbridgetypes.CheckTransactionWeight(tx, utxos); err != nil {

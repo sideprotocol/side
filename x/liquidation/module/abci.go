@@ -83,15 +83,16 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) error {
 	}
 
 	// get fee rate
+	// NOTE: the fee rate validity is not necessary here
+	// if it is 0 or too high, we use the reserved network fee duration liquidation, which is sufficient to relay the tx by design
 	feeRate := k.BtcBridgeKeeper().GetFeeRate(ctx)
 	if err := k.BtcBridgeKeeper().CheckFeeRate(ctx, feeRate); err != nil {
-		k.Logger(ctx).Warn("Failed to get fee rate to handle liquidation", "err", err)
-		return nil
+		k.Logger(ctx).Warn("Failed to get valid fee rate to handle liquidation", "err", err)
 	}
 
 	for _, liquidation := range liquidations {
 		// build settlement tx
-		settlementTx, txHash, sigHashes, changeAmount, err := types.BuildSettlementTransaction(liquidation, k.GetLiquidationRecords(ctx, liquidation.Id), k.ProtocolLiquidationFeeCollector(ctx), feeRate.Value)
+		settlementTx, txHash, sigHashes, changeAmount, err := types.BuildSettlementTransaction(liquidation, k.GetLiquidationRecords(ctx, liquidation.Id), k.ProtocolLiquidationFeeCollector(ctx), feeRate.Value, types.LiquidationNetworkFeeReserve)
 		if err != nil {
 			k.Logger(ctx).Error("Failed to build settlement transaction", "liquidation id", liquidation.Id, "fee rate", feeRate.Value, "err", err)
 			continue
