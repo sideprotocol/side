@@ -9,6 +9,7 @@ import (
 var (
 	ErrInvalidAmount = errorsmod.Register(ModuleName, 1000, "invalid amount")
 	ErrInvalidParams = errorsmod.Register(ModuleName, 1001, "invalid params")
+	ErrUnexpected    = errorsmod.Register(ModuleName, 1002, "unexpected error")
 
 	ErrInvalidPoolId         = errorsmod.Register(ModuleName, 2000, "invalid pool id")
 	ErrInvalidPoolConfig     = errorsmod.Register(ModuleName, 2001, "invalid pool config")

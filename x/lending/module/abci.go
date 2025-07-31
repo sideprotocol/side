@@ -2,6 +2,7 @@ package lending
 
 import (
 	"encoding/hex"
+	"errors"
 	"fmt"
 
 	sdkmath "cosmossdk.io/math"
@@ -24,7 +25,9 @@ func BeginBlocker(ctx sdk.Context, k keeper.Keeper) error {
 // EndBlocker called at the end of each block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
 	// handle pending loans
-	handlePendingLoans(ctx, k)
+	if err := handlePendingLoans(ctx, k); err != nil {
+		return err
+	}
 
 	// handle active loans
 	handleActiveLoans(ctx, k)
@@ -37,7 +40,7 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
 }
 
 // handleActiveLoans handles pending loans
-func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) {
+func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) error {
 	// handler on loan rejected
 	rejectHandler := func(loan *types.Loan, authorizationId uint64, reason error) {
 		if authorizationId > 0 {
@@ -99,6 +102,10 @@ func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) {
 
 				// approve loan
 				if err := k.HandleApproval(ctx, loan); err != nil {
+					if errors.Is(err, types.ErrUnexpected) {
+						return err
+					}
+
 					rejectHandler(loan, authorizationId, err)
 					continue
 				}
@@ -110,6 +117,8 @@ func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) {
 			}
 		}
 	}
+
+	return nil
 }
 
 // handleActiveLoans handles active loans
