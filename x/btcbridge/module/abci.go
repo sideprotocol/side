@@ -186,6 +186,14 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 		address := sdk.MustAccAddressFromBech32(req.Address)
 		amount, _ := sdk.ParseCoinNormalized(req.Amount)
 
+		// check if the balance is sufficient
+		if k.BankKeeper().SpendableCoin(ctx, address, k.BtcDenom(ctx)).IsLT(amount) {
+			k.Logger(ctx).Warn("failed to perform withdrawal from IBC", "address", req.Address, "amount", req.Amount, "err", "insufficient balance")
+
+			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
+			continue
+		}
+
 		// deduct protocol fee
 		withdrawAmount, err := amount.SafeSub(protocolFee)
 		if err != nil || withdrawAmount.Amount.Int64() < k.MinBTCWithdraw(ctx) || withdrawAmount.Amount.Int64() > k.MaxBTCWithdraw(ctx) {
@@ -223,7 +231,7 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 
 		// burn asset
 		if err := k.BurnAsset(ctx, req.Address, withdrawAmount.Add(networkFee)); err != nil {
-			k.Logger(ctx).Info("failed to burn asset for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "burned amount", withdrawAmount.Add(networkFee), "err", err)
+			k.Logger(ctx).Warn("failed to burn asset for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "burned amount", withdrawAmount.Add(networkFee), "err", err)
 
 			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
 			continue
@@ -231,7 +239,7 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 
 		// transfer protocol fee to fee collector
 		if err := k.BankKeeper().SendCoins(ctx, address, protocoFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
-			k.Logger(ctx).Info("failed to transfer protocol fee for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "protocol fee", protocolFee, "err", err)
+			k.Logger(ctx).Warn("failed to transfer protocol fee for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "protocol fee", protocolFee, "err", err)
 
 			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
 			continue
