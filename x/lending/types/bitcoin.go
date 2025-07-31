@@ -17,6 +17,9 @@ const (
 
 	// default maximum allowed transaction weight
 	MaxTransactionWeight = 400000
+
+	// default sequence
+	DefaultSequence = wire.MaxTxInSequenceNum - 1
 )
 
 // BuildPsbt builds a psbt from the given params
@@ -84,6 +87,7 @@ func AddUTXOToTx(tx *wire.MsgTx, utxo *btcbridgetypes.UTXO) {
 	}
 
 	txIn.PreviousOutPoint = *wire.NewOutPoint(hash, uint32(utxo.Vout))
+	txIn.Sequence = DefaultSequence
 
 	tx.AddTxIn(txIn)
 }

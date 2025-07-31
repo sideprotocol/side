@@ -23,6 +23,9 @@ const (
 
 	// default sig hash type
 	DefaultSigHashType = txscript.SigHashDefault
+
+	// default sequence
+	DefaultSequence = wire.MaxTxInSequenceNum - 1
 )
 
 // BuildSettlementTransaction builds the settlement tx for the given liquidation and records
@@ -189,6 +192,7 @@ func AddUTXOToTx(tx *wire.MsgTx, utxo *btcbridgetypes.UTXO) {
 	}
 
 	txIn.PreviousOutPoint = *wire.NewOutPoint(hash, uint32(utxo.Vout))
+	txIn.Sequence = DefaultSequence
 
 	tx.AddTxIn(txIn)
 }

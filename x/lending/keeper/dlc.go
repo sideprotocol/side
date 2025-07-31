@@ -106,7 +106,7 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 	}
 
 	// timeout refund transaction can be generated offchain as needed
-	timeoutRefundTx, err := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey, dlcMeta.TimeoutRefundScript, feeRate.Value)
+	timeoutRefundTx, err := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey, dlcMeta.TimeoutRefundScript, loan.FinalTimeout, feeRate.Value)
 	if err != nil {
 		return err
 	}

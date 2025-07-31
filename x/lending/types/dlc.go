@@ -295,7 +295,7 @@ func VerifyRepaymentCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScri
 }
 
 // CreateTimeoutRefundTransaction creates the timeout refund tx
-func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, leafScript LeafScript, feeRate int64) (string, error) {
+func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPkScript []byte, internalKeyBytes []byte, leafScript LeafScript, lockTime int64, feeRate int64) (string, error) {
 	vaultUtxos, err := GetVaultUtxos(depositTxs, vaultPkScript)
 	if err != nil {
 		return "", err
@@ -310,6 +310,8 @@ func CreateTimeoutRefundTransaction(depositTxs []*psbt.Packet, vaultPkScript []b
 	if err != nil {
 		return "", err
 	}
+
+	p.UnsignedTx.LockTime = uint32(lockTime)
 
 	for i := range p.Inputs {
 		p.Inputs[i].SighashType = DefaultSigHashType
