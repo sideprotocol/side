@@ -3,15 +3,17 @@ package oracle
 import (
 	"context"
 
+	"golang.org/x/sync/errgroup"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
+
 	"github.com/sideprotocol/side/x/oracle/providers/binance"
 	"github.com/sideprotocol/side/x/oracle/providers/bitget"
 	"github.com/sideprotocol/side/x/oracle/providers/bybit"
 	"github.com/sideprotocol/side/x/oracle/providers/coinbase"
 	"github.com/sideprotocol/side/x/oracle/providers/okex"
 	"github.com/sideprotocol/side/x/oracle/types"
-	"golang.org/x/sync/errgroup"
 )
 
 // Start Oracle Price Service

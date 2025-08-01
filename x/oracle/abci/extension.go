@@ -11,12 +11,13 @@ import (
 	"cosmossdk.io/math"
 
 	"github.com/btcsuite/btcd/rpcclient"
-	"github.com/cosmos/cosmos-sdk/telemetry"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sideprotocol/side/x/oracle/keeper"
 	"github.com/sideprotocol/side/x/oracle/types"
 )

@@ -3,8 +3,10 @@ package mexc
 import (
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/gorilla/websocket"
+
+	"github.com/cosmos/cosmos-sdk/server"
+
 	"github.com/sideprotocol/side/x/oracle/types"
 )
 

@@ -4,8 +4,9 @@ import (
 	"context"
 	time "time"
 
-	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/gorilla/websocket"
+
+	"github.com/cosmos/cosmos-sdk/server"
 )
 
 func sendMessage(conn *websocket.Conn, msg string) {

@@ -66,7 +66,7 @@ func (k Keeper) GetEstimatedReward(ctx sdk.Context, address string, amount sdk.C
 	types.UpdateEpochTotalStakings(nextEpoch, staking)
 
 	totalStakings := []types.TotalStaking{
-		types.TotalStaking{
+		{
 			Denom:           staking.Amount.Denom,
 			Amount:          staking.Amount,
 			EffectiveAmount: staking.EffectiveAmount,

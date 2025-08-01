@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/server"
+
 	"github.com/sideprotocol/side/x/oracle/types"
 )
 

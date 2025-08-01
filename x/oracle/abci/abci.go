@@ -2,6 +2,7 @@ package abci
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sideprotocol/side/x/oracle/keeper"
 )
 
