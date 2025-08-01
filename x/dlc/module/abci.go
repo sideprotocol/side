@@ -28,9 +28,7 @@ func generateLendingEventNonces(ctx sdk.Context, k keeper.Keeper) {
 	}
 
 	// check if there are sufficient oracle participants
-	oracleParticipantBaseSet := k.GetOracleParticipantBaseSet(ctx)
-	if len(oracleParticipantBaseSet) < int(k.OracleParticipantNum(ctx)) {
-		k.Logger(ctx).Warn("insufficient oracle participants", "num", len(oracleParticipantBaseSet), "required num", k.OracleParticipantNum(ctx))
+	if len(k.GetOracleParticipantBaseSet(ctx)) < int(k.OracleParticipantNum(ctx)) {
 		return
 	}
 
