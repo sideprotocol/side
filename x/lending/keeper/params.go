@@ -11,6 +11,11 @@ func (k Keeper) FinalTimeoutDuration(ctx sdk.Context) int64 {
 	return int64(k.GetParams(ctx).FinalTimeoutDuration / time.Second)
 }
 
+// MaxLiquidationFeeRateMultiplier gets the max fee rate multiplier for liquidation cet
+func (k Keeper) MaxLiquidationFeeRateMultiplier(ctx sdk.Context) int64 {
+	return k.GetParams(ctx).MaxLiquidationFeeRateMultiplier
+}
+
 // RequestFeeCollector gets the request fee collector
 func (k Keeper) RequestFeeCollector(ctx sdk.Context) string {
 	return k.GetParams(ctx).RequestFeeCollector

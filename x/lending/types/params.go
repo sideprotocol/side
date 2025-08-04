@@ -11,15 +11,19 @@ import (
 
 var (
 	DefaultFinalTimeoutDuration = 30 * 24 * time.Hour // 30 days
+
+	// default max fee rate multiplier for liquidation cet
+	DefaultMaxLiquidationFeeRateMultiplier = int64(5)
 )
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
 	return Params{
-		FinalTimeoutDuration:    DefaultFinalTimeoutDuration,
-		RequestFeeCollector:     authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-		OriginationFeeCollector: authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-		ProtocolFeeCollector:    authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		FinalTimeoutDuration:            DefaultFinalTimeoutDuration,
+		MaxLiquidationFeeRateMultiplier: DefaultMaxLiquidationFeeRateMultiplier,
+		RequestFeeCollector:             authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		OriginationFeeCollector:         authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		ProtocolFeeCollector:            authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	}
 }
 
@@ -27,6 +31,10 @@ func DefaultParams() Params {
 func (p Params) Validate() error {
 	if p.FinalTimeoutDuration <= 0 {
 		return errorsmod.Wrap(ErrInvalidParams, "final timeout duration must be greater than 0")
+	}
+
+	if p.MaxLiquidationFeeRateMultiplier < 0 {
+		return errorsmod.Wrap(ErrInvalidParams, "max liquidation fee rate multiplier cannot be negative")
 	}
 
 	if _, err := sdk.AccAddressFromBech32(p.RequestFeeCollector); err != nil {

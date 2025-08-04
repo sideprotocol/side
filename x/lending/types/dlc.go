@@ -26,9 +26,6 @@ const (
 
 	// liquidation cet sequence
 	LiquidationCetSequence = wire.MaxTxInSequenceNum
-
-	// default fee rate
-	DefaultFeeRate = 1
 )
 
 const (
@@ -79,7 +76,7 @@ func BuildDLCMeta(borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey st
 }
 
 // VerifyCets verifies the given cets
-func VerifyCets(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, dlcEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
+func VerifyCets(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerPubKey string, borrowerAuthPubKey string, dcmPubKey string, dlcEvent *dlctypes.DLCEvent, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string, currentFeeRate int64, maxLiquidationFeeRateMultiplier int64) error {
 	liquidationAdaptorPoint, err := dlctypes.GetSignaturePointFromEvent(dlcEvent, LiquidatedOutcomeIndex)
 	if err != nil {
 		return err
@@ -90,11 +87,11 @@ func VerifyCets(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byt
 		return err
 	}
 
-	if err := VerifyLiquidationCet(dlcMeta, depositTxs, vaultPkScript, borrowerAuthPubKey, dcmPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint); err != nil {
+	if err := VerifyLiquidationCet(dlcMeta, depositTxs, vaultPkScript, borrowerAuthPubKey, dcmPubKey, liquidationCet, liquidationAdaptorSignatures, liquidationAdaptorPoint, currentFeeRate, maxLiquidationFeeRateMultiplier); err != nil {
 		return errorsmod.Wrapf(ErrInvalidCET, "invalid liquidation cet: %v", err)
 	}
 
-	if err := VerifyLiquidationCet(dlcMeta, depositTxs, vaultPkScript, borrowerAuthPubKey, dcmPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint); err != nil {
+	if err := VerifyLiquidationCet(dlcMeta, depositTxs, vaultPkScript, borrowerAuthPubKey, dcmPubKey, liquidationCet, defaultLiquidationAdaptorSignatures, defaultLiquidationAdaptorPoint, currentFeeRate, maxLiquidationFeeRateMultiplier); err != nil {
 		return errorsmod.Wrapf(ErrInvalidCET, "invalid default liquidation cet: %v", err)
 	}
 
@@ -106,7 +103,7 @@ func VerifyCets(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byt
 }
 
 // VerifyLiquidationCet verifies the given liquidation cet and corresponding adaptor signatures
-func VerifyLiquidationCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerAuthPubKey string, dcmPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte) error {
+func VerifyLiquidationCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScript []byte, borrowerAuthPubKey string, dcmPubKey string, liquidationCET string, adaptorSignatures []string, adaptorPoint []byte, currentFeeRate int64, maxFeeRateMultiplier int64) error {
 	p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(liquidationCET)), true)
 	if err != nil {
 		return errorsmod.Wrap(ErrInvalidCET, "failed to deserialize cet")
@@ -132,13 +129,8 @@ func VerifyLiquidationCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkSc
 
 	witnessSize := getCetWitnessSize(CetType_LIQUIDATION, script, controlBlock)
 
-	fee, err := p.GetTxFee()
-	if err != nil {
-		return errorsmod.Wrapf(ErrInvalidCET, "failed to get tx fee: %v", err)
-	}
-
-	if int64(fee) < GetTxVirtualSize(p.UnsignedTx, witnessSize) {
-		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
+	if err := checkCetFeeRate(p, witnessSize, currentFeeRate, maxFeeRateMultiplier); err != nil {
+		return err
 	}
 
 	if err := CheckTransactionWeight(p.UnsignedTx, witnessSize); err != nil {
@@ -230,13 +222,8 @@ func VerifyRepaymentCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScri
 
 	witnessSize := getCetWitnessSize(CetType_REPAYMENT, script, controlBlock)
 
-	fee, err := p.GetTxFee()
-	if err != nil {
-		return errorsmod.Wrapf(ErrInvalidCET, "failed to get tx fee: %v", err)
-	}
-
-	if int64(fee) < GetTxVirtualSize(p.UnsignedTx, witnessSize) {
-		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
+	if err := checkCetFeeRate(p, witnessSize, 0, 0); err != nil {
+		return err
 	}
 
 	if err := CheckTransactionWeight(p.UnsignedTx, witnessSize); err != nil {
@@ -578,6 +565,26 @@ func getVaultUtxosFromDepositTx(depositTx *psbt.Packet, vaultPkScript []byte) ([
 	}
 
 	return utxos, nil
+}
+
+// checkCetFeeRate checks the fee rate of the given cet
+func checkCetFeeRate(p *psbt.Packet, witnessSize int, currentFeeRate int64, maxFeeRateMultiplier int64) error {
+	virtualSize := GetTxVirtualSize(p.UnsignedTx, witnessSize)
+
+	fee, err := p.GetTxFee()
+	if err != nil {
+		return errorsmod.Wrapf(ErrInvalidCET, "failed to get tx fee: %v", err)
+	}
+
+	if int64(fee) < virtualSize {
+		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
+	}
+
+	if maxFeeRateMultiplier > 0 && int64(fee) > virtualSize*currentFeeRate*maxFeeRateMultiplier {
+		return errorsmod.Wrap(ErrInvalidCET, "too high fee rate")
+	}
+
+	return nil
 }
 
 // getCetWitnessSize gets the cet witness size according to the given params

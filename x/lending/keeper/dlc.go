@@ -36,7 +36,7 @@ func (k Keeper) GetDLCMeta(ctx sdk.Context, loanId string) *types.DLCMeta {
 }
 
 // UpdateDLCMeta updates the dlc meta of the given loan with the given params
-func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt.Packet, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string) error {
+func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt.Packet, liquidationCet string, liquidationAdaptorSignatures []string, defaultLiquidationAdaptorSignatures []string, repaymentCet string, repaymentSignatures []string, feeRate int64) error {
 	loan := k.GetLoan(ctx, loanId)
 	dlcMeta := k.GetDLCMeta(ctx, loanId)
 
@@ -99,16 +99,9 @@ func (k Keeper) UpdateDLCMeta(ctx sdk.Context, loanId string, depositTxs []*psbt
 		return err
 	}
 
-	// get fee rate
-	// ignore fee rate validity period check and set to default fee rate if it is 0
-	feeRate := k.btcbridgeKeeper.GetFeeRate(ctx)
-	if feeRate.Value == 0 {
-		feeRate.Value = types.DefaultFeeRate
-	}
-
 	// timeout refund transaction can be generated offchain as needed
 	// err ignored
-	timeoutRefundTx, _ := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey, dlcMeta.TimeoutRefundScript, loan.FinalTimeout, feeRate.Value)
+	timeoutRefundTx, _ := types.CreateTimeoutRefundTransaction(depositTxs, vaultPkScript, borrowerPkScript, internalKey, dlcMeta.TimeoutRefundScript, loan.FinalTimeout, feeRate)
 
 	// update dlc meta
 	dlcMeta.LiquidationCet = types.LiquidationCet{

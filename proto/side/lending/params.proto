@@ -10,10 +10,12 @@ option go_package = "github.com/sideprotocol/side/x/lending/types";
 message Params {
     // final timeout duration for loan
     google.protobuf.Duration final_timeout_duration = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    // maximum fee rate multiplier for liquidation cet; 0 means no limit
+    int64 max_liquidation_fee_rate_multiplier = 2;
     // request fee collector address
-    string request_fee_collector = 2;
+    string request_fee_collector = 3;
     // origination fee collector address
-    string origination_fee_collector = 3;
+    string origination_fee_collector = 4;
     // protocol fee collector address
-    string protocol_fee_collector = 4;
+    string protocol_fee_collector = 5;
 }

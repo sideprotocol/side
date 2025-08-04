@@ -198,13 +198,19 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	dlcEvent := m.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
 	m.UpdateDLCEventLiquidatedOutcome(ctx, loan, dlcEvent, liquidationPrice)
 
+	// get fee rate
+	feeRate := m.btcbridgeKeeper.GetFeeRate(ctx)
+	if err := m.btcbridgeKeeper.CheckFeeRate(ctx, feeRate); err != nil {
+		return nil, err
+	}
+
 	// verify cets
-	if err := types.VerifyCets(m.GetDLCMeta(ctx, msg.LoanId), depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, dlcEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+	if err := types.VerifyCets(m.GetDLCMeta(ctx, msg.LoanId), depositTxs, vaultPkScript, loan.BorrowerPubKey, loan.BorrowerAuthPubKey, loan.DCM, dlcEvent, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, feeRate.Value, m.MaxLiquidationFeeRateMultiplier(ctx)); err != nil {
 		return nil, err
 	}
 
 	// update dlc meta
-	if err := m.UpdateDLCMeta(ctx, msg.LoanId, depositTxs, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures); err != nil {
+	if err := m.UpdateDLCMeta(ctx, msg.LoanId, depositTxs, msg.LiquidationCet, msg.LiquidationAdaptorSignatures, msg.DefaultLiquidationAdaptorSignatures, msg.RepaymentCet, msg.RepaymentSignatures, feeRate.Value); err != nil {
 		return nil, err
 	}
 
