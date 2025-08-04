@@ -22,11 +22,11 @@ const (
 	// default tx version
 	TxVersion = 2
 
+	// default sequence
+	DefaultSequence = 0
+
 	// default sig hash type
 	DefaultSigHashType = txscript.SigHashDefault
-
-	// default sequence
-	DefaultSequence = wire.MaxTxInSequenceNum - 1
 )
 
 // BuildSettlementTransaction builds the settlement tx for the given liquidation and records

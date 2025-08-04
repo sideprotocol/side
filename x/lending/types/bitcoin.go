@@ -15,11 +15,11 @@ const (
 	// default tx version
 	TxVersion = 2
 
+	// default sequence
+	DefaultSequence = 0
+
 	// default maximum allowed transaction weight
 	MaxTransactionWeight = 400000
-
-	// default sequence
-	DefaultSequence = wire.MaxTxInSequenceNum - 1
 )
 
 // BuildPsbt builds a psbt from the given params

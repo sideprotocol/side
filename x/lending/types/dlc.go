@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
+	"github.com/btcsuite/btcd/wire"
 
 	errorsmod "cosmossdk.io/errors"
 
@@ -22,6 +23,9 @@ import (
 const (
 	// default sig hash type
 	DefaultSigHashType = txscript.SigHashDefault
+
+	// liquidation cet sequence
+	LiquidationCetSequence = wire.MaxTxInSequenceNum
 
 	// default fee rate
 	DefaultFeeRate = 1
@@ -157,6 +161,10 @@ func VerifyLiquidationCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkSc
 
 		if txIn.PreviousOutPoint.Index != uint32(vaultUtxos[i].Vout) {
 			return errorsmod.Wrap(ErrInvalidCET, "incorrect previous tx out index")
+		}
+
+		if txIn.Sequence != LiquidationCetSequence {
+			return errorsmod.Wrap(ErrInvalidCET, "invalid sequence")
 		}
 
 		if p.Inputs[i].WitnessUtxo == nil {
