@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 
+	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/psbt"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
@@ -27,6 +28,12 @@ const (
 
 	// default sig hash type
 	DefaultSigHashType = txscript.SigHashDefault
+
+	// default maximum allowed transaction weight
+	MaxTransactionWeight = 400000
+
+	// default witness size
+	DefaultWitnessSize = 64
 )
 
 // BuildSettlementTransaction builds the settlement tx for the given liquidation and records
@@ -168,7 +175,7 @@ func BuildUnsignedTransaction(utxos []*btcbridgetypes.UTXO, txOuts []*wire.TxOut
 
 	tx.AddTxOut(wire.NewTxOut(0, changePkScript))
 
-	fee := btcbridgetypes.GetTxVirtualSize(tx, utxos) * feeRate
+	fee := GetTxVirtualSize(tx, DefaultWitnessSize) * feeRate
 
 	changeAmount := inAmount - outAmount - fee
 	if changeAmount > 0 {
@@ -181,7 +188,7 @@ func BuildUnsignedTransaction(utxos []*btcbridgetypes.UTXO, txOuts []*wire.TxOut
 		tx.TxOut = tx.TxOut[0 : len(tx.TxOut)-1]
 
 		if changeAmount < 0 {
-			feeWithoutChange := btcbridgetypes.GetTxVirtualSize(tx, utxos) * feeRate
+			feeWithoutChange := GetTxVirtualSize(tx, DefaultWitnessSize) * feeRate
 			if inAmount-outAmount-feeWithoutChange < 0 {
 				return nil, 0, ErrInsufficientUTXOs
 			}
@@ -190,7 +197,7 @@ func BuildUnsignedTransaction(utxos []*btcbridgetypes.UTXO, txOuts []*wire.TxOut
 		changeAmount = 0
 	}
 
-	if err := btcbridgetypes.CheckTransactionWeight(tx, utxos); err != nil {
+	if err := CheckTransactionWeight(tx, DefaultWitnessSize); err != nil {
 		return nil, 0, err
 	}
 
@@ -233,11 +240,11 @@ func BuildUnsignedTransactionWithFee(utxos []*btcbridgetypes.UTXO, txOuts []*wir
 		changeAmount = 0
 	}
 
-	if fee < btcbridgetypes.GetTxVirtualSize(tx, utxos) {
+	if fee < GetTxVirtualSize(tx, DefaultWitnessSize) {
 		return nil, 0, errorsmod.Wrap(ErrFailedToBuildTx, "too low fee rate")
 	}
 
-	if err := btcbridgetypes.CheckTransactionWeight(tx, utxos); err != nil {
+	if err := CheckTransactionWeight(tx, DefaultWitnessSize); err != nil {
 		return nil, 0, err
 	}
 
@@ -291,4 +298,37 @@ func CalcTaprootSigHash(p *psbt.Packet, idx int, sigHashType txscript.SigHashTyp
 	}
 
 	return sigHash, nil
+}
+
+// GetTxVirtualSize gets the virtual size of the given tx.
+func GetTxVirtualSize(tx *wire.MsgTx, witnessSize int) int64 {
+	newTx := PopulateTxWithDummyWitness(tx, witnessSize)
+
+	return mempool.GetTxVirtualSize(btcutil.NewTx(newTx))
+}
+
+// CheckTransactionWeight checks if the weight of the given tx exceeds the allowed maximum weight
+func CheckTransactionWeight(tx *wire.MsgTx, witnessSize int) error {
+	newTx := PopulateTxWithDummyWitness(tx, witnessSize)
+
+	weight := blockchain.GetTransactionWeight(btcutil.NewTx(newTx))
+	if weight > MaxTransactionWeight {
+		return ErrMaxTransactionWeightExceeded
+	}
+
+	return nil
+}
+
+// PopulateTxWithDummyWitness populates the given tx with the dummy witness
+func PopulateTxWithDummyWitness(tx *wire.MsgTx, witnessSize int) *wire.MsgTx {
+	newTx := tx.Copy()
+
+	for _, txIn := range newTx.TxIn {
+		if len(txIn.Witness) == 0 {
+			dummyWitness := make([]byte, witnessSize)
+			txIn.Witness = wire.TxWitness{dummyWitness}
+		}
+	}
+
+	return newTx
 }

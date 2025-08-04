@@ -15,6 +15,7 @@ var (
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 2100, "invalid params")
 
-	ErrInsufficientUTXOs = errorsmod.Register(ModuleName, 3100, "insufficient utxos")
-	ErrFailedToBuildTx   = errorsmod.Register(ModuleName, 3101, "failed to build transaction")
+	ErrInsufficientUTXOs            = errorsmod.Register(ModuleName, 3100, "insufficient utxos")
+	ErrMaxTransactionWeightExceeded = errorsmod.Register(ModuleName, 3101, "maximum transaction weight exceeded")
+	ErrFailedToBuildTx              = errorsmod.Register(ModuleName, 3102, "failed to build transaction")
 )
