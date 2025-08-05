@@ -14,11 +14,6 @@ func (k Keeper) HandleApproval(ctx sdk.Context, loan *types.Loan) error {
 		return types.ErrInsufficientLiquidity
 	}
 
-	// initiate signing request for repayment cet adaptor signatures from DCM
-	if err := k.InitiateRepaymentCetSigningRequest(ctx, loan.VaultAddress); err != nil {
-		return err
-	}
-
 	amount := sdk.NewCoin(loan.BorrowAmount.Denom, loan.BorrowAmount.Amount.Sub(loan.OriginationFee))
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(loan.Borrower), sdk.NewCoins(amount)); err != nil {
 		// unexpected error

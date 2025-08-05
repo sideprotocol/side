@@ -47,8 +47,8 @@ func (k Keeper) HandleRepaymentAdaptorSignatures(ctx sdk.Context, loanId string,
 	}
 
 	loan := k.GetLoan(ctx, loanId)
-	if loan.Status != types.LoanStatus_Open && loan.Status != types.LoanStatus_Repaid {
-		return errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan neither open nor repaid")
+	if types.LoanDisbursed(loan) {
+		return errorsmod.Wrap(types.ErrInvalidLoanStatus, "loan has been disbursed")
 	}
 
 	dlcMeta := k.GetDLCMeta(ctx, loanId)
@@ -124,4 +124,11 @@ func (k Keeper) GetRepaymentCetAdaptorPoint(ctx sdk.Context, loanId string) ([]b
 	dlcEvent := k.dlcKeeper.GetEvent(ctx, loan.DlcEventId)
 
 	return dlctypes.GetSignaturePointFromEvent(dlcEvent, types.RepaidOutcomeIndex)
+}
+
+// RepaymentCetSigned returns true if the repayment cet adaptor signatures already exist, false otherwise
+func (k Keeper) RepaymentCetSigned(ctx sdk.Context, loanId string) bool {
+	dlcMeta := k.GetDLCMeta(ctx, loanId)
+
+	return len(dlcMeta.RepaymentCet.DCMAdaptorSignatures) > 0
 }

@@ -214,6 +214,11 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 		return nil, err
 	}
 
+	// initiate signing request for repayment cet adaptor signatures from DCM
+	if err := m.InitiateRepaymentCetSigningRequest(ctx, loan.VaultAddress); err != nil {
+		return nil, err
+	}
+
 	// create authorization
 	authorization := m.CreateAuthorization(ctx, msg.LoanId, depositTxHashes)
 

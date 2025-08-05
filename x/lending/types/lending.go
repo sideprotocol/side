@@ -235,6 +235,11 @@ func CheckBorrowAmountLimit(pool *LendingPool, borrowAmount sdkmath.Int) error {
 	return nil
 }
 
+// LoanDisbursed returns true if the loan has been disbursed, false otherwise
+func LoanDisbursed(loan *Loan) bool {
+	return loan.Status >= LoanStatus_Open
+}
+
 // CollateralRedeemable returns true if the collateral is redeemable, false otherwise
 func CollateralRedeemable(loan *Loan) bool {
 	if len(loan.Authorizations) > 0 {

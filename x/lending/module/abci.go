@@ -86,8 +86,8 @@ func handlePendingLoans(ctx sdk.Context, k keeper.Keeper) error {
 				continue
 			}
 
-			// try to approve loan if all deposit txs verified
-			if k.DepositsVerified(ctx, k.GetAuthorization(ctx, loan.VaultAddress, authorizationId)) {
+			// try to approve loan if the repayment cet signed by DCM and all deposit txs verified
+			if k.RepaymentCetSigned(ctx, loan.VaultAddress) && k.DepositsVerified(ctx, k.GetAuthorization(ctx, loan.VaultAddress, authorizationId)) {
 				// check LTV
 				if !types.CheckLTV(loan.CollateralAmount, int(pool.Config.CollateralAsset.Decimals), loan.BorrowAmount.Amount, int(pool.Config.LendingAsset.Decimals), pool.Config.MaxLtv, currentPrice, pool.Config.CollateralAsset.IsBasePriceAsset) {
 					rejectHandler(loan, authorizationId, types.ErrInsufficientCollateral)
@@ -314,13 +314,10 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) error {
 			continue
 		}
 
+		// get dlc meta
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 
-		// check if the DCM adaptor signatures have been submitted
-		if len(dlcMeta.RepaymentCet.DCMAdaptorSignatures) == 0 {
-			continue
-		}
-
+		// check if the DCM adapted signatures already exist
 		if len(dlcMeta.RepaymentCet.DCMAdaptedSignatures) == 0 {
 			// check if the event attestation has been submitted
 			attestation := k.DLCKeeper().GetAttestationByEvent(ctx, loan.DlcEventId)
