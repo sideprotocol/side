@@ -10,7 +10,11 @@ import (
 )
 
 var (
-	DefaultFinalTimeoutDuration = 30 * 24 * time.Hour // 30 days
+	// minimum final timeout duration
+	MinFinalTimeoutDuration = 30 * 24 * time.Hour // 30 days
+
+	// default final timeout duration
+	DefaultFinalTimeoutDuration = 365 * 24 * time.Hour // 365 days
 
 	// default max fee rate multiplier for liquidation cet
 	DefaultMaxLiquidationFeeRateMultiplier = int64(5)
@@ -29,8 +33,8 @@ func DefaultParams() Params {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if p.FinalTimeoutDuration <= 0 {
-		return errorsmod.Wrap(ErrInvalidParams, "final timeout duration must be greater than 0")
+	if p.FinalTimeoutDuration < MinFinalTimeoutDuration {
+		return errorsmod.Wrapf(ErrInvalidParams, "final timeout duration cannot be less than %d", MinFinalTimeoutDuration)
 	}
 
 	if p.MaxLiquidationFeeRateMultiplier < 0 {
