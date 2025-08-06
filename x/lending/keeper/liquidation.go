@@ -102,10 +102,8 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, loan *types.Loan) {
 		// add to liquidation queue
 		k.AddToLiquidationQueue(ctx, loan.VaultAddress)
 
-		// trigger dlc event if not triggered yet
-		if !k.DLCKeeper().GetEvent(ctx, loan.DlcEventId).HasTriggered {
-			k.DLCKeeper().TriggerDLCEvent(ctx, loan.DlcEventId, outcomeIndex)
-		}
+		// trigger dlc event
+		k.DLCKeeper().TriggerDLCEvent(ctx, loan.DlcEventId, outcomeIndex)
 
 		// initiate signing request
 		k.TSSKeeper().InitiateSigningRequest(

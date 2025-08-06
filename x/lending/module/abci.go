@@ -135,12 +135,6 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) error {
 	var unexpectedErr error
 
 	k.IterateLoansByStatus(ctx, types.LoanStatus_Repaid, func(loan *types.Loan) (stop bool) {
-		// trigger dlc event if not triggered yet
-		if !k.DLCKeeper().GetEvent(ctx, loan.DlcEventId).HasTriggered {
-			k.DLCKeeper().TriggerDLCEvent(ctx, loan.DlcEventId, types.RepaidOutcomeIndex)
-			return false
-		}
-
 		// get dlc meta
 		dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
 
