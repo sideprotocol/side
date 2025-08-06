@@ -24,7 +24,7 @@ func (msg *MsgUpdateTrustedFeeProviders) ValidateBasic() error {
 	}
 
 	if len(msg.FeeProviders) == 0 {
-		return errorsmod.Wrapf(ErrInvalidFeeProviders, "fee providers can not be empty")
+		return errorsmod.Wrapf(ErrInvalidFeeProviders, "fee providers cannot be empty")
 	}
 
 	for _, provider := range msg.FeeProviders {

@@ -49,7 +49,7 @@ func verifySchnorrAdaptorSignature(sig *Signature, hash []byte, pubKey *secp256k
 	// 9. Fail if is_infinite(R)
 	// 10. EAP = AR - R if has_even_y(AR) else AR + R; Fail if is_infinite(EAP)
 	// 11. Fail if EAP != AP
-	// 12. Return success iff not failure occured before reaching this
+	// 12. Return success iff not failure occurred before reaching this
 	// point.
 
 	// Step 1.
@@ -181,6 +181,6 @@ func verifySchnorrAdaptorSignature(sig *Signature, hash []byte, pubKey *secp256k
 
 	// Step 12.
 	//
-	// Return success iff not failure occured before reaching this
+	// Return success iff not failure occurred before reaching this
 	return nil
 }

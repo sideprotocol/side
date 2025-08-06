@@ -40,7 +40,7 @@ func (m *MsgSubmitCets) ValidateBasic() error {
 	}
 
 	if len(m.DepositTxs) == 0 {
-		return errorsmod.Wrap(ErrInvalidDepositTxs, "deposit txs can not be empty")
+		return errorsmod.Wrap(ErrInvalidDepositTxs, "deposit txs cannot be empty")
 	}
 
 	depositTxHashes := []string{}

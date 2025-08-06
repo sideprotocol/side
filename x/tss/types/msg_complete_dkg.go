@@ -36,7 +36,7 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 	}
 
 	if len(m.PubKeys) == 0 {
-		return errorsmod.Wrap(ErrInvalidPubKeys, "pub keys can not be empty")
+		return errorsmod.Wrap(ErrInvalidPubKeys, "pub keys cannot be empty")
 	}
 
 	for _, pubKey := range m.PubKeys {

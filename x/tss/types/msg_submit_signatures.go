@@ -28,7 +28,7 @@ func (m *MsgSubmitSignatures) ValidateBasic() error {
 	}
 
 	if len(m.Signatures) == 0 {
-		return errorsmod.Wrap(ErrInvalidSignatures, "signatures can not be empty")
+		return errorsmod.Wrap(ErrInvalidSignatures, "signatures cannot be empty")
 	}
 
 	for _, signature := range m.Signatures {

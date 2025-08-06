@@ -189,35 +189,6 @@ func (k Keeper) GetLoansByOracle(ctx sdk.Context, oraclePubKey []byte, paginatio
 	return loans, pageRes, nil
 }
 
-// GetPendingLoans gets the requested or authorized loans
-func (k Keeper) GetPendingLoans(ctx sdk.Context) []*types.Loan {
-	var loans []*types.Loan
-
-	requestedLoans := k.GetLoans(ctx, types.LoanStatus_Requested)
-	if len(requestedLoans) != 0 {
-		loans = append(loans, requestedLoans...)
-	}
-
-	authorizedLoans := k.GetLoans(ctx, types.LoanStatus_Authorized)
-	if len(authorizedLoans) != 0 {
-		loans = append(loans, authorizedLoans...)
-	}
-
-	return loans
-}
-
-// GetLiquidatedLoans gets the liquidated loans from the liquidation queue
-func (k Keeper) GetLiquidatedLoans(ctx sdk.Context) []*types.Loan {
-	var loans []*types.Loan
-
-	k.IterateLiquidationQueue(ctx, func(loan *types.Loan) (stop bool) {
-		loans = append(loans, loan)
-		return false
-	})
-
-	return loans
-}
-
 // GetAllLoans returns all loans
 func (k Keeper) GetAllLoans(ctx sdk.Context) []*types.Loan {
 	var loans []*types.Loan

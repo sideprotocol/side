@@ -225,11 +225,11 @@ func CheckBorrowCap(pool *LendingPool, borrowAmount sdkmath.Int) error {
 // CheckBorrowAmountLimit checks if the borrow amount satisfies limits for the given pool
 func CheckBorrowAmountLimit(pool *LendingPool, borrowAmount sdkmath.Int) error {
 	if HasMinBorrowAmountLimit(pool) && borrowAmount.LT(pool.Config.MinBorrowAmount) {
-		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount can not be less than min borrow amount")
+		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount cannot be less than min borrow amount")
 	}
 
 	if HasMaxBorrowAmountLimit(pool) && borrowAmount.GT(pool.Config.MaxBorrowAmount) {
-		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount can not be greater than max borrow amount")
+		return errorsmod.Wrap(ErrInvalidAmount, "borrow amount cannot be greater than max borrow amount")
 	}
 
 	return nil

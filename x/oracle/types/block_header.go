@@ -62,7 +62,7 @@ type BlockHeaders []*BlockHeader
 // Validate validates if each block header is valid and if the block headers form a chain
 func (headers BlockHeaders) Validate() error {
 	if len(headers) == 0 {
-		return errorsmod.Wrap(ErrInvalidBlockHeaders, "block headers can not be empty")
+		return errorsmod.Wrap(ErrInvalidBlockHeaders, "block headers cannot be empty")
 	}
 
 	var lastHeight int32
@@ -74,7 +74,7 @@ func (headers BlockHeaders) Validate() error {
 		}
 
 		if i > 0 && h.Height != lastHeight+1 && h.PreviousBlockHash != lastHash {
-			return errorsmod.Wrap(ErrInvalidBlockHeaders, "block headers can not form a chain")
+			return errorsmod.Wrap(ErrInvalidBlockHeaders, "block headers cannot form a chain")
 		}
 
 		lastHeight = h.Height

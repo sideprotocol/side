@@ -34,7 +34,7 @@ func (m *MsgCompleteDKG) ValidateBasic() error {
 	}
 
 	if len(m.Vaults) == 0 {
-		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "vaults can not be empty")
+		return errorsmod.Wrap(ErrInvalidDKGCompletionRequest, "vaults cannot be empty")
 	}
 
 	vaults := make(map[string]bool)

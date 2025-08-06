@@ -56,7 +56,7 @@ func (p Params) Validate() error {
 	}
 
 	if p.NonceGenerationBatchSize < 2 {
-		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation batch size can not be less than 2")
+		return errorsmod.Wrapf(ErrInvalidParams, "nonce generation batch size cannot be less than 2")
 	}
 
 	if p.NonceGenerationInterval <= 0 {
@@ -72,11 +72,11 @@ func (p Params) Validate() error {
 	}
 
 	if len(p.AllowedOracleParticipants) > 0 && p.OracleParticipantNum > uint32(len(p.AllowedOracleParticipants)) {
-		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number can not be greater than allowed oracle participant number %d", len(p.AllowedOracleParticipants))
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number cannot be greater than allowed oracle participant number %d", len(p.AllowedOracleParticipants))
 	}
 
 	if p.OracleParticipantNum < MinOracleParticipantNum {
-		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number can not be less than min oracle participant number %d", MinOracleParticipantNum)
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number cannot be less than min oracle participant number %d", MinOracleParticipantNum)
 	}
 
 	if p.OracleParticipantThreshold == 0 || p.OracleParticipantThreshold > p.OracleParticipantNum {

@@ -188,7 +188,7 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	}
 
 	if collateralAmount.IsZero() {
-		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount can not be zero")
+		return nil, errorsmod.Wrap(types.ErrInsufficientCollateral, "collateral amount cannot be zero")
 	}
 
 	// calculate liquidation price

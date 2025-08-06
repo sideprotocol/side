@@ -24,7 +24,7 @@ func (msg *MsgUpdateTrustedNonBtcRelayers) ValidateBasic() error {
 	}
 
 	if len(msg.Relayers) == 0 {
-		return errorsmod.Wrapf(ErrInvalidRelayers, "relayers can not be empty")
+		return errorsmod.Wrapf(ErrInvalidRelayers, "relayers cannot be empty")
 	}
 
 	for _, relayer := range msg.Relayers {

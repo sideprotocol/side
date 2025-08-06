@@ -30,7 +30,7 @@ func (msg *MsgSubmitSignatures) ValidateBasic() error {
 	}
 
 	if len(msg.Txid) == 0 {
-		return errorsmod.Wrap(ErrInvalidTxHash, "tx id can not be empty")
+		return errorsmod.Wrap(ErrInvalidTxHash, "tx id cannot be empty")
 	}
 
 	if _, err := chainhash.NewHashFromStr(msg.Txid); err != nil {
@@ -38,7 +38,7 @@ func (msg *MsgSubmitSignatures) ValidateBasic() error {
 	}
 
 	if len(msg.Signatures) == 0 {
-		return errorsmod.Wrap(ErrInvalidSignatures, "signatures can not be empty")
+		return errorsmod.Wrap(ErrInvalidSignatures, "signatures cannot be empty")
 	}
 
 	for _, signature := range msg.Signatures {
