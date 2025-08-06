@@ -138,7 +138,7 @@ func (k Keeper) handleOriginationFee(ctx sdk.Context, loan *types.Loan) error {
 	originationFee := sdk.NewCoin(loan.BorrowAmount.Denom, loan.OriginationFee)
 	referralFee := sdk.NewCoin(loan.BorrowAmount.Denom, sdkmath.ZeroInt())
 
-	if loan.Referrer != nil {
+	if types.HasReferralFee(loan) {
 		referralFee.Amount = originationFee.Amount.ToLegacyDec().Mul(loan.Referrer.ReferralFeeFactor).TruncateInt()
 		originationFee = originationFee.Sub(referralFee)
 	}
@@ -153,6 +153,18 @@ func (k Keeper) handleOriginationFee(ctx sdk.Context, loan *types.Loan) error {
 		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(loan.Referrer.Address), sdk.NewCoins(referralFee)); err != nil {
 			return err
 		}
+
+		// emit referral event
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeReferral,
+				sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+				sdk.NewAttribute(types.AttributeKeyReferralCode, loan.Referrer.ReferralCode),
+				sdk.NewAttribute(types.AttributeKeyReferrerAddress, loan.Referrer.Address),
+				sdk.NewAttribute(types.AttributeKeyReferralFeeFactor, loan.Referrer.ReferralFeeFactor.String()),
+				sdk.NewAttribute(types.AttributeKeyReferralFee, referralFee.String()),
+			),
+		)
 	}
 
 	return nil
