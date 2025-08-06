@@ -6,7 +6,120 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/lending/types"
+	liquidationtypes "github.com/sideprotocol/side/x/liquidation/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
+
+// HandleLiquidation performs possible liquidation for the given loan
+func (k Keeper) HandleLiquidation(ctx sdk.Context, loan *types.Loan) {
+	var liquidationCet string
+	var sigHashes []string
+	var signingIntent int32
+
+	var outcomeIndex int
+
+	var liquidationInterest sdkmath.Int
+
+	pool := k.GetPool(ctx, loan.PoolId)
+	pricePair := types.GetPricePair(pool.Config)
+
+	currentPrice, err := k.GetPrice(ctx, pricePair)
+	if err != nil {
+		k.Logger(ctx).Warn("failed to get price", "pair", pricePair, "err", err)
+	}
+
+	dlcMeta := k.GetDLCMeta(ctx, loan.VaultAddress)
+
+	// check if the loan has defaulted
+	if ctx.BlockTime().Unix() >= loan.MaturityTime {
+		liquidationInterest = loan.Interest
+		loan.Status = types.LoanStatus_Defaulted
+
+		liquidationCet = dlcMeta.DefaultLiquidationCet.Tx
+		signingIntent = int32(types.SigningIntent_SIGNING_INTENT_DEFAULT_LIQUIDATION)
+		outcomeIndex = types.DefaultLiquidatedOutcomeIndex
+
+		// get default liquidation cet sig hashes; no error
+		sigHashes, _ = types.GetCetSigHashes(dlcMeta, types.CetType_DEFAULT_LIQUIDATION)
+
+		// emit default event
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeDefault,
+				sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+			),
+		)
+	} else if !currentPrice.IsZero() {
+		// check if the loan is to be liquidated
+		if types.ToBeLiquidated(currentPrice, loan.LiquidationPrice, pool.Config.CollateralAsset.IsBasePriceAsset) {
+			liquidationInterest = k.GetCurrentInterest(ctx, loan).Amount
+			loan.Status = types.LoanStatus_Liquidated
+
+			liquidationCet = dlcMeta.LiquidationCet.Tx
+			signingIntent = int32(types.SigningIntent_SIGNING_INTENT_LIQUIDATION)
+			outcomeIndex = types.LiquidatedOutcomeIndex
+
+			// get liquidation cet sig hashes; no error
+			sigHashes, _ = types.GetCetSigHashes(dlcMeta, types.CetType_LIQUIDATION)
+
+			// emit liquidation event
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeLiquidate,
+					sdk.NewAttribute(types.AttributeKeyLoanId, loan.VaultAddress),
+				),
+			)
+		}
+	}
+
+	// create liquidation if defaulted or liquidated
+	if loan.Status == types.LoanStatus_Defaulted || loan.Status == types.LoanStatus_Liquidated {
+		collateralDenom := pool.Config.CollateralAsset.Denom
+		debtDenom := pool.Config.LendingAsset.Denom
+
+		liquidation := k.LiquidationKeeper().CreateLiquidation(ctx, &liquidationtypes.Liquidation{
+			LoanId:                     loan.VaultAddress,
+			Debtor:                     loan.Borrower,
+			DCM:                        loan.DCM,
+			CollateralAmount:           sdk.NewCoin(collateralDenom, loan.CollateralAmount),
+			ActualCollateralAmount:     sdk.NewCoin(collateralDenom, sdkmath.NewInt(types.GetLiquidationCetOutput(liquidationCet))),
+			DebtAmount:                 sdk.NewCoin(debtDenom, loan.BorrowAmount.Amount.Add(liquidationInterest)),
+			CollateralAsset:            types.ToLiquidationAssetMeta(pool.Config.CollateralAsset),
+			DebtAsset:                  types.ToLiquidationAssetMeta(pool.Config.LendingAsset),
+			LiquidationPrice:           currentPrice,
+			LiquidationTime:            ctx.BlockTime(),
+			LiquidatedCollateralAmount: sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+			LiquidatedDebtAmount:       sdk.NewCoin(debtDenom, sdkmath.ZeroInt()),
+			LiquidationBonusAmount:     sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+			ProtocolLiquidationFee:     sdk.NewCoin(collateralDenom, sdkmath.ZeroInt()),
+			LiquidationCet:             liquidationCet,
+		})
+
+		// update loan
+		loan.LiquidationId = liquidation.Id
+		k.SetLoan(ctx, loan)
+
+		// add to liquidation queue
+		k.AddToLiquidationQueue(ctx, loan.VaultAddress)
+
+		// trigger dlc event if not triggered yet
+		if !k.DLCKeeper().GetEvent(ctx, loan.DlcEventId).HasTriggered {
+			k.DLCKeeper().TriggerDLCEvent(ctx, loan.DlcEventId, outcomeIndex)
+		}
+
+		// initiate signing request
+		k.TSSKeeper().InitiateSigningRequest(
+			ctx,
+			types.ModuleName,
+			loan.VaultAddress,
+			tsstypes.SigningType_SIGNING_TYPE_SCHNORR,
+			signingIntent,
+			loan.DCM,
+			sigHashes,
+			nil,
+		)
+	}
+}
 
 // HandleLiquidationSignatures handles the liquidation signatures
 // Assume that signatures have already been verified
