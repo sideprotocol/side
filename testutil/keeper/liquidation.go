@@ -45,6 +45,7 @@ func LiquidationKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		cdc,
 		storeKey,
 		memStoreKey,
+		app.AccountKeeper,
 		app.BankKeeper,
 		app.OracleKeeper,
 		app.TSSKeeper,

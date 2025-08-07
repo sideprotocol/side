@@ -29,12 +29,6 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	if moduleAcc == nil {
 		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
 	}
-
-	// set the module account if there is zero balance
-	balances := k.BankKeeper().GetAllBalances(ctx, moduleAcc.GetAddress())
-	if balances.IsZero() {
-		k.AuthKeeper().SetModuleAccount(ctx, moduleAcc)
-	}
 }
 
 // ExportGenesis returns the module's exported genesis

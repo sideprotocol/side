@@ -1,6 +1,7 @@
 package btcbridge
 
 import (
+	"fmt"
 	"sort"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -35,6 +36,12 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// set the rate limit
 	k.SetRateLimit(ctx, k.NewRateLimit(ctx))
+
+	// check if the module account exists
+	moduleAcc := k.GetModuleAccount(ctx)
+	if moduleAcc == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
+	}
 }
 
 // ExportGenesis returns the module's exported genesis

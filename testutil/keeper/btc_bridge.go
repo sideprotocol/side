@@ -45,6 +45,7 @@ func BtcBridgeKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		cdc,
 		storeKey,
 		memStoreKey,
+		app.AccountKeeper,
 		app.BankKeeper,
 		app.StakingKeeper,
 		app.OracleKeeper,

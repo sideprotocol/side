@@ -1,6 +1,8 @@
 package liquidation
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/x/liquidation/keeper"
@@ -20,6 +22,12 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	// set liquidation records
 	for _, record := range genState.LiquidationRecords {
 		k.SetLiquidationRecord(ctx, record)
+	}
+
+	// check if the module account exists
+	moduleAcc := k.GetModuleAccount(ctx)
+	if moduleAcc == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
 	}
 }
 

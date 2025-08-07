@@ -45,6 +45,11 @@ func NewKeeper(
 	tssKeeper types.TSSKeeper,
 	authority string,
 ) Keeper {
+	// ensure the module account is set
+	if addr := ak.GetModuleAddress(types.ModuleName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
+	}
+
 	// ensure escrow module account is set
 	if addr := ak.GetModuleAddress(types.RepaymentEscrowAccount); addr == nil {
 		panic(fmt.Sprintf("%s module account has not been set", types.RepaymentEscrowAccount))
@@ -95,6 +100,14 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	k.cdc.MustUnmarshal(bz, &params)
 
 	return params
+}
+
+func (k Keeper) GetModuleAccount(ctx sdk.Context) sdk.ModuleAccountI {
+	return k.authKeeper.GetModuleAccount(ctx, types.ModuleName)
+}
+
+func (k Keeper) GetRepaymentEscrowAccount(ctx sdk.Context) sdk.ModuleAccountI {
+	return k.authKeeper.GetModuleAccount(ctx, types.RepaymentEscrowAccount)
 }
 
 func (k Keeper) GetBlocksPerYear(ctx sdk.Context) uint64 {

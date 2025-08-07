@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -14,6 +16,7 @@ type Keeper struct {
 	storeKey storetypes.StoreKey
 	memKey   storetypes.StoreKey
 
+	authKeeper types.AccountKeeper
 	bankKeeper types.BankKeeper
 
 	authority string
@@ -23,13 +26,20 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey,
 	memKey storetypes.StoreKey,
+	authKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	authority string,
 ) Keeper {
+	// ensure the module account is set
+	if addr := authKeeper.GetModuleAddress(types.ModuleName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
+	}
+
 	return Keeper{
 		cdc:        cdc,
 		storeKey:   storeKey,
 		memKey:     memKey,
+		authKeeper: authKeeper,
 		bankKeeper: bankKeeper,
 		authority:  authority,
 	}
@@ -56,4 +66,8 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	k.cdc.MustUnmarshal(bz, &params)
 
 	return params
+}
+
+func (k Keeper) GetModuleAccount(ctx sdk.Context) sdk.ModuleAccountI {
+	return k.authKeeper.GetModuleAccount(ctx, types.ModuleName)
 }

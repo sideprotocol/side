@@ -675,6 +675,7 @@ func New(
 		appCodec,
 		keys[incentivetypes.StoreKey],
 		keys[incentivetypes.MemStoreKey],
+		app.AccountKeeper,
 		app.BankKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
@@ -683,6 +684,7 @@ func New(
 		appCodec,
 		keys[btcbridgetypes.StoreKey],
 		keys[btcbridgetypes.MemStoreKey],
+		app.AccountKeeper,
 		app.BankKeeper,
 		app.StakingKeeper,
 		app.OracleKeeper,
@@ -709,6 +711,7 @@ func New(
 		appCodec,
 		keys[liquidationtypes.StoreKey],
 		keys[liquidationtypes.MemStoreKey],
+		app.AccountKeeper,
 		app.BankKeeper,
 		app.OracleKeeper,
 		app.TSSKeeper,

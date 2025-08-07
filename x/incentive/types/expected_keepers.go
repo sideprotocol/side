@@ -7,6 +7,14 @@ import (
 	banktype "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
+// AccountKeeper defines the expected account keeper interface
+type AccountKeeper interface {
+	GetAccount(ctx context.Context, addr sdk.AccAddress) sdk.AccountI
+
+	GetModuleAddress(name string) sdk.AccAddress
+	GetModuleAccount(ctx context.Context, moduleName string) sdk.ModuleAccountI
+}
+
 // BankKeeper defines the expected interface needed to retrieve account balances.
 type BankKeeper interface {
 	SpendableCoins(ctx context.Context, addr sdk.AccAddress) sdk.Coins

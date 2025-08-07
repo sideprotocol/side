@@ -26,6 +26,7 @@ type (
 		storeKey storetypes.StoreKey
 		memKey   storetypes.StoreKey
 
+		authKeeper          types.AccountKeeper
 		bankKeeper          types.BankKeeper
 		stakingKeeper       types.StakingKeeper
 		oracleKeeper        types.OracleKeeper
@@ -44,6 +45,7 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey,
 	memKey storetypes.StoreKey,
+	authKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
 	oracleKeeper types.OracleKeeper,
@@ -55,10 +57,16 @@ func NewKeeper(
 	ibctransferKeeper types.IBCTransferKeeper,
 	authority string,
 ) *Keeper {
+	// ensure the module account is set
+	if addr := authKeeper.GetModuleAddress(types.ModuleName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
+	}
+
 	return &Keeper{
 		cdc:                 cdc,
 		storeKey:            storeKey,
 		memKey:              memKey,
+		authKeeper:          authKeeper,
 		bankKeeper:          bankKeeper,
 		stakingKeeper:       stakingKeeper,
 		oracleKeeper:        oracleKeeper,
@@ -90,6 +98,10 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	bz := store.Get(types.ParamsStoreKey)
 	k.cdc.MustUnmarshal(bz, &params)
 	return params
+}
+
+func (k Keeper) GetModuleAccount(ctx sdk.Context) sdk.ModuleAccountI {
+	return k.authKeeper.GetModuleAccount(ctx, types.ModuleName)
 }
 
 func (k Keeper) BankKeeper() types.BankKeeper {

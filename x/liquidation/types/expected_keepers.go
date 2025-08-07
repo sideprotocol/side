@@ -11,6 +11,14 @@ import (
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
+// AccountKeeper defines the expected account keeper interface
+type AccountKeeper interface {
+	GetAccount(ctx context.Context, addr sdk.AccAddress) sdk.AccountI
+
+	GetModuleAddress(name string) sdk.AccAddress
+	GetModuleAccount(ctx context.Context, moduleName string) sdk.ModuleAccountI
+}
+
 // BankKeeper defines the expected bank keeper interface
 type BankKeeper interface {
 	SpendableCoins(ctx context.Context, addr sdk.AccAddress) sdk.Coins
