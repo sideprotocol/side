@@ -265,6 +265,19 @@ func (k Keeper) SetDepositLog(ctx sdk.Context, depositLog *types.DepositLog) {
 	store.Set(types.DepositLogKey(depositLog.Txid), bz)
 }
 
+// NewDepositLog creates a new deposit log according to the given params
+func (k Keeper) NewDepositLog(ctx sdk.Context, txid string, vault string, authorizationId uint64, tx string) {
+	depositLog := &types.DepositLog{
+		Txid:            txid,
+		VaultAddress:    vault,
+		AuthorizationId: authorizationId,
+		DepositTx:       tx,
+		Status:          types.DepositStatus_DEPOSIT_STATUS_PENDING,
+	}
+
+	k.SetDepositLog(ctx, depositLog)
+}
+
 // HasDepositLog returns true if the given deposit log exists, false otherwise
 func (k Keeper) HasDepositLog(ctx sdk.Context, txid string) bool {
 	store := ctx.KVStore(k.storeKey)

@@ -13,6 +13,7 @@ import (
 	"github.com/btcsuite/btcd/wire"
 
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/adaptor"
 	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
@@ -523,6 +524,36 @@ func UnwrapLeafScript(leafScript LeafScript) ([]byte, []byte, error) {
 	return script, controlBlock, nil
 }
 
+// ParseDepositTxs parses the given deposit txs
+// Assume that the given deposit txs are valid psbts
+func ParseDepositTxs(depositTxs []string, vaultPkScript []byte) ([]*psbt.Packet, []string, sdkmath.Int, error) {
+	parsedDepositTxs := []*psbt.Packet{}
+	depositTxHashes := []string{}
+	depositAmount := sdkmath.ZeroInt()
+
+	for _, depositTx := range depositTxs {
+		p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(depositTx)), true)
+
+		parsedDepositTxs = append(parsedDepositTxs, p)
+		depositTxHashes = append(depositTxHashes, p.UnsignedTx.TxHash().String())
+
+		vaultFound := false
+
+		for _, out := range p.UnsignedTx.TxOut {
+			if bytes.Equal(out.PkScript, vaultPkScript) {
+				depositAmount = depositAmount.Add(sdkmath.NewInt(out.Value))
+				vaultFound = true
+			}
+		}
+
+		if !vaultFound {
+			return nil, nil, sdkmath.Int{}, errorsmod.Wrapf(ErrInvalidDepositTx, "no vault found in the deposit tx %s", p.UnsignedTx.TxHash().String())
+		}
+	}
+
+	return parsedDepositTxs, depositTxHashes, depositAmount, nil
+}
+
 // GetVaultUtxos gets the vault utxos from the given deposit txs
 func GetVaultUtxos(depositTxs []*psbt.Packet, vaultPkScript []byte) ([]*btcbridgetypes.UTXO, error) {
 	utxos := []*btcbridgetypes.UTXO{}
@@ -561,7 +592,7 @@ func getVaultUtxosFromDepositTx(depositTx *psbt.Packet, vaultPkScript []byte) ([
 	}
 
 	if !found {
-		return nil, ErrInvalidDepositTx
+		return nil, errorsmod.Wrapf(ErrInvalidDepositTx, "no vault found in the deposit tx %s", depositTx.UnsignedTx.TxHash().String())
 	}
 
 	return utxos, nil

@@ -12,7 +12,6 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 
 	errorsmod "cosmossdk.io/errors"
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
@@ -170,21 +169,10 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 
 	vaultPkScript, _ := types.GetPkScriptFromAddress(loan.VaultAddress)
 
-	depositTxs := []*psbt.Packet{}
-	depositTxHashes := []string{}
-	collateralAmount := sdkmath.ZeroInt()
-
-	for _, depositTx := range msg.DepositTxs {
-		p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(depositTx)), true)
-
-		depositTxs = append(depositTxs, p)
-		depositTxHashes = append(depositTxHashes, p.UnsignedTx.TxHash().String())
-
-		for _, out := range p.UnsignedTx.TxOut {
-			if bytes.Equal(out.PkScript, vaultPkScript) {
-				collateralAmount = collateralAmount.Add(sdkmath.NewInt(out.Value))
-			}
-		}
+	// parse deposit txs
+	depositTxs, depositTxHashes, collateralAmount, err := types.ParseDepositTxs(msg.DepositTxs, vaultPkScript)
+	if err != nil {
+		return nil, err
 	}
 
 	if collateralAmount.IsZero() {
@@ -222,16 +210,10 @@ func (m msgServer) SubmitCets(goCtx context.Context, msg *types.MsgSubmitCets) (
 	// create authorization
 	authorization := m.CreateAuthorization(ctx, msg.LoanId, depositTxHashes)
 
+	// set deposit logs
 	for i, depositTx := range msg.DepositTxs {
 		if !m.HasDepositLog(ctx, depositTxHashes[i]) {
-			depositLog := &types.DepositLog{
-				Txid:            depositTxHashes[i],
-				VaultAddress:    loan.VaultAddress,
-				AuthorizationId: authorization.Id,
-				DepositTx:       depositTx,
-			}
-
-			m.SetDepositLog(ctx, depositLog)
+			m.NewDepositLog(ctx, depositTxHashes[i], msg.LoanId, authorization.Id, depositTx)
 		}
 	}
 
