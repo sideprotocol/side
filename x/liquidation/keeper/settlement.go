@@ -44,6 +44,12 @@ func (k Keeper) HandleSettlementSignatures(ctx sdk.Context, sender string, liqui
 		return err
 	}
 
+	// handle liquidated debt (repay the lending pool)
+	if err := k.LiquidatedDebtHandler()(ctx, liquidation.Id, liquidation.LoanId, types.ModuleName, liquidation.LiquidatedDebtAmount); err != nil {
+		// unexpected error
+		return err
+	}
+
 	// update liquidation
 	liquidation.SettlementTx = settlementTxPsbtB64
 	liquidation.Status = types.LiquidationStatus_LIQUIDATION_STATUS_SETTLED

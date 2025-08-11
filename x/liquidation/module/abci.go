@@ -84,7 +84,7 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) error {
 
 	// get fee rate
 	// NOTE: the fee rate validity is not necessary here
-	// if it is 0 or too high, we use the reserved network fee duration liquidation, which is sufficient to relay the tx by design
+	// if it is 0 or too high, we use the reserved network fee during liquidation, which is sufficient to relay the tx by design
 	feeRate := k.BtcBridgeKeeper().GetFeeRate(ctx)
 	if err := k.BtcBridgeKeeper().CheckFeeRate(ctx, feeRate); err != nil {
 		k.Logger(ctx).Warn("Failed to get valid fee rate to handle liquidation", "err", err)
@@ -96,13 +96,6 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) error {
 		if err != nil {
 			k.Logger(ctx).Error("Failed to build settlement transaction", "liquidation id", liquidation.Id, "fee rate", feeRate.Value, "err", err)
 			continue
-		}
-
-		// handle liquidated debt (repay the lending pool)
-		if err := k.LiquidatedDebtHandler()(ctx, liquidation.Id, liquidation.LoanId, types.ModuleName, liquidation.LiquidatedDebtAmount); err != nil {
-			// unexpected error
-			k.Logger(ctx).Error("Failed to call LiquidatedDebtHandler", "liquidation id", liquidation.Id, "debt amount", liquidation.LiquidatedDebtAmount, "err", err)
-			return err
 		}
 
 		liquidation.UnliquidatedCollateralAmount = sdk.NewInt64Coin(liquidation.CollateralAsset.Denom, changeAmount)
