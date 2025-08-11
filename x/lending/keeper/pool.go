@@ -123,15 +123,18 @@ func (k Keeper) AfterPoolRepaid(ctx sdk.Context, poolId string, maturity int64, 
 	k.SetPool(ctx, pool)
 }
 
-// DecreaseTotalBorrowed decreases total borrowed by the given amount for the specified pool
-func (k Keeper) DecreaseTotalBorrowed(ctx sdk.Context, poolId string, maturity int64, amount sdkmath.Int) {
+// RebalancePool rebalances the given pool by means of decreasing total borrowed and total reserve by the respective amounts
+// Note: This is used to adjust the pool after liquidation is completed
+func (k Keeper) RebalancePool(ctx sdk.Context, poolId string, maturity int64, totalBorrowedDelta sdkmath.Int, totalReserveDelta sdkmath.Int) {
 	pool := k.GetPool(ctx, poolId)
 
-	pool.TotalBorrowed = pool.TotalBorrowed.Sub(amount)
+	pool.TotalBorrowed = pool.TotalBorrowed.Sub(totalBorrowedDelta)
+	pool.TotalReserve = pool.TotalReserve.Sub(totalReserveDelta)
 
 	for i, tranche := range pool.Tranches {
 		if tranche.Maturity == maturity {
-			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(amount)
+			pool.Tranches[i].TotalBorrowed = pool.Tranches[i].TotalBorrowed.Sub(totalBorrowedDelta)
+			pool.Tranches[i].TotalReserve = pool.Tranches[i].TotalReserve.Sub(totalReserveDelta)
 			break
 		}
 	}
@@ -217,9 +220,17 @@ func (k Keeper) NormalizePool(ctx sdk.Context, pool *types.LendingPool) {
 		pool.TotalBorrowed = sdkmath.ZeroInt()
 	}
 
+	if pool.TotalReserve.IsNegative() {
+		pool.TotalReserve = sdkmath.ZeroInt()
+	}
+
 	for i := range pool.Tranches {
 		if pool.Tranches[i].TotalBorrowed.IsNegative() {
 			pool.Tranches[i].TotalBorrowed = sdkmath.ZeroInt()
+		}
+
+		if pool.Tranches[i].TotalReserve.IsNegative() {
+			pool.Tranches[i].TotalReserve = sdkmath.ZeroInt()
 		}
 	}
 }
