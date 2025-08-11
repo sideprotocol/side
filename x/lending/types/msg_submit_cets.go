@@ -44,13 +44,21 @@ func (m *MsgSubmitCets) ValidateBasic() error {
 	}
 
 	depositTxHashes := []string{}
+	depositTxHashMap := make(map[string]bool)
 
 	for _, depositTx := range m.DepositTxs {
-		if p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(depositTx)), true); err != nil {
+		p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(depositTx)), true)
+		if err != nil {
 			return ErrInvalidDepositTx
-		} else {
-			depositTxHashes = append(depositTxHashes, p.UnsignedTx.TxHash().String())
 		}
+
+		hash := p.UnsignedTx.TxHash().String()
+		if depositTxHashMap[hash] {
+			return errorsmod.Wrap(ErrInvalidDepositTx, "duplicate deposit tx")
+		}
+
+		depositTxHashes = append(depositTxHashes, hash)
+		depositTxHashMap[hash] = true
 	}
 
 	liquidationCet, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(m.LiquidationCet)), true)
