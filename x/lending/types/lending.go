@@ -194,11 +194,6 @@ func HasMaxBorrowAmountLimit(pool *LendingPool) bool {
 	return pool.Config.MaxBorrowAmount.IsPositive()
 }
 
-// HasRequestFee returns true if the request fee set in the given pool, false otherwise
-func HasRequestFee(pool *LendingPool) bool {
-	return pool.Config.RequestFee.IsPositive()
-}
-
 // HasReferralFee returns true if the referral fee exists, false otherwise
 func HasReferralFee(loan *Loan) bool {
 	return loan.Referrer != nil && loan.Referrer.ReferralFeeFactor.IsPositive()
@@ -320,7 +315,7 @@ func ValidatePoolConfig(config PoolConfig) error {
 		return err
 	}
 
-	if !config.RequestFee.IsValid() {
+	if !config.RequestFee.IsValid() || !config.RequestFee.IsPositive() {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid request fee")
 	}
 
@@ -338,6 +333,19 @@ func ValidatePoolConfig(config PoolConfig) error {
 
 	if !config.MaxLtv.IsPositive() || config.MaxLtv.GTE(sdkmath.LegacyOneDec()) || config.MaxLtv.GTE(config.LiquidationThreshold) {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "invalid max ltv")
+	}
+
+	return nil
+}
+
+// ValidatePoolConfigUpdate validates the given pool config update
+func ValidatePoolConfigUpdate(config PoolConfig, newConfig PoolConfig) error {
+	if newConfig.CollateralAsset != config.CollateralAsset {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "collateral asset cannot be updated")
+	}
+
+	if newConfig.LendingAsset != config.LendingAsset {
+		return errorsmod.Wrap(ErrInvalidPoolConfig, "lending asset cannot be updated")
 	}
 
 	return nil
@@ -387,14 +395,22 @@ func validatePoolTranches(tranches []PoolTrancheConfig) error {
 		return errorsmod.Wrap(ErrInvalidPoolConfig, "tranches cannot be empty")
 	}
 
+	trancheMap := make(map[int64]bool)
+
 	for _, tranche := range tranches {
 		if tranche.Maturity <= 0 {
 			return errorsmod.Wrap(ErrInvalidPoolConfig, "maturity must be greater than 0")
 		}
 
+		if trancheMap[tranche.Maturity] {
+			return errorsmod.Wrap(ErrInvalidPoolConfig, "duplicate maturity")
+		}
+
 		if !tranche.BorrowAPR.IsPositive() || tranche.BorrowAPR.GTE(sdkmath.LegacyOneDec()) {
 			return errorsmod.Wrap(ErrInvalidPoolConfig, "borrow apr must be between (0, 1)")
 		}
+
+		trancheMap[tranche.Maturity] = true
 	}
 
 	return nil

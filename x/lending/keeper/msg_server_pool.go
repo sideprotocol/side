@@ -181,6 +181,9 @@ func (m msgServer) UpdatePoolConfig(goCtx context.Context, msg *types.MsgUpdateP
 	}
 
 	pool := m.GetPool(ctx, msg.PoolId)
+	if err := types.ValidatePoolConfigUpdate(pool.Config, msg.Config); err != nil {
+		return nil, err
+	}
 
 	m.UpdatePoolStatus(ctx, pool, &msg.Config)
 	m.OnPoolTranchesConfigChanged(ctx, pool, msg.Config.Tranches)
