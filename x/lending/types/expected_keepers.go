@@ -52,8 +52,6 @@ type LiquidationKeeper interface {
 	GetLiquidation(ctx sdk.Context, id uint64) *liquidationtypes.Liquidation
 
 	CreateLiquidation(ctx sdk.Context, liquidation *liquidationtypes.Liquidation) *liquidationtypes.Liquidation
-
-	SetLiquidatedDebtHandler(handler liquidationtypes.LiquidatedDebtHandler)
 }
 
 // DLCKeeper defines the expected DLC keeper interface

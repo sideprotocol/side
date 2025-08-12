@@ -166,7 +166,7 @@ func (k Keeper) handleDefaultLiquidationSignatures(ctx sdk.Context, loanId strin
 }
 
 // HandleLiquidatedDebt handles the liquidated debt for the liquidated loan
-func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin) error {
+func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin, accruedInterestDuringLiquidation sdkmath.Int) error {
 	loan := k.GetLoan(ctx, loanId)
 	pool := k.GetPool(ctx, loan.PoolId)
 
@@ -220,21 +220,22 @@ func (k Keeper) HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loan
 
 	k.AfterPoolRepaid(ctx, loan.PoolId, loan.Maturity, principal, interest, protocolFee, actualProtocolFee)
 
-	k.DeductLiquidationAccruedInterest(ctx, loan, pool)
+	k.DeductLiquidationAccruedInterest(ctx, loan, pool, accruedInterestDuringLiquidation)
 
 	return nil
 }
 
 // DeductLiquidationAccruedInterest deducts the interest accrued during the loan liquidation from the pool
-func (k Keeper) DeductLiquidationAccruedInterest(ctx sdk.Context, loan *types.Loan, pool *types.LendingPool) {
-	interest := k.GetLiquidationAccruedInterest(ctx, loan)
-	protocolFee := types.GetProtocolFee(interest, pool.Config.ReserveFactor)
+func (k Keeper) DeductLiquidationAccruedInterest(ctx sdk.Context, loan *types.Loan, pool *types.LendingPool, accruedInterest sdkmath.Int) {
+	accruedProtocolFee := types.GetProtocolFee(accruedInterest, pool.Config.ReserveFactor)
 
-	k.RebalancePool(ctx, loan.PoolId, loan.Maturity, interest, protocolFee)
+	k.RebalancePool(ctx, loan.PoolId, loan.Maturity, accruedInterest, accruedProtocolFee)
 }
 
 // GetLiquidationAccruedInterest gets the current accrued interest during the loan liquidation
-func (k Keeper) GetLiquidationAccruedInterest(ctx sdk.Context, loan *types.Loan) sdkmath.Int {
+func (k Keeper) GetLiquidationAccruedInterest(ctx sdk.Context, loanId string) sdkmath.Int {
+	loan := k.GetLoan(ctx, loanId)
+
 	currentTotalInterest := types.GetInterest(loan.BorrowAmount.Amount, loan.StartBorrowIndex, k.GetCurrentBorrowIndex(ctx, loan))
 
 	return currentTotalInterest.Sub(k.GetCurrentInterest(ctx, loan).Amount)

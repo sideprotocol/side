@@ -734,6 +734,10 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
+	// set lending keeper and register tss handler for liquidation module
+	app.LiquidationKeeper.SetLendingKeeper(app.LendingKeeper)
+	app.TSSKeeper.RegisterSigningRequestCompletedHandler(liquidationtypes.ModuleName, app.LiquidationKeeper.SigningCompletedHandler)
+
 	app.FarmingKeeper = farmingkeeper.NewKeeper(
 		appCodec,
 		keys[farmingtypes.StoreKey],
@@ -924,9 +928,9 @@ func New(
 		wasmtypes.ModuleName,
 		tsstypes.ModuleName,
 		btcbridgetypes.ModuleName,
+		lendingtypes.ModuleName,
 		liquidationtypes.ModuleName,
 		dlctypes.ModuleName,
-		lendingtypes.ModuleName,
 		oracletypes.ModuleName,
 		incentivetypes.ModuleName,
 		farmingtypes.ModuleName,

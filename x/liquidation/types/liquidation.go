@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	sdkmath "cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -15,9 +14,6 @@ const (
 	// default dust output value
 	DefaultDustOutValue = int64(546)
 )
-
-// LiquidatedDebtHandler defines the handler to perform liquidated debt handling
-type LiquidatedDebtHandler func(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin) error
 
 // GetPricePair gets the price pair of the given liquidation
 func GetPricePair(liquidation *Liquidation) string {

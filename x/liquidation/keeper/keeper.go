@@ -21,8 +21,7 @@ type Keeper struct {
 	oracleKeeper    types.OracleKeeper
 	tssKeeper       types.TSSKeeper
 	btcbridgeKeeper types.BtcBridgeKeeper
-
-	liquidatedDebtHandler types.LiquidatedDebtHandler
+	lendingKeeper   types.LendingKeeper
 
 	authority string
 }
@@ -43,7 +42,7 @@ func NewKeeper(
 		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
 	}
 
-	k := &Keeper{
+	return &Keeper{
 		cdc:             cdc,
 		storeKey:        storeKey,
 		memKey:          memKey,
@@ -54,11 +53,6 @@ func NewKeeper(
 		btcbridgeKeeper: btcbridgeKeeper,
 		authority:       authority,
 	}
-
-	// register signing request completed handler
-	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
-
-	return k
 }
 
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
@@ -102,10 +96,10 @@ func (k Keeper) BtcBridgeKeeper() types.BtcBridgeKeeper {
 	return k.btcbridgeKeeper
 }
 
-func (k Keeper) LiquidatedDebtHandler() types.LiquidatedDebtHandler {
-	return k.liquidatedDebtHandler
+func (k Keeper) LendingKeeper() types.LendingKeeper {
+	return k.lendingKeeper
 }
 
-func (k *Keeper) SetLiquidatedDebtHandler(handler types.LiquidatedDebtHandler) {
-	k.liquidatedDebtHandler = handler
+func (k *Keeper) SetLendingKeeper(lendingKeeper types.LendingKeeper) {
+	k.lendingKeeper = lendingKeeper
 }

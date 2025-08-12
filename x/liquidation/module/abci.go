@@ -8,13 +8,23 @@ import (
 	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
+// BeginBlocker called at the beginning of every block
+func BeginBlocker(ctx sdk.Context, k keeper.Keeper) error {
+	// calculate the accrued interest during liquidations
+	calculateAccruedInterest(ctx, k)
+
+	return nil
+}
+
 // EndBlocker called at the end of every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
 	// handle pending liquidations
 	handlePendingLiquidations(ctx, k)
 
 	// handle completed liquidations
-	return handleCompletedLiquidations(ctx, k)
+	handleCompletedLiquidations(ctx, k)
+
+	return nil
 }
 
 // handlePendingLiquidations handles the pending liquidations
@@ -75,11 +85,11 @@ func handlePendingLiquidations(ctx sdk.Context, k keeper.Keeper) {
 }
 
 // handleCompletedLiquidations handles the completed liquidations
-func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) error {
+func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) {
 	// get completed liquidations
 	liquidations := k.GetLiquidationsByStatus(ctx, types.LiquidationStatus_LIQUIDATION_STATUS_LIQUIDATED)
 	if len(liquidations) == 0 {
-		return nil
+		return
 	}
 
 	// get fee rate
@@ -109,6 +119,16 @@ func handleCompletedLiquidations(ctx sdk.Context, k keeper.Keeper) error {
 		// initiate signing request via TSS
 		k.TSSKeeper().InitiateSigningRequest(ctx, types.ModuleName, types.ToScopedId(liquidation.Id), tsstypes.SigningType_SIGNING_TYPE_SCHNORR_WITH_TWEAK, int32(types.SigningIntent_SIGNING_INTENT_DEFAULT), liquidation.DCM, sigHashes, &tsstypes.SigningOptions{Tweak: ""})
 	}
+}
 
-	return nil
+// calculateAccruedInterest calculates the accrued interest during liquidations
+func calculateAccruedInterest(ctx sdk.Context, k keeper.Keeper) {
+	k.IterateLiquidations(ctx, func(liquidation *types.Liquidation) (stop bool) {
+		if liquidation.Status != types.LiquidationStatus_LIQUIDATION_STATUS_SETTLED {
+			liquidation.AccruedInterestDuringLiquidation = sdk.NewCoin(liquidation.DebtAmount.Denom, k.LendingKeeper().GetLiquidationAccruedInterest(ctx, liquidation.LoanId))
+			k.SetLiquidation(ctx, liquidation)
+		}
+
+		return false
+	})
 }

@@ -667,27 +667,28 @@ func (x *fastReflection_AssetMetadata) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_Liquidation                                protoreflect.MessageDescriptor
-	fd_Liquidation_id                             protoreflect.FieldDescriptor
-	fd_Liquidation_loan_id                        protoreflect.FieldDescriptor
-	fd_Liquidation_debtor                         protoreflect.FieldDescriptor
-	fd_Liquidation_dcm                            protoreflect.FieldDescriptor
-	fd_Liquidation_collateral_amount              protoreflect.FieldDescriptor
-	fd_Liquidation_actual_collateral_amount       protoreflect.FieldDescriptor
-	fd_Liquidation_debt_amount                    protoreflect.FieldDescriptor
-	fd_Liquidation_collateral_asset               protoreflect.FieldDescriptor
-	fd_Liquidation_debt_asset                     protoreflect.FieldDescriptor
-	fd_Liquidation_liquidation_price              protoreflect.FieldDescriptor
-	fd_Liquidation_liquidation_time               protoreflect.FieldDescriptor
-	fd_Liquidation_liquidated_collateral_amount   protoreflect.FieldDescriptor
-	fd_Liquidation_liquidated_debt_amount         protoreflect.FieldDescriptor
-	fd_Liquidation_liquidation_bonus_amount       protoreflect.FieldDescriptor
-	fd_Liquidation_protocol_liquidation_fee       protoreflect.FieldDescriptor
-	fd_Liquidation_unliquidated_collateral_amount protoreflect.FieldDescriptor
-	fd_Liquidation_liquidation_cet                protoreflect.FieldDescriptor
-	fd_Liquidation_settlement_tx                  protoreflect.FieldDescriptor
-	fd_Liquidation_settlement_tx_id               protoreflect.FieldDescriptor
-	fd_Liquidation_status                         protoreflect.FieldDescriptor
+	md_Liquidation                                     protoreflect.MessageDescriptor
+	fd_Liquidation_id                                  protoreflect.FieldDescriptor
+	fd_Liquidation_loan_id                             protoreflect.FieldDescriptor
+	fd_Liquidation_debtor                              protoreflect.FieldDescriptor
+	fd_Liquidation_dcm                                 protoreflect.FieldDescriptor
+	fd_Liquidation_collateral_amount                   protoreflect.FieldDescriptor
+	fd_Liquidation_actual_collateral_amount            protoreflect.FieldDescriptor
+	fd_Liquidation_debt_amount                         protoreflect.FieldDescriptor
+	fd_Liquidation_collateral_asset                    protoreflect.FieldDescriptor
+	fd_Liquidation_debt_asset                          protoreflect.FieldDescriptor
+	fd_Liquidation_liquidation_price                   protoreflect.FieldDescriptor
+	fd_Liquidation_liquidation_time                    protoreflect.FieldDescriptor
+	fd_Liquidation_liquidated_collateral_amount        protoreflect.FieldDescriptor
+	fd_Liquidation_liquidated_debt_amount              protoreflect.FieldDescriptor
+	fd_Liquidation_liquidation_bonus_amount            protoreflect.FieldDescriptor
+	fd_Liquidation_protocol_liquidation_fee            protoreflect.FieldDescriptor
+	fd_Liquidation_unliquidated_collateral_amount      protoreflect.FieldDescriptor
+	fd_Liquidation_accrued_interest_during_liquidation protoreflect.FieldDescriptor
+	fd_Liquidation_liquidation_cet                     protoreflect.FieldDescriptor
+	fd_Liquidation_settlement_tx                       protoreflect.FieldDescriptor
+	fd_Liquidation_settlement_tx_id                    protoreflect.FieldDescriptor
+	fd_Liquidation_status                              protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -709,6 +710,7 @@ func init() {
 	fd_Liquidation_liquidation_bonus_amount = md_Liquidation.Fields().ByName("liquidation_bonus_amount")
 	fd_Liquidation_protocol_liquidation_fee = md_Liquidation.Fields().ByName("protocol_liquidation_fee")
 	fd_Liquidation_unliquidated_collateral_amount = md_Liquidation.Fields().ByName("unliquidated_collateral_amount")
+	fd_Liquidation_accrued_interest_during_liquidation = md_Liquidation.Fields().ByName("accrued_interest_during_liquidation")
 	fd_Liquidation_liquidation_cet = md_Liquidation.Fields().ByName("liquidation_cet")
 	fd_Liquidation_settlement_tx = md_Liquidation.Fields().ByName("settlement_tx")
 	fd_Liquidation_settlement_tx_id = md_Liquidation.Fields().ByName("settlement_tx_id")
@@ -876,6 +878,12 @@ func (x *fastReflection_Liquidation) Range(f func(protoreflect.FieldDescriptor, 
 			return
 		}
 	}
+	if x.AccruedInterestDuringLiquidation != nil {
+		value := protoreflect.ValueOfMessage(x.AccruedInterestDuringLiquidation.ProtoReflect())
+		if !f(fd_Liquidation_accrued_interest_during_liquidation, value) {
+			return
+		}
+	}
 	if x.LiquidationCet != "" {
 		value := protoreflect.ValueOfString(x.LiquidationCet)
 		if !f(fd_Liquidation_liquidation_cet, value) {
@@ -947,6 +955,8 @@ func (x *fastReflection_Liquidation) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ProtocolLiquidationFee != nil
 	case "side.liquidation.Liquidation.unliquidated_collateral_amount":
 		return x.UnliquidatedCollateralAmount != nil
+	case "side.liquidation.Liquidation.accrued_interest_during_liquidation":
+		return x.AccruedInterestDuringLiquidation != nil
 	case "side.liquidation.Liquidation.liquidation_cet":
 		return x.LiquidationCet != ""
 	case "side.liquidation.Liquidation.settlement_tx":
@@ -1003,6 +1013,8 @@ func (x *fastReflection_Liquidation) Clear(fd protoreflect.FieldDescriptor) {
 		x.ProtocolLiquidationFee = nil
 	case "side.liquidation.Liquidation.unliquidated_collateral_amount":
 		x.UnliquidatedCollateralAmount = nil
+	case "side.liquidation.Liquidation.accrued_interest_during_liquidation":
+		x.AccruedInterestDuringLiquidation = nil
 	case "side.liquidation.Liquidation.liquidation_cet":
 		x.LiquidationCet = ""
 	case "side.liquidation.Liquidation.settlement_tx":
@@ -1075,6 +1087,9 @@ func (x *fastReflection_Liquidation) Get(descriptor protoreflect.FieldDescriptor
 	case "side.liquidation.Liquidation.unliquidated_collateral_amount":
 		value := x.UnliquidatedCollateralAmount
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "side.liquidation.Liquidation.accrued_interest_during_liquidation":
+		value := x.AccruedInterestDuringLiquidation
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "side.liquidation.Liquidation.liquidation_cet":
 		value := x.LiquidationCet
 		return protoreflect.ValueOfString(value)
@@ -1139,6 +1154,8 @@ func (x *fastReflection_Liquidation) Set(fd protoreflect.FieldDescriptor, value 
 		x.ProtocolLiquidationFee = value.Message().Interface().(*v1beta1.Coin)
 	case "side.liquidation.Liquidation.unliquidated_collateral_amount":
 		x.UnliquidatedCollateralAmount = value.Message().Interface().(*v1beta1.Coin)
+	case "side.liquidation.Liquidation.accrued_interest_during_liquidation":
+		x.AccruedInterestDuringLiquidation = value.Message().Interface().(*v1beta1.Coin)
 	case "side.liquidation.Liquidation.liquidation_cet":
 		x.LiquidationCet = value.Interface().(string)
 	case "side.liquidation.Liquidation.settlement_tx":
@@ -1222,6 +1239,11 @@ func (x *fastReflection_Liquidation) Mutable(fd protoreflect.FieldDescriptor) pr
 			x.UnliquidatedCollateralAmount = new(v1beta1.Coin)
 		}
 		return protoreflect.ValueOfMessage(x.UnliquidatedCollateralAmount.ProtoReflect())
+	case "side.liquidation.Liquidation.accrued_interest_during_liquidation":
+		if x.AccruedInterestDuringLiquidation == nil {
+			x.AccruedInterestDuringLiquidation = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.AccruedInterestDuringLiquidation.ProtoReflect())
 	case "side.liquidation.Liquidation.id":
 		panic(fmt.Errorf("field id of message side.liquidation.Liquidation is not mutable"))
 	case "side.liquidation.Liquidation.loan_id":
@@ -1294,6 +1316,9 @@ func (x *fastReflection_Liquidation) NewField(fd protoreflect.FieldDescriptor) p
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.liquidation.Liquidation.unliquidated_collateral_amount":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "side.liquidation.Liquidation.accrued_interest_during_liquidation":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "side.liquidation.Liquidation.liquidation_cet":
@@ -1436,6 +1461,10 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.UnliquidatedCollateralAmount)
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
+		if x.AccruedInterestDuringLiquidation != nil {
+			l = options.Size(x.AccruedInterestDuringLiquidation)
+			n += 2 + l + runtime.Sov(uint64(l))
+		}
 		l = len(x.LiquidationCet)
 		if l > 0 {
 			n += 2 + l + runtime.Sov(uint64(l))
@@ -1485,7 +1514,7 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0xa0
+			dAtA[i] = 0xa8
 		}
 		if len(x.SettlementTxId) > 0 {
 			i -= len(x.SettlementTxId)
@@ -1494,7 +1523,7 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0x9a
+			dAtA[i] = 0xa2
 		}
 		if len(x.SettlementTx) > 0 {
 			i -= len(x.SettlementTx)
@@ -1503,12 +1532,28 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0x92
+			dAtA[i] = 0x9a
 		}
 		if len(x.LiquidationCet) > 0 {
 			i -= len(x.LiquidationCet)
 			copy(dAtA[i:], x.LiquidationCet)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidationCet)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0x92
+		}
+		if x.AccruedInterestDuringLiquidation != nil {
+			encoded, err := options.Marshal(x.AccruedInterestDuringLiquidation)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x1
 			i--
@@ -2297,6 +2342,42 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 17:
 				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AccruedInterestDuringLiquidation", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.AccruedInterestDuringLiquidation == nil {
+					x.AccruedInterestDuringLiquidation = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.AccruedInterestDuringLiquidation); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 18:
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationCet", wireType)
 				}
 				var stringLen uint64
@@ -2327,7 +2408,7 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 				}
 				x.LiquidationCet = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 18:
+			case 19:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SettlementTx", wireType)
 				}
@@ -2359,7 +2440,7 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 				}
 				x.SettlementTx = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 19:
+			case 20:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SettlementTxId", wireType)
 				}
@@ -2391,7 +2472,7 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 				}
 				x.SettlementTxId = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 20:
+			case 21:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 				}
@@ -3461,26 +3542,27 @@ type Liquidation struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                           uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	LoanId                       string                 `protobuf:"bytes,2,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
-	Debtor                       string                 `protobuf:"bytes,3,opt,name=debtor,proto3" json:"debtor,omitempty"`
-	Dcm                          string                 `protobuf:"bytes,4,opt,name=dcm,proto3" json:"dcm,omitempty"`
-	CollateralAmount             *v1beta1.Coin          `protobuf:"bytes,5,opt,name=collateral_amount,json=collateralAmount,proto3" json:"collateral_amount,omitempty"`
-	ActualCollateralAmount       *v1beta1.Coin          `protobuf:"bytes,6,opt,name=actual_collateral_amount,json=actualCollateralAmount,proto3" json:"actual_collateral_amount,omitempty"`
-	DebtAmount                   *v1beta1.Coin          `protobuf:"bytes,7,opt,name=debt_amount,json=debtAmount,proto3" json:"debt_amount,omitempty"`
-	CollateralAsset              *AssetMetadata         `protobuf:"bytes,8,opt,name=collateral_asset,json=collateralAsset,proto3" json:"collateral_asset,omitempty"`
-	DebtAsset                    *AssetMetadata         `protobuf:"bytes,9,opt,name=debt_asset,json=debtAsset,proto3" json:"debt_asset,omitempty"`
-	LiquidationPrice             string                 `protobuf:"bytes,10,opt,name=liquidation_price,json=liquidationPrice,proto3" json:"liquidation_price,omitempty"`
-	LiquidationTime              *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=liquidation_time,json=liquidationTime,proto3" json:"liquidation_time,omitempty"`
-	LiquidatedCollateralAmount   *v1beta1.Coin          `protobuf:"bytes,12,opt,name=liquidated_collateral_amount,json=liquidatedCollateralAmount,proto3" json:"liquidated_collateral_amount,omitempty"`
-	LiquidatedDebtAmount         *v1beta1.Coin          `protobuf:"bytes,13,opt,name=liquidated_debt_amount,json=liquidatedDebtAmount,proto3" json:"liquidated_debt_amount,omitempty"`
-	LiquidationBonusAmount       *v1beta1.Coin          `protobuf:"bytes,14,opt,name=liquidation_bonus_amount,json=liquidationBonusAmount,proto3" json:"liquidation_bonus_amount,omitempty"`
-	ProtocolLiquidationFee       *v1beta1.Coin          `protobuf:"bytes,15,opt,name=protocol_liquidation_fee,json=protocolLiquidationFee,proto3" json:"protocol_liquidation_fee,omitempty"`
-	UnliquidatedCollateralAmount *v1beta1.Coin          `protobuf:"bytes,16,opt,name=unliquidated_collateral_amount,json=unliquidatedCollateralAmount,proto3" json:"unliquidated_collateral_amount,omitempty"`
-	LiquidationCet               string                 `protobuf:"bytes,17,opt,name=liquidation_cet,json=liquidationCet,proto3" json:"liquidation_cet,omitempty"`
-	SettlementTx                 string                 `protobuf:"bytes,18,opt,name=settlement_tx,json=settlementTx,proto3" json:"settlement_tx,omitempty"`
-	SettlementTxId               string                 `protobuf:"bytes,19,opt,name=settlement_tx_id,json=settlementTxId,proto3" json:"settlement_tx_id,omitempty"`
-	Status                       LiquidationStatus      `protobuf:"varint,20,opt,name=status,proto3,enum=side.liquidation.LiquidationStatus" json:"status,omitempty"`
+	Id                               uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	LoanId                           string                 `protobuf:"bytes,2,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
+	Debtor                           string                 `protobuf:"bytes,3,opt,name=debtor,proto3" json:"debtor,omitempty"`
+	Dcm                              string                 `protobuf:"bytes,4,opt,name=dcm,proto3" json:"dcm,omitempty"`
+	CollateralAmount                 *v1beta1.Coin          `protobuf:"bytes,5,opt,name=collateral_amount,json=collateralAmount,proto3" json:"collateral_amount,omitempty"`
+	ActualCollateralAmount           *v1beta1.Coin          `protobuf:"bytes,6,opt,name=actual_collateral_amount,json=actualCollateralAmount,proto3" json:"actual_collateral_amount,omitempty"`
+	DebtAmount                       *v1beta1.Coin          `protobuf:"bytes,7,opt,name=debt_amount,json=debtAmount,proto3" json:"debt_amount,omitempty"`
+	CollateralAsset                  *AssetMetadata         `protobuf:"bytes,8,opt,name=collateral_asset,json=collateralAsset,proto3" json:"collateral_asset,omitempty"`
+	DebtAsset                        *AssetMetadata         `protobuf:"bytes,9,opt,name=debt_asset,json=debtAsset,proto3" json:"debt_asset,omitempty"`
+	LiquidationPrice                 string                 `protobuf:"bytes,10,opt,name=liquidation_price,json=liquidationPrice,proto3" json:"liquidation_price,omitempty"`
+	LiquidationTime                  *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=liquidation_time,json=liquidationTime,proto3" json:"liquidation_time,omitempty"`
+	LiquidatedCollateralAmount       *v1beta1.Coin          `protobuf:"bytes,12,opt,name=liquidated_collateral_amount,json=liquidatedCollateralAmount,proto3" json:"liquidated_collateral_amount,omitempty"`
+	LiquidatedDebtAmount             *v1beta1.Coin          `protobuf:"bytes,13,opt,name=liquidated_debt_amount,json=liquidatedDebtAmount,proto3" json:"liquidated_debt_amount,omitempty"`
+	LiquidationBonusAmount           *v1beta1.Coin          `protobuf:"bytes,14,opt,name=liquidation_bonus_amount,json=liquidationBonusAmount,proto3" json:"liquidation_bonus_amount,omitempty"`
+	ProtocolLiquidationFee           *v1beta1.Coin          `protobuf:"bytes,15,opt,name=protocol_liquidation_fee,json=protocolLiquidationFee,proto3" json:"protocol_liquidation_fee,omitempty"`
+	UnliquidatedCollateralAmount     *v1beta1.Coin          `protobuf:"bytes,16,opt,name=unliquidated_collateral_amount,json=unliquidatedCollateralAmount,proto3" json:"unliquidated_collateral_amount,omitempty"`
+	AccruedInterestDuringLiquidation *v1beta1.Coin          `protobuf:"bytes,17,opt,name=accrued_interest_during_liquidation,json=accruedInterestDuringLiquidation,proto3" json:"accrued_interest_during_liquidation,omitempty"`
+	LiquidationCet                   string                 `protobuf:"bytes,18,opt,name=liquidation_cet,json=liquidationCet,proto3" json:"liquidation_cet,omitempty"`
+	SettlementTx                     string                 `protobuf:"bytes,19,opt,name=settlement_tx,json=settlementTx,proto3" json:"settlement_tx,omitempty"`
+	SettlementTxId                   string                 `protobuf:"bytes,20,opt,name=settlement_tx_id,json=settlementTxId,proto3" json:"settlement_tx_id,omitempty"`
+	Status                           LiquidationStatus      `protobuf:"varint,21,opt,name=status,proto3,enum=side.liquidation.LiquidationStatus" json:"status,omitempty"`
 }
 
 func (x *Liquidation) Reset() {
@@ -3611,6 +3693,13 @@ func (x *Liquidation) GetProtocolLiquidationFee() *v1beta1.Coin {
 func (x *Liquidation) GetUnliquidatedCollateralAmount() *v1beta1.Coin {
 	if x != nil {
 		return x.UnliquidatedCollateralAmount
+	}
+	return nil
+}
+
+func (x *Liquidation) GetAccruedInterestDuringLiquidation() *v1beta1.Coin {
+	if x != nil {
+		return x.AccruedInterestDuringLiquidation
 	}
 	return nil
 }
@@ -3750,7 +3839,7 @@ var file_side_liquidation_liquidation_proto_rawDesc = []byte{
 	0x65, 0x53, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x12, 0x2d, 0x0a, 0x13, 0x69, 0x73, 0x5f, 0x62, 0x61,
 	0x73, 0x65, 0x5f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x5f, 0x61, 0x73, 0x73, 0x65, 0x74, 0x18, 0x05,
 	0x20, 0x01, 0x28, 0x08, 0x52, 0x10, 0x69, 0x73, 0x42, 0x61, 0x73, 0x65, 0x50, 0x72, 0x69, 0x63,
-	0x65, 0x41, 0x73, 0x73, 0x65, 0x74, 0x22, 0xa9, 0x0a, 0x0a, 0x0b, 0x4c, 0x69, 0x71, 0x75, 0x69,
+	0x65, 0x41, 0x73, 0x73, 0x65, 0x74, 0x22, 0x99, 0x0b, 0x0a, 0x0b, 0x4c, 0x69, 0x71, 0x75, 0x69,
 	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x6f, 0x61, 0x6e, 0x5f, 0x69,
 	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6c, 0x6f, 0x61, 0x6e, 0x49, 0x64, 0x12,
@@ -3821,16 +3910,23 @@ var file_side_liquidation_liquidation_proto_rawDesc = []byte{
 	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62,
 	0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
 	0x1c, 0x75, 0x6e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6c,
-	0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x27, 0x0a,
+	0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x6e, 0x0a,
+	0x23, 0x61, 0x63, 0x63, 0x72, 0x75, 0x65, 0x64, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73,
+	0x74, 0x5f, 0x64, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x11, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31,
+	0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x20, 0x61, 0x63, 0x63,
+	0x72, 0x75, 0x65, 0x64, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x44, 0x75, 0x72, 0x69,
+	0x6e, 0x67, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x27, 0x0a,
 	0x0f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74,
-	0x18, 0x11, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74,
+	0x18, 0x12, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74,
 	0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x23, 0x0a, 0x0d, 0x73, 0x65, 0x74, 0x74, 0x6c, 0x65,
-	0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x74, 0x78, 0x18, 0x12, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x73,
+	0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x74, 0x78, 0x18, 0x13, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x73,
 	0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x54, 0x78, 0x12, 0x28, 0x0a, 0x10, 0x73,
 	0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x74, 0x78, 0x5f, 0x69, 0x64, 0x18,
-	0x13, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x73, 0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e,
+	0x14, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x73, 0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e,
 	0x74, 0x54, 0x78, 0x49, 0x64, 0x12, 0x3b, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18,
-	0x14, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x69, 0x71,
+	0x15, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x23, 0x2e, 0x73, 0x69, 0x64, 0x65, 0x2e, 0x6c, 0x69, 0x71,
 	0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
 	0x74, 0x69, 0x6f, 0x6e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74,
 	0x75, 0x73, 0x22, 0xf8, 0x02, 0x0a, 0x11, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
@@ -3922,16 +4018,17 @@ var file_side_liquidation_liquidation_proto_depIdxs = []int32{
 	5,  // 8: side.liquidation.Liquidation.liquidation_bonus_amount:type_name -> cosmos.base.v1beta1.Coin
 	5,  // 9: side.liquidation.Liquidation.protocol_liquidation_fee:type_name -> cosmos.base.v1beta1.Coin
 	5,  // 10: side.liquidation.Liquidation.unliquidated_collateral_amount:type_name -> cosmos.base.v1beta1.Coin
-	0,  // 11: side.liquidation.Liquidation.status:type_name -> side.liquidation.LiquidationStatus
-	5,  // 12: side.liquidation.LiquidationRecord.debt_amount:type_name -> cosmos.base.v1beta1.Coin
-	5,  // 13: side.liquidation.LiquidationRecord.collateral_amount:type_name -> cosmos.base.v1beta1.Coin
-	5,  // 14: side.liquidation.LiquidationRecord.bonus_amount:type_name -> cosmos.base.v1beta1.Coin
-	6,  // 15: side.liquidation.LiquidationRecord.time:type_name -> google.protobuf.Timestamp
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	5,  // 11: side.liquidation.Liquidation.accrued_interest_during_liquidation:type_name -> cosmos.base.v1beta1.Coin
+	0,  // 12: side.liquidation.Liquidation.status:type_name -> side.liquidation.LiquidationStatus
+	5,  // 13: side.liquidation.LiquidationRecord.debt_amount:type_name -> cosmos.base.v1beta1.Coin
+	5,  // 14: side.liquidation.LiquidationRecord.collateral_amount:type_name -> cosmos.base.v1beta1.Coin
+	5,  // 15: side.liquidation.LiquidationRecord.bonus_amount:type_name -> cosmos.base.v1beta1.Coin
+	6,  // 16: side.liquidation.LiquidationRecord.time:type_name -> google.protobuf.Timestamp
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_side_liquidation_liquidation_proto_init() }

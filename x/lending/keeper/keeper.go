@@ -70,9 +70,6 @@ func NewKeeper(
 		authority:         authority,
 	}
 
-	// set liquidated debt handler for liquidation
-	liquidationKeeper.SetLiquidatedDebtHandler(k.HandleLiquidatedDebt)
-
 	// register signing request completed handler
 	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
 

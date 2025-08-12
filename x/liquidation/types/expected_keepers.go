@@ -55,3 +55,10 @@ type BtcBridgeKeeper interface {
 	GetFeeRate(ctx sdk.Context) *btcbridgetypes.FeeRate
 	CheckFeeRate(ctx sdk.Context, feeRate *btcbridgetypes.FeeRate) error
 }
+
+// LendingKeeper defines the expected lending keeper interface
+type LendingKeeper interface {
+	GetLiquidationAccruedInterest(ctx sdk.Context, loanId string) sdkmath.Int
+
+	HandleLiquidatedDebt(ctx sdk.Context, liquidationId uint64, loanId string, moduleAccount string, debtAmount sdk.Coin, accruedInterestDuringLiquidation sdkmath.Int) error
+}

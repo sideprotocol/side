@@ -45,10 +45,11 @@ message Liquidation {
     cosmos.base.v1beta1.Coin liquidation_bonus_amount = 14 [(gogoproto.nullable) = false];
     cosmos.base.v1beta1.Coin protocol_liquidation_fee = 15 [(gogoproto.nullable) = false];
     cosmos.base.v1beta1.Coin unliquidated_collateral_amount = 16 [(gogoproto.nullable) = false];
-    string liquidation_cet = 17;
-    string settlement_tx = 18;
-    string settlement_tx_id = 19;
-    LiquidationStatus status = 20;
+    cosmos.base.v1beta1.Coin accrued_interest_during_liquidation = 17 [(gogoproto.nullable) = false];
+    string liquidation_cet = 18;
+    string settlement_tx = 19;
+    string settlement_tx_id = 20;
+    LiquidationStatus status = 21;
 }
 
 message LiquidationRecord {
