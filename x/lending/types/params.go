@@ -11,7 +11,7 @@ import (
 
 var (
 	// minimum final timeout duration
-	MinFinalTimeoutDuration = 30 * 24 * time.Hour // 30 days
+	MinFinalTimeoutDuration = 90 * 24 * time.Hour // 90 days
 
 	// default final timeout duration
 	DefaultFinalTimeoutDuration = 365 * 24 * time.Hour // 365 days
