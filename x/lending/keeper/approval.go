@@ -71,6 +71,10 @@ func (k Keeper) HandleApproval(ctx sdk.Context, loan *types.Loan) error {
 // approve performs the loan disbursement
 func (k Keeper) approve(ctx sdk.Context, loan *types.Loan) error {
 	pool := k.GetPool(ctx, loan.PoolId)
+	if pool.Status != types.PoolStatus_ACTIVE {
+		return types.ErrPoolNotActive
+	}
+
 	if pool.AvailableAmount.LT(loan.BorrowAmount.Amount) {
 		return types.ErrInsufficientLiquidity
 	}
