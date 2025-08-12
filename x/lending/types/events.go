@@ -21,7 +21,7 @@ const (
 	AttributeKeyBorrowerPubKey     = "borrower_pub_key"
 	AttributeKeyBorrowerAuthPubKey = "borrower_auth_pub_key"
 	AttributeKeyDCMPubKey          = "dcm_pub_key"
-	AttributeKeyMuturityTime       = "muturity_time"
+	AttributeKeyMaturityTime       = "maturity_time"
 	AttributeKeyFinalTimeout       = "final_timeout"
 	AttributeKeyPoolId             = "pool_id"
 	AttributeKeyBorrowAmount       = "borrow_amount"

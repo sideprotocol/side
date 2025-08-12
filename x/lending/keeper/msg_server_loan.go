@@ -130,7 +130,7 @@ func (m msgServer) Apply(goCtx context.Context, msg *types.MsgApply) (*types.Msg
 			sdk.NewAttribute(types.AttributeKeyBorrowerPubKey, loan.BorrowerPubKey),
 			sdk.NewAttribute(types.AttributeKeyBorrowerAuthPubKey, loan.BorrowerAuthPubKey),
 			sdk.NewAttribute(types.AttributeKeyDCMPubKey, loan.DCM),
-			sdk.NewAttribute(types.AttributeKeyMuturityTime, fmt.Sprint(loan.MaturityTime)),
+			sdk.NewAttribute(types.AttributeKeyMaturityTime, fmt.Sprint(loan.MaturityTime)),
 			sdk.NewAttribute(types.AttributeKeyFinalTimeout, fmt.Sprint(loan.FinalTimeout)),
 			sdk.NewAttribute(types.AttributeKeyPoolId, loan.PoolId),
 			sdk.NewAttribute(types.AttributeKeyBorrowAmount, loan.BorrowAmount.String()),
