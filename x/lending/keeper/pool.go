@@ -148,9 +148,10 @@ func (k Keeper) RebalancePool(ctx sdk.Context, poolId string, maturity int64, to
 //
 // Formula:
 //
-// borrow rate = borrowAPR / blocksPerYear * (1-reserve factor)
-// borrowIndex_new = borrowIndex_old * (1+borrow rate)
-// totalBorrowed_new = totalBorrowed_old * borrowIndex_new/borrowIndex_old
+// borrowRatePerBlock = borrowAPR / blocksPerYear
+// borrowIndexRatio = 1 + borrowRatePerBlock
+// borrowIndex_new = borrowIndex_old * borrowIndexRatio
+// totalBorrowed_new = totalBorrowed_old * borrowIndexRatio
 func (k Keeper) UpdatePoolTranches(ctx sdk.Context, pool *types.LendingPool) {
 	// get blocks per year
 	blocksPerYear := k.GetBlocksPerYear(ctx)
