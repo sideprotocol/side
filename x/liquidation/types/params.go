@@ -12,6 +12,9 @@ var (
 	// default minimum liquidation factor
 	DefaultMinLiquidationFactor = sdkmath.LegacyMustNewDecFromStr("0.02") // 2%
 
+	// maximum liquidation bonus factor
+	MaxLiquidationBonusFactor = sdkmath.LegacyMustNewDecFromStr("0.1") // 10%
+
 	// default liquidation bonus factor
 	DefaultLiquidationBonusFactor = sdkmath.LegacyMustNewDecFromStr("0.05") // 5%
 
@@ -40,7 +43,7 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid minimum liquidation factor")
 	}
 
-	if !p.LiquidationBonusFactor.IsPositive() || p.LiquidationBonusFactor.GTE(sdkmath.LegacyOneDec()) {
+	if !p.LiquidationBonusFactor.IsPositive() || p.LiquidationBonusFactor.GT(MaxLiquidationBonusFactor) {
 		return errorsmod.Wrap(ErrInvalidParams, "invalid liquidation bonus factor")
 	}
 
