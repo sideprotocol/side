@@ -195,14 +195,14 @@ func handleRepayments(ctx sdk.Context, k keeper.Keeper) error {
 	return unexpectedErr
 }
 
-// updatePools updates all active pools at the beginning of each block
+// updatePools updates pools at the beginning of each block
 func updatePools(ctx sdk.Context, k keeper.Keeper) {
-	// get all active pools
-	pools := k.GetPools(ctx, types.PoolStatus_ACTIVE)
+	k.IteratePools(ctx, func(pool *types.LendingPool) (stop bool) {
+		if pool.Status != types.PoolStatus_INACTIVE {
+			k.UpdatePool(ctx, pool)
+			k.SetPool(ctx, pool)
+		}
 
-	for _, pool := range pools {
-		k.UpdatePool(ctx, pool)
-
-		k.SetPool(ctx, pool)
-	}
+		return false
+	})
 }
