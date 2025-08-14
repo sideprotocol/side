@@ -77,6 +77,8 @@ message Params {
   IBCParams ibc_params = 15 [(gogoproto.nullable) = false];
   // Rate limit params
   RateLimitParams rate_limit_params = 16 [(gogoproto.nullable) = false];
+  // Fee sponsorship params
+  FeeSponsorshipParams fee_sponsorship_params = 17 [(gogoproto.nullable) = false];
 }
 
 // AssetType defines the type of asset
@@ -170,4 +172,13 @@ message IBCParams {
   uint64 timeout_height_offset = 1;
   // Timeout duration relative to the current time
   google.protobuf.Duration timeout_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// FeeSponsorshipParams defines the params related to fee sponsorship
+message FeeSponsorshipParams {
+  // Maximum sponsorship fee per tx
+  repeated cosmos.base.v1beta1.Coin max_sponsor_fee = 1 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }

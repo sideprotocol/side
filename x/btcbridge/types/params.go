@@ -11,6 +11,7 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
@@ -60,6 +61,9 @@ var (
 
 	// default IBC timeout duration
 	DefaultIBCTimeoutDuration = time.Duration(3600) * time.Second // 1 hour
+
+	// default maximum sponsorship fee
+	DefaultMaxSponsorFee = sdk.NewCoins(sdk.NewCoin("ubtw", sdkmath.NewInt(200))) // 200 UBTW
 )
 
 // NewParams creates a new Params instance
@@ -107,6 +111,9 @@ func NewParams() Params {
 		IbcParams: IBCParams{
 			TimeoutHeightOffset: DefaultIBCTimeoutHeightOffset,
 			TimeoutDuration:     DefaultIBCTimeoutDuration,
+		},
+		FeeSponsorshipParams: FeeSponsorshipParams{
+			MaxSponsorFee: DefaultMaxSponsorFee,
 		},
 	}
 }
@@ -158,7 +165,11 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	return validateIBCParams(&p.IbcParams)
+	if err := validateIBCParams(&p.IbcParams); err != nil {
+		return err
+	}
+
+	return validateFeeSponsorshipParams(&p.FeeSponsorshipParams)
 }
 
 // SelectVaultByAddress returns the vault by the given address
@@ -365,4 +376,9 @@ func validateIBCParams(params *IBCParams) error {
 	}
 
 	return nil
+}
+
+// validateFeeSponsorshipParams validates the given fee sponsorship params
+func validateFeeSponsorshipParams(params *FeeSponsorshipParams) error {
+	return params.MaxSponsorFee.Validate()
 }

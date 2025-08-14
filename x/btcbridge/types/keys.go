@@ -16,6 +16,9 @@ const (
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_btcbridge"
+
+	// FeeSponsorName defines the gas fee sponsor module account name
+	FeeSponsorName = "fee_sponsor"
 )
 
 var (

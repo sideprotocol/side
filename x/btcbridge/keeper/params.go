@@ -114,6 +114,16 @@ func (k Keeper) IBCTimeoutDuration(ctx sdk.Context) time.Duration {
 	return k.GetParams(ctx).IbcParams.TimeoutDuration
 }
 
+// MaxSponsorFee gets the maximum sponsorship fee
+func (k Keeper) MaxSponsorFee(ctx sdk.Context) sdk.Coins {
+	return k.GetParams(ctx).FeeSponsorshipParams.MaxSponsorFee
+}
+
+// FeeSponsorshipEnabled returns true if fee sponsorship enabled, false otherwise
+func (k Keeper) FeeSponsorshipEnabled(ctx sdk.Context) bool {
+	return !k.GetParams(ctx).FeeSponsorshipParams.MaxSponsorFee.Empty()
+}
+
 // IsTrustedNonBtcRelayer returns true if the given address is a trusted non-btc relayer, false otherwise
 func (k Keeper) IsTrustedNonBtcRelayer(ctx sdk.Context, addr string) bool {
 	for _, relayer := range k.GetParams(ctx).TrustedNonBtcRelayers {

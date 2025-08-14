@@ -42,6 +42,12 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	if moduleAcc == nil {
 		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
 	}
+
+	// check if the fee sponsor module account exists
+	moduleAcc = k.GetFeeSponsorAccount(ctx)
+	if moduleAcc == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.FeeSponsorName))
+	}
 }
 
 // ExportGenesis returns the module's exported genesis

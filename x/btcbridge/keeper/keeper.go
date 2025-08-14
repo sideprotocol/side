@@ -62,6 +62,11 @@ func NewKeeper(
 		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
 	}
 
+	// ensure the fee sponsor module account is set
+	if addr := authKeeper.GetModuleAddress(types.FeeSponsorName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.FeeSponsorName))
+	}
+
 	return &Keeper{
 		cdc:                 cdc,
 		storeKey:            storeKey,
@@ -102,6 +107,10 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 
 func (k Keeper) GetModuleAccount(ctx sdk.Context) sdk.ModuleAccountI {
 	return k.authKeeper.GetModuleAccount(ctx, types.ModuleName)
+}
+
+func (k Keeper) GetFeeSponsorAccount(ctx sdk.Context) sdk.ModuleAccountI {
+	return k.authKeeper.GetModuleAccount(ctx, types.FeeSponsorName)
 }
 
 func (k Keeper) BankKeeper() types.BankKeeper {

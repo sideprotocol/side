@@ -8,6 +8,15 @@ import (
 	"path/filepath"
 	"sort"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/spf13/cast"
+
+	"github.com/CosmWasm/wasmd/x/wasm"
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+
+	abci "github.com/cometbft/cometbft/abci/types"
+
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
 	"cosmossdk.io/client/v2/autocli"
@@ -24,7 +33,6 @@ import (
 	"cosmossdk.io/x/upgrade"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-	abci "github.com/cometbft/cometbft/abci/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -45,7 +53,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
@@ -119,12 +126,6 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	solomachine "github.com/cosmos/ibc-go/v8/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/spf13/cast"
-
-	"github.com/CosmWasm/wasmd/x/wasm"
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	"github.com/sideprotocol/side/bitcoin"
 	"github.com/sideprotocol/side/docs"
@@ -237,6 +238,7 @@ var (
 		wasmtypes.ModuleName:                {authtypes.Burner},
 		tsstypes.ModuleName:                 nil,
 		btcbridgetypes.ModuleName:           {authtypes.Minter, authtypes.Burner},
+		btcbridgetypes.FeeSponsorName:       nil,
 		incentivetypes.ModuleName:           nil,
 		liquidationtypes.ModuleName:         nil,
 		dlctypes.ModuleName:                 nil,
@@ -1048,12 +1050,13 @@ func New(
 	app.MountMemoryStores(memKeys)
 
 	// create ante handler
-	anteHandler, err := ante.NewAnteHandler(
-		ante.HandlerOptions{
-			AccountKeeper:   app.AccountKeeper,
+	anteHandler, err := NewAnteHandler(
+		HandlerOptions{
+			AccountKeeper:   &app.AccountKeeper,
 			BankKeeper:      app.BankKeeper,
+			FeegrantKeeper:  &app.FeeGrantKeeper,
+			BtcBridgeKeeper: &app.BtcBridgeKeeper,
 			SignModeHandler: txConfig.SignModeHandler(),
-			FeegrantKeeper:  app.FeeGrantKeeper,
 			SigGasConsumer:  bitcoin.DefaultSigVerificationGasConsumer,
 		},
 	)
@@ -1326,6 +1329,7 @@ func BlockedAddresses() map[string]bool {
 
 	// allow the following addresses to receive funds
 	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
+	delete(modAccAddrs, authtypes.NewModuleAddress(btcbridgetypes.FeeSponsorName).String())
 	delete(modAccAddrs, authtypes.NewModuleAddress(incentivetypes.ModuleName).String())
 	delete(modAccAddrs, authtypes.NewModuleAddress(farmingtypes.ModuleName).String())
 
