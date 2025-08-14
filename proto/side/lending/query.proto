@@ -86,7 +86,7 @@ service Query {
     }
 
     rpc Referrer(QueryReferrerRequest) returns (QueryReferrerResponse) {
-        option (google.api.http).get = "/bitway/lending/referrer/{referral_code}";
+        option (google.api.http).get = "/side/lending/referrer/{referral_code}";
     }
 
     rpc Referrers(QueryReferrersRequest) returns (QueryReferrersResponse) {

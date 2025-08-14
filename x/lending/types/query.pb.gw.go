@@ -1790,7 +1790,7 @@ var (
 
 	pattern_Query_CurrentInterest_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"side", "lending", "loan", "current_interest"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Referrer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"bitway", "lending", "referrer", "referral_code"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Referrer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"side", "lending", "referrer", "referral_code"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_Referrers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"side", "lending", "referrers"}, "", runtime.AssumeColonVerbOpt(false)))
 )
