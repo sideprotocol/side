@@ -386,10 +386,7 @@ func (k Keeper) GetCurrentInterest(ctx sdk.Context, loan *types.Loan) sdk.Coin {
 		repayment := k.GetRepayment(ctx, loan.VaultAddress)
 		interest = repayment.Amount.Sub(loan.BorrowAmount).Amount
 
-	case types.LoanStatus_Defaulted:
-		interest = loan.Interest
-
-	case types.LoanStatus_Liquidated:
+	case types.LoanStatus_Defaulted, types.LoanStatus_Liquidated:
 		liquidation := k.liquidationKeeper.GetLiquidation(ctx, loan.LiquidationId)
 		interest = liquidation.DebtAmount.Amount.Sub(loan.BorrowAmount.Amount)
 

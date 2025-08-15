@@ -32,7 +32,7 @@ func (k Keeper) HandleLiquidation(ctx sdk.Context, loan *types.Loan) {
 
 	// check if the loan has defaulted
 	if ctx.BlockTime().Unix() >= loan.MaturityTime {
-		liquidationInterest = loan.Interest
+		liquidationInterest = k.GetCurrentInterest(ctx, loan).Amount
 		loan.Status = types.LoanStatus_Defaulted
 
 		liquidationCet = dlcMeta.DefaultLiquidationCet.Tx
