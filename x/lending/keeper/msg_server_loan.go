@@ -314,6 +314,16 @@ func (m msgServer) Redeem(goCtx context.Context, msg *types.MsgRedeem) (*types.M
 	internalKey, _ := hex.DecodeString(dlcMeta.InternalKey)
 	script, controlBlock, _ := types.UnwrapLeafScript(dlcMeta.RepaymentScript)
 
+	witnessSize := types.GetCetWitnessSize(types.CetType_REPAYMENT, script, controlBlock)
+
+	if err := types.CheckCetFeeRate(p, witnessSize, 0, 0); err != nil {
+		return nil, err
+	}
+
+	if err := types.CheckTransactionWeight(p.UnsignedTx, witnessSize); err != nil {
+		return nil, err
+	}
+
 	sigHashes := []string{}
 
 	for i, ti := range p.UnsignedTx.TxIn {

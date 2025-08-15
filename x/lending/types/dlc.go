@@ -128,9 +128,9 @@ func VerifyLiquidationCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkSc
 		return err
 	}
 
-	witnessSize := getCetWitnessSize(CetType_LIQUIDATION, script, controlBlock)
+	witnessSize := GetCetWitnessSize(CetType_LIQUIDATION, script, controlBlock)
 
-	if err := checkCetFeeRate(p, witnessSize, currentFeeRate, maxFeeRateMultiplier); err != nil {
+	if err := CheckCetFeeRate(p, witnessSize, currentFeeRate, maxFeeRateMultiplier); err != nil {
 		return err
 	}
 
@@ -221,9 +221,9 @@ func VerifyRepaymentCet(dlcMeta *DLCMeta, depositTxs []*psbt.Packet, vaultPkScri
 		return err
 	}
 
-	witnessSize := getCetWitnessSize(CetType_REPAYMENT, script, controlBlock)
+	witnessSize := GetCetWitnessSize(CetType_REPAYMENT, script, controlBlock)
 
-	if err := checkCetFeeRate(p, witnessSize, 0, 0); err != nil {
+	if err := CheckCetFeeRate(p, witnessSize, 0, 0); err != nil {
 		return err
 	}
 
@@ -524,6 +524,36 @@ func UnwrapLeafScript(leafScript LeafScript) ([]byte, []byte, error) {
 	return script, controlBlock, nil
 }
 
+// CheckCetFeeRate checks the fee rate of the given cet
+func CheckCetFeeRate(p *psbt.Packet, witnessSize int, currentFeeRate int64, maxFeeRateMultiplier int64) error {
+	virtualSize := GetTxVirtualSize(p.UnsignedTx, witnessSize)
+
+	fee, err := p.GetTxFee()
+	if err != nil {
+		return errorsmod.Wrapf(ErrInvalidCET, "failed to get tx fee: %v", err)
+	}
+
+	if int64(fee) < virtualSize {
+		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
+	}
+
+	if maxFeeRateMultiplier > 0 && int64(fee) > virtualSize*currentFeeRate*maxFeeRateMultiplier {
+		return errorsmod.Wrap(ErrInvalidCET, "too high fee rate")
+	}
+
+	return nil
+}
+
+// GetCetWitnessSize gets the cet witness size according to the given params
+// NOTE: The final signature is 64 bytes due to that the sig hash type is SigHashDefault currently.
+func GetCetWitnessSize(cetType CetType, script []byte, controlBlock []byte) int {
+	switch cetType {
+	default:
+		// dcm signature(64) + borrower signature(64) + len(script) + len(control block)
+		return 64 + 64 + len(script) + len(controlBlock)
+	}
+}
+
 // ParseDepositTxs parses the given deposit txs
 // Assume that the given deposit txs are valid psbts
 func ParseDepositTxs(depositTxs []string, vaultPkScript []byte) ([]*psbt.Packet, []string, sdkmath.Int, error) {
@@ -596,34 +626,4 @@ func getVaultUtxosFromDepositTx(depositTx *psbt.Packet, vaultPkScript []byte) ([
 	}
 
 	return utxos, nil
-}
-
-// checkCetFeeRate checks the fee rate of the given cet
-func checkCetFeeRate(p *psbt.Packet, witnessSize int, currentFeeRate int64, maxFeeRateMultiplier int64) error {
-	virtualSize := GetTxVirtualSize(p.UnsignedTx, witnessSize)
-
-	fee, err := p.GetTxFee()
-	if err != nil {
-		return errorsmod.Wrapf(ErrInvalidCET, "failed to get tx fee: %v", err)
-	}
-
-	if int64(fee) < virtualSize {
-		return errorsmod.Wrap(ErrInvalidCET, "too low fee rate")
-	}
-
-	if maxFeeRateMultiplier > 0 && int64(fee) > virtualSize*currentFeeRate*maxFeeRateMultiplier {
-		return errorsmod.Wrap(ErrInvalidCET, "too high fee rate")
-	}
-
-	return nil
-}
-
-// getCetWitnessSize gets the cet witness size according to the given params
-// NOTE: The final signature is 64 bytes due to that the sig hash type is SigHashDefault currently.
-func getCetWitnessSize(cetType CetType, script []byte, controlBlock []byte) int {
-	switch cetType {
-	default:
-		// dcm signature(64) + borrower signature(64) + len(script) + len(control block)
-		return 64 + 64 + len(script) + len(controlBlock)
-	}
 }
