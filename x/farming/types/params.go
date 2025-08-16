@@ -57,6 +57,15 @@ func (p Params) Validate() error {
 	return nil
 }
 
+// ValidateParamsUpdate validates the given params update
+func ValidateParamsUpdate(params Params, newParams Params) error {
+	if newParams.RewardPerEpoch.Denom != params.RewardPerEpoch.Denom {
+		return errorsmod.Wrap(ErrInvalidParams, "reward denom cannot be updated")
+	}
+
+	return nil
+}
+
 // validateEpochDuration validates the given epoch duration
 func validateEpochDuration(p Params) error {
 	if p.EpochDuration < 0 {

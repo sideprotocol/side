@@ -221,6 +221,11 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	// get the current params
 	params := m.GetParams(ctx)
 
+	// validate params update
+	if err := types.ValidateParamsUpdate(params, msg.Params); err != nil {
+		return nil, err
+	}
+
 	// update params
 	m.SetParams(ctx, msg.Params)
 
