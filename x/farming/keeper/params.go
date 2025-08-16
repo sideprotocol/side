@@ -60,19 +60,3 @@ func (k Keeper) Asset(ctx sdk.Context, denom string) types.Asset {
 
 	return types.Asset{}
 }
-
-// OnParamsChanged is called when the params are changed
-func (k Keeper) OnParamsChanged(ctx sdk.Context, params types.Params, newParams types.Params) {
-	if !params.Enabled && newParams.Enabled {
-		// start the new epoch when farming enabled or re-enabled
-		k.NewEpoch(ctx)
-	} else if params.Enabled && !newParams.Enabled {
-		// remove the staking queue for the current epoch
-		k.RemoveCurrentEpochStakingQueue(ctx)
-
-		// end the current epoch
-		currentEpoch := k.GetCurrentEpoch(ctx)
-		currentEpoch.Status = types.EpochStatus_EPOCH_STATUS_ENDED
-		k.SetEpoch(ctx, currentEpoch)
-	}
-}

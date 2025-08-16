@@ -82,16 +82,6 @@ func (k Keeper) RemoveFromCurrentEpochStakingQueue(ctx sdk.Context, staking *typ
 	store.Delete(types.CurrentEpochStakingQueueByAddressKey(staking.Address, staking.Id))
 }
 
-// RemoveCurrentEpochStakingQueue removes the staking queue for the current epoch
-func (k Keeper) RemoveCurrentEpochStakingQueue(ctx sdk.Context) {
-	k.IterateCurrentEpochStakingQueue(ctx, func(staking *types.Staking) (stop bool) {
-		// remove from the staking queue for the current epoch
-		k.RemoveFromCurrentEpochStakingQueue(ctx, staking)
-
-		return false
-	})
-}
-
 // HasStakingForCurrentEpoch returns true if the given staking exists for the current epoch, false otherwise
 func (k Keeper) HasStakingForCurrentEpoch(ctx sdk.Context, stakingId uint64) bool {
 	store := ctx.KVStore(k.storeKey)

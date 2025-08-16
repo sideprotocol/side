@@ -19,11 +19,6 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		k.SetStaking(ctx, staking)
 	}
 
-	// start the new epoch if farming enabled
-	if genState.Params.Enabled {
-		k.NewEpoch(ctx)
-	}
-
 	// check if the module account exists
 	moduleAcc := k.GetModuleAccount(ctx)
 	if moduleAcc == nil {

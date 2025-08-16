@@ -234,9 +234,6 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	// update params
 	m.SetParams(ctx, msg.Params)
 
-	// handle params change
-	m.OnParamsChanged(ctx, params, msg.Params)
-
 	return &types.MsgUpdateParamsResponse{}, nil
 }
 

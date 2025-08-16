@@ -20,17 +20,26 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) error {
 
 // handleEpoch handles the epoch
 func handleEpoch(ctx sdk.Context, k keeper.Keeper) {
-	if k.FarmingEnabled(ctx) {
-		currentEpoch := k.GetCurrentEpoch(ctx)
-		if !ctx.BlockTime().Before(currentEpoch.EndTime) {
-			// call handler on epoch ended
-			k.OnEpochEnded(ctx)
+	currentEpoch := k.GetCurrentEpoch(ctx)
+	if currentEpoch == nil || currentEpoch.Status == types.EpochStatus_EPOCH_STATUS_ENDED {
+		// start the new epoch when farming enabled or re-enabled
+		if k.FarmingEnabled(ctx) {
+			k.NewEpoch(ctx)
+		}
 
-			// end the current epoch
-			currentEpoch.Status = types.EpochStatus_EPOCH_STATUS_ENDED
-			k.SetEpoch(ctx, currentEpoch)
+		return
+	}
 
-			// start the new epoch
+	if !ctx.BlockTime().Before(currentEpoch.EndTime) {
+		// call handler on epoch ended
+		k.OnEpochEnded(ctx)
+
+		// end the current epoch
+		currentEpoch.Status = types.EpochStatus_EPOCH_STATUS_ENDED
+		k.SetEpoch(ctx, currentEpoch)
+
+		// start the new epoch if farming enabled
+		if k.FarmingEnabled(ctx) {
 			k.NewEpoch(ctx)
 		}
 	}

@@ -144,6 +144,10 @@ func (k Keeper) EstimatedReward(goCtx context.Context, req *types.QueryEstimated
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if !k.FarmingEnabled(ctx) {
+		return nil, status.Error(codes.FailedPrecondition, "farming not enabled")
+	}
+
 	_, err := sdk.AccAddressFromBech32(req.Address)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid address")
