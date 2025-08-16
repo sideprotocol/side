@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -125,12 +127,12 @@ func (k Keeper) IterateCurrentEpochStakingQueueByAddress(ctx sdk.Context, addres
 	}
 }
 
-// NewEpoch creates a new epoch
-func (k Keeper) NewEpoch(ctx sdk.Context) {
+// NewEpoch creates a new epoch with the given start time
+func (k Keeper) NewEpoch(ctx sdk.Context, startTime time.Time) {
 	epoch := &types.Epoch{
 		Id:        k.IncrementEpochId(ctx),
-		StartTime: ctx.BlockTime(),
-		EndTime:   ctx.BlockTime().Add(k.EpochDuration(ctx)),
+		StartTime: startTime,
+		EndTime:   startTime.Add(k.EpochDuration(ctx)),
 		Status:    types.EpochStatus_EPOCH_STATUS_STARTED,
 	}
 

@@ -24,7 +24,7 @@ func handleEpoch(ctx sdk.Context, k keeper.Keeper) {
 	if currentEpoch == nil || currentEpoch.Status == types.EpochStatus_EPOCH_STATUS_ENDED {
 		// start the new epoch when farming enabled or re-enabled
 		if k.FarmingEnabled(ctx) {
-			k.NewEpoch(ctx)
+			k.NewEpoch(ctx, ctx.BlockTime())
 		}
 
 		return
@@ -40,7 +40,7 @@ func handleEpoch(ctx sdk.Context, k keeper.Keeper) {
 
 		// start the new epoch if farming enabled
 		if k.FarmingEnabled(ctx) {
-			k.NewEpoch(ctx)
+			k.NewEpoch(ctx, currentEpoch.EndTime)
 		}
 	}
 }
