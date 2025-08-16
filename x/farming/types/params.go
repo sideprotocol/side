@@ -132,12 +132,12 @@ func validateEligibleAssets(p Params) error {
 			return errorsmod.Wrapf(ErrInvalidParams, "invalid asset denom: %v", err)
 		}
 
-		if asset.RewardRatio.IsNegative() {
-			return errorsmod.Wrap(ErrInvalidParams, "asset reward ratio cannot be negative")
+		if err := validateRewardRatio(asset.RewardRatio); err != nil {
+			return err
 		}
 
-		if asset.RewardRatio.GT(sdkmath.LegacyOneDec()) {
-			return errorsmod.Wrap(ErrInvalidParams, "asset reward ratio cannot be greater than 1")
+		if !asset.MinStakingAmount.IsPositive() {
+			return errorsmod.Wrapf(ErrInvalidParams, "min staking amount must be positive")
 		}
 
 		totalRewardRatio = totalRewardRatio.Add(asset.RewardRatio)
@@ -146,6 +146,19 @@ func validateEligibleAssets(p Params) error {
 
 	if totalRewardRatio.GT(sdkmath.LegacyOneDec()) {
 		return errorsmod.Wrap(ErrInvalidParams, "total asset reward ratio cannot be greater than 1")
+	}
+
+	return nil
+}
+
+// validateRewardRatio validates the given reward ratio
+func validateRewardRatio(rewardRatio sdkmath.LegacyDec) error {
+	if rewardRatio.IsNegative() {
+		return errorsmod.Wrap(ErrInvalidParams, "asset reward ratio cannot be negative")
+	}
+
+	if rewardRatio.GT(sdkmath.LegacyOneDec()) {
+		return errorsmod.Wrap(ErrInvalidParams, "asset reward ratio cannot be greater than 1")
 	}
 
 	return nil

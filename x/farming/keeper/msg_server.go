@@ -32,6 +32,11 @@ func (m msgServer) Stake(goCtx context.Context, msg *types.MsgStake) (*types.Msg
 		return nil, errorsmod.Wrapf(types.ErrAssetNotEligible, "asset %s not eligible", msg.Amount.Denom)
 	}
 
+	asset := m.Asset(ctx, msg.Amount.Denom)
+	if msg.Amount.Amount.LT(asset.MinStakingAmount) {
+		return nil, errorsmod.Wrapf(types.ErrInvalidAmount, "amount cannot be less than min staking amount %s", asset.MinStakingAmount)
+	}
+
 	if !m.LockDurationExists(ctx, msg.LockDuration) {
 		return nil, types.ErrInvalidLockDuration
 	}

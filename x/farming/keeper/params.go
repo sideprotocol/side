@@ -50,6 +50,17 @@ func (k Keeper) IsEligibleAsset(ctx sdk.Context, denom string) bool {
 	return false
 }
 
+// Asset gets the asset by the given denom
+func (k Keeper) Asset(ctx sdk.Context, denom string) types.Asset {
+	for _, asset := range k.EligibleAssets(ctx) {
+		if asset.Denom == denom {
+			return asset
+		}
+	}
+
+	return types.Asset{}
+}
+
 // OnParamsChanged is called when the params are changed
 func (k Keeper) OnParamsChanged(ctx sdk.Context, params types.Params, newParams types.Params) {
 	if !params.Enabled && newParams.Enabled {

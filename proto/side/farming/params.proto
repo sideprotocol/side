@@ -18,6 +18,11 @@ message Asset {
       (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
       (gogoproto.nullable)   = false
     ];
+    // Minimum staking amount
+    string min_staking_amount = 3 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
 }
 
 // Params defines the parameters for the module.
