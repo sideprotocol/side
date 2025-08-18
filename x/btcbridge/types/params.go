@@ -41,6 +41,12 @@ var (
 	// default maximum number of btc batch withdrawal per batch
 	DefaultMaxBtcBatchWithdrawNum = uint32(100)
 
+	// default DKG timeout period
+	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
+
+	// default TSS participant update transition period; not used for now
+	DefaultTSSParticipantUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
+
 	// default period for rate limit
 	DefaultRateLimitPeriod = 30 * time.Hour // 30 hours
 
@@ -49,12 +55,6 @@ var (
 
 	// default quota for per address rate limit
 	DefaultAddressRateLimitQuota = int64(50000000) // 0.5 BTC
-
-	// default DKG timeout period
-	DefaultDKGTimeoutPeriod = time.Duration(86400) * time.Second // 1 day
-
-	// default TSS participant update transition period; not used for now
-	DefaultTSSParticipantUpdateTransitionPeriod = time.Duration(1209600) * time.Second // 14 days
 
 	// default IBC timeout height offset
 	DefaultIBCTimeoutHeightOffset = uint64(0)
@@ -94,6 +94,10 @@ func NewParams() Params {
 			WithdrawFee: 6000, // 0.00006 BTC
 			Collector:   authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		},
+		TssParams: TSSParams{
+			DkgTimeoutPeriod:                  DefaultDKGTimeoutPeriod,
+			ParticipantUpdateTransitionPeriod: DefaultTSSParticipantUpdateTransitionPeriod,
+		},
 		RateLimitParams: RateLimitParams{
 			GlobalRateLimitParams: GlobalRateLimitParams{
 				Period:                DefaultRateLimitPeriod,
@@ -103,10 +107,6 @@ func NewParams() Params {
 				Period: DefaultRateLimitPeriod,
 				Quota:  DefaultAddressRateLimitQuota,
 			},
-		},
-		TssParams: TSSParams{
-			DkgTimeoutPeriod:                  DefaultDKGTimeoutPeriod,
-			ParticipantUpdateTransitionPeriod: DefaultTSSParticipantUpdateTransitionPeriod,
 		},
 		IbcParams: IBCParams{
 			TimeoutHeightOffset: DefaultIBCTimeoutHeightOffset,
@@ -157,11 +157,11 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if err := validateRateLimitParams(&p.RateLimitParams); err != nil {
+	if err := validateTSSParams(&p.TssParams); err != nil {
 		return err
 	}
 
-	if err := validateTSSParams(&p.TssParams); err != nil {
+	if err := validateRateLimitParams(&p.RateLimitParams); err != nil {
 		return err
 	}
 
@@ -339,6 +339,19 @@ func validateProtocolParams(protocolLimits *ProtocolLimits, protocolFees *Protoc
 	return nil
 }
 
+// validateTSSParams validates the given TSS params
+func validateTSSParams(params *TSSParams) error {
+	if params.DkgTimeoutPeriod == 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid dkg timeout period")
+	}
+
+	if params.ParticipantUpdateTransitionPeriod == 0 {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid participant update transition period")
+	}
+
+	return nil
+}
+
 // validateRateLimitParams validates the given rate limit params
 func validateRateLimitParams(params *RateLimitParams) error {
 	if params.GlobalRateLimitParams.Period <= 0 || params.AddressRateLimitParams.Period <= 0 {
@@ -351,19 +364,6 @@ func validateRateLimitParams(params *RateLimitParams) error {
 
 	if params.AddressRateLimitParams.Quota < 0 {
 		return errorsmod.Wrapf(ErrInvalidParams, "per address quota cannot be negative")
-	}
-
-	return nil
-}
-
-// validateTSSParams validates the given TSS params
-func validateTSSParams(params *TSSParams) error {
-	if params.DkgTimeoutPeriod == 0 {
-		return errorsmod.Wrapf(ErrInvalidParams, "invalid dkg timeout period")
-	}
-
-	if params.ParticipantUpdateTransitionPeriod == 0 {
-		return errorsmod.Wrapf(ErrInvalidParams, "invalid participant update transition period")
 	}
 
 	return nil

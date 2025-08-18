@@ -73,10 +73,10 @@ message Params {
   ProtocolFees protocol_fees = 13 [(gogoproto.nullable) = false];
   // TSS params
   TSSParams tss_params = 14 [(gogoproto.nullable) = false];
-  // IBC params
-  IBCParams ibc_params = 15 [(gogoproto.nullable) = false];
   // Rate limit params
-  RateLimitParams rate_limit_params = 16 [(gogoproto.nullable) = false];
+  RateLimitParams rate_limit_params = 15 [(gogoproto.nullable) = false];
+  // IBC params
+  IBCParams ibc_params = 16 [(gogoproto.nullable) = false];
   // Fee sponsorship params
   FeeSponsorshipParams fee_sponsorship_params = 17 [(gogoproto.nullable) = false];
 }
@@ -134,6 +134,14 @@ message ProtocolFees {
   string collector = 3;
 }
 
+// TSSParams defines the params related to TSS
+message TSSParams {
+  // Timeout duration for DKG request
+  google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  // Transition period after which TSS participants update process is completed
+  google.protobuf.Duration participant_update_transition_period = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
 // RateLimitParams defines the params related to the rate limit for BTC withdrawal
 message RateLimitParams {
   // Global rate limit params
@@ -156,14 +164,6 @@ message AddressRateLimitParams {
   google.protobuf.Duration period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
   // Maximum withdrawable amount during the rate limit period; 0 means no limit
   int64 quota = 2;
-}
-
-// TSSParams defines the params related to TSS
-message TSSParams {
-  // Timeout duration for DKG request
-  google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
-  // Transition period after which TSS participants update process is completed
-  google.protobuf.Duration participant_update_transition_period = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }
 
 // IBCParams defines the params related to IBC
