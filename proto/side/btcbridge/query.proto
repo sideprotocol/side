@@ -36,7 +36,7 @@ service Query {
   rpc QueryPendingBtcWithdrawRequests(QueryPendingBtcWithdrawRequestsRequest) returns (QueryPendingBtcWithdrawRequestsResponse) {
     option (google.api.http).get = "/side/btcbridge/withdrawal/requests/btc/pending";
   }
-  // QuerySigningRequest queries the signing requests by sequence.
+  // QuerySigningRequest queries the signing request by sequence.
   rpc QuerySigningRequest(QuerySigningRequestRequest) returns (QuerySigningRequestResponse) {
     option (google.api.http).get = "/side/btcbridge/signing/requests/{sequence}";
   }
@@ -54,7 +54,7 @@ service Query {
   }
   // QueryPendingSigningRequests queries the pending signing requests.
   rpc QueryPendingSigningRequests(QueryPendingSigningRequestsRequest) returns (QueryPendingSigningRequestsResponse) {
-    option (google.api.http).get = "/side/btcbridge/signing/requests/pending";
+    option (google.api.http).get = "/side/btcbridge/signing/requests/pending/compact";
   }
   // QueryUTXOs queries all utxos.
   rpc QueryUTXOs(QueryUTXOsRequest) returns (QueryUTXOsResponse) {

@@ -61,7 +61,7 @@ type QueryClient interface {
 	QueryWithdrawRequestsByTxHash(ctx context.Context, in *QueryWithdrawRequestsByTxHashRequest, opts ...grpc.CallOption) (*QueryWithdrawRequestsByTxHashResponse, error)
 	// QueryPendingBtcWithdrawRequests queries the pending btc withdrawal requests.
 	QueryPendingBtcWithdrawRequests(ctx context.Context, in *QueryPendingBtcWithdrawRequestsRequest, opts ...grpc.CallOption) (*QueryPendingBtcWithdrawRequestsResponse, error)
-	// QuerySigningRequest queries the signing requests by sequence.
+	// QuerySigningRequest queries the signing request by sequence.
 	QuerySigningRequest(ctx context.Context, in *QuerySigningRequestRequest, opts ...grpc.CallOption) (*QuerySigningRequestResponse, error)
 	// QuerySigningRequests queries the signing requests by the given status.
 	QuerySigningRequests(ctx context.Context, in *QuerySigningRequestsRequest, opts ...grpc.CallOption) (*QuerySigningRequestsResponse, error)
@@ -339,7 +339,7 @@ type QueryServer interface {
 	QueryWithdrawRequestsByTxHash(context.Context, *QueryWithdrawRequestsByTxHashRequest) (*QueryWithdrawRequestsByTxHashResponse, error)
 	// QueryPendingBtcWithdrawRequests queries the pending btc withdrawal requests.
 	QueryPendingBtcWithdrawRequests(context.Context, *QueryPendingBtcWithdrawRequestsRequest) (*QueryPendingBtcWithdrawRequestsResponse, error)
-	// QuerySigningRequest queries the signing requests by sequence.
+	// QuerySigningRequest queries the signing request by sequence.
 	QuerySigningRequest(context.Context, *QuerySigningRequestRequest) (*QuerySigningRequestResponse, error)
 	// QuerySigningRequests queries the signing requests by the given status.
 	QuerySigningRequests(context.Context, *QuerySigningRequestsRequest) (*QuerySigningRequestsResponse, error)
