@@ -13,9 +13,6 @@ var (
 	// maximum moniker size
 	MaxMonikerLength = stakingtypes.MaxMonikerLength
 
-	// minimum DKG participant number
-	MinDKGParticipantNum = 3
-
 	// default DKG timeout duration
 	DefaultDKGTimeoutDuration = time.Duration(86400) * time.Second // 1 day
 )

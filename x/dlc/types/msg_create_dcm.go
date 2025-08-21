@@ -6,6 +6,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 var _ sdk.Msg = &MsgCreateDCM{}
@@ -16,12 +18,12 @@ func (m *MsgCreateDCM) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	if m.Threshold == 0 {
-		return errorsmod.Wrap(ErrInvalidThreshold, "threshold must be greater than 0")
+	if len(m.Participants) < tsstypes.MinDKGParticipantNum {
+		return errorsmod.Wrapf(ErrInvalidParticipants, "participant number cannot be less than min dkg participant number %d", tsstypes.MinDKGParticipantNum)
 	}
 
-	if len(m.Participants) == 0 || len(m.Participants) < int(m.Threshold) {
-		return errorsmod.Wrap(ErrInvalidParticipants, "incorrect participant length")
+	if err := tsstypes.CheckDKGThreshold(len(m.Participants), int(m.Threshold)); err != nil {
+		return err
 	}
 
 	participants := make(map[string]bool)

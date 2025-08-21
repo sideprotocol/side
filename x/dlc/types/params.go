@@ -6,6 +6,8 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
+
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 var (
@@ -20,9 +22,6 @@ var (
 
 	// default nonce generation timeout duration
 	DefaultNonceGenerationTimeoutDuration = 24 * time.Hour // 24 hours
-
-	// minimum oracle participant number
-	MinOracleParticipantNum = uint32(3)
 
 	// default oracle participant number
 	DefaultOracleParticipantNum = uint32(3)
@@ -71,19 +70,11 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if len(p.AllowedOracleParticipants) > 0 && p.OracleParticipantNum > uint32(len(p.AllowedOracleParticipants)) {
-		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number cannot be greater than allowed oracle participant number %d", len(p.AllowedOracleParticipants))
+	if err := validateOracleParticipantNum(p); err != nil {
+		return err
 	}
 
-	if p.OracleParticipantNum < MinOracleParticipantNum {
-		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number cannot be less than min oracle participant number %d", MinOracleParticipantNum)
-	}
-
-	if p.OracleParticipantThreshold == 0 || p.OracleParticipantThreshold > p.OracleParticipantNum {
-		return errorsmod.Wrapf(ErrInvalidParams, "invalid oracle participant threshold")
-	}
-
-	return nil
+	return tsstypes.CheckDKGThreshold(int(p.OracleParticipantNum), int(p.OracleParticipantThreshold))
 }
 
 // validateOracleParticipants validates the given oracle participants
@@ -98,6 +89,19 @@ func validateOracleParticipants(participants []string) error {
 		if len(consensusPubKey) != ed25519.PubKeySize {
 			return errorsmod.Wrap(ErrInvalidParams, "incorrect participant consensus pub key size")
 		}
+	}
+
+	return nil
+}
+
+// validateOracleParticipantNum validates the given oracle participant num
+func validateOracleParticipantNum(p Params) error {
+	if p.OracleParticipantNum < uint32(tsstypes.MinDKGParticipantNum) {
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number cannot be less than min dkg participant number %d", tsstypes.MinDKGParticipantNum)
+	}
+
+	if len(p.AllowedOracleParticipants) > 0 && p.OracleParticipantNum > uint32(len(p.AllowedOracleParticipants)) {
+		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number cannot be greater than allowed oracle participant number %d", len(p.AllowedOracleParticipants))
 	}
 
 	return nil

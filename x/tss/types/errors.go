@@ -18,6 +18,7 @@ var (
 	ErrUnauthorizedParticipant    = errorsmod.Register(ModuleName, 2003, "unauthorized participant")
 	ErrDKGCompletionAlreadyExists = errorsmod.Register(ModuleName, 2004, "dkg completion already exists")
 	ErrInvalidDKGCompletion       = errorsmod.Register(ModuleName, 2005, "invalid dkg completion")
+	ErrInvalidThreshold           = errorsmod.Register(ModuleName, 2006, "invalid threshold")
 
 	ErrSigningRequestDoesNotExist = errorsmod.Register(ModuleName, 3000, "signing request does not exist")
 	ErrInvalidSigningStatus       = errorsmod.Register(ModuleName, 3001, "invalid signing status")

@@ -12,12 +12,20 @@ import (
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/txscript"
 
+	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sideprotocol/side/bitcoin/crypto/hash"
 )
 
-const (
+var (
+	// minimum dkg participant number
+	MinDKGParticipantNum = 3
+
+	// minimum dkg threshold ratio
+	MinDKGThresholdRatio = sdkmath.LegacyMustNewDecFromStr("0.5")
+
 	// schnorr signature size
 	SchnorrSignatureSize = 64
 
@@ -130,4 +138,23 @@ func GetExpirationTime(currentTime time.Time, timeoutDuration time.Duration) tim
 	}
 
 	return currentTime.Add(timeoutDuration)
+}
+
+// CheckDKGThreshold checks if the given threshold is valid
+func CheckDKGThreshold(participantNum int, threshold int) error {
+	if threshold == 0 {
+		return errorsmod.Wrap(ErrInvalidThreshold, "dkg threshold must be greater than 0")
+	}
+
+	if threshold > participantNum {
+		return errorsmod.Wrapf(ErrInvalidThreshold, "dkg threshold cannot be greater than participant number %d", participantNum)
+	}
+
+	if MinDKGThresholdRatio.IsPositive() {
+		if int64(threshold) < MinDKGThresholdRatio.MulInt64(int64(participantNum)).TruncateInt64() {
+			return errorsmod.Wrapf(ErrInvalidThreshold, "dkg threshold ratio cannot be less than %s", MinDKGThresholdRatio)
+		}
+	}
+
+	return nil
 }
