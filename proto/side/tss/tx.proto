@@ -72,10 +72,8 @@ message MsgRefresh {
   repeated uint64 dkg_ids = 2;
   // removed participant set
   repeated string removed_participants = 3;
-  // new threshold set corresponding to the DKGs
-  repeated uint32 thresholds = 4;
   // timeout duration per DKG refreshing
-  google.protobuf.Duration timeout_duration = 5 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  google.protobuf.Duration timeout_duration = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }
 
 // MsgRefreshResponse defines the Msg/Refresh response type.

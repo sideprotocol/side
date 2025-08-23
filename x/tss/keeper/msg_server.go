@@ -101,7 +101,7 @@ func (m msgServer) Refresh(goCtx context.Context, msg *types.MsgRefresh) (*types
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	for i, dkgId := range msg.DkgIds {
+	for _, dkgId := range msg.DkgIds {
 		if !m.HasDKGRequest(ctx, dkgId) {
 			return nil, errorsmod.Wrapf(types.ErrDKGRequestDoesNotExist, "dkg %d", dkgId)
 		}
@@ -113,7 +113,11 @@ func (m msgServer) Refresh(goCtx context.Context, msg *types.MsgRefresh) (*types
 
 		remainingParticipantNum := len(dkgRequest.Participants) - len(msg.RemovedParticipants)
 		if remainingParticipantNum < types.MinDKGParticipantNum {
-			return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "remaining participants %d cannot be less than min participants %d", remainingParticipantNum, types.MinDKGParticipantNum)
+			return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "remaining participants %d cannot be less than min participants %d for dkg %d", remainingParticipantNum, types.MinDKGParticipantNum, dkgId)
+		}
+
+		if uint32(remainingParticipantNum) < dkgRequest.Threshold {
+			return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "remaining participants %d cannot be less than threshold %d for dkg %d", remainingParticipantNum, dkgRequest.Threshold, dkgId)
 		}
 
 		for _, p := range msg.RemovedParticipants {
@@ -122,11 +126,7 @@ func (m msgServer) Refresh(goCtx context.Context, msg *types.MsgRefresh) (*types
 			}
 		}
 
-		if msg.Thresholds[i] > uint32(remainingParticipantNum) {
-			return nil, errorsmod.Wrapf(types.ErrInvalidThresholds, "threshold %d cannot be greater than participants %d for dkg %d", msg.Thresholds[i], remainingParticipantNum, dkgId)
-		}
-
-		m.InitiateRefreshingRequest(ctx, dkgId, msg.RemovedParticipants, msg.Thresholds[i], msg.TimeoutDuration)
+		m.InitiateRefreshingRequest(ctx, dkgId, msg.RemovedParticipants, msg.TimeoutDuration)
 	}
 
 	return &types.MsgRefreshResponse{}, nil

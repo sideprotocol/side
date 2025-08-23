@@ -26,12 +26,11 @@ var (
 
 	ErrInvalidDKGs                       = errorsmod.Register(ModuleName, 4000, "invalid dkgs")
 	ErrInvalidParticipants               = errorsmod.Register(ModuleName, 4001, "invalid participants")
-	ErrInvalidThresholds                 = errorsmod.Register(ModuleName, 4002, "invalid thresholds")
-	ErrInvalidTimeoutDuration            = errorsmod.Register(ModuleName, 4003, "invalid timeout duration")
-	ErrRefreshingRequestDoesNotExist     = errorsmod.Register(ModuleName, 4004, "refreshing request does not exist")
-	ErrInvalidRefreshingStatus           = errorsmod.Register(ModuleName, 4005, "invalid refreshing status")
-	ErrRefreshingRequestExpired          = errorsmod.Register(ModuleName, 4006, "refreshing request expired")
-	ErrRefreshingCompletionAlreadyExists = errorsmod.Register(ModuleName, 4007, "refreshing completion already exists")
+	ErrInvalidTimeoutDuration            = errorsmod.Register(ModuleName, 4002, "invalid timeout duration")
+	ErrRefreshingRequestDoesNotExist     = errorsmod.Register(ModuleName, 4003, "refreshing request does not exist")
+	ErrInvalidRefreshingStatus           = errorsmod.Register(ModuleName, 4004, "invalid refreshing status")
+	ErrRefreshingRequestExpired          = errorsmod.Register(ModuleName, 4005, "refreshing request expired")
+	ErrRefreshingCompletionAlreadyExists = errorsmod.Register(ModuleName, 4006, "refreshing completion already exists")
 
 	ErrInvalidParams = errorsmod.Register(ModuleName, 5000, "invalid params")
 )

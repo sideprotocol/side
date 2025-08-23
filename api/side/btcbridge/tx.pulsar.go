@@ -10010,58 +10010,11 @@ func (x *_MsgRefresh_3_list) IsValid() bool {
 	return x.list != nil
 }
 
-var _ protoreflect.List = (*_MsgRefresh_4_list)(nil)
-
-type _MsgRefresh_4_list struct {
-	list *[]uint32
-}
-
-func (x *_MsgRefresh_4_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_MsgRefresh_4_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfUint32((*x.list)[i])
-}
-
-func (x *_MsgRefresh_4_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
-	concreteValue := (uint32)(valueUnwrapped)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_MsgRefresh_4_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
-	concreteValue := (uint32)(valueUnwrapped)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_MsgRefresh_4_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message MsgRefresh at list field Thresholds as it is not of Message kind"))
-}
-
-func (x *_MsgRefresh_4_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_MsgRefresh_4_list) NewElement() protoreflect.Value {
-	v := uint32(0)
-	return protoreflect.ValueOfUint32(v)
-}
-
-func (x *_MsgRefresh_4_list) IsValid() bool {
-	return x.list != nil
-}
-
 var (
 	md_MsgRefresh                      protoreflect.MessageDescriptor
 	fd_MsgRefresh_authority            protoreflect.FieldDescriptor
 	fd_MsgRefresh_dkg_ids              protoreflect.FieldDescriptor
 	fd_MsgRefresh_removed_participants protoreflect.FieldDescriptor
-	fd_MsgRefresh_thresholds           protoreflect.FieldDescriptor
 	fd_MsgRefresh_timeout_duration     protoreflect.FieldDescriptor
 )
 
@@ -10071,7 +10024,6 @@ func init() {
 	fd_MsgRefresh_authority = md_MsgRefresh.Fields().ByName("authority")
 	fd_MsgRefresh_dkg_ids = md_MsgRefresh.Fields().ByName("dkg_ids")
 	fd_MsgRefresh_removed_participants = md_MsgRefresh.Fields().ByName("removed_participants")
-	fd_MsgRefresh_thresholds = md_MsgRefresh.Fields().ByName("thresholds")
 	fd_MsgRefresh_timeout_duration = md_MsgRefresh.Fields().ByName("timeout_duration")
 }
 
@@ -10158,12 +10110,6 @@ func (x *fastReflection_MsgRefresh) Range(f func(protoreflect.FieldDescriptor, p
 			return
 		}
 	}
-	if len(x.Thresholds) != 0 {
-		value := protoreflect.ValueOfList(&_MsgRefresh_4_list{list: &x.Thresholds})
-		if !f(fd_MsgRefresh_thresholds, value) {
-			return
-		}
-	}
 	if x.TimeoutDuration != nil {
 		value := protoreflect.ValueOfMessage(x.TimeoutDuration.ProtoReflect())
 		if !f(fd_MsgRefresh_timeout_duration, value) {
@@ -10191,8 +10137,6 @@ func (x *fastReflection_MsgRefresh) Has(fd protoreflect.FieldDescriptor) bool {
 		return len(x.DkgIds) != 0
 	case "side.btcbridge.MsgRefresh.removed_participants":
 		return len(x.RemovedParticipants) != 0
-	case "side.btcbridge.MsgRefresh.thresholds":
-		return len(x.Thresholds) != 0
 	case "side.btcbridge.MsgRefresh.timeout_duration":
 		return x.TimeoutDuration != nil
 	default:
@@ -10217,8 +10161,6 @@ func (x *fastReflection_MsgRefresh) Clear(fd protoreflect.FieldDescriptor) {
 		x.DkgIds = nil
 	case "side.btcbridge.MsgRefresh.removed_participants":
 		x.RemovedParticipants = nil
-	case "side.btcbridge.MsgRefresh.thresholds":
-		x.Thresholds = nil
 	case "side.btcbridge.MsgRefresh.timeout_duration":
 		x.TimeoutDuration = nil
 	default:
@@ -10251,12 +10193,6 @@ func (x *fastReflection_MsgRefresh) Get(descriptor protoreflect.FieldDescriptor)
 			return protoreflect.ValueOfList(&_MsgRefresh_3_list{})
 		}
 		listValue := &_MsgRefresh_3_list{list: &x.RemovedParticipants}
-		return protoreflect.ValueOfList(listValue)
-	case "side.btcbridge.MsgRefresh.thresholds":
-		if len(x.Thresholds) == 0 {
-			return protoreflect.ValueOfList(&_MsgRefresh_4_list{})
-		}
-		listValue := &_MsgRefresh_4_list{list: &x.Thresholds}
 		return protoreflect.ValueOfList(listValue)
 	case "side.btcbridge.MsgRefresh.timeout_duration":
 		value := x.TimeoutDuration
@@ -10291,10 +10227,6 @@ func (x *fastReflection_MsgRefresh) Set(fd protoreflect.FieldDescriptor, value p
 		lv := value.List()
 		clv := lv.(*_MsgRefresh_3_list)
 		x.RemovedParticipants = *clv.list
-	case "side.btcbridge.MsgRefresh.thresholds":
-		lv := value.List()
-		clv := lv.(*_MsgRefresh_4_list)
-		x.Thresholds = *clv.list
 	case "side.btcbridge.MsgRefresh.timeout_duration":
 		x.TimeoutDuration = value.Message().Interface().(*durationpb.Duration)
 	default:
@@ -10329,12 +10261,6 @@ func (x *fastReflection_MsgRefresh) Mutable(fd protoreflect.FieldDescriptor) pro
 		}
 		value := &_MsgRefresh_3_list{list: &x.RemovedParticipants}
 		return protoreflect.ValueOfList(value)
-	case "side.btcbridge.MsgRefresh.thresholds":
-		if x.Thresholds == nil {
-			x.Thresholds = []uint32{}
-		}
-		value := &_MsgRefresh_4_list{list: &x.Thresholds}
-		return protoreflect.ValueOfList(value)
 	case "side.btcbridge.MsgRefresh.timeout_duration":
 		if x.TimeoutDuration == nil {
 			x.TimeoutDuration = new(durationpb.Duration)
@@ -10363,9 +10289,6 @@ func (x *fastReflection_MsgRefresh) NewField(fd protoreflect.FieldDescriptor) pr
 	case "side.btcbridge.MsgRefresh.removed_participants":
 		list := []string{}
 		return protoreflect.ValueOfList(&_MsgRefresh_3_list{list: &list})
-	case "side.btcbridge.MsgRefresh.thresholds":
-		list := []uint32{}
-		return protoreflect.ValueOfList(&_MsgRefresh_4_list{list: &list})
 	case "side.btcbridge.MsgRefresh.timeout_duration":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -10455,13 +10378,6 @@ func (x *fastReflection_MsgRefresh) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if len(x.Thresholds) > 0 {
-			l = 0
-			for _, e := range x.Thresholds {
-				l += runtime.Sov(uint64(e))
-			}
-			n += 1 + runtime.Sov(uint64(l)) + l
-		}
 		if x.TimeoutDuration != nil {
 			l = options.Size(x.TimeoutDuration)
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -10507,26 +10423,6 @@ func (x *fastReflection_MsgRefresh) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x2a
-		}
-		if len(x.Thresholds) > 0 {
-			var pksize2 int
-			for _, num := range x.Thresholds {
-				pksize2 += runtime.Sov(uint64(num))
-			}
-			i -= pksize2
-			j1 := i
-			for _, num := range x.Thresholds {
-				for num >= 1<<7 {
-					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
-					num >>= 7
-					j1++
-				}
-				dAtA[j1] = uint8(num)
-				j1++
-			}
-			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
-			i--
 			dAtA[i] = 0x22
 		}
 		if len(x.RemovedParticipants) > 0 {
@@ -10539,22 +10435,22 @@ func (x *fastReflection_MsgRefresh) ProtoMethods() *protoiface.Methods {
 			}
 		}
 		if len(x.DkgIds) > 0 {
-			var pksize4 int
+			var pksize2 int
 			for _, num := range x.DkgIds {
-				pksize4 += runtime.Sov(uint64(num))
+				pksize2 += runtime.Sov(uint64(num))
 			}
-			i -= pksize4
-			j3 := i
+			i -= pksize2
+			j1 := i
 			for _, num := range x.DkgIds {
 				for num >= 1<<7 {
-					dAtA[j3] = uint8(uint64(num)&0x7f | 0x80)
+					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
 					num >>= 7
-					j3++
+					j1++
 				}
-				dAtA[j3] = uint8(num)
-				j3++
+				dAtA[j1] = uint8(num)
+				j1++
 			}
-			i = runtime.EncodeVarint(dAtA, i, uint64(pksize4))
+			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -10755,82 +10651,6 @@ func (x *fastReflection_MsgRefresh) ProtoMethods() *protoiface.Methods {
 				x.RemovedParticipants = append(x.RemovedParticipants, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
 			case 4:
-				if wireType == 0 {
-					var v uint32
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= uint32(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					x.Thresholds = append(x.Thresholds, v)
-				} else if wireType == 2 {
-					var packedLen int
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						packedLen |= int(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					if packedLen < 0 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-					}
-					postIndex := iNdEx + packedLen
-					if postIndex < 0 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-					}
-					if postIndex > l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					var elementCount int
-					var count int
-					for _, integer := range dAtA[iNdEx:postIndex] {
-						if integer < 128 {
-							count++
-						}
-					}
-					elementCount = count
-					if elementCount != 0 && len(x.Thresholds) == 0 {
-						x.Thresholds = make([]uint32, 0, elementCount)
-					}
-					for iNdEx < postIndex {
-						var v uint32
-						for shift := uint(0); ; shift += 7 {
-							if shift >= 64 {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-							}
-							if iNdEx >= l {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-							}
-							b := dAtA[iNdEx]
-							iNdEx++
-							v |= uint32(b&0x7F) << shift
-							if b < 0x80 {
-								break
-							}
-						}
-						x.Thresholds = append(x.Thresholds, v)
-					}
-				} else {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Thresholds", wireType)
-				}
-			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TimeoutDuration", wireType)
 				}
@@ -15033,10 +14853,8 @@ type MsgRefresh struct {
 	DkgIds []uint64 `protobuf:"varint,2,rep,packed,name=dkg_ids,json=dkgIds,proto3" json:"dkg_ids,omitempty"`
 	// removed participant set
 	RemovedParticipants []string `protobuf:"bytes,3,rep,name=removed_participants,json=removedParticipants,proto3" json:"removed_participants,omitempty"`
-	// new threshold set corresponding to the DKGs
-	Thresholds []uint32 `protobuf:"varint,4,rep,packed,name=thresholds,proto3" json:"thresholds,omitempty"`
 	// timeout duration per DKG refreshing
-	TimeoutDuration *durationpb.Duration `protobuf:"bytes,5,opt,name=timeout_duration,json=timeoutDuration,proto3" json:"timeout_duration,omitempty"`
+	TimeoutDuration *durationpb.Duration `protobuf:"bytes,4,opt,name=timeout_duration,json=timeoutDuration,proto3" json:"timeout_duration,omitempty"`
 }
 
 func (x *MsgRefresh) Reset() {
@@ -15076,13 +14894,6 @@ func (x *MsgRefresh) GetDkgIds() []uint64 {
 func (x *MsgRefresh) GetRemovedParticipants() []string {
 	if x != nil {
 		return x.RemovedParticipants
-	}
-	return nil
-}
-
-func (x *MsgRefresh) GetThresholds() []uint32 {
-	if x != nil {
-		return x.Thresholds
 	}
 	return nil
 }
@@ -15533,18 +15344,16 @@ var file_side_btcbridge_tx_proto_rawDesc = []byte{
 	0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
 	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x43,
 	0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0xf6, 0x01, 0x0a, 0x0a, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73,
+	0x73, 0x65, 0x22, 0xd6, 0x01, 0x0a, 0x0a, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73,
 	0x68, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12,
 	0x17, 0x0a, 0x07, 0x64, 0x6b, 0x67, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x04,
 	0x52, 0x06, 0x64, 0x6b, 0x67, 0x49, 0x64, 0x73, 0x12, 0x31, 0x0a, 0x14, 0x72, 0x65, 0x6d, 0x6f,
 	0x76, 0x65, 0x64, 0x5f, 0x70, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x73,
 	0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x13, 0x72, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x64, 0x50,
-	0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x73, 0x12, 0x1e, 0x0a, 0x0a, 0x74,
-	0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0d, 0x52,
-	0x0a, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x73, 0x12, 0x4e, 0x0a, 0x10, 0x74,
+	0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x73, 0x12, 0x4e, 0x0a, 0x10, 0x74,
 	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
-	0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x0f, 0x74, 0x69, 0x6d, 0x65,
 	0x6f, 0x75, 0x74, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x3a, 0x0e, 0x82, 0xe7, 0xb0,

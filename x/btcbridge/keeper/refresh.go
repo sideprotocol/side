@@ -165,12 +165,11 @@ func (k Keeper) IterateRefreshingCompletions(ctx sdk.Context, id uint64, cb func
 }
 
 // InitiateRefreshingRequest initiates the refreshing request with the specified params
-func (k Keeper) InitiateRefreshingRequest(ctx sdk.Context, dkgId uint64, removedParticipants []string, threshold uint32, timeoutDuration time.Duration) *types.RefreshingRequest {
+func (k Keeper) InitiateRefreshingRequest(ctx sdk.Context, dkgId uint64, removedParticipants []string, timeoutDuration time.Duration) *types.RefreshingRequest {
 	req := &types.RefreshingRequest{
 		Id:                  k.IncrementRefreshingRequestId(ctx),
 		DkgId:               dkgId,
 		RemovedParticipants: removedParticipants,
-		Threshold:           threshold,
 		ExpirationTime:      types.GetExpirationTime(ctx.BlockTime(), timeoutDuration),
 		Status:              types.RefreshingStatus_REFRESHING_STATUS_PENDING,
 	}
@@ -183,7 +182,6 @@ func (k Keeper) InitiateRefreshingRequest(ctx sdk.Context, dkgId uint64, removed
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", req.Id)),
 			sdk.NewAttribute(types.AttributeKeyDKGId, fmt.Sprintf("%d", dkgId)),
 			sdk.NewAttribute(types.AttributeKeyRemovedParticipants, strings.Join(removedParticipants, types.AttributeValueSeparator)),
-			sdk.NewAttribute(types.AttributeKeyThreshold, fmt.Sprintf("%d", threshold)),
 			sdk.NewAttribute(types.AttributeKeyExpirationTime, req.ExpirationTime.String()),
 		),
 	)

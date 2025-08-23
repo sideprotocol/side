@@ -238,12 +238,10 @@ message RefreshingRequest {
   uint64 dkg_id = 2;
   // removed participant set
   repeated string removed_participants = 3;
-  // new threshold
-  uint32 threshold = 4;
   // expiration time
-  google.protobuf.Timestamp expiration_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp expiration_time = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
   // status
-  RefreshingStatus status = 6;
+  RefreshingStatus status = 5;
 }
 
 // Refreshing Completion

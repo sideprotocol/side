@@ -91,10 +91,9 @@ func handleRefreshingRequests(ctx sdk.Context, k keeper.Keeper) {
 		req.Status = types.RefreshingStatus_REFRESHING_STATUS_COMPLETED
 		k.SetRefreshingRequest(ctx, req)
 
-		// update DKG participants and threshold
+		// update DKG participants
 		dkgRequest := k.GetDKGRequest(ctx, req.DkgId)
 		dkgRequest.Participants = k.GetRefreshingParticipants(ctx, req)
-		dkgRequest.Threshold = req.Threshold
 		k.SetDKGRequest(ctx, dkgRequest)
 
 		// Emit events
