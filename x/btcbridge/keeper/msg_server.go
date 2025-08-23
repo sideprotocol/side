@@ -15,6 +15,7 @@ import (
 
 	"github.com/sideprotocol/side/bitcoin/crypto/schnorr"
 	"github.com/sideprotocol/side/x/btcbridge/types"
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 type msgServer struct {
@@ -345,8 +346,8 @@ func (m msgServer) Refresh(goCtx context.Context, msg *types.MsgRefresh) (*types
 		}
 
 		remainingParticipantNum := len(dkgRequest.Participants) - len(msg.RemovedParticipants)
-		if remainingParticipantNum < types.MinDKGParticipantNum {
-			return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "remaining participants %d cannot be less than min participants %d", remainingParticipantNum, types.MinDKGParticipantNum)
+		if remainingParticipantNum < tsstypes.MinDKGParticipantNum {
+			return nil, errorsmod.Wrapf(types.ErrInvalidParticipants, "remaining participants %d cannot be less than min participants %d", remainingParticipantNum, tsstypes.MinDKGParticipantNum)
 		}
 
 		for _, p := range msg.RemovedParticipants {

@@ -74,7 +74,11 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	return tsstypes.CheckDKGThreshold(int(p.OracleParticipantNum), int(p.OracleParticipantThreshold))
+	if err := tsstypes.CheckDKGThreshold(int(p.OracleParticipantNum), int(p.OracleParticipantThreshold)); err != nil {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid oracle participant threshold: %v", err)
+	}
+
+	return nil
 }
 
 // validateOracleParticipants validates the given oracle participants
@@ -96,8 +100,8 @@ func validateOracleParticipants(participants []string) error {
 
 // validateOracleParticipantNum validates the given oracle participant num
 func validateOracleParticipantNum(p Params) error {
-	if p.OracleParticipantNum < uint32(tsstypes.MinDKGParticipantNum) {
-		return errorsmod.Wrapf(ErrInvalidParams, "oracle participant number cannot be less than min dkg participant number %d", tsstypes.MinDKGParticipantNum)
+	if err := tsstypes.CheckDKGParticipantNum(int(p.OracleParticipantNum)); err != nil {
+		return errorsmod.Wrapf(ErrInvalidParams, "invalid oracle participant number: %v", err)
 	}
 
 	if len(p.AllowedOracleParticipants) > 0 && p.OracleParticipantNum > uint32(len(p.AllowedOracleParticipants)) {

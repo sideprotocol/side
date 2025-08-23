@@ -8,6 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
+	tsstypes "github.com/sideprotocol/side/x/tss/types"
 )
 
 var _ sdk.Msg = &MsgInitiateDKG{}
@@ -18,8 +20,12 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	if len(m.Participants) == 0 || len(m.Participants) < MinDKGParticipantNum || m.Threshold == 0 || m.Threshold > uint32(len(m.Participants)) {
-		return ErrInvalidDKGParams
+	if err := tsstypes.CheckDKGParticipantNum(len(m.Participants)); err != nil {
+		return errorsmod.Wrapf(ErrInvalidDKGParams, "invalid participants: %v", err)
+	}
+
+	if err := tsstypes.CheckDKGThreshold(len(m.Participants), int(m.Threshold)); err != nil {
+		return errorsmod.Wrapf(ErrInvalidDKGParams, "invalid threshold: %v", err)
 	}
 
 	participants := make(map[string]bool)
@@ -36,7 +42,7 @@ func (m *MsgInitiateDKG) ValidateBasic() error {
 		}
 
 		if pubKey, err := base64.StdEncoding.DecodeString(p.ConsensusPubkey); err != nil || len(pubKey) != ed25519.PubKeySize {
-			return errorsmod.Wrap(err, "invalid consensus public key")
+			return errorsmod.Wrap(ErrInvalidDKGParams, "invalid consensus public key")
 		}
 
 		if participants[p.ConsensusPubkey] {

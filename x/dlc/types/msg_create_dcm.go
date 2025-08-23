@@ -18,19 +18,19 @@ func (m *MsgCreateDCM) ValidateBasic() error {
 		return errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	if len(m.Participants) < tsstypes.MinDKGParticipantNum {
-		return errorsmod.Wrapf(ErrInvalidParticipants, "participant number cannot be less than min dkg participant number %d", tsstypes.MinDKGParticipantNum)
+	if err := tsstypes.CheckDKGParticipantNum(len(m.Participants)); err != nil {
+		return errorsmod.Wrapf(ErrInvalidParticipants, "%v", err)
 	}
 
 	if err := tsstypes.CheckDKGThreshold(len(m.Participants), int(m.Threshold)); err != nil {
-		return err
+		return errorsmod.Wrapf(ErrInvalidThreshold, "%v", err)
 	}
 
 	participants := make(map[string]bool)
 
 	for _, p := range m.Participants {
 		if pubKey, err := base64.StdEncoding.DecodeString(p); err != nil || len(pubKey) != ed25519.PubKeySize {
-			return errorsmod.Wrap(err, "invalid participant public key")
+			return errorsmod.Wrap(ErrInvalidParticipants, "invalid participant public key")
 		}
 
 		if participants[p] {

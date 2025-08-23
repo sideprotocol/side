@@ -23,6 +23,9 @@ var (
 	// minimum dkg participant number
 	MinDKGParticipantNum = 3
 
+	// minimum dkg threshold
+	MinDKGThreshold = 2
+
 	// minimum dkg threshold ratio
 	MinDKGThresholdRatio = sdkmath.LegacyMustNewDecFromStr("0.5")
 
@@ -140,19 +143,28 @@ func GetExpirationTime(currentTime time.Time, timeoutDuration time.Duration) tim
 	return currentTime.Add(timeoutDuration)
 }
 
+// CheckDKGParticipantNum checks if the given participant num is valid
+func CheckDKGParticipantNum(participantNum int) error {
+	if participantNum < MinDKGParticipantNum {
+		return errorsmod.Wrapf(ErrInvalidDKGParticipantNum, "dkg participant number cannot be less than min participant number %d", MinDKGParticipantNum)
+	}
+
+	return nil
+}
+
 // CheckDKGThreshold checks if the given threshold is valid
 func CheckDKGThreshold(participantNum int, threshold int) error {
-	if threshold == 0 {
-		return errorsmod.Wrap(ErrInvalidThreshold, "dkg threshold must be greater than 0")
+	if threshold < MinDKGThreshold {
+		return errorsmod.Wrapf(ErrInvalidDKGThreshold, "dkg threshold cannot be less than min threshold %d", MinDKGThreshold)
 	}
 
 	if threshold > participantNum {
-		return errorsmod.Wrapf(ErrInvalidThreshold, "dkg threshold cannot be greater than participant number %d", participantNum)
+		return errorsmod.Wrapf(ErrInvalidDKGThreshold, "dkg threshold cannot be greater than participant number %d", participantNum)
 	}
 
 	if MinDKGThresholdRatio.IsPositive() {
-		if int64(threshold) < MinDKGThresholdRatio.MulInt64(int64(participantNum)).TruncateInt64() {
-			return errorsmod.Wrapf(ErrInvalidThreshold, "dkg threshold ratio cannot be less than %s", MinDKGThresholdRatio)
+		if int64(threshold) < MinDKGThresholdRatio.MulInt64(int64(participantNum)).Ceil().TruncateInt64() {
+			return errorsmod.Wrapf(ErrInvalidDKGThreshold, "dkg threshold ratio cannot be less than %s", MinDKGThresholdRatio)
 		}
 	}
 

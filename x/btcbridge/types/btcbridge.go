@@ -1,10 +1,5 @@
 package types
 
-const (
-	// minimum DKG participant number
-	MinDKGParticipantNum = 3
-)
-
 // Compact converts the signing request to the compact version
 func (req *SigningRequest) Compact() *CompactSigningRequest {
 	return &CompactSigningRequest{
