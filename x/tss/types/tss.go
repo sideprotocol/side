@@ -21,7 +21,7 @@ import (
 
 var (
 	// minimum dkg participant number
-	MinDKGParticipantNum = 3
+	MinDKGParticipantNum = 2
 
 	// minimum dkg threshold
 	MinDKGThreshold = 2
